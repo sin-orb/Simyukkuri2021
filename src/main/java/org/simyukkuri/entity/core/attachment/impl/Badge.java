@@ -55,6 +55,7 @@ public class Badge extends Attachment {
 			fileName = fn;
 		}
 
+		/** バッジ画像ファイル名を返す。 */
 		public String getFileName() {
 			return fileName;
 		}
@@ -109,11 +110,13 @@ public class Badge extends Attachment {
 		}
 	}
 
+	/** バッジのティック処理（特に何もしない）。 */
 	@Override
 	protected TickResult update() {
 		return TickResult.NONE;
 	}
 
+	/** 親ゆっくりの年齢層とバッジランクに応じた画像を返す。 */
 	@Override
 	public BufferedImage getImage(Yukkuri b) {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
@@ -129,6 +132,7 @@ public class Badge extends Attachment {
 		return badgeRank;
 	}
 
+	/** 親ゆっくりの年齢層に応じて境界ボックスをリセットする。 */
 	@Override
 	public void resetBoundary() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
@@ -161,48 +165,59 @@ public class Badge extends Attachment {
 		cost = 0;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Badge() {
 
 	}
 
+	/** アイテム名テキストを返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("item_badge");
 	}
 
+	/** バッジランクをセットする。 */
 	public void setBadgeRank(BadgeRank badgeRank) {
 		this.badgeRank = badgeRank;
 	}
 
 	// テスト用静的アクセサ
+	/** 画像配列を返す。 */
 	public static BufferedImage[][] getImages() {
 		return images;
 	}
 
+	/** 画像配列をセットする。 */
 	public static void setImages(BufferedImage[][] images) {
 		Badge.images = images;
 	}
 
+	/** 画像幅配列をセットする。 */
 	public static void setImgW(int[] imgW) {
 		Badge.imgW = imgW;
 	}
 
+	/** 画像高さ配列をセットする。 */
 	public static void setImgH(int[] imgH) {
 		Badge.imgH = imgH;
 	}
 
+	/** 画像原点 X 配列をセットする。 */
 	public static void setPivX(int[] pivX) {
 		Badge.pivX = pivX;
 	}
 
+	/** 画像原点 Y 配列をセットする。 */
 	public static void setPivY(int[] pivY) {
 		Badge.pivY = pivY;
 	}
 
+	/** 位置キー文字列を返す。 */
 	public static String getPosKey() {
 		return POS_KEY;
 	}
 
+	/** アタッチメントプロパティ配列を返す。 */
 	public static int[] getProperty() {
 		return property;
 	}

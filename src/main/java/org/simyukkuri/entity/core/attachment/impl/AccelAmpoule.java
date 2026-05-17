@@ -70,6 +70,7 @@ public class AccelAmpoule extends Attachment {
 		}
 	}
 
+	/** 成長促進アンプルのティック処理。死亡・成体でなければ年齢を急速に加算する。 */
 	@Override
 	protected TickResult update() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
@@ -81,6 +82,7 @@ public class AccelAmpoule extends Attachment {
 		return TickResult.NONE;
 	}
 
+	/** 親ゆっくりの年齢層と向きに応じた画像を返す。 */
 	@Override
 	public BufferedImage getImage(Yukkuri b) {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
@@ -92,6 +94,7 @@ public class AccelAmpoule extends Attachment {
 		return images[pa.getAgeState().ordinal()][0];
 	}
 
+	/** 親ゆっくりの年齢層に応じて境界ボックスをリセットする。 */
 	@Override
 	public void resetBoundary() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
@@ -124,42 +127,52 @@ public class AccelAmpoule extends Attachment {
 		processInterval = 100;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public AccelAmpoule() {
 	}
 
+	/** アイテム名テキストを返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("item_accell_ampoule");
 	}
 
+	/** 画像配列を返す。 */
 	public static BufferedImage[][] getImages() {
 		return images;
 	}
 
+	/** 画像配列をセットする。 */
 	public static void setImages(BufferedImage[][] images) {
 		AccelAmpoule.images = images;
 	}
 
+	/** 画像幅配列をセットする。 */
 	public static void setImgW(int[] imgW) {
 		AccelAmpoule.imgW = imgW;
 	}
 
+	/** 画像高さ配列をセットする。 */
 	public static void setImgH(int[] imgH) {
 		AccelAmpoule.imgH = imgH;
 	}
 
+	/** 画像原点 X 配列をセットする。 */
 	public static void setPivX(int[] pivX) {
 		AccelAmpoule.pivX = pivX;
 	}
 
+	/** 画像原点 Y 配列をセットする。 */
 	public static void setPivY(int[] pivY) {
 		AccelAmpoule.pivY = pivY;
 	}
 
+	/** 位置キー文字列を返す。 */
 	public static String getPosKey() {
 		return POS_KEY;
 	}
 
+	/** アタッチメントプロパティ配列を返す。 */
 	public static int[] getProperty() {
 		return property;
 	}

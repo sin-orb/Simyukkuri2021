@@ -53,6 +53,7 @@ public class Trampoline extends WorldEntity {
 			this.name = name;
 		}
 
+		/** enum 名の文字列表現を返す。 */
 		public String toString() {
 			return name;
 		}
@@ -69,6 +70,7 @@ public class Trampoline extends WorldEntity {
 		boundary.setY(boundary.getHeight() - 1);
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		layer[0] = images[0];
@@ -80,27 +82,36 @@ public class Trampoline extends WorldEntity {
 		return boundary;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
 		return images[1];
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		GameWorld.get().getCurrentWorldState().getTrampolines().remove(objId);
 	}
 
 	@Override
+	/**
+	 * Grab.
+	 */
 	public void grab() {
 		grabbed = true;
 	}
 
 	@Override
+	/**
+	 * Kick.
+	 */
 	public void kick() {
 		kick(0, -8, -4);
 	}
 
+	/** 衝突判定対象タイプを返す。 */
 	@Override
 	@Transient
 	public int getHitCheckObjType() {
@@ -125,6 +136,7 @@ public class Trampoline extends WorldEntity {
 		return false;
 	}
 
+	/** 矩形と対象エンティティで衝突判定を行い、ヒット時に true を返す。 */
 	@Override
 	public boolean checkHitObj(Rectangle colRect, Entity o) {
 		if (checkHitObj(o)) {
@@ -158,6 +170,7 @@ public class Trampoline extends WorldEntity {
 		cost = 0;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Trampoline() {
 
 	}
@@ -225,26 +238,32 @@ public class Trampoline extends WorldEntity {
 		return true;
 	}
 
+	/** トランポリンのオプション設定値を返す。 */
 	public int getOption() {
 		return option;
 	}
 
+	/** トランポリンのオプション設定値をセットする。 */
 	public void setOption(int option) {
 		this.option = option;
 	}
 
+	/** 事故発生確率1（高さ系）を返す。 */
 	public int getAccident1() {
 		return accident1;
 	}
 
+	/** 事故発生確率1をセットする。 */
 	public void setAccident1(int accident1) {
 		this.accident1 = accident1;
 	}
 
+	/** 事故発生確率2（速度系）を返す。 */
 	public int getAccident2() {
 		return accident2;
 	}
 
+	/** 事故発生確率2をセットする。 */
 	public void setAccident2(int accident2) {
 		this.accident2 = accident2;
 	}

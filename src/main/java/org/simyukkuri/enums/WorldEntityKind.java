@@ -37,6 +37,7 @@ public enum WorldEntityKind {
 		this.classPack = cls;
 	}
 
+	/** エンティティ種別に対応する Class オブジェクトを返す。 */
 	public Class<?> getClassPack() {
 		return classPack;
 	}

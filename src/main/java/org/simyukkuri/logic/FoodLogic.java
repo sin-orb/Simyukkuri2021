@@ -30,6 +30,14 @@ public class FoodLogic {
 		return checkFood(body, GameWorld.get().getCurrentWorldState());
 	}
 
+	/**
+	 * 食べ物行動を処理して行動実行有無を返す。
+	 *
+	 * @param body ゆっくり
+	 * @param ws ワールド状態
+	 *
+	 * @return 処理が実行された場合は true、それ以外は false
+	 */
 	public static final boolean checkFood(Yukkuri body, WorldState ws) {
 		/*
 		 * 流れとしては、C1→C2→B1→B2 (Aはキャンセル判定)といった感じ
@@ -130,10 +138,27 @@ public class FoodLogic {
 
 	// 餌検索B
 	// 一般用
+	/**
+	 * 一般種用の食べ物を探索して返す。
+	 *
+	 * @param body ゆっくり
+	 * @param forceEat 強制給餌フラグ
+	 *
+	 * @return 対象を発見した場合はそのオブジェクト、見つからない場合は null
+	 */
 	public static final Entity searchFoodStandard(Yukkuri body, boolean[] forceEat) {
 		return FoodSearchPolicy.searchFoodStandard(body, forceEat);
 	}
 
+	/**
+	 * 一般種用の食べ物を探索して返す。
+	 *
+	 * @param body ゆっくり
+	 * @param forceEat 強制給餌フラグ
+	 * @param ws ワールド状態
+	 *
+	 * @return 対象を発見した場合はそのオブジェクト、見つからない場合は null
+	 */
 	public static final Entity searchFoodStandard(Yukkuri body, boolean[] forceEat, WorldState ws) {
 		return FoodSearchPolicy.searchFoodStandard(body, forceEat, ws);
 	}
@@ -150,6 +175,15 @@ public class FoodLogic {
 		return searchFoodPredetor(body, forceEat, GameWorld.get().getCurrentWorldState());
 	}
 
+	/**
+	 * 捕食種用の食べ物を探索して返す。
+	 *
+	 * @param body ゆっくり
+	 * @param forceEat 強制給餌フラグ
+	 * @param ws ワールド状態
+	 *
+	 * @return 対象を発見した場合はそのオブジェクト、見つからない場合は null
+	 */
 	public static final Entity searchFoodPredetor(Yukkuri body, boolean[] forceEat, WorldState ws) {
 		Entity candidate = null;
 		Entity candidate2 = null; // 副候補
@@ -237,6 +271,15 @@ public class FoodLogic {
 		return FoodTakeoutPolicy.checkTakeout(body, target);
 	}
 
+	/**
+	 * 持ち帰り行動の可否を判定して返す。
+	 *
+	 * @param body ゆっくり
+	 * @param target 対象エンティティ
+	 * @param ws ワールド状態
+	 *
+	 * @return 処理が実行された場合は true、それ以外は false
+	 */
 	public static boolean checkTakeout(Yukkuri body, Entity target, WorldState ws) {
 		return FoodTakeoutPolicy.checkTakeout(body, target, ws);
 	}

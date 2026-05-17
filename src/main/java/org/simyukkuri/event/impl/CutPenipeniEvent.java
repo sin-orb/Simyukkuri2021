@@ -31,14 +31,17 @@ public class CutPenipeniEvent extends EventPacket {
 		super(fromBody, toBody, targetObject, count);
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public CutPenipeniEvent() {
 
 	}
 
+	/** イベントの進行ティックカウンタを返す。 */
 	public int getTick() {
 		return tick;
 	}
 
+	/** イベントの進行ティックカウンタをセットする。 */
 	public void setTick(int tick) {
 		this.tick = tick;
 	}
@@ -46,6 +49,7 @@ public class CutPenipeniEvent extends EventPacket {
 	// 参加チェック
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
+	/** イベントへの参加可否を判定し、参加可能なら true を返す。 */
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
 
@@ -57,12 +61,14 @@ public class CutPenipeniEvent extends EventPacket {
 	}
 
 	// イベント開始動作
+	/** イベントの開始処理を実行する。 */
 	@Override
 	public void start(Yukkuri body) {
 	}
 
 	// 毎フレーム処理
 	// UpdateState.ABORTを返すとイベント終了
+	/** 毎ティック状態を更新する。 */
 	@Override
 	public UpdateState update(Yukkuri body) {
 		if (body.isUnBirth()) {
@@ -150,6 +156,7 @@ public class CutPenipeniEvent extends EventPacket {
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	/** イベント終了判定を行い true で終了する。 */
 	@Override
 	public boolean execute(Yukkuri body) {
 		return true;
@@ -157,6 +164,11 @@ public class CutPenipeniEvent extends EventPacket {
 
 	// イベント終了処理
 	@Override
+	/**
+	 * End.
+	 *
+	 * @param body the body
+	 */
 	public void end(Yukkuri body) {
 		body.setCalm();
 		body.setPenipeniCutted(true);
@@ -164,6 +176,7 @@ public class CutPenipeniEvent extends EventPacket {
 		body.setLockmove(false);
 	}
 
+	/** イベント名の文字列表現を返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("event_cutpeni");

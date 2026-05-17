@@ -899,6 +899,11 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		MyPane.setSelectedYukkuri(body);
 	}
 
+	/**
+	 * Shows error.
+	 *
+	 * @param s the s
+	 */
 	public static void showError(String s) {
 		JLabel label = new JLabel(s);
 		label.setForeground(Color.RED);

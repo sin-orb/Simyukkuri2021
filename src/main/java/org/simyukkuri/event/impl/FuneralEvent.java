@@ -56,41 +56,51 @@ public class FuneralEvent extends EventPacket {
 		setHighPriority();
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public FuneralEvent() {
 	}
 
+	/** イベントの進行ティックカウンタを返す。 */
 	public int getTick() {
 		return tick;
 	}
 
+	/** イベントの進行ティックカウンタをセットする。 */
 	public void setTick(int tick) {
 		this.tick = tick;
 	}
 
+	/** 行動フラグを返す。 */
 	public boolean isActionFlag() {
 		return actionFlag;
 	}
 
+	/** 行動フラグをセットする。 */
 	public void setActionFlag(boolean actionFlag) {
 		this.actionFlag = actionFlag;
 	}
 
+	/** うんうん行動フラグを返す。 */
 	public boolean isUnunActionFlag() {
 		return ununActionFlag;
 	}
 
+	/** うんうん行動フラグをセットする。 */
 	public void setUnunActionFlag(boolean ununActionFlag) {
 		this.ununActionFlag = ununActionFlag;
 	}
 
+	/** 発信者側の待機カウントを返す。 */
 	public int getFromWaitCount() {
 		return fromWaitCount;
 	}
 
+	/** 発信者側の待機カウントをセットする。 */
 	public void setFromWaitCount(int fromWaitCount) {
 		this.fromWaitCount = fromWaitCount;
 	}
 
+	/** ゆっくり以外のエンティティに対する簡易参加チェック。 */
 	@Override
 	public boolean simpleEventAction(Yukkuri b) {
 		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
@@ -106,6 +116,7 @@ public class FuneralEvent extends EventPacket {
 	// 参加チェック
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
+	/** イベントへの参加可否を判定し、参加可能なら true を返す。 */
 	@Override
 	public boolean checkEventResponse(Yukkuri b) {
 		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
@@ -151,15 +162,18 @@ public class FuneralEvent extends EventPacket {
 	}
 
 	// イベント開始動作
+	/** イベント開始時の初期化処理。 */
 	@Override
 	public void start(Yukkuri b) {
 		b.setCurrentEvent(this);
 	}
 
+	/** イベントの進行ステートを返す。 */
 	public STATE getState() {
 		return state;
 	}
 
+	/** イベントの進行ステートをセットする。 */
 	public void setState(STATE state) {
 		this.state = state;
 	}
@@ -167,6 +181,7 @@ public class FuneralEvent extends EventPacket {
 	// 毎フレーム処理
 	// "UpdateState.ABORT"を返すとイベント終了
 	// 親→子供→次のステート、の順で処理をする
+	/** 毎ティック状態を更新する。 */
 	@Override
 	public UpdateState update(Yukkuri b) {
 		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
@@ -506,17 +521,24 @@ public class FuneralEvent extends EventPacket {
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	/** イベント終了判定を行い true で終了する。 */
 	@Override
 	public boolean execute(Yukkuri b) {
 		return false;
 	}
 
 	@Override
+	/**
+	 * End.
+	 *
+	 * @param b the b
+	 */
 	public void end(Yukkuri b) {
 		b.setCurrentEvent(null);
 		return;
 	}
 
+	/** イベント名の文字列表現を返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("event_funeral");

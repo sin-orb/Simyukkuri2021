@@ -44,6 +44,7 @@ public class Toy extends WorldEntity {
 		boundary.setY(boundary.getHeight() - 1);
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (itemRank == ItemRank.HOUSE) {
@@ -59,24 +60,32 @@ public class Toy extends WorldEntity {
 		return boundary;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
 		return images[SHADOW];
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		GameWorld.get().getCurrentWorldState().getToys().remove(objId);
 	}
 
 	@Override
+	/**
+	 * Grab.
+	 */
 	public void grab() {
 		owner = null;
 		grabbed = true;
 	}
 
 	@Override
+	/**
+	 * Kick.
+	 */
 	public void kick() {
 		kick(0, -8, -4);
 	}
@@ -137,14 +146,17 @@ public class Toy extends WorldEntity {
 
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Toy() {
 
 	}
 
+	/** アイテムのランク（品質）を返す。 */
 	public ItemRank getItemRank() {
 		return itemRank;
 	}
 
+	/** アイテムのランク（品質）をセットする。 */
 	public void setItemRank(ItemRank itemRank) {
 		this.itemRank = itemRank;
 	}

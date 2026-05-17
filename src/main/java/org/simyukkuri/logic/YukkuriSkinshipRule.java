@@ -17,11 +17,11 @@ public final class YukkuriSkinshipRule {
 	}
 
 	/**
-	 * Handle the family-contact and skinship branches in doActionOther.
+	 * doActionOther の家族接触・スキンシップ分岐を処理する。
 	 *
-	 * @param targetBody target body
-	 * @param actorBody  actor body
-	 * @return true when the branch handled the action
+	 * @param targetBody 処理対象ゆっくり
+	 * @param actorBody  行動主体ゆっくり
+	 * @return 分岐が処理を担当した場合は true
 	 */
 	public static boolean handleSkinship(Yukkuri targetBody, Yukkuri actorBody) {
 		// 相手がありに食われてる時

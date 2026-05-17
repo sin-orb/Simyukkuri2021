@@ -12,6 +12,11 @@ import org.simyukkuri.system.MainCommandSelection;
  */
 public final class SubItemComboBoxListener implements ItemListener {
 	@Override
+	/**
+	 * Item state changed.
+	 *
+	 * @param e イベント
+	 */
 	public void itemStateChanged(ItemEvent e) {
 		synchronized (SimYukkuri.lock) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {

@@ -92,6 +92,7 @@ public class Fire extends Attachment {
 		}
 	}
 
+	/** アニメフレームに応じた炎画像を返す。 */
 	@Override
 	public BufferedImage getImage(Yukkuri b) {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
@@ -100,6 +101,7 @@ public class Fire extends Attachment {
 		return images[pa.getAgeState().ordinal()][animeFrame];
 	}
 
+	/** 炎のティック処理。ダメージ・ストレス加算、燃焼進行、お飾り・毛の消失、実ゆ親への通知を行う。 */
 	@Override
 	protected TickResult update() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
@@ -161,6 +163,7 @@ public class Fire extends Attachment {
 		return TickResult.NONE;
 	}
 
+	/** 親ゆっくりの年齢層に応じて境界ボックスをリセットする。 */
 	@Override
 	public void resetBoundary() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
@@ -201,52 +204,64 @@ public class Fire extends Attachment {
 		processInterval = 1;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Fire() {
 
 	}
 
+	/** 燃焼経過時間を返す。 */
 	public int getBurnPeriod() {
 		return burnPeriod;
 	}
 
+	/** 燃焼経過時間をセットする。 */
 	public void setBurnPeriod(int burnPeriod) {
 		this.burnPeriod = burnPeriod;
 	}
 
+	/** アイテム名テキストを返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("item_fire");
 	}
 
 	// テスト用静的アクセサ
+	/** 画像配列を返す。 */
 	public static BufferedImage[][] getImages() {
 		return images;
 	}
 
+	/** 画像配列をセットする。 */
 	public static void setImages(BufferedImage[][] images) {
 		Fire.images = images;
 	}
 
+	/** 画像幅配列をセットする。 */
 	public static void setImgW(int[] imgW) {
 		Fire.imgW = imgW;
 	}
 
+	/** 画像高さ配列をセットする。 */
 	public static void setImgH(int[] imgH) {
 		Fire.imgH = imgH;
 	}
 
+	/** 画像原点 X 配列をセットする。 */
 	public static void setPivX(int[] pivX) {
 		Fire.pivX = pivX;
 	}
 
+	/** 画像原点 Y 配列をセットする。 */
 	public static void setPivY(int[] pivY) {
 		Fire.pivY = pivY;
 	}
 
+	/** 位置キー文字列を返す。 */
 	public static String getPosKey() {
 		return POS_KEY;
 	}
 
+	/** アタッチメントプロパティ配列を返す。 */
 	public static int[] getProperty() {
 		return property;
 	}

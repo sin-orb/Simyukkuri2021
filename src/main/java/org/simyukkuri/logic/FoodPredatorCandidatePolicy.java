@@ -89,6 +89,9 @@ public final class FoodPredatorCandidatePolicy {
 		return new SearchResult(null, null, 0, 0, 0, nearestDeadObject, nearestDeadDistance);
 	}
 
+	/**
+	 * SearchResult.
+	 */
 	public static final class SearchResult {
 		private final Entity nearestLiveObject;
 		private final Entity nearestOtherObject;
@@ -115,30 +118,37 @@ public final class FoodPredatorCandidatePolicy {
 			this.nearestDeadDistance = nearestDeadDistance;
 		}
 
+		/** 最も近い生存捕食対象エンティティを返す。 */
 		public Entity getNearestLiveObject() {
 			return nearestLiveObject;
 		}
 
+		/** 最も近い別種エンティティを返す。 */
 		public Entity getNearestOtherObject() {
 			return nearestOtherObject;
 		}
 
+		/** 最も近い生存捕食対象との距離（二乗値）を返す。 */
 		public int getNearestLiveDistance() {
 			return nearestLiveDistance;
 		}
 
+		/** 最も近い別種エンティティとの距離（二乗値）を返す。 */
 		public int getNearestOtherDistance() {
 			return nearestOtherDistance;
 		}
 
+		/** 候補リストのサイズを返す。 */
 		public int getSize() {
 			return size;
 		}
 
+		/** 最も近い死亡エンティティを返す。 */
 		public Entity getNearestDeadObject() {
 			return nearestDeadObject;
 		}
 
+		/** 最も近い死亡エンティティとの距離（二乗値）を返す。 */
 		public int getNearestDeadDistance() {
 			return nearestDeadDistance;
 		}

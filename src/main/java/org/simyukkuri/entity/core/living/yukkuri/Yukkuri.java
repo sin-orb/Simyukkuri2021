@@ -313,6 +313,7 @@ public abstract class Yukkuri extends SocialEntity {
 		return null;
 	}
 
+	/** ゆっくりの名前と年齢層を含む文字列表現を返す。 */
 	@Override
 	public String toString() {
 		String name = GameLocale.isJapanese() ? getNameJ() : getNameE();
@@ -354,9 +355,7 @@ public abstract class Yukkuri extends SocialEntity {
 		spriteDelegate().changeReUnyo();
 	}
 
-	/**
-	 * Resets unyo offsets to neutral.
-	 */
+	/** うにょオフセットを中立値にリセットする。 */
 	public void resetUnyo() {
 		spriteDelegate().resetUnyo();
 	}
@@ -488,33 +487,43 @@ public abstract class Yukkuri extends SocialEntity {
 		}
 	}
 
+	/** 皮むき状態になったときの処理を委譲する。 */
 	@Override
 	protected void onPealed() { stateDelegate().onPealed(); }
 
+	/** まんじゅう詰め状態になったときの処理を委譲する。 */
 	@Override
 	protected void onPacked() { stateDelegate().onPacked(); }
 
+	/** 轢き事故を受けたときの処理を委譲する。 */
 	@Override
 	protected void onCarAccident() { abuseDelegate().strikeByPress(); }
 
+	/** 毒蒸気を受けたときの処理を委譲する。 */
 	@Override
 	protected void onPoisonSteam() { stateDelegate().onPoisonSteam(); }
 
+	/** 切断ダメージを受けたときの処理を委譲する。 */
 	@Override
 	protected void onCutDamageReaction() { stateDelegate().onCutDamageReaction(); }
 
+	/** 傷つき叫び処理をステートデリゲートに委譲する。 */
 	@Override
 	protected void onInjuredScream(int x, int y) { stateDelegate().onInjuredScream(x, y); }
 
+	/** 悪夢ハンドラをステートデリゲートに委譲する。 */
 	@Override
 	protected void onNightmare(boolean nightmare) { stateDelegate().onNightmare(nightmare); }
 
+	/** 空腹起床ハンドラをステートデリゲートに委譲する。 */
 	@Override
 	protected void onWakeByHunger() { stateDelegate().onWakeByHunger(); }
 
+	/** 自然起床ハンドラをステートデリゲートに委譲する。 */
 	@Override
 	protected void onWakeupNaturally() { stateDelegate().onWakeupNaturally(); }
 
+	/** 子ゆの状態変化通知を茎デリゲートに委譲する。 */
 	@Override
 	public void onChildStateNotify(UnbirthBabyState state, boolean childDead) {
 		stalkDelegate().onChildStateNotify(state, childDead);
@@ -716,6 +725,7 @@ public abstract class Yukkuri extends SocialEntity {
 		messageDelegate().setNegiMessage(message, count, piko);
 	}
 
+	/** 潰された際に嘔吐物エフェクトを追加する。 */
 	protected void addCrushedVomit(int x, int y, int z) {
 		GameView.addCrushedVomit(x, y, z, this, getShitType());
 	}
@@ -735,6 +745,7 @@ public abstract class Yukkuri extends SocialEntity {
 		stalkDelegate().setUnBirth(flag);
 	}
 
+	/** JSON ロード用の実ゆフラグ設定メソッド。 */
 	@JsonProperty("unBirth")
 	public void setUnBirthForLoad(boolean flag) {
 		stalkDelegate().setUnBirthForLoad(flag);
@@ -844,10 +855,12 @@ public abstract class Yukkuri extends SocialEntity {
 		spriteDelegate().updateSpriteSize();
 	}
 
+	/** 衝突判定矩形を r にセットする。 */
 	public final void getBoundaryShape(Rectangle r) {
 		spriteDelegate().getBoundaryShape(r);
 	}
 
+	/** 拡大判定矩形を r にセットする。 */
 	public final void getExpandShape(Rectangle4y r) {
 		spriteDelegate().getExpandShape(r);
 	}
@@ -1262,6 +1275,7 @@ public abstract class Yukkuri extends SocialEntity {
 		YukkuriMovement.moveTo(this, toX, toY, toZ);
 	}
 
+	/** 移動目標へのオフセットをセットする。 */
 	public final void setTargetMoveOffset(int ox, int oy) {
 		moveDelegate().setTargetMoveOffset(ox, oy);
 	}
@@ -1884,6 +1898,7 @@ public abstract class Yukkuri extends SocialEntity {
 	// ------------------------------------------
 
 	// --------------------------------------------------
+	/** ワールドからゆっくりを除去し、関連するリソースを解放する。 */
 	@Override
 	public void remove() {
 		synchronized (SimYukkuri.lock) {
@@ -2069,6 +2084,9 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	@Override
+	/**
+	 * Grab.
+	 */
 	public void grab() {
 		stalkDelegate().grab();
 	}
@@ -2430,11 +2448,13 @@ public abstract class Yukkuri extends SocialEntity {
 		return bodies.toArray(new Yukkuri[0]);
 	}
 
+	/** 取得ポップアップを持つかを返す（常に BODY）。 */
 	@Override
 	public GetMenuTarget hasGetPopup() {
 		return GetMenuTarget.BODY;
 	}
 
+	/** 使用ポップアップを持つかを返す。 */
 	@Override
 	public UseMenuTarget hasUsePopup() {
 		return UseMenuTarget.BODY;
@@ -2592,6 +2612,7 @@ public abstract class Yukkuri extends SocialEntity {
 
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Yukkuri() {
 		objType = Type.YUKKURI;
 		objId = Numbering.INSTANCE.numberingObjId();
@@ -2710,15 +2731,19 @@ public abstract class Yukkuri extends SocialEntity {
 	/** 妊娠期間 */
 	protected int pregnantPeriod = 0;
 
+	/** 実ゆフラグのフィールド値を返す。 */
 	@Override
 	protected boolean getUnBirthField() { return unBirth; }
 
+	/** 実ゆフラグのフィールド値をセットする。 */
 	@Override
 	protected void setUnBirthField(boolean v) { unBirth = v; }
 
+	/** 妊娠期間を返す。 */
 	@Override
 	public int getPregnantPeriod() { return pregnantPeriod; }
 
+	/** 妊娠期間をセットする。 */
 	@Override
 	public void setPregnantPeriod(int pregnantPeriod) { this.pregnantPeriod = pregnantPeriod; }
 
@@ -2729,21 +2754,27 @@ public abstract class Yukkuri extends SocialEntity {
 	/** 発情期間 */
 	protected int excitingPeriod = 0;
 
+	/** 発情中かどうかを返す。死亡時は常に false。 */
 	@Override
 	public boolean isExciting() { return !dead && exciting; }
 
+	/** 発情フラグをセットする。 */
 	@Override
 	public void setExciting(boolean exciting) { this.exciting = exciting; }
 
+	/** 強制発情中かどうかを返す。死亡・非発情時は常に false。 */
 	@Override
 	public boolean isForceExciting() { return !dead && exciting && forceExciting; }
 
+	/** 強制発情フラグをセットする。 */
 	@Override
 	public void setForceExciting(boolean forceExciting) { this.forceExciting = forceExciting; }
 
+	/** 発情期間を返す。 */
 	@Override
 	public int getExcitingPeriod() { return excitingPeriod; }
 
+	/** 発情期間をセットする。 */
 	@Override
 	public void setExcitingPeriod(int excitingPeriod) { this.excitingPeriod = excitingPeriod; }
 
@@ -2753,21 +2784,25 @@ public abstract class Yukkuri extends SocialEntity {
 	/** 非ゆっくり症にかかっている期間 */
 	protected int nonYukkuriDiseasePeriod = 0;
 
+	/** 中枢餡の状態（非ゆっくり症フラグ）を返す。 */
 	@Override
 	public CoreAnkoState getCoreAnkoState() {
 		return coreAnkoState;
 	}
 
+	/** 中枢餡の状態をセットする。 */
 	@Override
 	public void setCoreAnkoState(CoreAnkoState coreAnkoState) {
 		this.coreAnkoState = coreAnkoState;
 	}
 
+	/** 非ゆっくり症にかかっている期間を返す。 */
 	@Override
 	public int getNonYukkuriDiseasePeriod() {
 		return nonYukkuriDiseasePeriod;
 	}
 
+	/** 非ゆっくり症期間をセットする。 */
 	@Override
 	public void setNonYukkuriDiseasePeriod(int v) {
 		this.nonYukkuriDiseasePeriod = v;
@@ -2801,10 +2836,12 @@ public abstract class Yukkuri extends SocialEntity {
 	/** 辛いえさが好きか */
 	protected boolean likeHotFood = false;
 
+	/** おかざりがなくなったことに気づいているかどうかを返す。 */
 	public boolean isNoticeNoOkazari() {
 		return noticeNoOkazari;
 	}
 
+	/** おかざりなし気づきフラグをセットする。 */
 	public void setNoticeNoOkazari(boolean noticeNoOkazari) {
 		this.noticeNoOkazari = noticeNoOkazari;
 	}
@@ -3197,10 +3234,12 @@ public abstract class Yukkuri extends SocialEntity {
 	/** うにょの動きの強さ */
 	public final static int UNYOSTRENGTH[] = { 4, 7, 10 };
 
+	/** 影画像の配列を返す。 */
 	public static BufferedImage[] getShadowImages() {
 		return YukkuriSpriteDelegate.getShadowImages();
 	}
 
+	/** 影画像の配列をセットする。 */
 	public static void setShadowImages(BufferedImage[] shadowImages) {
 		YukkuriSpriteDelegate.setShadowImages(shadowImages);
 	}
@@ -3223,10 +3262,12 @@ public abstract class Yukkuri extends SocialEntity {
 		YukkuriSpriteDelegate.setShadowImgW(shadowImgW);
 	}
 
+	/** 影画像の高さ定義を返す。 */
 	public static int[] getShadowImgH() {
 		return YukkuriSpriteDelegate.getShadowImgH();
 	}
 
+	/** 影画像の高さ定義をセットする。 */
 	public static void setShadowImgH(int[] shadowImgH) {
 		YukkuriSpriteDelegate.setShadowImgH(shadowImgH);
 	}
@@ -3249,10 +3290,12 @@ public abstract class Yukkuri extends SocialEntity {
 		YukkuriSpriteDelegate.setShadowPivX(shadowPivX);
 	}
 
+	/** 影画像の Y 方向中心定義を返す。 */
 	public static int[] getShadowPivY() {
 		return YukkuriSpriteDelegate.getShadowPivY();
 	}
 
+	/** 影画像の Y 方向中心定義をセットする。 */
 	public static void setShadowPivY(int[] shadowPivY) {
 		YukkuriSpriteDelegate.setShadowPivY(shadowPivY);
 	}
@@ -3820,11 +3863,13 @@ public abstract class Yukkuri extends SocialEntity {
 		setAnkoAmount(getDamageLimitBase()[val.ordinal()]);
 	}
 
+	/** 衝突判定の X 幅を返す。 */
 	@Transient
 	public int getCollisionX() {
 		return spriteDelegate().getCollisionX();
 	}
 
+	/** 衝突判定の Y 幅を返す。 */
 	@Transient
 	public int getCollisionY() {
 		return spriteDelegate().getCollisionY();
@@ -3840,61 +3885,73 @@ public abstract class Yukkuri extends SocialEntity {
 		return moveDelegate().getStep();
 	}
 
+	/** 1ステップの移動距離を返す。 */
 	@Transient
 	public int getStepDist() {
 		return moveDelegate().getStepDist();
 	}
 
+	/** 現在の体スプライト定義を返す。 */
 	@Transient
 	public Sprite getSpriteSetite() {
 		return spriteDelegate().getSpriteSetite();
 	}
 
+	/** 拡大状態のスプライト定義を返す。 */
 	@Transient
 	public Sprite getExpandedSpriteSet() {
 		return spriteDelegate().getExpandedSpriteSet();
 	}
 
+	/** お下げ（羽・尻尾）のスプライト定義を返す。 */
 	@Transient
 	public Sprite getBraidSprite() {
 		return spriteDelegate().getBraidSprite();
 	}
 
+	/** 現在サイズに対応する影画像を返す。 */
 	@Transient
 	public BufferedImage getShadowImage() {
 		return spriteDelegate().getShadowImage();
 	}
 
+	/** 影画像の高さを返す。 */
 	@Transient
 	public int getShadowH() {
 		return spriteDelegate().getShadowH();
 	}
 
+	/** 体スプライトの幅を返す。 */
 	@Transient
 	public int getW() {
 		return spriteDelegate().getW();
 	}
 
+	/** 体スプライトの高さを返す。 */
 	@Transient
 	public int getH() {
 		return spriteDelegate().getH();
 	}
 
+	/** 体スプライトの X 軸原点を返す。 */
 	@Transient
 	public int getPivotX() {
 		return spriteDelegate().getPivotX();
 	}
 
+	/** 体スプライトの Y 軸原点を返す。 */
 	@Transient
 	public int getPivotY() {
 		return spriteDelegate().getPivotY();
 	}
 
+	/** お下げスプライトの幅を返す。 */
 	@Transient
 	public int getBraidW() {
 		return spriteDelegate().getBraidW();
 	}
 
+	/** お下げスプライトの高さを返す。 */
 	@Transient
 	public int getBraidH() {
 		return spriteDelegate().getBraidH();

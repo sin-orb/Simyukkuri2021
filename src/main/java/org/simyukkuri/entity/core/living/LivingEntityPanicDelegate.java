@@ -12,6 +12,7 @@ import org.simyukkuri.util.GameMessages;
 public final class LivingEntityPanicDelegate {
 	private final LivingEntity body;
 
+	/** 指定の LivingEntity をラップしてデリゲートを初期化する。 */
 	public LivingEntityPanicDelegate(LivingEntity body) {
 		this.body = body;
 	}

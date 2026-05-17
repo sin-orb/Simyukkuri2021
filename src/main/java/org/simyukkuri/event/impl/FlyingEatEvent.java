@@ -36,19 +36,23 @@ public class FlyingEatEvent extends EventPacket {
 		super(f, t, tgt, cnt);
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public FlyingEatEvent() {
 
 	}
 
+	/** イベントの進行ティックカウンタを返す。 */
 	public int getTick() {
 		return tick;
 	}
 
+	/** イベントの進行ティックカウンタをセットする。 */
 	public void setTick(int tick) {
 		this.tick = tick;
 	}
 
 	// 参加チェック
+	/** イベントへの参加可否を判定し、参加可能なら true を返す。 */
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
 		setHighPriority();
@@ -56,6 +60,7 @@ public class FlyingEatEvent extends EventPacket {
 	}
 
 	// イベント開始動作
+	/** イベントの開始処理を実行する。 */
 	@Override
 	public void start(Yukkuri body) {
 		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
@@ -74,6 +79,7 @@ public class FlyingEatEvent extends EventPacket {
 
 	// 毎フレーム処理
 	// UpdateState.ABORTを返すとイベント終了
+	/** 毎ティック状態を更新する。 */
 	@Override
 	public UpdateState update(Yukkuri body) {
 		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
@@ -107,6 +113,7 @@ public class FlyingEatEvent extends EventPacket {
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	/** イベント終了判定を行い true で終了する。 */
 	@Override
 	public boolean execute(Yukkuri body) {
 		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
@@ -158,12 +165,18 @@ public class FlyingEatEvent extends EventPacket {
 
 	// イベント終了処理
 	@Override
+	/**
+	 * End.
+	 *
+	 * @param body the body
+	 */
 	public void end(Yukkuri body) {
 		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		if (targetBody != null)
 			targetBody.setParentLinkId(-1);
 	}
 
+	/** イベント名の文字列表現を返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("event_eatinair");

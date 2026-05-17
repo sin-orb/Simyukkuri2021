@@ -267,6 +267,13 @@ public final class YukkuriBirthTypeResolver {
 		return babyType;
 	}
 
+	/**
+	 * 父体のゆっくりタイプを祖先遡り補正して返す。
+	 *
+	 * @param iFatherType 父タイプID（父体がいない場合の初期値）
+	 * @param father      父体（null 可）
+	 * @return 補正後の父タイプID
+	 */
 	public static int resolveFatherType(int iFatherType, Yukkuri father) {
 		if (father == null) {
 			return iFatherType;
@@ -274,10 +281,23 @@ public final class YukkuriBirthTypeResolver {
 		return applyAncestorReversion(father.getAncestors(), YukkuriType.fromTypeID(iFatherType)).getTypeID();
 	}
 
+	/**
+	 * 母体のゆっくりタイプを祖先遡り補正して返す。
+	 *
+	 * @param mother 母体
+	 * @return 補正後の母タイプID
+	 */
 	public static int resolveMotherType(Yukkuri mother) {
 		return applyAncestorReversion(mother.getAncestors(), mother.getType()).getTypeID();
 	}
 
+	/**
+	 * 親の性格から子供の性格を確率的に決定して返す。
+	 *
+	 * @param mother     母体
+	 * @param fatherrAtt 父の性格
+	 * @return 子供の性格
+	 */
 	public static Attitude resolveAttitude(Yukkuri mother, Attitude fatherrAtt) {
 		int attBase = mother.getAttitude().ordinal() + fatherrAtt.ordinal();
 		Attitude[] attitude = Attitude.values();
@@ -316,6 +336,13 @@ public final class YukkuriBirthTypeResolver {
 		}
 	}
 
+	/**
+	 * 親の知性から子供の知性を確率的に決定して返す。
+	 *
+	 * @param mother     母体
+	 * @param fatherInt  父の知性
+	 * @return 子供の知性
+	 */
 	public static Intelligence resolveIntelligence(Yukkuri mother, Intelligence fatherInt) {
 		int intBase = mother.getIntelligence().ordinal() + fatherInt.ordinal();
 		Intelligence[] intel = Intelligence.values();

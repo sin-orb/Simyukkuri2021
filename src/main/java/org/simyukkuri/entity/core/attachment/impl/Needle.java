@@ -88,6 +88,7 @@ public class Needle extends Attachment {
 		}
 	}
 
+	/** 針のティック処理。ダメージ・ストレス加算、痛みの表情・セリフ設定、実ゆ親への通知を行う。 */
 	@Override
 	protected TickResult update() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
@@ -134,6 +135,7 @@ public class Needle extends Attachment {
 		return TickResult.NONE;
 	}
 
+	/** 親ゆっくりの年齢層と向きに応じた画像を返す。 */
 	@Override
 	public BufferedImage getImage(Yukkuri b) {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
@@ -145,6 +147,7 @@ public class Needle extends Attachment {
 		return images[pa.getAgeState().ordinal()][0];
 	}
 
+	/** 親ゆっくりの年齢層に応じて境界ボックスをリセットする。 */
 	@Override
 	public void resetBoundary() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
@@ -184,48 +187,59 @@ public class Needle extends Attachment {
 		processInterval = 1;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Needle() {
 
 	}
 
+	/** アイテム名テキストを返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("item_needle");
 	}
 
 	// テスト用静的アクセサ
+	/** 画像配列を返す。 */
 	public static BufferedImage[][] getImages() {
 		return images;
 	}
 
+	/** 画像配列をセットする。 */
 	public static void setImages(BufferedImage[][] images) {
 		Needle.images = images;
 	}
 
+	/** 画像幅配列をセットする。 */
 	public static void setImgW(int[] imgW) {
 		Needle.imgW = imgW;
 	}
 
+	/** 画像高さ配列をセットする。 */
 	public static void setImgH(int[] imgH) {
 		Needle.imgH = imgH;
 	}
 
+	/** 画像原点 X 配列をセットする。 */
 	public static void setPivX(int[] pivX) {
 		Needle.pivX = pivX;
 	}
 
+	/** 画像原点 Y 配列をセットする。 */
 	public static void setPivY(int[] pivY) {
 		Needle.pivY = pivY;
 	}
 
+	/** 位置キー文字列を返す。 */
 	public static String getPosKey() {
 		return POS_KEY;
 	}
 
+	/** 肛門刺さり時の位置キー文字列を返す。 */
 	public static String getPosKeyInAnal() {
 		return POS_KEY_IN_ANAL;
 	}
 
+	/** アタッチメントプロパティ配列を返す。 */
 	public static int[] getProperty() {
 		return property;
 	}

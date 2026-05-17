@@ -36,14 +36,17 @@ public enum YukkuriRank {
 		this.displayName = str;
 	}
 
+	/** ランクに対応する画像インデックスを返す。 */
 	public int getImageIndex() {
 		return imageIndex;
 	}
 
+	/** ランクに対応するメッセージインデックスを返す。 */
 	public int getMessageIndex() {
 		return messageIndex;
 	}
 
+	/** ランクの表示名を返す。 */
 	public String getDisplayName() {
 		return displayName;
 	}

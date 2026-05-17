@@ -43,6 +43,14 @@ public class FamilyActionLogic {
 		return checkFamilyAction(body, GameWorld.get().getCurrentWorldState());
 	}
 
+	/**
+	 * 家族行動を処理して行動実行有無を返す。
+	 *
+	 * @param body ゆっくり
+	 * @param ws ワールド状態
+	 *
+	 * @return 処理が実行された場合は true、それ以外は false
+	 */
 	public static final boolean checkFamilyAction(Yukkuri body, WorldState ws) {
 		// 他の用事がある場合
 		if (body.isToFood() || body.isToYukkuri() || body.isToSukkiri() ||
@@ -295,10 +303,27 @@ public class FamilyActionLogic {
 	}
 
 	// うんうん体操
+	/**
+	 * うんうん体操イベントを発生させてトイレへ向かわせる。
+	 *
+	 * @param body ゆっくり
+	 * @param childrenList 子ゆっくりリスト
+	 *
+	 * @return 処理が実行された場合は true、それ以外は false
+	 */
 	public static final boolean goToShit(Yukkuri body, List<Yukkuri> childrenList) {
 		return goToShit(body, childrenList, GameWorld.get().getCurrentWorldState());
 	}
 
+	/**
+	 * うんうん体操イベントを発生させてトイレへ向かわせる。
+	 *
+	 * @param body ゆっくり
+	 * @param childrenList 子ゆっくりリスト
+	 * @param ws ワールド状態
+	 *
+	 * @return 処理が実行された場合は true、それ以外は false
+	 */
 	public static final boolean goToShit(Yukkuri body, List<Yukkuri> childrenList, WorldState ws) {
 		Entity targetToilet = searchToilet(body, ws);
 		if (!body.checkWait(2000)) {
@@ -324,6 +349,14 @@ public class FamilyActionLogic {
 		return searchToilet(body, GameWorld.get().getCurrentWorldState());
 	}
 
+	/**
+	 * 最適なトイレを視野内で探索して返す。
+	 *
+	 * @param body ゆっくり
+	 * @param ws ワールド状態
+	 *
+	 * @return 対象を発見した場合はそのオブジェクト、見つからない場合は null
+	 */
 	public static Entity searchToilet(Yukkuri body, WorldState ws) {
 		Entity nearestToilet = null;
 		int minimumDistance = body.getEyesightBase();
@@ -358,6 +391,15 @@ public class FamilyActionLogic {
 		return goToEat(body, childrenList, GameWorld.get().getCurrentWorldState());
 	}
 
+	/**
+	 * フィールドの食べ物を探して子に届ける行動を開始させる。
+	 *
+	 * @param body ゆっくり
+	 * @param childrenList 子ゆっくりリスト
+	 * @param ws ワールド状態
+	 *
+	 * @return 処理が実行された場合は true、それ以外は false
+	 */
 	public static final boolean goToEat(Yukkuri body, List<Yukkuri> childrenList, WorldState ws) {
 		// 餌を持っていたら落とす
 		body.dropTakeoutItem(TakeoutItemType.FOOD);
@@ -389,6 +431,14 @@ public class FamilyActionLogic {
 		return searchFood(body, GameWorld.get().getCurrentWorldState());
 	}
 
+	/**
+	 * 家族に届ける食べ物を視野内で探索して返す。
+	 *
+	 * @param body ゆっくり
+	 * @param ws ワールド状態
+	 *
+	 * @return 対象を発見した場合はそのオブジェクト、見つからない場合は null
+	 */
 	public static final Entity searchFood(Yukkuri body, WorldState ws) {
 		Entity nearestFood = null;
 		int minimumDistance = body.getEyesightBase();

@@ -31,6 +31,18 @@ public final class FoodPredatorFallbackPolicy {
 				GameWorld.get().getCurrentWorldState());
 	}
 
+	/**
+	 * フォールバック候補として最適な食べ物を探索して返す。
+	 *
+	 * @param body ゆっくり
+	 * @param nearestFood 最も近い食べ物の現在候補
+	 * @param fallbackFood フォールバック候補の食べ物
+	 * @param nearestDistance 現在の最短距離（二乗値）
+	 * @param wallMode 壁通過モード
+	 * @param ws ワールド状態
+	 *
+	 * @return 対象を発見した場合はそのオブジェクト、見つからない場合は null
+	 */
 	public static Entity searchFallbackFood(Yukkuri body, Entity nearestFood, Entity fallbackFood, int nearestDistance,
 			int wallMode, WorldState ws) {
 		if (nearestFood == null && body.isFull()) {

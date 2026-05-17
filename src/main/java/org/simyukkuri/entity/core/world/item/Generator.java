@@ -30,6 +30,7 @@ public class Generator extends WorldEntity {
 	//
 	// private Entity o = null;
 	//
+	/** 画像をロードし境界矩形を設定する。 */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 		imageLayers[0] = ModLoader.loadItemImage(loader, "garbagechute" + File.separator + "garbagechute.png");
 		imageLayers[1] = ModLoader.loadItemImage(loader, "garbagechute" + File.separator + "garbagechute_off.png");
@@ -40,6 +41,7 @@ public class Generator extends WorldEntity {
 	}
 
 	//
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (enabled)
@@ -50,6 +52,7 @@ public class Generator extends WorldEntity {
 	}
 
 	//
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
@@ -101,13 +104,19 @@ public class Generator extends WorldEntity {
 	// }
 	// }
 	//
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		// GameWorld.get().currentMap.generator.remove(this);
 	}
 
-	//
-	// // initOption = 1 野良用
+	/**
+	 * コンストラクタ。
+	 *
+	 * @param initX      初期 X 座標
+	 * @param initY      初期 Y 座標
+	 * @param initOption 生成オプション（1=野良用）
+	 */
 	public Generator(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);

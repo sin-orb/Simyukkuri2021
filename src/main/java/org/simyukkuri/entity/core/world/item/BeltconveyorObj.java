@@ -95,6 +95,9 @@ public class BeltconveyorObj extends WorldEntity {
 	protected int[] polygonX = new int[4];
 	protected int[] polygonY = new int[4];
 
+	/**
+	 * Action enum type.
+	 */
 	public static enum Action {
 		YUKKURI_FILTER(GameText.read("item_filtersettings"), ""),
 		;
@@ -105,11 +108,13 @@ public class BeltconveyorObj extends WorldEntity {
 			this.name = nameJ;
 		}
 
+		/** アクション名を返す。 */
 		public String toString() {
 			return name;
 		}
 	}
 
+	/** 画像リソースをロードする。 */
 	public static void loadImages(ClassLoader loader, ImageObserver io)
 			throws IOException {
 		for (int i = 0; i < 10; i++)
@@ -135,6 +140,7 @@ public class BeltconveyorObj extends WorldEntity {
 		istrOptionList.add(GameText.read("item_onlydeadbody"));
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		int frame = 0;
@@ -161,6 +167,7 @@ public class BeltconveyorObj extends WorldEntity {
 		return 1;
 	}
 
+	/** ベルトコンベア面をテクスチャ塗りつぶして描画し、使用レイヤー数を返す。 */
 	public int getImageLayer(Graphics2D g2, BufferedImage[] layer) {
 		int[] basePolygonX = new int[2];
 		int[] basePolygonY = new int[2];
@@ -174,21 +181,25 @@ public class BeltconveyorObj extends WorldEntity {
 		return 1;
 	}
 
+	/** 指定インデックスの画像を返す（現在は null）。 */
 	public Image getImage(int idx) {
 		return null;
 	}
 
+	/** 画像レイヤー数を返す。 */
 	@Transient
 	public int getImageLayerCount() {
 		return 0;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
 		return null;
 	}
 
+	/** ベルトコンベア配置前のプレビュー描画を行う。 */
 	public static void drawPreview(Graphics2D g2, int sx, int sy, int ex, int ey) {
 		int[] polygonX = new int[4];
 		int[] polygonY = new int[4];
@@ -196,15 +207,18 @@ public class BeltconveyorObj extends WorldEntity {
 		g2.drawPolygon(polygonX, polygonY, 4);
 	}
 
+	/** 境界ボックスを返す。 */
 	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
+	/** 衝突判定対象タイプを返す。 */
 	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}
 
+	/** 指定座標がベルトコンベア上にあるかチェックする。 */
 	public boolean checkContain(int inX, int inY, boolean isField) {
 		int xCoord = inX;
 		int yCoord = inY;
@@ -225,6 +239,7 @@ public class BeltconveyorObj extends WorldEntity {
 		return false;
 	}
 
+	/** 衝突判定を行い、範囲内のオブジェクトを搬送対象に追加する。 */
 	public boolean checkHitObj(Rectangle colRect, Entity o) {
 		if ((o instanceof Yukkuri) && ((Yukkuri) o).isLockmove())
 			return false;
@@ -247,6 +262,7 @@ public class BeltconveyorObj extends WorldEntity {
 	}
 
 	// 箱を斜めから見下ろしている形式なので奥のxと手前のxで同じ座標でも垂直にならない
+	/** 衝突処理を行い、結果コードを返す。 */
 	public int objHitProcess(Entity o) {
 		int objX = o.getX();
 		int objY = o.getY();
@@ -393,15 +409,18 @@ public class BeltconveyorObj extends WorldEntity {
 		return 0;
 	}
 
+	/** 維持コストを定期的に引く。 */
 	public void upDate() {
 		if (getAge() % 2400L == 0L)
 			Cash.addCash(-getCost());
 	}
 
+	/** ベルト速度を返す。 */
 	public int getBeltSpeed() {
 		return beltSpeed;
 	}
 
+	/** ワールドからベルトコンベアオブジェクトを除去する。 */
 	public void removeFromWorld() {
 		if (bindObjList != null) {
 			for (Entity o : bindObjList) {
@@ -418,15 +437,18 @@ public class BeltconveyorObj extends WorldEntity {
 		GameWorld.get().getCurrentWorldState().getBeltconveyorObjects().remove(objId);
 	}
 
+	/** インターバルチェック（現在は常に true）。 */
 	public boolean checkInterval(int cnt) {
 		return true;
 	}
 
 	// 設定メニュー
+	/** ベルトコンベアのセットアップを行い、成功かどうかを返す。 */
 	public static boolean setupBeltconveyor(Beltconveyor target) {
 		return true;
 	}
 
+	/** X/Y 座標で生成してワールドに追加するコンストラクタ。 */
 	public BeltconveyorObj(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		// 初期設定
@@ -457,11 +479,13 @@ public class BeltconveyorObj extends WorldEntity {
 		cost = 25;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public BeltconveyorObj() {
 
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
+	/** ベルトコンベアの隣接関係を登録し、登録成功かどうかを返す。 */
 	public static boolean setBeltconveyors(BeltconveyorObj belt, boolean init) {
 		String HOU_LIST[] = {
 				GameText.read("inside"),
@@ -623,173 +647,218 @@ public class BeltconveyorObj extends WorldEntity {
 		return true;
 	}
 
+	/** フィルター設定を適用する。 */
 	public void applyFilterSetting(boolean filterEnabled) {
 		filter = filterEnabled;
 	}
 
+	/** 種別フィルターで選択されたゆっくり種別リストを返す。 */
 	public List<YukkuriType> getSelectedYukkuriTypes() {
 		return selectedYukkuriType;
 	}
 
+	/** 種別フィルターで選択されたゆっくり種別リストをセットする。 */
 	public void setSelectedYukkuriTypes(List<YukkuriType> selectedYukkuriTypes) {
 		selectedYukkuriType = selectedYukkuriTypes;
 	}
 
+	/** フィルターオプションのラベルリストを返す。 */
 	public List<String> getOptionLabels() {
 		return istrOptionList;
 	}
 
+	/** フィルターオプションの選択状態リストを返す。 */
 	public List<Boolean> getOptionSelections() {
 		return obOptionSelectionList;
 	}
 
+	/** フィルターオプションの選択状態リストをセットする。 */
 	public void setOptionSelections(List<Boolean> optionSelections) {
 		obOptionSelectionList = optionSelections;
 	}
 
+	/** 前フレームの方向を返す。 */
 	public int getHou_before() {
 		return hou_before;
 	}
 
+	/** 前フレームの方向をセットする。 */
 	public void setHou_before(int hou_before) {
 		this.hou_before = hou_before;
 	}
 
+	/** 前フレームのオブジェクト ID を返す。 */
 	public int getObj_before() {
 		return obj_before;
 	}
 
+	/** 前フレームのオブジェクト ID をセットする。 */
 	public void setObj_before(int obj_before) {
 		this.obj_before = obj_before;
 	}
 
+	/** 前フレームの移動状態を返す。 */
 	public int getMove_before() {
 		return move_before;
 	}
 
+	/** 前フレームの移動状態をセットする。 */
 	public void setMove_before(int move_before) {
 		this.move_before = move_before;
 	}
 
+	/** 前フレームの移動速度を返す。 */
 	public int getSpeed_before() {
 		return speed_before;
 	}
 
+	/** 前フレームの移動速度をセットする。 */
 	public void setSpeed_before(int speed_before) {
 		this.speed_before = speed_before;
 	}
 
+	/** ターゲットの種別を返す。 */
 	public int getTargetType() {
 		return targetType;
 	}
 
+	/** ターゲットの種別をセットする。 */
 	public void setTargetType(int targetType) {
 		this.targetType = targetType;
 	}
 
+	/** 移動不可カウンタを返す。 */
 	public int getCantmove() {
 		return cantmove;
 	}
 
+	/** 移動不可カウンタをセットする。 */
 	public void setCantmove(int cantmove) {
 		this.cantmove = cantmove;
 	}
 
+	/** 一度だけ移動フラグを返す。 */
 	public boolean isMoveOnce() {
 		return moveOnce;
 	}
 
+	/** 一度だけ移動フラグをセットする。 */
 	public void setMoveOnce(boolean moveOnce) {
 		this.moveOnce = moveOnce;
 	}
 
+	/** 関連付けられているオブジェクト一覧を返す。 */
 	public List<Entity> getBoundObjects() {
 		return bindObjList;
 	}
 
+	/** 関連付けるオブジェクト一覧をセットする。 */
 	public void setBoundObjects(List<Entity> boundObjects) {
 		this.bindObjList = boundObjects;
 	}
 
+	/** フィルター有効かどうかを返す。 */
 	public boolean isFilter() {
 		return filter;
 	}
 
+	/** フィルター有効フラグをセットする。 */
 	public void setFilter(boolean filter) {
 		this.filter = filter;
 	}
 
+	/** フィールド矩形の始点 X 座標を返す。 */
 	public int getFieldSX() {
 		return fieldSX;
 	}
 
+	/** フィールド矩形の始点 X 座標をセットする。 */
 	public void setFieldSX(int fieldSX) {
 		this.fieldSX = fieldSX;
 	}
 
+	/** フィールド矩形の始点 Y 座標を返す。 */
 	public int getFieldSY() {
 		return fieldSY;
 	}
 
+	/** フィールド矩形の始点 Y 座標をセットする。 */
 	public void setFieldSY(int fieldSY) {
 		this.fieldSY = fieldSY;
 	}
 
+	/** フィールド矩形の終点 X 座標を返す。 */
 	public int getFieldEX() {
 		return fieldEX;
 	}
 
+	/** フィールド矩形の終点 X 座標をセットする。 */
 	public void setFieldEX(int fieldEX) {
 		this.fieldEX = fieldEX;
 	}
 
+	/** フィールド矩形の終点 Y 座標を返す。 */
 	public int getFieldEY() {
 		return fieldEY;
 	}
 
+	/** フィールド矩形の終点 Y 座標をセットする。 */
 	public void setFieldEY(int fieldEY) {
 		this.fieldEY = fieldEY;
 	}
 
+	/** 配置時の初期 X 座標を返す。 */
 	public int getFirstX() {
 		return firstX;
 	}
 
+	/** 配置時の初期 X 座標をセットする。 */
 	public void setFirstX(int firstX) {
 		this.firstX = firstX;
 	}
 
+	/** 配置時の初期 Y 座標を返す。 */
 	public int getFirstY() {
 		return firstY;
 	}
 
+	/** 配置時の初期 Y 座標をセットする。 */
 	public void setFirstY(int firstY) {
 		this.firstY = firstY;
 	}
 
+	/** ポリゴン頂点の X 座標配列を返す。 */
 	public int[] getPolygonX() {
 		return polygonX;
 	}
 
+	/** ポリゴン頂点の X 座標配列をセットする。 */
 	public void setPolygonX(int[] polygonX) {
 		this.polygonX = polygonX;
 	}
 
+	/** ポリゴン頂点の Y 座標配列を返す。 */
 	public int[] getPolygonY() {
 		return polygonY;
 	}
 
+	/** ポリゴン頂点の Y 座標配列をセットする。 */
 	public void setPolygonY(int[] polygonY) {
 		this.polygonY = polygonY;
 	}
 
+	/** ベルト速度をセットする。 */
 	public void setBeltSpeed(int beltSpeed) {
 		this.beltSpeed = beltSpeed;
 	}
 
+	/**
+	 * ButtonListener.
+	 */
 	public static class ButtonListener implements ActionListener {
 		public BeltconveyorObj master = null;
 
+		/** ボタンアクションを処理してフィルター設定を更新する。 */
 		public void actionPerformed(ActionEvent e) {
 			String command = e.getActionCommand();
 			Action select = Action.valueOf(command);

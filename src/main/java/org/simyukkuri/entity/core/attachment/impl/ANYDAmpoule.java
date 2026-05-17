@@ -84,11 +84,22 @@ public class ANYDAmpoule extends Attachment {
 	}
 
 	@Override
+	/**
+	 * 毎ティック処理。このアンプルは能動的な効果を持たないため何もしない。
+	 *
+	 * @return 常に {@link TickResult#NONE}
+	 */
 	protected TickResult update() {
 		return TickResult.NONE;
 	}
 
 	@Override
+	/**
+	 * 親ゆっくりの年齢と向きに対応した表示画像を返す。
+	 *
+	 * @param b 描画対象のゆっくり
+	 * @return 表示画像。親が存在しない場合は null
+	 */
 	public BufferedImage getImage(Yukkuri b) {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa == null)
@@ -100,6 +111,9 @@ public class ANYDAmpoule extends Attachment {
 	}
 
 	@Override
+	/**
+	 * 親ゆっくりの年齢に合わせた当たり判定領域を再設定する。
+	 */
 	public void resetBoundary() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa == null)
@@ -129,44 +143,80 @@ public class ANYDAmpoule extends Attachment {
 		cost = 0;
 	}
 
+	/**
+	 * デシリアライズ用のデフォルトコンストラクタ。
+	 */
 	public ANYDAmpoule() {
 
 	}
 
 	@Override
+	/**
+	 * ゲーム内表示名（非ゆっくり症防止アンプル）を返す。
+	 *
+	 * @return ローカライズされたアイテム名
+	 */
 	public String toString() {
 		return GameText.read("item_anti_nyd");
 	}
 
 	// テスト用静的アクセサ
+	/** @return 年齢・向き別の画像配列 */
 	public static BufferedImage[][] getImages() {
 		return images;
 	}
 
+	/**
+	 * テスト用: 画像配列を差し替える。
+	 *
+	 * @param images 差し替える画像配列
+	 */
 	public static void setImages(BufferedImage[][] images) {
 		ANYDAmpoule.images = images;
 	}
 
+	/**
+	 * テスト用: 年齢別画像幅を設定する。
+	 *
+	 * @param imgW 年齢別画像幅の配列
+	 */
 	public static void setImgW(int[] imgW) {
 		ANYDAmpoule.imgW = imgW;
 	}
 
+	/**
+	 * テスト用: 年齢別画像高さを設定する。
+	 *
+	 * @param imgH 年齢別画像高さの配列
+	 */
 	public static void setImgH(int[] imgH) {
 		ANYDAmpoule.imgH = imgH;
 	}
 
+	/**
+	 * テスト用: 年齢別描画原点X座標を設定する。
+	 *
+	 * @param pivX 年齢別ピボットX配列
+	 */
 	public static void setPivX(int[] pivX) {
 		ANYDAmpoule.pivX = pivX;
 	}
 
+	/**
+	 * テスト用: 年齢別描画原点Y座標を設定する。
+	 *
+	 * @param pivY 年齢別ピボットY配列
+	 */
 	public static void setPivY(int[] pivY) {
 		ANYDAmpoule.pivY = pivY;
 	}
 
+	/** @return マウントポイント識別キー文字列 */
 	public static String getPosKey() {
 		return POS_KEY;
 	}
 
+	/** @return 描画プロパティ設定値配列 */
 	public static int[] getProperty() {
 		return property;
 	}

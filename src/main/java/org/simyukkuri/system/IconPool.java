@@ -32,6 +32,11 @@ public class IconPool {
 			fileName = str;
 		}
 
+		/**
+		 * このUIスキン要素に対応する画像ファイル名を返す。
+		 *
+		 * @return 画像ファイル名（例: "button0.png"）
+		 */
 		public String getFileName() {
 			return fileName;
 		}
@@ -51,6 +56,11 @@ public class IconPool {
 			fileName = str;
 		}
 
+		/**
+		 * このボタンアイコンに対応する画像ファイル名を返す。
+		 *
+		 * @return 画像ファイル名（例: "help_off.png"）
+		 */
 		public String getFileName() {
 			return fileName;
 		}
@@ -76,10 +86,20 @@ public class IconPool {
 			help = h;
 		}
 
+		/**
+		 * このステータスアイコンに対応する画像ファイル名を返す。
+		 *
+		 * @return 画像ファイル名（例: "predator.png"）
+		 */
 		public String getFileName() {
 			return fileName;
 		}
 
+		/**
+		 * このステータスアイコンのツールチップ用説明文を返す。
+		 *
+		 * @return ローカライズ済みの説明文字列
+		 */
 		public String getHelp() {
 			return help;
 		}
@@ -106,6 +126,11 @@ public class IconPool {
 			fileName = str;
 		}
 
+		/**
+		 * このカーソルアイコンに対応する画像ファイル名を返す。
+		 *
+		 * @return 画像ファイル名（例: "ctrl.png"）
+		 */
 		public String getFileName() {
 			return fileName;
 		}
@@ -124,6 +149,11 @@ public class IconPool {
 			fileName = str;
 		}
 
+		/**
+		 * このヘルプアイコンに対応する画像ファイル名を返す。
+		 *
+		 * @return 画像ファイル名（例: "ctrl.png"）
+		 */
 		public String getFileName() {
 			return fileName;
 		}

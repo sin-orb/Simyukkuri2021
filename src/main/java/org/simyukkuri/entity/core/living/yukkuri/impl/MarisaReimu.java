@@ -92,6 +92,7 @@ public class MarisaReimu extends Reimu {
 		baseSpeed = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
 	}
 
+	/** 現在の表示状態に基づく画像をレイヤーにセットし、画像番号を返す。 */
 	@Override
 	public int getImage(int type, int direction, YukkuriLayer layer, int index) {
 		if (!isImageNagasiMode() || imagesNagasi == null) {
@@ -139,22 +140,26 @@ public class MarisaReimu extends Reimu {
 	}
 
 	@Override
+	/** アタッチメントキーに対応する取り付け点座標を返す。 */
 	public Point4y[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}
 
+	/** ゆっくりの種別を返す。 */
 	@Override
 	@Transient
 	public YukkuriType getType() {
 		return type;
 	}
 
+	/** 日本語名を返す。 */
 	@Override
 	@Transient
 	public String getNameJ() {
 		return nameJ;
 	}
 
+	/** 自分の呼び名（愛称優先、なければ種族名）を返す。 */
 	@Override
 	@Transient
 	public String getMyName() {
@@ -164,6 +169,7 @@ public class MarisaReimu extends Reimu {
 		return nameJ;
 	}
 
+	/** ダメージ時の呼び名（設定あれば優先、なければ通常の呼び名）を返す。 */
 	@Override
 	@Transient
 	public String getMyNameD() {
@@ -173,12 +179,14 @@ public class MarisaReimu extends Reimu {
 		return getMyName();
 	}
 
+	/** 英語名を返す。 */
 	@Override
 	@Transient
 	public String getNameE() {
 		return nameE;
 	}
 
+	/** ハイブリッドゆっくりかを返す。 */
 	@Override
 	@Transient
 	public boolean isHybrid() {
@@ -195,11 +203,15 @@ public class MarisaReimu extends Reimu {
 		IniFileUtil.readYukkuriIniFile(this);
 	}
 
+	/** まりされいむ（ハイブリッド） のデフォルトコンストラクタ。 */
 	public MarisaReimu() {
 
 	}
 
 	@Override
+	/**
+	 * Tune parameters.
+	 */
 	public void tuneParameters() {
 		/*
 		 * if (rnd.nextBoolean()) {
@@ -242,10 +254,12 @@ public class MarisaReimu extends Reimu {
 		speed = baseSpeed;
 	}
 
+	/** 流し絵モード用の画像バリアント状態を返す。 */
 	public int[][] getImageVariantState() {
 		return imageVariantState;
 	}
 
+	/** 流し絵モード用の画像バリアント状態をセットする。 */
 	public void setImageVariantState(int[][] imageVariantState) {
 		this.imageVariantState = imageVariantState;
 	}

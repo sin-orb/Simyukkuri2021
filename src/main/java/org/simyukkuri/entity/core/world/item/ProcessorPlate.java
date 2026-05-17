@@ -108,6 +108,7 @@ public class ProcessorPlate extends WorldEntity {
 		boundary.setY(boundary.getHeight() >> 1);
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (enabled) {
@@ -118,6 +119,7 @@ public class ProcessorPlate extends WorldEntity {
 		return 1;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
@@ -129,6 +131,7 @@ public class ProcessorPlate extends WorldEntity {
 		return boundary;
 	}
 
+	/** 衝突判定対象タイプを返す。 */
 	@Override
 	@Transient
 	public int getHitCheckObjType() {
@@ -136,6 +139,11 @@ public class ProcessorPlate extends WorldEntity {
 	}
 
 	@Override
+	/**
+	 * Enable hit check.
+	 *
+	 * @return Enable hit check
+	 */
 	public boolean enableHitCheck() {
 		return true;
 	}
@@ -176,6 +184,7 @@ public class ProcessorPlate extends WorldEntity {
 	}
 
 	@Override
+	/** 衝突処理を行い、結果コードを返す。 */
 	public int objHitProcess(Entity targetObject) {
 		if (!enabled)
 			return 0;
@@ -207,6 +216,7 @@ public class ProcessorPlate extends WorldEntity {
 		return 1;
 	}
 
+	/** 毎ティックの状態更新を行う。 */
 	@Override
 	public void upDate() {
 		if (!enabled) {
@@ -431,6 +441,7 @@ public class ProcessorPlate extends WorldEntity {
 
 	@Override
 	@Transient
+	/** アイテムの設置コストを返す。 */
 	public int getCost() {
 		switch (processType.mode) {
 			case PAIN:
@@ -450,6 +461,7 @@ public class ProcessorPlate extends WorldEntity {
 		return 0;
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		if (activeBodies != null && activeEffects != null) {
@@ -548,6 +560,7 @@ public class ProcessorPlate extends WorldEntity {
 		}
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public ProcessorPlate() {
 
 	}
@@ -574,34 +587,42 @@ public class ProcessorPlate extends WorldEntity {
 		runningCost[3] = iniValue;
 	}
 
+	/** 現在プレート上で処理中のゆっくりリストを返す。 */
 	public List<Yukkuri> getActiveBodies() {
 		return activeBodies;
 	}
 
+	/** 処理中のゆっくりリストをセットする。 */
 	public void setActiveBodies(List<Yukkuri> activeBodies) {
 		this.activeBodies = activeBodies;
 	}
 
+	/** 現在プレートに適用中のエフェクトリストを返す。 */
 	public List<Effect> getActiveEffects() {
 		return activeEffects;
 	}
 
+	/** 適用中のエフェクトリストをセットする。 */
 	public void setActiveEffects(List<Effect> activeEffects) {
 		this.activeEffects = activeEffects;
 	}
 
+	/** プレートの処理種別（加工タイプ）を返す。 */
 	public ProcessType getEnumProcessType() {
 		return processType;
 	}
 
+	/** プレートの処理種別をセットする。 */
 	public void setEnumProcessType(ProcessType enumProcessType) {
 		this.processType = enumProcessType;
 	}
 
+	/** 各処理タイプの稼働コスト配列を返す。 */
 	public int[] getRunningCost() {
 		return runningCost;
 	}
 
+	/** 稼働コスト配列をセットする。 */
 	public void setRunningCost(int[] runningCost) {
 		this.runningCost = runningCost;
 	}

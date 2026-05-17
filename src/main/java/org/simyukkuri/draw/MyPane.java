@@ -139,42 +139,92 @@ public class MyPane extends JPanel implements Runnable {
 	/** カーソルで選択されているゆっくり */
 	private static Yukkuri selectBody = null;
 
+	/**
+	 * 通常速度値（100）を返す。
+	 *
+	 * @return 通常速度値
+	 */
 	public static int getNormalSpeed() {
 		return NORMAL;
 	}
 
+	/**
+	 * ゲーム速度段階配列を返す。
+	 *
+	 * @return ゲーム速度段階配列
+	 */
 	public static int[] getGameSpeed() {
 		return gameSpeed;
 	}
 
+	/**
+	 * スクリプト無効フラグを返す。
+	 *
+	 * @return スクリプト無効なら true
+	 */
 	public static boolean isDisableScript() {
 		return isDisableScript;
 	}
 
+	/**
+	 * スクリプト無効フラグをセットする。
+	 *
+	 * @param disableScript true でスクリプト無効
+	 */
 	public static void setDisableScript(boolean disableScript) {
 		isDisableScript = disableScript;
 	}
 
+	/**
+	 * ターゲット表示有効フラグを返す。
+	 *
+	 * @return ターゲット表示が有効なら true
+	 */
 	public static boolean isEnableTarget() {
 		return isEnableTarget;
 	}
 
+	/**
+	 * ターゲット表示有効フラグをセットする。
+	 *
+	 * @param enableTarget true でターゲット表示有効
+	 */
 	public static void setEnableTarget(boolean enableTarget) {
 		isEnableTarget = enableTarget;
 	}
 
+	/**
+	 * ヘルプ表示無効フラグを返す。
+	 *
+	 * @return ヘルプ表示が無効なら true
+	 */
 	public static boolean isDisableHelp() {
 		return isDisableHelp;
 	}
 
+	/**
+	 * ヘルプ表示無効フラグをセットする。
+	 *
+	 * @param disableHelp true でヘルプ表示無効
+	 */
 	public static void setDisableHelp(boolean disableHelp) {
 		isDisableHelp = disableHelp;
 	}
 
+	/**
+	 * カーソルで選択中のゆっくりを返す。
+	 *
+	 * @return 選択中のゆっくり（未選択なら null）
+	 */
 	public static Yukkuri getSelectedYukkuri() {
 		return selectBody;
 	}
 
+	/**
+	 * 選択ゆっくりをセットする。
+	 *
+	 * @param body 選択するゆっくり
+	 */
 	public static void setSelectedYukkuri(Yukkuri body) {
 		selectBody = body;
 	}
@@ -265,6 +315,9 @@ public class MyPane extends JPanel implements Runnable {
 		return backBufferG2;
 	}
 
+	/**
+	 * ゲームループを起動する。{@link GameLoop} に処理を委譲する。
+	 */
 	@Override
 	public void run() {
 		new GameLoop(this).run();
@@ -276,6 +329,11 @@ public class MyPane extends JPanel implements Runnable {
 
 	/** ゆっくり追加用クラス */
 	public class MyAddYukkuriListener implements ItemListener, ActionListener {
+		/**
+		 * ゆっくり追加ダイアログのコンボボックス選択変更時に呼ばれる。種別（レア・捕食）切替でリストを更新する。
+		 *
+		 * @param e ItemEvent
+		 */
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public void itemStateChanged(ItemEvent e) {
 			boolean isJp = GameLocale.isJapanese();
@@ -305,6 +363,11 @@ public class MyPane extends JPanel implements Runnable {
 			}
 		}
 
+		/**
+		 * 個数入力コンボボックスのアクション時に呼ばれる。数値以外が入力された場合は 1 に丸める。
+		 *
+		 * @param e ActionEvent
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == cb5) {
@@ -572,6 +635,11 @@ public class MyPane extends JPanel implements Runnable {
 		o.setScreenRect(rect);
 	}
 
+	/**
+	 * ゲーム画面を描画する。{@link Renderer} に処理を委譲する。
+	 *
+	 * @param g 描画対象 Graphics
+	 */
 	@SuppressWarnings("incomplete-switch")
 	@Override
 	public void paint(Graphics g) {
@@ -607,54 +675,119 @@ public class MyPane extends JPanel implements Runnable {
 		return (int) Math.ceil(drawPosY);
 	}
 
+	/**
+	 * ゲームスレッドが動作中かどうかを返す。
+	 *
+	 * @return 動作中なら true
+	 */
 	public boolean isRunning() {
 		return isRunning;
 	}
 
+	/**
+	 * ゲームスレッド動作フラグをセットする。
+	 *
+	 * @param isRunning true で動作中
+	 */
 	public void setRunning(boolean isRunning) {
 		this.isRunning = isRunning;
 	}
 
+	/**
+	 * ログ出力先フラグを返す（1=ダイアログ出力）。
+	 *
+	 * @return ログ出力先フラグ
+	 */
 	public int getLogOutput() {
 		return logOutput;
 	}
 
+	/**
+	 * テラリウムインスタンスを返す。
+	 *
+	 * @return テラリウム
+	 */
 	public Terrarium getTerrarium() {
 		return terrarium;
 	}
 
+	/**
+	 * テラリウムインスタンスをセットする。
+	 *
+	 * @param terrarium 新しいテラリウム
+	 */
 	public void setTerrarium(Terrarium terrarium) {
 		this.terrarium = terrarium;
 	}
 
+	/**
+	 * 描画キューを返す。
+	 *
+	 * @return 描画キュー
+	 */
 	public List<Object> getRenderQueue() {
 		return renderQueue;
 	}
 
+	/**
+	 * 描画キューをセットする。
+	 *
+	 * @param renderQueue 新しい描画キュー
+	 */
 	public void setRenderQueue(List<Object> renderQueue) {
 		this.renderQueue = renderQueue;
 	}
 
+	/**
+	 * メッセージ表示中のゆっくりリストを返す。
+	 *
+	 * @return メッセージ表示中ゆっくりリスト
+	 */
 	public List<Yukkuri> getMessageBodies() {
 		return messageBodies;
 	}
 
+	/**
+	 * メッセージ表示ゆっくりリストをセットする。
+	 *
+	 * @param messageBodies 新しいメッセージ表示ゆっくりリスト
+	 */
 	public void setMessageBodies(List<Yukkuri> messageBodies) {
 		this.messageBodies = messageBodies;
 	}
 
+	/**
+	 * 描画位置計算用テンポラリ配列を返す。
+	 *
+	 * @return 描画位置計算用テンポラリ配列
+	 */
 	public int[] getPosTmp() {
 		return posTmp;
 	}
 
+	/**
+	 * 描画位置計算用テンポラリ配列をセットする。
+	 *
+	 * @param posTmp 新しいテンポラリ配列
+	 */
 	public void setPosTmp(int[] posTmp) {
 		this.posTmp = posTmp;
 	}
 
+	/**
+	 * レイヤー描画用テンポラリ画像配列を返す。
+	 *
+	 * @return レイヤー描画用テンポラリ画像配列
+	 */
 	public BufferedImage[] getLayerTmp() {
 		return layerTmp;
 	}
 
+	/**
+	 * レイヤー描画用テンポラリ画像配列をセットする。
+	 *
+	 * @param layerTmp 新しいテンポラリ画像配列
+	 */
 	public void setLayerTmp(BufferedImage[] layerTmp) {
 		this.layerTmp = layerTmp;
 	}
@@ -667,14 +800,29 @@ public class MyPane extends JPanel implements Runnable {
 		return tmpRect;
 	}
 
+	/**
+	 * 拡大表示倍率ヒントオブジェクトを返す。
+	 *
+	 * @return 拡大表示倍率ヒント
+	 */
 	public Object getRenderScale() {
 		return renderScale;
 	}
 
+	/**
+	 * アイテムカーソル描画用ストロークを返す。
+	 *
+	 * @return アイテムカーソル用ストローク
+	 */
 	public static Stroke getItemCurStroke() {
 		return ITEM_CUR_STROKE;
 	}
 
+	/**
+	 * アイテムカーソル描画色を返す。
+	 *
+	 * @return アイテムカーソル色
+	 */
 	public static Color getItemCurColor() {
 		return ITEM_CUR_COLOR;
 	}

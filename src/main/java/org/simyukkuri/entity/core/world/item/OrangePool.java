@@ -44,6 +44,7 @@ public class OrangePool extends WorldEntity {
 			this.name = name;
 		}
 
+		/** enum 名の文字列表現を返す。 */
 		public String toString() {
 			return name;
 		}
@@ -78,6 +79,7 @@ public class OrangePool extends WorldEntity {
 		boundary.setY(boundary.getHeight() >> 1);
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (itemRank == ItemRank.HOUSE) {
@@ -99,6 +101,7 @@ public class OrangePool extends WorldEntity {
 		return 1;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
@@ -110,6 +113,7 @@ public class OrangePool extends WorldEntity {
 		return boundary;
 	}
 
+	/** 衝突判定対象タイプを返す。 */
 	@Override
 	@Transient
 	public int getHitCheckObjType() {
@@ -117,6 +121,7 @@ public class OrangePool extends WorldEntity {
 	}
 
 	@Override
+	/** 衝突処理を行い、結果コードを返す。 */
 	public int objHitProcess(Entity targetObject) {
 		if (!enabled)
 			return 0;
@@ -144,6 +149,7 @@ public class OrangePool extends WorldEntity {
 
 	@Override
 	@Transient
+	/** アイテムの購入価格を返す。 */
 	public int getValue() {
 		if (itemRank == ItemRank.HOUSE) {
 			if (rescue)
@@ -157,6 +163,7 @@ public class OrangePool extends WorldEntity {
 
 	@Override
 	@Transient
+	/** アイテムの設置コストを返す。 */
 	public int getCost() {
 		if (itemRank == ItemRank.HOUSE) {
 			if (rescue)
@@ -168,6 +175,7 @@ public class OrangePool extends WorldEntity {
 		}
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		GameWorld.get().getCurrentWorldState().getOrangePools().remove(objId);
@@ -207,6 +215,7 @@ public class OrangePool extends WorldEntity {
 		}
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public OrangePool() {
 
 	}
@@ -251,18 +260,22 @@ public class OrangePool extends WorldEntity {
 		return result;
 	}
 
+	/** ゆっくりを救出するかを返す。 */
 	public boolean isRescue() {
 		return rescue;
 	}
 
+	/** 救出モード（ゆっくりを引き上げる）をセットする。 */
 	public void setRescue(boolean rescue) {
 		this.rescue = rescue;
 	}
 
+	/** アイテムのランク（品質）を返す。 */
 	public ItemRank getItemRank() {
 		return itemRank;
 	}
 
+	/** アイテムのランク（品質）をセットする。 */
 	public void setItemRank(ItemRank itemRank) {
 		this.itemRank = itemRank;
 	}

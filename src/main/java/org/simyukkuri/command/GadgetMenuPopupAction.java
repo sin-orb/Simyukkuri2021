@@ -13,6 +13,11 @@ import org.simyukkuri.ui.MainCommandUI;
 public final class GadgetMenuPopupAction implements ActionListener {
 
 	@Override
+	/**
+	 * Action performed.
+	 *
+	 * @param e イベント
+	 */
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 

@@ -82,6 +82,7 @@ public class Yunba extends WorldEntity {
 			this.name = GameLocale.isJapanese() ? nameJ : nameE;
 		}
 
+		/** アクション名の文字列表現を返す。 */
 		public String toString() {
 			return name;
 		}
@@ -181,6 +182,7 @@ public class Yunba extends WorldEntity {
 		defaultColor = 0;
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		for (int i = 0; i < layerCount; i++) {
@@ -199,12 +201,14 @@ public class Yunba extends WorldEntity {
 		return layerCount;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
 		return images[3][direction];
 	}
 
+	/** セットアップメニューを持つかを返す。 */
 	@Override
 	public boolean hasSetupMenu() {
 		return true;
@@ -215,6 +219,7 @@ public class Yunba extends WorldEntity {
 		return boundary;
 	}
 
+	/** 毎ティックの状態更新を行う。 */
 	@Override
 	public void upDate() {
 		if (getAge() % 2400 == 0) {
@@ -236,11 +241,13 @@ public class Yunba extends WorldEntity {
 		return cost;
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		GameWorld.get().getCurrentWorldState().getYunbas().remove(objId);
 	}
 
+	/** 毎ティックの状態更新を行う。 */
 	@Override
 	public TickResult clockTick() {
 		setAge(getAge() + TICK);
@@ -863,11 +870,13 @@ public class Yunba extends WorldEntity {
 		}
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Yunba() {
 
 	}
 
 	// 設定メニュー
+	/** ゆんばの設定ダイアログを表示し、変更があれば true を返す。 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static boolean setupYunba(Yunba y, boolean init) {
 
@@ -1178,8 +1187,12 @@ public class Yunba extends WorldEntity {
 		return ret;
 	}
 
+	/**
+	 * ButtonListener.
+	 */
 	public static class ButtonListener implements ActionListener {
 
+		/** チェックボックスの全選択/全解除トグル処理。 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String command = e.getActionCommand();
@@ -1198,6 +1211,7 @@ public class Yunba extends WorldEntity {
 	}
 
 	// 他のゆんばのターゲットになっているか
+	/** 他のゆんばのターゲットになっていない場合 true を返す。 */
 	public boolean cheackOtherYunbaTarget(Entity o) {
 		for (Map.Entry<Integer, Yunba> entry : GameWorld.get().getCurrentWorldState().getYunbas().entrySet()) {
 			Yunba yunba = entry.getValue();
@@ -1211,186 +1225,232 @@ public class Yunba extends WorldEntity {
 		return true;
 	}
 
+	/** アイテムのランク（品質）を返す。 */
 	public ItemRank getItemRank() {
 		return itemRank;
 	}
 
+	/** アイテムのランク（品質）をセットする。 */
 	public void setItemRank(ItemRank itemRank) {
 		this.itemRank = itemRank;
 	}
 
+	/** ゆんばの色インデックスを返す。 */
 	public int getColor() {
 		return color;
 	}
 
+	/** ゆんばの色インデックスをセットする。 */
 	public void setColor(int color) {
 		this.color = color;
 	}
 
+	/** ゆんばの向きを返す。 */
 	public int getDirection() {
 		return direction;
 	}
 
+	/** ゆんばの向きをセットする。 */
 	public void setDirection(int direction) {
 		this.direction = direction;
 	}
 
+	/** アクションフラグ（行動設定1）を返す。 */
 	public boolean[][] getActionFlags() {
 		return actionFlags;
 	}
 
+	/** アクションフラグ（行動設定1）をセットする。 */
 	public void setActionFlags(boolean[][] actionFlags) {
 		this.actionFlags = actionFlags;
 	}
 
+	/** アクションフラグ2（行動設定2）を返す。 */
 	public boolean[][] getActionFlags2() {
 		return actionFlags2;
 	}
 
+	/** アクションフラグ2（行動設定2）をセットする。 */
 	public void setActionFlags2(boolean[][] actionFlags2) {
 		this.actionFlags2 = actionFlags2;
 	}
 
+	/** アクションフラグ3（行動設定3）を返す。 */
 	public boolean[][] getActionFlags3() {
 		return actionFlags3;
 	}
 
+	/** アクションフラグ3（行動設定3）をセットする。 */
 	public void setActionFlags3(boolean[][] actionFlags3) {
 		this.actionFlags3 = actionFlags3;
 	}
 
+	/** ゆっくりをターゲット対象にするかを返す。 */
 	public boolean isYukkuriCheck() {
 		return bodyCheck;
 	}
 
+	/** ゆっくりをターゲット対象にするかをセットする。 */
 	public void setYukkuriCheck(boolean bodyCheck) {
 		this.bodyCheck = bodyCheck;
 	}
 
+	/** うんうんをターゲット対象にするかを返す。 */
 	public boolean isShitCheck() {
 		return shitCheck;
 	}
 
+	/** うんうんをターゲット対象にするかをセットする。 */
 	public void setShitCheck(boolean shitCheck) {
 		this.shitCheck = shitCheck;
 	}
 
+	/** 茎をターゲット対象にするかを返す。 */
 	public boolean isStalkCheck() {
 		return stalkCheck;
 	}
 
+	/** 茎をターゲット対象にするかをセットする。 */
 	public void setStalkCheck(boolean stalkCheck) {
 		this.stalkCheck = stalkCheck;
 	}
 
+	/** ノーランダム（乱数なし）モードかを返す。 */
 	public boolean isNorndCheck() {
 		return norndCheck;
 	}
 
+	/** ノーランダムモードをセットする。 */
 	public void setNorndCheck(boolean norndCheck) {
 		this.norndCheck = norndCheck;
 	}
 
+	/** 撃破フラグを返す。 */
 	public boolean isKillCheck() {
 		return killCheck;
 	}
 
+	/** 撃破フラグをセットする。 */
 	public void setKillCheck(boolean killCheck) {
 		this.killCheck = killCheck;
 	}
 
+	/** 身打ちチェックフラグを返す。 */
 	public boolean isMineutiCheck() {
 		return mineutiCheck;
 	}
 
+	/** 身打ちチェックフラグをセットする。 */
 	public void setMineutiCheck(boolean mineutiCheck) {
 		this.mineutiCheck = mineutiCheck;
 	}
 
+	/** 落下ダメージなしフラグを返す。 */
 	public boolean isNoDamageFallCheck() {
 		return noDamageFallCheck;
 	}
 
+	/** 落下ダメージなしフラグをセットする。 */
 	public void setNoDamageFallCheck(boolean noDamageFallCheck) {
 		this.noDamageFallCheck = noDamageFallCheck;
 	}
 
+	/** 食べ物をターゲット対象にするかを返す。 */
 	public boolean isFoodCheck() {
 		return foodCheck;
 	}
 
+	/** 食べ物をターゲット対象にするかをセットする。 */
 	public void setFoodCheck(boolean foodCheck) {
 		this.foodCheck = foodCheck;
 	}
 
+	/** 描画レイヤー配列を返す。 */
 	public int[] getDrawLayer() {
 		return drawLayer;
 	}
 
+	/** 描画レイヤー配列をセットする。 */
 	public void setDrawLayer(int[] drawLayer) {
 		this.drawLayer = drawLayer;
 	}
 
+	/** 使用レイヤー数を返す。 */
 	public int getLayerCount() {
 		return layerCount;
 	}
 
+	/** 使用レイヤー数をセットする。 */
 	public void setLayerCount(int layerCount) {
 		this.layerCount = layerCount;
 	}
 
+	/** 現在の行動（アクション種別）を返す。 */
 	public Action getAction() {
 		return action;
 	}
 
+	/** 現在の行動（アクション種別）をセットする。 */
 	public void setAction(Action action) {
 		this.action = action;
 	}
 
+	/** 現在の追跡・処理対象エンティティを返す。 */
 	public Entity getTarget() {
 		return target;
 	}
 
+	/** 現在の追跡・処理対象エンティティをセットする。 */
 	public void setTarget(Entity target) {
 		this.target = target;
 	}
 
+	/** 移動目標の X 座標を返す。 */
 	public int getDestX() {
 		return destX;
 	}
 
+	/** 移動目標の X 座標をセットする。 */
 	public void setDestX(int destX) {
 		this.destX = destX;
 	}
 
+	/** 移動目標の Y 座標を返す。 */
 	public int getDestY() {
 		return destY;
 	}
 
+	/** 移動目標の Y 座標をセットする。 */
 	public void setDestY(int destY) {
 		this.destY = destY;
 	}
 
+	/** 移動速度を返す。 */
 	public int getSpeed() {
 		return speed;
 	}
 
+	/** 移動速度をセットする。 */
 	public void setSpeed(int speed) {
 		this.speed = speed;
 	}
 
+	/** 初期配置の X 座標を返す。 */
 	public int getDefaultX() {
 		return defaultX;
 	}
 
+	/** 初期配置の X 座標をセットする。 */
 	public void setDefaultX(int defaultX) {
 		this.defaultX = defaultX;
 	}
 
+	/** 初期配置の Y 座標を返す。 */
 	public int getDefaultY() {
 		return defaultY;
 	}
 
+	/** 初期配置の Y 座標をセットする。 */
 	public void setDefaultY(int defaultY) {
 		this.defaultY = defaultY;
 	}

@@ -83,12 +83,14 @@ public class DosMarisa extends Marisa {
 		baseSpeed = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
 	}
 
+	/** 画像が読み込み済みかを返す。 */
 	@Override
 	@Transient
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
 
+	/** 現在の表示状態に基づく画像をレイヤーにセットし、画像番号を返す。 */
 	@Override
 	public int getImage(int type, int direction, YukkuriLayer layer, int index) {
 		layer.getImage()[index] = imagePack[getRank().getImageIndex()][type][direction
@@ -98,16 +100,19 @@ public class DosMarisa extends Marisa {
 	}
 
 	@Override
+	/** アタッチメントキーに対応する取り付け点座標を返す。 */
 	public Point4y[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}
 
+	/** ゆっくりの種別を返す。 */
 	@Override
 	@Transient
 	public YukkuriType getType() {
 		return type;
 	}
 
+	/** 交配相手の種別に応じた混血種別を返す。 */
 	@Override
 	@Transient
 	public YukkuriType getHybridType(YukkuriType partnerType) {
@@ -120,12 +125,14 @@ public class DosMarisa extends Marisa {
 		}
 	}
 
+	/** 日本語名を返す。 */
 	@Override
 	@Transient
 	public String getNameJ() {
 		return nameJ;
 	}
 
+	/** 自分の呼び名（愛称優先、なければ種族名）を返す。 */
 	@Override
 	@Transient
 	public String getMyName() {
@@ -135,6 +142,7 @@ public class DosMarisa extends Marisa {
 		return nameJ;
 	}
 
+	/** ダメージ時の呼び名（設定あれば優先、なければ通常の呼び名）を返す。 */
 	@Override
 	@Transient
 	public String getMyNameD() {
@@ -144,18 +152,21 @@ public class DosMarisa extends Marisa {
 		return getMyName();
 	}
 
+	/** 英語名を返す。 */
 	@Override
 	@Transient
 	public String getNameE() {
 		return nameE;
 	}
 
+	/** 追加の日本語名（ない場合は空文字）を返す。 */
 	@Override
 	@Transient
 	public String getNameJ2() {
 		return "";
 	}
 
+	/** 追加の英語名（ない場合は空文字）を返す。 */
 	@Override
 	@Transient
 	public String getNameE2() {
@@ -172,11 +183,15 @@ public class DosMarisa extends Marisa {
 		IniFileUtil.readYukkuriIniFile(this);
 	}
 
+	/** どすまりさ のデフォルトコンストラクタ。 */
 	public DosMarisa() {
 
 	}
 
 	@Override
+	/**
+	 * Tune parameters.
+	 */
 	public void tuneParameters() {
 		/*
 		 * if (rnd.nextBoolean()) {
@@ -226,6 +241,7 @@ public class DosMarisa extends Marisa {
 		speed = baseSpeed;
 	}
 
+	/** ワールドからこのゆっくりを除去する追加処理。 */
 	@Override
 	public void remove() {
 		super.remove();

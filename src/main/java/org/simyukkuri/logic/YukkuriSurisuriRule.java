@@ -16,11 +16,11 @@ public final class YukkuriSurisuriRule {
 	}
 
 	/**
-	 * Check action when another body is being petted by player.
+	 * プレイヤーになでられているゆっくりに隣接している時の行動を処理する。
 	 *
-	 * @param body       subject body
-	 * @param targetBody target body
-	 * @return action result
+	 * @param body       ゆっくり
+	 * @param targetBody 処理対象ゆっくり
+	 * @return 行動結果
 	 */
 	public static final YukkuriLogic.ActionGo checkActionSurisuriFromPlayer(Yukkuri body, Yukkuri targetBody) {
 		if (body == null || targetBody == null) {

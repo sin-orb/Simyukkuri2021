@@ -123,6 +123,7 @@ public class Shit extends Entity {
 		}
 	}
 
+	/** うんうんのサイズ・排出者名を含む文字列表現を返す。 */
 	@Override
 	public String toString() {
 		String base = GameText.read("system_unun");
@@ -154,6 +155,7 @@ public class Shit extends Entity {
 		return (images[shitType][SHIT_SHADOW][ageState.ordinal()]);
 	}
 
+	/** うんうんの画像幅（サイズ）を返す。 */
 	@Transient
 	public int getSize() {
 		return imgW[shitType][ageState.ordinal()];
@@ -184,6 +186,7 @@ public class Shit extends Entity {
 				imgW[shitType][ageState.ordinal()], imgH[shitType][ageState.ordinal()]);
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Shit() {
 		ageState = AgeState.ADULT;
 		ownerName = "Unknown";
@@ -238,16 +241,19 @@ public class Shit extends Entity {
 		return value[ageState.ordinal()];
 	}
 
+	/** 取得ポップアップを持つかを返す（常に SHIT）。 */
 	@Override
 	public GetMenuTarget hasGetPopup() {
 		return GetMenuTarget.SHIT;
 	}
 
+	/** 使用ポップアップを持つかを返す（常に SHIT）。 */
 	@Override
 	public UseMenuTarget hasUsePopup() {
 		return UseMenuTarget.SHIT;
 	}
 
+	/** 毎ティックの状態更新を行う。 */
 	@Override
 	public TickResult clockTick() {
 		if (!isRemoved()) {
@@ -311,50 +317,62 @@ public class Shit extends Entity {
 		return TickResult.REMOVED;
 	}
 
+	/** 排出したゆっくりの名前を返す。 */
 	public String getOwnerName() {
 		return ownerName;
 	}
 
+	/** 排出したゆっくりの名前をセットする。 */
 	public void setOwnerName(String ownerName) {
 		this.ownerName = ownerName;
 	}
 
+	/** 排出したゆっくりの ID を返す。 */
 	public int getOwnerId() {
 		return ownerId;
 	}
 
+	/** 排出したゆっくりの ID をセットする。 */
 	public void setOwnerId(int ownerId) {
 		this.ownerId = ownerId;
 	}
 
+	/** 排出したゆっくりの年齢層を返す。 */
 	public AgeState getAgeState() {
 		return ageState;
 	}
 
+	/** 排出したゆっくりの年齢層をセットする。 */
 	public void setAgeState(AgeState ageState) {
 		this.ageState = ageState;
 	}
 
+	/** うんうんが落下した際のダメージ値を返す。 */
 	public int getFalldownDamage() {
 		return falldownDamage;
 	}
 
+	/** うんうんが落下した際のダメージ値をセットする。 */
 	public void setFalldownDamage(int falldownDamage) {
 		this.falldownDamage = falldownDamage;
 	}
 
+	/** うんうんの量を返す。 */
 	public int getAmount() {
 		return amount;
 	}
 
+	/** うんうんの量をセットする。 */
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
 
+	/** うんうんの種類（通常/毒/下痢等）を返す。 */
 	public int getShitType() {
 		return shitType;
 	}
 
+	/** うんうんの種類をセットする。 */
 	public void setShitType(int shitType) {
 		this.shitType = shitType;
 	}

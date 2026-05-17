@@ -79,11 +79,13 @@ public class Beltconveyor extends FieldShape {
 			this.caption = cap;
 		}
 
+		/** メニュー項目の表示名を返す。 */
 		@SuppressWarnings("unused")
 		public String getCaption() {
 			return caption;
 		}
 
+		/** enum 名の文字列表現を返す。 */
 		@Override
 		public String toString() {
 			return this.caption;
@@ -116,16 +118,19 @@ public class Beltconveyor extends FieldShape {
 			this.check[2] = chk3;
 		}
 
+		/** ボタンの表示名を返す。 */
 		@SuppressWarnings("unused")
 		public String getCaption() {
 			return caption;
 		}
 
+		/** 対応するメニュー配列を返す。 */
 		@SuppressWarnings("unused")
 		public SetupMenu[] getCheck() {
 			return check;
 		}
 
+		/** enum 名の文字列表現を返す。 */
 		@Override
 		public String toString() {
 			return this.caption;
@@ -148,15 +153,18 @@ public class Beltconveyor extends FieldShape {
 			this.direct = dir;
 		}
 
+		/** コンボボックスの表示名を返す。 */
 		@SuppressWarnings("unused")
 		public String getCaption() {
 			return caption;
 		}
 
+		/** ベルトコンベアの方向値を返す。 */
 		public int getDirect() {
 			return direct;
 		}
 
+		/** enum 名の文字列表現を返す。 */
 		@Override
 		public String toString() {
 			return this.caption;
@@ -178,15 +186,18 @@ public class Beltconveyor extends FieldShape {
 			this.speed = spd;
 		}
 
+		/** コンボボックスの表示名を返す。 */
 		@SuppressWarnings("unused")
 		public String getCaption() {
 			return caption;
 		}
 
+		/** ベルトコンベアの速度値を返す。 */
 		public int getSpeed() {
 			return speed;
 		}
 
+		/** enum 名の文字列表現を返す。 */
 		@Override
 		public String toString() {
 			return this.caption;
@@ -228,11 +239,13 @@ public class Beltconveyor extends FieldShape {
 		}
 	}
 
+	/** シェイプポップアップを持つかを返す（常に BELT）。 */
 	@Override
 	public ShapeMenuTarget hasShapePopup() {
 		return ShapeMenuTarget.BELT;
 	}
 
+	/** シェイプポップアップのメニューアクションを実行する。 */
 	@Override
 	public void executeShapePopup(ShapeMenu menu) {
 
@@ -270,12 +283,14 @@ public class Beltconveyor extends FieldShape {
 		}
 	}
 
+	/** ベルトコンベアのフィールド属性値を返す。 */
 	@Override
 	@Transient
 	public int getAttribute() {
 		return FIELD_BELT;
 	}
 
+	/** バリアの最小サイズを返す。 */
 	@Override
 	@Transient
 	public int getMinimumSize() {
@@ -291,6 +306,7 @@ public class Beltconveyor extends FieldShape {
 		g2.drawPolygon(polygonX, polygonY, 4);
 	}
 
+	/** ベルトコンベアの形状を描画する。 */
 	@Override
 	public void drawShape(Graphics2D g2) {
 		int[] polygonX = new int[4];
@@ -373,6 +389,7 @@ public class Beltconveyor extends FieldShape {
 		}
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Beltconveyor() {
 
 	}
@@ -603,6 +620,11 @@ public class Beltconveyor extends FieldShape {
 	public static class ButtonListener implements ActionListener {
 
 		@Override
+		/**
+		 * Action performed.
+		 *
+		 * @param e イベント
+		 */
 		public void actionPerformed(ActionEvent e) {
 			String command = e.getActionCommand();
 
@@ -620,34 +642,42 @@ public class Beltconveyor extends FieldShape {
 		}
 	}
 
+	/** 各ゆっくり種別・年齢の搬送設定フラグ配列を返す。 */
 	public boolean[][] getSetting() {
 		return setting;
 	}
 
+	/** 搬送設定フラグ配列をセットする。 */
 	public void setSetting(boolean[][] setting) {
 		this.setting = setting;
 	}
 
+	/** ベルトの移動方向を返す。 */
 	public DirectCombo getDirection() {
 		return direction;
 	}
 
+	/** ベルトの移動方向をセットする。 */
 	public void setDirection(DirectCombo direction) {
 		this.direction = direction;
 	}
 
+	/** ベルトコンベアの速度設定を返す。 */
 	public SpeedCombo getBeltSpeed() {
 		return beltSpeed;
 	}
 
+	/** ベルトコンベアの速度設定をセットする。 */
 	public void setBeltSpeed(SpeedCombo beltSpeed) {
 		this.beltSpeed = beltSpeed;
 	}
 
+	/** このフィールドオブジェクトの ID を返す。 */
 	public int getObjId() {
 		return objId;
 	}
 
+	/** このフィールドオブジェクトの ID をセットする。 */
 	public void setObjId(int objId) {
 		this.objId = objId;
 	}

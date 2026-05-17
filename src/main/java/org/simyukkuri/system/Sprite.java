@@ -52,6 +52,9 @@ public class Sprite implements java.io.Serializable {
 		screenRect[0] = new Rectangle4y();
 		screenRect[1] = new Rectangle4y();
 	}
+	/**
+	 * デシリアライズ用デフォルトコンストラクタ。
+	 */
 	public Sprite() {
 		
 	}
@@ -122,48 +125,67 @@ public class Sprite implements java.io.Serializable {
 				break;
 		}
 	}
+	/** @return 原画の幅 */
 	public int getOriginalW() {
 		return originalW;
 	}
+	/** @param originalW 原画の幅 */
 	public void setOriginalW(int originalW) {
 		this.originalW = originalW;
 	}
+	/** @return 原画の高さ */
 	public int getOriginalH() {
 		return originalH;
 	}
+	/** @param originalH 原画の高さ */
 	public void setOriginalH(int originalH) {
 		this.originalH = originalH;
 	}
+	/** @return 描画画像の幅（拡大縮小で変動） */
 	public int getImageW() {
 		return imageW;
 	}
+	/** @param imageW 描画画像の幅 */
 	public void setImageW(int imageW) {
 		this.imageW = imageW;
 	}
+	/** @return 描画画像の高さ（拡大縮小で変動） */
 	public int getImageH() {
 		return imageH;
 	}
+	/** @param imageH 描画画像の高さ */
 	public void setImageH(int imageH) {
 		this.imageH = imageH;
 	}
+	/** @return 描画原点のX座標 */
 	public int getPivotX() {
 		return pivotX;
 	}
+	/** @param pivotX 描画原点のX座標 */
 	public void setPivotX(int pivotX) {
 		this.pivotX = pivotX;
 	}
+	/** @return 描画原点のY座標 */
 	public int getPivotY() {
 		return pivotY;
 	}
+	/** @param pivotY 描画原点のY座標 */
 	public void setPivotY(int pivotY) {
 		this.pivotY = pivotY;
 	}
+	/**
+	 * キャッシュされた描画スクリーン座標配列を返す。
+	 *
+	 * @return スクリーン座標矩形の配列（[0]左 [1]右）
+	 */
 	public Rectangle4y[] getScreenRect() {
 		return screenRect;
 	}
+	/** @param screenRect スクリーン座標矩形の配列 */
 	public void setScreenRect(Rectangle4y[] screenRect) {
 		this.screenRect = screenRect;
 	}
+	/** @return 中心点タイプ（PIVOT_CENTER_CENTER / PIVOT_CENTER_BOTTOM） */
 	public int getPivotType() {
 		return pivotType;
 	}

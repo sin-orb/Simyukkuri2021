@@ -39,22 +39,27 @@ public class House extends WorldEntity {
 			rank = r;
 		}
 
+		/** 床画像のファイル名を返す。 */
 		public String getFloorName() {
 			return floorName;
 		}
 
+		/** 壁画像のファイル名を返す。 */
 		public String getWallName() {
 			return wallName;
 		}
 
+		/** 天井画像のファイル名を返す。 */
 		public String getCeilName() {
 			return ceilName;
 		}
 
+		/** ドア画像のファイル名を返す。 */
 		public String getDoorName() {
 			return doorName;
 		}
 
+		/** 家のランク値を返す。 */
 		public int getRank() {
 			return rank;
 		}
@@ -85,12 +90,14 @@ public class House extends WorldEntity {
 		}
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		layer[0] = images[0][0];
 		return 1;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
@@ -103,12 +110,14 @@ public class House extends WorldEntity {
 		return boundary[0];
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		GameWorld.get().getCurrentWorldState().getHouses().remove(objId);
 	}
 
 	@Override
+	/** アイテムの購入価格を返す。 */
 	public int getValue() {
 		return value;
 	}
@@ -142,22 +151,27 @@ public class House extends WorldEntity {
 		}
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public House() {
 
 	}
 
+	/** 家の種別（外観タイプ）を返す。 */
 	public HouseTable getHouseType() {
 		return houseType;
 	}
 
+	/** 家の種別をセットする。 */
 	public void setHouseType(HouseTable houseType) {
 		this.houseType = houseType;
 	}
 
+	/** アイテムのランク（品質）を返す。 */
 	public ItemRank getItemRank() {
 		return itemRank;
 	}
 
+	/** アイテムのランク（品質）をセットする。 */
 	public void setItemRank(ItemRank itemRank) {
 		this.itemRank = itemRank;
 	}

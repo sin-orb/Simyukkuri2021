@@ -16,11 +16,11 @@ public final class YukkuriDeadActionRule {
 	}
 
 	/**
-	 * Handle interaction with a dead target.
+	 * 死体対象との相互作用を処理する。
 	 *
-	 * @param targetBody target body
-	 * @param actorBody  actor body
-	 * @return true when the dead-body branch handled the action
+	 * @param targetBody 処理対象ゆっくり
+	 * @param actorBody  行動主体ゆっくり
+	 * @return 死体分岐が処理を担当した場合は true
 	 */
 	public static boolean handleDeadYukkuriInteraction(Yukkuri targetBody, Yukkuri actorBody) {
 		if (actorBody.isExciting()) {

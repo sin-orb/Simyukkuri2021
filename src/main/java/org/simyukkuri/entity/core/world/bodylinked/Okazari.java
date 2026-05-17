@@ -35,6 +35,7 @@ public class Okazari extends WorldEntity {
 			this.fileName = name;
 		}
 
+		/** おかざり画像のファイル名を返す。 */
 		public String getFileName() {
 			return fileName;
 		}
@@ -147,41 +148,50 @@ public class Okazari extends WorldEntity {
 		cost = 0;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Okazari() {
 	}
 
+	/** おかざりを装着しているゆっくりの ID を返す。 */
 	public int getOwner() {
 		return owner;
 	}
 
+	/** おかざりを装着しているゆっくりの ID をセットする。 */
 	public void setOwner(int owner) {
 		this.owner = owner;
 	}
 
+	/** 胴体に対するオフセット座標配列を返す。 */
 	public Point4y[] getOffsetPos() {
 		return offsetPos;
 	}
 
+	/** 胴体に対するオフセット座標配列をセットする。 */
 	public void setOffsetPos(Point4y[] offsetPos) {
 		this.offsetPos = offsetPos;
 	}
 
+	/** おかざりの種別をセットする。 */
 	public void setOkazariType(OkazariType okazariType) {
 		this.okazariType = okazariType;
 	}
 
+	/** 未実装（UnsupportedOperationException を投げる）。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'getImageLayer'");
 	}
 
+	/** 未実装（UnsupportedOperationException を投げる）。 */
 	@Override
 	public BufferedImage getShadowImage() {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'getShadowImage'");
 	}
 
+	/** ワールドからおかざりを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		// TODO Auto-generated method stub

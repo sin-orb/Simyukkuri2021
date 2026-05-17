@@ -4,25 +4,24 @@ import java.util.List;
 import java.util.Map;
 
 import org.simyukkuri.command.GadgetAction;
+import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.attachment.impl.Fire;
 import org.simyukkuri.entity.core.living.yukkuri.Dna;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.bodylinked.Stalk;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.PanicType;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.field.impl.Barrier;
-import org.simyukkuri.draw.Translate;
 import org.simyukkuri.logic.BedLogic;
-import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.logic.EventLogic;
 import org.simyukkuri.logic.FamilyActionLogic;
 import org.simyukkuri.logic.FoodLogic;
 import org.simyukkuri.logic.StoneLogic;
 import org.simyukkuri.logic.ToiletLogic;
+import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameRandom;
-import org.simyukkuri.util.GameWorld;
 
 /**
  * Terrarium の 1 体分の更新処理を担当する。
@@ -42,7 +41,8 @@ public final class YukkuriTickProcessor {
 	 * @param transCheck 突然変異チェックを行うか
 	 * @return 突然変異候補。なければ null
 	 */
-	public static Yukkuri processYukkuri(Terrarium terrarium, WorldState curMap, Yukkuri yukkuri, List<Yukkuri> babyList,
+	public static Yukkuri processYukkuri(Terrarium terrarium, WorldState curMap, Yukkuri yukkuri,
+			List<Yukkuri> babyList,
 			boolean transCheck) {
 		TickResult ret = yukkuri.clockTick();
 		switch (ret) {
@@ -168,7 +168,8 @@ public final class YukkuriTickProcessor {
 				}
 				if (babyTypes != null) {
 					Yukkuri baby = terrarium.makeYukkuri(yukkuri.getX(), yukkuri.getY(), 0, babyTypes,
-							AgeState.BABY, yukkuri, org.simyukkuri.util.YukkuriLookup.getYukkuriById(yukkuri.getPartner()));
+							AgeState.BABY, yukkuri,
+							org.simyukkuri.util.YukkuriLookup.getYukkuriById(yukkuri.getPartner()));
 					babyList.add(baby);
 					baby.setBindStalk(s);
 					s.addAttachedBaby(baby);
@@ -268,9 +269,10 @@ public final class YukkuriTickProcessor {
 						fx = Math.min(fx, Translate.getWorldWidth());
 						fy = Math.max(0, fy);
 						fy = Math.min(fy, Translate.getWorldHeight());
-						org.simyukkuri.entity.core.world.item.Food food = (org.simyukkuri.entity.core.world.item.Food) GadgetAction.putObjEX(
-								org.simyukkuri.entity.core.world.item.Food.class, fx, fy,
-								org.simyukkuri.entity.core.world.item.Food.FoodType.STALK.ordinal());
+						org.simyukkuri.entity.core.world.item.Food food = (org.simyukkuri.entity.core.world.item.Food) GadgetAction
+								.putObjEX(
+										org.simyukkuri.entity.core.world.item.Food.class, fx, fy,
+										org.simyukkuri.entity.core.world.item.Food.FoodType.STALK.ordinal());
 						curMap.getFoods().put(food.objId, food);
 					}
 					s.remove();

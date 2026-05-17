@@ -25,10 +25,27 @@ public final class FoodSearchPolicy {
 	private FoodSearchPolicy() {
 	}
 
+	/**
+	 * 一般種用の食べ物を探索して返す。
+	 *
+	 * @param body ゆっくり
+	 * @param forceEat 強制給餌フラグ
+	 *
+	 * @return 対象を発見した場合はそのオブジェクト、見つからない場合は null
+	 */
 	public static Entity searchFoodStandard(Yukkuri body, boolean[] forceEat) {
 		return searchFoodStandard(body, forceEat, GameWorld.get().getCurrentWorldState());
 	}
 
+	/**
+	 * 一般種用の食べ物を探索して返す。
+	 *
+	 * @param body ゆっくり
+	 * @param forceEat 強制給餌フラグ
+	 * @param ws ワールド状態
+	 *
+	 * @return 対象を発見した場合はそのオブジェクト、見つからない場合は null
+	 */
 	public static Entity searchFoodStandard(Yukkuri body, boolean[] forceEat, WorldState ws) {
 		Entity targetObject = null;
 		Entity takeoutTargetObject = null;

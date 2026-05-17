@@ -17,6 +17,7 @@ import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
  * Main command area のボタン入力を処理する.
  */
 public final class ButtonListener implements ActionListener {
+	/** @param e アクションイベント */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		synchronized (SimYukkuri.lock) {

@@ -17,6 +17,14 @@ public final class FoodActionGate {
 	private FoodActionGate() {
 	}
 
+	/**
+	 * Should skip before search.
+	 *
+	 * @param body ゆっくり
+	 * @param forceEat 強制給餌フラグ
+	 *
+	 * @return Should skip before search
+	 */
 	public static boolean shouldSkipBeforeSearch(Yukkuri body, boolean[] forceEat) {
 		if (!body.isVeryHungry()) {
 			if (body.isToYukkuri() || body.isToBed()

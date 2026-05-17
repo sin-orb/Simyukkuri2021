@@ -11,6 +11,11 @@ public final class AntInfestationPolicy {
 	private AntInfestationPolicy() {
 	}
 
+	/**
+	 * アリがたかるかを確率判定し、たかる場合はアリを付着させる。
+	 *
+	 * @param body ゆっくり
+	 */
 	public static void judgeNewAnt(Yukkuri body) {
 		int antProbability = 1;
 		switch (body.getAgeState()) {

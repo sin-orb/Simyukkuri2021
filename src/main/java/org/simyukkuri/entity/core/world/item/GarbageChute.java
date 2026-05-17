@@ -54,6 +54,7 @@ public class GarbageChute extends WorldEntity {
 		boundary.setY(boundary.getHeight() >> 1);
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (itemRank == ItemRank.HOUSE) {
@@ -70,6 +71,7 @@ public class GarbageChute extends WorldEntity {
 		return 1;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
@@ -81,12 +83,14 @@ public class GarbageChute extends WorldEntity {
 		return boundary;
 	}
 
+	/** 衝突判定対象タイプを返す。 */
 	@Override
 	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}
 
+	/** 衝突処理を行い、結果コードを返す。 */
 	@Override
 	public int objHitProcess(Entity o) {
 		// ディフューザー、ゆんばは消さない
@@ -115,6 +119,7 @@ public class GarbageChute extends WorldEntity {
 		return 0;
 	}
 
+	/** 毎ティックの状態更新を行う。 */
 	@Override
 	public void upDate() {
 		if (bindObjList == null || bindObjList.size() == 0) {
@@ -141,6 +146,7 @@ public class GarbageChute extends WorldEntity {
 		}
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		GameWorld.get().getCurrentWorldState().getGarbageChutes().remove(objId);
@@ -174,30 +180,37 @@ public class GarbageChute extends WorldEntity {
 		}
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public GarbageChute() {
 
 	}
 
+	/** 関連付けられているオブジェクト一覧を返す。 */
 	public List<Entity> getBoundObjects() {
 		return bindObjList;
 	}
 
+	/** 関連付けるオブジェクト一覧をセットする。 */
 	public void setBoundObjects(List<Entity> boundObjects) {
 		this.bindObjList = boundObjects;
 	}
 
+	/** アイテムのランク（品質）を返す。 */
 	public ItemRank getItemRank() {
 		return itemRank;
 	}
 
+	/** アイテムのランク（品質）をセットする。 */
 	public void setItemRank(ItemRank itemRank) {
 		this.itemRank = itemRank;
 	}
 
+	/** 関連付けられているゆっくりを返す。 */
 	public Yukkuri getBoundYukkuri() {
 		return bindBody;
 	}
 
+	/** 関連付けるゆっくりをセットする。 */
 	public void setBoundYukkuri(Yukkuri bindBody) {
 		this.bindBody = bindBody;
 	}

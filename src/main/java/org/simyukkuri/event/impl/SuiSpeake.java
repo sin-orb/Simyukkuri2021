@@ -30,10 +30,12 @@ public class SuiSpeake extends EventPacket {
 		super(f, t, tgt, cnt);
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public SuiSpeake() {
 
 	}
 
+	/** ゆっくり以外のエンティティに対する簡易参加チェック。 */
 	@Override
 	public boolean simpleEventAction(Yukkuri b) {
 		if (b.getCurrentEvent() != null || b.isTalking() || GameRandom.nextInt(20) != 0)
@@ -119,20 +121,24 @@ public class SuiSpeake extends EventPacket {
 		return true;
 	}
 
+	/** イベントへの参加可否を判定し、参加可能なら true を返す。 */
 	@Override
 	public boolean checkEventResponse(Yukkuri b) {
 		return false;
 	}
 
+	/** イベント開始時の初期化処理。 */
 	@Override
 	public void start(Yukkuri b) {
 	}
 
+	/** イベント終了判定を行い true で終了する。 */
 	@Override
 	public boolean execute(Yukkuri b) {
 		return true;
 	}
 
+	/** イベント名の文字列表現を返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("event_suispeak");

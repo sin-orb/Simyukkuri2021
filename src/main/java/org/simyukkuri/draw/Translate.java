@@ -3,12 +3,11 @@ package org.simyukkuri.draw;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 
-import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.util.GameWorld;
 
 /***************************************************
  * 座標変換クラス
- * 
+ *
  */
 public class Translate {
 
@@ -61,85 +60,181 @@ public class Translate {
 	/** オブジェクトの内包を簡易判定するためのシェイプ */
 	private static Polygon fieldPoly;
 
+	/**
+	 * 飛行種の最大高度制限レート（fieldH に対する比率）を返す。
+	 *
+	 * @return 飛行高度制限レート
+	 */
 	public static float getFlyLimit() {
 		return flyLimit;
 	}
 
+	/**
+	 * ワールドのスケール値を返す。内部規定値×スケールがマップサイズになる。
+	 *
+	 * @return ワールドスケール値
+	 */
 	public static int getWorldScale() {
 		return mapScale;
 	}
 
+	/**
+	 * ワールドスケール値をセットする。
+	 *
+	 * @param scale 新しいスケール値
+	 */
 	public static void setWorldScale(int scale) {
 		mapScale = scale;
 	}
 
+	/**
+	 * マップ幅（内部座標）を返す。
+	 *
+	 * @return マップ幅
+	 */
 	public static int getWorldWidth() {
 		return mapW;
 	}
 
+	/**
+	 * マップ高さ（内部座標）を返す。
+	 *
+	 * @return マップ高さ
+	 */
 	public static int getWorldHeight() {
 		return mapH;
 	}
 
+	/**
+	 * マップ奥行き（Z方向の内部座標上限）を返す。
+	 *
+	 * @return マップ奥行き
+	 */
 	public static int getWorldDepth() {
 		return mapZ;
 	}
 
+	/**
+	 * フィールド幅（描画ピクセル値）を返す。
+	 *
+	 * @return フィールド幅
+	 */
 	public static int getFieldW() {
 		return fieldW;
 	}
 
+	/**
+	 * フィールド高さ（描画ピクセル値）を返す。
+	 *
+	 * @return フィールド高さ
+	 */
 	public static int getFieldH() {
 		return fieldH;
 	}
 
+	/**
+	 * バックバッファ幅を返す。
+	 *
+	 * @return バックバッファ幅
+	 */
 	public static int getBufferW() {
 		return bufferW;
 	}
 
+	/**
+	 * バックバッファ高さを返す。
+	 *
+	 * @return バックバッファ高さ
+	 */
 	public static int getBufferH() {
 		return bufferH;
 	}
 
+	/**
+	 * キャンバス幅（描画ウィンドウ枠の幅）を返す。
+	 *
+	 * @return キャンバス幅
+	 */
 	public static int getCanvasW() {
 		return canvasW;
 	}
 
+	/**
+	 * キャンバス高さ（描画ウィンドウ枠の高さ）を返す。
+	 *
+	 * @return キャンバス高さ
+	 */
 	public static int getCanvasH() {
 		return canvasH;
 	}
 
+	/**
+	 * 各マップY座標でのX方向スケールレートテーブルを返す。
+	 * 遠近法により奥行きが大きいほどスケールが小さくなる。
+	 *
+	 * @return X方向スケールレートテーブル
+	 */
 	public static float[] getRateX() {
 		return rateX;
 	}
 
+	/**
+	 * 各マップY座標でのX方向オフセットテーブルを返す。
+	 *
+	 * @return X方向オフセットテーブル
+	 */
 	public static int[] getOfsX() {
 		return ofsX;
 	}
 
+	/**
+	 * マップY→フィールドY変換テーブルを返す。
+	 *
+	 * @return マップY→フィールドY変換テーブル
+	 */
 	public static int[] getWorldToFieldY() {
 		return mapToFieldY;
 	}
 
+	/**
+	 * フィールドの最小有効Y座標（壁より下の床部分の開始Y）を返す。
+	 *
+	 * @return フィールド最小有効Y座標
+	 */
 	public static int getFieldMinY() {
 		return fieldMinY;
 	}
 
+	/**
+	 * Z座標変換レートを返す。
+	 *
+	 * @return Z座標変換レート
+	 */
 	public static float getRateZ() {
 		return rateZ;
 	}
 
+	/**
+	 * フィールドY→マップY変換テーブルを返す。壁部分のインデックスは -1 になる。
+	 *
+	 * @return フィールドY→マップY変換テーブル
+	 */
 	public static int[] getFieldToWorldY() {
 		return fieldToMapY;
 	}
 
+	/**
+	 * フィールド範囲を表す台形ポリゴンを返す。内包判定に使用する。
+	 *
+	 * @return フィールド範囲ポリゴン
+	 */
 	public static Polygon getFieldPoly() {
 		return fieldPoly;
 	}
 
 	/**
 	 * マップサイズを設定する.
-	 * 
+	 *
 	 * @param mW 幅
 	 * @param mH 奥行き
 	 * @param mZ 高さ
@@ -153,14 +248,15 @@ public class Translate {
 	/**
 	 * canvasWidth, canvasHeight : 描画範囲のパネルサイズ
 	 * fieldSize, bufSizeを掛けるとマップ全体のサイズになる
-	 * 
+	 *
 	 * @param canvasWidth  描画範囲のパネルサイズの幅
 	 * @param canvasHeight 描画範囲のパネルサイズの奥行き
-	 * @param fieldSize フィールドサイズ
-	 * @param bufSize   バッファサイズ
-	 * @param rate      ズームレート
+	 * @param fieldSize    フィールドサイズ
+	 * @param bufSize      バッファサイズ
+	 * @param rate         ズームレート
 	 */
-	public static final void setCanvasSize(int canvasWidth, int canvasHeight, int fieldSize, int bufSize, float[] rate) {
+	public static final void setCanvasSize(int canvasWidth, int canvasHeight, int fieldSize, int bufSize,
+			float[] rate) {
 		canvasW = canvasWidth;
 		canvasH = canvasHeight;
 
@@ -180,7 +276,7 @@ public class Translate {
 
 	/**
 	 * ズーム率を加える.
-	 * 
+	 *
 	 * @param val 加えるズーム率
 	 * @return ズーム率が範囲内かどうか
 	 */
@@ -200,7 +296,7 @@ public class Translate {
 
 	/**
 	 * ズーム率を設定する.
-	 * 
+	 *
 	 * @param val ズーム率
 	 */
 	public static final void setZoomRate(int val) {
@@ -213,7 +309,7 @@ public class Translate {
 
 	/**
 	 * 現在のズーム率を取得する.
-	 * 
+	 *
 	 * @return 現ザーのズーム率
 	 */
 	public static final float getCurrentZoomRate() {
@@ -230,7 +326,7 @@ public class Translate {
 
 	/**
 	 * バッファポジションを設定する.
-	 * 
+	 *
 	 * @param sx バックバッファ描画位置X座標
 	 * @param sy バックバッファ描画位置Y座標
 	 */
@@ -242,7 +338,7 @@ public class Translate {
 
 	/**
 	 * バッファ中央位置を設定する.
-	 * 
+	 *
 	 * @param sx バックバッファ描画位置X座標
 	 * @param sy バックバッファ描画位置Y座標
 	 */
@@ -254,7 +350,7 @@ public class Translate {
 
 	/**
 	 * バッファ位置を加える.
-	 * 
+	 *
 	 * @param sx 加えるバックバッファ描画位置X座標
 	 * @param sy 加えるバックバッファ描画位置Y座標
 	 */
@@ -278,7 +374,7 @@ public class Translate {
 
 	/**
 	 * 描画エリアを取得する.
-	 * 
+	 *
 	 * @return 描画エリア
 	 */
 	public static final Rectangle4y getDisplayArea() {
@@ -287,7 +383,7 @@ public class Translate {
 
 	/**
 	 * キャンバス -> フィールド変換
-	 * 
+	 *
 	 * @param x   X座標
 	 * @param y   Y座標
 	 * @param out 変換後座標
@@ -299,7 +395,7 @@ public class Translate {
 
 	/**
 	 * フィールド -> キャンバス変換
-	 * 
+	 *
 	 * @param x   X座標
 	 * @param y   Y座標
 	 * @param out 変換後座標
@@ -311,7 +407,7 @@ public class Translate {
 
 	/**
 	 * セットされたマップとフィールドサイズから変換テーブルを作成
-	 * 
+	 *
 	 * @param isPers 遠近法の有無
 	 */
 	public static final void createTransTable(boolean isPers) {
@@ -378,7 +474,7 @@ public class Translate {
 
 	/**
 	 * マップ->フィールド変換
-	 * 
+	 *
 	 * @param x   X座標
 	 * @param y   Y座標
 	 * @param pos Point
@@ -395,7 +491,7 @@ public class Translate {
 
 	/**
 	 * Z座標を変換する.
-	 * 
+	 *
 	 * @param z Z座標
 	 * @return 変換後座標
 	 */
@@ -405,7 +501,7 @@ public class Translate {
 
 	/**
 	 * フィールド->マップ変換 範囲外の座標はnullを返す
-	 * 
+	 *
 	 * @param x X座標
 	 * @param y Y座標
 	 * @return Point
@@ -432,7 +528,7 @@ public class Translate {
 
 	/**
 	 * フィールド->マップ変換 範囲外の座標は限界位置として扱う
-	 * 
+	 *
 	 * @param x X座標
 	 * @param y Y座標
 	 * @return Point
@@ -459,7 +555,7 @@ public class Translate {
 
 	/**
 	 * フィールド内かどうか
-	 * 
+	 *
 	 * @param x X座標
 	 * @param y Y座標
 	 * @return フィールド内かどうか
@@ -488,7 +584,7 @@ public class Translate {
 
 	/**
 	 * オブジェクト用 フィールド->マップ変換 立っているとみなしてYは座標制限に猶予がある
-	 * 
+	 *
 	 * @param x      X座標
 	 * @param y      Y座標
 	 * @param pivX   X座標MIN/MAX猶予
@@ -525,7 +621,7 @@ public class Translate {
 
 	/**
 	 * 床配置物用 フィールド->マップ変換 設置物が完全にフィールド内に納まるように座標を制限する
-	 * 
+	 *
 	 * @param x    X座標
 	 * @param y    Y座標
 	 * @param pivX X座標猶予
@@ -560,7 +656,7 @@ public class Translate {
 
 	/**
 	 * 空中物用 フィールド->マップ変換 ここで返す値はx,z
-	 * 
+	 *
 	 * @param x    X座標
 	 * @param y    Y座標
 	 * @param z    Z座標
@@ -590,7 +686,7 @@ public class Translate {
 
 	/**
 	 * 移動量フィールド->マップ変換
-	 * 
+	 *
 	 * @param x   X座標
 	 * @param y   Y座標
 	 * @param pos 位置
@@ -615,7 +711,7 @@ public class Translate {
 
 	/**
 	 * マップY座標から画像サイズの距離を計算
-	 * 
+	 *
 	 * @param x    X座標
 	 * @param mapY マップY座標
 	 * @return 距離
@@ -630,7 +726,7 @@ public class Translate {
 
 	/**
 	 * アイテム配置座標の計算
-	 * 
+	 *
 	 * @param mx   X座標
 	 * @param my   Y座標
 	 * @param rect 矩形
@@ -649,7 +745,7 @@ public class Translate {
 
 	/**
 	 * Y座標変換
-	 * 
+	 *
 	 * @param y Y座標
 	 * @return 変換後Y座標
 	 */
@@ -659,7 +755,7 @@ public class Translate {
 
 	/**
 	 * 背景のY座標変換
-	 * 
+	 *
 	 * @param y Y座標
 	 * @return 変換後Y座標
 	 */
@@ -669,7 +765,7 @@ public class Translate {
 
 	/**
 	 * Z座標変換
-	 * 
+	 *
 	 * @param z Z座標
 	 * @return 変換後Z座標
 	 */
@@ -679,7 +775,7 @@ public class Translate {
 
 	/**
 	 * サイズを返却する.
-	 * 
+	 *
 	 * @param size サイズ
 	 * @return サイズ
 	 */
@@ -689,7 +785,7 @@ public class Translate {
 
 	/**
 	 * 2点間の距離計算 ルートを省いているので実際の距離にはならないので注意。また、帰ってくる値も距離の２乗なので注意
-	 * 
+	 *
 	 * @param x1 X座標1
 	 * @param y1 Y座標1
 	 * @param x2 X座標2
@@ -702,7 +798,7 @@ public class Translate {
 
 	/**
 	 * 飛行種の最大高度マップZを返す
-	 * 
+	 *
 	 * @return 飛行種の最大高度マップZ
 	 */
 	public static final int getFlyHeightLimit() {
@@ -711,7 +807,7 @@ public class Translate {
 
 	/**
 	 * 2点間の距離（正式）
-	 * 
+	 *
 	 * @param x1 X座標1
 	 * @param y1 Y座標1
 	 * @param x2 X座標2
@@ -724,7 +820,7 @@ public class Translate {
 
 	/**
 	 * 2点間の角度
-	 * 
+	 *
 	 * @param x  X座標1
 	 * @param y  Y座標1
 	 * @param x2 X座標2
@@ -738,7 +834,7 @@ public class Translate {
 
 	/**
 	 * 角度と距離から点２を計算
-	 * 
+	 *
 	 * @param x      X座標
 	 * @param y      Y座標
 	 * @param radius 半径
@@ -754,7 +850,7 @@ public class Translate {
 
 	/**
 	 * ポリゴン位置を取得する.
-	 * 
+	 *
 	 * @param sx       フィールドX座標
 	 * @param sy       フィールドY座標
 	 * @param ex       マップX座標
@@ -799,7 +895,7 @@ public class Translate {
 
 	/**
 	 * 移動後座標計算
-	 * 
+	 *
 	 * @param sx       フィールドX座標
 	 * @param sy       フィールドY座標
 	 * @param ex       マップX座標
@@ -854,7 +950,7 @@ public class Translate {
 
 	/**
 	 * フィールドの限界位置をマップ用に取得する.
-	 * 
+	 *
 	 * @param x X座標
 	 * @param y Y座標
 	 * @return 位置
@@ -873,7 +969,7 @@ public class Translate {
 
 	/**
 	 * 壁の数取得
-	 * 
+	 *
 	 * @param x X座標
 	 * @param y Y座標
 	 * @return 壁の数
@@ -887,7 +983,7 @@ public class Translate {
 
 	/**
 	 * 壁の数設定
-	 * 
+	 *
 	 * @param x   X座標
 	 * @param y   Y座標
 	 * @param num 数
@@ -901,7 +997,7 @@ public class Translate {
 
 	/**
 	 * フィールドの数取得
-	 * 
+	 *
 	 * @param x X座標
 	 * @param y Y座標
 	 * @return 数
@@ -915,7 +1011,7 @@ public class Translate {
 
 	/**
 	 * フィールドの数設定
-	 * 
+	 *
 	 * @param x   X座標
 	 * @param y   Y座標
 	 * @param num 数
@@ -927,4 +1023,3 @@ public class Translate {
 		GameWorld.get().getCurrentWorldState().getFieldGrid()[mSX][mSY] = num;
 	}
 }
-

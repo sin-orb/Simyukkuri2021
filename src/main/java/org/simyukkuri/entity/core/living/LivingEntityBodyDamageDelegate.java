@@ -16,6 +16,7 @@ import org.simyukkuri.util.GameWorld;
 public final class LivingEntityBodyDamageDelegate {
 	private final LivingEntity body;
 
+	/** 指定の LivingEntity をラップしてデリゲートを初期化する。 */
 	public LivingEntityBodyDamageDelegate(LivingEntity body) {
 		this.body = body;
 	}

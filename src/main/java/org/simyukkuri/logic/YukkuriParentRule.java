@@ -15,9 +15,9 @@ public final class YukkuriParentRule {
 	}
 
 	/**
-	 * Check and process a nearby parent body.
+	 * 近くにいる親ゆっくりを探索して接近行動を処理する。
 	 *
-	 * @param body target body
+	 * @param body ゆっくり
 	 */
 	public static void checkNearParent(Yukkuri body) {
 		if (body.isAdult()) {

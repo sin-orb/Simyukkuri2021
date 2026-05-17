@@ -25,6 +25,11 @@ public class ResourceUtil {
 	private static ResourceUtil instance;
 	private static Map<String, Map<String, String>> strings = new HashMap<String, Map<String, String>>();
 
+	/**
+	 * {@code ResourceUtil} のシングルトンインスタンスを返す。初回呼び出し時に生成される。
+	 *
+	 * @return {@code ResourceUtil} の唯一のインスタンス
+	 */
 	public static ResourceUtil getInstance() {
 		if (null == instance) {
 			instance = new ResourceUtil();
@@ -134,6 +139,12 @@ public class ResourceUtil {
 		return props;
 	}
 
+	/**
+	 * プロパティキーに対応するローカライズ文字列を返す。
+	 *
+	 * @param property プロパティキー
+	 * @return ローカライズされた文字列
+	 */
 	public String read(String property) {
 		String lang = thisLocale.getLanguage();
 		Map<String, String> props = strings.get(lang);

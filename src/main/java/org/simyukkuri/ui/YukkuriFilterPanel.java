@@ -22,6 +22,7 @@ import javax.swing.border.LineBorder;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.enums.YukkuriType;
 
+/** ゆっくりの種別フィルターパネルを提供するクラス。 */
 public class YukkuriFilterPanel {
 	boolean[] beforeSelectedType;
 	static YukkuriType[] yukkuriTypes = {
@@ -75,6 +76,7 @@ public class YukkuriFilterPanel {
 			this.name = nameJ;
 		}
 
+		/** @return ボタンの表示名 */
 		public String toString() {
 			return name;
 		}
@@ -244,14 +246,17 @@ public class YukkuriFilterPanel {
 
 		private static JCheckBox[] checkbox;
 
+		/** @return チェックボックス配列 */
 		public static JCheckBox[] getCheckbox() {
 			return checkbox;
 		}
 
+		/** @param checkbox チェックボックス配列 */
 		public static void setCheckbox(JCheckBox[] checkbox) {
 			ButtonListener.checkbox = checkbox;
 		}
 
+		/** @param e アクションイベント */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String command = e.getActionCommand();

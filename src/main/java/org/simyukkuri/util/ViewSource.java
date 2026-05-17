@@ -12,6 +12,9 @@ import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.EffectType;
 import org.simyukkuri.enums.YukkuriType;
 
+/**
+ * ViewSource interface.
+ */
 public interface ViewSource {
 	MyPane getPane();
 

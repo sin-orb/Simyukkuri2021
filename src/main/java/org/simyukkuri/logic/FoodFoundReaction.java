@@ -19,6 +19,15 @@ public final class FoodFoundReaction {
 	private FoodFoundReaction() {
 	}
 
+	/**
+	 * 発見した食べ物への反応処理を行い、行動継続可否を返す。
+	 *
+	 * @param body ゆっくり
+	 * @param targetObject 対象エンティティ
+	 * @param forceEat 強制給餌フラグ
+	 *
+	 * @return 食べ物への移動が継続する場合は true、キャンセルされた場合は false
+	 */
 	public static boolean handleFoundFood(Yukkuri body, Entity targetObject, boolean[] forceEat) {
 		if (body.isOnlyAmaama() && body.getPublicRank() != PublicRank.UNUN_SLAVE) {
 			if (!body.isStarving()) {

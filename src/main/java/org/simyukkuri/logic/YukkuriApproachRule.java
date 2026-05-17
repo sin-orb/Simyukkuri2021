@@ -13,10 +13,10 @@ public final class YukkuriApproachRule {
 	}
 
 	/**
-	 * Handle the non-contact approach branch in doActionOther.
+	 * doActionOther の非接触接近分岐を処理する。
 	 *
-	 * @param targetBody target body
-	 * @param actorBody  actor body
+	 * @param targetBody 処理対象ゆっくり
+	 * @param actorBody  行動主体ゆっくり
 	 */
 	public static void handleApproach(Yukkuri targetBody, Yukkuri actorBody, int offsetX) {
 		int directionSign = 1;

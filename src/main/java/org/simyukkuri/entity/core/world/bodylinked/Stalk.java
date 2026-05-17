@@ -80,6 +80,7 @@ public class Stalk extends WorldEntity {
 		boundary.setY(boundary.getHeight() - 1);
 	}
 
+	/** 茎の画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (option == 0) {
@@ -90,6 +91,7 @@ public class Stalk extends WorldEntity {
 		return 1;
 	}
 
+	/** 実ゆが付いていない場合に茎の影画像を返す。付いている場合は null。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
@@ -111,6 +113,7 @@ public class Stalk extends WorldEntity {
 		}
 	}
 
+	/** 毎ティックの状態更新を行う。 */
 	@Override
 	public void upDate() {
 		int i = 0;
@@ -150,6 +153,7 @@ public class Stalk extends WorldEntity {
 		}
 	}
 
+	/** ワールドからスタルクを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		remove();
@@ -180,10 +184,12 @@ public class Stalk extends WorldEntity {
 		return plantYukkuri;
 	}
 
+	/** シリアライズ用の実ゆ ID を返す。 */
 	public Integer getPyForSeri() {
 		return plantYukkuri;
 	}
 
+	/** シリアライズ用の実ゆ ID をセットし、bindObj にも反映する。 */
 	public void setPyForSeri(Integer s) {
 		this.plantYukkuri = s;
 		this.bindObj = s;
@@ -327,6 +333,9 @@ public class Stalk extends WorldEntity {
 	}
 
 	@Override
+	/**
+	 * Grab.
+	 */
 	public void grab() {
 		grabbed = true;
 		if (takePlantYukkuri() != null) {
@@ -344,6 +353,7 @@ public class Stalk extends WorldEntity {
 		return GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(plantYukkuri);
 	}
 
+	/** 毎ティックの状態更新を行う。 */
 	@Override
 	public TickResult clockTick() {
 		setAge(getAge() + TICK);
@@ -415,6 +425,7 @@ public class Stalk extends WorldEntity {
 		calcPos();
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Stalk() {
 		setBoundary(boundary);
 		objType = Type.OBJECT;
@@ -425,17 +436,20 @@ public class Stalk extends WorldEntity {
 		calcPos();
 	}
 
+	/** 衝突判定対象タイプを返す（茎は 0 で判定なし）。 */
 	@Override
 	@Transient
 	public int getHitCheckObjType() {
 		return 0;
 	}
 
+	/** 衝突処理（茎は何もせず 0 を返す）。 */
 	@Override
 	public int objHitProcess(Entity o) {
 		return 0;
 	}
 
+	/** 茎を除去し、紐付きゆっくりとの関係を解除する。 */
 	@Override
 	public void remove() {
 		plantYukkuri = -1;
@@ -489,22 +503,27 @@ public class Stalk extends WorldEntity {
 	// return ret;
 	// }
 
+	/** 茎に実っている実ゆの数を返す。 */
 	public int getAmount() {
 		return amount;
 	}
 
+	/** 茎に実っている実ゆの数をセットする。 */
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
 
+	/** 実ゆの ID を直接セットする。 */
 	public void setPlantYukkuri(int plantYukkuri) {
 		this.plantYukkuri = plantYukkuri;
 	}
 
+	/** 付きゆっくり（赤ゆ）の ID リストをセットする。 */
 	public void setBindBabies(List<Integer> bindBaby) {
 		this.bindBabies = bindBaby;
 	}
 
+	/** 茎をポップアップメニューの取得対象として返す。 */
 	@Override
 	public GetMenuTarget hasGetPopup() {
 		return GetMenuTarget.STALK;

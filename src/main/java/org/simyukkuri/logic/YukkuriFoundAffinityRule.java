@@ -14,13 +14,13 @@ public final class YukkuriFoundAffinityRule {
 	}
 
 	/**
-	 * Handle the target-directed approach rules for a target body.
+	 * 対象ゆっくりへの接近ルールを処理する。
 	 *
-	 * @param actorBody  actor body
-	 * @param targetBody target body
-	 * @param colX       collision-adjusted x coordinate
-	 * @param mz         destination z coordinate
-	 * @return true when a branch consumed the action
+	 * @param actorBody  行動主体ゆっくり
+	 * @param targetBody 処理対象ゆっくり
+	 * @param colX       衝突補正後のX座標
+	 * @param mz         目標Z座標
+	 * @return 分岐が処理を消費した場合は true
 	 */
 	public static boolean handleFoundAffinity(Yukkuri actorBody, Yukkuri targetBody, int colX, int mz) {
 		if (actorBody.getPublicRank() != targetBody.getPublicRank()) {

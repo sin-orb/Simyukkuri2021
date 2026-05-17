@@ -37,46 +37,57 @@ public class BegForLifeEvent extends EventPacket {
 		super(f, t, tgt, cnt);
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public BegForLifeEvent() {
 
 	}
 
+	/** ループカウンタ1を返す。 */
 	public int getRoop() {
 		return roop;
 	}
 
+	/** ループカウンタ1をセットする。 */
 	public void setRoop(int roop) {
 		this.roop = roop;
 	}
 
+	/** ループカウンタ2を返す。 */
 	public int getRoop2() {
 		return roop2;
 	}
 
+	/** ループカウンタ2をセットする。 */
 	public void setRoop2(int roop2) {
 		this.roop2 = roop2;
 	}
 
+	/** ループカウンタ3を返す。 */
 	public int getRoop3() {
 		return roop3;
 	}
 
+	/** ループカウンタ3をセットする。 */
 	public void setRoop3(int roop3) {
 		this.roop3 = roop3;
 	}
 
+	/** イベントの進行ティックカウンタを返す。 */
 	public int getTick() {
 		return tick;
 	}
 
+	/** イベントの進行ティックカウンタをセットする。 */
 	public void setTick(int tick) {
 		this.tick = tick;
 	}
 
+	/** 待機カウントを返す。 */
 	public int getWait() {
 		return wait;
 	}
 
+	/** 待機カウントをセットする。 */
 	public void setWait(int wait) {
 		this.wait = wait;
 	}
@@ -258,6 +269,7 @@ public class BegForLifeEvent extends EventPacket {
 		return;
 	}
 
+	/** イベント名の文字列表現を返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("event_beg");

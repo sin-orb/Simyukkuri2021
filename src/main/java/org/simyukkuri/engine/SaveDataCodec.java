@@ -21,8 +21,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.simyukkuri.engine.World;
-
 /**
  * セーブデータの JSON / GZIP / 暗号化を担当する.
  */
@@ -46,7 +44,7 @@ public final class SaveDataCodec {
 	 * World を保存ファイルへ書き出す.
 	 *
 	 * @param world 保存対象
-	 * @param file 保存先
+	 * @param file  保存先
 	 * @throws IOException 入出力失敗時
 	 */
 	public static void save(World world, File file) throws IOException {

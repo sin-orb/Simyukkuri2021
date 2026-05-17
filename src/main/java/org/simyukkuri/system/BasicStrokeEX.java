@@ -74,22 +74,55 @@ public class BasicStrokeEX extends BasicStroke implements java.io.Serializable {
 						target.getDashPhase());
 	}
 
+	/**
+	 * デフォルト設定でインスタンスを生成する。
+	 */
 	public BasicStrokeEX() {
 		super();
 	}
 
+	/**
+	 * 線幅のみを指定してインスタンスを生成する。
+	 *
+	 * @param lineWidth 線の太さ
+	 */
 	public BasicStrokeEX(float lineWidth) {
 		super(lineWidth);
 	}
 
+	/**
+	 * 線幅・端点スタイル・結合スタイルを指定してインスタンスを生成する。
+	 *
+	 * @param lineWidth 線の太さ
+	 * @param endCap 端点のスタイル（CAP_BUTT, CAP_ROUND, CAP_SQUARE）
+	 * @param lineJoin 結合部のスタイル（JOIN_BEVEL, JOIN_MITER, JOIN_ROUND）
+	 */
 	public BasicStrokeEX(float lineWidth, int endCap, int lineJoin) {
 		super(lineWidth, endCap, lineJoin);
 	}
 
+	/**
+	 * 線幅・端点・結合・マイター制限を指定してインスタンスを生成する。
+	 *
+	 * @param lineWidth 線の太さ
+	 * @param endCap 端点のスタイル
+	 * @param lineJoin 結合部のスタイル
+	 * @param miterLimit マイター継ぎの最大長さ
+	 */
 	public BasicStrokeEX(float lineWidth, int endCap, int lineJoin, float miterLimit) {
 		super(lineWidth, endCap, lineJoin, miterLimit);
 	}
 
+	/**
+	 * すべてのパラメータを指定してインスタンスを生成する。
+	 *
+	 * @param lineWidth 線の太さ
+	 * @param endCap 端点のスタイル
+	 * @param lineJoin 結合部のスタイル
+	 * @param miterLimit マイター継ぎの最大長さ
+	 * @param dashArray 破線パターンの配列（null で実線）
+	 * @param dashPhase 破線パターンの開始オフセット
+	 */
 	public BasicStrokeEX(float lineWidth, int endCap, int lineJoin, float miterLimit, float[] dashArray,
 			float dashPhase) {
 		super(lineWidth, endCap, lineJoin, miterLimit, dashArray, dashPhase);
@@ -99,10 +132,14 @@ public class BasicStrokeEX extends BasicStroke implements java.io.Serializable {
 		return new Serial(this);
 	}
 
-	// BasicStroke fields are final and cannot be modified easily via reflection in
-	// newer JDKs.
-	// These setter methods will fail silently or throw exceptions depending on the
-	// JDK security manager.
+	// BasicStroke のフィールドは final のため、新しい JDK ではリフレクションで変更が困難。
+	// セキュリティマネージャ設定によって静かに失敗するか例外を投げる場合がある。
+	/**
+	 * リフレクションを用いて線幅を変更する。
+	 * BasicStroke の final フィールドを強制書き換えするため、JDK バージョンによっては無効になる場合がある。
+	 *
+	 * @param width 変更後の線の太さ
+	 */
 	public void setLineWidth(float width) {
 		Class<?> superClazz = this.getClass().getSuperclass();
 		Field field = null;
@@ -115,6 +152,11 @@ public class BasicStrokeEX extends BasicStroke implements java.io.Serializable {
 		}
 	}
 
+	/**
+	 * リフレクションを用いて端点スタイルを変更する。
+	 *
+	 * @param cap 変更後の端点スタイル（BasicStroke.CAP_* 定数）
+	 */
 	public void setEndCap(int cap) {
 		Class<?> superClazz = this.getClass().getSuperclass();
 		Field field = null;
@@ -127,6 +169,11 @@ public class BasicStrokeEX extends BasicStroke implements java.io.Serializable {
 		}
 	}
 
+	/**
+	 * リフレクションを用いて線の結合スタイルを変更する。
+	 *
+	 * @param join 変更後の結合スタイル（BasicStroke.JOIN_* 定数）
+	 */
 	public void setLineJoin(int join) {
 		Class<?> superClazz = this.getClass().getSuperclass();
 		Field field = null;
@@ -139,6 +186,11 @@ public class BasicStrokeEX extends BasicStroke implements java.io.Serializable {
 		}
 	}
 
+	/**
+	 * リフレクションを用いてマイター継ぎの最大長さを変更する。
+	 *
+	 * @param miterlimit 変更後のマイター制限値
+	 */
 	public void setMiterLimit(float miterlimit) {
 		Class<?> superClazz = this.getClass().getSuperclass();
 		Field field = null;
@@ -151,6 +203,11 @@ public class BasicStrokeEX extends BasicStroke implements java.io.Serializable {
 		}
 	}
 
+	/**
+	 * リフレクションを用いて破線パターンの配列を変更する。
+	 *
+	 * @param dash 変更後の破線パターン配列
+	 */
 	public void setDashArray(float[] dash) {
 		Class<?> superClazz = this.getClass().getSuperclass();
 		Field field = null;
@@ -163,6 +220,11 @@ public class BasicStrokeEX extends BasicStroke implements java.io.Serializable {
 		}
 	}
 
+	/**
+	 * リフレクションを用いて破線パターンの開始オフセットを変更する。
+	 *
+	 * @param dash_phase 変更後の破線フェーズ（オフセット値）
+	 */
 	public void setDashPhase(float dash_phase) {
 		Class<?> superClazz = this.getClass().getSuperclass();
 		Field field = null;

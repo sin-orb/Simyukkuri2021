@@ -20,6 +20,7 @@ public enum AgeState {
 		this.name = str;
 	}
 
+	/** 年齢層の表示名を返す。 */
 	public String getName() {
 		return name;
 	}

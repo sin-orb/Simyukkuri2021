@@ -52,6 +52,7 @@ public class MouseInputController extends MouseAdapter {
 	private final Rectangle4y imageRect = new Rectangle4y();
 	private final List<Entity> list4sort = new LinkedList<Entity>();
 
+	/** @param owner メインウィンドウ */
 	public MouseInputController(SimYukkuri owner) {
 		this.owner = owner;
 	}
@@ -171,6 +172,7 @@ public class MouseInputController extends MouseAdapter {
 		return null;
 	}
 
+	/** マウスクリック時にガジェット操作・右クリックメニューを処理する。 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		synchronized (SimYukkuri.lock) {
@@ -270,6 +272,7 @@ public class MouseInputController extends MouseAdapter {
 		}
 	}
 
+	/** マウスボタン押下時にオブジェクトの掴み操作を開始する。 */
 	@Override
 	public void mousePressed(MouseEvent e) {
 		synchronized (SimYukkuri.lock) {
@@ -339,6 +342,7 @@ public class MouseInputController extends MouseAdapter {
 		}
 	}
 
+	/** マウスボタン解放時に掴んだオブジェクトを投げる。 */
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		synchronized (SimYukkuri.lock) {
@@ -380,6 +384,7 @@ public class MouseInputController extends MouseAdapter {
 		}
 	}
 
+	/** マウスドラッグ時にオブジェクト移動・なでなでを処理する。 */
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		synchronized (SimYukkuri.lock) {
@@ -512,6 +517,7 @@ public class MouseInputController extends MouseAdapter {
 		}
 	}
 
+	/** マウス移動時にフィールド選択矩形の終端座標を更新する。 */
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		synchronized (SimYukkuri.lock) {
@@ -533,16 +539,19 @@ public class MouseInputController extends MouseAdapter {
 		}
 	}
 
+	/** カーソルがキャンバスに入ったときにカスタムカーソルを設定する。 */
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		owner.setCursor(cr);
 	}
 
+	/** カーソルがキャンバスを出たときにデフォルトカーソルに戻す。 */
 	@Override
 	public void mouseExited(MouseEvent e) {
 		owner.setCursor(defCr);
 	}
 
+	/** マウスホイール操作でゲームスピードを変更する。 */
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		int select;

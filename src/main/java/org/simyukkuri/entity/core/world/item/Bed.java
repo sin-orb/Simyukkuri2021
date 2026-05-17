@@ -42,12 +42,14 @@ public class Bed extends WorldEntity {
 		boundary.setY(boundary.getHeight() >> 1);
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		layer[0] = images[itemRank.ordinal()];
 		return 1;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
@@ -59,12 +61,14 @@ public class Bed extends WorldEntity {
 		return boundary;
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		GameWorld.get().getCurrentWorldState().getBeds().remove(objId);
 	}
 
 	@Override
+	/** アイテムの購入価格を返す。 */
 	public int getValue() {
 		return value;
 	}
@@ -112,14 +116,17 @@ public class Bed extends WorldEntity {
 		}
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Bed() {
 
 	}
 
+	/** アイテムのランク（品質）を返す。 */
 	public ItemRank getItemRank() {
 		return itemRank;
 	}
 
+	/** アイテムのランク（品質）をセットする。 */
 	public void setItemRank(ItemRank itemRank) {
 		this.itemRank = itemRank;
 	}

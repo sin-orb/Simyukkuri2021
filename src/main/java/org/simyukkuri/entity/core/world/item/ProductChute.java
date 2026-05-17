@@ -40,6 +40,7 @@ public class ProductChute extends WorldEntity {
 		boundary.setY(boundary.getHeight() >> 1);
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (enabled)
@@ -49,6 +50,7 @@ public class ProductChute extends WorldEntity {
 		return 1;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
@@ -60,12 +62,14 @@ public class ProductChute extends WorldEntity {
 		return boundary;
 	}
 
+	/** 衝突判定対象タイプを返す。 */
 	@Override
 	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}
 
+	/** 衝突処理を行い、結果コードを返す。 */
 	@Override
 	public int objHitProcess(Entity o) {
 		// ディフューザー、ゆんばは消さない
@@ -82,6 +86,7 @@ public class ProductChute extends WorldEntity {
 		return 0;
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		GameWorld.get().getCurrentWorldState().getProductChutes().remove(objId);
@@ -103,6 +108,7 @@ public class ProductChute extends WorldEntity {
 		cost = 50;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public ProductChute() {
 
 	}

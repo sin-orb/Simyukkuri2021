@@ -90,12 +90,14 @@ public class WasaReimu extends Reimu {
 		baseSpeed = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
 	}
 
+	/** 画像が読み込み済みかを返す。 */
 	@Override
 	@Transient
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
 
+	/** 現在の表示状態に基づく画像をレイヤーにセットし、画像番号を返す。 */
 	@Override
 	public int getImage(int type, int direction, YukkuriLayer layer, int index) {
 		if (!isImageNagasiMode() || imagesNagasi == null) {
@@ -145,10 +147,12 @@ public class WasaReimu extends Reimu {
 	}
 
 	@Override
+	/** アタッチメントキーに対応する取り付け点座標を返す。 */
 	public Point4y[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}
 
+	/** ゆっくりの種別を返す。 */
 	@Override
 	@Transient
 	public YukkuriType getType() {
@@ -166,14 +170,17 @@ public class WasaReimu extends Reimu {
 		IniFileUtil.readYukkuriIniFile(this);
 	}
 
+	/** わされいむ のデフォルトコンストラクタ。 */
 	public WasaReimu() {
 
 	}
 
+	/** 流し絵モード用の画像バリアント状態を返す。 */
 	public int[][] getImageVariantState() {
 		return imageVariantState;
 	}
 
+	/** 流し絵モード用の画像バリアント状態をセットする。 */
 	public void setImageVariantState(int[][] imageVariantState) {
 		this.imageVariantState = imageVariantState;
 	}

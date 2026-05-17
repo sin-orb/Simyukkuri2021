@@ -13,6 +13,12 @@ import org.simyukkuri.draw.Translate;
 public final class InputController {
 	private int savedGameSpeed;
 
+	/**
+	 * キー押下時のアクション（ポーズ・ゆっくり操作等）を処理する。
+	 *
+	 * @param e     キーイベント
+	 * @param owner メインウィンドウ
+	 */
 	public void handleKeyPressed(KeyEvent e, SimYukkuri owner) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_ESCAPE:
@@ -87,9 +93,11 @@ public final class InputController {
 		}
 	}
 
+	/** @param e キーイベント */
 	public void handleKeyReleased(KeyEvent e) {
 	}
 
+	/** @param e キーイベント */
 	public void handleKeyTyped(KeyEvent e) {
 	}
 }

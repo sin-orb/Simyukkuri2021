@@ -48,6 +48,7 @@ public class MachinePress extends WorldEntity {
 		boundary.setY(boundary.getHeight() - 1);
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (enabled)
@@ -57,6 +58,7 @@ public class MachinePress extends WorldEntity {
 		return 1;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
@@ -68,12 +70,14 @@ public class MachinePress extends WorldEntity {
 		return boundary;
 	}
 
+	/** 衝突判定対象タイプを返す。 */
 	@Override
 	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}
 
+	/** 衝突処理を行い、結果コードを返す。 */
 	@Override
 	public int objHitProcess(Entity o) {
 		if (o.getObjType() == Type.YUKKURI) {
@@ -92,6 +96,7 @@ public class MachinePress extends WorldEntity {
 		return 0;
 	}
 
+	/** 毎ティックの状態更新を行う。 */
 	@Override
 	public void upDate() {
 		if (getAge() % 2400 == 0 && enabled) {
@@ -99,6 +104,7 @@ public class MachinePress extends WorldEntity {
 		}
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		GameWorld.get().getCurrentWorldState().getMachinePresses().remove(objId);
@@ -118,6 +124,7 @@ public class MachinePress extends WorldEntity {
 		cost = 1500;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public MachinePress() {
 
 	}

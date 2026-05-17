@@ -15,6 +15,9 @@ import org.simyukkuri.event.EventPacket;
  */
 public class YukkuriLogic {
 
+	/**
+	 * ActionGo enum type.
+	 */
 	public static enum ActionGo {
 		NONE, WAIT, GO, BACK
 	};

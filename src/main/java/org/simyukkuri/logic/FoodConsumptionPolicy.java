@@ -20,6 +20,13 @@ public final class FoodConsumptionPolicy {
 	private FoodConsumptionPolicy() {
 	}
 
+	/**
+	 * ゆっくりに食べ物を与えて状態を更新する。
+	 *
+	 * @param b ゆっくり
+	 * @param foodType 食べ物タイプ
+	 * @param amount 食べる量
+	 */
 	public static void eatFood(Yukkuri b, FoodType foodType, int amount) {
 		if (b.isDead()) {
 			return;

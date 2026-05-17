@@ -16,11 +16,11 @@ public final class YukkuriStealRule {
 	}
 
 	/**
-	 * Handle the steal branch in doActionOther.
+	 * doActionOther の盗み分岐を処理する。
 	 *
-	 * @param targetBody target body
-	 * @param actorBody  actor body
-	 * @return true when the steal branch handled the action
+	 * @param targetBody 処理対象ゆっくり
+	 * @param actorBody  行動主体ゆっくり
+	 * @return 盗み分岐が処理を担当した場合は true
 	 */
 	public static boolean handleOkazariSteal(Yukkuri targetBody, Yukkuri actorBody) {
 		if (!actorBody.hasOkazari() && targetBody.hasOkazari()

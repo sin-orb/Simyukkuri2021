@@ -227,14 +227,17 @@ public class Entity implements java.io.Serializable, Comparable {
 		}
 	}
 
+	/** X座標を直接設定する（壁判定なし）. @param x X座標 */
 	public void setX(int x) {
 		this.x = x;
 	}
 
+	/** Y座標を直接設定する（壁判定なし）. @param y Y座標 */
 	public void setY(int y) {
 		this.y = y;
 	}
 
+	/** Z座標を直接設定する（壁判定なし）. @param z Z座標 */
 	public void setZ(int z) {
 		this.z = z;
 	}
@@ -357,126 +360,157 @@ public class Entity implements java.io.Serializable, Comparable {
 		return pivY;
 	}
 
+	/** 衝撃による X 方向速度を取得する. @return X 方向速度 */
 	public int getVx() {
 		return vx;
 	}
 
+	/** 衝撃による X 方向速度を設定する. @param vx X 方向速度 */
 	public void setVx(int vx) {
 		this.vx = vx;
 	}
 
+	/** 衝撃による Y 方向速度を取得する. @return Y 方向速度 */
 	public int getVy() {
 		return vy;
 	}
 
+	/** 衝撃による Y 方向速度を設定する. @param vy Y 方向速度 */
 	public void setVy(int vy) {
 		this.vy = vy;
 	}
 
+	/** 衝撃による Z 方向速度を取得する. @return Z 方向速度 */
 	public int getVz() {
 		return vz;
 	}
 
+	/** 衝撃による Z 方向速度を設定する. @param vz Z 方向速度 */
 	public void setVz(int vz) {
 		this.vz = vz;
 	}
 
+	/** コンベアなど拘束による Z 方向移動量を取得する. @return Z 方向移動量 */
 	public int getMotionZ() {
 		return motionZ;
 	}
 
+	/** コンベアなど拘束による Z 方向移動量を設定する. @param motionZ Z 方向移動量 */
 	public void setMotionZ(int motionZ) {
 		this.motionZ = motionZ;
 	}
 
+	/** 壁衝突判定が有効かどうかを返す. @return 壁に影響されるなら true */
 	public boolean isEnableWall() {
 		return enableWall;
 	}
 
+	/** 壁衝突判定の有効／無効を設定する. @param enableWall true で壁判定を有効にする */
 	public void setEnableWall(boolean enableWall) {
 		this.enableWall = enableWall;
 	}
 
+	/** このオブジェクトの現在位置（床・テーブル上など）を返す. @return 現在位置の種別 */
 	public Where getWhere() {
 		return where;
 	}
 
+	/** このオブジェクトの現在位置を設定する. @param where 現在位置の種別 */
 	public void setWhere(Where where) {
 		this.where = where;
 	}
 
+	/** マップの底より下に落下中かどうかを返す. @return 地下落下中なら true */
 	public boolean isFallingUnderGround() {
 		return fallingUnderGround;
 	}
 
+	/** 地下落下状態を設定する. @param fallingUnderGround 地下落下中なら true */
 	public void setFallingUnderGround(boolean fallingUnderGround) {
 		this.fallingUnderGround = fallingUnderGround;
 	}
 
+	/** プールの中にいるかどうかを返す. @return プール内なら true */
 	public boolean isInPool() {
 		return inPool;
 	}
 
+	/** プール内フラグを設定する. @param inPool プール内なら true */
 	public void setInPool(boolean inPool) {
 		this.inPool = inPool;
 	}
 
+	/** 画像の幅を設定する. @param imgW 画像幅（ピクセル） */
 	public void setW(int imgW) {
 		this.imgW = imgW;
 	}
 
+	/** 画像の高さを設定する. @param imgH 画像高さ（ピクセル） */
 	public void setH(int imgH) {
 		this.imgH = imgH;
 	}
 
+	/** 画像原点の X 座標を設定する. @param pivX 画像原点 X */
 	public void setPivotX(int pivX) {
 		this.pivX = pivX;
 	}
 
+	/** 画像原点の Y 座標を設定する. @param pivY 画像原点 Y */
 	public void setPivotY(int pivY) {
 		this.pivY = pivY;
 	}
 
+	/** 描画オフセット（X 方向）を取得する. @return X 描画オフセット */
 	public int getOfsX() {
 		return ofsX;
 	}
 
+	/** 描画オフセット（X 方向）を設定する. @param ofsX X 描画オフセット */
 	public void setOfsX(int ofsX) {
 		this.ofsX = ofsX;
 	}
 
+	/** 描画オフセット（Y 方向）を取得する. @return Y 描画オフセット */
 	public int getOfsY() {
 		return ofsY;
 	}
 
+	/** 描画オフセット（Y 方向）を設定する. @param ofsY Y 描画オフセット */
 	public void setOfsY(int ofsY) {
 		this.ofsY = ofsY;
 	}
 
+	/** このオブジェクトの識別 ID を取得する. @return オブジェクト ID */
 	public int getObjId() {
 		return objId;
 	}
 
+	/** このオブジェクトの識別 ID を設定する. @param objId オブジェクト ID */
 	public void setObjId(int objId) {
 		this.objId = objId;
 	}
 
+	/** オブジェクトの種別（YUKKURI / FOOD 等）を設定する. @param objType 種別 */
 	public void setObjType(Type objType) {
 		this.objType = objType;
 	}
 
+	/** プレイヤーが掴めるかどうかを設定する. @param canGrab true で掴み可能 */
 	public void setCanGrab(boolean canGrab) {
 		this.canGrab = canGrab;
 	}
 
+	/** 掴まれている状態を設定する. @param grabbed true で掴まれ中 */
 	public void setGrabbed(boolean grabbed) {
 		this.grabbed = grabbed;
 	}
 
+	/** このオブジェクトの購入価値を設定する. @param value 購入価格 */
 	public void setValue(int value) {
 		this.value = value;
 	}
 
+	/** このオブジェクトのランニングコストを設定する. @param cost ランニングコスト */
 	public void setCost(int cost) {
 		this.cost = cost;
 	}
@@ -667,11 +701,21 @@ public class Entity implements java.io.Serializable, Comparable {
 		bindObj = obj;
 	}
 
+	/**
+	 * プレイヤーの「持つ」メニューターゲット種別を返す。この基底クラスは常に NONE。
+	 *
+	 * @return 「持つ」メニューターゲット
+	 */
 	@Transient
 	public GetMenuTarget hasGetPopup() {
 		return GetMenuTarget.NONE;
 	}
 
+	/**
+	 * プレイヤーの「使う」メニューターゲット種別を返す。この基底クラスは常に NONE。
+	 *
+	 * @return 「使う」メニューターゲット
+	 */
 	@Transient
 	public UseMenuTarget hasUsePopup() {
 		return UseMenuTarget.NONE;
@@ -809,6 +853,7 @@ public class Entity implements java.io.Serializable, Comparable {
 		this.motionY = motionY;
 	}
 
+	/** 描画順の比較（常に 0）。 */
 	@Override
 	public int compareTo(Object o) {
 		return 0;
@@ -834,34 +879,42 @@ public class Entity implements java.io.Serializable, Comparable {
 		}
 	}
 
+	/** 画像幅（ピクセル）を返す。 */
 	public int getImgW() {
 		return imgW;
 	}
 
+	/** 画像幅（ピクセル）をセットする。 */
 	public void setImgW(int imgW) {
 		this.imgW = imgW;
 	}
 
+	/** 画像高さ（ピクセル）を返す。 */
 	public int getImgH() {
 		return imgH;
 	}
 
+	/** 画像高さ（ピクセル）をセットする。 */
 	public void setImgH(int imgH) {
 		this.imgH = imgH;
 	}
 
+	/** 画像原点の X 座標を返す。 */
 	public int getPivX() {
 		return pivX;
 	}
 
+	/** 画像原点の X 座標をセットする。 */
 	public void setPivX(int pivX) {
 		this.pivX = pivX;
 	}
 
+	/** 画像原点の Y 座標を返す。 */
 	public int getPivY() {
 		return pivY;
 	}
 
+	/** 画像原点の Y 座標をセットする。 */
 	public void setPivY(int pivY) {
 		this.pivY = pivY;
 	}

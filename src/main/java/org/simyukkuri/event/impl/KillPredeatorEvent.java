@@ -41,6 +41,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 		super(f, t, tgt, cnt);
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public KillPredeatorEvent() {
 
 	}
@@ -106,6 +107,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 		return nextTarget;
 	}
 
+	/** 毎ティック状態を更新する。 */
 	@Override
 	public UpdateState update(Yukkuri body) {
 		// ランダムで復讐を諦める
@@ -134,6 +136,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 		return null;
 	}
 
+	/** イベントの開始処理を実行する。 */
 	@Override
 	public void start(Yukkuri body) {
 		if (body.isNYD()) {
@@ -145,6 +148,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 		body.moveToEvent(this, from.getX() + colX, from.getY());
 	}
 
+	/** イベント終了判定を行い true で終了する。 */
 	@Override
 	public boolean execute(Yukkuri body) {
 		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
@@ -175,6 +179,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 		return false;
 	}
 
+	/** イベント名の文字列表現を返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("event_killremi");

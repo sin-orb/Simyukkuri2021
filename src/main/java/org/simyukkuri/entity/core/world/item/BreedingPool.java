@@ -56,6 +56,7 @@ public class BreedingPool extends WorldEntity {
 			this.name = name;
 		}
 
+		/** enum 名の文字列表現を返す。 */
 		public String toString() {
 			return name;
 		}
@@ -87,6 +88,7 @@ public class BreedingPool extends WorldEntity {
 		boundary.setY(boundary.getHeight() >> 1);
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (enabled) {
@@ -103,6 +105,7 @@ public class BreedingPool extends WorldEntity {
 		return 1;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
@@ -114,6 +117,7 @@ public class BreedingPool extends WorldEntity {
 		return boundary;
 	}
 
+	/** 衝突判定対象タイプを返す。 */
 	@Override
 	@Transient
 	public int getHitCheckObjType() {
@@ -121,6 +125,7 @@ public class BreedingPool extends WorldEntity {
 	}
 
 	@Override
+	/** 衝突処理を行い、結果コードを返す。 */
 	public int objHitProcess(Entity targetObject) {
 		if (!enabled)
 			return 0;
@@ -244,15 +249,18 @@ public class BreedingPool extends WorldEntity {
 	}
 
 	@Override
+	/** アイテムの購入価格を返す。 */
 	public int getValue() {
 		return value[option];
 	}
 
 	@Override
+	/** アイテムの設置コストを返す。 */
 	public int getCost() {
 		return cost[option];
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		GameWorld.get().getCurrentWorldState().getBreedingPools().remove(objId);
@@ -291,11 +299,12 @@ public class BreedingPool extends WorldEntity {
 		}
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public BreedingPool() {
 
 	}
 
-	// 設定メニュー
+	/** 繁殖プールの設定ダイアログを表示し、変更があれば true を返す。 */
 	public static boolean setupPool(BreedingPool pool, boolean init) {
 
 		JPanel mainPanel = new JPanel();
@@ -400,34 +409,42 @@ public class BreedingPool extends WorldEntity {
 		return setupSucceeded;
 	}
 
+	/** 高品質モードかどうかを返す。 */
 	public boolean isHighQuality() {
 		return highQuality;
 	}
 
+	/** 高品質モードをセットする。 */
 	public void setHighQuality(boolean highQuality) {
 		this.highQuality = highQuality;
 	}
 
+	/** 茎プールモードかどうかを返す。 */
 	public boolean isStalkPool() {
 		return stalkPool;
 	}
 
+	/** 茎プールモードをセットする。 */
 	public void setStalkPool(boolean stalkPool) {
 		this.stalkPool = stalkPool;
 	}
 
+	/** 液状化ゆっくりの種別インデックスを返す。 */
 	public int getLiquidYukkuriType() {
 		return liquidYukkuriType;
 	}
 
+	/** 液状化ゆっくりの種別インデックスをセットする。 */
 	public void setLiquidYukkuriType(int liquidYukkuriType) {
 		this.liquidYukkuriType = liquidYukkuriType;
 	}
 
+	/** 最後に選択されたプールタイプのインデックスを返す。 */
 	public int getLastSelected() {
 		return lastSelected;
 	}
 
+	/** 最後に選択されたプールタイプのインデックスをセットする。 */
 	public void setLastSelected(int lastSelected) {
 		this.lastSelected = lastSelected;
 	}

@@ -33,6 +33,7 @@ public class AvoidMoldEvent extends EventPacket {
 		super(f, t, tgt, cnt);
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public AvoidMoldEvent() {
 
 	}
@@ -328,6 +329,7 @@ public class AvoidMoldEvent extends EventPacket {
 		From.setEventResMessage(message, Const.HOLDMESSAGE, true, GameRandom.nextBoolean());
 	}
 
+	/** イベント名の文字列表現を返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("event_mold");

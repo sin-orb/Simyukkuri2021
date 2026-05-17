@@ -230,6 +230,7 @@ public enum ImageCode {
 		return buf;
 	}
 
+	/** 第2サブディレクトリの使用有無を指定して画像ファイルパスを返す。 */
 	public String getFilePath(boolean isSecond) {
 		String buf = dir1;
 
@@ -244,6 +245,7 @@ public enum ImageCode {
 	return buf;
 	}
 
+	/** 左右非対称（右向き画像が別ファイル）かを返す。 */
 	public boolean hasSecondary() {
 		return secondary;
 	}

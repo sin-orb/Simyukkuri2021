@@ -34,6 +34,7 @@ public class Trash extends WorldEntity {
 		boundary.setY(boundary.getHeight() - 1);
 	}
 
+	/** がらくた画像をレイヤー配列にセットし、使用レイヤー数 1 を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		layer[0] = images[0];
@@ -45,17 +46,20 @@ public class Trash extends WorldEntity {
 		return boundary;
 	}
 
+	/** がらくたの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
 		return images[1];
 	}
 
+	/** ゴミオブジェクトのマップからこのがらくたを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		GameWorld.get().getCurrentWorldState().getTrashObjects().remove(objId);
 	}
 
+	/** がらくたを蹴って飛ばす。 */
 	@Override
 	public void kick() {
 		kick(0, -8, -4);
@@ -81,6 +85,7 @@ public class Trash extends WorldEntity {
 		cost = 0;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Trash() {
 
 	}

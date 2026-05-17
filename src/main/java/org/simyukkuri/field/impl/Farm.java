@@ -50,11 +50,13 @@ public class Farm extends FieldShape {
 		texture = new TexturePaint(images, new Rectangle2D.Float(0, 0, images.getWidth(), images.getHeight()));
 	}
 
+	/** シェイプポップアップを持つかを返す（常に FARM）。 */
 	@Override
 	public ShapeMenuTarget hasShapePopup() {
 		return ShapeMenuTarget.FARM;
 	}
 
+	/** シェイプポップアップのメニューアクションを実行する。 */
 	@Override
 	public void executeShapePopup(ShapeMenu menu) {
 
@@ -91,12 +93,14 @@ public class Farm extends FieldShape {
 		}
 	}
 
+	/** フィールドの属性値を返す。 */
 	@Override
 	@Transient
 	public int getAttribute() {
 		return FIELD_FARM;
 	}
 
+	/** バリアの最小サイズを返す。 */
 	@Override
 	@Transient
 	public int getMinimumSize() {
@@ -112,6 +116,7 @@ public class Farm extends FieldShape {
 		g2.drawPolygon(previewPolygonX, previewPolygonY, 4);
 	}
 
+	/** シェイプの外形を描画する。 */
 	@Override
 	public void drawShape(Graphics2D g2) {
 		Translate.getPolygonPoint(fieldSX, fieldSY, fieldEX, fieldEY, polygonX, polygonY);
@@ -180,6 +185,7 @@ public class Farm extends FieldShape {
 				FIELD_FARM);
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Farm() {
 
 	}
@@ -402,26 +408,32 @@ public class Farm extends FieldShape {
 		}
 	}
 
+	/** 農場の産出量を返す。 */
 	public int getAmount() {
 		return amount;
 	}
 
+	/** 農場の産出量をセットする。 */
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
 
+	/** フィールド形状の X 頂点座標配列を返す。 */
 	public int[] getPolygonX() {
 		return polygonX;
 	}
 
+	/** フィールド形状の X 頂点座標配列をセットする。 */
 	public void setPolygonX(int[] polygonX) {
 		this.polygonX = polygonX;
 	}
 
+	/** フィールド形状の Y 頂点座標配列を返す。 */
 	public int[] getPolygonY() {
 		return polygonY;
 	}
 
+	/** フィールド形状の Y 頂点座標配列をセットする。 */
 	public void setPolygonY(int[] polygonY) {
 		this.polygonY = polygonY;
 	}

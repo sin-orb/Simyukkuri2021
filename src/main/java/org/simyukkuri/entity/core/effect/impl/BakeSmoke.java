@@ -59,14 +59,17 @@ public class BakeSmoke extends Effect {
 		frames = 3;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public BakeSmoke() {
 
 	}
 
+	/** 煙の画像レイヤー配列を返す。 */
 	public static BufferedImage[] getImageLayers() {
 		return imageLayers;
 	}
 
+	/** 煙の画像レイヤー配列をセットする。 */
 	public static void setImageLayers(BufferedImage[] imageLayers) {
 		BakeSmoke.imageLayers = imageLayers;
 	}

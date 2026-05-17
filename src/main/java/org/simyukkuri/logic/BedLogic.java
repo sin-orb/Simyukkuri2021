@@ -38,6 +38,14 @@ public class BedLogic {
 		return checkBed(body, GameWorld.get().getCurrentWorldState());
 	}
 
+	/**
+	 * ベッド行動を処理して行動実行有無を返す。
+	 *
+	 * @param body ゆっくり
+	 * @param ws ワールド状態
+	 *
+	 * @return 処理が実行された場合は true、それ以外は false
+	 */
 	public static final boolean checkBed(Yukkuri body, WorldState ws) {
 		// 他の用事がある場合
 		if (body.isToFood() || body.isToYukkuri() || /* body.isToBed() || */ body.isToShit() ||
@@ -165,6 +173,14 @@ public class BedLogic {
 		return searchBed(body, GameWorld.get().getCurrentWorldState());
 	}
 
+	/**
+	 * 最適な寝床を視野内で探索して返す。
+	 *
+	 * @param body ゆっくり
+	 * @param ws ワールド状態
+	 *
+	 * @return 対象を発見した場合はそのオブジェクト、見つからない場合は null
+	 */
 	public static Entity searchBed(Yukkuri body, WorldState ws) {
 		Entity targetObject = body.getFavoriteItem(FavItemType.BED);
 		int nearestDistance = body.getEyesightBase();

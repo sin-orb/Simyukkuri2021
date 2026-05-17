@@ -91,6 +91,14 @@ public class TerrainField implements Serializable {
 	private static double scaleRateW;
 	private static double scaleRateH;
 
+	/**
+	 * 指定マップインデックスの背景テラインデータを読み込む。
+	 * INI ファイルが存在する場合は新フォーマット、なければ旧フォーマット（back.jpg）で読み込む。
+	 *
+	 * @param index  マップインデックス
+	 * @param loader クラスローダ
+	 * @param io     画像読み込み用イメージオブザーバ
+	 */
 	public static void loadTerrain(int index, ClassLoader loader, ImageObserver io) {
 
 		IniFileReader reader = null;

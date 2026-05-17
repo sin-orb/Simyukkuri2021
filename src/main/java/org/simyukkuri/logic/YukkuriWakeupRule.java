@@ -18,10 +18,10 @@ public final class YukkuriWakeupRule {
 	}
 
 	/**
-	 * Check whether there is any awake yukkuri in sight.
+	 * 視野内に起きているゆっくりがいるかを判定して返す。
 	 *
-	 * @param body subject body
-	 * @return true if an awake body is visible
+	 * @param body ゆっくり
+	 * @return 視野内に起きているゆっくりがいる場合は true
 	 */
 	public static boolean checkWakeupOtherYukkuri(Yukkuri body) {
 		boolean isWakeup = false;

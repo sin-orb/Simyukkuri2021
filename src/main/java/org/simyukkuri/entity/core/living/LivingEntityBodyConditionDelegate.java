@@ -6,6 +6,7 @@ package org.simyukkuri.entity.core.living;
 public final class LivingEntityBodyConditionDelegate {
 	private final LivingEntity body;
 
+	/** 指定の LivingEntity をラップしてデリゲートを初期化する。 */
 	public LivingEntityBodyConditionDelegate(LivingEntity body) {
 		this.body = body;
 	}

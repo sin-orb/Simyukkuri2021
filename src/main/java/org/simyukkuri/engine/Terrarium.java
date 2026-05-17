@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.engine.SaveDataCodec;
+import org.simyukkuri.draw.Rectangle4y;
+import org.simyukkuri.draw.TerrainField;
+import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.attachment.impl.Fire;
 import org.simyukkuri.entity.core.effect.Effect;
@@ -35,13 +37,9 @@ import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.EffectType;
 import org.simyukkuri.enums.Numbering;
 import org.simyukkuri.enums.YukkuriType;
-import org.simyukkuri.draw.Rectangle4y;
-import org.simyukkuri.draw.TerrainField;
-import org.simyukkuri.draw.Translate;
-import org.simyukkuri.engine.YukkuriFactory;
 import org.simyukkuri.field.impl.Barrier;
-import org.simyukkuri.ui.MainCommandUI;
 import org.simyukkuri.system.WorldState;
+import org.simyukkuri.ui.MainCommandUI;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
 
@@ -96,74 +94,164 @@ public class Terrarium implements Serializable {
 	private static boolean endlessFurifuriSteam = TerrariumEnvironment.isEndlessFurifuriSteam();
 	private static int intervalCount = TerrariumEnvironment.getInterval();
 
+	/**
+	 * ゲーム経過ティック数を返す。
+	 *
+	 * @return 経過ティック数
+	 */
 	public static int getOperationTime() {
 		return operationTime;
 	}
 
+	/**
+	 * 1昼夜サイクルの昼間部分のティック数を返す。
+	 *
+	 * @return 昼間ティック数
+	 */
 	public static int getDayTime() {
 		return TerrariumEnvironment.getDayTime();
 	}
 
+	/**
+	 * 1昼夜サイクルの夜間部分のティック数を返す。
+	 *
+	 * @return 夜間ティック数
+	 */
 	public static int getNightTime() {
 		return TerrariumEnvironment.getNightTime();
 	}
 
+	/**
+	 * スチームによる加湿フラグを返す。
+	 *
+	 * @return 加湿スチームが有効なら true
+	 */
 	public static boolean isHumid() {
 		return humid;
 	}
 
+	/**
+	 * 抗菌スチームフラグを返す。
+	 *
+	 * @return 抗菌スチームが有効なら true
+	 */
 	public static boolean isAntifungalSteam() {
 		return antifungalSteam;
 	}
 
+	/**
+	 * オレンジスチームフラグを返す。
+	 *
+	 * @return オレンジスチームが有効なら true
+	 */
 	public static boolean isOrangeSteam() {
 		return orangeSteam;
 	}
 
+	/**
+	 * 加齢促進スチームフラグを返す。
+	 *
+	 * @return 加齢促進スチームが有効なら true
+	 */
 	public static boolean isAgeBoostSteam() {
 		return ageBoostSteam;
 	}
 
+	/**
+	 * 加齢停止スチームフラグを返す。
+	 *
+	 * @return 加齢停止スチームが有効なら true
+	 */
 	public static boolean isAgeStopSteam() {
 		return ageStopSteam;
 	}
 
+	/**
+	 * アンチDOSスチームフラグを返す。
+	 *
+	 * @return アンチDOSスチームが有効なら true
+	 */
 	public static boolean isAntidosSteam() {
 		return antidosSteam;
 	}
 
+	/**
+	 * 毒スチームフラグを返す。
+	 *
+	 * @return 毒スチームが有効なら true
+	 */
 	public static boolean isPoisonSteam() {
 		return poisonSteam;
 	}
 
+	/**
+	 * 捕食者スチームフラグを返す。
+	 *
+	 * @return 捕食者スチームが有効なら true
+	 */
 	public static boolean isPredatorSteam() {
 		return predatorSteam;
 	}
 
+	/**
+	 * 砂糖スチームフラグを返す。
+	 *
+	 * @return 砂糖スチームが有効なら true
+	 */
 	public static boolean isSugerSteam() {
 		return sugerSteam;
 	}
 
+	/**
+	 * 睡眠抑制スチームフラグを返す。
+	 *
+	 * @return 睡眠抑制スチームが有効なら true
+	 */
 	public static boolean isNoSleepSteam() {
 		return noSleepSteam;
 	}
 
+	/**
+	 * ハイブリッドスチームフラグを返す。
+	 *
+	 * @return ハイブリッドスチームが有効なら true
+	 */
 	public static boolean isHybridSteam() {
 		return hybridSteam;
 	}
 
+	/**
+	 * 急速妊娠スチームフラグを返す。
+	 *
+	 * @return 急速妊娠スチームが有効なら true
+	 */
 	public static boolean isRapidPregnantSteam() {
 		return rapidPregnantSteam;
 	}
 
+	/**
+	 * 非ゆっくり症治癒スチームフラグを返す。
+	 *
+	 * @return 非ゆっくり症治癒スチームが有効なら true
+	 */
 	public static boolean isAntiNonYukkuriDiseaseSteam() {
 		return antiNonYukkuriDiseaseSteam;
 	}
 
+	/**
+	 * エンドレスふりふりスチームフラグを返す。
+	 *
+	 * @return エンドレスふりふりスチームが有効なら true
+	 */
 	public static boolean isEndlessFurifuriSteam() {
 		return endlessFurifuriSteam;
 	}
 
+	/**
+	 * 1ステップのティック増分を返す。
+	 *
+	 * @return ティック増分
+	 */
 	public static int getTick() {
 		return TICK;
 	}
@@ -172,8 +260,6 @@ public class Terrarium implements Serializable {
 	private static List<Yukkuri> babyList = new LinkedList<Yukkuri>();
 	/** マップ全体が警戒モードになる時間 */
 	private final static int ALARM_PERIOD = 300; // 30 seconds
-	/** 汎用長方形 */
-	private static Rectangle4y tmpRect = new Rectangle4y();
 
 	/**
 	 * セーブの実行部
@@ -500,7 +586,8 @@ public class Terrarium implements Serializable {
 			return;
 		}
 		// 全ゆっくりに対してチェック
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry()
+				.entrySet()) {
 			Yukkuri p = entry.getValue();
 			// 自分同士のチェックは無意味なのでスキップ
 			if (p == b) {

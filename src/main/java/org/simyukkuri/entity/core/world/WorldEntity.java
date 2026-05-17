@@ -308,50 +308,62 @@ public abstract class WorldEntity extends Entity {
 		enabled = true;
 	}
 
+	/** アニメーション更新間隔（ティック）を返す。 */
 	public int getInterval() {
 		return interval;
 	}
 
+	/** アニメーション更新間隔（ティック）をセットする。 */
 	public void setInterval(int interval) {
 		this.interval = interval;
 	}
 
+	/** 衝突判定の幅を返す。 */
 	public int getColW() {
 		return colW;
 	}
 
+	/** 衝突判定の幅をセットする。 */
 	public void setColW(int colW) {
 		this.colW = colW;
 	}
 
+	/** 衝突判定の高さを返す。 */
 	public int getColH() {
 		return colH;
 	}
 
+	/** 衝突判定の高さをセットする。 */
 	public void setColH(int colH) {
 		this.colH = colH;
 	}
 
+	/** 仮座標を返す。 */
 	public Point4y getTmpPos() {
 		return tmpPos;
 	}
 
+	/** 仮座標をセットする。 */
 	public void setTmpPos(Point4y tmpPos) {
 		this.tmpPos = tmpPos;
 	}
 
+	/** ワールドエンティティの種別をセットする。 */
 	public void setObjEXType(WorldEntityKind worldEntityType) {
 		this.worldEntityType = worldEntityType;
 	}
 
+	/** 親リンク ID をセットする。 */
 	public void setParentLinkId(int parentLinkId) {
 		this.parentLinkId = parentLinkId;
 	}
 
+	/** 外見バリアントをセットする。 */
 	public void setLooks(int looks) {
 		this.looks = looks;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public WorldEntity() {
 
 	}

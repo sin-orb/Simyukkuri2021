@@ -85,50 +85,62 @@ public class Dna implements java.io.Serializable {
 		raperChild = rape;
 	}
 
+	/** ゆっくりの種別を返す。 */
 	public YukkuriType getType() {
 		return type;
 	}
 
+	/** ゆっくりの種別をセットする。 */
 	public void setType(YukkuriType type) {
 		this.type = type;
 	}
 
+	/** 性格の区分を返す。 */
 	public Attitude getAttitude() {
 		return attitude;
 	}
 
+	/** 性格の区分をセットする。 */
 	public void setAttitude(Attitude attitude) {
 		this.attitude = attitude;
 	}
 
+	/** 知能の区分を返す。 */
 	public Intelligence getIntelligence() {
 		return intelligence;
 	}
 
+	/** 知能の区分をセットする。 */
 	public void setIntelligence(Intelligence intelligence) {
 		this.intelligence = intelligence;
 	}
 
+	/** レイプによって生まれた子かどうかを返す。 */
 	public boolean isRaperChild() {
 		return raperChild;
 	}
 
+	/** レイプ生まれフラグをセットする。 */
 	public void setRaperChild(boolean raperChild) {
 		this.raperChild = raperChild;
 	}
 
+	/** 父ゆの ID を返す。 */
 	public int getFather() {
 		return father;
 	}
 
+	/** 父ゆの ID をセットする。 */
 	public void setFather(int father) {
 		this.father = father;
 	}
 
+	/** 母ゆの ID を返す。 */
 	public int getMother() {
 		return mother;
 	}
 
+	/** 母ゆの ID をセットする。 */
 	public void setMother(int mother) {
 		this.mother = mother;
 	}

@@ -30,39 +30,80 @@ public final class TerrariumEnvironment {
 	private TerrariumEnvironment() {
 	}
 
+	/**
+	 * ゲーム経過ティック数を返す。
+	 *
+	 * @return 経過ティック数
+	 */
 	public static int getOperationTime() {
 		return operationTime;
 	}
 
+	/**
+	 * 1昼夜サイクルの昼間部分のティック数を返す。
+	 *
+	 * @return 昼間ティック数
+	 */
 	public static int getDayTime() {
 		return dayTime;
 	}
 
+	/**
+	 * 1昼夜サイクルの夜間部分のティック数を返す。
+	 *
+	 * @return 夜間ティック数
+	 */
 	public static int getNightTime() {
 		return nightTime;
 	}
 
+	/**
+	 * 1ステップのティック増分を返す。
+	 *
+	 * @return ティック増分
+	 */
 	public static int getTick() {
 		return TICK;
 	}
 
+	/**
+	 * インターバルカウンタ値（0–255）を返す。
+	 *
+	 * @return インターバルカウンタ
+	 */
 	public static int getInterval() {
 		return intervalCount;
 	}
 
+	/**
+	 * インターバルカウンタをインクリメントして返す。0–255 の循環カウンタ。
+	 *
+	 * @return インクリメント後のカウンタ値
+	 */
 	public static int advanceInterval() {
 		intervalCount = (++intervalCount) & 255;
 		return intervalCount;
 	}
 
+	/**
+	 * 昼夜サイクル内での経過ティック数を返す。
+	 *
+	 * @return サイクル内経過ティック数
+	 */
 	public static int getElapsedTimeInDayCycle() {
 		return operationTime % (dayTime + nightTime);
 	}
 
+	/**
+	 * ゲーム経過ティック数を 1 進める。
+	 */
 	public static void advanceOperationTime() {
 		operationTime += TICK;
 	}
 
+	/**
+	 * 全スチームフラグをリセットする。毎ティックの処理開始時に呼ぶ。
+	 */
 	public static void resetTerrariumEnvironment() {
 		antifungalSteam = false;
 		humid = false;
@@ -80,6 +121,11 @@ public final class TerrariumEnvironment {
 		endlessFurifuriSteam = false;
 	}
 
+	/**
+	 * ディフューザーのスチームフラグ配列を環境フラグに反映する。
+	 *
+	 * @param flags ディフューザーが出力するスチームフラグ配列（{@link Diffuser.SteamType} のordinalに対応）
+	 */
 	public static void applyDiffuserSteamFlags(boolean[] flags) {
 		if (flags[Diffuser.SteamType.ANTI_FUNGAL.ordinal()]) {
 			antifungalSteam = true;
@@ -125,58 +171,128 @@ public final class TerrariumEnvironment {
 		}
 	}
 
+	/**
+	 * スチームによる加湿フラグを返す。
+	 *
+	 * @return 加湿スチームが有効なら true
+	 */
 	public static boolean isHumid() {
 		return humid;
 	}
 
+	/**
+	 * 抗菌スチームフラグを返す。
+	 *
+	 * @return 抗菌スチームが有効なら true
+	 */
 	public static boolean isAntifungalSteam() {
 		return antifungalSteam;
 	}
 
+	/**
+	 * オレンジスチームフラグを返す。
+	 *
+	 * @return オレンジスチームが有効なら true
+	 */
 	public static boolean isOrangeSteam() {
 		return orangeSteam;
 	}
 
+	/**
+	 * 加齢促進スチームフラグを返す。
+	 *
+	 * @return 加齢促進スチームが有効なら true
+	 */
 	public static boolean isAgeBoostSteam() {
 		return ageBoostSteam;
 	}
 
+	/**
+	 * 加齢停止スチームフラグを返す。
+	 *
+	 * @return 加齢停止スチームが有効なら true
+	 */
 	public static boolean isAgeStopSteam() {
 		return ageStopSteam;
 	}
 
+	/**
+	 * アンチDOSスチームフラグを返す。
+	 *
+	 * @return アンチDOSスチームが有効なら true
+	 */
 	public static boolean isAntidosSteam() {
 		return antidosSteam;
 	}
 
+	/**
+	 * 毒スチームフラグを返す。
+	 *
+	 * @return 毒スチームが有効なら true
+	 */
 	public static boolean isPoisonSteam() {
 		return poisonSteam;
 	}
 
+	/**
+	 * 捕食者スチームフラグを返す。
+	 *
+	 * @return 捕食者スチームが有効なら true
+	 */
 	public static boolean isPredatorSteam() {
 		return predatorSteam;
 	}
 
+	/**
+	 * 砂糖スチームフラグを返す。
+	 *
+	 * @return 砂糖スチームが有効なら true
+	 */
 	public static boolean isSugerSteam() {
 		return sugerSteam;
 	}
 
+	/**
+	 * 睡眠抑制スチームフラグを返す。
+	 *
+	 * @return 睡眠抑制スチームが有効なら true
+	 */
 	public static boolean isNoSleepSteam() {
 		return noSleepSteam;
 	}
 
+	/**
+	 * ハイブリッドスチームフラグを返す。
+	 *
+	 * @return ハイブリッドスチームが有効なら true
+	 */
 	public static boolean isHybridSteam() {
 		return hybridSteam;
 	}
 
+	/**
+	 * 急速妊娠スチームフラグを返す。
+	 *
+	 * @return 急速妊娠スチームが有効なら true
+	 */
 	public static boolean isRapidPregnantSteam() {
 		return rapidPregnantSteam;
 	}
 
+	/**
+	 * 非ゆっくり症治癒スチームフラグを返す。
+	 *
+	 * @return 非ゆっくり症治癒スチームが有効なら true
+	 */
 	public static boolean isAntiNonYukkuriDiseaseSteam() {
 		return antiNonYukkuriDiseaseSteam;
 	}
 
+	/**
+	 * エンドレスふりふりスチームフラグを返す。
+	 *
+	 * @return エンドレスふりふりスチームが有効なら true
+	 */
 	public static boolean isEndlessFurifuriSteam() {
 		return endlessFurifuriSteam;
 	}

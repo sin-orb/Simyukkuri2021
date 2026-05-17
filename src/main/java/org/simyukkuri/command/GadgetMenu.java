@@ -69,6 +69,7 @@ public class GadgetMenu {
 			this.mask = flg;
 		}
 
+		/** @return アクション対象のビットマスク値 */
 		public int getMask() {
 			return this.mask;
 		}
@@ -135,6 +136,7 @@ public class GadgetMenu {
 			this.name = nameJ;
 		}
 
+		/** @return 表示名 */
 		@Override
 		public String toString() {
 			return name;
@@ -154,10 +156,12 @@ public class GadgetMenu {
 			this.width = w;
 		}
 
+		/** @return アイコン画像のインデックス */
 		public int getImageIndex() {
 			return imageIndex;
 		}
 
+		/** @return アイコンの表示幅（ピクセル） */
 		public int getW() {
 			return width;
 		}
@@ -455,38 +459,47 @@ public class GadgetMenu {
 			this.help2 = h2;
 		}
 
+		/** @return 所属するメインカテゴリ */
 		public MainCategoryName getGroup() {
 			return this.group;
 		}
 
+		/** @return メニューの表示名 */
 		public String getDisplayName() {
 			return this.displayName;
 		}
 
+		/** @return 対応するガジェットクラス */
 		public Class<?> getGadgetClass() {
 			return this.gadgetClass;
 		}
 
+		/** @return ガジェット初期化オプション */
 		public int getInitOption() {
 			return this.initOption;
 		}
 
+		/** @return アクション対象の種類 */
 		public ActionTarget getActionTarget() {
 			return this.actionTarget;
 		}
 
+		/** @return アクション入力種別 */
 		public ActionControl getActionControl() {
 			return this.actionControl;
 		}
 
+		/** @return ヘルプコンテキスト1 */
 		public HelpContext getHelp1() {
 			return this.help1;
 		}
 
+		/** @return ヘルプコンテキスト2 */
 		public HelpContext getHelp2() {
 			return this.help2;
 		}
 
+		/** @return メニューの表示名 */
 		@Override
 		public String toString() {
 			return this.displayName;
@@ -739,6 +752,7 @@ public class GadgetMenu {
 			this.name = nameJ;
 		}
 
+		/** @return ゲームスピードの表示名 */
 		@Override
 		public String toString() {
 			return name;
@@ -778,162 +792,202 @@ public class GadgetMenu {
 	/** ヘルプ */
 	private static HelpContext[] currentHelp = new HelpContext[4];
 
+	/** @return メインカテゴリのメニュー項目配列 */
 	public static GadgetMenuChoice[] getMainCategory() {
 		return MainCategory;
 	}
 
+	/** @return メインカテゴリのコンボボックスモデル */
 	public static DefaultComboBoxModel<GadgetMenuChoice> getMainModel() {
 		return mainModel;
 	}
 
+	/** @return 道具カテゴリのメニュー項目配列 */
 	public static GadgetMenuChoice[] getToolCategory() {
 		return ToolCategory;
 	}
 
+	/** @return 道具カテゴリのコンボボックスモデル */
 	public static DefaultComboBoxModel<GadgetMenuChoice> getToolModel() {
 		return toolModel;
 	}
 
+	/** @return 身体変更カテゴリのメニュー項目配列 */
 	public static GadgetMenuChoice[] getToolCategory2() {
 		return ToolCategory2;
 	}
 
+	/** @return 身体変更カテゴリのコンボボックスモデル */
 	public static DefaultComboBoxModel<GadgetMenuChoice> getToolModel2() {
 		return toolModel2;
 	}
 
+	/** @return アンプルカテゴリのメニュー項目配列 */
 	public static GadgetMenuChoice[] getAmpouleCategory() {
 		return AmpouleCategory;
 	}
 
+	/** @return アンプルカテゴリのコンボボックスモデル */
 	public static DefaultComboBoxModel<GadgetMenuChoice> getAmpouleModel() {
 		return AmpouleModel;
 	}
 
+	/** @return えさカテゴリのメニュー項目配列 */
 	public static GadgetMenuChoice[] getFoodCategory() {
 		return FoodCategory;
 	}
 
+	/** @return えさカテゴリのコンボボックスモデル */
 	public static DefaultComboBoxModel<GadgetMenuChoice> getFoodModel() {
 		return foodModel;
 	}
 
+	/** @return 清掃カテゴリのメニュー項目配列 */
 	public static GadgetMenuChoice[] getCleanCategory() {
 		return CleanCategory;
 	}
 
+	/** @return 清掃カテゴリのコンボボックスモデル */
 	public static DefaultComboBoxModel<GadgetMenuChoice> getCleanModel() {
 		return cleanModel;
 	}
 
+	/** @return おかざりカテゴリのメニュー項目配列 */
 	public static GadgetMenuChoice[] getOkazariCategory() {
 		return OkazariCategory;
 	}
 
+	/** @return おかざりカテゴリのコンボボックスモデル */
 	public static DefaultComboBoxModel<GadgetMenuChoice> getOkazariModel() {
 		return okazariModel;
 	}
 
+	/** @return おくるみカテゴリのメニュー項目配列 */
 	public static GadgetMenuChoice[] getPantsCategory() {
 		return PantsCategory;
 	}
 
+	/** @return おくるみカテゴリのコンボボックスモデル */
 	public static DefaultComboBoxModel<GadgetMenuChoice> getPantsModel() {
 		return pantsModel;
 	}
 
+	/** @return 床設置カテゴリのメニュー項目配列 */
 	public static GadgetMenuChoice[] getFloorCategory() {
 		return FloorCategory;
 	}
 
+	/** @return 床設置カテゴリのコンボボックスモデル */
 	public static DefaultComboBoxModel<GadgetMenuChoice> getFloorModel() {
 		return floorModel;
 	}
 
+	/** @return フィールドカテゴリのメニュー項目配列 */
 	public static GadgetMenuChoice[] getBarrierCategory() {
 		return BarrierCategory;
 	}
 
+	/** @return フィールドカテゴリのコンボボックスモデル */
 	public static DefaultComboBoxModel<GadgetMenuChoice> getBarrierModel() {
 		return barrierModel;
 	}
 
+	/** @return おもちゃカテゴリのメニュー項目配列 */
 	public static GadgetMenuChoice[] getToysCategory() {
 		return ToysCategory;
 	}
 
+	/** @return おもちゃカテゴリのコンボボックスモデル */
 	public static DefaultComboBoxModel<GadgetMenuChoice> getToyModel() {
 		return toyModel;
 	}
 
+	/** @return ベルトコンベアカテゴリのメニュー項目配列 */
 	public static GadgetMenuChoice[] getConveyorCategory() {
 		return ConveyorCategory;
 	}
 
+	/** @return ベルトコンベアカテゴリのコンボボックスモデル */
 	public static DefaultComboBoxModel<GadgetMenuChoice> getConveyorModel() {
 		return conveyorModel;
 	}
 
+	/** @return 声掛けカテゴリのメニュー項目配列 */
 	public static GadgetMenuChoice[] getVoiceCategory() {
 		return VoiceCategory;
 	}
 
+	/** @return 声掛けカテゴリのコンボボックスモデル */
 	public static DefaultComboBoxModel<GadgetMenuChoice> getVoiceModel() {
 		return voiceModel;
 	}
 
+	/** @return 開発用カテゴリのメニュー項目配列 */
 	public static GadgetMenuChoice[] getTestCategory() {
 		return TestCategory;
 	}
 
+	/** @return 開発用カテゴリのコンボボックスモデル */
 	public static DefaultComboBoxModel<GadgetMenuChoice> getTestModel() {
 		return testModel;
 	}
 
+	/** @return 現在選択中のメインカテゴリ */
 	public static GadgetMenuChoice getSelectMain() {
 		return selectMain;
 	}
 
+	/** @param selectMain 選択するメインカテゴリ */
 	public static void setSelectMain(GadgetMenuChoice selectMain) {
 		GadgetMenu.selectMain = selectMain;
 	}
 
+	/** @return 現在選択中のサブカテゴリ */
 	public static GadgetMenuChoice getSelectSub() {
 		return selectSub;
 	}
 
+	/** @param selectSub 選択するサブカテゴリ */
 	public static void setSelectSub(GadgetMenuChoice selectSub) {
 		GadgetMenu.selectSub = selectSub;
 	}
 
+	/** @return ポップアップメニュー */
 	public static JPopupMenu getPopup() {
 		return popup;
 	}
 
+	/** @return ポップアップが表示中の場合 true */
 	public static boolean isPopupDisplay() {
 		return popupDisplay;
 	}
 
+	/** @param popupDisplay ポップアップの表示状態（表示中なら true） */
 	public static void setPopupDisplay(boolean popupDisplay) {
 		GadgetMenu.popupDisplay = popupDisplay;
 	}
 
+	/** @return 現在のヘルプ要素数 */
 	public static int getCurrentHelpNum() {
 		return currentHelpNum;
 	}
 
+	/** @return 現在のヘルプテキストバッファ */
 	public static String[][] getCurrentHelpBuf() {
 		return currentHelpBuf;
 	}
 
+	/** @return 現在のヘルプアイコン配列 */
 	public static HelpIcon[][] getCurrentHelpIcon() {
 		return currentHelpIcon;
 	}
 
+	/** @return ヘルプ描画幅 */
 	public static int getHelpW() {
 		return helpW;
 	}
 
+	/** @return ヘルプ描画高さ */
 	public static int getHelpH() {
 		return helpH;
 	}

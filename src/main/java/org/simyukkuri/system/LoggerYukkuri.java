@@ -26,6 +26,11 @@ import org.simyukkuri.util.GameEnvironment;
 import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameWorld;
 
+/**
+ * ゆっくりの個体数・年齢層・感染状況・フン数・所持金などを時系列で記録し、
+ * グラフとして画面表示するロギングユーティリティ。
+ * 最大 120 ティック分のデータをリングバッファで保持する。
+ */
 public class LoggerYukkuri {
 	/** 処理の最小単位（ティック） */
 	public static final int TICK = 1;
@@ -113,6 +118,11 @@ public class LoggerYukkuri {
 			logPage = 0;
 	}
 
+	/**
+	 * ログページを相対値で移動する。0 未満や 4 以上になると循環する。
+	 *
+	 * @param p 移動量（正で次のページ、負で前のページ）
+	 */
 	public static void addLogPage(int p) {
 		logPage += p;
 		if (logPage < 0)
@@ -121,18 +131,38 @@ public class LoggerYukkuri {
 			logPage = 0;
 	}
 
+	/**
+	 * ログ画面を表示するかどうかを返す。
+	 *
+	 * @return 表示中なら true
+	 */
 	public static boolean isShow() {
 		return show;
 	}
 
+	/**
+	 * ログ画面の表示状態をセットする。
+	 *
+	 * @param show true で表示、false で非表示
+	 */
 	public static void setShow(boolean show) {
 		LoggerYukkuri.show = show;
 	}
 
+	/**
+	 * 最後にログをクリアした時刻（ティック）を返す。
+	 *
+	 * @return ログクリア時刻
+	 */
 	public static int getClearLogTime() {
 		return clearLogTime;
 	}
 
+	/**
+	 * ログクリア時刻をセットする。
+	 *
+	 * @param clearLogTime ログをクリアしたティック時刻
+	 */
 	public static void setClearLogTime(int clearLogTime) {
 		LoggerYukkuri.clearLogTime = clearLogTime;
 	}

@@ -10,6 +10,7 @@ import org.simyukkuri.system.ItemMenu.ShapeMenu;
  * シェイプメニューの実行.
  */
 public final class ItemShapeMenuAction implements ActionListener {
+	/** @param e アクションイベント */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		ShapeMenu m = ShapeMenu.valueOf(e.getActionCommand());

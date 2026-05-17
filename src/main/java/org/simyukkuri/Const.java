@@ -5,6 +5,9 @@ import java.awt.Color;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.system.BasicStrokeEX;
 
+/**
+ * Const.
+ */
 public class Const {
 	/** 左向き */
 	public static final int LEFT = 0;

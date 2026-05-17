@@ -29,10 +29,12 @@ public class ToiletLogic {
 	/** うんうんどれい */
 	private static Yukkuri bodyUnunSlave;
 
+	/** うんうんどれいゆっくりを返す。 */
 	public static Yukkuri getUnunSlave() {
 		return bodyUnunSlave;
 	}
 
+	/** うんうんどれいゆっくりをセットする。 */
 	public static void setUnunSlave(Yukkuri bodyUnunSlave) {
 		ToiletLogic.bodyUnunSlave = bodyUnunSlave;
 	}
@@ -47,6 +49,14 @@ public class ToiletLogic {
 		return checkShit(body, GameWorld.get().getCurrentWorldState());
 	}
 
+	/**
+	 * うんうん行動を処理して行動実行有無を返す。
+	 *
+	 * @param body ゆっくり
+	 * @param ws ワールド状態
+	 *
+	 * @return 処理が実行された場合は true、それ以外は false
+	 */
 	public static final boolean checkShit(Yukkuri body, WorldState ws) {
 		// A.トイレ行動中止
 		// 毎フレームチェックは重いのでインターバル
@@ -230,6 +240,14 @@ public class ToiletLogic {
 		return checkToilet(body, GameWorld.get().getCurrentWorldState());
 	}
 
+	/**
+	 * トイレ行動を処理して行動実行有無を返す。
+	 *
+	 * @param body ゆっくり
+	 * @param ws ワールド状態
+	 *
+	 * @return 処理が実行された場合は true、それ以外は false
+	 */
 	public static final boolean checkToilet(Yukkuri body, WorldState ws) {
 		// A.トイレ行動の中止
 		// 他の用事がある場合

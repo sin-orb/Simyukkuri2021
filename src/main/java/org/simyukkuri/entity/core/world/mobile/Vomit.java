@@ -114,6 +114,7 @@ public class Vomit extends Entity {
 		}
 	}
 
+	/** とあんのサイズ・排出者名を含む文字列表現を返す。 */
 	@Override
 	public String toString() {
 		String base = GameText.read("game_toan");
@@ -194,6 +195,7 @@ public class Vomit extends Entity {
 				imgW[vomitType][ageState.ordinal()], imgH[vomitType][ageState.ordinal()]);
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Vomit() {
 		ageState = AgeState.ADULT;
 		ownerName = "Unknown";
@@ -257,16 +259,19 @@ public class Vomit extends Entity {
 		return value[ageState.ordinal()];
 	}
 
+	/** 取得ポップアップを持つかを返す（常に VOMIT）。 */
 	@Override
 	public GetMenuTarget hasGetPopup() {
 		return GetMenuTarget.VOMIT;
 	}
 
+	/** 使用ポップアップを持つかを返す（常に null）。 */
 	@Override
 	public UseMenuTarget hasUsePopup() {
 		return UseMenuTarget.NONE;
 	}
 
+	/** 毎ティックの状態更新を行う。 */
 	@Override
 	public TickResult clockTick() {
 		if (!isRemoved()) {
@@ -326,38 +331,47 @@ public class Vomit extends Entity {
 		return TickResult.REMOVED;
 	}
 
+	/** 排出したゆっくりの名前を返す。 */
 	public String getOwnerName() {
 		return ownerName;
 	}
 
+	/** 排出したゆっくりの名前をセットする。 */
 	public void setOwnerName(String ownerName) {
 		this.ownerName = ownerName;
 	}
 
+	/** とあんが落下した際のダメージ値を返す。 */
 	public int getFalldownDamage() {
 		return falldownDamage;
 	}
 
+	/** とあんが落下した際のダメージ値をセットする。 */
 	public void setFalldownDamage(int falldownDamage) {
 		this.falldownDamage = falldownDamage;
 	}
 
+	/** とあんの量を返す。 */
 	public int getAmount() {
 		return amount;
 	}
 
+	/** とあんの量をセットする。 */
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
 
+	/** とあんの種類を返す。 */
 	public int getVomitType() {
 		return vomitType;
 	}
 
+	/** とあんの種類をセットする。 */
 	public void setVomitType(int vomitType) {
 		this.vomitType = vomitType;
 	}
 
+	/** 排出したゆっくりの年齢層をセットする。 */
 	public void setAgeState(AgeState ageState) {
 		this.ageState = ageState;
 	}

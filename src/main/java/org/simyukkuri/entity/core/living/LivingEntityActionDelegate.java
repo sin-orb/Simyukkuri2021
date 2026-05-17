@@ -10,6 +10,7 @@ import org.simyukkuri.enums.BurialState;
 public final class LivingEntityActionDelegate {
 	private final LivingEntity body;
 
+	/** 指定の LivingEntity をラップしてデリゲートを初期化する。 */
 	public LivingEntityActionDelegate(LivingEntity body) {
 		this.body = body;
 	}

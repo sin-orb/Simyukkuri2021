@@ -55,21 +55,27 @@ public class LoadWindow extends JDialog {
 	public void addLine(String str) {
 		log.append(str + "\r\n");
 	}
+	/** @return ローディング表示ラベル */
 	public JLabel getLoading() {
 		return loading;
 	}
+	/** @param loading ローディング表示ラベル */
 	public void setLoading(JLabel loading) {
 		this.loading = loading;
 	}
+	/** @return ログテキストエリア */
 	public JTextArea getLog() {
 		return log;
 	}
+	/** @param log ログテキストエリア */
 	public void setLog(JTextArea log) {
 		this.log = log;
 	}
+	/** @return ログスクロールペイン */
 	public JScrollPane getLogBar() {
 		return logBar;
 	}
+	/** @param logBar ログスクロールペイン */
 	public void setLogBar(JScrollPane logBar) {
 		this.logBar = logBar;
 	}

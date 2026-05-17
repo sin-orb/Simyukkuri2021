@@ -49,6 +49,7 @@ public class MainCommandUI {
 			this.label = str;
 		}
 
+		/** @return ボタンのラベル文字列 */
 		public String getLabel() {
 			return label;
 		}
@@ -66,6 +67,7 @@ public class MainCommandUI {
 			this.label = str;
 		}
 
+		/** @return ボタンのラベル文字列 */
 		public String getLabel() {
 			return label;
 		}
@@ -93,6 +95,7 @@ public class MainCommandUI {
 			this.label = str;
 		}
 
+		/** @return ボタンのラベル文字列 */
 		public String getLabel() {
 			return label;
 		}
@@ -108,6 +111,7 @@ public class MainCommandUI {
 			this.label = str;
 		}
 
+		/** @return ボタンのラベル文字列 */
 		public String getLabel() {
 			return label;
 		}
@@ -530,152 +534,188 @@ public class MainCommandUI {
 		}
 	}
 
+	/** @return 現在選択中のゲームスピードインデックス */
 	public static int getSelectedGameSpeed() {
 		return selectedGameSpeed;
 	}
 
+	/** @param selectedGameSpeed ゲームスピードインデックス */
 	public static void setSelectedGameSpeed(int selectedGameSpeed) {
 		MainCommandUI.selectedGameSpeed = selectedGameSpeed;
 	}
 
+	/** @return 現在選択中のズームスケール */
 	public static int getSelectedZoomScale() {
 		return selectedZoomScale;
 	}
 
+	/** @param selectedZoomScale ズームスケール */
 	public static void setSelectedZoomScale(int selectedZoomScale) {
 		MainCommandUI.selectedZoomScale = selectedZoomScale;
 	}
 
+	/** @return ゲームスピードのコンボボックス */
 	@SuppressWarnings("rawtypes")
 	public static JComboBox getGameSpeedCombo() {
 		return gameSpeedCombo;
 	}
 
+	/** @param gameSpeedCombo ゲームスピードのコンボボックス */
 	@SuppressWarnings("rawtypes")
 	public static void setGameSpeedCombo(JComboBox gameSpeedCombo) {
 		MainCommandUI.gameSpeedCombo = gameSpeedCombo;
 	}
 
+	/** @return メインカテゴリのコンボボックス */
 	@SuppressWarnings("rawtypes")
 	public static JComboBox getMainItemCombo() {
 		return mainItemCombo;
 	}
 
+	/** @param mainItemCombo メインカテゴリのコンボボックス */
 	@SuppressWarnings("rawtypes")
 	public static void setMainItemCombo(JComboBox mainItemCombo) {
 		MainCommandUI.mainItemCombo = mainItemCombo;
 	}
 
+	/** @return サブカテゴリのコンボボックス */
 	@SuppressWarnings("rawtypes")
 	public static JComboBox getSubItemCombo() {
 		return subItemCombo;
 	}
 
+	/** @param subItemCombo サブカテゴリのコンボボックス */
 	@SuppressWarnings("rawtypes")
 	public static void setSubItemCombo(JComboBox subItemCombo) {
 		MainCommandUI.subItemCombo = subItemCombo;
 	}
 
+	/** @return ゆっくりステータス表示ラベル配列 */
 	public static JLabel[] getYuStatusLabel() {
 		return yuStatusLabel;
 	}
 
+	/** @param yuStatusLabel ゆっくりステータス表示ラベル配列 */
 	public static void setYuStatusLabel(JLabel[] yuStatusLabel) {
 		MainCommandUI.yuStatusLabel = yuStatusLabel;
 	}
 
+	/** @return ステータスアイコンラベル配列 */
 	public static JLabel[] getStatIconLabel() {
 		return statIconLabel;
 	}
 
+	/** @param statIconLabel ステータスアイコンラベル配列 */
 	public static void setStatIconLabel(JLabel[] statIconLabel) {
 		MainCommandUI.statIconLabel = statIconLabel;
 	}
 
+	/** @return アイテムアイコンラベル配列 */
 	public static JLabel[] getItemIconLabel() {
 		return itemIconLabel;
 	}
 
+	/** @param itemIconLabel アイテムアイコンラベル配列 */
 	public static void setItemIconLabel(JLabel[] itemIconLabel) {
 		MainCommandUI.itemIconLabel = itemIconLabel;
 	}
 
+	/** @return システムボタン配列 */
 	public static JButton[] getSystemButton() {
 		return systemButton;
 	}
 
+	/** @param systemButton システムボタン配列 */
 	public static void setSystemButton(JButton[] systemButton) {
 		MainCommandUI.systemButton = systemButton;
 	}
 
+	/** @return スクリプト無効化ボタン */
 	public static JToggleButton getScriptButton() {
 		return scriptButton;
 	}
 
+	/** @param scriptButton スクリプト無効化ボタン */
 	public static void setScriptButton(JToggleButton scriptButton) {
 		MainCommandUI.scriptButton = scriptButton;
 	}
 
+	/** @return ターゲット表示ボタン */
 	public static JToggleButton getTargetButton() {
 		return targetButton;
 	}
 
+	/** @param targetButton ターゲット表示ボタン */
 	public static void setTargetButton(JToggleButton targetButton) {
 		MainCommandUI.targetButton = targetButton;
 	}
 
+	/** @return ピン留めボタン */
 	public static JToggleButton getPinButton() {
 		return pinButton;
 	}
 
+	/** @param pinButton ピン留めボタン */
 	public static void setPinButton(JToggleButton pinButton) {
 		MainCommandUI.pinButton = pinButton;
 	}
 
+	/** @return ヘルプ表示無効化ボタン */
 	public static JToggleButton getHelpButton() {
 		return helpButton;
 	}
 
+	/** @param helpButton ヘルプ表示無効化ボタン */
 	public static void setHelpButton(JToggleButton helpButton) {
 		MainCommandUI.helpButton = helpButton;
 	}
 
+	/** @return オプションポップアップボタン */
 	public static JToggleButton getOptionButton() {
 		return optionButton;
 	}
 
+	/** @param optionButton オプションポップアップボタン */
 	public static void setOptionButton(JToggleButton optionButton) {
 		MainCommandUI.optionButton = optionButton;
 	}
 
+	/** @return プレイヤーツールボタン配列 */
 	public static JToggleButton[] getPlayerButton() {
 		return playerButton;
 	}
 
+	/** @param playerButton プレイヤーツールボタン配列 */
 	public static void setPlayerButton(JToggleButton[] playerButton) {
 		MainCommandUI.playerButton = playerButton;
 	}
 
+	/** @return オプションポップアップメニュー */
 	public static JPopupMenu getOptionPopup() {
 		return optionPopup;
 	}
 
+	/** @param optionPopup オプションポップアップメニュー */
 	public static void setOptionPopup(JPopupMenu optionPopup) {
 		MainCommandUI.optionPopup = optionPopup;
 	}
 
+	/** @return ワールド選択ウィンドウ */
 	public static WorldSelectionWindow getWorldWindow() {
 		return mapWindow;
 	}
 
+	/** @param mapWindow ワールド選択ウィンドウ */
 	public static void setWorldWindow(WorldSelectionWindow mapWindow) {
 		MainCommandUI.mapWindow = mapWindow;
 	}
 
+	/** @return アイテムウィンドウ */
 	public static ItemWindow getItemWindow() {
 		return itemWindow;
 	}
 
+	/** @param itemWindow アイテムウィンドウ */
 	public static void setItemWindow(ItemWindow itemWindow) {
 		MainCommandUI.itemWindow = itemWindow;
 	}

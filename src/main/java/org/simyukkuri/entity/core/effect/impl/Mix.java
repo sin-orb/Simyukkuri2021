@@ -61,14 +61,17 @@ public class Mix extends Effect {
 		frames = 3;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Mix() {
 
 	}
 
+	/** ミキサーエフェクトの画像レイヤー配列を返す。 */
 	public static BufferedImage[] getImageLayers() {
 		return imageLayers;
 	}
 
+	/** ミキサーエフェクトの画像レイヤー配列をセットする。 */
 	public static void setImageLayers(BufferedImage[] imageLayers) {
 		Mix.imageLayers = imageLayers;
 	}

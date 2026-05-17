@@ -40,21 +40,26 @@ public class SuiRideEvent extends EventPacket {
 		priority = EventPriority.MIDDLE; // すぃーの乗車イベントを食事、睡眠、トイレより上にする
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public SuiRideEvent() {
 	}
 
+	/** イベントの進行ティックカウンタを返す。 */
 	public int getTick() {
 		return tick;
 	}
 
+	/** イベントの進行ティックカウンタをセットする。 */
 	public void setTick(int tick) {
 		this.tick = tick;
 	}
 
+	/** すいが乗車中かを返す。 */
 	public boolean isMemberRide() {
 		return memberRide;
 	}
 
+	/** ファミリー乗車フラグをセットする。 */
 	public void setMemberRide(boolean memberRide) {
 		this.memberRide = memberRide;
 	}
@@ -62,6 +67,7 @@ public class SuiRideEvent extends EventPacket {
 	// 参加チェック
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
+	/** イベントへの参加可否を判定し、参加可能なら true を返す。 */
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
 		Entity targetObject = body.takeMappedObj(this.target);
@@ -127,6 +133,7 @@ public class SuiRideEvent extends EventPacket {
 	}
 
 	// イベント開始動作
+	/** イベントの開始処理を実行する。 */
 	@Override
 	public void start(Yukkuri body) {
 		Entity targetObject = body.takeMappedObj(this.target);
@@ -137,6 +144,7 @@ public class SuiRideEvent extends EventPacket {
 	}
 
 	// 毎フレーム処理
+	/** 毎ティック状態を更新する。 */
 	@Override
 	public UpdateState update(Yukkuri body) {
 		Entity targetObject = body.takeMappedObj(this.target);
@@ -255,6 +263,7 @@ public class SuiRideEvent extends EventPacket {
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	/** イベント終了判定を行い true で終了する。 */
 	@Override
 	public boolean execute(Yukkuri body) {
 		Entity targetObject = body.takeMappedObj(this.target);
@@ -274,6 +283,11 @@ public class SuiRideEvent extends EventPacket {
 	}
 
 	@Override
+	/**
+	 * End.
+	 *
+	 * @param body the body
+	 */
 	public void end(Yukkuri body) {
 		// 他のイベントで強制的にイベントが終わることがある
 		// すぃーにのってたら降りる
@@ -285,6 +299,7 @@ public class SuiRideEvent extends EventPacket {
 		memberRide = false;
 	}
 
+	/** イベント名の文字列表現を返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("event_ridesui");

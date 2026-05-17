@@ -494,11 +494,13 @@ public abstract class LivingEntity extends Entity {
 	protected void onInjuredScream(int x, int y) {
 	}
 
+	/** ダメージ量が VERY 以上かを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isDamaged() {
 		return getDamageState() == Damage.VERY || getDamageState() == Damage.TOOMUCH;
 	}
 
+	/** ダメージ量が TOOMUCH かを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isDamagedHeavily() {
 		return getDamageState() == Damage.TOOMUCH;
@@ -635,6 +637,7 @@ public abstract class LivingEntity extends Entity {
 	public void setForceExciting(boolean forceExciting) {
 	}
 
+	/** 興奮・緊急状態をリセットしてゆっくり状態に戻す。 */
 	public void setCalm() {
 	}
 
@@ -2662,6 +2665,7 @@ public abstract class LivingEntity extends Entity {
 		return ret;
 	}
 
+	/** 外圧から計算される水平方向の力を返す。正値で拡張、負値で圧縮。 */
 	@Transient
 	public int getExternalForceH() {
 		int ret = 0;
@@ -2819,6 +2823,7 @@ public abstract class LivingEntity extends Entity {
 		this.uniqueID = uniqueID;
 	}
 
+	/** ユニークIDで等値比較する。 */
 	@Override
 	public boolean equals(Object o) {
 		if (o == null) {
@@ -2831,12 +2836,20 @@ public abstract class LivingEntity extends Entity {
 		return getUniqueID() == other.getUniqueID();
 	}
 
+	/** ユニークIDをハッシュコードとして返す。 */
 	@Override
 	public int hashCode() {
 		return getUniqueID() * 13;
 	}
 
 	@Override
+	/**
+	 * Compares this object with another.
+	 *
+	 * @param o the o
+	 *
+	 * @return a negative integer, zero, or a positive integer
+	 */
 	public int compareTo(Object o) {
 		if (o == null) {
 			return 0;
@@ -3855,6 +3868,7 @@ public abstract class LivingEntity extends Entity {
 
 	// ===== Step6-1: BodyAttributes から移動したメソッド群 =====
 
+	/** 年齢から年齢層（BABY/CHILD/ADULT）を算出して返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public AgeState getAgeState() {
 		if (getAge() < getBabyLimitBase()) {
@@ -3865,51 +3879,61 @@ public abstract class LivingEntity extends Entity {
 		return AgeState.ADULT;
 	}
 
+	/** 現在の年齢層に応じた空腹限界値を返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public int getHungryLimit() {
 		return getHungryLimitBase()[getAgeState().ordinal()];
 	}
 
+	/** 過食状態（空腹度が限界値の130%超）かどうかを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isOverEating() {
 		return !dead && hungry >= getHungryLimit() * 1.3f;
 	}
 
+	/** 腹いっぱい状態（空腹度が限界値以上）かどうかを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isTooFull() {
 		return !dead && hungry >= getHungryLimit();
 	}
 
+	/** 満腹状態（空腹度が限界値の80%以上）かどうかを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isFull() {
 		return !dead && hungry >= getHungryLimit() * 0.8f;
 	}
 
+	/** 空腹状態（空腹度が限界値の半分以下）かどうかを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isHungry() {
 		return !dead && hungry <= getHungryLimit() / 2;
 	}
 
+	/** かなり空腹状態（空腹度が限界値の20%以下）かどうかを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isSoHungry() {
 		return !dead && hungry <= getHungryLimit() * 0.2f;
 	}
 
+	/** 完全空腹状態（空腹度 0 以下）かどうかを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isVeryHungry() {
 		return !dead && hungry <= 0;
 	}
 
+	/** 飢え死に寸前（空腹度 0 かつダメージあり）かどうかを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isTooHungry() {
 		return !dead && hungry <= 0 && getDamageState() != Damage.NONE;
 	}
 
+	/** 瀕死の飢え状態（空腹度 0 かつ最大ダメージ）かどうかを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isStarving() {
 		return !dead && hungry <= 0 && getDamageState() == Damage.TOOMUCH;
 	}
 
+	/** 空腹度を増減させる。正値で増加、負値で減少。 */
 	public void addHungry(int val) {
 		hungry += (TICK * val);
 	}
@@ -3924,85 +3948,102 @@ public abstract class LivingEntity extends Entity {
 		hungerDelegate().checkTang();
 	}
 
+	/** 空腹度フィールド値を返す（Jackson シリアライズ除外）。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public int getJkHung() {
 		return hungry;
 	}
 
+	/** 空腹度フィールド値を直接セットする（Jackson シリアライズ除外）。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public void setJkHung(int j) {
 		this.hungry = j;
 	}
 
+	/** 成体（ADULT）かどうかを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isAdult() {
 		return getAgeState() == AgeState.ADULT;
 	}
 
+	/** 子ゆ（CHILD）かどうかを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isChild() {
 		return getAgeState() == AgeState.CHILD;
 	}
 
+	/** 赤ゆ（BABY）かどうかを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isBaby() {
 		return getAgeState() == AgeState.BABY;
 	}
 
+	/** 現在の年齢層に応じたダメージ限界値を返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public int getDamageLimit() {
 		return getDamageLimitBase()[getAgeState().ordinal()];
 	}
 
+	/** 現在の年齢層に応じたストレス限界値を返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public int getStressLimit() {
 		return getStressLimitBase()[getAgeState().ordinal()];
 	}
 
+	/** 病気状態かどうかを返す（潜伏期間超過で true）。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isSick() {
 		return sickPeriod > getIncubationPeriodBase();
 	}
 
+	/** 重症病気状態（潜伏期間の8倍超過）かどうかを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isSickHeavily() {
 		return sickPeriod > getIncubationPeriodBase() * 8;
 	}
 
+	/** 瀕死病気状態（潜伏期間の32倍超過かつダメージあり）かどうかを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isSickTooHeavily() {
 		return sickPeriod > getIncubationPeriodBase() * 32 && isDamaged();
 	}
 
+	/** 病気を強制的に瀕死状態に設定する。 */
 	public final void forceSetSick() {
 		sickPeriod = (getIncubationPeriodBase() * 32) + 2;
 	}
 
+	/** 非ゆっくり症（NYD）状態かどうかを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public final boolean isNYD() {
 		return getCoreAnkoState() != CoreAnkoState.NORMAL;
 	}
 
+	/** 通常（非NYD）状態かどうかを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public final boolean isNotNYD() {
 		return getCoreAnkoState() == CoreAnkoState.NORMAL;
 	}
 
+	/** 老齢状態（寿命の9割経過）かどうかを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public final boolean isOld() {
 		return getAge() > (getLifeLimitBase() * 9 / 10);
 	}
 
+	/** セリフ表示中かどうかを返す（messageTicksが正のとき true）。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public final boolean isTalking() {
 		return messageTicks > 0;
 	}
 
+	/** 現在の年齢層に応じた1回の食事量を返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public int getEatAmount() {
 		return getEatAmountBase()[getAgeState().ordinal()];
 	}
 
+	/** 胴体の焼け具合レベルを返す（NONE/MEDIUM/CRITICAL）。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public final YukkuriBake getBakeLevel() {
 		YukkuriBake ret = YukkuriBake.NONE;
@@ -4017,6 +4058,7 @@ public abstract class LivingEntity extends Entity {
 		return ret;
 	}
 
+	/** 足の焼け具合レベルを返す（NONE/MEDIUM/CRITICAL）。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public FootBake getFootBakeLevel() {
 		FootBake ret = FootBake.NONE;
@@ -4031,29 +4073,35 @@ public abstract class LivingEntity extends Entity {
 		return ret;
 	}
 
+	/** 焼け状態（足・胴体いずれか）かどうかを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isGotBurned() {
 		return getFootBakeLevel() != FootBake.NONE || getBakeLevel() != YukkuriBake.NONE;
 	}
 
+	/** 重度の焼け状態（胴体 CRITICAL または足焼けあり）かどうかを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isGotBurnedHeavily() {
 		return getFootBakeLevel() != FootBake.NONE || getBakeLevel() == YukkuriBake.CRITICAL;
 	}
 
+	/** 焼け経過時間を加算する（胴体は s、足は s/5）。 */
 	public void addBakePeriod(int s) {
 		footBakePeriod += (s / 5);
 		bodyBakePeriod += s;
 	}
 
+	/** 足の焼け経過時間を加算する。 */
 	public void addFootBakePeriod(int s) {
 		footBakePeriod += s;
 	}
 
+	/** バカ舌値を増減させる。 */
 	public void addTang(int val) {
 		setTang(getTang() + val);
 	}
 
+	/** バカ舌レベル（味覚タイプ：POOR/NORMAL/GOURMET）を返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public TangType getTangType() {
 		TangType ret;
@@ -4067,15 +4115,18 @@ public abstract class LivingEntity extends Entity {
 		return ret;
 	}
 
+	/** トラウマを持っているかどうかを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean hasTrauma() {
 		return getTrauma() != null;
 	}
 
+	/** アタッチメントをリストに追加する。 */
 	public void addAttachment(Attachment at) {
 		getAttach().add(at);
 	}
 
+	/** 指定クラスのアタッチメント数を返す。 */
 	public int getAttachmentSize(Class<?> type) {
 		int ret = 0;
 		for (Attachment at : getAttach()) {
@@ -4086,6 +4137,7 @@ public abstract class LivingEntity extends Entity {
 		return ret;
 	}
 
+	/** 指定クラスのアタッチメントを全て除去する。 */
 	public void removeAttachment(Class<?> type) {
 		Attachment[] attachments = getAttach().toArray(new Attachment[0]);
 		getAttach().clear();
@@ -4096,6 +4148,7 @@ public abstract class LivingEntity extends Entity {
 		}
 	}
 
+	/** 全アタッチメントの境界ボックスをリセットする。 */
 	public void resetAttachmentBoundary() {
 		if (getAttach() != null && getAttach().size() != 0) {
 			for (Attachment at : getAttach()) {
@@ -4104,18 +4157,22 @@ public abstract class LivingEntity extends Entity {
 		}
 	}
 
+	/** 指定キーのお気に入りアイテムを返す。登録されていない場合は null。 */
 	public Entity getFavoriteItem(FavItemType key) {
 		return getFavoriteItems().get(key) == null ? null : takeMappedObj(getFavoriteItems().get(key));
 	}
 
+	/** 指定キーのお気に入りアイテムを設定する。val が null の場合は -1 を登録。 */
 	public void setFavoriteItem(FavItemType key, Entity val) {
 		getFavoriteItems().put(key, val == null ? -1 : val.objId);
 	}
 
+	/** 指定キーのお気に入りアイテムを除去する。 */
 	public void removeFavoriteItem(FavItemType key) {
 		getFavoriteItems().remove(key);
 	}
 
+	/** 指定キーの持ち運びアイテムを返す。マップに存在しない場合は null。 */
 	public Entity getCarryItem(TakeoutItemType key) {
 		if (getCarryItems() == null) {
 			return null;
@@ -4133,21 +4190,25 @@ public abstract class LivingEntity extends Entity {
 		return YukkuriRelations.findYukkuriByObjId(getCarryItems().get(key));
 	}
 
+	/** 指定キーの持ち運びアイテムを除去する。 */
 	public void removeCarryItem(TakeoutItemType key) {
 		getCarryItems().remove(key);
 	}
 
+	/** 現在の年齢層に応じたうんうん限界値を返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public int getShitLimit() {
 		return getShitLimitBase()[getAgeState().ordinal()];
 	}
 
+	/** うんうん量を加算する（排便中または 0 以下の場合は無視）。 */
 	public void plusShit(int s) {
 		if (shit == 0 || s <= 0)
 			return;
 		shit += s;
 	}
 
+	/** うんうん量を強制セットする。ibVeryShit=true の場合は限界値まで積む（排便中は無視）。 */
 	public void setShit(int inShit, boolean ibVeryShit) {
 		if (shitting)
 			return;

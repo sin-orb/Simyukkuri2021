@@ -72,14 +72,17 @@ public class TerrainBillboard implements Serializable {
 		this.sortY = sortY;
 	}
 
+	/** @return 変形用アフィン変換 */
 	public AffineTransform getXform() {
 		return xform;
 	}
 
+	/** @param xform 変形用アフィン変換 */
 	public void setXform(AffineTransform xform) {
 		this.xform = xform;
 	}
 
+	/** @param image 背景部品の画像 */
 	public void setImage(BufferedImage image) {
 		this.image = image;
 	}

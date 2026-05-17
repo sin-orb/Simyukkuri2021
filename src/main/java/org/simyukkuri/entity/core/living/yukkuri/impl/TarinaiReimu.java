@@ -73,6 +73,7 @@ public class TarinaiReimu extends Tarinai {
 		imageLoaded = true;
 	}
 
+	/** 画像が読み込み済みかを返す。 */
 	@Override
 	@Transient
 	public boolean isImageLoaded() {
@@ -85,6 +86,7 @@ public class TarinaiReimu extends Tarinai {
 		baseSpeed = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
 	}
 
+	/** 現在の表示状態に基づく画像をレイヤーにセットし、画像番号を返す。 */
 	@Override
 	public int getImage(int type, int direction, YukkuriLayer layer, int index) {
 		layer.getImage()[index] = imagePack[getRank().getImageIndex()][type][direction
@@ -94,16 +96,19 @@ public class TarinaiReimu extends Tarinai {
 	}
 
 	@Override
+	/** アタッチメントキーに対応する取り付け点座標を返す。 */
 	public Point4y[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}
 
+	/** ゆっくりの種別を返す。 */
 	@Override
 	@Transient
 	public YukkuriType getType() {
 		return type;
 	}
 
+	/** 交配相手の種別に応じた混血種別を返す。 */
 	@Override
 	public YukkuriType getHybridType(YukkuriType partnerType) {
 		switch (partnerType) {
@@ -114,6 +119,7 @@ public class TarinaiReimu extends Tarinai {
 		}
 	}
 
+	/** 日本語名を返す。 */
 	@Override
 	@Transient
 	public String getNameJ() {
@@ -130,6 +136,7 @@ public class TarinaiReimu extends Tarinai {
 		IniFileUtil.readYukkuriIniFile(this);
 	}
 
+	/** たりないれいむ のデフォルトコンストラクタ。 */
 	public TarinaiReimu() {
 
 	}
@@ -147,6 +154,9 @@ public class TarinaiReimu extends Tarinai {
 	}
 
 	@Override
+	/**
+	 * Tune parameters.
+	 */
 	public void tuneParameters() {
 		setAttitude(Attitude.SUPER_SHITHEAD);
 		double factor = Math.random() * 2 + 1;

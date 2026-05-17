@@ -52,6 +52,7 @@ public class HotPlate extends WorldEntity {
 		boundary.setY(boundary.getHeight() >> 1);
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (enabled) {
@@ -80,6 +81,7 @@ public class HotPlate extends WorldEntity {
 		return 1;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
@@ -91,6 +93,7 @@ public class HotPlate extends WorldEntity {
 		return boundary;
 	}
 
+	/** 衝突判定対象タイプを返す。 */
 	@Override
 	@Transient
 	public int getHitCheckObjType() {
@@ -98,12 +101,18 @@ public class HotPlate extends WorldEntity {
 	}
 
 	@Override
+	/**
+	 * Enable hit check.
+	 *
+	 * @return Enable hit check
+	 */
 	public boolean enableHitCheck() {
 		if (bindBody != null)
 			return false;
 		return true;
 	}
 
+	/** 衝突処理を行い、結果コードを返す。 */
 	@Override
 	public int objHitProcess(Entity o) {
 
@@ -121,6 +130,7 @@ public class HotPlate extends WorldEntity {
 		return 1;
 	}
 
+	/** 毎ティックの状態更新を行う。 */
 	@Override
 	public void upDate() {
 		if (getAge() % 2400 == 0) {
@@ -169,6 +179,7 @@ public class HotPlate extends WorldEntity {
 		}
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		if (bindBody != null) {
@@ -198,22 +209,27 @@ public class HotPlate extends WorldEntity {
 		cost = 100;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public HotPlate() {
 
 	}
 
+	/** 関連付けられているゆっくりを返す。 */
 	public Yukkuri getBoundYukkuri() {
 		return bindBody;
 	}
 
+	/** 関連付けるゆっくりをセットする。 */
 	public void setBoundYukkuri(Yukkuri bindBody) {
 		this.bindBody = bindBody;
 	}
 
+	/** ホットプレートの煙エフェクトを返す。 */
 	public Effect getSmoke() {
 		return smoke;
 	}
 
+	/** ホットプレートの煙エフェクトをセットする。 */
 	public void setSmoke(Effect smoke) {
 		this.smoke = smoke;
 	}

@@ -85,12 +85,14 @@ public class Chen extends Yukkuri {
 		baseSpeed = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
 	}
 
+	/** 画像が読み込み済みかを返す。 */
 	@Override
 	@Transient
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
 
+	/** 現在の表示状態に基づく画像をレイヤーにセットし、画像番号を返す。 */
 	@Override
 	public int getImage(int type, int direction, YukkuriLayer layer, int index) {
 		layer.getImage()[index] = imagePack[getRank().getImageIndex()][type][direction
@@ -100,22 +102,26 @@ public class Chen extends Yukkuri {
 	}
 
 	@Override
+	/** アタッチメントキーに対応する取り付け点座標を返す。 */
 	public Point4y[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}
 
+	/** ゆっくりの種別を返す。 */
 	@Override
 	@Transient
 	public YukkuriType getType() {
 		return type;
 	}
 
+	/** 日本語名を返す。 */
 	@Override
 	@Transient
 	public String getNameJ() {
 		return nameJ;
 	}
 
+	/** 自分の呼び名（愛称優先、なければ種族名）を返す。 */
 	@Override
 	@Transient
 	public String getMyName() {
@@ -125,6 +131,7 @@ public class Chen extends Yukkuri {
 		return nameJ;
 	}
 
+	/** ダメージ時の呼び名（設定あれば優先、なければ通常の呼び名）を返す。 */
 	@Override
 	@Transient
 	public String getMyNameD() {
@@ -134,18 +141,21 @@ public class Chen extends Yukkuri {
 		return getMyName();
 	}
 
+	/** 英語名を返す。 */
 	@Override
 	@Transient
 	public String getNameE() {
 		return nameE;
 	}
 
+	/** 追加の日本語名（ない場合は空文字）を返す。 */
 	@Override
 	@Transient
 	public String getNameJ2() {
 		return "";
 	}
 
+	/** 追加の英語名（ない場合は空文字）を返す。 */
 	@Override
 	@Transient
 	public String getNameE2() {
@@ -162,11 +172,15 @@ public class Chen extends Yukkuri {
 		IniFileUtil.readYukkuriIniFile(this);
 	}
 
+	/** ちぇん のデフォルトコンストラクタ。 */
 	public Chen() {
 
 	}
 
 	@Override
+	/**
+	 * Tune parameters.
+	 */
 	public void tuneParameters() {
 		/*
 		 * if (rnd.nextBoolean()) {

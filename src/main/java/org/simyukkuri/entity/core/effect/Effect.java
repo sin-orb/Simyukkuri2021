@@ -99,6 +99,7 @@ public abstract class Effect extends Entity {
 		calcPos();
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Effect() {
 
 	}
@@ -108,6 +109,7 @@ public abstract class Effect extends Entity {
 		animeFrame = f;
 	}
 
+	/** エフェクトの毎ティック処理。座標更新・アニメ進行・寿命チェックを行う。 */
 	@Override
 	public TickResult clockTick() {
 		setAge(getAge() + TICK);
@@ -142,78 +144,97 @@ public abstract class Effect extends Entity {
 		return TickResult.NONE;
 	}
 
+	/** エフェクトの向きを返す（0=左、1=右）。 */
 	public int getDirection() {
 		return direction;
 	}
 
+	/** エフェクトの向きをセットする。 */
 	public void setDirection(int direction) {
 		this.direction = direction;
 	}
 
+	/** アニメーション間隔を返す。 */
 	public int getInterval() {
 		return interval;
 	}
 
+	/** アニメーション間隔をセットする。 */
 	public void setInterval(int interval) {
 		this.interval = interval;
 	}
 
+	/** アニメーション総フレーム数を返す。 */
 	public int getFrames() {
 		return frames;
 	}
 
+	/** アニメーション総フレーム数をセットする。 */
 	public void setFrames(int frames) {
 		this.frames = frames;
 	}
 
+	/** エフェクトの継続時間（ティック）を返す。 */
 	public int getLifeTime() {
 		return lifeTime;
 	}
 
+	/** エフェクトの継続時間（ティック）をセットする。 */
 	public void setLifeTime(int lifeTime) {
 		this.lifeTime = lifeTime;
 	}
 
+	/** アニメーション再生中かどうかを返す。 */
 	public boolean isAnimate() {
 		return animate;
 	}
 
+	/** アニメーション再生フラグをセットする。 */
 	public void setAnimate(boolean animate) {
 		this.animate = animate;
 	}
 
+	/** アニメーション経過カウンタを返す。 */
 	public int getAnimeInterval() {
 		return animeInterval;
 	}
 
+	/** アニメーション経過カウンタをセットする。 */
 	public void setAnimeInterval(int animeInterval) {
 		this.animeInterval = animeInterval;
 	}
 
+	/** アニメループ残数を返す。-1 で無限ループ。 */
 	public int getAnimeLoop() {
 		return animeLoop;
 	}
 
+	/** アニメループ残数をセットする。 */
 	public void setAnimeLoop(int animeLoop) {
 		this.animeLoop = animeLoop;
 	}
 
+	/** アニメ終了時に消滅するかどうかを返す。 */
 	public boolean isAnimeEnd() {
 		return animeEnd;
 	}
 
+	/** アニメ終了時消滅フラグをセットする。 */
 	public void setAnimeEnd(boolean animeEnd) {
 		this.animeEnd = animeEnd;
 	}
 
+	/** 重力の影響を受けるかどうかを返す。 */
 	public boolean isEnableGravity() {
 		return enableGravity;
 	}
 
+	/** 重力フラグをセットする。 */
 	public void setEnableGravity(boolean enableGravity) {
 		this.enableGravity = enableGravity;
 	}
 
+	/** 現在のアニメーションフレーム番号を返す。 */
 	public int getAnimeFrame() {
 		return animeFrame;
 	}

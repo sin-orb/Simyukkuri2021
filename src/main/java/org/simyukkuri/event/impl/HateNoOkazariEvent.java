@@ -42,6 +42,7 @@ public class HateNoOkazariEvent extends EventPacket {
 		super(fromBody, toBody, targetObject, count);
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public HateNoOkazariEvent() {
 
 	}
@@ -49,6 +50,7 @@ public class HateNoOkazariEvent extends EventPacket {
 	// 参加チェック
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
+	/** イベントへの参加可否を判定し、参加可能なら true を返す。 */
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
 		boolean accepted = false;
@@ -113,6 +115,7 @@ public class HateNoOkazariEvent extends EventPacket {
 	}
 
 	// イベント開始動作
+	/** イベントの開始処理を実行する。 */
 	@Override
 	public void start(Yukkuri body) {
 		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
@@ -124,6 +127,7 @@ public class HateNoOkazariEvent extends EventPacket {
 
 	// 毎フレーム処理
 	// UpdateState.ABORTを返すとイベント終了
+	/** 毎ティック状態を更新する。 */
 	@Override
 	public UpdateState update(Yukkuri body) {
 		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
@@ -141,6 +145,7 @@ public class HateNoOkazariEvent extends EventPacket {
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	/** イベント終了判定を行い true で終了する。 */
 	@Override
 	public boolean execute(Yukkuri body) {
 		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
@@ -196,6 +201,7 @@ public class HateNoOkazariEvent extends EventPacket {
 		return true;
 	}
 
+	/** イベント名の文字列表現を返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("event_noacc");

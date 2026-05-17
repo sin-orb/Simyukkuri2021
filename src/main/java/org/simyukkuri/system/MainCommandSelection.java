@@ -11,6 +11,14 @@ public final class MainCommandSelection {
 	private MainCommandSelection() {
 	}
 
+	/**
+	 * メインカテゴリとサブインデックスから対応するメニュー項目を返す。
+	 * TOOL / BODY_CHANGE / AMPOULE など各カテゴリの配列から該当インデックスの項目を取得する。
+	 *
+	 * @param mainSel メインカテゴリ選択
+	 * @param subSel  サブカテゴリのインデックス
+	 * @return 対応する {@link GadgetMenuChoice}、カテゴリ未対応なら null
+	 */
 	public static GadgetMenuChoice getSubItem(GadgetMenuChoice mainSel, int subSel) {
 		switch (mainSel) {
 		case TOOL:

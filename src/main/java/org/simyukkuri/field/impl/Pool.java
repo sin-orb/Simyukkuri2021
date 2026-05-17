@@ -58,11 +58,13 @@ public class Pool extends FieldShape {
 		texture = new TexturePaint(images, new Rectangle2D.Float(0, 0, images.getWidth(), images.getHeight()));
 	}
 
+	/** シェイプポップアップを持つかを返す（常に POOL）。 */
 	@Override
 	public ShapeMenuTarget hasShapePopup() {
 		return ShapeMenuTarget.POOL;
 	}
 
+	/** シェイプポップアップのメニューアクションを実行する。 */
 	@Override
 	public void executeShapePopup(ShapeMenu menu) {
 
@@ -99,12 +101,14 @@ public class Pool extends FieldShape {
 		}
 	}
 
+	/** フィールドの属性値を返す。 */
 	@Override
 	@Transient
 	public int getAttribute() {
 		return FIELD_POOL;
 	}
 
+	/** バリアの最小サイズを返す。 */
 	@Override
 	@Transient
 	public int getMinimumSize() {
@@ -120,6 +124,7 @@ public class Pool extends FieldShape {
 		g2.drawPolygon(polygonX, polygonY, 4);
 	}
 
+	/** シェイプの外形を描画する。 */
 	@Override
 	public void drawShape(Graphics2D g2) {
 		int[] polygonX = new int[4];
@@ -195,6 +200,7 @@ public class Pool extends FieldShape {
 				FIELD_POOL);
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Pool() {
 
 	}
@@ -463,26 +469,32 @@ public class Pool extends FieldShape {
 		return depthResult;
 	}
 
+	/** 水面領域の X 頂点座標配列を返す。 */
 	public int[] getWaterPolygonX() {
 		return waterPolygonX;
 	}
 
+	/** 水面領域の X 頂点座標配列をセットする。 */
 	public void setWaterPolygonX(int[] waterPolygonX) {
 		this.waterPolygonX = waterPolygonX;
 	}
 
+	/** 水面領域の Y 頂点座標配列を返す。 */
 	public int[] getWaterPolygonY() {
 		return waterPolygonY;
 	}
 
+	/** 水面領域の Y 頂点座標配列をセットする。 */
 	public void setWaterPolygonY(int[] waterPolygonY) {
 		this.waterPolygonY = waterPolygonY;
 	}
 
+	/** プールにバインドされているエンティティリストを返す。 */
 	public List<Entity> getBoundObjects() {
 		return bindObjList;
 	}
 
+	/** プールにバインドされているエンティティリストをセットする。 */
 	public void setBoundObjects(List<Entity> boundObjects) {
 		this.bindObjList = boundObjects;
 	}

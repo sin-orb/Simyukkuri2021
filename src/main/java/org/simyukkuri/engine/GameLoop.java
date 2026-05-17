@@ -13,10 +13,18 @@ import org.simyukkuri.util.GameWorld;
 public final class GameLoop {
 	private final MyPane pane;
 
+	/**
+	 * ゲームループを指定パネルと関連付けて初期化する。
+	 *
+	 * @param pane ゲーム描画パネル
+	 */
 	public GameLoop(MyPane pane) {
 		this.pane = pane;
 	}
 
+	/**
+	 * ゲームループを実行する。ゆっくり追加ダイアログを表示後、isRunning が false になるまでゲームを更新し続ける。
+	 */
 	public void run() {
 		pane.initBodies();
 		synchronized (SimYukkuri.lock) {

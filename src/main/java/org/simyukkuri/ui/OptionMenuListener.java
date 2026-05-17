@@ -14,6 +14,7 @@ import org.simyukkuri.util.IniFileUtil;
  * Main command の option popup を処理する.
  */
 public final class OptionMenuListener implements ActionListener {
+	/** @param e アクションイベント */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();

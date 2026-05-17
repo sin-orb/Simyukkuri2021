@@ -42,6 +42,7 @@ public class Stone extends WorldEntity {
 		boundary.setY(boundary.getHeight() - 1);
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (itemRank == ItemRank.HOUSE) {
@@ -57,12 +58,14 @@ public class Stone extends WorldEntity {
 		return boundary;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
 		return images[2];
 	}
 
+	/** 衝突判定対象タイプを返す。 */
 	@Override
 	@Transient
 	public int getHitCheckObjType() {
@@ -70,6 +73,7 @@ public class Stone extends WorldEntity {
 	}
 
 	@Override
+	/** 衝突処理を行い、結果コードを返す。 */
 	public int objHitProcess(Entity targetObject) {
 		if (targetObject instanceof Yukkuri) {
 			Yukkuri body = (Yukkuri) targetObject;
@@ -86,17 +90,24 @@ public class Stone extends WorldEntity {
 		return 0;
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		GameWorld.get().getCurrentWorldState().getStones().remove(objId);
 	}
 
 	@Override
+	/**
+	 * Grab.
+	 */
 	public void grab() {
 		grabbed = true;
 	}
 
 	@Override
+	/**
+	 * Kick.
+	 */
 	public void kick() {
 		kick(0, -8, -4);
 	}
@@ -136,14 +147,17 @@ public class Stone extends WorldEntity {
 
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Stone() {
 
 	}
 
+	/** アイテムのランク（品質）を返す。 */
 	public ItemRank getItemRank() {
 		return itemRank;
 	}
 
+	/** アイテムのランク（品質）をセットする。 */
 	public void setItemRank(ItemRank itemRank) {
 		this.itemRank = itemRank;
 	}

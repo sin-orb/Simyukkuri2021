@@ -77,36 +77,36 @@ public abstract class SocialEntity extends LivingEntity {
 	/** トラウマ */
 	protected Trauma trauma = Trauma.NONE;
 
+	/** パニックタイプを返す。 */
 	@Override
 	public PanicType getPanicType() { return panicType; }
 
+	/** パニックタイプをセットする。 */
 	@Override
 	public void setPanicType(PanicType panicType) { this.panicType = panicType; }
 
+	/** パニック継続時間を返す。 */
 	@Override
 	public int getPanicPeriod() { return panicPeriod; }
 
+	/** パニック継続時間をセットする。 */
 	@Override
 	public void setPanicPeriod(int panicPeriod) { this.panicPeriod = panicPeriod; }
 
+	/** トラウマの種別を返す。 */
 	@Override
 	public Trauma getTrauma() { return trauma; }
 
+	/** トラウマの種別をセットする。 */
 	@Override
 	public void setTrauma(Trauma trauma) { this.trauma = trauma; }
 
-	/**
-	 * 性格 counter indicating shithead/nicehead etc. を取得する. @return 性格 counter
-	 * indicating shithead/nicehead etc.
-	 */
+	/** 性格（クズ・良いゆ等）の区分を返す。 */
 	public Attitude getAttitude() {
 		return attitude;
 	}
 
-	/**
-	 * 性格 counter indicating shithead/nicehead etc. を設定する. @param attitude 性格
-	 * counter indicating shithead/nicehead etc.
-	 */
+	/** 性格の区分をセットする。 */
 	public void setAttitude(Attitude attitude) {
 		this.attitude = attitude;
 	}
@@ -301,6 +301,7 @@ public abstract class SocialEntity extends LivingEntity {
 	@Override
 	public abstract void setForceExciting(boolean forceExciting);
 
+	/** 興奮・発情状態をリセットしてゆっくり状態に戻す。 */
 	@Override
 	public void setCalm() {
 		setForceExciting(false);
@@ -559,6 +560,7 @@ public abstract class SocialEntity extends LivingEntity {
 
 	// ===== Step6-2: BodyAttributes から移動したメソッド群 =====
 
+	/** @param val プレイヤーへの好感度に加算する値（上限・下限でクランプ） */
 	public void addLovePlayer(int val) {
 		if (isNYD()) {
 			lovePlayer = -1 * getLovePlayerLimitBase();
@@ -572,6 +574,7 @@ public abstract class SocialEntity extends LivingEntity {
 		}
 	}
 
+	/** @param memoryDelta 記憶量に加算する値（0以下にはならない） */
 	public final void addMemories(int memoryDelta) {
 		switch (getIntelligence()) {
 			case WISE:
@@ -611,6 +614,7 @@ public abstract class SocialEntity extends LivingEntity {
 		}
 	}
 
+	/** @param val あまあましつけ度に加算する値 */
 	public final void addAmaamaDiscipline(int val) {
 		amaamaDiscipline += val;
 		if (amaamaDiscipline > 100) {
@@ -1116,11 +1120,13 @@ public abstract class SocialEntity extends LivingEntity {
 	/** 汚れ状態を設定する。Yukkuri でオーバーライドして実装する. */
 	protected void makeDirty(boolean flag) {}
 
+	/** 睡眠開始時に幸福度を AVERAGE に設定する。 */
 	@Override
 	protected void onStartSleeping() {
 		setHappiness(Happiness.AVERAGE);
 	}
 
+	/** パニック解除時に幸福度を SAD に設定する。 */
 	@Override
 	protected void onClearPanic() {
 		setHappiness(Happiness.SAD);
@@ -1413,16 +1419,19 @@ public abstract class SocialEntity extends LivingEntity {
 
 	// --- 家族リスト操作 ---
 
+	/** 姉妹数を返す。 */
 	@Transient
 	public int getSistersCount() {
 		return getSisters().size();
 	}
 
+	/** 姉数を返す。 */
 	@Transient
 	public int getElderSistersCount() {
 		return getElderSisters().size();
 	}
 
+	/** 子ゆっくり数を返す。 */
 	@Transient
 	public int getChildrenCount() {
 		if (getChildren() == null)
@@ -1430,29 +1439,35 @@ public abstract class SocialEntity extends LivingEntity {
 		return getChildren().size();
 	}
 
+	/** 子ゆっくりをリストに追加する。 */
 	public void addChild(SocialEntity at) {
 		if (at != null)
 			getChildren().add(at.getUniqueID());
 	}
 
+	/** 子ゆっくりをリストから除去する。 */
 	public void removeChild(SocialEntity target) {
 		YukkuriRelations.removeChild(this, target);
 	}
 
+	/** 姉をリストに追加する。 */
 	public void addElderSister(SocialEntity at) {
 		if (at != null)
 			getElderSisters().add(at.getUniqueID());
 	}
 
+	/** 姉をリストから除去する。 */
 	public void removeElderSister(SocialEntity target) {
 		YukkuriRelations.removeElderSister(this, target);
 	}
 
+	/** 姉妹をリストに追加する。 */
 	public void addSister(SocialEntity at) {
 		if (at != null)
 			getSisters().add(at.getUniqueID());
 	}
 
+	/** 姉妹をリストから除去する。 */
 	public void removeSister(SocialEntity target) {
 		YukkuriRelations.removeSister(this, target);
 	}

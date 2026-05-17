@@ -85,6 +85,7 @@ public class FoodMaker extends WorldEntity {
 		boundary.setY(boundary.getHeight() >> 1);
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (enabled) {
@@ -95,6 +96,7 @@ public class FoodMaker extends WorldEntity {
 		return 1;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
@@ -106,12 +108,14 @@ public class FoodMaker extends WorldEntity {
 		return boundary;
 	}
 
+	/** 衝突判定対象タイプを返す。 */
 	@Override
 	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}
 
+	/** 衝突処理を行い、結果コードを返す。 */
 	@Override
 	public int objHitProcess(Entity o) {
 		if (!processReady) {
@@ -298,6 +302,7 @@ public class FoodMaker extends WorldEntity {
 		return 0;
 	}
 
+	/** 毎ティックの状態更新を行う。 */
 	@Override
 	public void upDate() {
 		if (getAge() % 4 == 0 && !processReady) {
@@ -305,6 +310,7 @@ public class FoodMaker extends WorldEntity {
 		}
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		GameWorld.get().getCurrentWorldState().getFoodMakers().remove(objId);
@@ -325,30 +331,37 @@ public class FoodMaker extends WorldEntity {
 		cost = 30;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public FoodMaker() {
 
 	}
 
+	/** 加工処理の準備が完了しているかを返す。 */
 	public boolean isProcessReady() {
 		return processReady;
 	}
 
+	/** 加工処理準備完了フラグをセットする。 */
 	public void setProcessReady(boolean processReady) {
 		this.processReady = processReady;
 	}
 
+	/** 在庫食べ物タイプのインデックスを返す。 */
 	public int getStockFood() {
 		return stockFood;
 	}
 
+	/** 在庫食べ物タイプのインデックスをセットする。 */
 	public void setStockFood(int stockFood) {
 		this.stockFood = stockFood;
 	}
 
+	/** 一回に生産する食べ物の量を返す。 */
 	public int getFoodAmount() {
 		return foodAmount;
 	}
 
+	/** 一回に生産する食べ物の量をセットする。 */
 	public void setFoodAmount(int foodAmount) {
 		this.foodAmount = foodAmount;
 	}

@@ -213,6 +213,12 @@ public class SimYukkuri extends JFrame {
 		});
 	}
 
+	/**
+	 * ローディングダイアログを表示しながらタスクをバックグラウンドで実行する。
+	 *
+	 * @param message ダイアログに表示するメッセージ
+	 * @param task    実行するタスク
+	 */
 	public void runWithLoadingDialog(String message, Runnable task) {
 		final JDialog loadingDialog = createLoadingDialog(message);
 		final Throwable[] err = new Throwable[1];

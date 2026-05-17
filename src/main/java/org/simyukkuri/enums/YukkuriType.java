@@ -67,14 +67,17 @@ public enum YukkuriType {
 		this.typeID = id;
 	}
 
+	/** ゆっくり実装クラスの簡易名を返す。 */
 	public String getClassName() {
 		return className;
 	}
 
+	/** セリフ定義ファイル名を返す。 */
 	public String getMessageFileName() {
 		return messageFileName;
 	}
 
+	/** 画像ディレクトリ名を返す。 */
 	public String getImageDirName() {
 		return imageDirName;
 	}
@@ -94,10 +97,18 @@ public enum YukkuriType {
 		return nameE;
 	}
 
+	/** ゆっくり種別の数値 ID を返す。 */
 	public int getTypeID() {
 		return typeID;
 	}
 
+	/**
+	 * From class name.
+	 *
+	 * @param className the class name
+	 *
+	 * @return From class name
+	 */
 	public static YukkuriType fromClassName(String className) {
 		if (className == null) {
 			return null;
@@ -105,10 +116,24 @@ public enum YukkuriType {
 		return BY_CLASS_NAME.get(className);
 	}
 
+	/**
+	 * From type id.
+	 *
+	 * @param typeID the type id
+	 *
+	 * @return From type id
+	 */
 	public static YukkuriType fromTypeID(int typeID) {
 		return BY_TYPE_ID.get(Integer.valueOf(typeID));
 	}
 
+	/**
+	 * Normalize offspring type.
+	 *
+	 * @param typeID the type id
+	 *
+	 * @return Normalize offspring type
+	 */
 	public static YukkuriType normalizeOffspringType(YukkuriType typeID) {
 		switch (typeID) {
 			case DOSMARISA:

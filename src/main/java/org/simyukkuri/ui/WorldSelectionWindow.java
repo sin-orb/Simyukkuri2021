@@ -53,14 +53,17 @@ public class WorldSelectionWindow extends JDialog implements ActionListener, Win
 			this.filePath = path;
 		}
 
+		/** @return ワールドの表示名 */
 		public String getDisplayName() {
 			return displayName;
 		}
 
+		/** @return ワールドのファイルパス */
 		public String getFilePath() {
 			return filePath;
 		}
 
+		/** @return ワールドの表示名 */
 		public String toString() {
 			return this.displayName;
 		}
@@ -97,6 +100,7 @@ public class WorldSelectionWindow extends JDialog implements ActionListener, Win
 		pack();
 	}
 
+	/** @param e ボタン押下イベント */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		int idx = -1;
@@ -116,6 +120,7 @@ public class WorldSelectionWindow extends JDialog implements ActionListener, Win
 		MyPane.setSelectedYukkuri(null);
 	}
 
+	/** ウィンドウ表示時に現在のワールド選択ボタンを選択状態にする。 */
 	@Override
 	public void windowOpened(WindowEvent e) {
 		Point pos = SimYukkuri.simYukkuri.getLocation();
@@ -123,6 +128,7 @@ public class WorldSelectionWindow extends JDialog implements ActionListener, Win
 		butList[GameWorld.get().getCurrentWorldState().getWorldIndex()].setSelected(true);
 	}
 
+	/** ウィンドウを閉じるときにツールボタンの選択を解除する。 */
 	@Override
 	public void windowClosing(WindowEvent e) {
 		MainCommandUI.getPlayerButton()[ToolButtonLabel.MOVE.ordinal()].setSelected(false);

@@ -56,26 +56,32 @@ public class SuperEatingTimeEvent extends EventPacket {
 		setHighPriority();
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public SuperEatingTimeEvent() {
 
 	}
 
+	/** イベントの進行ティックカウンタを返す。 */
 	public int getTick() {
 		return tick;
 	}
 
+	/** イベントの進行ティックカウンタをセットする。 */
 	public void setTick(int tick) {
 		this.tick = tick;
 	}
 
+	/** 次フェーズまでの待機ティック数を返す。 */
 	public int getWaitTicks() {
 		return waitTicks;
 	}
 
+	/** 待機ティック数をセットする。 */
 	public void setWaitTicks(int waitTicks) {
 		this.waitTicks = waitTicks;
 	}
 
+	/** ゆっくり以外のエンティティに対する簡易参加チェック。 */
 	@Override
 	public boolean simpleEventAction(Yukkuri b) {
 		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
@@ -88,6 +94,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 	// 参加チェック
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
+	/** イベントへの参加可否を判定し、参加可能なら true を返す。 */
 	@Override
 	public boolean checkEventResponse(Yukkuri b) {
 		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
@@ -130,23 +137,28 @@ public class SuperEatingTimeEvent extends EventPacket {
 	}
 
 	// イベント開始動作
+	/** イベント開始時の初期化処理。 */
 	@Override
 	public void start(Yukkuri b) {
 		b.setCurrentEvent(this);
 	}
 
+	/** 最小ステップ数を返す。 */
 	public int getMinimumStep() {
 		return minimumStep;
 	}
 
+	/** 最小ステップ数をセットする。 */
 	public void setMinimumStep(int minimumStep) {
 		this.minimumStep = minimumStep;
 	}
 
+	/** イベントの進行ステートを返す。 */
 	public STATE getState() {
 		return state;
 	}
 
+	/** イベントの進行ステートをセットする。 */
 	public void setState(STATE state) {
 		this.state = state;
 	}
@@ -154,6 +166,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 	// 毎フレーム処理
 	// trueを返すとイベント終了
 	// 親→子供→次のステート、の順で処理をする
+	/** 毎ティック状態を更新する。 */
 	@Override
 	public UpdateState update(Yukkuri b) {
 		b.clearActionsForEvent();
@@ -507,11 +520,13 @@ public class SuperEatingTimeEvent extends EventPacket {
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	/** イベント終了判定を行い true で終了する。 */
 	@Override
 	public boolean execute(Yukkuri b) {
 		return false;
 	}
 
+	/** イベント名の文字列表現を返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("event_super");

@@ -32,6 +32,9 @@ public class Diffuser extends WorldEntity {
 
 	private static final long serialVersionUID = -1780241956081220439L;
 
+	/**
+	 * SteamType enum type.
+	 */
 	public static enum SteamType {
 		ANTI_FUNGAL(GameText.read("item_preventionmold"), 0),
 		STEAM(GameText.read("item_water"), 1),
@@ -57,10 +60,12 @@ public class Diffuser extends WorldEntity {
 			this.steamColor = col;
 		}
 
+		/** enum 名の文字列表現を返す。 */
 		public String toString() {
 			return name;
 		}
 
+		/** スチームの色コードを返す。 */
 		public int getColor() {
 			return steamColor;
 		}
@@ -84,6 +89,7 @@ public class Diffuser extends WorldEntity {
 		boundary.setY(boundary.getHeight() - 1);
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (enabled) {
@@ -94,6 +100,7 @@ public class Diffuser extends WorldEntity {
 		return 1;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
@@ -105,6 +112,7 @@ public class Diffuser extends WorldEntity {
 		return boundary;
 	}
 
+	/** 毎ティックの状態更新を行う。 */
 	@Override
 	public void upDate() {
 		if (!enabled)
@@ -130,6 +138,7 @@ public class Diffuser extends WorldEntity {
 		}
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		GameWorld.get().getCurrentWorldState().getDiffusers().remove(objId);
@@ -163,6 +172,7 @@ public class Diffuser extends WorldEntity {
 		}
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Diffuser() {
 
 	}
@@ -202,14 +212,17 @@ public class Diffuser extends WorldEntity {
 		return ret;
 	}
 
+	/** 同時に噴出するスチーム数を返す。 */
 	public int getSteamNum() {
 		return steamNum;
 	}
 
+	/** 同時に噴出するスチーム数をセットする。 */
 	public void setSteamNum(int steamNum) {
 		this.steamNum = steamNum;
 	}
 
+	/** 各スチームタイプの有効フラグ配列をセットする。 */
 	public void setSteamType(boolean[] steamType) {
 		this.steamType = steamType;
 	}

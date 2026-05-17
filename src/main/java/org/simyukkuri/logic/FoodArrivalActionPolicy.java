@@ -39,6 +39,16 @@ public final class FoodArrivalActionPolicy {
 		return handleArrivedFood(body, targetObject, forceEat, GameWorld.get().getCurrentWorldState());
 	}
 
+	/**
+	 * 到達した食べ物への摂食処理を行い、行動継続可否を返す。
+	 *
+	 * @param body ゆっくり
+	 * @param targetObject 対象エンティティ
+	 * @param forceEat 強制給餌フラグ
+	 * @param ws ワールド状態
+	 *
+	 * @return 摂食処理が完了した場合は true、キャンセルされた場合は false
+	 */
 	public static boolean handleArrivedFood(Yukkuri body, Entity targetObject, boolean[] forceEat, WorldState ws) {
 		boolean sweets = false;
 		boolean goodsweets = false;

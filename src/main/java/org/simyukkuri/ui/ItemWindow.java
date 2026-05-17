@@ -82,6 +82,11 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 
 	@SuppressWarnings("unchecked")
 	@Override
+	/**
+	 * Window opened.
+	 *
+	 * @param e イベント
+	 */
 	public void windowOpened(WindowEvent e) {
 		itemList.setModel(GameWorld.get().getPlayer().getInventoryView());
 		itemList.setSelectedIndex(-1);
@@ -90,32 +95,67 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 	}
 
 	@Override
+	/**
+	 * Window closing.
+	 *
+	 * @param e イベント
+	 */
 	public void windowClosing(WindowEvent e) {
 		MainCommandUI.getPlayerButton()[ToolButtonLabel.BAG.ordinal()].setSelected(false);
 		GameWorld.get().getPlayer().setHoldItem(null);
 	}
 
 	@Override
+	/**
+	 * Window closed.
+	 *
+	 * @param e イベント
+	 */
 	public void windowClosed(WindowEvent e) {
 	}
 
 	@Override
+	/**
+	 * Window iconified.
+	 *
+	 * @param e イベント
+	 */
 	public void windowIconified(WindowEvent e) {
 	}
 
 	@Override
+	/**
+	 * Window deiconified.
+	 *
+	 * @param e イベント
+	 */
 	public void windowDeiconified(WindowEvent e) {
 	}
 
 	@Override
+	/**
+	 * Window activated.
+	 *
+	 * @param e イベント
+	 */
 	public void windowActivated(WindowEvent e) {
 	}
 
 	@Override
+	/**
+	 * Window deactivated.
+	 *
+	 * @param e イベント
+	 */
 	public void windowDeactivated(WindowEvent e) {
 	}
 
 	@Override
+	/**
+	 * Mouse clicked.
+	 *
+	 * @param e イベント
+	 */
 	public void mouseClicked(MouseEvent e) {
 		if (itemList.getSelectedIndices().length == 1) {
 			int index = itemList.locationToIndex(e.getPoint());
@@ -126,18 +166,38 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 	}
 
 	@Override
+	/**
+	 * Mouse pressed.
+	 *
+	 * @param e イベント
+	 */
 	public void mousePressed(MouseEvent e) {
 	}
 
 	@Override
+	/**
+	 * Mouse released.
+	 *
+	 * @param e イベント
+	 */
 	public void mouseReleased(MouseEvent e) {
 	}
 
 	@Override
+	/**
+	 * Mouse entered.
+	 *
+	 * @param e イベント
+	 */
 	public void mouseEntered(MouseEvent e) {
 	}
 
 	@Override
+	/**
+	 * Mouse exited.
+	 *
+	 * @param e イベント
+	 */
 	public void mouseExited(MouseEvent e) {
 	}
 
@@ -164,20 +224,36 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 	}
 
 	@Override
+	/**
+	 * Interval added.
+	 *
+	 * @param e イベント
+	 */
 	public void intervalAdded(ListDataEvent e) {
 		itemList.setSelectedIndex(-1);
 	}
 
 	@Override
+	/**
+	 * Interval removed.
+	 *
+	 * @param e イベント
+	 */
 	public void intervalRemoved(ListDataEvent e) {
 		itemList.setSelectedIndex(-1);
 	}
 
 	@Override
+	/**
+	 * Contents changed.
+	 *
+	 * @param e イベント
+	 */
 	public void contentsChanged(ListDataEvent e) {
 		itemList.setSelectedIndex(-1);
 	}
 
+	/** @return インベントリ表示用のリストコンポーネント */
 	@SuppressWarnings("rawtypes")
 	public JList getInventoryView() {
 		return itemList;

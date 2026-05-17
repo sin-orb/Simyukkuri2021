@@ -103,12 +103,14 @@ public class Sui extends WorldEntity {
 		boundary.setY(boundary.getHeight() >> 1);
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		layer[0] = images[current_direction][current_condition];
 		return 1;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
@@ -269,6 +271,7 @@ public class Sui extends WorldEntity {
 		return boundary;
 	}
 
+	/** 衝突判定対象タイプを返す。 */
 	@Override
 	@Transient
 	public int getHitCheckObjType() {
@@ -276,10 +279,16 @@ public class Sui extends WorldEntity {
 	}
 
 	@Override
+	/**
+	 * Enable hit check.
+	 *
+	 * @return Enable hit check
+	 */
 	public boolean enableHitCheck() {
 		return true;
 	}
 
+	/** 衝突処理を行い、結果コードを返す。 */
 	@Override
 	public int objHitProcess(Entity o) {
 		Yukkuri b = (Yukkuri) o;
@@ -290,6 +299,7 @@ public class Sui extends WorldEntity {
 		return 0;
 	}
 
+	/** 毎ティックの状態更新を行う。 */
 	@Override
 	public void upDate() {
 		// 所有者がいるかつ消滅しているなら所有者をリセット
@@ -313,11 +323,13 @@ public class Sui extends WorldEntity {
 		}
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		GameWorld.get().getCurrentWorldState().getSuis().remove(objId);
 	}
 
+	/** 毎ティックの状態更新を行う。 */
 	@Override
 	public TickResult clockTick() {
 		setAge(getAge() + TICK);
@@ -496,6 +508,7 @@ public class Sui extends WorldEntity {
 		cost = 0;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Sui() {
 
 	}
@@ -523,82 +536,102 @@ public class Sui extends WorldEntity {
 		}
 	}
 
+	/** 現在バインドしているゆっくりの数を返す。 */
 	public int getCurrent_bindbody_num() {
 		return current_bindbody_num;
 	}
 
+	/** 現在バインドしているゆっくりの数をセットする。 */
 	public void setCurrent_bindbody_num(int current_bindbody_num) {
 		this.current_bindbody_num = current_bindbody_num;
 	}
 
+	/** 関連付けられているゆっくりを返す。 */
 	public Yukkuri[] getBoundYukkuri() {
 		return bindBody;
 	}
 
+	/** 関連付けるゆっくりをセットする。 */
 	public void setBoundYukkuri(Yukkuri[] bindBody) {
 		this.bindBody = bindBody;
 	}
 
+	/** 吸引対象のエンティティを返す。 */
 	public Entity getBindobj() {
 		return bindobj;
 	}
 
+	/** 吸引対象のエンティティをセットする。 */
 	public void setBindobj(Entity bindobj) {
 		this.bindobj = bindobj;
 	}
 
+	/** 現在の移動方向を返す。 */
 	public int getCurrent_direction() {
 		return current_direction;
 	}
 
+	/** 現在の移動方向をセットする。 */
 	public void setCurrent_direction(int current_direction) {
 		this.current_direction = current_direction;
 	}
 
+	/** 現在の動作状態を返す。 */
 	public int getCurrent_condition() {
 		return current_condition;
 	}
 
+	/** 現在の動作状態をセットする。 */
 	public void setCurrent_condition(int current_condition) {
 		this.current_condition = current_condition;
 	}
 
+	/** 移動目標の X 座標を返す。 */
 	public int getDestX() {
 		return destX;
 	}
 
+	/** 移動目標の X 座標をセットする。 */
 	public void setDestX(int destX) {
 		this.destX = destX;
 	}
 
+	/** 移動目標の Y 座標を返す。 */
 	public int getDestY() {
 		return destY;
 	}
 
+	/** 移動目標の Y 座標をセットする。 */
 	public void setDestY(int destY) {
 		this.destY = destY;
 	}
 
+	/** X 方向の移動ベクトルを返す。 */
 	public int getVecX() {
 		return vecX;
 	}
 
+	/** X 方向の移動ベクトルをセットする。 */
 	public void setVecX(int vecX) {
 		this.vecX = vecX;
 	}
 
+	/** Y 方向の移動ベクトルを返す。 */
 	public int getVecY() {
 		return vecY;
 	}
 
+	/** Y 方向の移動ベクトルをセットする。 */
 	public void setVecY(int vecY) {
 		this.vecY = vecY;
 	}
 
+	/** 移動速度を返す。 */
 	public int getSpeed() {
 		return speed;
 	}
 
+	/** 移動速度をセットする。 */
 	public void setSpeed(int speed) {
 		this.speed = speed;
 	}

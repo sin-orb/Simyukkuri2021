@@ -12,11 +12,11 @@ public final class YukkuriExcitementRule {
 	}
 
 	/**
-	 * Handle the exciting-body contact branch.
+	 * 興奮ゆっくりとの接触分岐を処理する。
 	 *
-	 * @param targetBody target body
-	 * @param actorBody  actor body
-	 * @return true when the branch consumed the action
+	 * @param targetBody 処理対象ゆっくり
+	 * @param actorBody  行動主体ゆっくり
+	 * @return 分岐が処理を消費した場合は true
 	 */
 	public static boolean handleExcitingContact(Yukkuri targetBody, Yukkuri actorBody) {
 		if (!actorBody.isExciting()) {

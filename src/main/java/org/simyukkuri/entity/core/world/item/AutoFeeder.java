@@ -60,6 +60,7 @@ public class AutoFeeder extends WorldEntity {
 			this.name = name;
 		}
 
+		/** enum 名の文字列表現を返す。 */
 		public String toString() {
 			return name;
 		}
@@ -77,6 +78,7 @@ public class AutoFeeder extends WorldEntity {
 			this.name = name;
 		}
 
+		/** enum 名の文字列表現を返す。 */
 		public String toString() {
 			return name;
 		}
@@ -109,6 +111,7 @@ public class AutoFeeder extends WorldEntity {
 		boundary.setY(boundary.getHeight() >> 1);
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (enabled) {
@@ -119,6 +122,7 @@ public class AutoFeeder extends WorldEntity {
 		return 1;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
@@ -134,6 +138,7 @@ public class AutoFeeder extends WorldEntity {
 		return boundary;
 	}
 
+	/** 衝突判定対象タイプを返す。 */
 	@Override
 	@Transient
 	public int getHitCheckObjType() {
@@ -141,20 +146,24 @@ public class AutoFeeder extends WorldEntity {
 	}
 
 	@Override
+	/** アイテムの購入価格を返す。 */
 	public int getValue() {
 		return value;
 	}
 
 	@Override
+	/** アイテムの設置コストを返す。 */
 	public int getCost() {
 		return cost;
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		GameWorld.get().getCurrentWorldState().getAutoFeeders().remove(objId);
 	}
 
+	/** 毎ティックの状態更新を行う。 */
 	@Override
 	public void upDate() {
 		if (!enabled)
@@ -285,6 +294,7 @@ public class AutoFeeder extends WorldEntity {
 		cost = 30;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public AutoFeeder() {
 
 	}
@@ -387,42 +397,52 @@ public class AutoFeeder extends WorldEntity {
 			feedingP = iniValue;
 	}
 
+	/** 給餌する食べ物の種類インデックスを返す。 */
 	public int getType() {
 		return type;
 	}
 
+	/** 給餌する食べ物の種類インデックスをセットする。 */
 	public void setType(int type) {
 		this.type = type;
 	}
 
+	/** 給餌モード（通常/定期）を返す。 */
 	public int getMode() {
 		return mode;
 	}
 
+	/** 給餌モードをセットする。 */
 	public void setMode(int mode) {
 		this.mode = mode;
 	}
 
+	/** 定期給餌の間隔（ティック数）を返す。 */
 	public int getFeedingInterval() {
 		return feedingInterval;
 	}
 
+	/** 定期給餌の間隔をセットする。 */
 	public void setFeedingInterval(int feedingInterval) {
 		this.feedingInterval = feedingInterval;
 	}
 
+	/** 給餌ポイント（投下位置）インデックスを返す。 */
 	public int getFeedingP() {
 		return feedingP;
 	}
 
+	/** 給餌ポイントをセットする。 */
 	public void setFeedingP(int feedingP) {
 		this.feedingP = feedingP;
 	}
 
+	/** ステージ上の食べ物リストを返す。 */
 	public Entity getFoods() {
 		return food;
 	}
 
+	/** ステージ上の食べ物をセットする。 */
 	public void setFoods(Entity food) {
 		this.food = food;
 	}

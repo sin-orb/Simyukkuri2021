@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * ImageSource interface.
+ */
 public interface ImageSource {
 	BufferedImage read(InputStream input) throws IOException;
 

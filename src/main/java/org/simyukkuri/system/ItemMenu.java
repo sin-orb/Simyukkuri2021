@@ -44,14 +44,29 @@ public class ItemMenu {
 			this.canDebug = debug;
 		}
 
+		/**
+		 * このターゲットに対して「持つ」操作が有効かどうかを返す。
+		 *
+		 * @return 「持つ」が有効なら true
+		 */
 		public boolean canPickup() {
 			return canPickup;
 		}
 
+		/**
+		 * このターゲットに対してステータス表示が有効かどうかを返す。
+		 *
+		 * @return ステータス表示が有効なら true
+		 */
 		public boolean canStatus() {
 			return canStatus;
 		}
 
+		/**
+		 * このターゲットに対してデバッグメニューが有効かどうかを返す。
+		 *
+		 * @return デバッグが有効なら true
+		 */
 		public boolean canDebug() {
 			return canDebug;
 		}
@@ -81,14 +96,29 @@ public class ItemMenu {
 			this.isFarm = farm;
 		}
 
+		/**
+		 * このシェイプターゲットで「設定変更」操作が有効かどうかを返す。
+		 *
+		 * @return 設定変更が有効なら true
+		 */
 		public boolean canSetup() {
 			return canSetup;
 		}
 
+		/**
+		 * このシェイプターゲットで「並び順変更」操作が有効かどうかを返す。
+		 *
+		 * @return 並び順変更が有効なら true
+		 */
 		public boolean canSort() {
 			return canSort;
 		}
 
+		/**
+		 * このシェイプターゲットが農場かどうかを返す。農場の場合は「収穫」メニューが表示される。
+		 *
+		 * @return 農場なら true
+		 */
 		public boolean isFarm() {
 			return isFarm;
 		}
@@ -105,6 +135,11 @@ public class ItemMenu {
 			this.name = str;
 		}
 
+		/**
+		 * このメニュー項目の表示名を返す。
+		 *
+		 * @return ロケールに応じた表示名
+		 */
 		public String getName() {
 			return name;
 		}
@@ -127,6 +162,11 @@ public class ItemMenu {
 			this.name = str;
 		}
 
+		/**
+		 * このメニュー項目の表示名を返す。
+		 *
+		 * @return ロケールに応じた表示名
+		 */
 		public String getName() {
 			return name;
 		}
@@ -152,6 +192,11 @@ public class ItemMenu {
 			this.name = str;
 		}
 
+		/**
+		 * このメニュー項目の表示名を返す。
+		 *
+		 * @return ロケールに応じた表示名
+		 */
 		public String getName() {
 			return name;
 		}
@@ -260,50 +305,110 @@ public class ItemMenu {
 		}
 	}
 
+	/**
+	 * 「持つ」ポップアップメニューを返す。
+	 *
+	 * @return 取得用ポップアップメニュー
+	 */
 	public static JPopupMenu getGetPopup() {
 		return getPopup;
 	}
 
+	/**
+	 * 「持つ」ポップアップメニューをセットする。
+	 *
+	 * @param getPopup 新しいポップアップメニュー
+	 */
 	public static void setGetPopup(JPopupMenu getPopup) {
 		ItemMenu.getPopup = getPopup;
 	}
 
+	/**
+	 * 「持つ」メニューの操作対象エンティティを返す。
+	 *
+	 * @return 現在の取得ターゲット
+	 */
 	public static Entity getGetTarget() {
 		return getTarget;
 	}
 
+	/**
+	 * 「持つ」メニューの操作対象エンティティをセットする。
+	 *
+	 * @param getTarget 新しい取得ターゲット
+	 */
 	public static void setGetTarget(Entity getTarget) {
 		ItemMenu.getTarget = getTarget;
 	}
 
+	/**
+	 * 「使う」ポップアップメニューを返す。
+	 *
+	 * @return 使用用ポップアップメニュー
+	 */
 	public static JPopupMenu getUsePopup() {
 		return usePopup;
 	}
 
+	/**
+	 * 「使う」ポップアップメニューをセットする。
+	 *
+	 * @param usePopup 新しいポップアップメニュー
+	 */
 	public static void setUsePopup(JPopupMenu usePopup) {
 		ItemMenu.usePopup = usePopup;
 	}
 
+	/**
+	 * 「使う」メニューの操作対象エンティティを返す。
+	 *
+	 * @return 現在の使用ターゲット
+	 */
 	public static Entity getUseTarget() {
 		return useTarget;
 	}
 
+	/**
+	 * 「使う」メニューの操作対象エンティティをセットする。
+	 *
+	 * @param useTarget 新しい使用ターゲット
+	 */
 	public static void setUseTarget(Entity useTarget) {
 		ItemMenu.useTarget = useTarget;
 	}
 
+	/**
+	 * シェイプ（バリア・水場・農場）操作用ポップアップメニューを返す。
+	 *
+	 * @return シェイプポップアップメニュー
+	 */
 	public static JPopupMenu getShapePopup() {
 		return shapePopup;
 	}
 
+	/**
+	 * シェイプ操作用ポップアップメニューをセットする。
+	 *
+	 * @param shapePopup 新しいポップアップメニュー
+	 */
 	public static void setShapePopup(JPopupMenu shapePopup) {
 		ItemMenu.shapePopup = shapePopup;
 	}
 
+	/**
+	 * シェイプメニューの操作対象フィールドシェイプを返す。
+	 *
+	 * @return 現在のシェイプターゲット
+	 */
 	public static FieldShape getShapeTarget() {
 		return shapeTarget;
 	}
 
+	/**
+	 * シェイプメニューの操作対象フィールドシェイプをセットする。
+	 *
+	 * @param shapeTarget 新しいシェイプターゲット
+	 */
 	public static void setShapeTarget(FieldShape shapeTarget) {
 		ItemMenu.shapeTarget = shapeTarget;
 	}

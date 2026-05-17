@@ -71,14 +71,17 @@ public class Steam extends Effect {
 		frames = 1;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Steam() {
 
 	}
 
+	/** スチームエフェクトの画像レイヤー配列を返す。 */
 	public static BufferedImage[] getImageLayers() {
 		return imageLayers;
 	}
 
+	/** スチームエフェクトの画像レイヤー配列をセットする。 */
 	public static void setImageLayers(BufferedImage[] imageLayers) {
 		Steam.imageLayers = imageLayers;
 	}

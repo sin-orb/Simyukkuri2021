@@ -37,6 +37,15 @@ public final class FoodTakeoutPolicy {
 		return checkTakeout(body, target, GameWorld.get().getCurrentWorldState());
 	}
 
+	/**
+	 * 持ち帰り行動の可否を判定して返す。
+	 *
+	 * @param body ゆっくり
+	 * @param target 対象エンティティ
+	 * @param ws ワールド状態
+	 *
+	 * @return 処理が実行された場合は true、それ以外は false
+	 */
 	public static boolean checkTakeout(Yukkuri body, Entity target, WorldState ws) {
 		if (body == null || target == null) {
 			return false;

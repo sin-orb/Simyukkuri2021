@@ -54,14 +54,17 @@ public class GarbageStation extends WorldEntity {
 			this.foodType = type;
 		}
 
+		/** ゴミ種別の表示名を返す。 */
 		public String getName() {
 			return name;
 		}
 
+		/** 対応する食べ物タイプを返す。 */
 		public FoodType getFoodType() {
 			return foodType;
 		}
 
+		/** enum 名の文字列表現を返す。 */
 		public String toString() {
 			return name;
 		}
@@ -119,6 +122,7 @@ public class GarbageStation extends WorldEntity {
 		boundary.setY(boundary.getHeight() - 1);
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		int ret = 2;
@@ -132,6 +136,7 @@ public class GarbageStation extends WorldEntity {
 		return ret;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
@@ -143,6 +148,7 @@ public class GarbageStation extends WorldEntity {
 		return boundary;
 	}
 
+	/** 毎ティックの状態更新を行う。 */
 	@Override
 	public void upDate() {
 		if (!enabled)
@@ -182,6 +188,7 @@ public class GarbageStation extends WorldEntity {
 		}
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		GameWorld.get().getCurrentWorldState().getGarbageStations().remove(objId);
@@ -209,6 +216,7 @@ public class GarbageStation extends WorldEntity {
 		}
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public GarbageStation() {
 
 	}
@@ -262,34 +270,42 @@ public class GarbageStation extends WorldEntity {
 			gettingP = iniValue;
 	}
 
+	/** 各ゴミ種別の有効フラグ配列を返す。 */
 	public boolean[] getEnable() {
 		return enable;
 	}
 
+	/** 各ゴミ種別の有効フラグ配列をセットする。 */
 	public void setEnable(boolean[] enable) {
 		this.enable = enable;
 	}
 
+	/** ステージ上の食べ物リストを返す。 */
 	public Entity[] getFoods() {
 		return food;
 	}
 
+	/** ステージ上の食べ物配列をセットする。 */
 	public void setFoods(Entity[] food) {
 		this.food = food;
 	}
 
+	/** ゴミ投下間隔（ティック数）を返す。 */
 	public int getThrowingTime() {
 		return throwingTime;
 	}
 
+	/** ゴミ投下間隔をセットする。 */
 	public void setThrowingTime(int throwingTime) {
 		this.throwingTime = throwingTime;
 	}
 
+	/** 投下先ポイントインデックスを返す。 */
 	public int getGettingP() {
 		return gettingP;
 	}
 
+	/** 投下先ポイントインデックスをセットする。 */
 	public void setGettingP(int gettingP) {
 		this.gettingP = gettingP;
 	}

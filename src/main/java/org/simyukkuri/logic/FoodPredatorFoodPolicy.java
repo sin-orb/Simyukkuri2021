@@ -34,6 +34,20 @@ public final class FoodPredatorFoodPolicy {
 				GameWorld.get().getCurrentWorldState());
 	}
 
+	/**
+	 * 捕食種として最適な食べ物を探索して返す。
+	 *
+	 * @param body ゆっくり
+	 * @param forceEat 強制給餌フラグ
+	 * @param wallMode 壁通過モード
+	 * @param nearestObject 最も近い候補エンティティ
+	 * @param nearestDeadObject 最も近い死体候補エンティティ
+	 * @param nearestDistance 現在の最短距離（二乗値）
+	 * @param looks 現在の最高外見評価値
+	 * @param ws ワールド状態
+	 *
+	 * @return 対象を発見した場合はそのオブジェクト、見つからない場合は null
+	 */
 	public static FoodSearchResult searchFood(Yukkuri body, boolean[] forceEat, int wallMode, Entity nearestObject,
 			Entity nearestDeadObject, int nearestDistance, int looks, WorldState ws) {
 		Entity result = nearestObject;
@@ -191,6 +205,9 @@ public final class FoodPredatorFoodPolicy {
 		return new FoodSearchResult(result, distanceLimit, bestLooks);
 	}
 
+	/**
+	 * FoodSearchResult.
+	 */
 	public static final class FoodSearchResult {
 		private final Entity nearestObject;
 		private final int nearestDistance;
@@ -202,14 +219,17 @@ public final class FoodPredatorFoodPolicy {
 			this.looks = looks;
 		}
 
+		/** 最も近い食べ物エンティティを返す。 */
 		public Entity getNearestObject() {
 			return nearestObject;
 		}
 
+		/** 最も近い食べ物との距離（二乗値）を返す。 */
 		public int getNearestDistance() {
 			return nearestDistance;
 		}
 
+		/** 最も評価の高い食べ物の外見評価値を返す。 */
 		public int getLooks() {
 			return looks;
 		}

@@ -51,13 +51,13 @@ public final class YukkuriPartnerSearchRule {
 	}
 
 	/**
-	 * Select the best search targets for the current body.
+	 * ゆっくりに対して最適なパートナー候補を選択して返す。
 	 *
-	 * @param b                 actor body
-	 * @param targetBody        current preferred body
-	 * @param minDistance       current minimum distance
-	 * @param secondMinDistance current second minimum distance
-	 * @return search result
+	 * @param b                 行動主体ゆっくり
+	 * @param targetBody        現在の優先候補ゆっくり
+	 * @param minDistance       現在の最短距離（二乗値）
+	 * @param secondMinDistance 現在の第二候補最短距離（二乗値）
+	 * @return パートナー検索結果
 	 */
 	public static SearchResult selectTargets(Yukkuri body, Yukkuri targetBody, int minDistance, int secondMinDistance) {
 		Yukkuri bodyHasOkazari = null;

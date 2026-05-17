@@ -41,6 +41,7 @@ public class Food extends WorldEntity {
 			fileName = fn;
 		}
 
+		/** 画像ファイル名を返す。 */
 		public String getFileName() {
 			return fileName;
 		}
@@ -98,26 +99,32 @@ public class Food extends WorldEntity {
 			shadow = sh;
 		}
 
+		/** 食べ物の販売価格を返す。 */
 		public int getValue() {
 			return value;
 		}
 
+		/** 外見評価値（ゆっくりが好むかの指標）を返す。 */
 		public int getLooks() {
 			return looks;
 		}
 
+		/** 初期の食べ物量を返す。 */
 		public int getAmount() {
 			return amount;
 		}
 
+		/** 画像ファイル名を返す。 */
 		public String getFileName() {
 			return fileName;
 		}
 
+		/** 空になったときの画像タイプを返す。 */
 		public EmptyImage getEmptyImg() {
 			return emptyImg;
 		}
 
+		/** 影画像があるかを返す。 */
 		public boolean hasShadow() {
 			return shadow;
 		}
@@ -170,6 +177,7 @@ public class Food extends WorldEntity {
 
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (isEmpty()) {
@@ -197,6 +205,7 @@ public class Food extends WorldEntity {
 		return boundary[type.ordinal()];
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		GameWorld.get().getCurrentWorldState().getFoods().remove(objId);
@@ -204,10 +213,12 @@ public class Food extends WorldEntity {
 
 	@Override
 	@Transient
+	/** アイテムの購入価格を返す。 */
 	public int getValue() {
 		return foodType.getValue();
 	}
 
+	/** 食べ物の外見評価値を返す（FoodType から委譲）。 */
 	@Override
 	@Transient
 	public int getLooks() {
@@ -274,6 +285,7 @@ public class Food extends WorldEntity {
 		setRemoved(false);
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Food() {
 
 	}
@@ -300,19 +312,23 @@ public class Food extends WorldEntity {
 		}
 	}
 
+	/** 食べ物を蹴って飛ばす。 */
 	@Override
 	public void kick() {
 		kick(0, -8, -4);
 	}
 
+	/** アイテムの量・個数を返す。 */
 	public int getAmount() {
 		return amount;
 	}
 
+	/** アイテムの量・個数をセットする。 */
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
 
+	/** フードタイプをセットする。 */
 	public void setFoodType(FoodType foodType) {
 		this.foodType = foodType;
 	}

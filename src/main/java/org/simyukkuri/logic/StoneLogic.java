@@ -24,6 +24,12 @@ public class StoneLogic {
 		checkPubble(b, GameWorld.get().getCurrentWorldState());
 	}
 
+	/**
+	 * 石ぷっぷるとの当たり判定を処理する。
+	 *
+	 * @param b ゆっくり
+	 * @param ws ワールド状態
+	 */
 	public static final void checkPubble(Yukkuri b, WorldState ws) {
 		if (b == null) {
 			return;

@@ -67,6 +67,17 @@ public final class ImageLoadService {
 	private ImageLoadService() {
 	}
 
+	/**
+	 * 指定フラグに応じてゲーム画像を一括ロードする。
+	 *
+	 * @param pane     描画パネル
+	 * @param isBg     背景画像をロードするか
+	 * @param isItem   アイテム画像をロードするか
+	 * @param isEffect エフェクト画像をロードするか
+	 * @param isBody   ゆっくり画像をロードするか
+	 * @param isAttach アタッチメント画像をロードするか
+	 * @param isIni    INIデータをロードするか
+	 */
 	public static void loadImages(MyPane pane, boolean isBg, boolean isItem, boolean isEffect, boolean isBody,
 			boolean isAttach, boolean isIni) {
 		try {
@@ -194,6 +205,12 @@ public final class ImageLoadService {
 		}
 	}
 
+	/**
+	 * 指定種別のゆっくり画像をリフレクション経由でロードする。
+	 *
+	 * @param pane 描画パネル
+	 * @param type ゆっくり種別
+	 */
 	public static void loadYukkuriImage(MyPane pane, YukkuriType type) {
 		synchronized (SimYukkuri.lock) {
 			try {
@@ -212,6 +229,12 @@ public final class ImageLoadService {
 		}
 	}
 
+	/**
+	 * 指定パネルのクラスローダを返す。画像読み込みに使用する。
+	 *
+	 * @param pane 描画パネル
+	 * @return クラスローダ
+	 */
 	public static ClassLoader getImageLoader(MyPane pane) {
 		return pane.getClass().getClassLoader();
 	}

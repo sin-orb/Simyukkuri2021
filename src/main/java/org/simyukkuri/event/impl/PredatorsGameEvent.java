@@ -54,60 +54,74 @@ public class PredatorsGameEvent extends EventPacket {
 		super(f, t, tgt, cnt);
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public PredatorsGameEvent() {
 
 	}
 
+	/** イベントの進行ティックカウンタを返す。 */
 	public int getTick() {
 		return tick;
 	}
 
+	/** イベントの進行ティックカウンタをセットする。 */
 	public void setTick(int tick) {
 		this.tick = tick;
 	}
 
+	/** イベントの補助ティックカウンタを返す。 */
 	public int getTick2() {
 		return tick2;
 	}
 
+	/** イベントの補助ティックカウンタをセットする。 */
 	public void setTick2(int tick2) {
 		this.tick2 = tick2;
 	}
 
+	/** 遊びで使用するおもちゃ種別インデックスを返す。 */
 	public int getToys() {
 		return toy;
 	}
 
+	/** 遊びで使用するおもちゃ種別インデックスをセットする。 */
 	public void setToys(int toy) {
 		this.toy = toy;
 	}
 
+	/** 飛行ゲーム中かどうかを返す。 */
 	public boolean isFlyGame() {
 		return FlyGame;
 	}
 
+	/** 飛行ゲームフラグをセットする。 */
 	public void setFlyGame(boolean flyGame) {
 		this.FlyGame = flyGame;
 	}
 
+	/** 掴み動作中かどうかを返す。 */
 	public boolean isGrabbing() {
 		return grabbing;
 	}
 
+	/** 掴み動作フラグをセットする。 */
 	public void setGrabbing(boolean grabbing) {
 		this.grabbing = grabbing;
 	}
 
+	/** おやつ提供中かどうかを返す。 */
 	public boolean isSnack() {
 		return snack;
 	}
 
+	/** おやつ提供フラグをセットする。 */
 	public void setSnack(boolean snack) {
 		this.snack = snack;
 	}
 
 	// 参加チェック
 	// このイベントがスタートできるのはれみりゃ、ふらんのみ
+	/** イベントへの参加可否を判定し、参加可能なら true を返す。 */
 	@Override
 	public boolean checkEventResponse(Yukkuri b) {
 		priority = EventPriority.LOW;
@@ -172,6 +186,7 @@ public class PredatorsGameEvent extends EventPacket {
 	}
 
 	// イベント開始動作
+	/** イベント開始時の初期化処理。 */
 	@Override
 	public void start(Yukkuri b) {
 		b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GameStart), true);
@@ -179,6 +194,7 @@ public class PredatorsGameEvent extends EventPacket {
 
 	// 毎フレーム処理
 	// UpdateState.ABORTを返すとイベント終了
+	/** 毎ティック状態を更新する。 */
 	@Override
 	public UpdateState update(Yukkuri b) {
 		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
@@ -346,6 +362,7 @@ public class PredatorsGameEvent extends EventPacket {
 
 	// イベント目標に到着した際に呼ばれる(このイベントでは別挙動の扱いをしている)
 	// trueを返すとイベント終了
+	/** イベント終了判定を行い true で終了する。 */
 	@Override
 	public boolean execute(Yukkuri b) {
 		Yukkuri toy = org.simyukkuri.util.YukkuriLookup.getYukkuriById(this.toy);
@@ -398,6 +415,11 @@ public class PredatorsGameEvent extends EventPacket {
 
 	// イベント終了処理
 	@Override
+	/**
+	 * End.
+	 *
+	 * @param b the b
+	 */
 	public void end(Yukkuri b) {
 		b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GameEnd));
 		grabbing = false;
@@ -408,6 +430,7 @@ public class PredatorsGameEvent extends EventPacket {
 		}
 	}
 
+	/** イベント名の文字列表現を返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("event_pgame");

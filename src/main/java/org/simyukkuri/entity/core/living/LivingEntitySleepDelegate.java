@@ -11,6 +11,7 @@ import org.simyukkuri.util.GameRandom;
 public final class LivingEntitySleepDelegate {
 	private final LivingEntity body;
 
+	/** 指定の LivingEntity をラップしてデリゲートを初期化する。 */
 	public LivingEntitySleepDelegate(LivingEntity body) {
 		this.body = body;
 	}

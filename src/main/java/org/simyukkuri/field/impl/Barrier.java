@@ -52,11 +52,13 @@ public class Barrier extends FieldShape {
 		return color;
 	}
 
+	/** バリアの属性値（どんな壁か）を返す。 */
 	@Override
 	public int getAttribute() {
 		return attribute;
 	}
 
+	/** バリアの最小サイズを返す。 */
 	@Override
 	@Transient
 	public int getMinimumSize() {
@@ -121,6 +123,7 @@ public class Barrier extends FieldShape {
 		GameWorld.get().getCurrentWorldState().getBarriers().add(this);
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Barrier() {
 
 	}
@@ -130,6 +133,7 @@ public class Barrier extends FieldShape {
 		g2.drawLine(sx, sy, ex, ey);
 	}
 
+	/** シェイプの外形を描画する。 */
 	@Override
 	public void drawShape(Graphics2D g2) {
 		g2.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue()));

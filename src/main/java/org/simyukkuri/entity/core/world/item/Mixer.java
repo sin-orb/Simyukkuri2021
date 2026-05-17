@@ -56,6 +56,7 @@ public class Mixer extends WorldEntity {
 		boundary.setY(boundary.getHeight() >> 1);
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		Yukkuri bindBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(bind);
@@ -78,6 +79,7 @@ public class Mixer extends WorldEntity {
 		return 1;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
@@ -89,6 +91,7 @@ public class Mixer extends WorldEntity {
 		return boundary;
 	}
 
+	/** 衝突判定対象タイプを返す。 */
 	@Override
 	@Transient
 	public int getHitCheckObjType() {
@@ -96,6 +99,11 @@ public class Mixer extends WorldEntity {
 	}
 
 	@Override
+	/**
+	 * Enable hit check.
+	 *
+	 * @return Enable hit check
+	 */
 	public boolean enableHitCheck() {
 		Yukkuri bindBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(bind);
 		if (bindBody != null)
@@ -103,6 +111,7 @@ public class Mixer extends WorldEntity {
 		return true;
 	}
 
+	/** 衝突処理を行い、結果コードを返す。 */
 	@Override
 	public int objHitProcess(Entity o) {
 		if (!enabled)
@@ -118,6 +127,7 @@ public class Mixer extends WorldEntity {
 		return 1;
 	}
 
+	/** 毎ティックの状態更新を行う。 */
 	@Override
 	public void upDate() {
 		if (getAge() % 2400 == 0) {
@@ -204,6 +214,7 @@ public class Mixer extends WorldEntity {
 		}
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		Yukkuri bindBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(bind);
@@ -234,54 +245,67 @@ public class Mixer extends WorldEntity {
 		cost = 50;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Mixer() {
 
 	}
 
+	/** バインド（拘束）中のゆっくり数を返す。 */
 	public int getBind() {
 		return bind;
 	}
 
+	/** バインド中のゆっくり数をセットする。 */
 	public void setBind(int bind) {
 		this.bind = bind;
 	}
 
+	/** ミキサーで混入するエフェクト（効果）を返す。 */
 	public Effect getMix() {
 		return mix;
 	}
 
+	/** ミキサーで混入するエフェクトをセットする。 */
 	public void setMix(Effect mix) {
 		this.mix = mix;
 	}
 
+	/** 動作カウンター値を返す。 */
 	public int getCounter() {
 		return counter;
 	}
 
+	/** 動作カウンター値をセットする。 */
 	public void setCounter(int counter) {
 		this.counter = counter;
 	}
 
+	/** アイテムの量・個数を返す。 */
 	public int getAmount() {
 		return amount;
 	}
 
+	/** アイテムの量・個数をセットする。 */
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
 
+	/** 甘味レベルを返す。 */
 	public int getSweet() {
 		return sweet;
 	}
 
+	/** 甘味レベルをセットする。 */
 	public void setSweet(int sweet) {
 		this.sweet = sweet;
 	}
 
+	/** 病原体フラグを返す。 */
 	public boolean isSick() {
 		return sick;
 	}
 
+	/** 病原体フラグをセットする。 */
 	public void setSick(boolean sick) {
 		this.sick = sick;
 	}

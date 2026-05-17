@@ -59,62 +59,137 @@ public class ModLoader {
 	// 表情の別バージョンの最大数
 	private static final int maxImageVariantCount = 6;
 
+	/**
+	 * デフォルトの画像ルートディレクトリパスを返す。
+	 *
+	 * @return デフォルト画像ルートディレクトリパス
+	 */
 	public static String getDefaultImgRootDir() {
 		return DEFAULT_IMG_ROOT_DIR;
 	}
 
+	/**
+	 * デフォルトのデータディレクトリパスを返す。
+	 *
+	 * @return デフォルトデータディレクトリパス
+	 */
 	public static String getDefaultDataDir() {
 		return DEFAULT_DATA_DIR;
 	}
 
+	/**
+	 * Mod のルートディレクトリ名を返す。
+	 *
+	 * @return Mod ルートディレクトリ名
+	 */
 	public static String getModRootDir() {
 		return MOD_ROOT_DIR;
 	}
 
+	/**
+	 * Mod の背景画像ディレクトリ名を返す。
+	 *
+	 * @return Mod 背景ディレクトリ名
+	 */
 	public static String getModBackDir() {
 		return MOD_BACK_DIR;
 	}
 
+	/**
+	 * Mod のアイテム画像ディレクトリ名を返す。
+	 *
+	 * @return Mod アイテムディレクトリ名
+	 */
 	public static String getModItemDir() {
 		return MOD_ITEM_DIR;
 	}
 
+	/**
+	 * Mod のゆっくり画像ディレクトリ名を返す。
+	 *
+	 * @return Mod ゆっくりディレクトリ名
+	 */
 	public static String getModYukkuriDir() {
 		return MOD_BODY_DIR;
 	}
 
+	/**
+	 * 開発用データディレクトリ名を返す。
+	 *
+	 * @return 開発用データディレクトリ名
+	 */
 	public static String getDataDevDir() {
 		return DATA_DEV_DIR;
 	}
 
+	/**
+	 * ゆっくりメッセージデータディレクトリ名を返す。
+	 *
+	 * @return メッセージデータディレクトリ名
+	 */
 	public static String getDataMsgDir() {
 		return DATA_MSG_DIR;
 	}
 
+	/**
+	 * ゆっくり INI データディレクトリ名を返す。
+	 *
+	 * @return ゆっくり INI ディレクトリ名
+	 */
 	public static String getDataIniDir() {
 		return DATA_INI_DIR;
 	}
 
+	/**
+	 * アイテム INI データディレクトリ名を返す。
+	 *
+	 * @return アイテム INI ディレクトリ名
+	 */
 	public static String getDataItemIniDir() {
 		return DATA_ITEM_INI_DIR;
 	}
 
+	/**
+	 * ワールド INI データディレクトリ名を返す。
+	 *
+	 * @return ワールド INI ディレクトリ名
+	 */
 	public static String getDataWorldIniDir() {
 		return DATA_WORLD_INI_DIR;
 	}
 
+	/**
+	 * 野良ゆっくりを示すファイル名サフィックスを返す。
+	 *
+	 * @return 野良ゆっくりのファイル名サフィックス
+	 */
 	public static String getYkWordNora() {
 		return YK_WORD_NORA;
 	}
 
+	/**
+	 * 野性ゆっくりを示すファイル名サフィックスを返す。
+	 *
+	 * @return 野性ゆっくりのファイル名サフィックス
+	 */
 	public static String getYkWordYasei() {
 		return YK_WORD_YASEI;
 	}
 
+	/**
+	 * まりちゃ流しモード画像を示すファイル名サフィックスを返す。
+	 *
+	 * @return 流しモードのファイル名サフィックス
+	 */
 	public static String getYkWordNagasi() {
 		return YK_WORD_NAGASI;
 	}
 
+	/**
+	 * 表情の別バージョン画像の最大数を返す。
+	 *
+	 * @return 画像バリアント最大数
+	 */
 	public static int getMaxImgOtherVer() {
 		return maxImageVariantCount;
 	}
@@ -1043,22 +1118,39 @@ final class BodyImage {
 		imgOtherVer = new BufferedImage[2][ModLoader.getMaxImgOtherVer()];
 	}
 
+	/**
+	 * 左右の画像配列を返す。
+	 *
+	 * @return 画像配列（[0]左 [1]右）
+	 */
 	public BufferedImage[] getImg() {
 		return img;
 	}
 
+	/**
+	 * 左右のダミーフラグ配列を返す。
+	 *
+	 * @return ダミーフラグ配列（[0]左 [1]右）
+	 */
 	public boolean[] getIsDummy() {
 		return isDummy;
 	}
 
+	/** @return 右画像を左の反転で描画する場合 true */
 	public boolean isFlip() {
 		return isFlip;
 	}
 
+	/** @param flip 右画像を左の反転で描画するか */
 	public void setFlip(boolean flip) {
 		isFlip = flip;
 	}
 
+	/**
+	 * 左右の別バージョン画像配列を返す。
+	 *
+	 * @return 別バージョン画像配列（[左右][バージョン]）
+	 */
 	public BufferedImage[][] getImgOtherVer() {
 		return imgOtherVer;
 	}

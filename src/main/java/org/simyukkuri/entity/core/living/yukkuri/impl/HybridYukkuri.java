@@ -296,12 +296,14 @@ public class HybridYukkuri extends Yukkuri {
 		}
 	}
 
+	/** 画像が読み込み済みかを返す。 */
 	@Override
 	@Transient
 	public boolean isImageLoaded() {
 		return true;
 	}
 
+	/** 4体のどれいと自身のランクを同時にセットする。 */
 	@Override
 	public void setRank(YukkuriRank r) {
 		if (dorei != null) {
@@ -319,6 +321,7 @@ public class HybridYukkuri extends Yukkuri {
 		bodyRank = r;
 	}
 
+	/** 現在の表示状態に基づく画像をレイヤーにセットし、画像番号を返す。 */
 	@Override
 	public int getImage(int type, int direction, YukkuriLayer layer, int index) {
 		if (images == null || images[type] == null)
@@ -348,28 +351,33 @@ public class HybridYukkuri extends Yukkuri {
 	}
 
 	@Override
+	/** アタッチメントキーに対応する取り付け点座標を返す。 */
 	public Point4y[] getMountPoint(String key) {
 		return dorei.getMountPoint(key);
 	}
 
+	/** ゆっくりの種別を返す。 */
 	@Override
 	@Transient
 	public YukkuriType getType() {
 		return type;
 	}
 
+	/** 交配相手の種別に応じた混血種別を返す。 */
 	@Override
 	@Transient
 	public YukkuriType getHybridType(YukkuriType partnerType) {
 		return YukkuriType.HYBRIDYUKKURI;
 	}
 
+	/** 日本語名を返す。 */
 	@Override
 	@Transient
 	public String getNameJ() {
 		return nameJ;
 	}
 
+	/** 自分の呼び名（愛称優先、なければ種族名）を返す。 */
 	@Override
 	@Transient
 	public String getMyName() {
@@ -379,6 +387,7 @@ public class HybridYukkuri extends Yukkuri {
 		return nameJ;
 	}
 
+	/** ダメージ時の呼び名（設定あれば優先、なければ通常の呼び名）を返す。 */
 	@Override
 	@Transient
 	public String getMyNameD() {
@@ -388,21 +397,25 @@ public class HybridYukkuri extends Yukkuri {
 		return nameJ;
 	}
 
+	/** 英語名を返す。 */
 	@Override
 	public String getNameE() {
 		return nameE;
 	}
 
+	/** 追加の日本語名を返す。 */
 	@Override
 	public String getNameJ2() {
 		return nameJ2;
 	}
 
+	/** 追加の英語名を返す。 */
 	@Override
 	public String getNameE2() {
 		return nameE2;
 	}
 
+	/** ハイブリッドゆっくりかどうかを返す（常に true）。 */
 	@Override
 	@JsonIgnore
 	@Transient
@@ -418,11 +431,15 @@ public class HybridYukkuri extends Yukkuri {
 		setShitType(p1.getShitType());
 	}
 
+	/** ハイブリッドゆっくり のデフォルトコンストラクタ。 */
 	public HybridYukkuri() {
 
 	}
 
 	@Override
+	/**
+	 * Tune parameters.
+	 */
 	public void tuneParameters() {
 		/*
 		 * if (rnd.nextBoolean()) {
@@ -467,6 +484,7 @@ public class HybridYukkuri extends Yukkuri {
 		}
 	}
 
+	/** ワールドからこのゆっくりを除去する追加処理。 */
 	@Override
 	public void remove() {
 		super.remove();
@@ -476,58 +494,72 @@ public class HybridYukkuri extends Yukkuri {
 		dorei4.remove();
 	}
 
+	/** 1体目のどれいゆを返す。 */
 	public Yukkuri getDorei() {
 		return dorei;
 	}
 
+	/** 1体目のどれいゆをセットする。 */
 	public void setDorei(Yukkuri dorei) {
 		this.dorei = dorei;
 	}
 
+	/** 2体目のどれいゆを返す。 */
 	public Yukkuri getDorei2() {
 		return dorei2;
 	}
 
+	/** 2体目のどれいゆをセットする。 */
 	public void setDorei2(Yukkuri dorei2) {
 		this.dorei2 = dorei2;
 	}
 
+	/** 3体目のどれいゆを返す。 */
 	public Yukkuri getDorei3() {
 		return dorei3;
 	}
 
+	/** 3体目のどれいゆをセットする。 */
 	public void setDorei3(Yukkuri dorei3) {
 		this.dorei3 = dorei3;
 	}
 
+	/** 4体目のどれいゆを返す。 */
 	public Yukkuri getDorei4() {
 		return dorei4;
 	}
 
+	/** 4体目のどれいゆをセットする。 */
 	public void setDorei4(Yukkuri dorei4) {
 		this.dorei4 = dorei4;
 	}
 
+	/** 画像描画に使うゆっくり配列を返す。 */
 	public Yukkuri[] getImages() {
 		return images;
 	}
 
+	/** 画像描画に使うゆっくり配列をセットする。 */
 	public void setImages(Yukkuri[] images) {
 		this.images = images;
 	}
 
+	/** 日本語名をセットする。 */
 	public void setNameJ(String nameJ) {
 		this.nameJ = nameJ;
 	}
 
+	/** 英語名をセットする。 */
 	public void setNameE(String nameE) {
 		this.nameE = nameE;
 	}
 
+	/** 追加の日本語名をセットする。 */
 	public void setNameJ2(String nameJ2) {
 		this.nameJ2 = nameJ2;
 	}
 
+	/** 追加の英語名をセットする。 */
 	public void setNameE2(String nameE2) {
 		this.nameE2 = nameE2;
 	}

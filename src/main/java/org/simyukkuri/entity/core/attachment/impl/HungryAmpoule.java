@@ -83,6 +83,7 @@ public class HungryAmpoule extends Attachment {
 		}
 	}
 
+	/** 飢餓誘発アンプルのティック処理。食事中でなければ空腹度を急速に減少させる。 */
 	@Override
 	protected TickResult update() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
@@ -97,6 +98,7 @@ public class HungryAmpoule extends Attachment {
 		return TickResult.NONE;
 	}
 
+	/** 親ゆっくりの年齢層と向きに応じた画像を返す。 */
 	@Override
 	public BufferedImage getImage(Yukkuri b) {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
@@ -108,6 +110,7 @@ public class HungryAmpoule extends Attachment {
 		return images[pa.getAgeState().ordinal()][0];
 	}
 
+	/** 親ゆっくりの年齢層に応じて境界ボックスをリセットする。 */
 	@Override
 	public void resetBoundary() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
@@ -138,44 +141,54 @@ public class HungryAmpoule extends Attachment {
 		cost = 0;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public HungryAmpoule() {
 
 	}
 
+	/** アイテム名テキストを返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("item_hungry");
 	}
 
 	// テスト用静的アクセサ
+	/** 画像配列を返す。 */
 	public static BufferedImage[][] getImages() {
 		return images;
 	}
 
+	/** 画像配列をセットする。 */
 	public static void setImages(BufferedImage[][] images) {
 		HungryAmpoule.images = images;
 	}
 
+	/** 画像幅配列をセットする。 */
 	public static void setImgW(int[] imgW) {
 		HungryAmpoule.imgW = imgW;
 	}
 
+	/** 画像高さ配列をセットする。 */
 	public static void setImgH(int[] imgH) {
 		HungryAmpoule.imgH = imgH;
 	}
 
+	/** 画像原点 X 配列をセットする。 */
 	public static void setPivX(int[] pivX) {
 		HungryAmpoule.pivX = pivX;
 	}
 
+	/** 画像原点 Y 配列をセットする。 */
 	public static void setPivY(int[] pivY) {
 		HungryAmpoule.pivY = pivY;
 	}
 
+	/** 位置キー文字列を返す。 */
 	public static String getPosKey() {
 		return POS_KEY;
 	}
 
+	/** アタッチメントプロパティ配列を返す。 */
 	public static int[] getProperty() {
 		return property;
 	}

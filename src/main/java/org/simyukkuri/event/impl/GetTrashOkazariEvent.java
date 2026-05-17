@@ -26,6 +26,7 @@ public class GetTrashOkazariEvent extends EventPacket {
 		super(f, t, tgt, cnt);
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public GetTrashOkazariEvent() {
 
 	}
@@ -33,6 +34,7 @@ public class GetTrashOkazariEvent extends EventPacket {
 	// 参加チェック
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
+	/** イベントへの参加可否を判定し、参加可能なら true を返す。 */
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
 
@@ -41,12 +43,14 @@ public class GetTrashOkazariEvent extends EventPacket {
 	}
 
 	// イベント開始動作
+	/** イベントの開始処理を実行する。 */
 	@Override
 	public void start(Yukkuri body) {
 		Entity targetObject = body.takeMappedObj(this.target);
 		body.moveToEvent(this, targetObject.getX(), targetObject.getY());
 	}
 
+	/** 毎ティック状態を更新する。 */
 	@Override
 	public UpdateState update(Yukkuri body) {
 		Entity targetObject = body.takeMappedObj(this.target);
@@ -60,6 +64,7 @@ public class GetTrashOkazariEvent extends EventPacket {
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	/** イベント終了判定を行い true で終了する。 */
 	@Override
 	public boolean execute(Yukkuri body) {
 		Entity targetObject = body.takeMappedObj(this.target);
@@ -70,6 +75,7 @@ public class GetTrashOkazariEvent extends EventPacket {
 		return true;
 	}
 
+	/** イベント名の文字列表現を返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("event_trashokazari");

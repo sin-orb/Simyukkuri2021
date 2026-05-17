@@ -26,10 +26,12 @@ public class FavCopyEvent extends EventPacket {
 		super(fromBody, toBody, targetObject, count);
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public FavCopyEvent() {
 
 	}
 
+	/** ゆっくり以外のエンティティに対する簡易参加チェック。 */
 	@Override
 	public boolean simpleEventAction(Yukkuri body) {
 		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
@@ -52,20 +54,24 @@ public class FavCopyEvent extends EventPacket {
 		return true;
 	}
 
+	/** イベントへの参加可否を判定し、参加可能なら true を返す。 */
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
 		return false;
 	}
 
+	/** イベントの開始処理を実行する。 */
 	@Override
 	public void start(Yukkuri body) {
 	}
 
+	/** イベント終了判定を行い true で終了する。 */
 	@Override
 	public boolean execute(Yukkuri body) {
 		return true;
 	}
 
+	/** イベント名の文字列表現を返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("event_favcopy");

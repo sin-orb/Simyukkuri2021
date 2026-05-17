@@ -51,19 +51,23 @@ public class RaperReactionEvent extends EventPacket {
 		super(fromBody, toBody, targetObject, count);
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public RaperReactionEvent() {
 
 	}
 
+	/** ゆっくりの年齢（ティック）を返す。 */
 	public int getAge() {
 		return age;
 	}
 
+	/** ゆっくりの年齢をセットする。 */
 	public void setAge(int age) {
 		this.age = age;
 	}
 
 	// 参加チェック
+	/** イベントへの参加可否を判定し、参加可能なら true を返す。 */
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
 		// 最低限のチェックはRaperWakeupEventで済んでるんで省略
@@ -126,6 +130,7 @@ public class RaperReactionEvent extends EventPacket {
 	}
 
 	// イベント開始動作
+	/** イベントの開始処理を実行する。 */
 	@Override
 	public void start(Yukkuri body) {
 		if (body.isNYD()) {
@@ -142,15 +147,18 @@ public class RaperReactionEvent extends EventPacket {
 		}
 	}
 
+	/** イベントの進行ステートを返す。 */
 	public ActionState getState() {
 		return state;
 	}
 
+	/** イベントの進行ステートをセットする。 */
 	public void setState(ActionState state) {
 		this.state = state;
 	}
 
 	// 毎フレーム処理
+	/** 毎ティック状態を更新する。 */
 	@Override
 	public UpdateState update(Yukkuri body) {
 		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
@@ -290,6 +298,7 @@ public class RaperReactionEvent extends EventPacket {
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	/** イベント終了判定を行い true で終了する。 */
 	@Override
 	public boolean execute(Yukkuri body) {
 		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
@@ -418,6 +427,7 @@ public class RaperReactionEvent extends EventPacket {
 		body.moveToEvent(this, vx, vy);
 	}
 
+	/** イベント名の文字列表現を返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("event_raperreaction");

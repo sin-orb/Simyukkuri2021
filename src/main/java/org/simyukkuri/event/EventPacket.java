@@ -101,6 +101,7 @@ abstract public class EventPacket implements java.io.Serializable {
 		count = cnt;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public EventPacket() {
 
 	}
@@ -286,30 +287,37 @@ abstract public class EventPacket implements java.io.Serializable {
 		return true;
 	}
 
+	/** イベント受信対象の objId を返す。 */
 	public int getTarget() {
 		return target;
 	}
 
+	/** イベント受信対象の objId をセットする。 */
 	public void setTarget(int target) {
 		this.target = target;
 	}
 
+	/** イベントの残有効回数を返す。 */
 	public int getCount() {
 		return count;
 	}
 
+	/** イベントの残有効回数をセットする。 */
 	public void setCount(int count) {
 		this.count = count;
 	}
 
+	/** イベント発信者の objId をセットする。 */
 	public void setFrom(int from) {
 		this.from = from;
 	}
 
+	/** イベント受信者の objId をセットする。 */
 	public void setTo(int to) {
 		this.to = to;
 	}
 
+	/** イベントの優先度をセットする。 */
 	public void setPriority(EventPriority priority) {
 		this.priority = priority;
 	}

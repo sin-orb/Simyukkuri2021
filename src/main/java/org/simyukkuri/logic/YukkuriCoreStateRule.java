@@ -10,6 +10,7 @@ public final class YukkuriCoreStateRule {
 	private YukkuriCoreStateRule() {
 	}
 
+	/** ゆっくりのダメージ量を評価してダメージ状態を返す。致死ダメージなら toDead() を呼び出す。 */
 	public static Damage getDamageState(Yukkuri body) {
 		int limit = body.getDamageLimitBase()[body.getAgeState().ordinal()];
 		int damage = body.getDamage();

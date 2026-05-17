@@ -16,13 +16,13 @@ public final class YukkuriDeadSearchRule {
 	}
 
 	/**
-	 * Handle the dead-body branch of partner search.
+	 * パートナー探索の死体分岐を処理する。
 	 *
-	 * @param actorBody  actor body
-	 * @param targetBody target dead body
-	 * @param colX       collision-adjusted x coordinate
-	 * @param mz         destination z coordinate
-	 * @return true when a branch consumed the action
+	 * @param actorBody  行動主体ゆっくり
+	 * @param targetBody 処理対象の死体ゆっくり
+	 * @param colX       衝突補正後のX座標
+	 * @param mz         目標Z座標
+	 * @return 分岐が処理を消費した場合は true
 	 */
 	public static boolean handleDeadFound(Yukkuri actorBody, Yukkuri targetBody, int colX, int mz) {
 		boolean handled = false;

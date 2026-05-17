@@ -62,14 +62,17 @@ public class Hit extends Effect {
 		frames = 4;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Hit() {
 
 	}
 
+	/** ヒットエフェクトの画像レイヤー配列を返す。 */
 	public static BufferedImage[][] getImageLayers() {
 		return imageLayers;
 	}
 
+	/** ヒットエフェクトの画像レイヤー配列をセットする。 */
 	public static void setImageLayers(BufferedImage[][] imageLayers) {
 		Hit.imageLayers = imageLayers;
 	}

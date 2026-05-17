@@ -17,11 +17,11 @@ public final class YukkuriUnunSlaveEmotionRule {
 	}
 
 	/**
-	 * Process the special emotion reaction for unun slave bodies.
+	 * うんうん奴隷ゆっくりの特殊感情反応を処理する。
 	 *
-	 * @param body       actor body
-	 * @param bodyTarget target body
-	 * @return true if a reaction was handled
+	 * @param body       行動主体ゆっくり
+	 * @param bodyTarget 処理対象ゆっくり
+	 * @return 反応が処理された場合は true
 	 */
 	public static boolean checkEmotionFromUnunSlave(Yukkuri body, Yukkuri bodyTarget) {
 		if (body == null || bodyTarget == null) {

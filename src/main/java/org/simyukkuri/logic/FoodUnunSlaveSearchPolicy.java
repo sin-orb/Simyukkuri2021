@@ -21,10 +21,27 @@ public final class FoodUnunSlaveSearchPolicy {
 	private FoodUnunSlaveSearchPolicy() {
 	}
 
+	/**
+	 * うんうん奴隷用の食べ物を探索して返す。
+	 *
+	 * @param body ゆっくり
+	 * @param forceEat 強制給餌フラグ
+	 *
+	 * @return 対象を発見した場合はそのオブジェクト、見つからない場合は null
+	 */
 	public static Entity searchFoodForUnunSlave(Yukkuri body, boolean[] forceEat) {
 		return searchFoodForUnunSlave(body, forceEat, GameWorld.get().getCurrentWorldState());
 	}
 
+	/**
+	 * うんうん奴隷用の食べ物を探索して返す。
+	 *
+	 * @param body ゆっくり
+	 * @param forceEat 強制給餌フラグ
+	 * @param ws ワールド状態
+	 *
+	 * @return 対象を発見した場合はそのオブジェクト、見つからない場合は null
+	 */
 	public static Entity searchFoodForUnunSlave(Yukkuri body, boolean[] forceEat, WorldState ws) {
 		Entity targetObject = null;
 		int minDistance = body.getEyesightBase();

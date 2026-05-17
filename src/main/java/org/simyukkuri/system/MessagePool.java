@@ -23,6 +23,10 @@ import org.simyukkuri.util.GameRandom;
  */
 public class MessagePool {
 	// アクション名定義
+	/**
+	 * ゆっくりが発話するアクション（状況）の種別。
+	 * ゆっくりが特定の行動・状態になったとき、対応するメッセージをここから引く。
+	 */
 	public enum Action {
 		/** 餌発見 */
 		WantFood,

@@ -30,6 +30,7 @@ public class BreedEvent extends EventPacket {
 		super(f, t, tgt, cnt);
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public BreedEvent() {
 
 	}
@@ -199,6 +200,7 @@ public class BreedEvent extends EventPacket {
 		}
 	}
 
+	/** イベント名の文字列表現を返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("event_welcomechild");

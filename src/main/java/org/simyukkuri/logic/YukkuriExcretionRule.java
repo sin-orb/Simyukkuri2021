@@ -11,6 +11,7 @@ public final class YukkuriExcretionRule {
 	private YukkuriExcretionRule() {
 	}
 
+	/** ゆっくりが下痢状態かどうかを確率判定して返す。 */
 	public static boolean getDiarrhea(Yukkuri body) {
 		if (body.getRank() == YukkuriRank.KAIYU) {
 			return true;

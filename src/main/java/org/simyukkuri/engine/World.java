@@ -49,42 +49,92 @@ public class World implements Serializable {
 	/** ワールド内のマップリスト */
 	private List<WorldState> mapList;
 
+	/**
+	 * 現在表示中のマップインデックスを返す。
+	 *
+	 * @return 現在のマップインデックス
+	 */
 	public int getCurrentWorldStateIndex() {
 		return currentMapIdx;
 	}
 
+	/**
+	 * 現在表示中のマップインデックスをセットする。
+	 *
+	 * @param currentMapIdx 新しいマップインデックス
+	 */
 	public void setCurrentWorldStateIndex(int currentMapIdx) {
 		this.currentMapIdx = currentMapIdx;
 	}
 
+	/**
+	 * ウィンドウタイプを返す。
+	 *
+	 * @return ウィンドウタイプ
+	 */
 	public int getWindowType() {
 		return windowType;
 	}
 
+	/**
+	 * ウィンドウタイプをセットする。
+	 *
+	 * @param windowType 新しいウィンドウタイプ
+	 */
 	public void setWindowType(int windowType) {
 		this.windowType = windowType;
 	}
 
+	/**
+	 * テラリウムサイズインデックスを返す。
+	 *
+	 * @return テラリウムサイズインデックス
+	 */
 	public int getTerrariumSizeIndex() {
 		return terrariumSizeIndex;
 	}
 
+	/**
+	 * テラリウムサイズインデックスをセットする。
+	 *
+	 * @param terrariumSizeIndex 新しいサイズインデックス
+	 */
 	public void setTerrariumSizeIndex(int terrariumSizeIndex) {
 		this.terrariumSizeIndex = terrariumSizeIndex;
 	}
 
+	/**
+	 * 全ワールドステートリストを返す。
+	 *
+	 * @return ワールドステートリスト
+	 */
 	public List<WorldState> getWorldStates() {
 		return mapList;
 	}
 
+	/**
+	 * ワールドステートリストをセットする。
+	 *
+	 * @param mapList 新しいワールドステートリスト
+	 */
 	public void setWorldStates(List<WorldState> mapList) {
 		this.mapList = mapList;
 	}
 
+	/**
+	 * シリアルバージョン UID を返す。
+	 *
+	 * @return シリアルバージョン UID
+	 */
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
 
+	/**
+	 * プレイヤーをセットする。
+	 *
+	 * @param player 新しいプレイヤー
+	 */
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
@@ -111,6 +161,9 @@ public class World implements Serializable {
 		}
 	}
 
+	/**
+	 * Jackson デシリアライズ用デフォルトコンストラクタ。
+	 */
 	public World() {
 		player = new Player();
 		nextMap = -1;
@@ -375,18 +428,38 @@ public class World implements Serializable {
 		return hitTargetGroupList;
 	}
 
+	/**
+	 * 割り当て済みオブジェクト ID の最大値を返す。
+	 *
+	 * @return オブジェクト ID 最大値
+	 */
 	public int getMaxObjId() {
 		return maxObjId;
 	}
 
+	/**
+	 * オブジェクト ID 最大値をセットする。
+	 *
+	 * @param maxObjId 新しいオブジェクト ID 最大値
+	 */
 	public void setMaxObjId(int maxObjId) {
 		this.maxObjId = maxObjId;
 	}
 
+	/**
+	 * 割り当て済みユニーク ID の最大値を返す。
+	 *
+	 * @return ユニーク ID 最大値
+	 */
 	public int getMaxUniqueId() {
 		return maxUniqueId;
 	}
 
+	/**
+	 * ユニーク ID 最大値をセットする。
+	 *
+	 * @param maxUniqueId 新しいユニーク ID 最大値
+	 */
 	public void setMaxUniqueId(int maxUniqueId) {
 		this.maxUniqueId = maxUniqueId;
 	}

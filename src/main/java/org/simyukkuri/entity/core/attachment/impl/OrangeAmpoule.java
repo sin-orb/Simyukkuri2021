@@ -83,6 +83,7 @@ public class OrangeAmpoule extends Attachment {
 		}
 	}
 
+	/** オレンジアンプルのティック処理。死亡ゆっくりを蘇生させ、ダメージを回復させる。 */
 	@Override
 	protected TickResult update() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
@@ -95,6 +96,7 @@ public class OrangeAmpoule extends Attachment {
 		return TickResult.NONE;
 	}
 
+	/** 親ゆっくりの年齢層と向きに応じた画像を返す。 */
 	@Override
 	public BufferedImage getImage(Yukkuri b) {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
@@ -106,6 +108,7 @@ public class OrangeAmpoule extends Attachment {
 		return images[pa.getAgeState().ordinal()][0];
 	}
 
+	/** 親ゆっくりの年齢層に応じて境界ボックスをリセットする。 */
 	@Override
 	public void resetBoundary() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
@@ -136,44 +139,54 @@ public class OrangeAmpoule extends Attachment {
 		cost = 0;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public OrangeAmpoule() {
 
 	}
 
+	/** アイテム名テキストを返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("item_orange");
 	}
 
 	// テスト用静的アクセサ
+	/** 画像配列を返す。 */
 	public static BufferedImage[][] getImages() {
 		return images;
 	}
 
+	/** 画像配列をセットする。 */
 	public static void setImages(BufferedImage[][] images) {
 		OrangeAmpoule.images = images;
 	}
 
+	/** 画像幅配列をセットする。 */
 	public static void setImgW(int[] imgW) {
 		OrangeAmpoule.imgW = imgW;
 	}
 
+	/** 画像高さ配列をセットする。 */
 	public static void setImgH(int[] imgH) {
 		OrangeAmpoule.imgH = imgH;
 	}
 
+	/** 画像原点 X 配列をセットする。 */
 	public static void setPivX(int[] pivX) {
 		OrangeAmpoule.pivX = pivX;
 	}
 
+	/** 画像原点 Y 配列をセットする。 */
 	public static void setPivY(int[] pivY) {
 		OrangeAmpoule.pivY = pivY;
 	}
 
+	/** 位置キー文字列を返す。 */
 	public static String getPosKey() {
 		return POS_KEY;
 	}
 
+	/** アタッチメントプロパティ配列を返す。 */
 	public static int[] getProperty() {
 		return property;
 	}

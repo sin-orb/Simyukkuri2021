@@ -7,6 +7,7 @@ package org.simyukkuri.entity.core.living;
 public final class LivingEntityHungerDelegate {
 	private final LivingEntity body;
 
+	/** 指定の LivingEntity をラップしてデリゲートを初期化する。 */
 	public LivingEntityHungerDelegate(LivingEntity body) {
 		this.body = body;
 	}

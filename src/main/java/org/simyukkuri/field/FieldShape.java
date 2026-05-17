@@ -180,60 +180,79 @@ public abstract class FieldShape implements Serializable {
 	abstract public int getMinimumSize();
 	/**配置時の境界線を描く*/
 	abstract public void drawShape(Graphics2D g2);
+	/** ワールドの横幅（マップ座標）を返す。 */
 	public int getWorldWidth() {
 		return mapW;
 	}
+	/** ワールドの横幅をセットする。 */
 	public void setWorldWidth(int worldWidth) {
 		this.mapW = worldWidth;
 	}
+	/** ワールドの縦幅（マップ座標）を返す。 */
 	public int getWorldHeight() {
 		return mapH;
 	}
+	/** ワールドの縦幅をセットする。 */
 	public void setWorldHeight(int worldHeight) {
 		this.mapH = worldHeight;
 	}
+	/** フィールド描画幅を返す。 */
 	public int getFieldW() {
 		return fieldW;
 	}
+	/** フィールド描画幅をセットする。 */
 	public void setFieldW(int fieldW) {
 		this.fieldW = fieldW;
 	}
+	/** フィールド描画高さを返す。 */
 	public int getFieldH() {
 		return fieldH;
 	}
+	/** フィールド描画高さをセットする。 */
 	public void setFieldH(int fieldH) {
 		this.fieldH = fieldH;
 	}
+	/** フィールドオブジェクトの経過ティック数を返す。 */
 	public long getAge() {
 		return age;
 	}
+	/** フィールドオブジェクトの経過ティック数をセットする。 */
 	public void setAge(long age) {
 		this.age = age;
 	}
+	/** 配置起点の X 座標（マップ座標）をセットする。 */
 	public void setStartX(int mapSX) {
 		this.mapSX = mapSX;
 	}
+	/** 配置起点の Y 座標（マップ座標）をセットする。 */
 	public void setStartY(int mapSY) {
 		this.mapSY = mapSY;
 	}
+	/** 配置終点の X 座標（マップ座標）をセットする。 */
 	public void setEndX(int mapEX) {
 		this.mapEX = mapEX;
 	}
+	/** 配置終点の Y 座標（マップ座標）をセットする。 */
 	public void setEndY(int mapEY) {
 		this.mapEY = mapEY;
 	}
+	/** フィールド起点の X 座標をセットする。 */
 	public void setFieldSX(int fieldSX) {
 		this.fieldSX = fieldSX;
 	}
+	/** フィールド起点の Y 座標をセットする。 */
 	public void setFieldSY(int fieldSY) {
 		this.fieldSY = fieldSY;
 	}
+	/** フィールド終点の X 座標をセットする。 */
 	public void setFieldEX(int fieldEX) {
 		this.fieldEX = fieldEX;
 	}
+	/** フィールド終点の Y 座標をセットする。 */
 	public void setFieldEY(int fieldEY) {
 		this.fieldEY = fieldEY;
 	}
+	/** 削除済みフラグをセットする。 */
 	public void setRemoved(boolean removed) {
 		this.removed = removed;
 	}

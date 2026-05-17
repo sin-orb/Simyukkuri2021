@@ -83,6 +83,7 @@ public class StopAmpoule extends Attachment {
 		}
 	}
 
+	/** 成長抑制アンプルのティック処理。成体でなければ経過時間を巻き戻し成長を抑制する。 */
 	@Override
 	protected TickResult update() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
@@ -94,6 +95,7 @@ public class StopAmpoule extends Attachment {
 		return TickResult.NONE;
 	}
 
+	/** 親ゆっくりの年齢層と向きに応じた画像を返す。 */
 	@Override
 	public BufferedImage getImage(Yukkuri b) {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
@@ -105,6 +107,7 @@ public class StopAmpoule extends Attachment {
 		return images[pa.getAgeState().ordinal()][0];
 	}
 
+	/** 親ゆっくりの年齢層に応じて境界ボックスをリセットする。 */
 	@Override
 	public void resetBoundary() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
@@ -137,44 +140,54 @@ public class StopAmpoule extends Attachment {
 		processInterval = 100;
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public StopAmpoule() {
 
 	}
 
+	/** アイテム名テキストを返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("item_stop");
 	}
 
 	// テスト用静的アクセサ
+	/** 画像配列を返す。 */
 	public static BufferedImage[][] getImages() {
 		return images;
 	}
 
+	/** 画像配列をセットする。 */
 	public static void setImages(BufferedImage[][] images) {
 		StopAmpoule.images = images;
 	}
 
+	/** 画像幅配列をセットする。 */
 	public static void setImgW(int[] imgW) {
 		StopAmpoule.imgW = imgW;
 	}
 
+	/** 画像高さ配列をセットする。 */
 	public static void setImgH(int[] imgH) {
 		StopAmpoule.imgH = imgH;
 	}
 
+	/** 画像原点 X 配列をセットする。 */
 	public static void setPivX(int[] pivX) {
 		StopAmpoule.pivX = pivX;
 	}
 
+	/** 画像原点 Y 配列をセットする。 */
 	public static void setPivY(int[] pivY) {
 		StopAmpoule.pivY = pivY;
 	}
 
+	/** 位置キー文字列を返す。 */
 	public static String getPosKey() {
 		return POS_KEY;
 	}
 
+	/** アタッチメントプロパティ配列を返す。 */
 	public static int[] getProperty() {
 		return property;
 	}

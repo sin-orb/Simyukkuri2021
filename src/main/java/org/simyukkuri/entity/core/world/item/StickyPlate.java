@@ -45,6 +45,7 @@ public class StickyPlate extends WorldEntity {
 			this.name = name;
 		}
 
+		/** enum 名の文字列表現を返す。 */
 		public String toString() {
 			return name;
 		}
@@ -74,6 +75,7 @@ public class StickyPlate extends WorldEntity {
 		boundary.setY(boundary.getHeight() >> 1);
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (itemRank == ItemRank.HOUSE) {
@@ -90,6 +92,7 @@ public class StickyPlate extends WorldEntity {
 		return 1;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
@@ -101,6 +104,7 @@ public class StickyPlate extends WorldEntity {
 		return boundary;
 	}
 
+	/** 衝突判定対象タイプを返す。 */
 	@Override
 	@Transient
 	public int getHitCheckObjType() {
@@ -108,16 +112,23 @@ public class StickyPlate extends WorldEntity {
 	}
 
 	@Override
+	/**
+	 * Enable hit check.
+	 *
+	 * @return Enable hit check
+	 */
 	public boolean enableHitCheck() {
 		if (bindBody != null)
 			return false;
 		return true;
 	}
 
+	/** 関連付けられているゆっくりを返す。 */
 	public Yukkuri getBoundYukkuri() {
 		return bindBody;
 	}
 
+	/** 衝突処理を行い、結果コードを返す。 */
 	@Override
 	public int objHitProcess(Entity o) {
 		if (((Yukkuri) o).isDead())
@@ -150,6 +161,7 @@ public class StickyPlate extends WorldEntity {
 		return 0;
 	}
 
+	/** 毎ティックの状態更新を行う。 */
 	@Override
 	public void upDate() {
 		if (!enabled && bindBody != null) {
@@ -186,6 +198,7 @@ public class StickyPlate extends WorldEntity {
 		}
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		if (bindBody != null) {
@@ -226,6 +239,7 @@ public class StickyPlate extends WorldEntity {
 		}
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public StickyPlate() {
 
 	}
@@ -264,22 +278,27 @@ public class StickyPlate extends WorldEntity {
 		return ret;
 	}
 
+	/** 粘着板の裏面固定かを返す。 */
 	public boolean isFixBack() {
 		return fixBack;
 	}
 
+	/** ゆっくりを後ろ向きに固定するかをセットする。 */
 	public void setFixBack(boolean fixBack) {
 		this.fixBack = fixBack;
 	}
 
+	/** アイテムのランク（品質）を返す。 */
 	public ItemRank getItemRank() {
 		return itemRank;
 	}
 
+	/** アイテムのランク（品質）をセットする。 */
 	public void setItemRank(ItemRank itemRank) {
 		this.itemRank = itemRank;
 	}
 
+	/** 関連付けるゆっくりをセットする。 */
 	public void setBoundYukkuri(Yukkuri bindBody) {
 		this.bindBody = bindBody;
 	}

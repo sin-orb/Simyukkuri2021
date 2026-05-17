@@ -34,11 +34,13 @@ public class RevengeAttackEvent extends EventPacket {
 		super(f, t, tgt, cnt);
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public RevengeAttackEvent() {
 
 	}
 
 	// 参加チェック
+	/** イベントへの参加可否を判定し、参加可能なら true を返す。 */
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
 		setHighPriority();
@@ -48,6 +50,7 @@ public class RevengeAttackEvent extends EventPacket {
 	}
 
 	// イベント開始動作
+	/** イベントの開始処理を実行する。 */
 	@Override
 	public void start(Yukkuri body) {
 		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
@@ -66,6 +69,7 @@ public class RevengeAttackEvent extends EventPacket {
 
 	// 毎フレーム処理
 	// UpdateState.ABORTを返すとイベント終了
+	/** 毎ティック状態を更新する。 */
 	@Override
 	public UpdateState update(Yukkuri body) {
 		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
@@ -83,6 +87,7 @@ public class RevengeAttackEvent extends EventPacket {
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	/** イベント終了判定を行い true で終了する。 */
 	@Override
 	public boolean execute(Yukkuri body) {
 		// 動けない場合と、ランダムであきらめる
@@ -111,6 +116,7 @@ public class RevengeAttackEvent extends EventPacket {
 		return true;
 	}
 
+	/** イベント名の文字列表現を返す。 */
 	@Override
 	public String toString() {
 		return GameText.read("event_revenge");

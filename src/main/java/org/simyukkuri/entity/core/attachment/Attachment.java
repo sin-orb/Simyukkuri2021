@@ -95,6 +95,10 @@ public abstract class Attachment extends Entity {
 		parent = body.getUniqueID();
 	}
 
+	/**
+	 * デシリアライズ用のデフォルトコンストラクタ。
+	 * 年齢ごとの描画オフセット配列を初期化する。
+	 */
 	public Attachment() {
 		posOfs = new Point4y[3];
 	}
@@ -136,66 +140,147 @@ public abstract class Attachment extends Entity {
 		return ret;
 	}
 
+	/**
+	 * アタッチメントが装着されているゆっくりのユニークIDを返す。
+	 *
+	 * @return 親ゆっくりのユニークID
+	 */
 	public int getParent() {
 		return parent;
 	}
 
+	/**
+	 * 親ゆっくりのユニークIDを設定する。
+	 *
+	 * @param parent 親ゆっくりのユニークID
+	 */
 	public void setParent(int parent) {
 		this.parent = parent;
 	}
 
+	/**
+	 * アニメーションが進行中かどうかを返す。
+	 *
+	 * @return アニメーション中なら true
+	 */
 	public boolean isAnimate() {
 		return animate;
 	}
 
+	/**
+	 * アニメーションの進行フラグを設定する。
+	 *
+	 * @param animate true でアニメーションを有効にする
+	 */
 	public void setAnimate(boolean animate) {
 		this.animate = animate;
 	}
 
+	/**
+	 * 現在表示中のアニメーションフレーム番号を返す。
+	 *
+	 * @return アニメーションフレーム番号
+	 */
 	public int getAnimeFrame() {
 		return animeFrame;
 	}
 
+	/**
+	 * アニメーションフレーム番号を設定する。
+	 *
+	 * @param animeFrame 表示するフレーム番号
+	 */
 	public void setAnimeFrame(int animeFrame) {
 		this.animeFrame = animeFrame;
 	}
 
+	/**
+	 * 次のフレームに切り替わるまでの経過時間カウンタを返す。
+	 *
+	 * @return アニメーション間隔カウンタ
+	 */
 	public int getAnimeInterval() {
 		return animeInterval;
 	}
 
+	/**
+	 * アニメーション間隔カウンタを設定する。
+	 *
+	 * @param animeInterval アニメーション間隔カウンタ
+	 */
 	public void setAnimeInterval(int animeInterval) {
 		this.animeInterval = animeInterval;
 	}
 
+	/**
+	 * アニメーションの残りループ回数を返す。0 でアニメーション停止。
+	 *
+	 * @return 残りループ回数
+	 */
 	public int getAnimeLoop() {
 		return animeLoop;
 	}
 
+	/**
+	 * アニメーションのループ回数を設定する。0 を指定するとアニメーション停止。
+	 *
+	 * @param animeLoop ループ回数
+	 */
 	public void setAnimeLoop(int animeLoop) {
 		this.animeLoop = animeLoop;
 	}
 
+	/**
+	 * アタッチメントの描画プロパティ配列（画像サイズ比率・アニメ設定等）を返す。
+	 *
+	 * @return {@link org.simyukkuri.enums.AttachProperty} に対応した設定値の配列
+	 */
 	public int[] getAttachProperty() {
 		return attachProperty;
 	}
 
+	/**
+	 * アタッチメントの描画プロパティ配列を設定する。
+	 *
+	 * @param attachProperty {@link org.simyukkuri.enums.AttachProperty} に対応した設定値の配列
+	 */
 	public void setAttachProperty(int[] attachProperty) {
 		this.attachProperty = attachProperty;
 	}
 
+	/**
+	 * update() を呼び出す処理間隔（ティック数）を返す。
+	 * 初期値は 10（約1秒）。
+	 *
+	 * @return update() の呼び出し間隔（ティック数）
+	 */
 	public int getProcessInterval() {
 		return processInterval;
 	}
 
+	/**
+	 * update() を呼び出す処理間隔（ティック数）を設定する。
+	 *
+	 * @param processInterval update() の呼び出し間隔（ティック数）
+	 */
 	public void setProcessInterval(int processInterval) {
 		this.processInterval = processInterval;
 	}
 
+	/**
+	 * 年齢ごとの描画オフセット（赤ゆ・子ゆ・成ゆ）を格納した配列を返す。
+	 *
+	 * @return 年齢別描画オフセット配列
+	 */
 	public Point4y[] getPosOfs() {
 		return posOfs;
 	}
 
+	/**
+	 * 年齢ごとの描画オフセット配列を設定する。
+	 *
+	 * @param posOfs 年齢別描画オフセット配列
+	 */
 	public void setPosOfs(Point4y[] posOfs) {
 		this.posOfs = posOfs;
 	}

@@ -78,23 +78,28 @@ public class Player extends Entity {
 		itemList = inventory;
 	}
 
+	/** 現在手に持っているアイテムを返す。 */
 	public Entity getHoldItem() {
 		return holdItem;
 	}
 
+	/** 現在手に持つアイテムをセットする。 */
 	public void setHoldItem(Entity holdItem) {
 		this.holdItem = holdItem;
 	}
 
+	/** 所持アイテム一覧のビューモデルを返す。 */
 	@Transient
 	public DefaultListModel<Entity> getInventoryView() {
 		return itemList;
 	}
 
+	/** セーブ用アイテムリストを返す。 */
 	public List<Entity> getItemForSave() {
 		return itemForSave;
 	}
 
+	/** セーブ用アイテムリストをセットする。 */
 	public void setItemForSave(List<Entity> itemForSave) {
 		this.itemForSave = itemForSave;
 	}

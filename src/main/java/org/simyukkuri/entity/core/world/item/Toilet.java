@@ -45,6 +45,7 @@ public class Toilet extends WorldEntity {
 			this.name = name;
 		}
 
+		/** enum 名の文字列表現を返す。 */
 		public String toString() {
 			return name;
 		}
@@ -84,6 +85,7 @@ public class Toilet extends WorldEntity {
 		boundary.setY(boundary.getHeight() >> 1);
 	}
 
+	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (itemRank == ItemRank.HOUSE) {
@@ -107,6 +109,7 @@ public class Toilet extends WorldEntity {
 		return 1;
 	}
 
+	/** アイテムの影画像を返す。 */
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
@@ -118,6 +121,7 @@ public class Toilet extends WorldEntity {
 		return boundary;
 	}
 
+	/** 衝突判定対象タイプを返す。 */
 	@Override
 	@Transient
 	public int getHitCheckObjType() {
@@ -126,6 +130,7 @@ public class Toilet extends WorldEntity {
 		return 0;
 	}
 
+	/** エンティティの座標がトイレ矩形内にあるかを判定する。 */
 	public boolean checkHitObj(Entity targetObject) {
 		Rectangle tmpRect = new Rectangle();
 		getCollisionRect(tmpRect);
@@ -138,6 +143,7 @@ public class Toilet extends WorldEntity {
 		return false;
 	}
 
+	/** 矩形と対象エンティティでトイレ衝突判定を行い、autoClean 時は対象を除去する。 */
 	@Override
 	public boolean checkHitObj(Rectangle collisionRect, Entity targetObject) {
 		Rectangle tmpRect = new Rectangle();
@@ -154,6 +160,7 @@ public class Toilet extends WorldEntity {
 		return false;
 	}
 
+	/** ワールドからこのアイテムを除去する。 */
 	@Override
 	public void removeFromWorld() {
 		GameWorld.get().getCurrentWorldState().getToilets().remove(objId);
@@ -223,10 +230,12 @@ public class Toilet extends WorldEntity {
 		}
 	}
 
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
 	public Toilet() {
 
 	}
 
+	/** 衝突処理を行い、結果コードを返す。 */
 	public int objHitProcess(Entity targetObject) {
 		targetObject.remove();
 		Cash.addCash(-getCost());
@@ -271,10 +280,12 @@ public class Toilet extends WorldEntity {
 		return setupSucceeded;
 	}
 
+	/** アイテムのランク（品質）を返す。 */
 	public ItemRank getItemRank() {
 		return itemRank;
 	}
 
+	/** アイテムのランク（品質）をセットする。 */
 	public void setItemRank(ItemRank itemRank) {
 		this.itemRank = itemRank;
 	}
@@ -287,10 +298,12 @@ public class Toilet extends WorldEntity {
 	// this.forSlave = forSlave;
 	// }
 
+	/** どれいゆっくり専用トイレかどうかをセットする。 */
 	public void setForSlave(boolean forSlave) {
 		this.forSlave = forSlave;
 	}
 
+	/** うんうんを自動除去する自動洗浄モードをセットする。 */
 	public void setAutoClean(boolean autoClean) {
 		this.autoClean = autoClean;
 	}

@@ -2,6 +2,9 @@ package org.simyukkuri.util;
 
 import org.simyukkuri.engine.Terrarium;
 
+/**
+ * EnvironmentSource interface.
+ */
 public interface EnvironmentSource {
 	int getOperationTime();
 

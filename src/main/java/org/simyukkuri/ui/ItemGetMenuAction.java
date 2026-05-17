@@ -16,6 +16,7 @@ import org.simyukkuri.util.GameWorld;
  * 取得メニューの実行.
  */
 public final class ItemGetMenuAction implements ActionListener {
+	/** @param e アクションイベント */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		GetMenu m = GetMenu.valueOf(e.getActionCommand());
