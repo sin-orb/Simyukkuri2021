@@ -1,35 +1,28 @@
 package org.simyukkuri.item;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.world.item.ProcessorPlate;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.entity.core.world.item.ItemTestBase;
-import org.simyukkuri.enums.Numbering;
+import org.simyukkuri.entity.core.world.item.ProcessorPlate;
 import org.simyukkuri.enums.HairState;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
+import org.simyukkuri.enums.Numbering;
 import org.simyukkuri.util.WorldTestHelper;
-import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 
 class ProcessorPlateTest extends ItemTestBase {
 
@@ -351,7 +344,7 @@ class ProcessorPlateTest extends ItemTestBase {
     @Test
     void testConstructor_WithCoords_executesCode() {
         try {
-            ProcessorPlate item = new ProcessorPlate(100, 100, 0);
+            new ProcessorPlate(100, 100, 0);
         } catch (Exception e) {
             // Expected in headless environment (setupProcessorPlate fails)
         }

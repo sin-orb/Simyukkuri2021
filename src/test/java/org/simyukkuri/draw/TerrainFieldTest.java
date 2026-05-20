@@ -1,18 +1,5 @@
 package org.simyukkuri.draw;
 
-import org.simyukkuri.visual.TerrainBillboard;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-import org.simyukkuri.engine.ModLoader;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -31,10 +18,10 @@ import javax.imageio.ImageIO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-
-import org.simyukkuri.entity.core.Entity;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.ui.WorldSelectionWindow;
 import org.simyukkuri.util.WorldTestHelper;
+import org.simyukkuri.visual.TerrainBillboard;
 
 public class TerrainFieldTest {
 
@@ -42,8 +29,6 @@ public class TerrainFieldTest {
     Path tempDir;
 
     private static String originalJarPath;
-    private static String originalDevelopRoot;
-    private static String originalBackTheme;
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -56,10 +41,10 @@ public class TerrainFieldTest {
             originalJarPath = ModLoader.getJarPath();
             Field devField = ModLoader.class.getDeclaredField("developRoot");
             devField.setAccessible(true);
-            originalDevelopRoot = (String) devField.get(null);
+            // originalDevelopRoot = (String) devField.get(null);
             Field backField = ModLoader.class.getDeclaredField("backTheme");
             backField.setAccessible(true);
-            originalBackTheme = (String) backField.get(null);
+            // originalBackTheme = (String) backField.get(null);
         }
 
         // Setup ModLoader paths to tempDir

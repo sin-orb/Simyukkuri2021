@@ -1,26 +1,18 @@
 package org.simyukkuri.yukkuri;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import org.simyukkuri.ConstState;
 import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Alice;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.draw.Point4y;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 
 public class AliceTest {
 
@@ -57,9 +49,12 @@ public class AliceTest {
     public void testAliceHybridType() {
         Alice alice = new Alice();
         // Alice always returns Alice type regardless of partner
-        assertEquals(org.simyukkuri.enums.YukkuriType.ALICE, alice.getHybridType(org.simyukkuri.enums.YukkuriType.REIMU));
-        assertEquals(org.simyukkuri.enums.YukkuriType.ALICE, alice.getHybridType(org.simyukkuri.enums.YukkuriType.MARISA));
-        assertEquals(org.simyukkuri.enums.YukkuriType.ALICE, alice.getHybridType(org.simyukkuri.enums.YukkuriType.CHEN));
+        assertEquals(org.simyukkuri.enums.YukkuriType.ALICE,
+                alice.getHybridType(org.simyukkuri.enums.YukkuriType.REIMU));
+        assertEquals(org.simyukkuri.enums.YukkuriType.ALICE,
+                alice.getHybridType(org.simyukkuri.enums.YukkuriType.MARISA));
+        assertEquals(org.simyukkuri.enums.YukkuriType.ALICE,
+                alice.getHybridType(org.simyukkuri.enums.YukkuriType.CHEN));
     }
 
     @Test
@@ -162,7 +157,7 @@ public class AliceTest {
         Alice obj = new Alice();
         // getMountPoint returns attachment offset from map
         // Most classes return null for unknown keys
-        Point4y[] result = obj.getMountPoint("unknown_key");
+        obj.getMountPoint("unknown_key");
         // Result can be null or an array depending on initialization
         // Just verify the method doesn't crash
         assertNotNull(obj);
@@ -181,7 +176,7 @@ public class AliceTest {
 
             // checkTransform() checks if transformation should occur
             // Returns this if transformation triggered, null otherwise
-            org.simyukkuri.entity.core.living.yukkuri.Yukkuri result = obj.checkTransform();
+            obj.checkTransform();
 
             // Method should execute without crashing
             assertNotNull(obj);
@@ -195,7 +190,8 @@ public class AliceTest {
     @Test
     public void testAliceIsImageLoaded() {
         Alice obj = new Alice();
-        // isImageLoaded() reflects static image loader state, which may be changed by other tests.
+        // isImageLoaded() reflects static image loader state, which may be changed by
+        // other tests.
         assertDoesNotThrow(() -> obj.isImageLoaded());
     }
 
@@ -218,6 +214,7 @@ public class AliceTest {
             assertNotNull(obj);
         }
     }
+
     @Test
     public void testAliceJudgeCanTransForGodHandWhenUnbirth() {
         Alice obj = new Alice();
@@ -233,7 +230,7 @@ public class AliceTest {
         Alice parent2 = new Alice();
         Alice obj = new Alice(100, 100, 0, AgeState.ADULT, parent1, parent2);
         // Adult yukkuri - test transformation eligibility
-        boolean result = obj.judgeCanTransForGodHand();
+        obj.judgeCanTransForGodHand();
         // Result varies by class, just verify no crash
         assertNotNull(obj);
     }
@@ -244,40 +241,41 @@ public class AliceTest {
         Alice parent2 = new Alice();
         Alice obj = new Alice(100, 100, 0, AgeState.BABY, parent1, parent2);
         // Baby yukkuri - test transformation eligibility
-        boolean result = obj.judgeCanTransForGodHand();
+        obj.judgeCanTransForGodHand();
         // Result varies by class, just verify no crash
         assertNotNull(obj);
     }
+
     @Test
     public void testAliceKillTimeMultipleBranches() {
         try {
             org.simyukkuri.util.WorldTestHelper.initializeMinimalWorld();
-            
+
             Alice obj = new Alice();
-            
+
             // Test multiple branches by calling killTime with different RNG values
             // Each value hits a different branch in the if/else chain
-            
+
             // Branch 1: p <= 6 (values 0-6)
             SimYukkuri.RND = new org.simyukkuri.SequenceRNG(3);
             obj.killTime();
-            
+
             // Branch 2: p <= 14 (values 7-14)
             SimYukkuri.RND = new org.simyukkuri.SequenceRNG(10);
             obj.killTime();
-            
+
             // Branch 3: p <= 21 (values 15-21)
             SimYukkuri.RND = new org.simyukkuri.SequenceRNG(18);
             obj.killTime();
-            
+
             // Branch 4: p <= 28 (values 22-28)
             SimYukkuri.RND = new org.simyukkuri.SequenceRNG(25);
             obj.killTime();
-            
+
             // Branch 5: p > 28 (values 29-49)
             SimYukkuri.RND = new org.simyukkuri.SequenceRNG(35);
             obj.killTime();
-            
+
             assertNotNull(obj);
         } catch (Exception e) {
             // If World initialization fails, just verify object exists
@@ -311,14 +309,16 @@ public class AliceTest {
     @Test
     public void testLoadImages_headless_executesCode() {
         try {
-            // Set imageLoaded=true so loadImages exits via early-return path (fires JaCoCo probe)
+            // Set imageLoaded=true so loadImages exits via early-return path (fires JaCoCo
+            // probe)
             java.lang.reflect.Field fl = Alice.class.getDeclaredField("imageLoaded");
             fl.setAccessible(true);
             boolean oldVal = fl.getBoolean(null);
             fl.setBoolean(null, true);
             Alice.loadImages(Alice.class.getClassLoader(), null);
             fl.setBoolean(null, oldVal);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     @Test
@@ -328,7 +328,8 @@ public class AliceTest {
             fp.setAccessible(true);
             int ranks = org.simyukkuri.enums.YukkuriRank.values().length;
             java.awt.image.BufferedImage[][][][] pack = new java.awt.image.BufferedImage[ranks][200][20][20];
-            java.awt.image.BufferedImage dummy = new java.awt.image.BufferedImage(1, 1, java.awt.image.BufferedImage.TYPE_INT_ARGB);
+            java.awt.image.BufferedImage dummy = new java.awt.image.BufferedImage(1, 1,
+                    java.awt.image.BufferedImage.TYPE_INT_ARGB);
             for (int i = 0; i < ranks; i++)
                 for (int j = 0; j < 200; j++)
                     for (int k = 0; k < 20; k++)
@@ -338,19 +339,23 @@ public class AliceTest {
             Alice obj = new Alice();
             org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
             obj.getImage(0, 0, layer, 0);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     @Test
     public void testLoadIniFile_executesCode() {
         try {
             Alice.loadIniFile(Alice.class.getClassLoader());
-        } catch (Exception e) { } finally {
+        } catch (Exception e) {
+        } finally {
             try {
                 java.lang.reflect.Field fa = Alice.class.getDeclaredField("AttachOffset");
                 fa.setAccessible(true);
-                if (fa.get(null) == null) fa.set(null, new java.util.HashMap<>());
-            } catch (Exception e) { }
+                if (fa.get(null) == null)
+                    fa.set(null, new java.util.HashMap<>());
+            } catch (Exception e) {
+            }
         }
     }
 

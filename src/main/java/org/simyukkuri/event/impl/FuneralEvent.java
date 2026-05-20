@@ -9,8 +9,6 @@ import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.event.EventPacket;
-import org.simyukkuri.event.EventPacket.EventPriority;
-import org.simyukkuri.event.EventPacket.UpdateState;
 import org.simyukkuri.field.impl.Barrier;
 import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.system.MessagePool;

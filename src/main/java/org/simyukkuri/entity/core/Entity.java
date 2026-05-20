@@ -1,7 +1,6 @@
 package org.simyukkuri.entity.core;
 
 import java.beans.Transient;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
@@ -10,7 +9,6 @@ import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.Where;
@@ -662,37 +660,68 @@ public class Entity implements java.io.Serializable, Comparable {
 	}
 
 	private static Entity findEntityInAllMaps(WorldState m, int i) {
-		if (m.getAutoFeeders().containsKey(i)) return m.getAutoFeeders().get(i);
-		if (m.getBeds().containsKey(i)) return m.getBeds().get(i);
-		if (m.getBeltconveyorObjects().containsKey(i)) return m.getBeltconveyorObjects().get(i);
-		if (m.getBreedingPools().containsKey(i)) return m.getBreedingPools().get(i);
-		if (m.getDiffusers().containsKey(i)) return m.getDiffusers().get(i);
-		if (m.getFoods().containsKey(i)) return m.getFoods().get(i);
-		if (m.getFoodMakers().containsKey(i)) return m.getFoodMakers().get(i);
-		if (m.getFrontEffects().containsKey(i)) return m.getFrontEffects().get(i);
-		if (m.getGarbageChutes().containsKey(i)) return m.getGarbageChutes().get(i);
-		if (m.getGarbageStations().containsKey(i)) return m.getGarbageStations().get(i);
-		if (m.getHotPlates().containsKey(i)) return m.getHotPlates().get(i);
-		if (m.getHouses().containsKey(i)) return m.getHouses().get(i);
-		if (m.getMachinePresses().containsKey(i)) return m.getMachinePresses().get(i);
-		if (m.getMixers().containsKey(i)) return m.getMixers().get(i);
-		if (m.getOkazaris().containsKey(i)) return m.getOkazaris().get(i);
-		if (m.getOrangePools().containsKey(i)) return m.getOrangePools().get(i);
-		if (m.getProcessorPlates().containsKey(i)) return m.getProcessorPlates().get(i);
-		if (m.getProductChutes().containsKey(i)) return m.getProductChutes().get(i);
-		if (m.getShit().containsKey(i)) return m.getShit().get(i);
-		if (m.getSortedEffects().containsKey(i)) return m.getSortedEffects().get(i);
-		if (m.getStalks().containsKey(i)) return m.getStalks().get(i);
-		if (m.getStickyPlates().containsKey(i)) return m.getStickyPlates().get(i);
-		if (m.getStones().containsKey(i)) return m.getStones().get(i);
-		if (m.getSuis().containsKey(i)) return m.getSuis().get(i);
-		if (m.getToilets().containsKey(i)) return m.getToilets().get(i);
-		if (m.getToys().containsKey(i)) return m.getToys().get(i);
-		if (m.getTrampolines().containsKey(i)) return m.getTrampolines().get(i);
-		if (m.getTrashObjects().containsKey(i)) return m.getTrashObjects().get(i);
-		if (m.getVomit().containsKey(i)) return m.getVomit().get(i);
-		if (m.getYunbas().containsKey(i)) return m.getYunbas().get(i);
-		if (m.getYukkuriRegistry().containsKey(i)) return m.getYukkuriRegistry().get(i);
+		if (m.getAutoFeeders().containsKey(i))
+			return m.getAutoFeeders().get(i);
+		if (m.getBeds().containsKey(i))
+			return m.getBeds().get(i);
+		if (m.getBeltconveyorObjects().containsKey(i))
+			return m.getBeltconveyorObjects().get(i);
+		if (m.getBreedingPools().containsKey(i))
+			return m.getBreedingPools().get(i);
+		if (m.getDiffusers().containsKey(i))
+			return m.getDiffusers().get(i);
+		if (m.getFoods().containsKey(i))
+			return m.getFoods().get(i);
+		if (m.getFoodMakers().containsKey(i))
+			return m.getFoodMakers().get(i);
+		if (m.getFrontEffects().containsKey(i))
+			return m.getFrontEffects().get(i);
+		if (m.getGarbageChutes().containsKey(i))
+			return m.getGarbageChutes().get(i);
+		if (m.getGarbageStations().containsKey(i))
+			return m.getGarbageStations().get(i);
+		if (m.getHotPlates().containsKey(i))
+			return m.getHotPlates().get(i);
+		if (m.getHouses().containsKey(i))
+			return m.getHouses().get(i);
+		if (m.getMachinePresses().containsKey(i))
+			return m.getMachinePresses().get(i);
+		if (m.getMixers().containsKey(i))
+			return m.getMixers().get(i);
+		if (m.getOkazaris().containsKey(i))
+			return m.getOkazaris().get(i);
+		if (m.getOrangePools().containsKey(i))
+			return m.getOrangePools().get(i);
+		if (m.getProcessorPlates().containsKey(i))
+			return m.getProcessorPlates().get(i);
+		if (m.getProductChutes().containsKey(i))
+			return m.getProductChutes().get(i);
+		if (m.getShit().containsKey(i))
+			return m.getShit().get(i);
+		if (m.getSortedEffects().containsKey(i))
+			return m.getSortedEffects().get(i);
+		if (m.getStalks().containsKey(i))
+			return m.getStalks().get(i);
+		if (m.getStickyPlates().containsKey(i))
+			return m.getStickyPlates().get(i);
+		if (m.getStones().containsKey(i))
+			return m.getStones().get(i);
+		if (m.getSuis().containsKey(i))
+			return m.getSuis().get(i);
+		if (m.getToilets().containsKey(i))
+			return m.getToilets().get(i);
+		if (m.getToys().containsKey(i))
+			return m.getToys().get(i);
+		if (m.getTrampolines().containsKey(i))
+			return m.getTrampolines().get(i);
+		if (m.getTrashObjects().containsKey(i))
+			return m.getTrashObjects().get(i);
+		if (m.getVomit().containsKey(i))
+			return m.getVomit().get(i);
+		if (m.getYunbas().containsKey(i))
+			return m.getYunbas().get(i);
+		if (m.getYukkuriRegistry().containsKey(i))
+			return m.getYukkuriRegistry().get(i);
 		return null;
 	}
 

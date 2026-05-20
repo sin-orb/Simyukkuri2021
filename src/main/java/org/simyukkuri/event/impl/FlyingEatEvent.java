@@ -8,8 +8,6 @@ import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.event.EventPacket;
-import org.simyukkuri.event.EventPacket.EventPriority;
-import org.simyukkuri.event.EventPacket.UpdateState;
 import org.simyukkuri.logic.FoodLogic;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;

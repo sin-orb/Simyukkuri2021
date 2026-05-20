@@ -1,7 +1,6 @@
 package org.simyukkuri.entity.core.living;
 
 import org.simyukkuri.entity.core.attachment.impl.Badge;
-import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Damage;
 import org.simyukkuri.event.EventPacket;

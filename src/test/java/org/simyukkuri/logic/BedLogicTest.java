@@ -1,40 +1,23 @@
 package org.simyukkuri.logic;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.logic.BedLogic;
-import org.simyukkuri.util.WorldTestHelper;
-import org.simyukkuri.entity.core.living.yukkuri.impl.Marisa;
+import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.item.Bed;
 import org.simyukkuri.entity.core.world.item.House;
-import org.simyukkuri.entity.core.world.item.Toilet;
-import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.PublicRank;
-import org.simyukkuri.entity.core.Entity;
+import org.simyukkuri.util.WorldTestHelper;
 
 class BedLogicTest {
 
@@ -64,7 +47,7 @@ class BedLogicTest {
         bed.setY(150);
         SimYukkuri.world.getCurrentWorldState().getBeds().put(bed.getObjId(), bed);
 
-        boolean result = BedLogic.checkBed(body);
+        BedLogic.checkBed(body);
         // This might depend on implementation details of checkBed (distance etc.)
         // But with sleeping=true, it should try to find a bed.
     }

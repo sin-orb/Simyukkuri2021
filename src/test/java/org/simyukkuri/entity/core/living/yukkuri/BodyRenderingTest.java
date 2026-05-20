@@ -1,29 +1,20 @@
 package org.simyukkuri.entity.core.living.yukkuri;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.engine.World;
-import org.simyukkuri.enums.*;
-import org.simyukkuri.system.YukkuriLayer;
-import org.simyukkuri.draw.Point4y;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.reflect.Field;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.engine.World;
+import org.simyukkuri.enums.CoreAnkoState;
+import org.simyukkuri.enums.CriticalDamageType;
+import org.simyukkuri.enums.Damage;
+import org.simyukkuri.enums.ImageCode;
+import org.simyukkuri.system.YukkuriLayer;
 
 public class BodyRenderingTest {
 

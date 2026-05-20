@@ -1,24 +1,11 @@
 package org.simyukkuri.util;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.Dna;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -28,8 +15,8 @@ import org.simyukkuri.enums.CoreAnkoState;
 import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Direction;
 import org.simyukkuri.enums.HairState;
-import org.simyukkuri.system.WorldState;
 import org.simyukkuri.system.Sprite;
+import org.simyukkuri.system.WorldState;
 
 public class BodyUtilTest {
 
@@ -45,7 +32,8 @@ public class BodyUtilTest {
             java.lang.reflect.Field imagePackField = org.simyukkuri.entity.core.living.yukkuri.impl.Marisa.class
                     .getDeclaredField("imagePack");
             imagePackField.setAccessible(true);
-            BufferedImage[][][][] dummyPack = new BufferedImage[org.simyukkuri.enums.YukkuriRank.values().length][200][20][20];
+            BufferedImage[][][][] dummyPack = new BufferedImage[org.simyukkuri.enums.YukkuriRank
+                    .values().length][200][20][20];
             BufferedImage dummyImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
             for (int i = 0; i < dummyPack.length; i++) {
                 for (int j = 0; j < 200; j++) {
@@ -175,7 +163,8 @@ public class BodyUtilTest {
         try {
             java.lang.reflect.Field mapBodyField = WorldState.class.getDeclaredField("body");
             mapBodyField.setAccessible(true);
-            ((Map<Integer, Yukkuri>) mapBodyField.get(SimYukkuri.world.getCurrentWorldState())).put(parent.getUniqueID(),
+            ((Map<Integer, Yukkuri>) mapBodyField.get(SimYukkuri.world.getCurrentWorldState())).put(
+                    parent.getUniqueID(),
                     parent);
         } catch (Exception e) {
         }

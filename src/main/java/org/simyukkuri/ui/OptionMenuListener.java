@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.util.Map;
 
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.system.MainCommandSelection;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
 import org.simyukkuri.util.IniFileUtil;

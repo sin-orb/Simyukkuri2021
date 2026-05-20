@@ -39,7 +39,7 @@ import org.simyukkuri.util.GameWorld;
 import org.simyukkuri.visual.TerrainBillboard;
 
 final class Renderer {
-
+	@SuppressWarnings("incomplete-switch")
 	void render(MyPane pane, Graphics g) {
 		synchronized (SimYukkuri.lock) {
 			WorldState map = GameWorld.get().getCurrentWorldState();

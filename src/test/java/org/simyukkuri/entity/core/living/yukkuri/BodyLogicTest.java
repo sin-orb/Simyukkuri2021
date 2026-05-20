@@ -1,32 +1,20 @@
 package org.simyukkuri.entity.core.living.yukkuri;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Test;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.*;
-
+import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.draw.MyPane;
 import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.world.mobile.Vomit;
-import org.simyukkuri.draw.MyPane;
-import org.simyukkuri.engine.Terrarium;
+import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.system.WorldState;
-import org.simyukkuri.enums.*;
-import java.lang.reflect.Method;
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.LinkedList;
 
 public class BodyLogicTest {
 
@@ -108,7 +96,7 @@ public class BodyLogicTest {
     }
 
     @Test
-	public void testPruneRemovedFamilyMembers() throws Exception {
+    public void testPruneRemovedFamilyMembers() throws Exception {
         StubBody sister = new StubBody();
         sister.setObjId(2);
         gameMap.getYukkuriRegistry().put(2, sister);
@@ -121,7 +109,7 @@ public class BodyLogicTest {
         body.getSisters().add(2);
         body.getChildren().add(3);
 
-		Method m = Yukkuri.class.getDeclaredMethod("pruneRemovedFamilyMembers");
+        Method m = Yukkuri.class.getDeclaredMethod("pruneRemovedFamilyMembers");
         m.setAccessible(true);
         m.invoke(body);
 

@@ -1,19 +1,5 @@
 package org.simyukkuri.util;
 
-
-
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,7 +19,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
 import org.simyukkuri.ConstState;
 import org.simyukkuri.SequenceRNG;
 import org.simyukkuri.SimYukkuri;
@@ -171,7 +156,8 @@ public class YukkuriUtilTest {
 
             // This will likely return null without actual bodies in the map
             // but should not crash. Use Integer.MIN_VALUE as ID that can't be assigned.
-            org.simyukkuri.entity.core.living.yukkuri.Yukkuri body = org.simyukkuri.util.YukkuriLookup.getYukkuriById(Integer.MIN_VALUE);
+            org.simyukkuri.entity.core.living.yukkuri.Yukkuri body = org.simyukkuri.util.YukkuriLookup
+                    .getYukkuriById(Integer.MIN_VALUE);
 
             // Null is expected for non-existent ID
             assertNull(body);
@@ -335,11 +321,14 @@ public class YukkuriUtilTest {
     @Test
     public void testChangeBody_CopiesBodySpriteSetDeeply() throws Exception {
         Reimu from = new Reimu();
-        org.simyukkuri.system.Sprite[] bodySpr = new org.simyukkuri.system.Sprite[] { new org.simyukkuri.system.Sprite(), new org.simyukkuri.system.Sprite(),
+        org.simyukkuri.system.Sprite[] bodySpr = new org.simyukkuri.system.Sprite[] {
+                new org.simyukkuri.system.Sprite(), new org.simyukkuri.system.Sprite(),
                 new org.simyukkuri.system.Sprite() };
-        org.simyukkuri.system.Sprite[] expandSpr = new org.simyukkuri.system.Sprite[] { new org.simyukkuri.system.Sprite(), new org.simyukkuri.system.Sprite(),
+        org.simyukkuri.system.Sprite[] expandSpr = new org.simyukkuri.system.Sprite[] {
+                new org.simyukkuri.system.Sprite(), new org.simyukkuri.system.Sprite(),
                 new org.simyukkuri.system.Sprite() };
-        org.simyukkuri.system.Sprite[] braidSpr = new org.simyukkuri.system.Sprite[] { new org.simyukkuri.system.Sprite(), new org.simyukkuri.system.Sprite(),
+        org.simyukkuri.system.Sprite[] braidSpr = new org.simyukkuri.system.Sprite[] {
+                new org.simyukkuri.system.Sprite(), new org.simyukkuri.system.Sprite(),
                 new org.simyukkuri.system.Sprite() };
         bodySpr[0].setImageW(11);
         expandSpr[0].setImageW(22);
@@ -526,7 +515,8 @@ public class YukkuriUtilTest {
         assertTrue(type >= 0);
     }
 
-    private static void copyTransformedBody(org.simyukkuri.entity.core.living.yukkuri.Yukkuri to, org.simyukkuri.entity.core.living.yukkuri.Yukkuri from) {
+    private static void copyTransformedBody(org.simyukkuri.entity.core.living.yukkuri.Yukkuri to,
+            org.simyukkuri.entity.core.living.yukkuri.Yukkuri from) {
         TransformationBodyCopier.copy(to, from);
         TransformationPolicy.normalizeTransformedAge(to, from);
     }
@@ -535,77 +525,77 @@ public class YukkuriUtilTest {
     class RegressionScenarios {
 
         @Test
-    void testScenario_DosParentRandomTypeFallsBackToConcreteMarisaSubtype() {
-        DosMarisa parent = new DosMarisa();
-        SimYukkuri.RND = new SequenceRNG(2, 1);
-        YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(parent);
+        void testScenario_DosParentRandomTypeFallsBackToConcreteMarisaSubtype() {
+            DosMarisa parent = new DosMarisa();
+            SimYukkuri.RND = new SequenceRNG(2, 1);
+            YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(parent);
 
-        assertEquals(YukkuriType.MARISAKOTATSUMURI, type);
-    }
-
-        @Test
-    void testScenario_NullParentRareRollYieldsSpecificRareType() {
-        SimYukkuri.RND = new SequenceRNG(0, 11, 4);
-
-        YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(null);
-
-        assertEquals(YukkuriType.MEIRIN, type);
-    }
+            assertEquals(YukkuriType.MARISAKOTATSUMURI, type);
+        }
 
         @Test
-    void testScenario_NonDosParentKeepsItsOwnTypeOnParentBranch() {
-        Reimu parent = new Reimu();
-        SimYukkuri.RND = new SequenceRNG(2);
+        void testScenario_NullParentRareRollYieldsSpecificRareType() {
+            SimYukkuri.RND = new SequenceRNG(0, 11, 4);
 
-        YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(parent);
+            YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(null);
 
-        assertEquals(parent.getType(), type);
-    }
-
-        @Test
-    void testScenario_NullParentParentBranchCanYieldPlainMyon() {
-        SimYukkuri.RND = new SequenceRNG(4, 5);
-
-        YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(null);
-
-        assertEquals(YukkuriType.MYON, type);
-    }
+            assertEquals(YukkuriType.MEIRIN, type);
+        }
 
         @Test
-    void testScenario_RandomBranchMapsAliceSlotToArisu() {
-        SimYukkuri.RND = new SequenceRNG(0, 3);
+        void testScenario_NonDosParentKeepsItsOwnTypeOnParentBranch() {
+            Reimu parent = new Reimu();
+            SimYukkuri.RND = new SequenceRNG(2);
 
-        YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(null);
+            YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(parent);
 
-        assertEquals(YukkuriType.ALICE, type);
-    }
-
-        @Test
-    void testScenario_RandomBranchCanYieldSpecificRareType() {
-        SimYukkuri.RND = new SequenceRNG(1, 11, 7);
-
-        YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(null);
-
-        assertEquals(YukkuriType.EIKI, type);
-    }
+            assertEquals(parent.getType(), type);
+        }
 
         @Test
-    void testScenario_ChangelingCanYieldRareSubtype() {
-        SimYukkuri.RND = new SequenceRNG(0, 4);
+        void testScenario_NullParentParentBranchCanYieldPlainMyon() {
+            SimYukkuri.RND = new SequenceRNG(4, 5);
 
-        YukkuriType type = YukkuriBirthTypeResolver.getChangelingBabyType();
+            YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(null);
 
-        assertEquals(YukkuriType.MEIRIN, type);
-    }
+            assertEquals(YukkuriType.MYON, type);
+        }
 
         @Test
-    void testScenario_ChangelingCanYieldDeibuFromReimuBranch() {
-        SimYukkuri.RND = new SequenceRNG(1, 1, 3);
+        void testScenario_RandomBranchMapsAliceSlotToArisu() {
+            SimYukkuri.RND = new SequenceRNG(0, 3);
 
-        YukkuriType type = YukkuriBirthTypeResolver.getChangelingBabyType();
+            YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(null);
 
-        assertEquals(YukkuriType.DEIBU, type);
-    }
+            assertEquals(YukkuriType.ALICE, type);
+        }
+
+        @Test
+        void testScenario_RandomBranchCanYieldSpecificRareType() {
+            SimYukkuri.RND = new SequenceRNG(1, 11, 7);
+
+            YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(null);
+
+            assertEquals(YukkuriType.EIKI, type);
+        }
+
+        @Test
+        void testScenario_ChangelingCanYieldRareSubtype() {
+            SimYukkuri.RND = new SequenceRNG(0, 4);
+
+            YukkuriType type = YukkuriBirthTypeResolver.getChangelingBabyType();
+
+            assertEquals(YukkuriType.MEIRIN, type);
+        }
+
+        @Test
+        void testScenario_ChangelingCanYieldDeibuFromReimuBranch() {
+            SimYukkuri.RND = new SequenceRNG(1, 1, 3);
+
+            YukkuriType type = YukkuriBirthTypeResolver.getChangelingBabyType();
+
+            assertEquals(YukkuriType.DEIBU, type);
+        }
 
         @Test
         void testScenario_GetMarisaTypeCanYieldKotatsumuri() {

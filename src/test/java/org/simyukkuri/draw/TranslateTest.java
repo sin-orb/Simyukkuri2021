@@ -1,24 +1,14 @@
 package org.simyukkuri.draw;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.engine.World;
 
 class TranslateTest {
@@ -27,7 +17,7 @@ class TranslateTest {
     void setUp() {
         SimYukkuri.world = new World();
         Translate.setWorldSize(1000, 1000, 500);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f, 0.5f, 0.25f});
+        Translate.setCanvasSize(800, 600, 100, 100, new float[] { 1.0f, 0.5f, 0.25f });
         Translate.createTransTable(true);
     }
 
@@ -57,7 +47,7 @@ class TranslateTest {
 
     @Test
     void testGetFlyHeightLimit() {
-        assertEquals((int)(501 * 0.175f), Translate.getFlyHeightLimit());
+        assertEquals((int) (501 * 0.175f), Translate.getFlyHeightLimit());
     }
 
     // --- distance ---
@@ -172,7 +162,7 @@ class TranslateTest {
     void testInvertYBasic() {
         int result = Translate.invertY(300);
         // result = (int)(300 * 1001 / 600)
-        assertEquals((int)(300.0f * 1001.0f / 600.0f), result);
+        assertEquals((int) (300.0f * 1001.0f / 600.0f), result);
     }
 
     // --- invertZ ---
@@ -181,7 +171,7 @@ class TranslateTest {
     void testInvertZBasic() {
         int result = Translate.invertZ(300);
         // result = (int)(300 * 501 / 600)
-        assertEquals((int)(300.0f * 501.0f / 600.0f), result);
+        assertEquals((int) (300.0f * 501.0f / 600.0f), result);
     }
 
     // --- invertBgY ---
@@ -190,7 +180,7 @@ class TranslateTest {
     void testInvertBgYBasic() {
         int result = Translate.invertBgY(300);
         // result = (int)(300 * 1001 / 600 * 0.7)
-        assertEquals((int)(300.0f * 1001.0f / 600.0f * 0.7f), result);
+        assertEquals((int) (300.0f * 1001.0f / 600.0f * 0.7f), result);
     }
 
     // --- invertX ---

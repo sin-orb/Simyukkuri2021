@@ -17,8 +17,6 @@ import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.event.EventPacket;
-import org.simyukkuri.event.EventPacket.EventPriority;
-import org.simyukkuri.event.EventPacket.UpdateState;
 import org.simyukkuri.field.impl.Barrier;
 import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.logic.FamilyActionLogic;

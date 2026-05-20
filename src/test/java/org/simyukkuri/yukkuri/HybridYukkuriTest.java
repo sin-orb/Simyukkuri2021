@@ -1,25 +1,23 @@
 package org.simyukkuri.yukkuri;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Alice;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Chen;
+import org.simyukkuri.entity.core.living.yukkuri.impl.HybridYukkuri;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Marisa;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.enums.YukkuriRank;
+import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.util.WorldTestHelper;
 
 public class HybridYukkuriTest {
@@ -195,7 +193,8 @@ public class HybridYukkuriTest {
     @Test
     public void testGetMountPoint_doreiNull_throwsNPE() {
         HybridYukkuri hybrid = new HybridYukkuri();
-        // dorei == null → hybrid.getMountPoint("key") → dorei.getMountPoint("key") → NPE
+        // dorei == null → hybrid.getMountPoint("key") → dorei.getMountPoint("key") →
+        // NPE
         assertThrows(NullPointerException.class, () -> hybrid.getMountPoint("head"));
     }
 
@@ -224,7 +223,8 @@ public class HybridYukkuriTest {
         assertEquals(0, hybrid.getImage(0, 0, layer, 0));
     }
 
-    // --- getImage (after tuneParameters, images[0] is null → NPE on images[0].setAgeState) ---
+    // --- getImage (after tuneParameters, images[0] is null → NPE on
+    // images[0].setAgeState) ---
 
     @Test
     public void testGetImage_afterTuneParameters_imagesSlotNull_throwsNPE() {
@@ -236,7 +236,8 @@ public class HybridYukkuriTest {
         assertEquals(0, hybrid.getImage(0, 0, layer, 0));
     }
 
-    // --- Constructor(int, int, int, AgeState, Yukkuri, Yukkuri): with non-null p1 ---
+    // --- Constructor(int, int, int, AgeState, Yukkuri, Yukkuri): with non-null p1
+    // ---
 
     @Test
     public void testConstructor_WithCoords_doesNotThrow() {
@@ -278,7 +279,8 @@ public class HybridYukkuriTest {
             java.lang.reflect.Field doreiField = HybridYukkuri.class.getDeclaredField("dorei");
             doreiField.setAccessible(true);
             doreiField.set(hybrid, reimuDorei);
-            // Use ConstState to control RNG (nextBoolean → true when nextInt(2)>0 ??? depends on impl)
+            // Use ConstState to control RNG (nextBoolean → true when nextInt(2)>0 ???
+            // depends on impl)
             SimYukkuri.RND = new org.simyukkuri.ConstState(1);
             hybrid.loadImages_Hyblid();
         } catch (Exception e) {

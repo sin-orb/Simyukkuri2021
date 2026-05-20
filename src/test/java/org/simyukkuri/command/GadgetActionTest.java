@@ -1,19 +1,5 @@
 package org.simyukkuri.command;
 
-
-
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -29,7 +15,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
 import org.simyukkuri.ConstState;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
@@ -43,8 +28,8 @@ import org.simyukkuri.entity.core.world.item.Food;
 import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.entity.core.world.mobile.Vomit;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.Intelligence;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.system.Sprite;
 import org.simyukkuri.util.WorldTestHelper;
@@ -265,7 +250,8 @@ public class GadgetActionTest {
 
             GadgetAction.evaluateAmpoule(GadgetMenuChoice.POISON_AMP, ev, b);
 
-            assertEquals(1, b.getAttachmentSize(org.simyukkuri.entity.core.attachment.impl.PoisonAmpoule.class), "毒アンプルが追加されるべき");
+            assertEquals(1, b.getAttachmentSize(org.simyukkuri.entity.core.attachment.impl.PoisonAmpoule.class),
+                    "毒アンプルが追加されるべき");
         }
     }
 

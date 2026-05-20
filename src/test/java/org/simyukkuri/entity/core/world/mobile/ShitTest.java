@@ -1,28 +1,13 @@
 package org.simyukkuri.entity.core.world.mobile;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.engine.World;
@@ -353,7 +338,8 @@ class ShitTest {
     @Test
     void testLoadImages_headless_executesCode() {
         try {
-            org.simyukkuri.entity.core.world.mobile.Shit.loadImages(org.simyukkuri.entity.core.world.mobile.Shit.class.getClassLoader(),
+            org.simyukkuri.entity.core.world.mobile.Shit.loadImages(
+                    org.simyukkuri.entity.core.world.mobile.Shit.class.getClassLoader(),
                     null);
         } catch (Exception e) {
         }
@@ -363,7 +349,7 @@ class ShitTest {
     void testConstructorWithArgs_headless_executesCode() {
         try {
             org.simyukkuri.entity.core.living.yukkuri.Yukkuri body = org.simyukkuri.util.WorldTestHelper.createBody();
-            org.simyukkuri.entity.core.world.mobile.Shit s = new org.simyukkuri.entity.core.world.mobile.Shit(100, 100, 0, body,
+            new org.simyukkuri.entity.core.world.mobile.Shit(100, 100, 0, body,
                     org.simyukkuri.enums.YukkuriType.REIMU);
         } catch (Exception e) {
         }

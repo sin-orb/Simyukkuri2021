@@ -1,25 +1,19 @@
 package org.simyukkuri.item;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-import org.simyukkuri.entity.core.world.item.ItemTestBase;
-import org.simyukkuri.entity.core.world.WorldEntity;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Translate;
-import org.simyukkuri.enums.WorldEntityKind;
+import org.simyukkuri.entity.core.world.item.ItemTestBase;
+import org.simyukkuri.entity.core.world.item.Trash;
 import org.simyukkuri.enums.Type;
-import static org.junit.jupiter.api.Assertions.*;
+import org.simyukkuri.enums.WorldEntityKind;
 
 class TrashTest extends ItemTestBase {
 
@@ -91,7 +85,7 @@ class TrashTest extends ItemTestBase {
         Trash trash = new Trash(100, 100, 0);
         trash.kick();
         // kick() calls kick(0, -8, -4)
-        assertEquals(0,  trash.getVx());
+        assertEquals(0, trash.getVx());
         assertEquals(-8, trash.getVy());
         assertEquals(-4, trash.getVz());
     }

@@ -9,8 +9,6 @@ import org.simyukkuri.entity.core.world.item.Food;
 import org.simyukkuri.enums.GatheringDirection;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.event.EventPacket;
-import org.simyukkuri.event.EventPacket.EventPriority;
-import org.simyukkuri.event.EventPacket.UpdateState;
 import org.simyukkuri.field.impl.Barrier;
 import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.logic.FoodLogic;

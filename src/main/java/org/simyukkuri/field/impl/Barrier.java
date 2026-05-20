@@ -7,7 +7,6 @@ import java.awt.Stroke;
 import java.beans.Transient;
 import java.util.List;
 
-import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.util.GameWorld;
 import org.simyukkuri.draw.Color4y;
 import org.simyukkuri.draw.Point4y;

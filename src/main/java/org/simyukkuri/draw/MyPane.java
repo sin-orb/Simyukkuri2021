@@ -311,7 +311,7 @@ public class MyPane extends JPanel implements Runnable {
 		return backBuffer;
 	}
 
-	Graphics2D getBackBufferG2() {
+	public Graphics2D getBackBufferG2() {
 		return backBufferG2;
 	}
 
@@ -372,13 +372,13 @@ public class MyPane extends JPanel implements Runnable {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == cb5) {
 				String str = cb5.getSelectedItem().toString();
-				Integer num;
+				int num;
 				try {
-					num = new Integer(str);
+					num = Integer.parseInt(str);
 				} catch (NumberFormatException ne) {
-					num = new Integer(1);
+					num = 1;
 				}
-				cb5.setSelectedItem(num.toString());
+				cb5.setSelectedItem(String.valueOf(num));
 			}
 		}
 	}
@@ -640,7 +640,6 @@ public class MyPane extends JPanel implements Runnable {
 	 *
 	 * @param g 描画対象 Graphics
 	 */
-	@SuppressWarnings("incomplete-switch")
 	@Override
 	public void paint(Graphics g) {
 		new Renderer().render(this, g);

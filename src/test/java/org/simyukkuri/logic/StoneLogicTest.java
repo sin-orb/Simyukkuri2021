@@ -1,24 +1,18 @@
 package org.simyukkuri.logic;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.engine.World;
+import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.entity.core.world.item.Stone;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.BurialState;
@@ -26,7 +20,6 @@ import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.system.Sprite;
 import org.simyukkuri.util.WorldTestHelper;
-import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 
 /**
  * Test class for StoneLogic.
@@ -79,7 +72,7 @@ public class StoneLogicTest {
     public void testCheckPubble_stoneFarAway_noEffect() {
         Yukkuri b = createAdultBody(100, 100);
         // Stone far away (distance=500) → neither branch fires
-        Stone stone = new Stone(600, 100, 0);
+        new Stone(600, 100, 0);
         assertDoesNotThrow(() -> StoneLogic.checkPubble(b));
     }
 
@@ -87,7 +80,7 @@ public class StoneLogicTest {
     public void testCheckPubble_differentZ_skipped() {
         Yukkuri b = createAdultBody(100, 100);
         b.setZ(1); // stone at Z=0, body at Z=1 → skip
-        Stone stone = new Stone(100, 100, 0); // stone at same position
+        new Stone(100, 100, 0); // stone at same position
         assertDoesNotThrow(() -> StoneLogic.checkPubble(b));
     }
 
@@ -98,7 +91,7 @@ public class StoneLogicTest {
         Yukkuri b = createAdultBody(100, 100);
         b.setBurialState(BurialState.HALF);
         // Stone at same position → distance=0, getStepDist()=16 > 0 → bodyInjure
-        Stone stone = new Stone(100, 100, 0);
+        new Stone(100, 100, 0);
         assertDoesNotThrow(() -> StoneLogic.checkPubble(b));
         // After bodyInjure, damage type should be INJURED
         assertEquals(CriticalDamageType.INJURED, b.getCriticalDamege());
@@ -110,7 +103,7 @@ public class StoneLogicTest {
         Yukkuri b = createAdultBody(100, 100);
         b.setIntelligence(Intelligence.WISE);
         // distance ~ 25 (100+25=125): getStepDist()=16, 16<=25 but 48>25 → WISE runAway
-        Stone stone = new Stone(125, 100, 0);
+        new Stone(125, 100, 0);
         assertDoesNotThrow(() -> StoneLogic.checkPubble(b));
     }
 

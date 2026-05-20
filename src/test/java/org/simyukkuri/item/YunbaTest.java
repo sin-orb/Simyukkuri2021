@@ -1,30 +1,23 @@
 package org.simyukkuri.item;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity.ItemRank;
 import org.simyukkuri.entity.core.world.item.Food;
+import org.simyukkuri.entity.core.world.item.ItemTestBase;
 import org.simyukkuri.entity.core.world.item.Yunba;
 import org.simyukkuri.entity.core.world.item.Yunba.Action;
 import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.entity.core.world.mobile.Vomit;
-import org.simyukkuri.entity.core.world.item.ItemTestBase;
 import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.util.WorldTestHelper;
 
@@ -601,7 +594,7 @@ class YunbaTest extends ItemTestBase {
         // The constructor always adds to the yunba map when setupYunba fails
         assertDoesNotThrow(() -> {
             try {
-                Yunba y = new Yunba(100, 100, 0);
+                new Yunba(100, 100, 0);
             } catch (Exception e) {
                 // Expected in headless environment (GUI setup fails)
             }
@@ -721,7 +714,8 @@ class YunbaTest extends ItemTestBase {
     void testClockTick_NearStalk_Stalk_DoesNotThrow() {
         Yunba item = createNearActionYunba(100, 100);
         item.setAction(Action.STALK);
-        org.simyukkuri.entity.core.world.bodylinked.Stalk stalk = new org.simyukkuri.entity.core.world.bodylinked.Stalk(100, 100, 0);
+        org.simyukkuri.entity.core.world.bodylinked.Stalk stalk = new org.simyukkuri.entity.core.world.bodylinked.Stalk(
+                100, 100, 0);
         stalk.setAmount(100);
         SimYukkuri.world.getCurrentWorldState().getStalks().put(stalk.getObjId(), stalk);
         item.setTarget(stalk);
@@ -818,7 +812,8 @@ class YunbaTest extends ItemTestBase {
         item.setObjId(801);
         SimYukkuri.world.getCurrentWorldState().getYunbas().put(801, item);
 
-        org.simyukkuri.entity.core.world.bodylinked.Stalk stalk = new org.simyukkuri.entity.core.world.bodylinked.Stalk(110, 110, 0);
+        org.simyukkuri.entity.core.world.bodylinked.Stalk stalk = new org.simyukkuri.entity.core.world.bodylinked.Stalk(
+                110, 110, 0);
         stalk.setAmount(100);
         SimYukkuri.world.getCurrentWorldState().getStalks().put(stalk.getObjId(), stalk);
 

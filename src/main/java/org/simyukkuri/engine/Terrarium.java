@@ -1,6 +1,5 @@
 package org.simyukkuri.engine;
 
-import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -9,14 +8,11 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.TerrainField;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.impl.Fire;
 import org.simyukkuri.entity.core.effect.Effect;
 import org.simyukkuri.entity.core.living.yukkuri.Dna;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -37,7 +33,6 @@ import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.EffectType;
 import org.simyukkuri.enums.Numbering;
 import org.simyukkuri.enums.YukkuriType;
-import org.simyukkuri.field.impl.Barrier;
 import org.simyukkuri.system.WorldState;
 import org.simyukkuri.ui.MainCommandUI;
 import org.simyukkuri.util.GameView;
@@ -566,106 +561,6 @@ public class Terrarium implements Serializable {
 	}
 
 	/**
-	 * パニック時の挙動
-	 * 
-	 * @param b ゆっくり
-	 */
-	private void checkPanic(Yukkuri b) {
-		TerrariumWorldLogic.checkPanic(b);
-	}
-
-	/**
-	 * 引火処理
-	 * 
-	 * @param b ゆっくり
-	 */
-	private void checkFire(Yukkuri b) {
-		int minDistance;
-		// 燃えてないなら終了
-		if (b.getAttachmentSize(Fire.class) == 0) {
-			return;
-		}
-		// 全ゆっくりに対してチェック
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry()
-				.entrySet()) {
-			Yukkuri p = entry.getValue();
-			// 自分同士のチェックは無意味なのでスキップ
-			if (p == b) {
-				continue;
-			}
-			if (b.isRemoved()) {
-				continue;
-			}
-			// 相手との間に壁があればスキップ
-			if (Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(),
-					Barrier.BODY_BLOCK_FLAGS[b.getAgeState().ordinal()])) {
-				continue;
-			}
-
-			minDistance = Translate.distance(b.getX(), b.getY(), p.getX(), p.getY());
-			if (minDistance <= Translate.distance(0, 0, b.getStep() * 2, b.getStep() * 2)) {
-				// 接触状態で自分が燃えていたら飛び火
-				p.giveFire();
-			}
-		}
-	}
-
-	/**
-	 * 赤ゆの追加(胎生出産時用)
-	 *
-	 * @param x   発生場所X座標
-	 * @param y   発生場所Y座標
-	 * @param z   発生場所Z座標
-	 * @param dna 赤ゆのDNA
-	 * @param p1  母親
-	 * @param p2  父親
-	 */
-	private void addBaby(int x, int y, int z, Dna dna, Yukkuri p1, Yukkuri p2) {
-		babyList.add(makeYukkuri(x, y, z + 1, dna, AgeState.BABY, p1, p2));
-		babyList.get(babyList.size() - 1).kick(0, 5, -2);
-
-	}
-
-	/**
-	 * 赤ゆの追加(茎式出産時用)
-	 *
-	 * @param x     発生場所X座標
-	 * @param y     発生場所Y座標
-	 * @param z     発生場所Z座標
-	 * @param dna   赤ゆのDNA
-	 * @param p1    母親
-	 * @param p2    父親
-	 * @param stalk 出生もとの茎(なければnull)
-	 */
-	private void addBaby(int x, int y, int z, Dna dna, Yukkuri p1, Yukkuri p2, Stalk stalk) {
-		babyList.add(makeYukkuri(x, y, z, dna, AgeState.BABY, p1, p2));
-		Yukkuri b = babyList.get(babyList.size() - 1);
-		stalk.addAttachedBaby(b);
-		b.setBindStalk(stalk);
-		b.setUnBirth(true);
-		b.setShadowVisible(false);
-	}
-
-	/**
-	 * 赤ゆの追加(主に爆発四散時用)
-	 *
-	 * @param x   発生場所X座標
-	 * @param y   発生場所Y座標
-	 * @param z   発生場所Z座標
-	 * @param vx  初速X成分
-	 * @param vy  初速Y成分
-	 * @param vz  初速Z成分
-	 * @param dna 赤ゆのDNA
-	 * @param p1  母親
-	 * @param p2  父親
-	 */
-	private void addBaby(int x, int y, int z, int vx, int vy, int vz, Dna dna, Yukkuri p1, Yukkuri p2) {
-		babyList.add(makeYukkuri(x, y, z + 1, dna, AgeState.BABY, p1, p2));
-		babyList.get(babyList.size() - 1).kick(vx, vy, vz);
-
-	}
-
-	/**
 	 * ゆっくりの追加(出産用ショートカット)
 	 *
 	 * @param x   発生場所X座標
@@ -940,10 +835,6 @@ public class Terrarium implements Serializable {
 	private static void advanceOperationTime() {
 		TerrariumEnvironment.advanceOperationTime();
 		operationTime = TerrariumEnvironment.getOperationTime();
-	}
-
-	private Rectangle translateRectangles(Rectangle4y r) {
-		return new Rectangle(r.getX(), r.getY(), r.getWidth(), r.getHeight());
 	}
 
 	/**

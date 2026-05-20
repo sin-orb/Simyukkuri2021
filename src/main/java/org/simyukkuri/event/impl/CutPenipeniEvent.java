@@ -5,8 +5,6 @@ import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.event.EventPacket;
-import org.simyukkuri.event.EventPacket.EventPriority;
-import org.simyukkuri.event.EventPacket.UpdateState;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;

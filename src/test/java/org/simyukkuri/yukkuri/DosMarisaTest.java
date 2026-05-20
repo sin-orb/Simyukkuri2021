@@ -1,26 +1,21 @@
 package org.simyukkuri.yukkuri;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import org.simyukkuri.ConstState;
 import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.entity.core.living.yukkuri.impl.DosMarisa;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Marisa;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
+import org.simyukkuri.entity.core.living.yukkuri.impl.ReimuMarisa;
+import org.simyukkuri.entity.core.living.yukkuri.impl.WasaReimu;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.draw.Point4y;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 
 public class DosMarisaTest {
 
@@ -81,7 +76,8 @@ public class DosMarisaTest {
         // Robustness should be: nextInt(10) + 1 = min(7, 9) + 1 = 7 + 1 = 8
         assertEquals(8, dosMarisa.getImmunityStrength());
 
-        // sameDirectionFactor should be: nextInt(10) + 10 = min(7, 9) + 10 = 7 + 10 = 17
+        // sameDirectionFactor should be: nextInt(10) + 10 = min(7, 9) + 10 = 7 + 10 =
+        // 17
         assertEquals(17, dosMarisa.getSameDirectionFactor());
     }
 
@@ -101,7 +97,7 @@ public class DosMarisaTest {
         DosMarisa obj = new DosMarisa();
         // getMountPoint returns attachment offset from map
         // Most classes return null for unknown keys
-        Point4y[] result = obj.getMountPoint("unknown_key");
+        obj.getMountPoint("unknown_key");
         // Result can be null or an array depending on initialization
         // Just verify the method doesn't crash
         assertNotNull(obj);
@@ -112,14 +108,15 @@ public class DosMarisaTest {
         DosMarisa obj = new DosMarisa();
         // checkTransform() checks transformation conditions
         // Without proper World setup, will likely return null
-        Yukkuri result = obj.checkTransform();
+        obj.checkTransform();
         // Just verify the method executes without crashing
     }
 
     @Test
     public void testDosMarisaIsImageLoaded() {
         DosMarisa obj = new DosMarisa();
-        // isImageLoaded() reflects static image loader state, which may be changed by other tests.
+        // isImageLoaded() reflects static image loader state, which may be changed by
+        // other tests.
         assertDoesNotThrow(() -> obj.isImageLoaded());
     }
 
@@ -142,22 +139,26 @@ public class DosMarisaTest {
             assertNotNull(obj);
         }
     }
+
     @Test
     public void testDosMarisaHybridTypeWithReimu() {
         DosMarisa obj = new DosMarisa();
         assertEquals(ReimuMarisa.type, obj.getHybridType(Reimu.type));
     }
+
     @Test
     public void testDosMarisaHybridTypeWithWasaReimu() {
         DosMarisa obj = new DosMarisa();
         assertEquals(ReimuMarisa.type, obj.getHybridType(WasaReimu.type));
     }
+
     @Test
     public void testDosMarisaHybridTypeWithOther() {
         DosMarisa obj = new DosMarisa();
         // Test with a type not specifically handled - should return own type
         assertEquals(DosMarisa.type, obj.getHybridType(org.simyukkuri.enums.YukkuriType.ALICE));
     }
+
     @Test
     public void testDosMarisaJudgeCanTransForGodHandWhenUnbirth() {
         DosMarisa obj = new DosMarisa();
@@ -177,7 +178,7 @@ public class DosMarisaTest {
         DosMarisa parent2 = new DosMarisa();
         DosMarisa obj = new DosMarisa(100, 100, 0, AgeState.ADULT, parent1, parent2);
         // Adult yukkuri - test transformation eligibility
-        boolean result = obj.judgeCanTransForGodHand();
+        obj.judgeCanTransForGodHand();
         // Result varies by class, just verify no crash
         assertNotNull(obj);
     }
@@ -188,40 +189,41 @@ public class DosMarisaTest {
         DosMarisa parent2 = new DosMarisa();
         DosMarisa obj = new DosMarisa(100, 100, 0, AgeState.BABY, parent1, parent2);
         // Baby yukkuri - test transformation eligibility
-        boolean result = obj.judgeCanTransForGodHand();
+        obj.judgeCanTransForGodHand();
         // Result varies by class, just verify no crash
         assertNotNull(obj);
     }
+
     @Test
     public void testDosMarisaKillTimeMultipleBranches() {
         try {
             org.simyukkuri.util.WorldTestHelper.initializeMinimalWorld();
-            
+
             DosMarisa obj = new DosMarisa();
-            
+
             // Test multiple branches by calling killTime with different RNG values
             // Each value hits a different branch in the if/else chain
-            
+
             // Branch 1: p <= 6 (values 0-6)
             SimYukkuri.RND = new org.simyukkuri.SequenceRNG(3);
             obj.killTime();
-            
+
             // Branch 2: p <= 14 (values 7-14)
             SimYukkuri.RND = new org.simyukkuri.SequenceRNG(10);
             obj.killTime();
-            
+
             // Branch 3: p <= 21 (values 15-21)
             SimYukkuri.RND = new org.simyukkuri.SequenceRNG(18);
             obj.killTime();
-            
+
             // Branch 4: p <= 28 (values 22-28)
             SimYukkuri.RND = new org.simyukkuri.SequenceRNG(25);
             obj.killTime();
-            
+
             // Branch 5: p > 28 (values 29-49)
             SimYukkuri.RND = new org.simyukkuri.SequenceRNG(35);
             obj.killTime();
-            
+
             assertNotNull(obj);
         } catch (Exception e) {
             // If World initialization fails, just verify object exists
@@ -234,17 +236,17 @@ public class DosMarisaTest {
     public void testDosMarisaKillTimeSequence() {
         try {
             org.simyukkuri.util.WorldTestHelper.initializeMinimalWorld();
-            
+
             DosMarisa obj = new DosMarisa();
-            
+
             // Use a sequence to hit multiple branches in succession
             SimYukkuri.RND = new org.simyukkuri.SequenceRNG(3, 10, 18, 25, 35, 40, 45);
-            
+
             // Call killTime multiple times to execute different branches
             for (int i = 0; i < 7; i++) {
                 obj.killTime();
             }
-            
+
             assertNotNull(obj);
         } catch (Exception e) {
             DosMarisa obj = new DosMarisa();
@@ -255,16 +257,17 @@ public class DosMarisaTest {
     @Test
     public void testLoadImages_headless_executesCode() {
         try {
-            // Set imageLoaded=true so loadImages exits via early-return path (fires JaCoCo probe)
+            // Set imageLoaded=true so loadImages exits via early-return path (fires JaCoCo
+            // probe)
             java.lang.reflect.Field fl = DosMarisa.class.getDeclaredField("imageLoaded");
             fl.setAccessible(true);
             boolean oldVal = fl.getBoolean(null);
             fl.setBoolean(null, true);
             DosMarisa.loadImages(DosMarisa.class.getClassLoader(), null);
             fl.setBoolean(null, oldVal);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
-
 
     @Test
     public void testGetImage_executesCode() {
@@ -274,7 +277,8 @@ public class DosMarisaTest {
             fp.setAccessible(true);
             int ranks = org.simyukkuri.enums.YukkuriRank.values().length;
             java.awt.image.BufferedImage[][][][] pack = new java.awt.image.BufferedImage[ranks][200][20][20];
-            java.awt.image.BufferedImage dummy = new java.awt.image.BufferedImage(1, 1, java.awt.image.BufferedImage.TYPE_INT_ARGB);
+            java.awt.image.BufferedImage dummy = new java.awt.image.BufferedImage(1, 1,
+                    java.awt.image.BufferedImage.TYPE_INT_ARGB);
             for (int i = 0; i < ranks; i++)
                 for (int j = 0; j < 200; j++)
                     for (int k = 0; k < 20; k++)
@@ -284,19 +288,23 @@ public class DosMarisaTest {
             DosMarisa obj = new DosMarisa();
             org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
             obj.getImage(0, 0, layer, 0);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     @Test
     public void testLoadIniFile_executesCode() {
         try {
             DosMarisa.loadIniFile(DosMarisa.class.getClassLoader());
-        } catch (Exception e) { } finally {
+        } catch (Exception e) {
+        } finally {
             try {
                 java.lang.reflect.Field fa = DosMarisa.class.getDeclaredField("AttachOffset");
                 fa.setAccessible(true);
-                if (fa.get(null) == null) fa.set(null, new java.util.HashMap<>());
-            } catch (Exception e) { }
+                if (fa.get(null) == null)
+                    fa.set(null, new java.util.HashMap<>());
+            } catch (Exception e) {
+            }
         }
     }
 }

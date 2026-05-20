@@ -1,17 +1,5 @@
 package org.simyukkuri.logic;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -21,21 +9,20 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.simyukkuri.util.WorldTestHelper;
+import org.simyukkuri.ConstState;
+import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.item.Food;
 import org.simyukkuri.entity.core.world.item.Toilet;
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.PublicRank;
+import org.simyukkuri.event.impl.FuneralEvent;
 import org.simyukkuri.event.impl.ProudChildEvent;
 import org.simyukkuri.event.impl.ShitExercisesEvent;
 import org.simyukkuri.event.impl.SuperEatingTimeEvent;
 import org.simyukkuri.event.impl.YukkuriRideEvent;
-import org.simyukkuri.event.impl.FuneralEvent;
-
-import org.simyukkuri.ConstState;
+import org.simyukkuri.util.WorldTestHelper;
 
 class FamilyActionLogicTest {
 
@@ -59,7 +46,8 @@ class FamilyActionLogicTest {
         child.setY(55);
         child.setAge(0); // BABY
         child.setFirstEatStalk(true);
-        child.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT); // Ensure proper OKAZARI
+        child.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT); // Ensure proper
+                                                                                                    // OKAZARI
         parent.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
 
         WorldTestHelper.addChild(parent, child.getUniqueID());
@@ -393,7 +381,7 @@ class FamilyActionLogicTest {
             }
         };
 
-        boolean result = FamilyActionLogic.checkFamilyAction(parent);
+        FamilyActionLogic.checkFamilyAction(parent);
         // Will initiate rideOnParent if it finds a bed, but MinimalWorld has no bed.
         // Let's create a bed or food. We will make child hungry again.
         child.setHungry((int) (child.getHungryLimit() * 0.1));
@@ -617,16 +605,20 @@ class FamilyActionLogicTest {
     void testCheckFamilyAction_ParentFull_ChildFull_ReturnsFalse() {
         setReady(parent);
         // hungry >= 80% of limit → isFull()=true
-        parent.setHungry((int)(parent.getHungryLimit() * 0.9));
+        parent.setHungry((int) (parent.getHungryLimit() * 0.9));
         // child full and no shit
-        child.setHungry((int)(child.getHungryLimit() * 0.9));
+        child.setHungry((int) (child.getHungryLimit() * 0.9));
         child.setShit(0);
         SimYukkuri.RND = new ConstState(0) {
             @Override
-            public boolean nextBoolean() { return false; }
+            public boolean nextBoolean() {
+                return false;
+            }
         };
-        // bWantToEat=false (parent full), bWantToShit=false (child shit<=25%), bIsBaby=true but bWantToShit forced false
-        // rideOnParent: child not hungry, not wantToShit, not sleepy → no target → false
+        // bWantToEat=false (parent full), bWantToShit=false (child shit<=25%),
+        // bIsBaby=true but bWantToShit forced false
+        // rideOnParent: child not hungry, not wantToShit, not sleepy → no target →
+        // false
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
@@ -640,9 +632,12 @@ class FamilyActionLogicTest {
         child.setNeedled(true);
         SimYukkuri.RND = new ConstState(0) {
             @Override
-            public boolean nextBoolean() { return false; }
+            public boolean nextBoolean() {
+                return false;
+            }
         };
-        // isDamaged=false but isNeedled=true → bWantToShit=false, bWantToEat=false (break)
+        // isDamaged=false but isNeedled=true → bWantToShit=false, bWantToEat=false
+        // (break)
         // rideOnParent with empty childrenListForRideYukkuriTarget → false
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
@@ -654,13 +649,15 @@ class FamilyActionLogicTest {
     @Test
     void testCheckFamilyAction_BabyChildShitting_WantToShitFalse() {
         setReady(parent);
-        child.setShit((int)(child.getShitLimit() * 0.5));
+        child.setShit((int) (child.getShitLimit() * 0.5));
         // hungry >= 80% to force bWantToEat=false
-        child.setHungry((int)(child.getHungryLimit() * 0.9));
+        child.setHungry((int) (child.getHungryLimit() * 0.9));
         child.setShitting(true);
         SimYukkuri.RND = new ConstState(0) {
             @Override
-            public boolean nextBoolean() { return false; }
+            public boolean nextBoolean() {
+                return false;
+            }
         };
         // wantToShit=false (child shitting), wantToEat=false (hungryPercent>=80)
         // rideOnParent: child isShitting → continue → empty list → false
@@ -676,27 +673,32 @@ class FamilyActionLogicTest {
     void testCheckFamilyAction_BabyChildShitFull_WantToShitFalse() {
         setReady(parent);
         child.setShit(child.getShitLimit()); // 100%
-        child.setHungry((int)(child.getHungryLimit() * 0.9)); // >=80%
+        child.setHungry((int) (child.getHungryLimit() * 0.9)); // >=80%
         SimYukkuri.RND = new ConstState(0) {
             @Override
-            public boolean nextBoolean() { return false; }
+            public boolean nextBoolean() {
+                return false;
+            }
         };
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
     // =========================================================
-    // Group 9: Child isHungry + isBaby → wantToShit=false; shitPercent>50 → wantToEat=false
+    // Group 9: Child isHungry + isBaby → wantToShit=false; shitPercent>50 →
+    // wantToEat=false
     // =========================================================
 
     @Test
     void testCheckFamilyAction_BabyChildHungryAndShit60_BothFalse() {
         setReady(parent);
-        child.setShit((int)(child.getShitLimit() * 0.6)); // 60% shit > 50
+        child.setShit((int) (child.getShitLimit() * 0.6)); // 60% shit > 50
         // hungry <= 50% of limit → isHungry=true, and hungryPercent<80
-        child.setHungry((int)(child.getHungryLimit() * 0.3));
+        child.setHungry((int) (child.getHungryLimit() * 0.3));
         SimYukkuri.RND = new ConstState(0) {
             @Override
-            public boolean nextBoolean() { return false; }
+            public boolean nextBoolean() {
+                return false;
+            }
         };
         // wantToShit=false (child isHungry), wantToEat=false (shitPercent>50)
         // rideOnParent: child isHungry, searchFood=null → no target → false
@@ -712,10 +714,12 @@ class FamilyActionLogicTest {
         setReady(parent);
         child.setEating(true);
         child.setShit(0); // 0% → bWantToShit=false (<=25%)
-        child.setHungry((int)(child.getHungryLimit() * 0.9)); // >=80%
+        child.setHungry((int) (child.getHungryLimit() * 0.9)); // >=80%
         SimYukkuri.RND = new ConstState(0) {
             @Override
-            public boolean nextBoolean() { return false; }
+            public boolean nextBoolean() {
+                return false;
+            }
         };
         // bWantToEat=false (eating), bWantToShit=false (shit<=25%)
         // rideOnParent: child isEating=true → continue → false
@@ -731,11 +735,13 @@ class FamilyActionLogicTest {
     void testCheckFamilyAction_ChildLockmove_Continue() {
         setReady(parent);
         child.setLockmove(true);
-        child.setHungry((int)(child.getHungryLimit() * 0.9));
+        child.setHungry((int) (child.getHungryLimit() * 0.9));
         child.setShit(0);
         SimYukkuri.RND = new ConstState(0) {
             @Override
-            public boolean nextBoolean() { return false; }
+            public boolean nextBoolean() {
+                return false;
+            }
         };
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
         child.setLockmove(false);
@@ -750,11 +756,13 @@ class FamilyActionLogicTest {
         setReady(parent);
         // Make child an adult (not baby)
         child.setAge(child.getChildLimitBase() + 1);
-        child.setHungry((int)(child.getHungryLimit() * 0.9)); // >=80%
+        child.setHungry((int) (child.getHungryLimit() * 0.9)); // >=80%
         child.setShit(0);
         SimYukkuri.RND = new ConstState(0) {
             @Override
-            public boolean nextBoolean() { return false; }
+            public boolean nextBoolean() {
+                return false;
+            }
         };
         // bIsBaby=false → bWantToShit=false
         // wantToEat=false (hungryPercent>=80)
@@ -769,11 +777,13 @@ class FamilyActionLogicTest {
         setReady(parent);
         // 子を子ゆ年齢（CHILD）に設定（BABY ではないが ADULT でもない）
         child.setAge(child.getBabyLimitBase() + 1); // CHILD age
-        child.setHungry((int)(child.getHungryLimit() * 0.9)); // >=80% → bWantToEat=false
+        child.setHungry((int) (child.getHungryLimit() * 0.9)); // >=80% → bWantToEat=false
         child.setShit(0);
         SimYukkuri.RND = new ConstState(0) {
             @Override
-            public boolean nextBoolean() { return true; } // bIsBaby=true なら proudChild に入る
+            public boolean nextBoolean() {
+                return true;
+            } // bIsBaby=true なら proudChild に入る
         };
         // bIsBaby=false (子ゆのみ) → proudChild スキップ → rideOnParent も空 → false
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
@@ -913,7 +923,7 @@ class FamilyActionLogicTest {
     @Test
     void testRideOnParent_BabyChildWantToShitToiletFar_ReturnsTrue() {
         setReady(parent);
-        child.setHungry((int)(child.getHungryLimit() * 0.9)); // not hungry
+        child.setHungry((int) (child.getHungryLimit() * 0.9)); // not hungry
         // Use setShit to push up shit value; wantToShit() uses getShitLimitBase
         child.setShit(child.getShitLimit() - 1); // near limit → wantToShit=true
         Toilet toilet = new Toilet();
@@ -930,7 +940,7 @@ class FamilyActionLogicTest {
     @Test
     void testRideOnParent_BabyChildNoTargetFound_ReturnsFalse() {
         setReady(parent);
-        child.setHungry((int)(child.getHungryLimit() * 0.9)); // not hungry
+        child.setHungry((int) (child.getHungryLimit() * 0.9)); // not hungry
         child.setShit(0); // not wantToShit
         // not sleepy (wakeUpTime=0, ACTIVEPERIODorg=100*6=600, age is fresh)
         java.util.List<Yukkuri> list = new java.util.ArrayList<>();
@@ -985,7 +995,9 @@ class FamilyActionLogicTest {
     void testSearchFood_EmptyFood_Skipped() {
         Food empty = new Food(80, 80, Food.FoodType.SWEETS1.ordinal()) {
             @Override
-            public boolean isEmpty() { return true; }
+            public boolean isEmpty() {
+                return true;
+            }
         };
         SimYukkuri.world.getCurrentWorldState().getFoods().put(empty.getObjId(), empty);
         Entity found = FamilyActionLogic.searchFood(parent);
@@ -997,7 +1009,7 @@ class FamilyActionLogicTest {
         // Only waste food, parent is full → waste not taken by normal parent
         Food waste = new Food(80, 80, Food.FoodType.WASTE.ordinal());
         SimYukkuri.world.getCurrentWorldState().getFoods().put(waste.getObjId(), waste);
-        parent.setHungry((int)(parent.getHungryLimit() * 0.9)); // full
+        parent.setHungry((int) (parent.getHungryLimit() * 0.9)); // full
         Entity found = FamilyActionLogic.searchFood(parent);
         org.junit.jupiter.api.Assertions.assertNull(found);
     }
@@ -1015,9 +1027,13 @@ class FamilyActionLogicTest {
     @Test
     void testCheckFamilyAction_IsIdiot_ReturnsFalse() {
         Yukkuri idiotBody = new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
-            @Override public boolean isIdiot() { return true; }
+            @Override
+            public boolean isIdiot() {
+                return true;
+            }
         };
-        idiotBody.setX(50); idiotBody.setY(50);
+        idiotBody.setX(50);
+        idiotBody.setY(50);
         idiotBody.setAge(idiotBody.getChildLimitBase() + 1);
         idiotBody.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         WorldTestHelper.addChild(idiotBody, child.getUniqueID());
@@ -1048,7 +1064,8 @@ class FamilyActionLogicTest {
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
-    // ---- child loop: getCriticalDamageType != null (INJURED passes isNotAllright) ----
+    // ---- child loop: getCriticalDamageType != null (INJURED passes isNotAllright)
+    // ----
 
     @Test
     void testCheckFamilyAction_ChildCriticalDamageInjured_BothFalse() {
@@ -1057,12 +1074,16 @@ class FamilyActionLogicTest {
         child.setShit(0);
         child.setCriticalDamageType(org.simyukkuri.enums.CriticalDamageType.INJURED);
         SimYukkuri.RND = new ConstState(0) {
-            @Override public boolean nextBoolean() { return false; }
+            @Override
+            public boolean nextBoolean() {
+                return false;
+            }
         };
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
-    // ---- child loop: !hasOkazari -> continue (covers L143-146 and ride loop L216-217) ----
+    // ---- child loop: !hasOkazari -> continue (covers L143-146 and ride loop
+    // L216-217) ----
 
     @Test
     void testCheckFamilyAction_ChildNoOkazari_LoopContinue() {
@@ -1071,9 +1092,13 @@ class FamilyActionLogicTest {
         child.setHungry(child.getHungryLimit());
         child.setShit(0);
         SimYukkuri.RND = new ConstState(0) {
-            @Override public boolean nextBoolean() { return false; }
+            @Override
+            public boolean nextBoolean() {
+                return false;
+            }
         };
-        // ride loop: same child !hasOkazari -> L216 continue -> empty ride list -> false
+        // ride loop: same child !hasOkazari -> L216 continue -> empty ride list ->
+        // false
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
         child.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
     }
@@ -1087,14 +1112,28 @@ class FamilyActionLogicTest {
         child.setShit(0); // 0% -> bWantToShit=false
         // Give child an event so ride loop skips it
         child.setCurrentEvent(new org.simyukkuri.event.EventPacket(child, null, null, 1) {
-            @Override public void start(Yukkuri b) {}
-            @Override public boolean execute(Yukkuri b) { return false; }
-            @Override public boolean checkEventResponse(Yukkuri b) { return false; }
+            @Override
+            public void start(Yukkuri b) {
+            }
+
+            @Override
+            public boolean execute(Yukkuri b) {
+                return false;
+            }
+
+            @Override
+            public boolean checkEventResponse(Yukkuri b) {
+                return false;
+            }
         });
         SimYukkuri.RND = new ConstState(0) {
-            @Override public boolean nextBoolean() { return false; }
+            @Override
+            public boolean nextBoolean() {
+                return false;
+            }
         };
-        // Both flags false -> ride loop entered -> child has event -> skipped -> empty ride list -> false
+        // Both flags false -> ride loop entered -> child has event -> skipped -> empty
+        // ride list -> false
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
         child.setCurrentEvent(null);
     }
@@ -1104,10 +1143,14 @@ class FamilyActionLogicTest {
     @Test
     void testCheckFamilyAction_HungryChildNoFood_GoesToEatFails() {
         setReady(parent);
-        child.setHungry(0); // hungry -> hungryPercent<80 -> wantToEat stays true; isHungry=true -> wantToShit=false
+        child.setHungry(0); // hungry -> hungryPercent<80 -> wantToEat stays true; isHungry=true ->
+                            // wantToShit=false
         child.setShit(0);
         SimYukkuri.RND = new ConstState(0) {
-            @Override public boolean nextBoolean() { return false; }
+            @Override
+            public boolean nextBoolean() {
+                return false;
+            }
         };
         // goToEat: no food in world -> found=null -> return false
         // rideOnParent: bWantToEat=true -> ride loop NOT entered -> empty list -> false
@@ -1119,13 +1162,18 @@ class FamilyActionLogicTest {
     @Test
     void testCheckFamilyAction_WantToShitGoToShitCheckWaitFails() {
         // Do NOT call setReady(parent) -> checkWait fails
-        child.setHungry((int)(child.getHungryLimit() * 0.9)); // hungryPercent=90>=80 -> wantToEat=false; isHungry=false
-        child.setShit((int)(child.getShitLimit() * 0.5)); // 50% -> bWantToShit stays true for baby
+        child.setHungry((int) (child.getHungryLimit() * 0.9)); // hungryPercent=90>=80 -> wantToEat=false;
+                                                               // isHungry=false
+        child.setShit((int) (child.getShitLimit() * 0.5)); // 50% -> bWantToShit stays true for baby
         parent.setLastActionTime(); // goToShit checkWait(2000) fails
         SimYukkuri.RND = new ConstState(0) {
-            @Override public boolean nextBoolean() { return false; }
+            @Override
+            public boolean nextBoolean() {
+                return false;
+            }
         };
-        // bWantToShit=true, bWantToEat=false -> goToShit called -> checkWait fails -> false
+        // bWantToShit=true, bWantToEat=false -> goToShit called -> checkWait fails ->
+        // false
         // bWantToShit=true -> ride loop NOT entered -> rideOnParent(empty) -> false
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
@@ -1134,35 +1182,47 @@ class FamilyActionLogicTest {
 
     @Test
     void testCheckFamilyAction_ProudChildCheckWaitFails() {
-        child.setHungry((int)(child.getHungryLimit() * 0.9)); // bWantToEat=false
+        child.setHungry((int) (child.getHungryLimit() * 0.9)); // bWantToEat=false
         child.setShit(0); // bWantToShit=false
         parent.setLastActionTime(); // proudChild checkWait(2000) fails; rideOnParent checkWait(3000) also fails
         SimYukkuri.RND = new java.util.Random() {
-            @Override public int nextInt(int bound) { return 0; }
-            @Override public boolean nextBoolean() { return true; } // enter proudChild branch
+            @Override
+            public int nextInt(int bound) {
+                return 0;
+            }
+
+            @Override
+            public boolean nextBoolean() {
+                return true;
+            } // enter proudChild branch
         };
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
-    // ---- L276-277: rideOnParent returns true via checkFamilyAction (sleepy child + bed) ----
+    // ---- L276-277: rideOnParent returns true via checkFamilyAction (sleepy child
+    // + bed) ----
 
     @Test
     void testCheckFamilyAction_RideOnParentReturnsTrueViaBed() {
         setReady(parent);
-        child.setHungry((int)(child.getHungryLimit() * 0.9)); // hungryPercent=90>=80 -> wantToEat=false; isHungry=false
+        child.setHungry((int) (child.getHungryLimit() * 0.9)); // hungryPercent=90>=80 -> wantToEat=false;
+                                                               // isHungry=false
         child.setShit(0); // bWantToShit=false
         child.setWakeUpTime(Long.MIN_VALUE / 2); // isSleepy=true even at age=0
 
         org.simyukkuri.entity.core.world.item.Bed bed = new org.simyukkuri.entity.core.world.item.Bed();
-        bed.setX(300); bed.setY(300);
+        bed.setX(300);
+        bed.setY(300);
         SimYukkuri.world.getCurrentWorldState().getBeds().put(bed.getObjId(), bed);
 
         SimYukkuri.RND = new ConstState(0) {
-            @Override public boolean nextBoolean() { return false; }
+            @Override
+            public boolean nextBoolean() {
+                return false;
+            }
         };
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() ->
-            assertTrue(FamilyActionLogic.checkFamilyAction(parent))
-        );
+        org.junit.jupiter.api.Assertions
+                .assertDoesNotThrow(() -> assertTrue(FamilyActionLogic.checkFamilyAction(parent)));
     }
 
     // ---- searchFood: default food type (FOOD) ----
@@ -1175,11 +1235,13 @@ class FamilyActionLogicTest {
         assertNotNull(found);
     }
 
-    // ---- checkRaperFamily: with actual raper body (covers L432-433 setExciting) ----
+    // ---- checkRaperFamily: with actual raper body (covers L432-433 setExciting)
+    // ----
 
     @Test
     void testCheckRaperFamily_WithActualRaper() {
-        // Make parent a raper, child unbirth -> isRapeTarget=false -> loop -> raper.setExciting(false)
+        // Make parent a raper, child unbirth -> isRapeTarget=false -> loop ->
+        // raper.setExciting(false)
         parent.setRaper(true);
         child.setUnBirth(true);
         assertTrue(FamilyActionLogic.checkRaperFamily());
@@ -1201,7 +1263,8 @@ class FamilyActionLogicTest {
         assertFalse(FamilyActionLogic.isRapeTarget());
     }
 
-    // ---- rideOnParent: null list, child isEating, child isShitting, parent has takeout ----
+    // ---- rideOnParent: null list, child isEating, child isShitting, parent has
+    // takeout ----
 
     @Test
     void testRideOnParent_NullList_ReturnsFalse() {
@@ -1227,7 +1290,8 @@ class FamilyActionLogicTest {
         child.setShitting(true);
         java.util.List<Yukkuri> list = new java.util.ArrayList<>();
         list.add(child);
-        // child.isBaby() && !child.isShitting() -> false -> block skipped -> return false
+        // child.isBaby() && !child.isShitting() -> false -> block skipped -> return
+        // false
         assertFalse(FamilyActionLogic.rideOnParent(parent, list));
         child.setShitting(false);
     }
@@ -1243,13 +1307,14 @@ class FamilyActionLogicTest {
         parent.setCarryItem(org.simyukkuri.enums.TakeoutItemType.FOOD, takenFood);
         java.util.List<Yukkuri> list = new java.util.ArrayList<>();
         list.add(child);
-        // child.isHungry=true but parent has takeout food -> no food search -> target=null
+        // child.isHungry=true but parent has takeout food -> no food search ->
+        // target=null
         // child.wantToShit=false, child.isSleepy=false -> no target -> return false
         assertFalse(FamilyActionLogic.rideOnParent(parent, list));
     }
 
     // ---- Middle-age child: covers L167 false branch (isBaby=false in child loop)
-    //      and L231-232 (!isBaby in ride loop) ----
+    // and L231-232 (!isBaby in ride loop) ----
 
     @Test
     void testCheckFamilyAction_MiddleAgeChild_NoBabyLoop() {
@@ -1260,9 +1325,13 @@ class FamilyActionLogicTest {
         child.setHungry(child.getHungryLimit()); // full -> hungryPercent>=80 -> wantToEat=false
         child.setShit(0);
         // After child loop: bIsBaby=false -> bWantToShit=false. bWantToEat=false.
-        // Ride loop: child.isBaby()=false -> L231 true -> L232 continue -> empty ride list
+        // Ride loop: child.isBaby()=false -> L231 true -> L232 continue -> empty ride
+        // list
         SimYukkuri.RND = new ConstState(0) {
-            @Override public boolean nextBoolean() { return false; }
+            @Override
+            public boolean nextBoolean() {
+                return false;
+            }
         };
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
@@ -1276,9 +1345,13 @@ class FamilyActionLogicTest {
         child.setShit(0); // 0% -> bWantToShit=false (baby, <=25%)
         child.setSleeping(true); // isSleeping=true -> canAction()=false
         SimYukkuri.RND = new ConstState(0) {
-            @Override public boolean nextBoolean() { return false; }
+            @Override
+            public boolean nextBoolean() {
+                return false;
+            }
         };
-        // ride loop: canAction()=false -> L210 true -> L211 continue -> empty ride list -> false
+        // ride loop: canAction()=false -> L210 true -> L211 continue -> empty ride list
+        // -> false
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
         child.setSleeping(false);
     }
@@ -1294,7 +1367,8 @@ class FamilyActionLogicTest {
         assertNotNull(found);
     }
 
-    // ---- searchFood: multiple foods, looks comparison (covers L411 false branch) ----
+    // ---- searchFood: multiple foods, looks comparison (covers L411 false branch)
+    // ----
 
     @Test
     void testSearchFood_MultipleFood_HigherLooksWins() {
@@ -1322,9 +1396,13 @@ class FamilyActionLogicTest {
     void testCheckFamilyAction_NoChildren_ReturnsFalse() {
         // 子なし大人: createActiveChildList → null/空 → L94 → false
         Yukkuri loner = new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
-            @Override public int getCollisionX() { return 10; }
+            @Override
+            public int getCollisionX() {
+                return 10;
+            }
         };
-        loner.setX(50); loner.setY(50);
+        loner.setX(50);
+        loner.setY(50);
         loner.setAge(loner.getChildLimitBase() + 1); // adult
         loner.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         // addChild を呼ばない → 子リスト空
@@ -1338,10 +1416,10 @@ class FamilyActionLogicTest {
     void testSearchFood_WasteWithIsTooHungry_Found() {
         Food waste = new Food(80, 80, Food.FoodType.WASTE.ordinal());
         SimYukkuri.world.getCurrentWorldState().getFoods().put(waste.getObjId(), waste);
-        parent.setHungry(0);   // hungry <= 0
+        parent.setHungry(0); // hungry <= 0
         // getDamageState() != NONE: damage >= DAMAGELIMIT/2 で VERY になる
         WorldTestHelper.setDamage(parent,
-            parent.getDamageLimitBase()[org.simyukkuri.enums.AgeState.ADULT.ordinal()] / 2 + 1);
+                parent.getDamageLimitBase()[org.simyukkuri.enums.AgeState.ADULT.ordinal()] / 2 + 1);
         Entity found = FamilyActionLogic.searchFood(parent);
         assertNotNull(found);
     }

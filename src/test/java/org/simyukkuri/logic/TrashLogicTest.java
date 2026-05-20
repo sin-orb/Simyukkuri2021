@@ -1,37 +1,26 @@
 package org.simyukkuri.logic;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Marisa;
 import org.simyukkuri.entity.core.world.bodylinked.Okazari;
-import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.world.item.Trash;
 import org.simyukkuri.util.WorldTestHelper;
-import org.simyukkuri.entity.core.living.yukkuri.impl.Marisa;
 
 /**
  * Test class for TrashLogic.
  *
  * TrashLogic has two methods:
- *   checkTrashOkazari(Yukkuri b) - public
- *   searchTrashObj(Yukkuri b)    - private (tested indirectly via checkTrashOkazari)
+ * checkTrashOkazari(Yukkuri b) - public
+ * searchTrashObj(Yukkuri b) - private (tested indirectly via checkTrashOkazari)
  */
 public class TrashLogicTest {
 
@@ -41,7 +30,7 @@ public class TrashLogicTest {
     // wallMap のサイズは DEFAULT_MAP_X[0]*fieldScaleData[0]/100 + 1 = 151x151 に固定される
     // （Translate.setWorldSize を後で変えても wallMap はリサイズされない）
     // そのため body と Trash の座標はすべて 0〜149 の範囲内に収める
-    private static final int WORLD_SELECTION_LIMIT = 140;
+    // private static final int WORLD_SELECTION_LIMIT = 140;
 
     @BeforeEach
     void setUp() {
@@ -122,7 +111,7 @@ public class TrashLogicTest {
         // eyesightBase を 0 に設定 → searchTrashObj で minDistance=0 なので見つからない
         setEyesightBase(body, 0);
 
-        Trash trash = new Trash(55, 55, 0);
+        new Trash(55, 55, 0);
 
         boolean result = TrashLogic.checkTrashOkazari(body);
 
@@ -137,7 +126,7 @@ public class TrashLogicTest {
         assertFalse(body.hasOkazari());
 
         // body と同じ座標に Trash を置く（距離 = 0）
-        Trash trash = new Trash(50, 50, 0);
+        new Trash(50, 50, 0);
 
         boolean result = TrashLogic.checkTrashOkazari(body);
 
@@ -154,8 +143,8 @@ public class TrashLogicTest {
         assertFalse(body.hasOkazari());
 
         // body=(50,50) 近辺に2つ置く（wallMap範囲内）
-        Trash trash1 = new Trash(55, 55, 0);
-        Trash trash2 = new Trash(60, 60, 0);
+        new Trash(55, 55, 0);
+        new Trash(60, 60, 0);
 
         boolean result = TrashLogic.checkTrashOkazari(body);
 
@@ -184,7 +173,7 @@ public class TrashLogicTest {
     void testCheckTrashOkazari_HasOkazariUnchangedAfterCall() {
         assertFalse(body.hasOkazari());
 
-        Trash trash = new Trash(55, 55, 0);
+        new Trash(55, 55, 0);
         TrashLogic.checkTrashOkazari(body);
 
         // checkTrashOkazari 自体は okazari を変更しない
@@ -230,7 +219,7 @@ public class TrashLogicTest {
 
     @Test
     void testCheckTrashOkazari_CalledTwice_WithTrash() {
-        Trash trash = new Trash(55, 55, 0);
+        new Trash(55, 55, 0);
 
         boolean r1 = TrashLogic.checkTrashOkazari(body);
         assertTrue(r1);
@@ -253,7 +242,7 @@ public class TrashLogicTest {
         SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body2.getObjId(), body2);
 
         // body2 近くに Trash を配置（wallMap 範囲内）
-        Trash trash = new Trash(35, 35, 0);
+        new Trash(35, 35, 0);
 
         boolean result = TrashLogic.checkTrashOkazari(body2);
         assertTrue(result);
@@ -282,7 +271,7 @@ public class TrashLogicTest {
         assertFalse(body.hasOkazari());
         setEyesightBase(body, -1);
 
-        Trash trash = new Trash(55, 55, 0);
+        // Trash trash = new Trash(55, 55, 0);
 
         boolean result = TrashLogic.checkTrashOkazari(body);
         assertFalse(result, "minDistance < 1 の場合、即ブレークして false を返すべき");
@@ -298,7 +287,7 @@ public class TrashLogicTest {
         assertFalse(body.hasOkazari());
 
         // body=(50,50), trash=(60,50) -> distance = 100
-        Trash trash = new Trash(60, 50, 0);
+        new Trash(60, 50, 0);
 
         // eyesightBase = 101 (distance=100 < 101 なので見つかる)
         setEyesightBase(body, 101);
@@ -312,9 +301,10 @@ public class TrashLogicTest {
         assertFalse(body.hasOkazari());
 
         // body=(50,50), trash=(60,50) -> distance = 100
-        Trash trash = new Trash(60, 50, 0);
+        new Trash(60, 50, 0);
 
-        // eyesightBase = 100 (distance == minDistance なので採用されない: minDistance > distance が必要)
+        // eyesightBase = 100 (distance == minDistance なので採用されない: minDistance > distance
+        // が必要)
         setEyesightBase(body, 100);
 
         boolean result = TrashLogic.checkTrashOkazari(body);

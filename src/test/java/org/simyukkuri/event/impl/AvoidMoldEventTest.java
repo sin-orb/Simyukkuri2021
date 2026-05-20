@@ -1,17 +1,5 @@
 package org.simyukkuri.event.impl;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -22,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -105,7 +92,7 @@ class AvoidMoldEventTest {
         // Reimu.isIdiot() returns false, so the idiot check should not block
         assertFalse(responder.isIdiot());
         // The method should pass the idiot check (not return false due to isIdiot)
-        AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
+        new AvoidMoldEvent(from, to, null, 10);
         // We cannot easily make isIdiot() true without a TarinaiReimu subclass,
         // so we verify the negative case: non-idiot passes this check
         // (may still return false for other reasons like barrier check)
@@ -545,16 +532,17 @@ class AvoidMoldEventTest {
         return new AvoidMoldEvent(from, to, null, 10);
     }
 
-    private static java.lang.reflect.Field findField(Class<?> clazz, String fieldName) {
-        while (clazz != null) {
-            try {
-                return clazz.getDeclaredField(fieldName);
-            } catch (NoSuchFieldException e) {
-                clazz = clazz.getSuperclass();
-            }
-        }
-        return null;
-    }
+    // private static java.lang.reflect.Field findField(Class<?> clazz, String
+    // fieldName) {
+    // while (clazz != null) {
+    // try {
+    // return clazz.getDeclaredField(fieldName);
+    // } catch (NoSuchFieldException e) {
+    // clazz = clazz.getSuperclass();
+    // }
+    // }
+    // return null;
+    // }
 
     @Nested
     class RegressionScenarios {

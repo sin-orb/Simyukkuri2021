@@ -180,21 +180,18 @@ public class Okazari extends WorldEntity {
 	/** 未実装（UnsupportedOperationException を投げる）。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
-		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'getImageLayer'");
 	}
 
 	/** 未実装（UnsupportedOperationException を投げる）。 */
 	@Override
 	public BufferedImage getShadowImage() {
-		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'getShadowImage'");
 	}
 
 	/** ワールドからおかざりを除去する。 */
 	@Override
 	public void removeFromWorld() {
-		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'removeListData'");
 	}
 

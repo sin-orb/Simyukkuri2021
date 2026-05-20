@@ -1,35 +1,27 @@
 package org.simyukkuri.entity.core.living.yukkuri;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
+import java.awt.image.BufferedImage;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.simyukkuri.ConstState;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.engine.World;
+import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.attachment.Attachment;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Attitude;
 import org.simyukkuri.enums.BurialState;
-import org.simyukkuri.enums.YukkuriBake;
-import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.Burst;
 import org.simyukkuri.enums.CoreAnkoState;
 import org.simyukkuri.enums.Damage;
@@ -38,11 +30,10 @@ import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.Pain;
 import org.simyukkuri.enums.TangType;
-import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.enums.TickResult;
+import org.simyukkuri.enums.YukkuriBake;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.system.Sprite;
-
-import java.awt.image.BufferedImage;
 
 public class BodyAttributesTest {
 
@@ -54,9 +45,9 @@ public class BodyAttributesTest {
             super(b);
         }
 
-        public TestAttachment() {
-            super();
-        }
+        // public TestAttachment() {
+        // super();
+        // }
 
         @Override
         protected TickResult update() {
@@ -123,8 +114,10 @@ public class BodyAttributesTest {
 
         @Test
         void testScenario_BabyTypesDequeuePreservesInsertionOrderAcrossMultipleEntries() {
-            org.simyukkuri.entity.core.living.yukkuri.Dna first = new org.simyukkuri.entity.core.living.yukkuri.Dna(org.simyukkuri.enums.YukkuriType.MARISA, Attitude.NICE, Intelligence.AVERAGE, false);
-            org.simyukkuri.entity.core.living.yukkuri.Dna second = new org.simyukkuri.entity.core.living.yukkuri.Dna(org.simyukkuri.enums.YukkuriType.DOSMARISA, Attitude.SHITHEAD, Intelligence.WISE, true);
+            org.simyukkuri.entity.core.living.yukkuri.Dna first = new org.simyukkuri.entity.core.living.yukkuri.Dna(
+                    org.simyukkuri.enums.YukkuriType.MARISA, Attitude.NICE, Intelligence.AVERAGE, false);
+            org.simyukkuri.entity.core.living.yukkuri.Dna second = new org.simyukkuri.entity.core.living.yukkuri.Dna(
+                    org.simyukkuri.enums.YukkuriType.DOSMARISA, Attitude.SHITHEAD, Intelligence.WISE, true);
             body.getBabyTypes().add(first);
             body.getBabyTypes().add(second);
 

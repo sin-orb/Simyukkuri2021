@@ -2049,30 +2049,6 @@ public abstract class Yukkuri extends SocialEntity {
 	};
 
 	/**
-	 * まばたき画像が用意されているかチェック、Trueで対応している
-	 * 
-	 * @return まばたき画像が用意されているか
-	 */
-	private boolean mabatakiNormalImageCheck() {
-		// normal2.png normal3.png
-		// ハイブリット以外
-		// 画像を用意したゆっくりのみ対応、追加する時はModLoaderの条件も変更する
-		// int i = getType();
-		// if(i == 0 || i == 1 || i == 2 || i == 4 || i == 10001 || i == 1009 || i ==
-		// 1001 ||
-		// i == 1006 || i == 3002 || i == 1010 || i == 1000 || i == 2001 || i == 1003 ||
-		// i == 1002 || i == 2007 || i == 2000 || i == 1005 || i == 1011 || i == 3000 ||
-		// i == 1008 || i == 3 || i == 1002 || i == 5 || i == 1004 || i == 10000 ||
-		// i == 2006 || i == 2003 || i == 3001 || i == 1007 || i == 2005 ){return true;}
-		// return false;
-		// ハイブリッドのみエラーが出るので除外
-		if (getType() == YukkuriType.HYBRIDYUKKURI) {
-			return false;
-		}
-		return true; // 画像をすべて用意したのでtrueで確定
-	}
-
-	/**
 	 * おさげ、羽、尻尾のグラフィックを返す。
 	 * 
 	 * @param layer レイヤ

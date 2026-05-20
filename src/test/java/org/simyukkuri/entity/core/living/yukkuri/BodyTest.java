@@ -1,104 +1,92 @@
 package org.simyukkuri.entity.core.living.yukkuri;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
+import java.awt.Color;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.simyukkuri.ConstState;
 import org.simyukkuri.Const;
+import org.simyukkuri.ConstState;
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.entity.core.attachment.Attachment;
-import org.simyukkuri.entity.core.attachment.impl.Fire;
+import org.simyukkuri.draw.Color4y;
+import org.simyukkuri.draw.Dimension4y;
+import org.simyukkuri.draw.Rectangle4y;
+import org.simyukkuri.draw.Translate;
+import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.engine.World;
+import org.simyukkuri.entity.core.Entity;
+import org.simyukkuri.entity.core.attachment.Attachment;
+import org.simyukkuri.entity.core.attachment.impl.ANYDAmpoule;
+import org.simyukkuri.entity.core.attachment.impl.Ants;
+import org.simyukkuri.entity.core.attachment.impl.Fire;
+import org.simyukkuri.entity.core.attachment.impl.VeryShitAmpoule;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
+import org.simyukkuri.entity.core.world.bodylinked.Okazari;
+import org.simyukkuri.entity.core.world.bodylinked.Stalk;
+import org.simyukkuri.entity.core.world.item.Bed;
+import org.simyukkuri.entity.core.world.item.Food;
+import org.simyukkuri.entity.core.world.item.Toilet;
+import org.simyukkuri.entity.core.world.item.Trampoline;
+import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Attitude;
 import org.simyukkuri.enums.BurialState;
-import org.simyukkuri.enums.YukkuriRank;
+import org.simyukkuri.enums.Burst;
 import org.simyukkuri.enums.CoreAnkoState;
 import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Damage;
-import org.simyukkuri.enums.TickResult;
+import org.simyukkuri.enums.Direction;
+import org.simyukkuri.enums.FavItemType;
 import org.simyukkuri.enums.FootBake;
+import org.simyukkuri.enums.HairState;
 import org.simyukkuri.enums.Happiness;
-import org.simyukkuri.util.WorldTestHelper;
+import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.LovePlayer;
-import org.simyukkuri.enums.Parent;
-import org.simyukkuri.enums.PublicRank;
-import org.simyukkuri.enums.HairState;
-import org.simyukkuri.enums.ImageCode;
-import org.simyukkuri.enums.TangType;
 import org.simyukkuri.enums.PanicType;
-import org.simyukkuri.enums.PurposeOfMoving;
-import org.simyukkuri.enums.Trauma;
-import org.simyukkuri.enums.YukkuriType;
+import org.simyukkuri.enums.Parent;
+import org.simyukkuri.enums.PlayStyle;
 import org.simyukkuri.enums.PredatorType;
-import org.simyukkuri.field.impl.Barrier;
-import org.simyukkuri.entity.core.world.item.Trampoline;
-import org.simyukkuri.draw.Translate;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.world.mobile.Shit;
-import org.simyukkuri.entity.core.world.bodylinked.Stalk;
+import org.simyukkuri.enums.PublicRank;
+import org.simyukkuri.enums.PurposeOfMoving;
+import org.simyukkuri.enums.TakeoutItemType;
+import org.simyukkuri.enums.TickResult;
+import org.simyukkuri.enums.Trauma;
+import org.simyukkuri.enums.Where;
+import org.simyukkuri.enums.WindowType;
+import org.simyukkuri.enums.YukkuriRank;
+import org.simyukkuri.enums.YukkuriType;
+import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.event.impl.AvoidMoldEvent;
+import org.simyukkuri.event.impl.CutPenipeniEvent;
 import org.simyukkuri.event.impl.HateNoOkazariEvent;
 import org.simyukkuri.event.impl.PredatorsGameEvent;
 import org.simyukkuri.event.impl.RaperReactionEvent;
-import org.simyukkuri.entity.core.world.item.Food;
+import org.simyukkuri.event.impl.SuperEatingTimeEvent;
+import org.simyukkuri.field.FieldShape;
+import org.simyukkuri.field.impl.Barrier;
+import org.simyukkuri.system.BasicStrokeEX;
 import org.simyukkuri.system.ItemMenu.GetMenuTarget;
 import org.simyukkuri.system.ItemMenu.UseMenuTarget;
 import org.simyukkuri.system.Sprite;
-import org.simyukkuri.system.BasicStrokeEX;
-import org.simyukkuri.event.EventPacket;
-import org.simyukkuri.enums.Direction;
-import org.simyukkuri.enums.FavItemType;
-import org.simyukkuri.enums.TakeoutItemType;
-import org.simyukkuri.enums.PublicRank;
-import org.simyukkuri.enums.Burst;
-import org.simyukkuri.enums.PlayStyle;
-import org.simyukkuri.entity.core.world.bodylinked.Okazari;
-import org.simyukkuri.field.FieldShape;
-import org.simyukkuri.entity.core.world.bodylinked.Stalk;
-import org.simyukkuri.draw.Rectangle4y;
-import org.simyukkuri.draw.Dimension4y;
-import org.simyukkuri.engine.Terrarium;
-import org.simyukkuri.draw.Color4y;
-import java.awt.Color;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.util.LinkedList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-import java.lang.reflect.Field;
-
-import org.simyukkuri.event.impl.CutPenipeniEvent;
-import org.simyukkuri.event.impl.SuperEatingTimeEvent;
-import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.impl.VeryShitAmpoule;
-import org.simyukkuri.entity.core.attachment.impl.ANYDAmpoule;
-import org.simyukkuri.entity.core.attachment.impl.Ants;
-import org.simyukkuri.entity.core.world.item.Toilet;
-import org.simyukkuri.entity.core.world.item.Bed;
-import org.simyukkuri.enums.Where;
-import org.simyukkuri.enums.WindowType;
+import org.simyukkuri.util.WorldTestHelper;
 
 public class BodyTest {
 
@@ -347,22 +335,12 @@ public class BodyTest {
         }
     }
 
-    private static boolean invokeMabatakiCheck(Yukkuri b) {
-        try {
-            java.lang.reflect.Method m = Yukkuri.class.getDeclaredMethod("mabatakiNormalImageCheck");
-            m.setAccessible(true);
-            return (Boolean) m.invoke(b);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static void assertColorEquals(Color expected, Color4y actual) {
-        assertEquals(expected.getRed(), actual.getRed());
-        assertEquals(expected.getGreen(), actual.getGreen());
-        assertEquals(expected.getBlue(), actual.getBlue());
-        assertEquals(expected.getAlpha(), actual.getAlpha());
-    }
+    // private static void assertColorEquals(Color expected, Color4y actual) {
+    // assertEquals(expected.getRed(), actual.getRed());
+    // assertEquals(expected.getGreen(), actual.getGreen());
+    // assertEquals(expected.getBlue(), actual.getBlue());
+    // assertEquals(expected.getAlpha(), actual.getAlpha());
+    // }
 
     private static class FixedToleranceBody extends StubBody {
         FixedToleranceBody() {
@@ -3092,7 +3070,7 @@ public class BodyTest {
             body.setDead(false);
             body.setShitting(true);
             // Already shitting, continues
-            boolean result = body.checkShit();
+            body.checkShit();
             // Result depends on shitting state
             assertTrue(body.isShitting() || !body.isShitting()); // just verify no crash
         }
@@ -7010,7 +6988,7 @@ public class BodyTest {
             baby.setHasPants(false);
             baby.setCoreAnkoState(CoreAnkoState.NORMAL);
 
-            boolean result = baby.checkShit();
+            baby.checkShit();
 
             assertTrue(true);
         }
@@ -7070,7 +7048,8 @@ public class BodyTest {
             rect.setY(20);
             rect.setWidth(30);
             rect.setHeight(40);
-            java.lang.reflect.Method m = org.simyukkuri.entity.core.living.LivingEntity.class.getDeclaredMethod("takeScreenRect", Rectangle4y.class);
+            java.lang.reflect.Method m = org.simyukkuri.entity.core.living.LivingEntity.class
+                    .getDeclaredMethod("takeScreenRect", Rectangle4y.class);
             m.setAccessible(true);
             Rectangle result = (Rectangle) m.invoke(body, rect);
             assertEquals(10, result.x);
@@ -7082,7 +7061,8 @@ public class BodyTest {
         @Test
         public void testTakeScreenRectUsesBodyScreenRect() throws Exception {
             body.setScreenRect(1, 2, 3, 4);
-            java.lang.reflect.Method m = org.simyukkuri.entity.core.living.LivingEntity.class.getDeclaredMethod("takeScreenRect");
+            java.lang.reflect.Method m = org.simyukkuri.entity.core.living.LivingEntity.class
+                    .getDeclaredMethod("takeScreenRect");
             m.setAccessible(true);
             Rectangle result = (Rectangle) m.invoke(body);
             assertEquals(1, result.x);
@@ -7220,22 +7200,6 @@ public class BodyTest {
 
             body.castrateYukkuri(false);
             assertFalse(body.isCastrated());
-        }
-
-        @Test
-        public void testMabatakiNormalImageCheck() {
-            StubBody normal = new StubBody();
-            assertTrue(invokeMabatakiCheck(normal));
-
-            StubBody hybrid = new StubBody() {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public org.simyukkuri.enums.YukkuriType getType() {
-                    return org.simyukkuri.enums.YukkuriType.HYBRIDYUKKURI;
-                }
-            };
-            assertFalse(invokeMabatakiCheck(hybrid));
         }
 
         @Test
@@ -8383,6 +8347,10 @@ public class BodyTest {
             body.setAttitude(Attitude.SHITHEAD);
             body.setMessageBuffer("test");
             body.setMessageTicks(10);
+            // furifuriDiscipline=20, ConstState(1)→nextInt(21)=1≠0
+            // でbeginDisciplineEmotionを通過させる
+            body.setFurifuriDiscipline(20);
+            SimYukkuri.RND = new ConstState(1);
             int oldAttitude = body.getAttitudePoint();
             body.teachManner(10);
             assertTrue(body.getAttitudePoint() > oldAttitude);
@@ -8961,7 +8929,8 @@ public class BodyTest {
             Yukkuri child = new StubBody();
             body.setUniqueID(100);
             child.setUniqueID(200);
-            org.simyukkuri.util.GameWorld.get().getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
+            org.simyukkuri.util.GameWorld.get().getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(),
+                    child);
 
             Stalk stalk = new Stalk();
             LinkedList<Stalk> stalks = new LinkedList<>();
@@ -10404,7 +10373,6 @@ public class BodyTest {
             body.setFurifuriDiscipline(0);
             body.setCoreAnkoState(CoreAnkoState.NORMAL);
             assertTrue(body.willingFurifuri());
-            int stressBefore = body.getStress();
             body.checkShit();
             assertEquals(0, body.getShit());
         }
@@ -16404,7 +16372,6 @@ public class BodyTest {
             body.setSickPeriod(99999);
             body.addDamage(body.getDamageLimit());
             SimYukkuri.RND = new ConstState(1);
-            int damageBefore = body.getDamage();
             body.checkDamage();
             // nextInt(3)=1 → no +TICK from this branch, but hungry may add damage
             // Just verify it doesn't crash

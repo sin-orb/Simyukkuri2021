@@ -1,18 +1,8 @@
 package org.simyukkuri.ui;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -22,7 +12,6 @@ import javax.swing.JToggleButton;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.engine.World;
 import org.simyukkuri.util.WorldTestHelper;
@@ -65,6 +54,7 @@ public class MainCommandUITest {
 
     @Test
     public void testGetSetGameSpeedCombo() {
+        @SuppressWarnings("rawtypes")
         JComboBox combo = new JComboBox();
         MainCommandUI.setGameSpeedCombo(combo);
         assertSame(combo, MainCommandUI.getGameSpeedCombo());
@@ -74,6 +64,7 @@ public class MainCommandUITest {
 
     @Test
     public void testGetSetMainItemCombo() {
+        @SuppressWarnings("rawtypes")
         JComboBox combo = new JComboBox();
         MainCommandUI.setMainItemCombo(combo);
         assertSame(combo, MainCommandUI.getMainItemCombo());
@@ -83,6 +74,7 @@ public class MainCommandUITest {
 
     @Test
     public void testGetSetSubItemCombo() {
+        @SuppressWarnings("rawtypes")
         JComboBox combo = new JComboBox();
         MainCommandUI.setSubItemCombo(combo);
         assertSame(combo, MainCommandUI.getSubItemCombo());

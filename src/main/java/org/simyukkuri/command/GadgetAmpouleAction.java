@@ -3,7 +3,6 @@ package org.simyukkuri.command;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.attachment.impl.ANYDAmpoule;
@@ -23,7 +22,8 @@ final class GadgetAmpouleAction {
 	}
 
 	static void evaluateAmpoule(GadgetMenuChoice item, MouseEvent ev, Entity targetObject) {
-		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
+		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(
+				GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
 		switch (item) {
 			case ORANGE_AMP:
 				if (ev.isShiftDown()) {
@@ -33,11 +33,13 @@ final class GadgetAmpouleAction {
 					}
 					for (Yukkuri body : bodyList) {
 						if (attachmentCount == 0) {
-							if (body.getAttachmentSize(OrangeAmpoule.class) == 0)
+							if (body.getAttachmentSize(OrangeAmpoule.class) == 0) {
 								body.addAttachment(new OrangeAmpoule(body));
+							}
 						} else {
-							if (body.getAttachmentSize(OrangeAmpoule.class) != 0)
+							if (body.getAttachmentSize(OrangeAmpoule.class) != 0) {
 								body.removeAttachment(OrangeAmpoule.class);
+							}
 						}
 					}
 				} else if (ev.isControlDown()) {
@@ -67,11 +69,13 @@ final class GadgetAmpouleAction {
 					}
 					for (Yukkuri body : bodyList) {
 						if (attachmentCount == 0) {
-							if (body.getAttachmentSize(AccelAmpoule.class) == 0)
+							if (body.getAttachmentSize(AccelAmpoule.class) == 0) {
 								body.addAttachment(new AccelAmpoule(body));
+							}
 						} else {
-							if (body.getAttachmentSize(AccelAmpoule.class) != 0)
+							if (body.getAttachmentSize(AccelAmpoule.class) != 0) {
 								body.removeAttachment(AccelAmpoule.class);
+							}
 						}
 					}
 				} else if (ev.isControlDown()) {
@@ -101,11 +105,13 @@ final class GadgetAmpouleAction {
 					}
 					for (Yukkuri body : bodyList) {
 						if (attachmentCount == 0) {
-							if (body.getAttachmentSize(StopAmpoule.class) == 0)
+							if (body.getAttachmentSize(StopAmpoule.class) == 0) {
 								body.addAttachment(new StopAmpoule(body));
+							}
 						} else {
-							if (body.getAttachmentSize(StopAmpoule.class) != 0)
+							if (body.getAttachmentSize(StopAmpoule.class) != 0) {
 								body.removeAttachment(StopAmpoule.class);
+							}
 						}
 					}
 				} else if (ev.isControlDown()) {
@@ -135,11 +141,13 @@ final class GadgetAmpouleAction {
 					}
 					for (Yukkuri body : bodyList) {
 						if (attachmentCount == 0) {
-							if (body.getAttachmentSize(HungryAmpoule.class) == 0)
+							if (body.getAttachmentSize(HungryAmpoule.class) == 0) {
 								body.addAttachment(new HungryAmpoule(body));
+							}
 						} else {
-							if (body.getAttachmentSize(HungryAmpoule.class) != 0)
+							if (body.getAttachmentSize(HungryAmpoule.class) != 0) {
 								body.removeAttachment(HungryAmpoule.class);
+							}
 						}
 					}
 				} else if (ev.isControlDown()) {
@@ -169,11 +177,13 @@ final class GadgetAmpouleAction {
 					}
 					for (Yukkuri body : bodyList) {
 						if (attachmentCount == 0) {
-							if (body.getAttachmentSize(VeryShitAmpoule.class) == 0)
+							if (body.getAttachmentSize(VeryShitAmpoule.class) == 0) {
 								body.addAttachment(new VeryShitAmpoule(body));
+							}
 						} else {
-							if (body.getAttachmentSize(VeryShitAmpoule.class) != 0)
+							if (body.getAttachmentSize(VeryShitAmpoule.class) != 0) {
 								body.removeAttachment(VeryShitAmpoule.class);
+							}
 						}
 					}
 				} else if (ev.isControlDown()) {
@@ -203,11 +213,13 @@ final class GadgetAmpouleAction {
 					}
 					for (Yukkuri body : bodyList) {
 						if (attachmentCount == 0) {
-							if (body.getAttachmentSize(PoisonAmpoule.class) == 0)
+							if (body.getAttachmentSize(PoisonAmpoule.class) == 0) {
 								body.addAttachment(new PoisonAmpoule(body));
+							}
 						} else {
-							if (body.getAttachmentSize(PoisonAmpoule.class) != 0)
+							if (body.getAttachmentSize(PoisonAmpoule.class) != 0) {
 								body.removeAttachment(PoisonAmpoule.class);
+							}
 						}
 					}
 				} else if (ev.isControlDown()) {
@@ -237,11 +249,13 @@ final class GadgetAmpouleAction {
 					}
 					for (Yukkuri body : bodyList) {
 						if (attachmentCount == 0) {
-							if (body.getAttachmentSize(BreedingAmpoule.class) == 0)
+							if (body.getAttachmentSize(BreedingAmpoule.class) == 0) {
 								body.addAttachment(new BreedingAmpoule(body));
+							}
 						} else {
-							if (body.getAttachmentSize(BreedingAmpoule.class) != 0)
+							if (body.getAttachmentSize(BreedingAmpoule.class) != 0) {
 								body.removeAttachment(BreedingAmpoule.class);
+							}
 						}
 					}
 				} else if (ev.isControlDown()) {
@@ -271,11 +285,13 @@ final class GadgetAmpouleAction {
 					}
 					for (Yukkuri body : bodyList) {
 						if (flag == 0) {
-							if (body.getAttachmentSize(ANYDAmpoule.class) == 0)
+							if (body.getAttachmentSize(ANYDAmpoule.class) == 0) {
 								body.addAttachment(new ANYDAmpoule(body));
+							}
 						} else {
-							if (body.getAttachmentSize(ANYDAmpoule.class) != 0)
+							if (body.getAttachmentSize(ANYDAmpoule.class) != 0) {
 								body.removeAttachment(ANYDAmpoule.class);
+							}
 						}
 					}
 				} else if (ev.isControlDown()) {

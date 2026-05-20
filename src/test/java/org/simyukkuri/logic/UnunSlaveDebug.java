@@ -1,25 +1,14 @@
 package org.simyukkuri.logic;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.draw.Translate;
-import org.simyukkuri.enums.PublicRank;
+import org.simyukkuri.entity.core.Entity;
+import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.mobile.Shit;
+import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.util.WorldTestHelper;
 
 public class UnunSlaveDebug {
@@ -36,7 +25,8 @@ public class UnunSlaveDebug {
         body.setPublicRank(PublicRank.UNUN_SLAVE);
 
         // Set eyesightBase via reflection
-        java.lang.reflect.Field eyesightField = org.simyukkuri.entity.core.living.LivingEntity.class.getDeclaredField("eyesightBase");
+        java.lang.reflect.Field eyesightField = org.simyukkuri.entity.core.living.LivingEntity.class
+                .getDeclaredField("eyesightBase");
         eyesightField.setAccessible(true);
         eyesightField.set(body, 1000000);
 
@@ -60,8 +50,9 @@ public class UnunSlaveDebug {
         System.out.println("DEBUG: actual distance squared="
                 + Translate.distance(body.getX(), body.getY(), shit.getX(), shit.getY()));
         System.out.println("DEBUG: acrossBarrier="
-                + org.simyukkuri.field.impl.Barrier.acrossBarrier(body.getX(), body.getY(), shit.getX(), shit.getY(), 4096)); // 4096 is
-                                                                                                             // Barrier.BARRIER_KEKKAI
+                + org.simyukkuri.field.impl.Barrier.acrossBarrier(body.getX(), body.getY(), shit.getX(), shit.getY(),
+                        4096)); // 4096 is
+        // Barrier.BARRIER_KEKKAI
 
         if (found == null) {
             System.out.println("DEBUG: found is NULL");

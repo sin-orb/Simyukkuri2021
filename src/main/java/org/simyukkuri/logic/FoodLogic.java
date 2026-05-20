@@ -237,18 +237,6 @@ public class FoodLogic {
 		return FoodPredatorFallbackPolicy.searchFallbackFood(body, candidate, deadCandidate, nearestDistance, wallMode, ws);
 	}
 
-	// 餌検索D
-	// うんうん奴隷用
-	private static final Entity searchFoodForUnunSlave(Yukkuri body, boolean[] forceEat) {
-		return FoodUnunSlaveSearchPolicy.searchFoodForUnunSlave(body, forceEat);
-	}
-
-	// 餌検索A
-	// 足りないゆ、足焼き用 最も近いものを適当に食べる
-	private static final Entity searchFoodNearlest(Yukkuri body, boolean[] forceEat) {
-		return FoodNearestSearchPolicy.searchFoodNearest(body, forceEat);
-	}
-
 	/**
 	 * 食事処理
 	 * 

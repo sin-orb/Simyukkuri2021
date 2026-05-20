@@ -1,35 +1,30 @@
 package org.simyukkuri.logic;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.enums.YukkuriRelationType;
-import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.Attitude;
 import org.simyukkuri.enums.CriticalDamageType;
-import org.simyukkuri.util.WorldTestHelper;
+import org.simyukkuri.enums.Happiness;
+import org.simyukkuri.enums.YukkuriRelationType;
 import org.simyukkuri.system.WorldState;
+import org.simyukkuri.util.WorldTestHelper;
 
 public class EmotionLogicTest {
 
     private Yukkuri dummyParent;
 
+    @SuppressWarnings("unchecked")
     @BeforeEach
     public void setUp() {
         WorldTestHelper.initializeMinimalWorld();
@@ -38,7 +33,8 @@ public class EmotionLogicTest {
         try {
             java.lang.reflect.Field mapBodyField = WorldState.class.getDeclaredField("body");
             mapBodyField.setAccessible(true);
-            ((Map<Integer, Yukkuri>) mapBodyField.get(SimYukkuri.world.getCurrentWorldState())).put(dummyParent.getUniqueID(),
+            ((Map<Integer, Yukkuri>) mapBodyField.get(SimYukkuri.world.getCurrentWorldState())).put(
+                    dummyParent.getUniqueID(),
                     dummyParent);
         } catch (Exception e) {
         }
@@ -240,13 +236,15 @@ public class EmotionLogicTest {
         you.setHappiness(Happiness.SAD);
         mockRelation(me, you, YukkuriRelationType.MOTHER);
 
-        // target=SAD × mine=SAD × MOTHER family → abEmote[2]=true (哀), abEmote[6]=true (心配)
+        // target=SAD × mine=SAD × MOTHER family → abEmote[2]=true (哀), abEmote[6]=true
+        // (心配)
         boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
         assertTrue(result[2], "Sad mother should feel Sadness seeing sad child");
         assertTrue(result[6], "Sad mother should feel Worry seeing sad child");
     }
 
-    // --- mine=VERY_SAD × target=SAD × OTHER (non-family) → sad only (line 147 + default branch) ---
+    // --- mine=VERY_SAD × target=SAD × OTHER (non-family) → sad only (line 147 +
+    // default branch) ---
 
     @Test
     public void testCheckEmotion_VerySadMeSeesSadOther_SadOnly() throws Exception {

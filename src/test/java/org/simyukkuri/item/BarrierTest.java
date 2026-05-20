@@ -1,32 +1,26 @@
 package org.simyukkuri.item;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.world.item.ItemTestBase;
 import org.simyukkuri.field.FieldShape;
 import org.simyukkuri.field.impl.Barrier;
 
 public class BarrierTest extends ItemTestBase {
-    // setUp is inherited from ItemTestBase (calls Translate.setWorldSize(1000,1000,200))
+    // setUp is inherited from ItemTestBase (calls
+    // Translate.setWorldSize(1000,1000,200))
 
     @Test
     void testConstructor_Default() {
@@ -112,7 +106,7 @@ public class BarrierTest extends ItemTestBase {
 
     @Test
     void testGetBarrier_withBarrier_returnsBarrier() {
-        Barrier b = new Barrier(50, 50, 100, 50, FieldShape.BARRIER_WALL);
+        new Barrier(50, 50, 100, 50, FieldShape.BARRIER_WALL);
         // getBarrier checks map coordinates, may or may not find based on coord mapping
         // Just verify it doesn't throw
         assertDoesNotThrow(() -> Barrier.getBarrier(50, 50, 5));
@@ -134,7 +128,8 @@ public class BarrierTest extends ItemTestBase {
 
             assertTrue(SimYukkuri.world.getCurrentWorldState().getBarriers().contains(barrier));
             assertTrue(Barrier.onBarrier(midX, midY, 4, 4, FieldShape.BARRIER_WALL));
-            assertTrue(Barrier.acrossBarrier(barrier.getStartX(), barrier.getStartY(), barrier.getEndX(), barrier.getEndY(),
+            assertTrue(Barrier.acrossBarrier(barrier.getStartX(), barrier.getStartY(), barrier.getEndX(),
+                    barrier.getEndY(),
                     FieldShape.BARRIER_WALL));
         }
 
@@ -155,14 +150,16 @@ public class BarrierTest extends ItemTestBase {
             int midX = (barrier.getStartX() + barrier.getEndX()) / 2;
             int midY = (barrier.getStartY() + barrier.getEndY()) / 2;
             assertTrue(Barrier.onBarrier(midX, midY, 4, 4, FieldShape.BARRIER_WALL));
-            assertTrue(Barrier.acrossBarrier(barrier.getStartX(), barrier.getStartY(), barrier.getEndX(), barrier.getEndY(),
+            assertTrue(Barrier.acrossBarrier(barrier.getStartX(), barrier.getStartY(), barrier.getEndX(),
+                    barrier.getEndY(),
                     FieldShape.BARRIER_WALL));
 
             Barrier.clearBarrier(barrier);
 
             assertFalse(SimYukkuri.world.getCurrentWorldState().getBarriers().contains(barrier));
             assertFalse(Barrier.onBarrier(midX, midY, 4, 4, FieldShape.BARRIER_WALL));
-            assertFalse(Barrier.acrossBarrier(barrier.getStartX(), barrier.getStartY(), barrier.getEndX(), barrier.getEndY(),
+            assertFalse(Barrier.acrossBarrier(barrier.getStartX(), barrier.getStartY(), barrier.getEndX(),
+                    barrier.getEndY(),
                     FieldShape.BARRIER_WALL));
         }
     }

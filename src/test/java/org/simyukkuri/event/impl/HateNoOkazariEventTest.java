@@ -1,17 +1,5 @@
 package org.simyukkuri.event.impl;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -23,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -116,8 +103,8 @@ class HateNoOkazariEventTest {
     void testCheckEventResponse_returnsFalseForIdiot() {
         // isIdiot() is overridden in specific subclasses (e.g. TarinaiReimu).
         // For a normal Reimu, isIdiot() returns false, so we verify the logic path.
-        Yukkuri from = createBody();
-        Yukkuri to = createBody();
+        createBody();
+        createBody();
         Yukkuri responder = createBody();
         assertFalse(responder.isIdiot());
         // Non-idiot body passes the idiot check (may still return false for other

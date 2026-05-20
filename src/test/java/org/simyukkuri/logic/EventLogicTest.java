@@ -1,24 +1,19 @@
 package org.simyukkuri.logic;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
+import org.simyukkuri.event.EventPacket;
 
 /**
  * Test class for EventLogic.
@@ -253,7 +248,8 @@ public class EventLogicTest {
         org.simyukkuri.SimYukkuri.world.getCurrentWorldState().getEvents().add(event);
         EventPacket result = EventLogic.checkWorldEvent(yukkuri);
         assertNotNull(result);
-        assertEquals(1, org.simyukkuri.SimYukkuri.world.getCurrentWorldState().getEvents().size(), "world event should remain registered");
+        assertEquals(1, org.simyukkuri.SimYukkuri.world.getCurrentWorldState().getEvents().size(),
+                "world event should remain registered");
         org.simyukkuri.SimYukkuri.world.getCurrentWorldState().getEvents().clear();
     }
 
@@ -317,7 +313,8 @@ public class EventLogicTest {
     @Test
     public void testCheckBodyEvent_retNotNull_secondEventCountsDown() {
         // event1: check=true → ret set & removed
-        // event2: simple=false, ret!=null → if(ret==null) skipped → countDown=true → removed
+        // event2: simple=false, ret!=null → if(ret==null) skipped → countDown=true →
+        // removed
         Reimu yukkuri = new Reimu();
         MockCheckResponseTruePacket event1 = new MockCheckResponseTruePacket();
         MockCountDownEvent event2 = new MockCountDownEvent();

@@ -1,36 +1,29 @@
 package org.simyukkuri.item;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.world.item.ItemTestBase;
-import org.simyukkuri.draw.Rectangle4y;
-import org.simyukkuri.entity.core.world.item.BeltconveyorObj;
-import org.simyukkuri.entity.core.world.mobile.Shit;
-import org.simyukkuri.enums.YukkuriType;
-import org.simyukkuri.system.Sprite;
-import org.simyukkuri.util.WorldTestHelper;
-
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.draw.Rectangle4y;
+import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
+import org.simyukkuri.entity.core.world.item.BeltconveyorObj;
+import org.simyukkuri.entity.core.world.item.ItemTestBase;
+import org.simyukkuri.entity.core.world.mobile.Shit;
+import org.simyukkuri.enums.YukkuriType;
+import org.simyukkuri.system.Sprite;
+import org.simyukkuri.util.WorldTestHelper;
 
 class BeltconveyorObjTest extends ItemTestBase {
 
@@ -621,7 +614,7 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testConstructor_WithCoords_doesNotThrow() {
         try {
-            BeltconveyorObj belt = new BeltconveyorObj(100, 100, 0);
+            new BeltconveyorObj(100, 100, 0);
         } catch (Exception e) {
             // Expected in headless environment
         }

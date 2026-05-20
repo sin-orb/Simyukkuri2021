@@ -7,6 +7,29 @@ on:
     branches: [ "master", "main" ]
 
 jobs:
+  checkstyle:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK 11 for Checkstyle
+      uses: actions/setup-java@v4
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+
+    - name: Download Checkstyle
+      shell: powershell
+      run: |
+        New-Item -ItemType Directory -Force -Path tools | Out-Null
+        Invoke-WebRequest -Uri "https://repo1.maven.org/maven2/com/puppycrawl/tools/checkstyle/10.20.1/checkstyle-10.20.1-all.jar" -OutFile "tools\checkstyle.jar"
+
+    - name: Run Checkstyle
+      shell: cmd
+      run: |
+        java -jar tools\checkstyle.jar -c google_checks.xml -f plain src\main\java src\test\java
+
   build:
     runs-on: windows-latest
 

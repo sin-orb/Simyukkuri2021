@@ -1,17 +1,5 @@
 package org.simyukkuri.draw;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,10 +16,9 @@ import java.nio.file.Files;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.engine.Terrarium;
+import org.simyukkuri.engine.TerrariumWorldLogic;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.attachment.Attachment;
 import org.simyukkuri.entity.core.attachment.impl.Ants;
@@ -142,16 +129,17 @@ class TerrariumTest {
         return null;
     }
 
-    private Beltconveyor findBeltAcrossMaps(int objId) {
-        for (org.simyukkuri.system.WorldState map : SimYukkuri.world.getWorldStates()) {
-            for (Beltconveyor belt : map.getBeltconveyors()) {
-                if (belt.getObjId() == objId) {
-                    return belt;
-                }
-            }
-        }
-        return null;
-    }
+    // private Beltconveyor findBeltAcrossMaps(int objId) {
+    // for (org.simyukkuri.system.WorldState map :
+    // SimYukkuri.world.getWorldStates()) {
+    // for (Beltconveyor belt : map.getBeltconveyors()) {
+    // if (belt.getObjId() == objId) {
+    // return belt;
+    // }
+    // }
+    // }
+    // return null;
+    // }
 
     private Beltconveyor findBeltAcrossMaps(int mapSX, int mapSY, int mapEX, int mapEY) {
         for (org.simyukkuri.system.WorldState map : SimYukkuri.world.getWorldStates()) {
@@ -316,7 +304,8 @@ class TerrariumTest {
     @Test
     void testAddBody_Success() {
         int initialBodyCount = SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().size();
-        // addYukkuri(int x, int y, int z, int type, AgeState age, Yukkuri p1, Yukkuri p2)
+        // addYukkuri(int x, int y, int z, int type, AgeState age, Yukkuri p1, Yukkuri
+        // p2)
         // Use getTypeID() instead of ordinal()
         terrarium.addYukkuri(100, 100, 0, YukkuriType.REIMU, AgeState.ADULT, null, null);
         assertEquals(initialBodyCount + 1, SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().size());
@@ -329,11 +318,7 @@ class TerrariumTest {
         body.setY(100);
         body.setPanicType(PanicType.FEAR);
 
-        assertDoesNotThrow(() -> {
-            java.lang.reflect.Method m = Terrarium.class.getDeclaredMethod("checkPanic", Yukkuri.class);
-            m.setAccessible(true);
-            m.invoke(terrarium, body);
-        });
+        assertDoesNotThrow(() -> TerrariumWorldLogic.checkPanic(body));
     }
 
     @Test
@@ -447,9 +432,7 @@ class TerrariumTest {
             assertTrue(nearbyRaper.isRaper());
             assertNull(nearbyRaper.getPanicType());
 
-            java.lang.reflect.Method m = Terrarium.class.getDeclaredMethod("checkPanic", Yukkuri.class);
-            m.setAccessible(true);
-            m.invoke(terrarium, source);
+            TerrariumWorldLogic.checkPanic(source);
 
             assertEquals(PanicType.FEAR, nearby.getPanicType());
             assertNull(nearbyRaper.getPanicType());
@@ -1223,7 +1206,8 @@ class TerrariumTest {
                 enable[GarbageStation.GomiType.WASTE.ordinal()] = true;
                 enable[GarbageStation.GomiType.NORMAL.ordinal()] = true;
                 garbageStation.setEnable(enable);
-                SimYukkuri.world.getCurrentWorldState().getGarbageStations().put(garbageStation.getObjId(), garbageStation);
+                SimYukkuri.world.getCurrentWorldState().getGarbageStations().put(garbageStation.getObjId(),
+                        garbageStation);
 
                 Food leftFood = new Food(garbageStation.getX() - 20, garbageStation.getY(),
                         Food.FoodType.WASTE_NORA.ordinal());
@@ -1280,7 +1264,8 @@ class TerrariumTest {
                 spawnedBody.setAgeState(AgeState.BABY);
                 spawnedBody.setX(feeder.getX());
                 spawnedBody.setY(feeder.getY());
-                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(spawnedBody.getUniqueID(), spawnedBody);
+                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(spawnedBody.getUniqueID(),
+                        spawnedBody);
                 feeder.setFoods(spawnedBody);
 
                 int feederId = feeder.getObjId();
@@ -1624,7 +1609,8 @@ class TerrariumTest {
 
                 Marisa breedingBody = new Marisa();
                 breedingBody.addAttachment(new BreedingAmpoule(breedingBody));
-                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(breedingBody.getUniqueID(), breedingBody);
+                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(breedingBody.getUniqueID(),
+                        breedingBody);
 
                 int poisonBodyId = poisonBody.getUniqueID();
                 int breedingBodyId = breedingBody.getUniqueID();

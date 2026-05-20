@@ -203,7 +203,8 @@ public class YukkuriUtil {
 				OkazariType otype = okazari.getOkazariType();
 				if (otype == OkazariType.DEFAULT) {
 					b.getOkazariImageIndex(layer3, 1);
-					drawYukkuri(g2, z, okazariOfsY, layer3.getImage()[0], base.getScreenRect()[layer3.getDir()[0]].getX(),
+					drawYukkuri(g2, z, okazariOfsY, layer3.getImage()[0],
+							base.getScreenRect()[layer3.getDir()[0]].getX(),
 							base.getScreenRect()[layer3.getDir()[0]].getY() + okazariOfsY,
 							base.getScreenRect()[layer3.getDir()[0]].getWidth(),
 							base.getScreenRect()[layer3.getDir()[0]].getHeight(),
@@ -328,7 +329,8 @@ public class YukkuriUtil {
 						bx += base.getPivotX();
 					}
 					// --> TEST
-					drawYukkuri(g2, z, okazariOfsY, layer3.getImage()[0], bx - okX + ofsX, by - okY + ofsY + okazariOfsY,
+					drawYukkuri(g2, z, okazariOfsY, layer3.getImage()[0], bx - okX + ofsX,
+							by - okY + ofsY + okazariOfsY,
 							okW,
 							okH, okW, okH, io);
 					// <-- TEST
@@ -426,8 +428,6 @@ public class YukkuriUtil {
 		int dy2 = dy1 + expandHeight + tz;
 		int sx1 = 0;
 		int sy1 = 0;
-		if (img == null)
-			return;
 		int imageWidth = img.getWidth();
 		int imageHeight = img.getHeight();
 		int sourceX2 = imageWidth;

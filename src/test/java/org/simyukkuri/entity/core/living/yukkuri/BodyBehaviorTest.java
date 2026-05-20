@@ -1,32 +1,31 @@
 package org.simyukkuri.entity.core.living.yukkuri;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
+import java.lang.reflect.Method;
+import java.security.SecureRandom;
+
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
-import static org.junit.jupiter.api.Assertions.*;
-
+import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.engine.World;
 import org.simyukkuri.draw.MyPane;
-import org.simyukkuri.engine.Terrarium;
-import org.simyukkuri.enums.*;
+import org.simyukkuri.engine.TerrariumWorldLogic;
+import org.simyukkuri.engine.World;
+import org.simyukkuri.engine.YukkuriTickProcessor;
+import org.simyukkuri.enums.Attitude;
+import org.simyukkuri.enums.Happiness;
+import org.simyukkuri.enums.Intelligence;
+import org.simyukkuri.enums.PanicType;
+import org.simyukkuri.enums.YukkuriRank;
+import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.event.impl.BegForLifeEvent;
 import org.simyukkuri.util.WorldTestHelper;
-import java.security.SecureRandom;
-import java.lang.reflect.Method;
 
 public class BodyBehaviorTest {
 
@@ -51,9 +50,9 @@ public class BodyBehaviorTest {
             nextIntValue = v;
         }
 
-        public void setNextBool(boolean b) {
-            nextBoolValue = b;
-        }
+        // public void setNextBool(boolean b) {
+        // nextBoolValue = b;
+        // }
     }
 
     private PresetRandom testRnd;
@@ -126,7 +125,7 @@ public class BodyBehaviorTest {
     }
 
     @Test
-    public void testCheckPanic_Propagation() throws Exception {
+    public void testCheckPanic_Propagation() {
         body.setPanic(true, PanicType.BURN);
 
         StubBody neighbor = new StubBody();
@@ -135,9 +134,7 @@ public class BodyBehaviorTest {
         neighbor.setY(body.getY());
         world.getCurrentWorldState().getYukkuriRegistry().put(2, neighbor);
 
-        Method m = Terrarium.class.getDeclaredMethod("checkPanic", Yukkuri.class);
-        m.setAccessible(true);
-        m.invoke(SimYukkuri.mypane.getTerrarium(), body);
+        TerrariumWorldLogic.checkPanic(body);
 
         assertNotNull(neighbor.getPanicType());
         assertEquals(PanicType.FEAR, neighbor.getPanicType());
@@ -153,9 +150,10 @@ public class BodyBehaviorTest {
         neighbor.setY(body.getY());
         world.getCurrentWorldState().getYukkuriRegistry().put(2, neighbor);
 
-        Method m = Terrarium.class.getDeclaredMethod("checkFire", Yukkuri.class);
+        Method m = YukkuriTickProcessor.class.getDeclaredMethod("checkFire",
+                Yukkuri.class, org.simyukkuri.system.WorldState.class);
         m.setAccessible(true);
-        m.invoke(SimYukkuri.mypane.getTerrarium(), body);
+        m.invoke(null, body, world.getCurrentWorldState());
 
         assertTrue(neighbor.getAttachmentSize(org.simyukkuri.entity.core.attachment.impl.Fire.class) > 0);
     }
@@ -176,7 +174,7 @@ public class BodyBehaviorTest {
         }
 
         @Test
-        void testScenario_PanicDoesNotPropagateToRaperBody() throws Exception {
+        void testScenario_PanicDoesNotPropagateToRaperBody() {
             body.setPanic(true, PanicType.BURN);
 
             StubBody raper = new StubBody();
@@ -186,9 +184,7 @@ public class BodyBehaviorTest {
             raper.setRaper(true);
             world.getCurrentWorldState().getYukkuriRegistry().put(2, raper);
 
-            Method m = Terrarium.class.getDeclaredMethod("checkPanic", Yukkuri.class);
-            m.setAccessible(true);
-            m.invoke(SimYukkuri.mypane.getTerrarium(), body);
+            TerrariumWorldLogic.checkPanic(body);
 
             assertNull(raper.getPanicType());
         }
@@ -203,9 +199,10 @@ public class BodyBehaviorTest {
             distant.setY(body.getY() + 1000);
             world.getCurrentWorldState().getYukkuriRegistry().put(2, distant);
 
-            Method m = Terrarium.class.getDeclaredMethod("checkFire", Yukkuri.class);
+            Method m = YukkuriTickProcessor.class.getDeclaredMethod("checkFire",
+                    Yukkuri.class, org.simyukkuri.system.WorldState.class);
             m.setAccessible(true);
-            m.invoke(SimYukkuri.mypane.getTerrarium(), body);
+            m.invoke(null, body, world.getCurrentWorldState());
 
             assertEquals(0, distant.getAttachmentSize(org.simyukkuri.entity.core.attachment.impl.Fire.class));
         }

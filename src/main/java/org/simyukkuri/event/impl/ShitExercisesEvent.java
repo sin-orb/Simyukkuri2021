@@ -11,8 +11,6 @@ import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.event.EventPacket;
-import org.simyukkuri.event.EventPacket.EventPriority;
-import org.simyukkuri.event.EventPacket.UpdateState;
 import org.simyukkuri.field.impl.Barrier;
 import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.system.MessagePool;
@@ -271,7 +269,7 @@ public class ShitExercisesEvent extends EventPacket {
 						sourceBody.setMessage(
 								GameMessages.getMessage(sourceBody, MessagePool.Action.ShitExercisesGOFrom), true);
 					}
-					boolean gathered = YukkuriLogic.gatheringYukkuriFront(sourceBody, childrenList, this);
+					YukkuriLogic.gatheringYukkuriFront(sourceBody, childrenList, this);
 					int distanceToToilet = 0;
 					Entity targetObject = sourceBody.takeMappedObj(this.target);
 					if (targetObject != null) {

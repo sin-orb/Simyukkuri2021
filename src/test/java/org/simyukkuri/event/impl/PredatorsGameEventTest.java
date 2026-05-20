@@ -1,17 +1,5 @@
 package org.simyukkuri.event.impl;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -22,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -200,12 +187,12 @@ class PredatorsGameEventTest {
         Yukkuri from = createBody();
         from.setPredatorType(org.simyukkuri.enums.PredatorType.BITE); // make from a predator
         // Add a prey body (not predator) to the world
-        Yukkuri prey = createBody();
+        // Yukkuri prey = createBody();
         // prey is Reimu (not predator), alive
 
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
         // b == from and from.isPredatorType() → enters the scanning loop
-        boolean result = event.checkEventResponse(from);
+        event.checkEventResponse(from);
         // Result depends on whether prey is found within eyesight
         // Just verify no crash
         assertNotNull(event);

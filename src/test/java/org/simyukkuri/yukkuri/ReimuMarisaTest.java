@@ -1,25 +1,16 @@
 package org.simyukkuri.yukkuri;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.simyukkuri.SimYukkuri;
-
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.draw.Point4y;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Marisa;
+import org.simyukkuri.entity.core.living.yukkuri.impl.ReimuMarisa;
+import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.util.WorldTestHelper;
 
 public class ReimuMarisaTest {
@@ -72,7 +63,7 @@ public class ReimuMarisaTest {
         ReimuMarisa obj = new ReimuMarisa();
         // getMountPoint returns attachment offset from map
         // Most classes return null for unknown keys
-        Point4y[] result = obj.getMountPoint("unknown_key");
+        obj.getMountPoint("unknown_key");
         // Result can be null or an array depending on initialization
         // Just verify the method doesn't crash
         assertNotNull(obj);
@@ -83,14 +74,15 @@ public class ReimuMarisaTest {
         ReimuMarisa obj = new ReimuMarisa();
         // checkTransform() checks transformation conditions
         // Without proper World setup, will likely return null
-        Yukkuri result = obj.checkTransform();
+        obj.checkTransform();
         // Just verify the method executes without crashing
     }
 
     @Test
     public void testReimuMarisaIsImageLoaded() {
         ReimuMarisa obj = new ReimuMarisa();
-        // isImageLoaded() reflects static image loader state, which may be changed by other tests.
+        // isImageLoaded() reflects static image loader state, which may be changed by
+        // other tests.
         assertDoesNotThrow(() -> obj.isImageLoaded());
     }
 
@@ -129,7 +121,7 @@ public class ReimuMarisaTest {
         ReimuMarisa parent2 = new ReimuMarisa();
         ReimuMarisa obj = new ReimuMarisa(100, 100, 0, AgeState.ADULT, parent1, parent2);
         // Adult yukkuri - test transformation eligibility
-        boolean result = obj.judgeCanTransForGodHand();
+        obj.judgeCanTransForGodHand();
         // Result varies by class, just verify no crash
         assertNotNull(obj);
     }
@@ -140,7 +132,7 @@ public class ReimuMarisaTest {
         ReimuMarisa parent2 = new ReimuMarisa();
         ReimuMarisa obj = new ReimuMarisa(100, 100, 0, AgeState.BABY, parent1, parent2);
         // Baby yukkuri - test transformation eligibility
-        boolean result = obj.judgeCanTransForGodHand();
+        obj.judgeCanTransForGodHand();
         // Result varies by class, just verify no crash
         assertNotNull(obj);
     }

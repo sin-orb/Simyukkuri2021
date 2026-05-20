@@ -1,17 +1,5 @@
 package org.simyukkuri.entity.core.attachment.impl;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -23,19 +11,17 @@ import java.security.SecureRandom;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.MyPane;
 import org.simyukkuri.engine.World;
-import org.simyukkuri.entity.core.attachment.impl.Ants;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.entity.core.world.mobile.Vomit;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.CoreAnkoState;
-import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.system.ResourceUtil;
 
@@ -154,7 +140,8 @@ public class AntsTest {
         Ants ants = new Ants(parent);
         ants.update();
 
-        // pa.beEaten(60/3=20, 0, false) -> eatYukkuri reduces ankoAmount; makeDirty sets
+        // pa.beEaten(60/3=20, 0, false) -> eatYukkuri reduces ankoAmount; makeDirty
+        // sets
         // flag
         assertTrue(parent.getAnkoAmount() < bodyAmountBefore, "ankoAmount should decrease after eatYukkuri");
         assertTrue(parent.isDirty(), "body should be marked dirty by beEaten");

@@ -1,17 +1,5 @@
 package org.simyukkuri.event.impl;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -19,12 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.event.EventPacket.UpdateState;
-import org.simyukkuri.util.WorldTestHelper;
 import org.simyukkuri.event.EventTestBase;
+import org.simyukkuri.util.WorldTestHelper;
 
 public class BreedEventTest extends EventTestBase {
 
@@ -353,35 +340,35 @@ public class BreedEventTest extends EventTestBase {
     class RegressionScenarios {
 
         @Test
-    void testScenario_BirthSuccessMakesResponderVeryHappyAndAddsGoodMemories() {
-        Yukkuri from = createBody(1, 100, 100);
-        Yukkuri b = createBody(2, 120, 120);
-        b.setStress(100);
-        int beforeStress = b.getStress();
+        void testScenario_BirthSuccessMakesResponderVeryHappyAndAddsGoodMemories() {
+            Yukkuri from = createBody(1, 100, 100);
+            Yukkuri b = createBody(2, 120, 120);
+            b.setStress(100);
+            int beforeStress = b.getStress();
             int beforeMemories = b.getMemories();
 
             BreedEvent event = new BreedEvent(from, null, null, 10);
 
-        assertTrue(event.execute(b));
-        assertEquals(Happiness.VERY_HAPPY, b.getHappiness());
-        assertEquals(beforeStress - 30, b.getStress());
-        assertTrue(b.getMemories() > beforeMemories);
-    }
+            assertTrue(event.execute(b));
+            assertEquals(Happiness.VERY_HAPPY, b.getHappiness());
+            assertEquals(beforeStress - 30, b.getStress());
+            assertTrue(b.getMemories() > beforeMemories);
+        }
 
-    @Test
-    void testScenario_ChildResponderLeavesEventAfterGreeting() {
-        Yukkuri from = createBody(1, 100, 100);
-        Yukkuri child = createBody(2, 120, 120);
-        WorldTestHelper.setParents(child, -1, from.getUniqueID());
-        child.setAgeState(org.simyukkuri.enums.AgeState.BABY);
-        child.setBirthMessageForced(false);
-        from.setHasBaby(true);
+        @Test
+        void testScenario_ChildResponderLeavesEventAfterGreeting() {
+            Yukkuri from = createBody(1, 100, 100);
+            Yukkuri child = createBody(2, 120, 120);
+            WorldTestHelper.setParents(child, -1, from.getUniqueID());
+            child.setAgeState(org.simyukkuri.enums.AgeState.BABY);
+            child.setBirthMessageForced(false);
+            from.setHasBaby(true);
 
-        BreedEvent event = new BreedEvent(from, null, null, 10);
+            BreedEvent event = new BreedEvent(from, null, null, 10);
 
-        assertTrue(event.execute(child));
-        assertTrue(child.getBirthEventBlockedTicks() > 0);
-        assertFalse(event.checkEventResponse(child));
-    }
+            assertTrue(event.execute(child));
+            assertTrue(child.getBirthEventBlockedTicks() > 0);
+            assertFalse(event.checkEventResponse(child));
+        }
     }
 }

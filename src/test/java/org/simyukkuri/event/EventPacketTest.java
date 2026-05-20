@@ -1,42 +1,26 @@
 package org.simyukkuri.event;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.engine.World;
-import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.system.Sprite;
+import org.simyukkuri.entity.core.Entity;
+import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
-
-import org.junit.jupiter.api.Nested;
-
-import org.simyukkuri.event.EventPacket.EventPriority;
-import org.simyukkuri.event.EventPacket.UpdateState;
-import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.world.bodylinked.Okazari;
+import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Attitude;
 import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.PublicRank;
+import org.simyukkuri.event.EventPacket.EventPriority;
+import org.simyukkuri.event.EventPacket.UpdateState;
 import org.simyukkuri.event.impl.BreedEvent;
 import org.simyukkuri.event.impl.CutPenipeniEvent;
 import org.simyukkuri.event.impl.EatBodyEvent;
@@ -44,6 +28,7 @@ import org.simyukkuri.event.impl.FavCopyEvent;
 import org.simyukkuri.event.impl.GetTrashOkazariEvent;
 import org.simyukkuri.event.impl.ProposeEvent;
 import org.simyukkuri.event.impl.RevengeAttackEvent;
+import org.simyukkuri.system.Sprite;
 import org.simyukkuri.util.WorldTestHelper;
 
 public class EventPacketTest {

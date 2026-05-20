@@ -1,32 +1,19 @@
 package org.simyukkuri.logic;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.enums.Attitude;
-import org.simyukkuri.util.GameRandom;
-import org.simyukkuri.util.WorldTestHelper;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Marisa;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Remirya;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Sakuya;
+import org.simyukkuri.enums.Attitude;
+import org.simyukkuri.util.GameRandom;
+import org.simyukkuri.util.WorldTestHelper;
 
 /**
  * Tests for YukkuriPartnerSearchRule.
@@ -67,7 +54,8 @@ class BodyPartnerSearchRuleTest {
 		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(closer.getUniqueID(), closer);
 		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(pheromone.getUniqueID(), pheromone);
 
-		YukkuriPartnerSearchRule.SearchResult result = YukkuriPartnerSearchRule.selectTargets(me, null, me.getEyesightBase(),
+		YukkuriPartnerSearchRule.SearchResult result = YukkuriPartnerSearchRule.selectTargets(me, null,
+				me.getEyesightBase(),
 				me.getEyesightBase());
 		assertNotNull(result);
 		assertEquals(pheromone, result.getTargetBody());
@@ -88,7 +76,8 @@ class BodyPartnerSearchRuleTest {
 		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(me.getUniqueID(), me);
 		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(target.getUniqueID(), target);
 
-		YukkuriPartnerSearchRule.SearchResult result = YukkuriPartnerSearchRule.selectTargets(me, null, me.getEyesightBase(),
+		YukkuriPartnerSearchRule.SearchResult result = YukkuriPartnerSearchRule.selectTargets(me, null,
+				me.getEyesightBase(),
 				me.getEyesightBase());
 		assertNotNull(result);
 		assertEquals(target, result.getTargetHasOkazari());
@@ -116,7 +105,8 @@ class BodyPartnerSearchRuleTest {
 		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(predator.getUniqueID(), predator);
 		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(normal.getUniqueID(), normal);
 
-		YukkuriPartnerSearchRule.SearchResult result = YukkuriPartnerSearchRule.selectTargets(me, null, me.getEyesightBase(),
+		YukkuriPartnerSearchRule.SearchResult result = YukkuriPartnerSearchRule.selectTargets(me, null,
+				me.getEyesightBase(),
 				me.getEyesightBase());
 		assertNotNull(result);
 		assertEquals(normal, result.getTargetBody());

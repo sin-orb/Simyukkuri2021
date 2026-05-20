@@ -4,7 +4,6 @@ import java.awt.event.MouseEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
 import org.simyukkuri.command.GadgetMenu.ActionTarget;
 import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.draw.Point4y;
@@ -18,9 +17,8 @@ import org.simyukkuri.field.impl.Farm;
 import org.simyukkuri.field.impl.Pool;
 import org.simyukkuri.system.Cash;
 
-/******************************************************************
- * 
- * 各コマンドの実行部分
+/**
+ * 各コマンドの実行部分.
  * SimYukkuri.javaが長いので分割
  * 
  */
@@ -28,7 +26,7 @@ import org.simyukkuri.system.Cash;
 public class GadgetAction {
 
 	/**
-	 * 即時実行処理(清掃系)
+	 * 即時実行処理(清掃系).
 	 *
 	 * @param actionItem 対象オブジェクト
 	 */
@@ -37,13 +35,13 @@ public class GadgetAction {
 	}
 
 	/**
-	 * 左クリック処理
+	 * 左クリック処理.
 	 *
 	 * @param actionItem    実行内容
 	 * @param targetObject  対象アイテム
 	 * @param ev            入力されたマウス操作
 	 * @param fieldMousePos マウスの座標
-	 * @return
+	 * @return WorldEntity
 	 */
 	public static final WorldEntity leftClickEvaluate(GadgetMenuChoice actionItem, Entity targetObject, MouseEvent ev,
 			int[] fieldMousePos) {
@@ -62,8 +60,9 @@ public class GadgetAction {
 		// クリック対象とガジェットの選択モードチェック
 		if (actionTarget == ActionTarget.TERRAIN) {
 			// 背景設置物
-			if (targetObject != null)
+			if (targetObject != null) {
 				return null;
+			}
 
 			// 今のところキーは使用しないので未チェック
 			// 座標変換と設置可能範囲チェック
@@ -132,8 +131,9 @@ public class GadgetAction {
 			}
 		} else {
 			// 選択物体
-			if (targetObject == null)
+			if (targetObject == null) {
 				return null;
+			}
 			switch (actionItem.getGroup()) {
 				case TOOL:
 					evaluateTool(actionItem, ev, targetObject);
@@ -176,13 +176,13 @@ public class GadgetAction {
 	}
 
 	/**
-	 * 左複数クリック処理
+	 * 左複数クリック処理.
 	 *
 	 * @param item          実行内容
 	 * @param target        対象アイテム
 	 * @param ev            入力されたマウス操作
 	 * @param fieldMousePos マウスの座標
-	 * @return
+	 * @return WorldEntity
 	 */
 	public static final WorldEntity leftMultiClickEvaluate(GadgetMenuChoice item, Entity target, MouseEvent ev,
 			int[] fieldMousePos) {
@@ -190,13 +190,13 @@ public class GadgetAction {
 	}
 
 	/**
-	 * プレイヤー操作によらないアイテム設置
+	 * プレイヤー操作によらないアイテム設置.
 	 *
 	 * @param cls        設置されるアイテム
 	 * @param px         設置場所のX座標
 	 * @param py         設置場所のY座標
 	 * @param initOption 設置アイテムのオプション情報
-	 * @return
+	 * @return WorldEntity
 	 */
 	public static WorldEntity putObjEX(Class<?> cls, int px, int py, int initOption) {
 		WorldEntity placedObject = null;

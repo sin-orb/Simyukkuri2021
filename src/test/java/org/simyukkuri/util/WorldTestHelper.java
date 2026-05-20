@@ -1,17 +1,5 @@
 package org.simyukkuri.util;
 
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.*;
-import org.simyukkuri.entity.core.attachment.impl.*;
-import org.simyukkuri.entity.core.effect.*;
-import org.simyukkuri.entity.core.effect.impl.*;
-import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.*;
-import org.simyukkuri.entity.core.world.bodylinked.*;
-import org.simyukkuri.entity.core.world.item.*;
-import org.simyukkuri.entity.core.world.mobile.*;
-
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
@@ -20,16 +8,16 @@ import java.util.Random;
 import javax.swing.JComboBox;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.draw.Translate;
+import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Marisa;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.system.LoggerYukkuri;
-import org.simyukkuri.ui.MainCommandUI;
-import org.simyukkuri.system.WorldState;
 import org.simyukkuri.system.MessagePool;
+import org.simyukkuri.system.WorldState;
+import org.simyukkuri.ui.MainCommandUI;
 
 /**
  * Test helper to initialize minimal World infrastructure for testing

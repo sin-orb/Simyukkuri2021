@@ -1,4 +1,5 @@
 package org.simyukkuri.ui;
+
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameText;
 
@@ -19,7 +20,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.enums.YukkuriType;
 
 /** ゆっくりの種別フィルターパネルを提供するクラス。 */
@@ -96,7 +96,7 @@ public class YukkuriFilterPanel {
 	 * @param obOptionSelection  初期選択配列
 	 * @return OKされたかどうか
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static boolean openFilterPanel(String strHead, String strTop, List<String> istrOptionList,
 			List<YukkuriType> ioResultSelectType, List<Boolean> obOptionSelection) {
 		List<YukkuriType> retSelectedType = new LinkedList<YukkuriType>();

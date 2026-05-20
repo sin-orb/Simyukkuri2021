@@ -1247,6 +1247,7 @@ public abstract class SocialEntity extends LivingEntity {
 
 	/** 通常時の躾 */
 	public final void teachManner(int p) {
+		if (!beginDisciplineEmotion()) return;
 		disclipline(p * 5);
 		boolean flag = false;
 		if (isFurifuri() || (isSukkiri() && !isRaper()))
