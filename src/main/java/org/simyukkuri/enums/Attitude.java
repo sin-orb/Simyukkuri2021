@@ -1,5 +1,6 @@
 package org.simyukkuri.enums;
-/** ゲス度合い */
+
+/** ゲス度合い. */
 public enum Attitude {
 	/** 超善良 */VERY_NICE,
 	/** 善良 */NICE,

@@ -1,7 +1,6 @@
 package org.simyukkuri.command;
 
 import java.awt.event.ActionListener;
-
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;

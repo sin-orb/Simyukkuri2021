@@ -20,7 +20,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.ConstState;
-import org.simyukkuri.SequenceRNG;
+import org.simyukkuri.SequenceRandom;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.engine.birth.YukkuriBirthTypeResolver;
 import org.simyukkuri.engine.transform.TransformationBodyCopier;
@@ -83,7 +83,7 @@ public class YukkuriUtilTest {
     @Test
     public void testGetChangelingBabyType() {
         // Test changeling type generation with controlled RNG
-        SimYukkuri.RND = new SequenceRNG(5);
+        SimYukkuri.RND = new SequenceRandom(5);
 
         YukkuriType changelingType = YukkuriBirthTypeResolver.getChangelingBabyType();
 
@@ -95,7 +95,7 @@ public class YukkuriUtilTest {
     @Test
     public void testGetMarisaType() {
         // Test Marisa subtype selection with controlled RNG
-        SimYukkuri.RND = new SequenceRNG(1);
+        SimYukkuri.RND = new SequenceRandom(1);
 
         int marisaType = YukkuriBirthTypeResolver.getMarisaType();
 
@@ -106,7 +106,7 @@ public class YukkuriUtilTest {
     @Test
     public void testGetRandomYukkuriType() {
         // Test random yukkuri type generation
-        SimYukkuri.RND = new SequenceRNG(10);
+        SimYukkuri.RND = new SequenceRandom(10);
 
         Reimu parent = new Reimu();
         YukkuriType randomType = YukkuriBirthTypeResolver.getRandomYukkuriType(parent);
@@ -118,7 +118,7 @@ public class YukkuriUtilTest {
     @Test
     public void testGetRandomYukkuriTypeWithNullParent() {
         // Test with null parent
-        SimYukkuri.RND = new SequenceRNG(5);
+        SimYukkuri.RND = new SequenceRandom(5);
 
         YukkuriType randomType = YukkuriBirthTypeResolver.getRandomYukkuriType(null);
 
@@ -209,7 +209,7 @@ public class YukkuriUtilTest {
     @Test
     public void testJudgeNewAnt() {
         // Test ant judgment logic
-        SimYukkuri.RND = new SequenceRNG(50);
+        SimYukkuri.RND = new SequenceRandom(50);
 
         Reimu reimu = new Reimu();
 
@@ -486,7 +486,7 @@ public class YukkuriUtilTest {
 
     @Test
     public void testGetRandomYukkuriType_ReturnsValidType() {
-        SimYukkuri.RND = new SequenceRNG(0);
+        SimYukkuri.RND = new SequenceRandom(0);
         Reimu parent = new Reimu();
         YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(parent);
         assertNotNull(type);
@@ -494,7 +494,7 @@ public class YukkuriUtilTest {
 
     @Test
     public void testGetRandomYukkuriType_NullParent_ReturnsValidType() {
-        SimYukkuri.RND = new SequenceRNG(999);
+        SimYukkuri.RND = new SequenceRandom(999);
         YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(null);
         assertNotNull(type);
     }
@@ -527,7 +527,7 @@ public class YukkuriUtilTest {
         @Test
         void testScenario_DosParentRandomTypeFallsBackToConcreteMarisaSubtype() {
             DosMarisa parent = new DosMarisa();
-            SimYukkuri.RND = new SequenceRNG(2, 1);
+            SimYukkuri.RND = new SequenceRandom(2, 1);
             YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(parent);
 
             assertEquals(YukkuriType.MARISAKOTATSUMURI, type);
@@ -535,7 +535,7 @@ public class YukkuriUtilTest {
 
         @Test
         void testScenario_NullParentRareRollYieldsSpecificRareType() {
-            SimYukkuri.RND = new SequenceRNG(0, 11, 4);
+            SimYukkuri.RND = new SequenceRandom(0, 11, 4);
 
             YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(null);
 
@@ -545,7 +545,7 @@ public class YukkuriUtilTest {
         @Test
         void testScenario_NonDosParentKeepsItsOwnTypeOnParentBranch() {
             Reimu parent = new Reimu();
-            SimYukkuri.RND = new SequenceRNG(2);
+            SimYukkuri.RND = new SequenceRandom(2);
 
             YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(parent);
 
@@ -554,7 +554,7 @@ public class YukkuriUtilTest {
 
         @Test
         void testScenario_NullParentParentBranchCanYieldPlainMyon() {
-            SimYukkuri.RND = new SequenceRNG(4, 5);
+            SimYukkuri.RND = new SequenceRandom(4, 5);
 
             YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(null);
 
@@ -563,7 +563,7 @@ public class YukkuriUtilTest {
 
         @Test
         void testScenario_RandomBranchMapsAliceSlotToArisu() {
-            SimYukkuri.RND = new SequenceRNG(0, 3);
+            SimYukkuri.RND = new SequenceRandom(0, 3);
 
             YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(null);
 
@@ -572,7 +572,7 @@ public class YukkuriUtilTest {
 
         @Test
         void testScenario_RandomBranchCanYieldSpecificRareType() {
-            SimYukkuri.RND = new SequenceRNG(1, 11, 7);
+            SimYukkuri.RND = new SequenceRandom(1, 11, 7);
 
             YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(null);
 
@@ -581,7 +581,7 @@ public class YukkuriUtilTest {
 
         @Test
         void testScenario_ChangelingCanYieldRareSubtype() {
-            SimYukkuri.RND = new SequenceRNG(0, 4);
+            SimYukkuri.RND = new SequenceRandom(0, 4);
 
             YukkuriType type = YukkuriBirthTypeResolver.getChangelingBabyType();
 
@@ -590,7 +590,7 @@ public class YukkuriUtilTest {
 
         @Test
         void testScenario_ChangelingCanYieldDeibuFromReimuBranch() {
-            SimYukkuri.RND = new SequenceRNG(1, 1, 3);
+            SimYukkuri.RND = new SequenceRandom(1, 1, 3);
 
             YukkuriType type = YukkuriBirthTypeResolver.getChangelingBabyType();
 
@@ -599,7 +599,7 @@ public class YukkuriUtilTest {
 
         @Test
         void testScenario_GetMarisaTypeCanYieldKotatsumuri() {
-            SimYukkuri.RND = new SequenceRNG(1, 1);
+            SimYukkuri.RND = new SequenceRandom(1, 1);
 
             int type = YukkuriBirthTypeResolver.getMarisaType();
 
@@ -608,7 +608,7 @@ public class YukkuriUtilTest {
 
         @Test
         void testScenario_GetMarisaTypeCanYieldTsumuri() {
-            SimYukkuri.RND = new SequenceRNG(2, 2);
+            SimYukkuri.RND = new SequenceRandom(2, 2);
 
             int type = YukkuriBirthTypeResolver.getMarisaType();
 

@@ -3,8 +3,8 @@ package org.simyukkuri.system;
 import java.util.HashMap;
 import java.util.Map;
 
-/*****************************************************
- * 1アクションのメッセージ束
+/**
+ * 1アクションのメッセージ束.
  */
 public class MessageBundle {
 	/** 現在有効なサブタグ */

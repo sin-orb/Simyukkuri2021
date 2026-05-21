@@ -1,7 +1,6 @@
 package org.simyukkuri.entity.core.living.yukkuri;
 
 import java.util.Iterator;
-
 import org.simyukkuri.entity.core.world.bodylinked.Stalk;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.UnbirthBabyState;
@@ -177,6 +176,7 @@ public final class YukkuriStalkDelegate {
 					body.stay();
 					break;
 				}
+				// fall through
 			case KILLED:
 				body.setHappiness(Happiness.VERY_SAD);
 				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.AbuseBabyKilled));

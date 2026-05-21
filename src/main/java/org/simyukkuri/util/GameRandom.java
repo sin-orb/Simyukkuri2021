@@ -1,7 +1,6 @@
 package org.simyukkuri.util;
 
 import java.util.Random;
-
 import org.simyukkuri.SimYukkuri;
 
 /**

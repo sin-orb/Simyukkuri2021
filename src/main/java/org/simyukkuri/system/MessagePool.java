@@ -5,21 +5,20 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.FootBake;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.LovePlayer;
 import org.simyukkuri.enums.PublicRank;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.util.GameLocale;
 import org.simyukkuri.util.GameRandom;
 
-/*****************************************************
- * 全キャラのメッセージ管理
+/**
+ * 全キャラのメッセージ管理.
  */
 public class MessagePool {
 	// アクション名定義
@@ -696,19 +695,21 @@ public class MessagePool {
 
 		do {
 			line = br.readLine();
-			if (line != null)
+			if (line != null) {
 				line = line.trim();
+			}
 
-			if (line == null || "".equals(line))
+			if (line == null || "".equals(line)) {
 				continue;
+			}
 
 			// 先頭文字判定
 			String head1 = line.substring(0, 1);
-			if ("#".equals(head1))
+			if ("#".equals(head1)) {
 				continue;
+			}
 
-			if ("[".equals(head1)) // アクション
-			{
+			if ("[".equals(head1)) { // アクション
 				String head2 = line.substring(1, 2);
 				// アクションを閉じる
 				if ("/".equals(head2)) {
@@ -726,10 +727,10 @@ public class MessagePool {
 				int st = line.indexOf("[") + 1;
 				int ed = line.indexOf("]");
 				actName = line.substring(st, ed) + suffix;
-			} else if ("<".equals(head1)) // サブタグ
-			{
-				if (actName == null)
+			} else if ("<".equals(head1)) { // サブタグ
+				if (actName == null) {
 					continue;
+				}
 
 				// 現在までのメッセージを登録
 				if (msg != null && msg.size() > 0) {
@@ -782,8 +783,7 @@ public class MessagePool {
 						}
 					}
 				}
-			} else // セリフ
-			{
+			} else { // セリフ
 				msg.add(line);
 			}
 		} while (line != null);
@@ -800,8 +800,9 @@ public class MessagePool {
 				key.append("_");
 			}
 		}
-		if (key.length() == 0)
+		if (key.length() == 0) {
 			return null;
+		}
 
 		return key.toString();
 	}
@@ -824,23 +825,19 @@ public class MessagePool {
 		}
 		// 口封じ時
 		if (body.isShutmouth()) {
-			if (body.isSleeping())
+			if (body.isSleeping()) {
 				return null;
-			else if (body.isNYD())
+			} else if (body.isNYD()) {
 				action = MessagePool.Action.NYDCantTalk;
-			else
+			} else {
 				action = MessagePool.Action.CantTalk;
+			}
 		}
 
 		HashMap<String, MessageBundle> map = null;
-		MessageBundle act = null;
-		String name = "";
-		String name2 = "";
-		String partnerName = "";
 		if (body.getRank() == null) {
 			return null;
 		}
-		String suffix = RANK_SUFFIX[body.getRank().getMessageIndex()];
 		if (pool_j.length <= body.getMsgType().ordinal()) {
 			return null;
 		}
@@ -848,6 +845,7 @@ public class MessagePool {
 		if (map == null) {
 			return null;
 		}
+		String name = "";
 		// name = body.getMyNameJ;
 		if (body.isStressful() && body.isDamaged() && GameRandom.nextBoolean()) {
 			name = body.getMyNameD();
@@ -861,20 +859,23 @@ public class MessagePool {
 			name = GameLocale.isJapanese() ? body.getNameJ() : body.getNameE();
 			// name = body.getNameJ() / body.getNameE() fallback already handled above.
 		}
-		name2 = GameLocale.isJapanese() ? body.getNameJ2() : body.getNameE2();
+		String partnerName = "";
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(body.getPartner());
-		if (pa != null)
+		if (pa != null) {
 			partnerName = GameLocale.isJapanese() ? pa.getNameJ() : pa.getNameE();
+		}
 
-		act = map.get(action.name() + suffix);
+		String suffix = RANK_SUFFIX[body.getRank().getMessageIndex()];
+		MessageBundle act = map.get(action.name() + suffix);
 		// 読み込み失敗かつ飼いゆメッセージではないなら飼いゆメッセージを読み込む
 		if (act == null && body.getRank().getMessageIndex() != YukkuriRank.KAIYU.getMessageIndex()) {
 			suffix = RANK_SUFFIX[YukkuriRank.KAIYU.getMessageIndex()];
 			act = map.get(action.name() + suffix);
 		}
 
-		if (act == null)
+		if (act == null) {
 			return "NO ACTION [" + action.name() + "]";
+		}
 
 		boolean[] flags = null;
 		StringBuilder key = null;
@@ -1000,14 +1001,17 @@ public class MessagePool {
 			msg = beforeMsg;
 		}
 
-		if (msg == null)
+		if (msg == null) {
 			return "NO TAG <" + key.toString() + ">";
+		}
 
 		StringBuilder ret = new StringBuilder(msg[GameRandom.nextInt(msg.length)]);
 		// 埋め込み文字の置き換え
 		if (ret.indexOf("%") != -1) {
-			if (ret.indexOf("%" + Replace.dummy.name()) != -1)
+			String name2 = GameLocale.isJapanese() ? body.getNameJ2() : body.getNameE2();
+			if (ret.indexOf("%" + Replace.dummy.name()) != -1) {
 				return null;
+			}
 			int st;
 			do {
 				st = ret.indexOf("%" + Replace.name2.name());

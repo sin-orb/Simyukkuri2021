@@ -1,7 +1,6 @@
 package org.simyukkuri.util;
 
 import java.awt.Component;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.MyPane;
 import org.simyukkuri.engine.Terrarium;

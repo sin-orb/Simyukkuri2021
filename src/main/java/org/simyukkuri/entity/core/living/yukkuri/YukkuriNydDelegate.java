@@ -102,15 +102,15 @@ public final class YukkuriNydDelegate {
 		if (body.isUnBirth()) {
 			return true;
 		}
-		int randomThreshold = 40;
 		body.wakeup();
 		body.setBirth(false);
 
 		if (body.isNYD() && body.isSleeping()) {
 			body.wakeup();
 		}
+		final int nearDiseaseThreshold = 40;
 		if (body.getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE_NEAR
-				&& GameRandom.nextInt(randomThreshold) == 0) {
+				&& GameRandom.nextInt(nearDiseaseThreshold) == 0) {
 			switch (body.getNonYukkuriDiseasePeriod()) {
 				case 0:
 					if (GameRandom.nextBoolean()) {
@@ -166,9 +166,9 @@ public final class YukkuriNydDelegate {
 			body.setHappiness(Happiness.VERY_SAD);
 			body.setNydMessage(GameMessages.getMessage(body, MessagePool.Action.NonYukkuriDiseaseNear), false);
 		}
-		randomThreshold = 20;
+		final int diseaseThreshold = 20;
 		if (body.getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE
-				&& GameRandom.nextInt(randomThreshold) == 0) {
+				&& GameRandom.nextInt(diseaseThreshold) == 0) {
 			switch (body.getNonYukkuriDiseasePeriod()) {
 				case 0:
 					if (GameRandom.nextBoolean()) {
@@ -244,7 +244,7 @@ public final class YukkuriNydDelegate {
 			body.addMemories(-5);
 			body.setHappiness(Happiness.VERY_SAD);
 			body.setNydMessage(GameMessages.getMessage(body, MessagePool.Action.NonYukkuriDisease), false);
-			if (GameRandom.nextInt(randomThreshold) == 0) {
+			if (GameRandom.nextInt(diseaseThreshold) == 0) {
 				body.setNonYukkuriDiseasePeriod(0);
 			}
 		}

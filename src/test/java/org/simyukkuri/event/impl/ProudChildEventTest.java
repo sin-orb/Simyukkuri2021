@@ -180,17 +180,17 @@ public class ProudChildEventTest {
     @Test
     public void testGetState_defaultIsGO() {
         ProudChildEvent event = new ProudChildEvent();
-        assertEquals(ProudChildEvent.STATE.GO, event.getState());
+        assertEquals(ProudChildEvent.State.GO, event.getState());
     }
 
     @Test
     public void testSetState() {
         ProudChildEvent event = new ProudChildEvent();
-        event.setState(ProudChildEvent.STATE.SING);
-        assertEquals(ProudChildEvent.STATE.SING, event.getState());
+        event.setState(ProudChildEvent.State.SING);
+        assertEquals(ProudChildEvent.State.SING, event.getState());
 
-        event.setState(ProudChildEvent.STATE.END);
-        assertEquals(ProudChildEvent.STATE.END, event.getState());
+        event.setState(ProudChildEvent.State.END);
+        assertEquals(ProudChildEvent.State.END, event.getState());
     }
 
     // --- start ---
@@ -209,12 +209,12 @@ public class ProudChildEventTest {
         assertDoesNotThrow(() -> event.toString());
     }
 
-    // --- STATE enum ---
+    // --- State enum ---
     @Test
     public void testStateEnum_allValues() {
-        ProudChildEvent.STATE[] states = ProudChildEvent.STATE.values();
+        ProudChildEvent.State[] states = ProudChildEvent.State.values();
         assertTrue(states.length > 0);
-        for (ProudChildEvent.STATE s : states) {
+        for (ProudChildEvent.State s : states) {
             assertNotNull(s.name());
         }
     }
@@ -309,7 +309,7 @@ public class ProudChildEventTest {
         Yukkuri from = createBody();
         Yukkuri child = createBody();
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
-        event.setState(ProudChildEvent.STATE.WAIT);
+        event.setState(ProudChildEvent.State.WAIT);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
         assertDoesNotThrow(() -> event.update(child));
@@ -321,7 +321,7 @@ public class ProudChildEventTest {
         Yukkuri child = createBody();
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         event.setActionFlag(true);
-        event.setState(ProudChildEvent.STATE.START);
+        event.setState(ProudChildEvent.State.START);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
         assertDoesNotThrow(() -> event.update(child));
@@ -333,7 +333,7 @@ public class ProudChildEventTest {
         Yukkuri child = createBody();
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         event.setActionFlag(true);
-        event.setState(ProudChildEvent.STATE.SING);
+        event.setState(ProudChildEvent.State.SING);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
         assertDoesNotThrow(() -> event.update(child));
@@ -345,7 +345,7 @@ public class ProudChildEventTest {
         Yukkuri child = createBody();
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         event.setActionFlag(true);
-        event.setState(ProudChildEvent.STATE.PROUD);
+        event.setState(ProudChildEvent.State.PROUD);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
         assertDoesNotThrow(() -> event.update(child));
@@ -356,7 +356,7 @@ public class ProudChildEventTest {
         Yukkuri from = createBody();
         Yukkuri child = createBody();
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
-        event.setState(ProudChildEvent.STATE.END);
+        event.setState(ProudChildEvent.State.END);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
         assertEquals(EventPacket.UpdateState.ABORT, event.update(child));
@@ -370,7 +370,7 @@ public class ProudChildEventTest {
         child.setAgeState(AgeState.BABY);
         from.getChildren().add(child.getUniqueID());
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
-        event.setState(ProudChildEvent.STATE.END);
+        event.setState(ProudChildEvent.State.END);
         event.setActionFlag(false);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
@@ -403,7 +403,7 @@ public class ProudChildEventTest {
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         partner.setCurrentEvent(event);
-        event.setState(ProudChildEvent.STATE.GO);
+        event.setState(ProudChildEvent.State.GO);
         assertDoesNotThrow(() -> event.update(partner));
     }
 
@@ -416,7 +416,7 @@ public class ProudChildEventTest {
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         partner.setCurrentEvent(event);
-        event.setState(ProudChildEvent.STATE.WAIT);
+        event.setState(ProudChildEvent.State.WAIT);
         assertNull(event.update(partner));
     }
 
@@ -490,7 +490,7 @@ public class ProudChildEventTest {
         Yukkuri child = createBody();
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         event.setActionFlag(false);
-        event.setState(ProudChildEvent.STATE.SING);
+        event.setState(ProudChildEvent.State.SING);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
         assertDoesNotThrow(() -> event.update(child));
@@ -567,7 +567,7 @@ public class ProudChildEventTest {
             ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
             from.setCurrentEvent(event);
             child.setCurrentEvent(event);
-            event.setState(ProudChildEvent.STATE.PROUD);
+            event.setState(ProudChildEvent.State.PROUD);
             event.setActionFlag(false);
             from.setLastActionTime(0);
             int memoriesBefore = from.getMemories();
@@ -589,7 +589,7 @@ public class ProudChildEventTest {
             ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
             from.setCurrentEvent(event);
             child.setCurrentEvent(event);
-            event.setState(ProudChildEvent.STATE.PROUD);
+            event.setState(ProudChildEvent.State.PROUD);
             event.setActionFlag(true);
             child.setLastActionTime(0);
             int memoriesBefore = child.getMemories();

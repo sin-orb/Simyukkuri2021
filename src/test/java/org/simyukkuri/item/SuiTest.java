@@ -60,7 +60,7 @@ class SuiTest extends ItemTestBase {
         Sui sui = new Sui();
         Yukkuri b = createBody();
         assertTrue(sui.rideOn(b));
-        assertEquals(1, sui.getCurrent_bindbody_num());
+        assertEquals(1, sui.getBoundBodyCount());
     }
 
     @Test
@@ -78,7 +78,7 @@ class SuiTest extends ItemTestBase {
         Yukkuri b2 = createBody();
         assertTrue(sui.rideOn(b1));
         assertTrue(sui.rideOn(b2));
-        assertEquals(2, sui.getCurrent_bindbody_num());
+        assertEquals(2, sui.getBoundBodyCount());
     }
 
     // --- isriding ---
@@ -86,14 +86,14 @@ class SuiTest extends ItemTestBase {
     @Test
     void testIsriding_NullBody_returnsFalse() {
         Sui sui = new Sui();
-        assertFalse(sui.isriding(null));
+        assertFalse(sui.isRiddenBy(null));
     }
 
     @Test
     void testIsriding_NotOnSui_returnsFalse() {
         Sui sui = new Sui();
         Yukkuri b = createBody();
-        assertFalse(sui.isriding(b));
+        assertFalse(sui.isRiddenBy(b));
     }
 
     @Test
@@ -101,7 +101,7 @@ class SuiTest extends ItemTestBase {
         Sui sui = new Sui();
         Yukkuri b = createBody();
         sui.rideOn(b);
-        assertTrue(sui.isriding(b));
+        assertTrue(sui.isRiddenBy(b));
     }
 
     // --- iscanriding ---
@@ -109,7 +109,7 @@ class SuiTest extends ItemTestBase {
     @Test
     void testIscanriding_NoOwner_returnsFalse() {
         Sui sui = new Sui();
-        assertFalse(sui.iscanriding());
+        assertFalse(sui.isOwnerRiding());
     }
 
     @Test
@@ -118,7 +118,7 @@ class SuiTest extends ItemTestBase {
         Yukkuri b = createBody();
         sui.rideOn(b);
         // bindobj == b, b is on board → true
-        assertTrue(sui.iscanriding());
+        assertTrue(sui.isOwnerRiding());
     }
 
     // --- NoCanBind ---
@@ -126,7 +126,7 @@ class SuiTest extends ItemTestBase {
     @Test
     void testNoCanBind_NoOwner_returnsFalse() {
         Sui sui = new Sui();
-        assertFalse(sui.NoCanBind());
+        assertFalse(sui.hasOwner());
     }
 
     @Test
@@ -134,7 +134,7 @@ class SuiTest extends ItemTestBase {
         Sui sui = new Sui();
         Yukkuri b = createBody();
         sui.rideOn(b);
-        assertTrue(sui.NoCanBind());
+        assertTrue(sui.hasOwner());
     }
 
     // --- rideOff ---
@@ -154,9 +154,9 @@ class SuiTest extends ItemTestBase {
         sui.rideOn(passenger);
         // owner descends → all off
         sui.rideOff(owner);
-        assertFalse(sui.isriding(owner));
-        assertFalse(sui.isriding(passenger));
-        assertEquals(0, sui.getCurrent_bindbody_num());
+        assertFalse(sui.isRiddenBy(owner));
+        assertFalse(sui.isRiddenBy(passenger));
+        assertEquals(0, sui.getBoundBodyCount());
     }
 
     @Test
@@ -168,8 +168,8 @@ class SuiTest extends ItemTestBase {
         sui.rideOn(passenger);
         // passenger descends → only passenger off
         sui.rideOff(passenger);
-        assertFalse(sui.isriding(passenger));
-        assertTrue(sui.isriding(owner));
+        assertFalse(sui.isRiddenBy(passenger));
+        assertTrue(sui.isRiddenBy(owner));
     }
 
     // --- getters/setters ---
@@ -177,8 +177,8 @@ class SuiTest extends ItemTestBase {
     @Test
     void testGetSetCurrentBindBodyNum() {
         Sui sui = new Sui();
-        sui.setCurrent_bindbody_num(2);
-        assertEquals(2, sui.getCurrent_bindbody_num());
+        sui.setBoundBodyCount(2);
+        assertEquals(2, sui.getBoundBodyCount());
     }
 
     @Test
@@ -192,15 +192,15 @@ class SuiTest extends ItemTestBase {
     @Test
     void testGetSetCurrentDirection() {
         Sui sui = new Sui();
-        sui.setCurrent_direction(3);
-        assertEquals(3, sui.getCurrent_direction());
+        sui.setDirectionIndex(3);
+        assertEquals(3, sui.getDirectionIndex());
     }
 
     @Test
     void testGetSetCurrentCondition() {
         Sui sui = new Sui();
-        sui.setCurrent_condition(1);
-        assertEquals(1, sui.getCurrent_condition());
+        sui.setConditionIndex(1);
+        assertEquals(1, sui.getConditionIndex());
     }
 
     // --- enableHitCheck / getHitCheckObjType ---
@@ -238,8 +238,8 @@ class SuiTest extends ItemTestBase {
     @Test
     void testChangeY_doesNotThrow() {
         Sui sui = new Sui();
-        assertDoesNotThrow(() -> sui.ChangeY(true));
-        assertDoesNotThrow(() -> sui.ChangeY(false));
+        assertDoesNotThrow(() -> sui.shiftVerticalPosition(true));
+        assertDoesNotThrow(() -> sui.shiftVerticalPosition(false));
     }
 
     // --- upDate ---
@@ -263,10 +263,10 @@ class SuiTest extends ItemTestBase {
     @Test
     void testGetSetBindobj() {
         Sui sui = new Sui();
-        assertNull(sui.getBindobj());
+        assertNull(sui.getOwnerBody());
         Yukkuri b = createBody();
-        sui.setBindobj(b);
-        assertEquals(b, sui.getBindobj());
+        sui.setOwnerBody(b);
+        assertEquals(b, sui.getOwnerBody());
     }
 
     // --- getDestX / setDestX / getDestY / setDestY ---
@@ -356,7 +356,7 @@ class SuiTest extends ItemTestBase {
         sui.rideOn(b);
         b.setGrabbed(true);
         assertDoesNotThrow(() -> sui.upDate());
-        assertFalse(sui.isriding(b));
+        assertFalse(sui.isRiddenBy(b));
     }
 
     // --- upDate with removed owner ---
@@ -365,10 +365,10 @@ class SuiTest extends ItemTestBase {
     void testUpDate_ownerRemoved_clearsBindobj() {
         Sui sui = new Sui();
         Yukkuri b = createBody();
-        sui.setBindobj(b);
+        sui.setOwnerBody(b);
         b.setRemoved(true);
         assertDoesNotThrow(() -> sui.upDate());
-        assertNull(sui.getBindobj());
+        assertNull(sui.getOwnerBody());
     }
 
     @Test

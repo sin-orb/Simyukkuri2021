@@ -212,23 +212,23 @@ final class GadgetToolAction {
 			case SHUTMOUTH:
 				List<Yukkuri> bodyListS = new LinkedList<Yukkuri>(GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
 				if (ev.isShiftDown()) {
-					boolean shouldShutMouth = true;
+					boolean shouldshutMouth = true;
 					if (targetObject instanceof Yukkuri) {
-						shouldShutMouth = !((Yukkuri) targetObject).isShutmouth();
+						shouldshutMouth = !((Yukkuri) targetObject).isShutmouth();
 					}
 					for (Yukkuri body : bodyListS) {
-						if (!shouldShutMouth && body.isShutmouth()) {
-							body.ShutMouth();
-						} else if (shouldShutMouth && !body.isShutmouth()) {
-							body.ShutMouth();
+						if (!shouldshutMouth && body.isShutmouth()) {
+							body.shutMouth();
+						} else if (shouldshutMouth && !body.isShutmouth()) {
+							body.shutMouth();
 						}
 					}
 				} else if (ev.isControlDown()) {
 					for (Yukkuri body : bodyListS) {
-						body.ShutMouth();
+						body.shutMouth();
 					}
 				} else if (targetObject instanceof Yukkuri) {
-					((Yukkuri) targetObject).ShutMouth();
+					((Yukkuri) targetObject).shutMouth();
 				}
 				break;
 			case HAIRCUT:

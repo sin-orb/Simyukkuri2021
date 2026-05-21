@@ -3,7 +3,6 @@ package org.simyukkuri.util;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 
 /**

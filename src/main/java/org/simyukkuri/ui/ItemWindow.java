@@ -13,7 +13,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.Locale;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -23,7 +22,6 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
@@ -32,7 +30,7 @@ import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameWorld;
 
 /**
- * 持ち物ウィンドウの設計図クラス
+ * Holds the inventory window.
  */
 public class ItemWindow extends JDialog implements WindowListener, MouseListener, ActionListener, ListDataListener {
 	private static final long serialVersionUID = 1359537638021473531L;
@@ -45,8 +43,12 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 	private JList itemList;
 	private JButton delButton;
 
+	/**
+	 * Creates the item window.
+	 *
+	 * @param frame parent frame
+	 */
 	@SuppressWarnings("rawtypes")
-	/** コンストラクタ */
 	public ItemWindow(Frame frame) {
 		super(frame, TITLE, Dialog.ModalityType.MODELESS);
 		addWindowListener(this);
@@ -61,14 +63,12 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 		itemList.addMouseListener(this);
 
 		JScrollPane sc = new JScrollPane(itemList);
-
 		panel.add(sc, BorderLayout.CENTER);
 
 		JPanel bp = new JPanel();
 		bp.setLayout(new BoxLayout(bp, BoxLayout.X_AXIS));
 
 		delButton = new JButton(GameText.read("system_throwaway"));
-		// delButton.setPreferredSize(new Dimension(80, 30));
 		delButton.addActionListener(this);
 		bp.add(delButton);
 		panel.add(bp, BorderLayout.SOUTH);
@@ -80,13 +80,13 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 		pack();
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
 	/**
 	 * Window opened.
 	 *
-	 * @param e イベント
+	 * @param e event
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
 	public void windowOpened(WindowEvent e) {
 		itemList.setModel(GameWorld.get().getPlayer().getInventoryView());
 		itemList.setSelectedIndex(-1);
@@ -94,68 +94,68 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 		setLocation(pos.x + Translate.getCanvasW() - 200, pos.y + 100);
 	}
 
-	@Override
 	/**
 	 * Window closing.
 	 *
-	 * @param e イベント
+	 * @param e event
 	 */
+	@Override
 	public void windowClosing(WindowEvent e) {
 		MainCommandUI.getPlayerButton()[ToolButtonLabel.BAG.ordinal()].setSelected(false);
 		GameWorld.get().getPlayer().setHoldItem(null);
 	}
 
-	@Override
 	/**
 	 * Window closed.
 	 *
-	 * @param e イベント
+	 * @param e event
 	 */
+	@Override
 	public void windowClosed(WindowEvent e) {
 	}
 
-	@Override
 	/**
 	 * Window iconified.
 	 *
-	 * @param e イベント
+	 * @param e event
 	 */
+	@Override
 	public void windowIconified(WindowEvent e) {
 	}
 
-	@Override
 	/**
 	 * Window deiconified.
 	 *
-	 * @param e イベント
+	 * @param e event
 	 */
+	@Override
 	public void windowDeiconified(WindowEvent e) {
 	}
 
-	@Override
 	/**
 	 * Window activated.
 	 *
-	 * @param e イベント
+	 * @param e event
 	 */
+	@Override
 	public void windowActivated(WindowEvent e) {
 	}
 
-	@Override
 	/**
 	 * Window deactivated.
 	 *
-	 * @param e イベント
+	 * @param e event
 	 */
+	@Override
 	public void windowDeactivated(WindowEvent e) {
 	}
 
-	@Override
 	/**
 	 * Mouse clicked.
 	 *
-	 * @param e イベント
+	 * @param e event
 	 */
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (itemList.getSelectedIndices().length == 1) {
 			int index = itemList.locationToIndex(e.getPoint());
@@ -165,56 +165,60 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 		}
 	}
 
-	@Override
 	/**
 	 * Mouse pressed.
 	 *
-	 * @param e イベント
+	 * @param e event
 	 */
+	@Override
 	public void mousePressed(MouseEvent e) {
 	}
 
-	@Override
 	/**
 	 * Mouse released.
 	 *
-	 * @param e イベント
+	 * @param e event
 	 */
+	@Override
 	public void mouseReleased(MouseEvent e) {
 	}
 
-	@Override
 	/**
 	 * Mouse entered.
 	 *
-	 * @param e イベント
+	 * @param e event
 	 */
+	@Override
 	public void mouseEntered(MouseEvent e) {
 	}
 
-	@Override
 	/**
 	 * Mouse exited.
 	 *
-	 * @param e イベント
+	 * @param e event
 	 */
+	@Override
 	public void mouseExited(MouseEvent e) {
 	}
 
 	/**
-	 * 捨てるボタン
+	 * Drops selected belongings.
+	 *
+	 * @param e event
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (itemList.getSelectedIndex() == -1)
+		if (itemList.getSelectedIndex() == -1) {
 			return;
+		}
 
 		int[] idx = itemList.getSelectedIndices();
 		Entity[] obj = new Entity[idx.length];
 		for (int i = 0; i < idx.length; i++) {
 			obj[i] = GameWorld.get().getPlayer().getInventoryView().get(idx[i]);
-			if (obj[i] != null)
+			if (obj[i] != null) {
 				obj[i].remove();
+			}
 		}
 		for (int i = 0; i < obj.length; i++) {
 			GameWorld.get().getPlayer().getInventoryView().removeElement(obj[i]);
@@ -223,37 +227,41 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 		GameWorld.get().getPlayer().setHoldItem(null);
 	}
 
-	@Override
 	/**
 	 * Interval added.
 	 *
-	 * @param e イベント
+	 * @param e event
 	 */
+	@Override
 	public void intervalAdded(ListDataEvent e) {
 		itemList.setSelectedIndex(-1);
 	}
 
-	@Override
 	/**
 	 * Interval removed.
 	 *
-	 * @param e イベント
+	 * @param e event
 	 */
+	@Override
 	public void intervalRemoved(ListDataEvent e) {
 		itemList.setSelectedIndex(-1);
 	}
 
-	@Override
 	/**
 	 * Contents changed.
 	 *
-	 * @param e イベント
+	 * @param e event
 	 */
+	@Override
 	public void contentsChanged(ListDataEvent e) {
 		itemList.setSelectedIndex(-1);
 	}
 
-	/** @return インベントリ表示用のリストコンポーネント */
+	/**
+	 * Returns the inventory list component.
+	 *
+	 * @return inventory view
+	 */
 	@SuppressWarnings("rawtypes")
 	public JList getInventoryView() {
 		return itemList;

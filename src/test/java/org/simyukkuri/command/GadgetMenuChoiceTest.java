@@ -19,7 +19,7 @@ import org.simyukkuri.command.GadgetMenu.MainCategoryName;
 public class GadgetMenuChoiceTest {
 
     @BeforeAll
-    public static void setUpClass() {
+    static void setUpClass() {
         System.setProperty("java.awt.headless", "true");
         // MessagePool.loadMessage(GadgetMenuChoiceTest.class.getClassLoader());
     }
@@ -29,7 +29,7 @@ public class GadgetMenuChoiceTest {
     // -------------------------------------------------------
 
     @Test
-    public void testValuesNotEmpty() {
+    void testValuesNotEmpty() {
         GadgetMenuChoice[] values = GadgetMenuChoice.values();
         assertTrue(values.length > 0, "GadgetMenuChoice に要素が存在すること");
     }
@@ -39,7 +39,7 @@ public class GadgetMenuChoiceTest {
     // -------------------------------------------------------
 
     @Test
-    public void testAllItemsHaveGroup() {
+    void testAllItemsHaveGroup() {
         for (GadgetMenuChoice item : GadgetMenuChoice.values()) {
             assertNotNull(item.getGroup(),
                     "getGroup() が非 null であること: " + item.name());
@@ -47,7 +47,7 @@ public class GadgetMenuChoiceTest {
     }
 
     @Test
-    public void testImmediateItemsHaveNullOrImmediateActionTarget() {
+    void testImmediateItemsHaveNullOrImmediateActionTarget() {
         // IMMEDIATE グループのアイテムは actionTarget が IMMEDIATE か null のみ
         for (GadgetMenuChoice item : GadgetMenuChoice.values()) {
             if (item.getActionTarget() == ActionTarget.IMMEDIATE) {
@@ -61,39 +61,39 @@ public class GadgetMenuChoiceTest {
     // -------------------------------------------------------
 
     @Test
-    public void testPunishIsToolGroupAndBodyTarget() {
+    void testPunishIsToolGroupAndBodyTarget() {
         assertEquals(MainCategoryName.TOOL, GadgetMenuChoice.PUNISH.getGroup());
         assertEquals(ActionTarget.BODY, GadgetMenuChoice.PUNISH.getActionTarget());
         assertEquals(ActionControl.LEFT_CLICK, GadgetMenuChoice.PUNISH.getActionControl());
     }
 
     @Test
-    public void testYuCleanIsImmediateTarget() {
+    void testYuCleanIsImmediateTarget() {
         assertEquals(ActionTarget.IMMEDIATE, GadgetMenuChoice.YU_CLEAN.getActionTarget());
         assertEquals(MainCategoryName.CLEAN, GadgetMenuChoice.YU_CLEAN.getGroup());
     }
 
     @Test
-    public void testNormalFoodHasFoodClass() {
+    void testNormalFoodHasFoodClass() {
         assertNotNull(GadgetMenuChoice.NORMAL.getGadgetClass());
         assertEquals(org.simyukkuri.entity.core.world.item.Food.class, GadgetMenuChoice.NORMAL.getGadgetClass());
     }
 
     @Test
-    public void testToStringReturnsDisplayName() {
+    void testToStringReturnsDisplayName() {
         String str = GadgetMenuChoice.PUNISH.toString();
         assertNotNull(str);
         assertFalse(str.isEmpty(), "toString() が空文字ではないこと");
     }
 
     @Test
-    public void testOkazariHideIsAccessoryGroup() {
+    void testOkazariHideIsAccessoryGroup() {
         assertEquals(MainCategoryName.ACCESSORY, GadgetMenuChoice.OKAZARI_HIDE.getGroup());
         assertEquals(ActionTarget.BODY, GadgetMenuChoice.OKAZARI_HIDE.getActionTarget());
     }
 
     @Test
-    public void testGetInitOptionReturnsNonNegative() {
+    void testGetInitOptionReturnsNonNegative() {
         for (GadgetMenuChoice item : GadgetMenuChoice.values()) {
             assertTrue(item.getInitOption() >= 0,
                     "initOption が 0 以上であること: " + item.name());
@@ -105,14 +105,14 @@ public class GadgetMenuChoiceTest {
     // -------------------------------------------------------
 
     @Test
-    public void testMainCategoryContainsTool() {
+    void testMainCategoryContainsTool() {
         GadgetMenuChoice[] main = GadgetMenu.getMainCategory();
         assertTrue(main.length > 0);
         assertEquals(GadgetMenuChoice.TOOL, main[0]);
     }
 
     @Test
-    public void testToolCategoryFirstIsPunish() {
+    void testToolCategoryFirstIsPunish() {
         GadgetMenuChoice[] tool = GadgetMenu.getToolCategory();
         assertTrue(tool.length > 0);
         assertEquals(GadgetMenuChoice.PUNISH, tool[0]);

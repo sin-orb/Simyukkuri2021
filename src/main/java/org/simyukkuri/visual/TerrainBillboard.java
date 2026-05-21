@@ -7,8 +7,8 @@ import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.Serializable;
 
-/*************************************************
- * 背景の部品画像管理
+/**
+ * 背景の部品画像管理.
  */
 public class TerrainBillboard implements Serializable {
 

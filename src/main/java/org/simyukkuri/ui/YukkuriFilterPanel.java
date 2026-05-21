@@ -1,8 +1,5 @@
 package org.simyukkuri.ui;
 
-import org.simyukkuri.util.GameView;
-import org.simyukkuri.util.GameText;
-
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -11,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -19,8 +15,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
-
 import org.simyukkuri.enums.YukkuriType;
+import org.simyukkuri.util.GameText;
+import org.simyukkuri.util.GameView;
 
 /** ゆっくりの種別フィルターパネルを提供するクラス。 */
 public class YukkuriFilterPanel {
@@ -99,46 +96,45 @@ public class YukkuriFilterPanel {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static boolean openFilterPanel(String strHead, String strTop, List<String> istrOptionList,
 			List<YukkuriType> ioResultSelectType, List<Boolean> obOptionSelection) {
-		List<YukkuriType> retSelectedType = new LinkedList<YukkuriType>();
-		int typeCount = yukkuriTypes.length;
+		final List<YukkuriType> retSelectedType = new LinkedList<YukkuriType>();
+		final int typeCount = yukkuriTypes.length;
 		int optionCount = 0;
 		if (istrOptionList != null) {
 			optionCount = istrOptionList.size();
 		}
 
-		JComboBox cb1 = new JComboBox();
-		JCheckBox[] checkBox = new JCheckBox[typeCount + optionCount];
-		JPanel mainPanel = new JPanel();
-		JPanel yukkuriPanel = new JPanel();
-		JPanel optionPanel = new JPanel();
-		JPanel buttonPanel = new JPanel();
-		JPanel centerPanel = new JPanel();
-		JPanel center2Panel = new JPanel();
+		final JCheckBox[] checkBox = new JCheckBox[typeCount + optionCount];
+		final JPanel mainPanel = new JPanel();
+		final JPanel yukkuriPanel = new JPanel();
+		final JPanel optionPanel = new JPanel();
+		final JPanel buttonPanel = new JPanel();
+		final JPanel centerPanel = new JPanel();
+		final JPanel center2Panel = new JPanel();
 
 		// レイアウト
-		GridBagLayout layout = new GridBagLayout();
+		final GridBagLayout layout = new GridBagLayout();
 		mainPanel.setLayout(layout);
-		GridBagConstraints constraints = new GridBagConstraints();
+		final GridBagConstraints constraints = new GridBagConstraints();
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		layout.setConstraints(center2Panel, constraints);// 制約の設定
+		layout.setConstraints(center2Panel, constraints); // 制約の設定
 		mainPanel.add(center2Panel);
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		layout.setConstraints(yukkuriPanel, constraints);// 制約の設定
+		layout.setConstraints(yukkuriPanel, constraints); // 制約の設定
 		mainPanel.add(yukkuriPanel);
 		constraints.gridx = 0;
 		constraints.gridy = 2;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		layout.setConstraints(optionPanel, constraints);// 制約の設定
+		layout.setConstraints(optionPanel, constraints); // 制約の設定
 		mainPanel.add(optionPanel);
 		constraints.gridx = 0;
 		constraints.gridy = 3;
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		layout.setConstraints(buttonPanel, constraints);// 制約の設定
+		layout.setConstraints(buttonPanel, constraints); // 制約の設定
 		mainPanel.add(buttonPanel);
 
 		yukkuriPanel.setLayout(new GridLayout(9, 4));
@@ -146,12 +142,12 @@ public class YukkuriFilterPanel {
 		buttonPanel.setLayout(new GridLayout(1, 5));
 
 		// 枠線設定
-		LineBorder border = new LineBorder(Color.BLACK, 1, true);
+		final LineBorder border = new LineBorder(Color.BLACK, 1, true);
 		yukkuriPanel.setBorder(border);
 		optionPanel.setBorder(border);
 		// buttonPanel.setBorder(border);
 
-		String names2[] = new String[typeCount + optionCount];
+		String[] names2 = new String[typeCount + optionCount];
 		for (int k = 0; k < typeCount; k++) {
 			String strTemp = yukkuriTypes[k].getNameJ();
 			if (strTemp.length() != 0) {
@@ -167,16 +163,16 @@ public class YukkuriFilterPanel {
 			}
 		}
 
-		JLabel l1 = new JLabel(strHead);
-		centerPanel.add(l1);
-		cb1 = new JComboBox(names2);
+		JLabel headLabel = new JLabel(strHead);
+		centerPanel.add(headLabel);
+		final JComboBox cb1 = new JComboBox(names2);
 		cb1.setSelectedIndex(0);
 		centerPanel.add(cb1);
-		JLabel l2 = new JLabel(strTop);
-		center2Panel.add(l2);
-		JLabel l3 = new JLabel("");
+		JLabel topLabel = new JLabel(strTop);
+		center2Panel.add(topLabel);
+		JLabel blankLabel = new JLabel("");
 
-		center2Panel.add(l3);
+		center2Panel.add(blankLabel);
 		for (int i = 0; i < typeCount; i++) {
 			checkBox[i] = new JCheckBox(names2[i].toString());
 			if (ioResultSelectType != null && ioResultSelectType.size() != 0) {
@@ -201,18 +197,18 @@ public class YukkuriFilterPanel {
 			optionPanel.add(checkBox[i]);
 		}
 
-		ButtonListener buttonListener = new ButtonListener();
+		final ButtonListener buttonListener = new ButtonListener();
 		ButtonListener.setCheckbox(checkBox);
 
-		Action[] action = Action.values();
+		final Action[] action = Action.values();
 		for (int i = 0; i < action.length; i++) {
-			JButton but = new JButton(action[i].toString());
-			but.setActionCommand(action[i].name());
-			but.addActionListener(buttonListener);
-			buttonPanel.add(but);
+			JButton button = new JButton(action[i].toString());
+			button.setActionCommand(action[i].name());
+			button.addActionListener(buttonListener);
+			buttonPanel.add(button);
 		}
 
-		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel, strHead, 2, -1);
+		final int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel, strHead, 2, -1);
 		if (dlgRet == 0) {
 			for (int i = 0; i < typeCount; i++) {
 				if (checkBox[i].isSelected()) {

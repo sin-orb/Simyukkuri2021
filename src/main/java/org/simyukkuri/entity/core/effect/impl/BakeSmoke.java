@@ -4,12 +4,11 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-
 import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.effect.Effect;
 
-/****************************************
- * ホットプレート
+/**
+ * ホットプレートの煙.
  */
 public class BakeSmoke extends Effect {
 

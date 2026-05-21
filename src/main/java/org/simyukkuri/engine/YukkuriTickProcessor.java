@@ -2,7 +2,6 @@ package org.simyukkuri.engine;
 
 import java.util.List;
 import java.util.Map;
-
 import org.simyukkuri.command.GadgetAction;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.attachment.impl.Fire;
@@ -269,8 +268,8 @@ public final class YukkuriTickProcessor {
 						fx = Math.min(fx, Translate.getWorldWidth());
 						fy = Math.max(0, fy);
 						fy = Math.min(fy, Translate.getWorldHeight());
-						org.simyukkuri.entity.core.world.item.Food food = (org.simyukkuri.entity.core.world.item.Food) GadgetAction
-								.putObjEX(
+						org.simyukkuri.entity.core.world.item.Food food =
+								(org.simyukkuri.entity.core.world.item.Food) GadgetAction.putObjEX(
 										org.simyukkuri.entity.core.world.item.Food.class, fx, fy,
 										org.simyukkuri.entity.core.world.item.Food.FoodType.STALK.ordinal());
 						curMap.getFoods().put(food.objId, food);

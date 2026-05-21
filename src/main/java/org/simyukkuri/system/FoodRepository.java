@@ -3,7 +3,6 @@ package org.simyukkuri.system;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.simyukkuri.entity.core.world.item.Food;
 import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.entity.core.world.mobile.Vomit;

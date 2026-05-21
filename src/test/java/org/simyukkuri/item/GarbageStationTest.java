@@ -220,7 +220,7 @@ class GarbageStationTest extends ItemTestBase {
     @Test
     void testObjEXType_afterManualSet() {
         GarbageStation item = new GarbageStation();
-        item.setObjEXType(WorldEntityKind.GARBAGESTATION);
+		item.setWorldEntityType(WorldEntityKind.GARBAGESTATION);
         assertEquals(WorldEntityKind.GARBAGESTATION, item.getWorldEntityType());
     }
 

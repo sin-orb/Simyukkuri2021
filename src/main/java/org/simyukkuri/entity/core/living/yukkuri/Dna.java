@@ -4,8 +4,8 @@ import org.simyukkuri.enums.Attitude;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.YukkuriType;
 
-/****************************************
- * ゆっくりの遺伝子情報
+/**
+ * ゆっくりの遺伝子情報.
  */
 public class Dna implements java.io.Serializable {
 

@@ -1,9 +1,9 @@
 package org.simyukkuri.entity.core.living.yukkuri;
 
 import org.simyukkuri.entity.core.attachment.impl.Ants;
-import org.simyukkuri.enums.YukkuriRelationType;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.Intelligence;
+import org.simyukkuri.enums.YukkuriRelationType;
 import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;

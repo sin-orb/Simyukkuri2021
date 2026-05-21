@@ -1,8 +1,8 @@
 package org.simyukkuri.logic;
 
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.enums.YukkuriRelationType;
 import org.simyukkuri.enums.Happiness;
+import org.simyukkuri.enums.YukkuriRelationType;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;

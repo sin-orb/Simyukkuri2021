@@ -5,11 +5,10 @@ import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-
 import org.simyukkuri.command.GadgetAction;
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
@@ -24,8 +23,8 @@ import org.simyukkuri.system.Cash;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
- * フードメーカー
+/**
+ * フードメーカー.
  */
 public class FoodMaker extends WorldEntity {
 
@@ -34,7 +33,7 @@ public class FoodMaker extends WorldEntity {
 	public static final int hitCheckObjType = WorldEntity.YUKKURI | WorldEntity.SHIT | WorldEntity.FOOD
 			| WorldEntity.VOMIT | WorldEntity.STALK;
 	private static final int IMAGE_COUNT = 6; // このクラスの総使用画像数
-	private static int[] animationFrameCounts = { IMAGE_COUNT };// アニメごとに何枚使うか
+	private static int[] animationFrameCounts = { IMAGE_COUNT }; // アニメごとに何枚使うか
 	private static BufferedImage[] imageLayers = new BufferedImage[IMAGE_COUNT + 1];
 	private static Rectangle4y boundary = new Rectangle4y();
 
@@ -44,7 +43,8 @@ public class FoodMaker extends WorldEntity {
 	// private static final int numOfBodyType= 5;
 	// private static final int numOfFoodType = 5;
 
-	private static final int[][] makeTable = { { 1, 3, 5, 1, 1, 1, 2, 3, 4, 5, 0, 8, 6, 7 }, // 通常種
+	private static final int[][] makeTable = {
+			{ 1, 3, 5, 1, 1, 1, 2, 3, 4, 5, 0, 8, 6, 7 }, // 通常種
 			{ 3, 1, 5, 1, 1, 1, 2, 3, 4, 5, 0, 8, 6, 7 }, // 希少種・捕食種
 			{ 5, 5, 1, 5, 1, 5, 2, 5, 4, 5, 0, 8, 6, 7 }, // ありす
 			{ 1, 1, 5, 2, 1, 2, 2, 2, 4, 5, 0, 8, 6, 7 }, // ちぇん
@@ -57,7 +57,7 @@ public class FoodMaker extends WorldEntity {
 			{ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 8, 6, 7 }, // shit
 			{ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8 }, // ゴミ
 			{ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 8, 6, 7 }, // 軽い非ゆっくり症
-			{ 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 7, 7 },// 重い非ゆっくり症
+			{ 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 7, 7 }, // 重い非ゆっくり症
 	};
 
 	private static final FoodType[] foodTable = { FoodType.SHIT,
@@ -126,27 +126,27 @@ public class FoodMaker extends WorldEntity {
 			if (o.getObjType() == Type.YUKKURI) {
 				Yukkuri b = (Yukkuri) o;
 				if (b.isCrushed() || b.isPealed() || b.isBaby()) {
-					if (b.isSick()) {// カビ
+					if (b.isSick()) { // カビ
 						stockFood = 11;
-					} else if (b.getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE_NEAR) {// 軽度の非ゆっくり症
+					} else if (b.getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE_NEAR) { // 軽度の非ゆっくり症
 						stockFood = 12;
-					} else if (b.getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE) {// 重度の非ゆっくり症
+					} else if (b.getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE) { // 重度の非ゆっくり症
 						stockFood = 13;
-					} else if (b.getType() == YukkuriType.ALICE) {// ありす
+					} else if (b.getType() == YukkuriType.ALICE) { // ありす
 						stockFood = 2;
-					} else if (b.getType() == YukkuriType.CHEN) {// ちぇん
+					} else if (b.getType() == YukkuriType.CHEN) { // ちぇん
 						stockFood = 3;
-					} else if (b.getType() == YukkuriType.MEIRIN) {// めーりん
+					} else if (b.getType() == YukkuriType.MEIRIN) { // めーりん
 						stockFood = 8;
-					} else if (b.getType().getTypeID() >= YukkuriType.MARISAREIMU.getTypeID()) {// ハイブリッド・雑種
+					} else if (b.getType().getTypeID() >= YukkuriType.MARISAREIMU.getTypeID()) { // ハイブリッド・雑種
 						stockFood = 4;
-					} else if (b.getType().getTypeID() >= YukkuriType.REMIRYA.getTypeID()) {// 捕食種
+					} else if (b.getType().getTypeID() >= YukkuriType.REMIRYA.getTypeID()) { // 捕食種
 						stockFood = 1;
-					} else if (b.getType().getTypeID() >= YukkuriType.TARINAI.getTypeID()) {// 変異種
+					} else if (b.getType().getTypeID() >= YukkuriType.TARINAI.getTypeID()) { // 変異種
 						stockFood = 4;
-					} else if (b.getType().getTypeID() >= YukkuriType.YURUSANAE.getTypeID()) {// 希少種
+					} else if (b.getType().getTypeID() >= YukkuriType.YURUSANAE.getTypeID()) { // 希少種
 						stockFood = 1;
-					} else {// 通常種・
+					} else { // 通常種・
 						stockFood = 0;
 					}
 					switch (b.getAgeState()) {
@@ -158,6 +158,8 @@ public class FoodMaker extends WorldEntity {
 							break;
 						case ADULT:
 							foodAmount += 4;
+							break;
+						default:
 							break;
 					}
 					if (b.isAdult()) {
@@ -201,32 +203,31 @@ public class FoodMaker extends WorldEntity {
 				stockFood = 5 + 5;
 				v.remove();
 			}
-
 		} else {
 			if (o.getObjType() == Type.YUKKURI) {
 				Yukkuri b = (Yukkuri) o;
 				if (b.isCrushed() || b.isPealed() || b.isBaby()) {
-					if (b.isSick()) {// カビ
+					if (b.isSick()) { // カビ
 						foodType = foodTable[makeTable[stockFood][11]];
-					} else if (b.getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE_NEAR) {// 軽度の非ゆっくり症
+					} else if (b.getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE_NEAR) { // 軽度の非ゆっくり症
 						foodType = foodTable[makeTable[stockFood][12]];
-					} else if (b.getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE) {// 重度の非ゆっくり症
+					} else if (b.getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE) { // 重度の非ゆっくり症
 						foodType = foodTable[makeTable[stockFood][13]];
-					} else if (b.getType() == YukkuriType.ALICE) {// ありす
+					} else if (b.getType() == YukkuriType.ALICE) { // ありす
 						foodType = foodTable[makeTable[stockFood][2]];
-					} else if (b.getType() == YukkuriType.CHEN) {// ちぇん
+					} else if (b.getType() == YukkuriType.CHEN) { // ちぇん
 						foodType = foodTable[makeTable[stockFood][3]];
-					} else if (b.getType() == YukkuriType.MEIRIN) {// めーりん
+					} else if (b.getType() == YukkuriType.MEIRIN) { // めーりん
 						foodType = foodTable[makeTable[stockFood][8]];
-					} else if (b.getType().getTypeID() >= YukkuriType.MARISAREIMU.getTypeID()) {// ハイブリッド・雑種
+					} else if (b.getType().getTypeID() >= YukkuriType.MARISAREIMU.getTypeID()) { // ハイブリッド・雑種
 						foodType = foodTable[makeTable[stockFood][4]];
-					} else if (b.getType().getTypeID() >= YukkuriType.REMIRYA.getTypeID()) {// 捕食種
+					} else if (b.getType().getTypeID() >= YukkuriType.REMIRYA.getTypeID()) { // 捕食種
 						foodType = foodTable[makeTable[stockFood][1]];
-					} else if (b.getType().getTypeID() >= YukkuriType.TARINAI.getTypeID()) {// 変異種
+					} else if (b.getType().getTypeID() >= YukkuriType.TARINAI.getTypeID()) { // 変異種
 						foodType = foodTable[makeTable[stockFood][4]];
-					} else if (b.getType().getTypeID() >= YukkuriType.YURUSANAE.getTypeID()) {// 希少種
+					} else if (b.getType().getTypeID() >= YukkuriType.YURUSANAE.getTypeID()) { // 希少種
 						foodType = foodTable[makeTable[stockFood][1]];
-					} else {// 通常種
+					} else { // 通常種
 						foodType = foodTable[makeTable[stockFood][0]];
 					}
 					switch (b.getAgeState()) {
@@ -238,6 +239,8 @@ public class FoodMaker extends WorldEntity {
 							break;
 						case ADULT:
 							foodAmount += 4;
+							break;
+						default:
 							break;
 					}
 					Cash.addCash(-getCost());
@@ -285,8 +288,9 @@ public class FoodMaker extends WorldEntity {
 				return 0;
 			}
 			int dir = 1;
-			if (x + 40 >= Translate.getWorldWidth())
+			if (x + 40 >= Translate.getWorldWidth()) {
 				dir = -1;
+			}
 			if (foodType == FoodType.SHIT) {
 				GameView.addVomit(x + (40 * dir), y, 0, null, YukkuriType.REIMU);
 			} else {
@@ -295,10 +299,9 @@ public class FoodMaker extends WorldEntity {
 					GameWorld.get().getCurrentWorldState().getFoods().put(f.objId, f);
 				}
 				foodAmount = 0;
-
 			}
-			stockFood = -1;
 		}
+		stockFood = -1;
 		return 0;
 	}
 

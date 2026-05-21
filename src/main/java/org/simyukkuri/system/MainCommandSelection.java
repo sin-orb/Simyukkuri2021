@@ -21,34 +21,34 @@ public final class MainCommandSelection {
 	 */
 	public static GadgetMenuChoice getSubItem(GadgetMenuChoice mainSel, int subSel) {
 		switch (mainSel) {
-		case TOOL:
-			return GadgetMenu.getToolCategory()[subSel];
-		case BODY_CHANGE:
-			return GadgetMenu.getToolCategory2()[subSel];
-		case AMPOULE:
-			return GadgetMenu.getAmpouleCategory()[subSel];
-		case FOODS:
-			return GadgetMenu.getFoodCategory()[subSel];
-		case CLEAN:
-			return GadgetMenu.getCleanCategory()[subSel];
-		case ACCESSORY:
-			return GadgetMenu.getOkazariCategory()[subSel];
-		case PANTS:
-			return GadgetMenu.getPantsCategory()[subSel];
-		case FLOOR:
-			return GadgetMenu.getFloorCategory()[subSel];
-		case BARRIER:
-			return GadgetMenu.getBarrierCategory()[subSel];
-		case TOYS:
-			return GadgetMenu.getToysCategory()[subSel];
-		case CONVEYOR:
-			return GadgetMenu.getConveyorCategory()[subSel];
-		case VOICE:
-			return GadgetMenu.getVoiceCategory()[subSel];
-		case DEBUG:
-			return GadgetMenu.getTestCategory()[subSel];
-		default:
-			return null;
+			case TOOL:
+				return GadgetMenu.getToolCategory()[subSel];
+			case BODY_CHANGE:
+				return GadgetMenu.getToolCategory2()[subSel];
+			case AMPOULE:
+				return GadgetMenu.getAmpouleCategory()[subSel];
+			case FOODS:
+				return GadgetMenu.getFoodCategory()[subSel];
+			case CLEAN:
+				return GadgetMenu.getCleanCategory()[subSel];
+			case ACCESSORY:
+				return GadgetMenu.getOkazariCategory()[subSel];
+			case PANTS:
+				return GadgetMenu.getPantsCategory()[subSel];
+			case FLOOR:
+				return GadgetMenu.getFloorCategory()[subSel];
+			case BARRIER:
+				return GadgetMenu.getBarrierCategory()[subSel];
+			case TOYS:
+				return GadgetMenu.getToysCategory()[subSel];
+			case CONVEYOR:
+				return GadgetMenu.getConveyorCategory()[subSel];
+			case VOICE:
+				return GadgetMenu.getVoiceCategory()[subSel];
+			case DEBUG:
+				return GadgetMenu.getTestCategory()[subSel];
+			default:
+				return null;
 		}
 	}
 }

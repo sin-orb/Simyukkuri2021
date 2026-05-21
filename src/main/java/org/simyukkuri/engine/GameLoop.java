@@ -2,8 +2,8 @@ package org.simyukkuri.engine;
 
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.MyPane;
-import org.simyukkuri.ui.MainCommandUI;
 import org.simyukkuri.system.LoggerYukkuri;
+import org.simyukkuri.ui.MainCommandUI;
 import org.simyukkuri.util.GameEnvironment;
 import org.simyukkuri.util.GameWorld;
 

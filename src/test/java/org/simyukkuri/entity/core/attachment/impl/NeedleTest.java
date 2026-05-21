@@ -14,7 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.ConstState;
-import org.simyukkuri.SequenceRNG;
+import org.simyukkuri.SequenceRandom;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -455,7 +455,7 @@ public class NeedleTest {
 
         @Test
         void testScenario_FixBackNeedleUpdateWakesBodyFacesPainAndCanTriggerPurupuru() {
-            SimYukkuri.RND = new SequenceRNG(0, 1);
+            SimYukkuri.RND = new SequenceRandom(0, 1);
             Yukkuri parent = createParent(AgeState.ADULT);
             Needle needle = new Needle(parent);
             parent.setDead(false);

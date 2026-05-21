@@ -24,7 +24,7 @@ public final class YukkuriParentRule {
 			return;
 		}
 
-		int nearestDistance = body.getEyesightBase();
+		final int nearestDistance = body.getEyesightBase();
 		Yukkuri parentBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(body.getMother());
 		if (parentBody == null) {
 			parentBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(body.getFather());

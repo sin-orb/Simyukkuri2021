@@ -3,18 +3,12 @@ package org.simyukkuri.system;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-//import java.io.ByteArrayInputStream;
 import java.io.IOException;
-//import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.Map;
-//import java.util.List;
 import java.util.logging.FileHandler;
-//import java.util.logging.Formatter;
 import java.util.logging.Level;
-//import java.util.logging.LogManager;
 import java.util.logging.Logger;
-
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Deibu;
@@ -28,8 +22,8 @@ import org.simyukkuri.util.GameWorld;
 
 /**
  * ゆっくりの個体数・年齢層・感染状況・フン数・所持金などを時系列で記録し、
- * グラフとして画面表示するロギングユーティリティ。
- * 最大 120 ティック分のデータをリングバッファで保持する。
+ * グラフとして画面表示するロギングユーティリティ.
+ * 最大 120 ティック分のデータをリングバッファで保持する.
  */
 public class LoggerYukkuri {
 	/** 処理の最小単位（ティック） */
@@ -112,10 +106,12 @@ public class LoggerYukkuri {
 	 */
 	public static void setLogPage(int p) {
 		logPage = p;
-		if (logPage < 0)
+		if (logPage < 0) {
 			logPage = 3;
-		if (logPage >= 4)
+		}
+		if (logPage >= 4) {
 			logPage = 0;
+		}
 	}
 
 	/**
@@ -125,10 +121,11 @@ public class LoggerYukkuri {
 	 */
 	public static void addLogPage(int p) {
 		logPage += p;
-		if (logPage < 0)
+		if (logPage < 0) {
 			logPage = 3;
-		else if (logPage >= 4)
+		} else if (logPage >= 4) {
 			logPage = 0;
+		}
 	}
 
 	/**
@@ -171,8 +168,7 @@ public class LoggerYukkuri {
 	 * ロガーを実行する.
 	 */
 	public static void run() {
-
-		long logData[] = new long[NUM_OF_LOGDATA_TYPE];
+		long[] logData = new long[NUM_OF_LOGDATA_TYPE];
 		try {
 			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 				Yukkuri b = entry.getValue();
@@ -289,8 +285,9 @@ public class LoggerYukkuri {
 	 * @param g2 Graphics2D
 	 */
 	public static void displayLog(Graphics2D g2) {
-		if (java.awt.GraphicsEnvironment.isHeadless())
+		if (java.awt.GraphicsEnvironment.isHeadless()) {
 			return;
+		}
 		initGraphics();
 		g2.setColor(backColor);
 		g2.fillRect(0, 0, Translate.getCanvasW(), Translate.getCanvasH());
@@ -306,20 +303,17 @@ public class LoggerYukkuri {
 		long max = Runtime.getRuntime().maxMemory() / 1024;
 		long used = total - free;
 		double ratio = (used * 100 / (double) total);
-		String info = GameText.read("system_memoryusing") + f1.format(used) +
-				" (" + f2.format(ratio) + "%)、" + GameText.read("system_maxmemory") + f1.format(max);
+		String info = GameText.read("system_memoryusing") + f1.format(used)
+				+ " (" + f2.format(ratio) + "%)、" + GameText.read("system_maxmemory") + f1.format(max);
 		g2.drawString(info, 20, 40);
 
 		g2.setColor(textColor1);
 		g2.setFont(textFontTitle);
-		// int numOfLogData = getNumOfLogData();
-		// int NUM_OF_GRAPH_DATA = 120;
-		int GRAPH_WIDTH = 700;
-		int GRAPH_HEIGHT = 200;
-		int GRAPH_OFFSETX = 100;
-		int GRAPH_OFFSETY = 300;
-		int LEGEND_OFFSETX = 120;
-		// int LEGEND_OFFSETY = 140;
+		int graphWidth = 700;
+		int graphHeight = 200;
+		int graphOffsetX = 100;
+		int graphOffsetY = 300;
+		int legendOffsetX = 120;
 
 		long[] logData = new long[NUM_OF_LOGDATA_TYPE * NUM_OF_GRAPH_DATA];
 		long[] numOfObjNowLog = getNumOfObjNowLog();
@@ -359,10 +353,10 @@ public class LoggerYukkuri {
 		int[] xp = new int[NUM_OF_GRAPH_DATA * 2];
 		int[] yp = new int[NUM_OF_GRAPH_DATA * 2];
 		for (int i = 0; i < NUM_OF_GRAPH_DATA; i++) {
-			xp[i] = GRAPH_WIDTH * i / (NUM_OF_GRAPH_DATA - 1) + GRAPH_OFFSETX;
-			xp[NUM_OF_GRAPH_DATA * 2 - i - 1] = GRAPH_WIDTH * i / (NUM_OF_GRAPH_DATA - 1) + GRAPH_OFFSETX;
-			yp[i] = GRAPH_HEIGHT + GRAPH_OFFSETY;
-			yp[NUM_OF_GRAPH_DATA + i] = GRAPH_HEIGHT + GRAPH_OFFSETY;
+			xp[i] = graphWidth * i / (NUM_OF_GRAPH_DATA - 1) + graphOffsetX;
+			xp[NUM_OF_GRAPH_DATA * 2 - i - 1] = graphWidth * i / (NUM_OF_GRAPH_DATA - 1) + graphOffsetX;
+			yp[i] = graphHeight + graphOffsetY;
+			yp[NUM_OF_GRAPH_DATA + i] = graphHeight + graphOffsetY;
 		}
 
 		switch (logPage) {
@@ -371,38 +365,40 @@ public class LoggerYukkuri {
 				g2.setFont(textFonttext);
 				for (int i = 0; i < NUM_OF_HYBRID + 1; i++) {
 					g2.setColor(Color.WHITE);
-					g2.drawString(Long.toString(numOfObjNowLog[i]), LEGEND_OFFSETX + 130, 30 * i + 140);
+					g2.drawString(Long.toString(numOfObjNowLog[i]), legendOffsetX + 130, 30 * i + 140);
 					switch (i) {
 						case NUM_OF_NORMAL:
-							g2.drawString(GameText.read("draw_normalsp"), LEGEND_OFFSETX,
+							g2.drawString(GameText.read("draw_normalsp"), legendOffsetX,
 									30 * i + 140);
 							g2.setColor(Color.LIGHT_GRAY);
 							break;
 						case NUM_OF_PREDATOR:
-							g2.drawString(GameText.read("draw_predsp"), LEGEND_OFFSETX, 30 * i + 140);
+							g2.drawString(GameText.read("draw_predsp"), legendOffsetX, 30 * i + 140);
 							g2.setColor(Color.RED);
 							break;
 						case NUM_OF_RARE:
-							g2.drawString(GameText.read("draw_raresp"), LEGEND_OFFSETX, 30 * i + 140);
+							g2.drawString(GameText.read("draw_raresp"), legendOffsetX, 30 * i + 140);
 							g2.setColor(Color.YELLOW);
 							break;
 						case NUM_OF_TARINAI:
-							g2.drawString(GameText.read("item_tarinai"), LEGEND_OFFSETX,
+							g2.drawString(GameText.read("item_tarinai"), legendOffsetX,
 									30 * i + 140);
 							g2.setColor(Color.ORANGE);
 							break;
 						case NUM_OF_HYBRID:
-							g2.drawString(GameText.read("enums_hybrid"), LEGEND_OFFSETX,
+							g2.drawString(GameText.read("enums_hybrid"), legendOffsetX,
 									30 * i + 140);
 							g2.setColor(Color.MAGENTA);
 							break;
+						default:
+							break;
 					}
-					g2.fillRect(LEGEND_OFFSETX + 180, 30 * i + 130, 10, 10);
+					g2.fillRect(legendOffsetX + 180, 30 * i + 130, 10, 10);
 					for (int k = 0; k < NUM_OF_GRAPH_DATA; k++) {
 						if (logData[NUM_OF_LOGDATA_TYPE * k + i] != 0) {
-							yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + i] * GRAPH_HEIGHT / numOfMaxYukkuri;
+							yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + i] * graphHeight / numOfMaxYukkuri;
 						} else {
-							yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + i] * GRAPH_HEIGHT / 1;
+							yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + i] * graphHeight / 1;
 						}
 					}
 					g2.fillPolygon(xp, yp, NUM_OF_GRAPH_DATA * 2);
@@ -411,13 +407,13 @@ public class LoggerYukkuri {
 					}
 				}
 				g2.setColor(Color.WHITE);
-				g2.drawRect(GRAPH_OFFSETX, GRAPH_OFFSETY, GRAPH_WIDTH, GRAPH_HEIGHT);
+				g2.drawRect(graphOffsetX, graphOffsetY, graphWidth, graphHeight);
 				g2.drawString(Long.toString(numOfMaxYukkuri),
-						GRAPH_OFFSETX - String.valueOf(numOfMaxYukkuri).length() * 10 - 2, GRAPH_OFFSETY);
+						graphOffsetX - String.valueOf(numOfMaxYukkuri).length() * 10 - 2, graphOffsetY);
 				g2.drawString(Long.toString(numOfMaxYukkuri / 2),
-						GRAPH_OFFSETX - String.valueOf(numOfMaxYukkuri).length() * 10 - 2,
-						GRAPH_OFFSETY + GRAPH_HEIGHT / 2);
-				g2.drawString("0", GRAPH_OFFSETX - 12, GRAPH_OFFSETY + GRAPH_HEIGHT);
+						graphOffsetX - String.valueOf(numOfMaxYukkuri).length() * 10 - 2,
+						graphOffsetY + graphHeight / 2);
+				g2.drawString("0", graphOffsetX - 12, graphOffsetY + graphHeight);
 				break;
 
 			case 1:
@@ -425,31 +421,33 @@ public class LoggerYukkuri {
 				g2.setFont(textFonttext);
 				for (int i = 0; i < 3; i++) {
 					g2.setColor(Color.WHITE);
-					g2.drawString(Long.toString(numOfObjNowLog[i + NUM_OF_BABY]), LEGEND_OFFSETX + 130, 30 * i + 140);
+					g2.drawString(Long.toString(numOfObjNowLog[i + NUM_OF_BABY]), legendOffsetX + 130, 30 * i + 140);
 					switch (i) {
 						case 0:
-							g2.drawString(GameText.read("enums_babyyu"), LEGEND_OFFSETX,
+							g2.drawString(GameText.read("enums_babyyu"), legendOffsetX,
 									30 * i + 140);
 							g2.setColor(Color.ORANGE);
 							break;
 						case 1:
-							g2.drawString(GameText.read("enums_childyu"), LEGEND_OFFSETX,
+							g2.drawString(GameText.read("enums_childyu"), legendOffsetX,
 									30 * i + 140);
 							g2.setColor(Color.YELLOW);
 							break;
 						case 2:
-							g2.drawString(GameText.read("enums_adultyu"), LEGEND_OFFSETX,
+							g2.drawString(GameText.read("enums_adultyu"), legendOffsetX,
 									30 * i + 140);
 							g2.setColor(Color.GREEN);
 							break;
+						default:
+							break;
 					}
-					g2.fillRect(LEGEND_OFFSETX + 180, 30 * i + 130, 10, 10);
+					g2.fillRect(legendOffsetX + 180, 30 * i + 130, 10, 10);
 					for (int k = 0; k < NUM_OF_GRAPH_DATA; k++) {
 						if (logData[NUM_OF_LOGDATA_TYPE * k + i + NUM_OF_BABY] != 0) {
-							yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + i + NUM_OF_BABY] * GRAPH_HEIGHT
+							yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + i + NUM_OF_BABY] * graphHeight
 									/ numOfMaxYukkuri;
 						} else {
-							yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + i + NUM_OF_BABY] * GRAPH_HEIGHT / 1;
+							yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + i + NUM_OF_BABY] * graphHeight / 1;
 						}
 					}
 					g2.fillPolygon(xp, yp, NUM_OF_GRAPH_DATA * 2);
@@ -459,13 +457,13 @@ public class LoggerYukkuri {
 					}
 				}
 				g2.setColor(Color.WHITE);
-				g2.drawRect(GRAPH_OFFSETX, GRAPH_OFFSETY, GRAPH_WIDTH, GRAPH_HEIGHT);
+				g2.drawRect(graphOffsetX, graphOffsetY, graphWidth, graphHeight);
 				g2.drawString(Long.toString(numOfMaxYukkuri),
-						GRAPH_OFFSETX - String.valueOf(numOfMaxYukkuri).length() * 10 - 2, GRAPH_OFFSETY);
+						graphOffsetX - String.valueOf(numOfMaxYukkuri).length() * 10 - 2, graphOffsetY);
 				g2.drawString(Long.toString(numOfMaxYukkuri / 2),
-						GRAPH_OFFSETX - String.valueOf(numOfMaxYukkuri).length() * 10 - 2,
-						GRAPH_OFFSETY + GRAPH_HEIGHT / 2);
-				g2.drawString("0", GRAPH_OFFSETX - 12, GRAPH_OFFSETY + GRAPH_HEIGHT);
+						graphOffsetX - String.valueOf(numOfMaxYukkuri).length() * 10 - 2,
+						graphOffsetY + graphHeight / 2);
+				g2.drawString("0", graphOffsetX - 12, graphOffsetY + graphHeight);
 				break;
 
 			case 2:
@@ -475,42 +473,43 @@ public class LoggerYukkuri {
 					g2.setColor(Color.WHITE);
 					switch (i) {
 						case 0:
-							g2.drawString(Long.toString(numOfObjNowLog[NUM_OF_SICK]), LEGEND_OFFSETX + 130,
+							g2.drawString(Long.toString(numOfObjNowLog[NUM_OF_SICK]), legendOffsetX + 130,
 									30 * i + 140);
-							g2.drawString(GameText.read("system_kansen"), LEGEND_OFFSETX,
+							g2.drawString(GameText.read("system_kansen"), legendOffsetX,
 									30 * i + 140);
 							g2.setColor(Color.GREEN);
 							break;
 						case 1:
 							g2.drawString(Long.toString(numOfSumYukkuri - numOfObjNowLog[NUM_OF_SICK]),
-									LEGEND_OFFSETX + 130,
+									legendOffsetX + 130,
 									30 * i + 140);
-							g2.drawString(GameText.read("system_mikansen"), LEGEND_OFFSETX,
+							g2.drawString(GameText.read("system_mikansen"), legendOffsetX,
 									30 * i + 140);
 							g2.setColor(Color.LIGHT_GRAY);
 							break;
+						default:
+							break;
 					}
-					g2.fillRect(LEGEND_OFFSETX + 180, 30 * i + 130, 10, 10);
+					g2.fillRect(legendOffsetX + 180, 30 * i + 130, 10, 10);
 					for (int k = 0; k < NUM_OF_GRAPH_DATA; k++) {
+						long sickValue = logData[NUM_OF_LOGDATA_TYPE * k + i + NUM_OF_SICK];
+						long healthyValue = logData[NUM_OF_LOGDATA_TYPE * k]
+								+ logData[NUM_OF_LOGDATA_TYPE * k + 1]
+								+ logData[NUM_OF_LOGDATA_TYPE * k + 2]
+								+ logData[NUM_OF_LOGDATA_TYPE * k + 3]
+								+ logData[NUM_OF_LOGDATA_TYPE * k + 4]
+								- logData[NUM_OF_LOGDATA_TYPE * k + NUM_OF_SICK];
 						if (numOfMaxYukkuri == 0) {
 							if (i == 0) {
-								yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + i + NUM_OF_SICK] * GRAPH_HEIGHT / 1;
+								yp[k] -= sickValue * graphHeight / 1;
 							} else {
-								yp[k] -= (logData[NUM_OF_LOGDATA_TYPE * k] + logData[NUM_OF_LOGDATA_TYPE * k + 1]
-										+ logData[NUM_OF_LOGDATA_TYPE * k + 2] + logData[NUM_OF_LOGDATA_TYPE * k + 3]
-										+ logData[NUM_OF_LOGDATA_TYPE * k + 4]
-										- logData[NUM_OF_LOGDATA_TYPE * k + NUM_OF_SICK]) * GRAPH_HEIGHT / 1;
+								yp[k] -= healthyValue * graphHeight / 1;
 							}
 						} else {
 							if (i == 0) {
-								yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + i + NUM_OF_SICK] * GRAPH_HEIGHT
-										/ numOfMaxYukkuri;
+								yp[k] -= sickValue * graphHeight / numOfMaxYukkuri;
 							} else {
-								yp[k] -= (logData[NUM_OF_LOGDATA_TYPE * k] + logData[NUM_OF_LOGDATA_TYPE * k + 1]
-										+ logData[NUM_OF_LOGDATA_TYPE * k + 2] + logData[NUM_OF_LOGDATA_TYPE * k + 3]
-										+ logData[NUM_OF_LOGDATA_TYPE * k + 4]
-										- logData[NUM_OF_LOGDATA_TYPE * k + NUM_OF_SICK]) * GRAPH_HEIGHT
-										/ numOfMaxYukkuri;
+								yp[k] -= healthyValue * graphHeight / numOfMaxYukkuri;
 							}
 						}
 					}
@@ -520,42 +519,42 @@ public class LoggerYukkuri {
 					}
 				}
 				g2.setColor(Color.WHITE);
-				g2.drawRect(GRAPH_OFFSETX, GRAPH_OFFSETY, GRAPH_WIDTH, GRAPH_HEIGHT);
+				g2.drawRect(graphOffsetX, graphOffsetY, graphWidth, graphHeight);
 				g2.drawString(Long.toString(numOfMaxYukkuri),
-						GRAPH_OFFSETX - String.valueOf(numOfMaxYukkuri).length() * 10 - 2, GRAPH_OFFSETY);
+						graphOffsetX - String.valueOf(numOfMaxYukkuri).length() * 10 - 2, graphOffsetY);
 				g2.drawString(Long.toString(numOfMaxYukkuri / 2),
-						GRAPH_OFFSETX - String.valueOf(numOfMaxYukkuri).length() * 10 - 2,
-						GRAPH_OFFSETY + GRAPH_HEIGHT / 2);
-				g2.drawString("0", GRAPH_OFFSETX - 12, GRAPH_OFFSETY + GRAPH_HEIGHT);
+						graphOffsetX - String.valueOf(numOfMaxYukkuri).length() * 10 - 2,
+						graphOffsetY + graphHeight / 2);
+				g2.drawString("0", graphOffsetX - 12, graphOffsetY + graphHeight);
 				break;
 
 			case 3:
 				g2.drawString(GameText.read("system_numberofunun"), 100, 100);
 				g2.setFont(textFonttext);
-				g2.drawString(GameText.read("command_clean_shit"), LEGEND_OFFSETX, 140);
-				g2.drawString(Long.toString(numOfObjNowLog[NUM_OF_SHIT]), LEGEND_OFFSETX + 130, 140);
+				g2.drawString(GameText.read("command_clean_shit"), legendOffsetX, 140);
+				g2.drawString(Long.toString(numOfObjNowLog[NUM_OF_SHIT]), legendOffsetX + 130, 140);
 				g2.setColor(Color.GRAY);
 				for (int k = 0; k < NUM_OF_GRAPH_DATA; k++) {
 					if (logData[NUM_OF_LOGDATA_TYPE * k + NUM_OF_SHIT] != 0) {
-						yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + NUM_OF_SHIT] * GRAPH_HEIGHT / numOfMaxUnun;
+						yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + NUM_OF_SHIT] * graphHeight / numOfMaxUnun;
 					} else {
-						yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + NUM_OF_SHIT] * GRAPH_HEIGHT / 1;
+						yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + NUM_OF_SHIT] * graphHeight / 1;
 					}
 				}
-				g2.fillRect(LEGEND_OFFSETX + 180, 130, 10, 10);
+				g2.fillRect(legendOffsetX + 180, 130, 10, 10);
 				g2.fillPolygon(xp, yp, NUM_OF_GRAPH_DATA * 2);
 				for (int k = 0; k < NUM_OF_GRAPH_DATA; k++) {
 					yp[NUM_OF_GRAPH_DATA * 2 - k - 1] = yp[k];
 				}
 				g2.setColor(Color.WHITE);
-				g2.drawRect(GRAPH_OFFSETX, GRAPH_OFFSETY, GRAPH_WIDTH, GRAPH_HEIGHT);
+				g2.drawRect(graphOffsetX, graphOffsetY, graphWidth, graphHeight);
 				g2.drawString(Long.toString(numOfMaxUnun),
-						GRAPH_OFFSETX - String.valueOf(numOfMaxUnun).length() * 10 - 2,
-						GRAPH_OFFSETY);
+						graphOffsetX - String.valueOf(numOfMaxUnun).length() * 10 - 2,
+						graphOffsetY);
 				g2.drawString(Long.toString(numOfMaxUnun / 2),
-						GRAPH_OFFSETX - String.valueOf(numOfMaxUnun).length() * 10 - 2,
-						GRAPH_OFFSETY + GRAPH_HEIGHT / 2);
-				g2.drawString("0", GRAPH_OFFSETX - 12, GRAPH_OFFSETY + GRAPH_HEIGHT);
+						graphOffsetX - String.valueOf(numOfMaxUnun).length() * 10 - 2,
+						graphOffsetY + graphHeight / 2);
+				g2.drawString("0", graphOffsetX - 12, graphOffsetY + graphHeight);
 				break;
 			default:
 				break;
@@ -564,22 +563,22 @@ public class LoggerYukkuri {
 		int operationTime = GameEnvironment.getOperationTime() / 10;
 		int opetmp = operationTime % NUM_OF_GRAPH_DATA;
 		for (int i = 0; i < NUM_OF_GRAPH_DATA / 30 + 1; i++) {
-			int graphx = GRAPH_WIDTH - (((GRAPH_WIDTH) * 30 * i) / NUM_OF_GRAPH_DATA)
-					- ((opetmp % 30) * GRAPH_WIDTH / NUM_OF_GRAPH_DATA) + GRAPH_OFFSETX;
+			int graphx = graphWidth - (((graphWidth) * 30 * i) / NUM_OF_GRAPH_DATA)
+					- ((opetmp % 30) * graphWidth / NUM_OF_GRAPH_DATA) + graphOffsetX;
 			int time = operationTime - 30 * i;
-			if (GRAPH_WIDTH - (GRAPH_WIDTH * 30 * i / NUM_OF_GRAPH_DATA + opetmp) >= 0 && time >= 0) {
-				g2.drawLine(graphx, GRAPH_OFFSETY, graphx, GRAPH_OFFSETY + GRAPH_HEIGHT);
+			if (graphWidth - (graphWidth * 30 * i / NUM_OF_GRAPH_DATA + opetmp) >= 0 && time >= 0) {
+				g2.drawLine(graphx, graphOffsetY, graphx, graphOffsetY + graphHeight);
 				int offsetX = String.valueOf(((Integer.toString(time / 3600)) + ":" + (Integer.toString(time / 60 % 60))
 						+ ":" + Integer.toString(time % 60 / 30 * 30))).length() * 5 - 4;
 				g2.drawString(
 						((Integer.toString(time / 3600)) + ":" + (Integer.toString(time / 60 % 60)) + ":"
 								+ Integer.toString(time % 60 / 30 * 30)),
-						graphx - offsetX, GRAPH_OFFSETY + GRAPH_HEIGHT + 18);
+						graphx - offsetX, graphOffsetY + graphHeight + 18);
 				int day = (operationTime + 60 - 30 * i) / 240;
 				int hour = (time / 30 * 3 + 6) % 24;
-				g2.drawString(("(" + (Integer.toString(day)) + GameText.read("system_nichime") +
-						(Integer.toString(hour)) + GameText.read("system_time")),
-						graphx - offsetX, GRAPH_OFFSETY + GRAPH_HEIGHT + 36);
+				g2.drawString("(" + Integer.toString(day) + GameText.read("system_nichime")
+						+ Integer.toString(hour) + GameText.read("system_time"),
+						graphx - offsetX, graphOffsetY + graphHeight + 36);
 			}
 		}
 	}

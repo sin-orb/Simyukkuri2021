@@ -771,7 +771,7 @@ public class SuiSpeakeTest {
 
     private static org.simyukkuri.entity.core.world.item.Sui createSui(Yukkuri bindobj, int x, int y) {
         org.simyukkuri.entity.core.world.item.Sui sui = new org.simyukkuri.entity.core.world.item.Sui(x, y, 0);
-        sui.setBindobj(bindobj);
+        sui.setOwnerBody(bindobj);
         return sui;
     }
 }

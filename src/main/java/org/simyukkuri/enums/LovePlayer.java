@@ -1,4 +1,5 @@
 package org.simyukkuri.enums;
+
 /** プレイヤーへのなつき度 */
 public enum LovePlayer {
 	/** くそじじい！ */BAD,

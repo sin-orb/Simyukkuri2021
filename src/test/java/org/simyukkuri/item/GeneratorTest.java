@@ -9,7 +9,7 @@ import org.simyukkuri.entity.core.world.item.ItemTestBase;
 
 class GeneratorTest extends ItemTestBase {
     @Test
-    void testConstructor_Default() {
+    void testConstructorDefault() {
         Generator item = new Generator(0, 0, 0);
         item.setObjId(1);
         // Generator is not in WorldState currently

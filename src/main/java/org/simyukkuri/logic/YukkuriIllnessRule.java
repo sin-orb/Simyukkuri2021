@@ -1,7 +1,7 @@
 package org.simyukkuri.logic;
 
-import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
+import org.simyukkuri.enums.Intelligence;
 
 /**
  * かび・病気の見分けに関する判定を集約する.

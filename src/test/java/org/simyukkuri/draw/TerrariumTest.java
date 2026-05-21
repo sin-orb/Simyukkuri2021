@@ -1659,8 +1659,8 @@ class TerrariumTest {
                 assertNotNull(restoredRider);
                 assertNotNull(restoredSui);
                 assertEquals(suiId, restoredRider.getParentLinkId());
-                assertEquals(restoredRider, restoredSui.getBindobj());
-                assertTrue(restoredSui.isriding(restoredRider));
+                assertEquals(restoredRider, restoredSui.getOwnerBody());
+                assertTrue(restoredSui.isRiddenBy(restoredRider));
             } finally {
                 tempFile.delete();
             }
@@ -1802,6 +1802,17 @@ class TerrariumTest {
                 terrarium.addYukkuri(100, 100, 0, YukkuriType.REIMU, AgeState.ADULT, null, null);
                 int originalBodyCount = SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().size();
                 long originalCash = SimYukkuri.world.getPlayer().getCash();
+                int originalWorldScale = Translate.getWorldScale();
+                int originalWorldWidth = Translate.getWorldWidth();
+                int originalWorldHeight = Translate.getWorldHeight();
+                int originalFieldW = Translate.getFieldW();
+                int originalFieldH = Translate.getFieldH();
+                int originalBufferW = Translate.getBufferW();
+                int originalBufferH = Translate.getBufferH();
+                int originalDisplayX = Translate.getDisplayArea().getX();
+                int originalDisplayY = Translate.getDisplayArea().getY();
+                int originalDisplayW = Translate.getDisplayArea().getWidth();
+                int originalDisplayH = Translate.getDisplayArea().getHeight();
 
                 Terrarium.saveState(tempFile);
                 byte[] bytes = Files.readAllBytes(tempFile.toPath());
@@ -1814,6 +1825,28 @@ class TerrariumTest {
                         "failed load should not replace the in-memory world body map");
                 assertEquals(originalCash, SimYukkuri.world.getPlayer().getCash(),
                         "failed load should not replace the in-memory player state");
+                assertEquals(originalWorldScale, Translate.getWorldScale(),
+                        "failed load should not change the world scale");
+                assertEquals(originalWorldWidth, Translate.getWorldWidth(),
+                        "failed load should not change the world width");
+                assertEquals(originalWorldHeight, Translate.getWorldHeight(),
+                        "failed load should not change the world height");
+                assertEquals(originalFieldW, Translate.getFieldW(),
+                        "failed load should not change the field width");
+                assertEquals(originalFieldH, Translate.getFieldH(),
+                        "failed load should not change the field height");
+                assertEquals(originalBufferW, Translate.getBufferW(),
+                        "failed load should not change the buffer width");
+                assertEquals(originalBufferH, Translate.getBufferH(),
+                        "failed load should not change the buffer height");
+                assertEquals(originalDisplayX, Translate.getDisplayArea().getX(),
+                        "failed load should not change the display X");
+                assertEquals(originalDisplayY, Translate.getDisplayArea().getY(),
+                        "failed load should not change the display Y");
+                assertEquals(originalDisplayW, Translate.getDisplayArea().getWidth(),
+                        "failed load should not change the display width");
+                assertEquals(originalDisplayH, Translate.getDisplayArea().getHeight(),
+                        "failed load should not change the display height");
             } finally {
                 tempFile.delete();
             }
@@ -1994,7 +2027,7 @@ class TerrariumTest {
                 SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
 
                 ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
-                Class<?> stateClass = Class.forName("org.simyukkuri.event.impl.ProudChildEvent$STATE");
+                Class<?> stateClass = Class.forName("org.simyukkuri.event.impl.ProudChildEvent$State");
                 java.lang.reflect.Method setState = ProudChildEvent.class.getMethod("setState", stateClass);
                 Object proudState = Enum.valueOf((Class) stateClass, "PROUD");
                 setState.invoke(event, proudState);

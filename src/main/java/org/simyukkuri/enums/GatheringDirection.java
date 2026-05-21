@@ -1,4 +1,5 @@
 package org.simyukkuri.enums;
+
 /** ゆっくりが集まる方向 */
 public enum GatheringDirection {
 	/** ↑ */UP,

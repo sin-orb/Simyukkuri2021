@@ -3826,60 +3826,60 @@ public class BodyTest {
     }
 
     // ===========================================
-    // ShutMouth (口封じ)
+    // shutMouth (口封じ)
     // ===========================================
 
     @Nested
-    class ShutMouthTests {
+    class shutMouthTests {
         @Test
-        public void testShutMouthWhenDead() {
+        public void testshutMouthWhenDead() {
             body.setDead(true);
             body.setShutmouth(false);
-            body.ShutMouth();
+            body.shutMouth();
             assertFalse(body.isShutmouth());
         }
 
         @Test
-        public void testShutMouthToggleOn() {
+        public void testshutMouthToggleOn() {
             body.setDead(false);
             body.setShutmouth(false);
             body.setSleeping(false);
             body.setCoreAnkoState(CoreAnkoState.NORMAL);
             int loveBefore = body.getLovePlayer();
-            body.ShutMouth();
+            body.shutMouth();
             assertTrue(body.isShutmouth());
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
             assertTrue(body.getLovePlayer() < loveBefore);
         }
 
         @Test
-        public void testShutMouthToggleOff() {
+        public void testshutMouthToggleOff() {
             body.setDead(false);
             body.setShutmouth(true);
-            body.ShutMouth();
+            body.shutMouth();
             assertFalse(body.isShutmouth());
         }
 
         @Test
-        public void testShutMouthWakesUpSleeping() {
+        public void testshutMouthWakesUpSleeping() {
             body.setDead(false);
             body.setShutmouth(false);
             body.setSleeping(true);
             body.setCoreAnkoState(CoreAnkoState.NORMAL);
-            body.ShutMouth();
+            body.shutMouth();
             assertFalse(body.isSleeping());
             assertTrue(body.isShutmouth());
         }
 
         @Test
-        public void testShutMouthClearsActions() {
+        public void testshutMouthClearsActions() {
             body.setDead(false);
             body.setShutmouth(false);
             body.setSleeping(false);
             body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setToFood(true);
             body.setToBed(true);
-            body.ShutMouth();
+            body.shutMouth();
             assertFalse(body.isToFood());
             assertFalse(body.isToBed());
         }

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.simyukkuri.entity.core.world.item.AutoFeeder;
 import org.simyukkuri.entity.core.world.item.BeltconveyorObj;
 import org.simyukkuri.entity.core.world.item.Diffuser;

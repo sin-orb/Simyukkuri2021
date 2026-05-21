@@ -1,4 +1,5 @@
 package org.simyukkuri.enums;
+
 /** ゆっくりの感じている痛みレベル */
 public enum Pain {
 	/** 痛くない */NONE,

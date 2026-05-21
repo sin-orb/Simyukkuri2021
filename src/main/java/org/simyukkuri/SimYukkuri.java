@@ -12,7 +12,6 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
-
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
@@ -27,20 +26,19 @@ import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
 import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
-
 import org.simyukkuri.command.GadgetMenu;
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.MyPane;
 import org.simyukkuri.draw.TerrainField;
-import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.draw.Translate;
+import org.simyukkuri.engine.ModLoader;
+import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.system.ItemMenu;
-import org.simyukkuri.ui.MainCommandUI;
-import org.simyukkuri.ui.InputController;
-import org.simyukkuri.ui.listener.MouseInputController;
 import org.simyukkuri.system.IconPool;
+import org.simyukkuri.system.ItemMenu;
+import org.simyukkuri.ui.InputController;
+import org.simyukkuri.ui.MainCommandUI;
+import org.simyukkuri.ui.listener.MouseInputController;
 import org.simyukkuri.util.GameLocale;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameText;
@@ -65,13 +63,13 @@ public class SimYukkuri extends JFrame {
 	/** 時間最小単位 */
 	public static final int TICK = 1;
 	/** フィールド倍率 */
-	public static final String[] fieldScaleTbl = { "x0.5", "x1", "x2" };// , "x4", "x8"};
+	public static final String[] fieldScaleTbl = { "x0.5", "x1", "x2" }; // , "x4", "x8"};
 	/** フィールド大きさ */
 	public static final int[] fieldScaleData = { 50, 100, 200, 400, 800 };
 	/** バッファ大きさ */
 	public static final int[] bufferSizeData = { 50, 100, 200, 400, 200 };
 	/** フィールド倍率レート */
-	public static final float fieldZoomRate[][] = {
+	public static final float[][] fieldZoomRate = {
 			{ 1.0f },
 			{ 1.0f, 0.8f, 0.7f, 0.6f, 0.5f },
 			{ 1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f },
@@ -80,16 +78,19 @@ public class SimYukkuri extends JFrame {
 	};
 
 	/** 標準ウィンドウのテラリウム描画エリアのサイズ */
-	public static final int[] PAINT_PANE_X = { 900, 1260 }, PAINT_PANE_Y = { 700, 980 };
+	public static final int[] PAINT_PANE_X = { 900, 1260 };
+	public static final int[] PAINT_PANE_Y = { 700, 980 };
 	/** 標準ウィンドウのテラリウム描画エリアのアスペクト比 */
 	public static final double ASPECT = 1.29;
 	/** 標準ウィンドウの内部マップサイズ */
-	public static final int[] DEFAULT_MAP_X = { 300, 500, 500 }, DEFAULT_MAP_Y = { 300, 500, 500 },
-			DEFAULT_MAP_Z = { 100, 150, 150 };
+	public static final int[] DEFAULT_MAP_X = { 300, 500, 500 };
+	public static final int[] DEFAULT_MAP_Y = { 300, 500, 500 };
+	public static final int[] DEFAULT_MAP_Z = { 100, 150, 150 };
 	/** ペインのindex */
 	public static int paintPaneMode = 0;
 
-	private static int windowType, scaleIndex;
+	private static int windowType;
+	private static int scaleIndex;
 	/** 自オブジェクト */
 	public static SimYukkuri simYukkuri = null;
 	/** 世界 */
@@ -99,16 +100,24 @@ public class SimYukkuri extends JFrame {
 	/** スレッド */
 	static Thread mythread;
 	/** ドラッグ始点 */
-	public static int fieldSX = -1, fieldSY = -1;
+	public static int fieldSX = -1;
+	public static int fieldSY = -1;
 	/** ドラッグ終点 */
-	public static int fieldEX = -1, fieldEY = -1;
+	public static int fieldEX = -1;
+	public static int fieldEY = -1;
 	/** 「フィールド」オブジェクトのタイプ */
 	public static int fieldType = 0;
 
 	/** マウス処理の座標保存 */
-	public static int mouseNewX = 0, mouseNewY = 0, mouseOldX = 0, mouseOldY = 0, mouseVX = 0, mouseVY = 0;
+	public static int mouseNewX = 0;
+	public static int mouseNewY = 0;
+	public static int mouseOldX = 0;
+	public static int mouseOldY = 0;
+	public static int mouseVX = 0;
+	public static int mouseVY = 0;
 	/** マウススクロール処理の座標保存 */
-	public static int scrollOldX = 0, scrollOldY = 0;
+	public static int scrollOldX = 0;
+	public static int scrollOldY = 0;
 	/** マウスのポイント座標 */
 	public static int[] fieldMousePos = new int[2];
 	/** 精子餡インスタンス */
@@ -138,7 +147,7 @@ public class SimYukkuri extends JFrame {
 		mypane.setBorder(new EmptyBorder(0, 0, 0, 0));
 
 		// 右メニュー作成
-		JPanel ui = MainCommandUI.createInterface(PAINT_PANE_Y[paintPaneMode]);
+		final JPanel ui = MainCommandUI.createInterface(PAINT_PANE_Y[paintPaneMode]);
 
 		// setup my pane
 		mypane.setFocusable(true);
@@ -178,8 +187,9 @@ public class SimYukkuri extends JFrame {
 		synchronized (lock) {
 			final JFileChooser fc = new JFileChooser(ModLoader.getJarPath());
 			int result = fc.showSaveDialog(SimYukkuri.this);
-			if (result != JFileChooser.APPROVE_OPTION)
+			if (result != JFileChooser.APPROVE_OPTION) {
 				return;
+			}
 			File file = fc.getSelectedFile();
 			try {
 				Terrarium.saveState(file);
@@ -320,6 +330,7 @@ public class SimYukkuri extends JFrame {
 	 * マウスリスナ
 	 */
 	public class MyMouseListener extends MouseInputController {
+		/** コンストラクタ. */
 		public MyMouseListener() {
 			super(SimYukkuri.this);
 		}
@@ -381,25 +392,21 @@ public class SimYukkuri extends JFrame {
 	/** 最初に出てくるウィンドウの作成 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	void initTerrariumSize() {
-		String[] screen;
-		String mess1, mess2, mess3, mess4;
-		JComboBox windowModeCombo;
-		JComboBox fieldScaleCombo;
-		JComboBox bgModCombo;
-		JComboBox itemModCombo;
-		JComboBox yukkuriModCombo;
-		JRadioButton draw1;
-		JRadioButton draw2;
-		ButtonGroup drawGrp;
-
-		mess1 = GameText.read("terrarium_size");
-		screen = new String[] { GameText.read("window_900_700"),
+		final String mess1 = GameText.read("terrarium_size");
+		final String[] screen = new String[] { GameText.read("window_900_700"),
 				GameText.read("window_1260_980"),
 				GameText.read("full_screen") };
-
-		mess2 = GameText.read("background_theme");
-		mess3 = GameText.read("item_theme");
-		mess4 = GameText.read("yukkuri_theme");
+		final String mess2 = GameText.read("background_theme");
+		final String mess3 = GameText.read("item_theme");
+		final String mess4 = GameText.read("yukkuri_theme");
+		final JComboBox windowModeCombo;
+		final JComboBox fieldScaleCombo;
+		final JComboBox bgModCombo;
+		final JComboBox itemModCombo;
+		final JComboBox yukkuriModCombo;
+		final JRadioButton draw1;
+		final JRadioButton draw2;
+		final ButtonGroup drawGrp;
 
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new GridLayout(2, 1, 0, 0));

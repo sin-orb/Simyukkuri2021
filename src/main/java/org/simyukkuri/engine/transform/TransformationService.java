@@ -1,7 +1,6 @@
 package org.simyukkuri.engine.transform;
 
 import java.util.function.BooleanSupplier;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.engine.YukkuriFactory;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;

@@ -1,4 +1,5 @@
 package org.simyukkuri.enums;
+
 /** 髪の状態 */
 public enum HairState {
 	/** 普通 */DEFAULT,

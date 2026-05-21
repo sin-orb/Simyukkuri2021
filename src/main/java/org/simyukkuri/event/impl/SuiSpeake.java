@@ -56,7 +56,7 @@ public class SuiSpeake extends EventPacket {
 				}
 			} else {
 				if (Translate.distance(b.getX(), b.getY(), target.getX(), target.getY()) < 200000) {
-					Yukkuri db = (Yukkuri) ((Sui) target).getBindobj();
+					Yukkuri db = (Yukkuri) ((Sui) target).getOwnerBody();
 					if (db == null)
 						return false;
 					if (db.isParent(b)) {

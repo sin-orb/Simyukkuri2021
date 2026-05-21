@@ -13,8 +13,8 @@ import org.simyukkuri.event.impl.RaperWakeupEvent;
 import org.simyukkuri.logic.EventLogic;
 import org.simyukkuri.logic.YukkuriRelations;
 import org.simyukkuri.system.MessagePool;
-import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameEnvironment;
+import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
 
 /**

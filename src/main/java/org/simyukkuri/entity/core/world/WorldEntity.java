@@ -1,25 +1,23 @@
 package org.simyukkuri.entity.core.world;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.beans.Transient;
-
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
-
-import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
-import org.simyukkuri.enums.TickResult;
+import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.enums.Numbering;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.WorldEntityKind;
 import org.simyukkuri.field.impl.Barrier;
 import org.simyukkuri.util.GameWorld;
 
-/*********************************************************
- * ゆっくり以外のゲーム内オブジェクトの元となるクラス
+/**
+ * Base class for non-yukkuri world objects.
  */
 @JsonTypeInfo(use = Id.CLASS)
 public abstract class WorldEntity extends Entity {
@@ -29,16 +27,16 @@ public abstract class WorldEntity extends Entity {
 	protected int option;
 
 	/** 排他的論理和でフラグ管理している ex) 0101 ならゆっくりと食物 */
-	public static final int YUKKURI = (int) Math.pow(2, 0),
-			SHIT = (int) Math.pow(2, 1),
-			FOOD = (int) Math.pow(2, 2),
-			TOILET = (int) Math.pow(2, 3),
-			TOY = (int) Math.pow(2, 4),
-			PLATFORM = (int) Math.pow(2, 5),
-			FIX_OBJECT = (int) Math.pow(2, 6),
-			OBJECT = (int) Math.pow(2, 7),
-			VOMIT = (int) Math.pow(2, 8),
-			STALK = (int) Math.pow(2, 9);
+	public static final int YUKKURI = (int) Math.pow(2, 0);
+	public static final int SHIT = (int) Math.pow(2, 1);
+	public static final int FOOD = (int) Math.pow(2, 2);
+	public static final int TOILET = (int) Math.pow(2, 3);
+	public static final int TOY = (int) Math.pow(2, 4);
+	public static final int PLATFORM = (int) Math.pow(2, 5);
+	public static final int FIX_OBJECT = (int) Math.pow(2, 6);
+	public static final int OBJECT = (int) Math.pow(2, 7);
+	public static final int VOMIT = (int) Math.pow(2, 8);
+	public static final int STALK = (int) Math.pow(2, 9);
 	/**
 	 * 処理対象
 	 * <br>
@@ -67,19 +65,20 @@ public abstract class WorldEntity extends Entity {
 	 * <br>
 	 * 画像=判定ならpivXYでOK プレス機など設置地面付近なら要調整
 	 */
-	protected int colW = 0, colH = 0;
+	protected int colW = 0;
+	protected int colH = 0;
 	/** 処理対象の位置 */
 	protected Point4y tmpPos = new Point4y();
 
 	/** 画像レイヤー */
-	abstract public int getImageLayer(BufferedImage[] layer);
+	public abstract int getImageLayer(BufferedImage[] layer);
 
 	/** 影の画像 */
 	@Transient
-	abstract public BufferedImage getShadowImage();
+	public abstract BufferedImage getShadowImage();
 
 	/** リストから除去 */
-	abstract public void removeFromWorld();
+	public abstract void removeFromWorld();
 
 	/** オブジェクトのタイプのゲッター */
 	public WorldEntityKind getWorldEntityType() {
@@ -160,7 +159,7 @@ public abstract class WorldEntity extends Entity {
 	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
-	};
+	}
 
 	/**
 	 * 当たり判定
@@ -216,14 +215,16 @@ public abstract class WorldEntity extends Entity {
 	/** 当たり判定されたオブジェクトへの処理 */
 	public int objHitProcess(Entity o) {
 		return 0;
-	};
+	}
 
-	@Override
 	/**
-	 * 毎ティックごとの処理
+	 * 毎ティックごとの処理.
 	 * <br>
-	 * 主に移動系
+	 * 主に移動系.
+	 *
+	 * @return tick result.
 	 */
+	@Override
 	public TickResult clockTick() {
 		setAge(getAge() + TICK);
 		if (isRemoved()) {
@@ -295,7 +296,7 @@ public abstract class WorldEntity extends Entity {
 	 */
 	public void upDate() {
 		// 処理なし
-	};
+	}
 
 	/** 初期設定 */
 	public WorldEntity(int initX, int initY, int initOption) {
@@ -306,6 +307,11 @@ public abstract class WorldEntity extends Entity {
 		z = 0;
 		option = initOption;
 		enabled = true;
+	}
+
+	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
+	public WorldEntity() {
+
 	}
 
 	/** アニメーション更新間隔（ティック）を返す。 */
@@ -349,7 +355,7 @@ public abstract class WorldEntity extends Entity {
 	}
 
 	/** ワールドエンティティの種別をセットする。 */
-	public void setObjEXType(WorldEntityKind worldEntityType) {
+	public void setWorldEntityType(WorldEntityKind worldEntityType) {
 		this.worldEntityType = worldEntityType;
 	}
 
@@ -363,8 +369,4 @@ public abstract class WorldEntity extends Entity {
 		this.looks = looks;
 	}
 
-	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
-	public WorldEntity() {
-
-	}
 }

@@ -1,7 +1,6 @@
 package org.simyukkuri.event.impl;
 
 import java.util.List;
-
 import org.simyukkuri.Const;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -15,12 +14,8 @@ import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameText;
 
-/***************************************************
- * おちびちゃん自慢イベント
- * protected Yukkuri from; // イベントを発した個体
- * protected Yukkuri to; // 未使用
- * protected Entity target; // 未使用
- * protected int count; // 10
+/**
+ * おちびちゃん自慢イベント.
  */
 public class ProudChildEvent extends EventPacket {
 
@@ -31,7 +26,7 @@ public class ProudChildEvent extends EventPacket {
 	int fromWaitTicks = 0;
 
 	/** 行動ステート */
-	enum STATE {
+	enum State {
 		/** 移動 */
 		GO,
 		/** 待機 */
@@ -47,7 +42,7 @@ public class ProudChildEvent extends EventPacket {
 	}
 
 	/** 状態 */
-	private STATE state = STATE.GO;
+	private State state = State.GO;
 
 	/**
 	 * コンストラクタ.
@@ -62,47 +57,47 @@ public class ProudChildEvent extends EventPacket {
 
 	}
 
-	/** イベントの進行ティックカウンタを返す。 */
+	/** イベントの進行ティックカウンタを返す. */
 	public int getTick() {
 		return eventTick;
 	}
 
-	/** イベントの進行ティックカウンタをセットする。 */
+	/** イベントの進行ティックカウンタをセットする. */
 	public void setTick(int tick) {
 		this.eventTick = tick;
 	}
 
-	/** 行動フラグを返す。 */
+	/** 行動フラグを返す. */
 	public boolean isActionFlag() {
 		return childActionEnabled;
 	}
 
-	/** 行動フラグをセットする。 */
+	/** 行動フラグをセットする. */
 	public void setActionFlag(boolean actionFlag) {
 		this.childActionEnabled = actionFlag;
 	}
 
-	/** うんうん行動フラグを返す。 */
+	/** うんうん行動フラグを返す. */
 	public boolean isUnunActionFlag() {
 		return slaveActionEnabled;
 	}
 
-	/** うんうん行動フラグをセットする。 */
+	/** うんうん行動フラグをセットする. */
 	public void setUnunActionFlag(boolean ununActionFlag) {
 		this.slaveActionEnabled = ununActionFlag;
 	}
 
-	/** 発信者側の待機カウントを返す。 */
+	/** 発信者側の待機カウントを返す. */
 	public int getFromWaitCount() {
 		return fromWaitTicks;
 	}
 
-	/** 発信者側の待機カウントをセットする。 */
+	/** 発信者側の待機カウントをセットする. */
 	public void setFromWaitCount(int fromWaitCount) {
 		this.fromWaitTicks = fromWaitCount;
 	}
 
-	/** ゆっくり以外のエンティティに対する簡易参加チェック。 */
+	/** ゆっくり以外のエンティティに対する簡易参加チェック. */
 	@Override
 	public boolean simpleEventAction(Yukkuri body) {
 		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
@@ -123,15 +118,18 @@ public class ProudChildEvent extends EventPacket {
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
 		// うんうん奴隷の場合は参加しない
-		if (body.getPublicRank() == PublicRank.UNUN_SLAVE)
+		if (body.getPublicRank() == PublicRank.UNUN_SLAVE) {
 			return false;
+		}
 		// 父母がいない場合は参加しない
-		if (org.simyukkuri.util.YukkuriLookup.getYukkuriById(body.getFather()) == null &&
-				org.simyukkuri.util.YukkuriLookup.getYukkuriById(body.getMother()) == null)
+		if (org.simyukkuri.util.YukkuriLookup.getYukkuriById(body.getFather()) == null
+				&& org.simyukkuri.util.YukkuriLookup.getYukkuriById(body.getMother()) == null) {
 			return false;
+		}
 		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
-		if (sourceBody == null)
+		if (sourceBody == null) {
 			return false;
+		}
 		// つがいも参加する
 		if (sourceBody.isPartner(body)) {
 			return true;
@@ -146,19 +144,20 @@ public class ProudChildEvent extends EventPacket {
 			return false;
 		}
 		// Fromの子供だけ参加する(※Fromが教育係のときは全ての子供が参加するようにする？)
-		if (!body.isChild(sourceBody))
+		if (!body.isChild(sourceBody)) {
 			return false;
+		}
 		// うまれたての赤ゆは参加しない
 		if (body.isBirthMessageForced() || body.getBirthEventBlockedTicks() > 0) {
 			return false;
 		}
 		// 赤、子ゆのみ参加
-		if (body.isAdult())
+		if (body.isAdult()) {
 			return false;
+		}
 
-		body.setWorldEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ProudChildsGO), Const.HOLDMESSAGE,
-				true,
-				false);
+		body.setWorldEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ProudChildsGO),
+				Const.HOLDMESSAGE, true, false);
 		body.setHappiness(Happiness.HAPPY);
 		body.wakeup();
 		body.clearActions();
@@ -173,12 +172,12 @@ public class ProudChildEvent extends EventPacket {
 	}
 
 	/** イベントの進行ステートを返す。 */
-	public STATE getState() {
+	public State getState() {
 		return state;
 	}
 
-	/** イベントの進行ステートをセットする。 */
-	public void setState(STATE state) {
+	/** イベントの進行ステートをセットする. */
+	public void setState(State state) {
 		this.state = state;
 	}
 
@@ -225,33 +224,37 @@ public class ProudChildEvent extends EventPacket {
 			return UpdateState.ABORT;
 		}
 
-		// 3秒に1回（FROMのみ tick を進め、参加者数に依らず30フレーム周期を保つ）
-		if (body == sourceBody) {
-			if (eventTick++ % 30 != 0)
-				return null;
-		} else {
-			if (eventTick % 30 != 0)
-				return null;
-		}
-		// 親を持ち上げたときの反応
-		if (!sourceBody.canflyCheck() && sourceBody.getZ() >= 2) {
-			if (GameRandom.nextInt(50) == 0)
-				return UpdateState.ABORT;
-			else if (body == sourceBody) {
-				// 空処理
+			// 3秒に1回（FROMのみ tick を進め、参加者数に依らず30フレーム周期を保つ）
+			if (body == sourceBody) {
+				if (eventTick++ % 30 != 0) {
+					return null;
+				}
 			} else {
-				if (body.isSad())
-					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.LookForParents), false);
-				else
-					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.LookForParents), true);
-				body.setHappiness(Happiness.SAD);
-				return null;
+				if (eventTick % 30 != 0) {
+					return null;
+				}
 			}
-		}
+			// 親を持ち上げたときの反応
+			if (!sourceBody.canflyCheck() && sourceBody.getZ() >= 2) {
+				if (GameRandom.nextInt(50) == 0) {
+					return UpdateState.ABORT;
+				} else if (body == sourceBody) {
+					// 空処理
+				} else {
+					if (body.isSad()) {
+						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.LookForParents), false);
+					} else {
+						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.LookForParents), true);
+					}
+					body.setHappiness(Happiness.SAD);
+					return null;
+				}
+			}
 
-		// 自慢中は寝ない
-		if (body.isSleeping())
-			body.wakeup();
+			// 自慢中は寝ない
+			if (body.isSleeping()) {
+				body.wakeup();
+			}
 		// 空腹状態なら60%にする(強制イベント救済措置)
 		if (body.isHungry()) {
 			body.setHungry(body.getHungryLimit() * 6 / 10);
@@ -263,7 +266,7 @@ public class ProudChildEvent extends EventPacket {
 				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.GladAboutChild), true);
 			}
 			// 集まるとき以外は留まる
-			if (state != STATE.GO) {
+			if (state != State.GO) {
 				body.stay();
 			} else {
 				int collisionX = YukkuriLogic.calcCollisionX(body, sourceBody);
@@ -323,7 +326,7 @@ public class ProudChildEvent extends EventPacket {
 					// MessagePool.Action.ShitExercisesWAITFrom), 52, true, false);
 					boolean gathered = YukkuriLogic.gatheringYukkuriFront(sourceBody, childrenList, this);
 					if (gathered) {
-						state = STATE.START;
+						state = State.START;
 						childActionEnabled = false;
 					}
 					body.stay(stayTicks);
@@ -333,7 +336,7 @@ public class ProudChildEvent extends EventPacket {
 				 * if (checkWait(body, waitTicks)) {
 				 * body.setEventResMessage(GameMessages.getMessage(body,
 				 * MessagePool.Action.ProudChildsWAITFrom), 52, true, false);
-				 * state = STATE.START;
+						 * state = State.START;
 				 * childActionEnabled = false;
 				 * }
 				 * body.stay(stayTicks);
@@ -350,7 +353,7 @@ public class ProudChildEvent extends EventPacket {
 							body.stay(stayTicks + 10);
 							body.addMemories(10);
 						} else {
-							state = STATE.SING;
+							state = State.SING;
 							childActionEnabled = false;
 						}
 					}
@@ -361,14 +364,15 @@ public class ProudChildEvent extends EventPacket {
 							body.setEventResMessage(
 									GameMessages.getMessage(body, MessagePool.Action.ProudChildsSING), 52,
 									true, false);
-							if (GameRandom.nextBoolean())
-								childActionEnabled = true;
+								if (GameRandom.nextBoolean()) {
+									childActionEnabled = true;
+								}
 							body.setNobinobi(true);
 							body.stay(stayTicks);
 							body.addMemories(10);
 							body.setHappiness(Happiness.HAPPY);
 						} else {
-							state = STATE.PROUD;
+							state = State.PROUD;
 							childActionEnabled = false;
 						}
 					}
@@ -386,7 +390,7 @@ public class ProudChildEvent extends EventPacket {
 							body.setHappiness(Happiness.VERY_HAPPY);
 							body.addMemories(10);
 						} else {
-							state = STATE.END;
+							state = State.END;
 							childActionEnabled = false;
 						}
 					}
@@ -468,20 +472,22 @@ public class ProudChildEvent extends EventPacket {
 									true, false);
 							if (body.isRude() && GameRandom.nextBoolean()) {
 								body.setFurifuri(true);
-							} else
-								body.getInVain(false);
+								} else {
+									body.getInVain(false);
+								}
 							body.stay(stayTicks);
 							body.addMemories(10);
 						}
 					}
 					break;
 				case END:
-					if (body.isRude())
-						body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ProudChildsEND),
-								52, true,
-								false);
-					body.stay(52);
-					return UpdateState.ABORT;
+						if (body.isRude()) {
+							body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ProudChildsEND),
+									52, true,
+									false);
+						}
+						body.stay(52);
+						return UpdateState.ABORT;
 				default:
 					break;
 			}
@@ -499,15 +505,10 @@ public class ProudChildEvent extends EventPacket {
 		return false;
 	}
 
+	/** End. */
 	@Override
-	/**
-	 * End.
-	 *
-	 * @param body the body
-	 */
 	public void end(Yukkuri body) {
 		body.setCurrentEvent(null);
-		return;
 	}
 
 	/** イベント名の文字列表現を返す。 */

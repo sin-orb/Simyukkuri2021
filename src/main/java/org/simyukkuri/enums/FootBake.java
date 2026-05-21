@@ -1,4 +1,5 @@
 package org.simyukkuri.enums;
+
 /** あんよ焼き */
 public enum FootBake {
 	/** 焼かれてない */NONE,

@@ -14,7 +14,7 @@ import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.YukkuriRelationType;
 import org.simyukkuri.util.WorldTestHelper;
 
-class BodyRelationsTest {
+class YukkuriRelationsTest {
 
 	private Yukkuri parent;
 	private Yukkuri child;

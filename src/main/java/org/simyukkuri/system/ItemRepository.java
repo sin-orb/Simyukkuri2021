@@ -3,7 +3,6 @@ package org.simyukkuri.system;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.simyukkuri.entity.core.world.bodylinked.Okazari;
 import org.simyukkuri.entity.core.world.bodylinked.Stalk;
 import org.simyukkuri.entity.core.world.item.Bed;

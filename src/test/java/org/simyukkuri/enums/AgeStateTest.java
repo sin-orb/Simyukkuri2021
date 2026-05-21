@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * AgeState enum のテスト.
+ */
 public class AgeStateTest {
 
     @Test

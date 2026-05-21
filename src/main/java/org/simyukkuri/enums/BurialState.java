@@ -1,5 +1,6 @@
 package org.simyukkuri.enums;
-/** 地中に埋まってる状態 */
+
+/** 地中に埋まってる状態. */
 public enum BurialState {
 	/** 埋まってない */NONE,
 	/** 半分埋まってる */HALF,

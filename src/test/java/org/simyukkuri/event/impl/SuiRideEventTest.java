@@ -282,7 +282,7 @@ public class SuiRideEventTest extends EventTestBase {
     public void testExecute_returnsFalseWhenSuiNotInWaitingState() {
         Yukkuri b = createBody(1, 100, 100);
         Sui sui = createSui(999);
-        sui.setCurrent_condition(2);
+        sui.setConditionIndex(2);
         SuiRideEvent event = new SuiRideEvent(b, null, sui, 100);
         assertFalse(event.execute(b));
     }
@@ -291,8 +291,8 @@ public class SuiRideEventTest extends EventTestBase {
     public void testExecute_alwaysReturnsFalse_suiInWaitingState() {
         Yukkuri b = createBody(1, 100, 100);
         Sui sui = createSui(999);
-        // Default getCurrent_condition() == 1 (rest/waiting)
-        assertEquals(1, sui.getCurrent_condition());
+        // Default getConditionIndex() == 1 (rest/waiting)
+        assertEquals(1, sui.getConditionIndex());
         SuiRideEvent event = new SuiRideEvent(b, null, sui, 100);
         assertFalse(event.execute(b));
     }
@@ -301,10 +301,10 @@ public class SuiRideEventTest extends EventTestBase {
     public void testExecute_suiWaiting_bodyRidesOnSui() {
         Yukkuri b = createBody(1, 100, 100);
         Sui sui = createSui(999);
-        assertEquals(1, sui.getCurrent_condition());
+        assertEquals(1, sui.getConditionIndex());
         SuiRideEvent event = new SuiRideEvent(b, null, sui, 100);
         event.execute(b);
-        assertTrue(sui.isriding(b));
+        assertTrue(sui.isRiddenBy(b));
     }
 
     // -----------------------------------------------------------------------
@@ -323,11 +323,11 @@ public class SuiRideEventTest extends EventTestBase {
         Yukkuri b = createBody(1, 100, 100);
         Sui sui = createSui(999);
         sui.rideOn(b);
-        assertTrue(sui.isriding(b));
+        assertTrue(sui.isRiddenBy(b));
         b.setParentLinkId(sui.getObjId());
         SuiRideEvent event = new SuiRideEvent(b, null, sui, 100);
         event.end(b);
-        assertFalse(sui.isriding(b));
+        assertFalse(sui.isRiddenBy(b));
     }
 
     @Test
@@ -451,7 +451,7 @@ public class SuiRideEventTest extends EventTestBase {
         // Give b favitem SUI without actually riding (no rideOn)
         b.setFavoriteItem(FavItemType.SUI, sui);
         SuiRideEvent event = new SuiRideEvent(b, null, sui, 100);
-        // isriding(b) == false => falls to tick++ and returns null
+        // isRiddenBy(b) == false => falls to tick++ and returns null
         assertDoesNotThrow(() -> {
             UpdateState state = event.update(b);
             assertNull(state);
@@ -488,8 +488,8 @@ public class SuiRideEventTest extends EventTestBase {
         Sui sui = createSui(999);
         sui.rideOn(b);
         b.setFavoriteItem(FavItemType.SUI, sui);
-        sui.setCurrent_bindbody_num(3);
-        sui.setCurrent_condition(1);
+        sui.setBoundBodyCount(3);
+        sui.setConditionIndex(1);
         SuiRideEvent event = new SuiRideEvent(b, null, sui, 100);
         // tick=0, not > 500; condition==1 => moveTo path
         assertDoesNotThrow(() -> event.update(b));
@@ -501,8 +501,8 @@ public class SuiRideEventTest extends EventTestBase {
         Sui sui = createSui(999);
         sui.rideOn(b);
         b.setFavoriteItem(FavItemType.SUI, sui);
-        sui.setCurrent_bindbody_num(3);
-        sui.setCurrent_condition(2); // not waiting
+        sui.setBoundBodyCount(3);
+        sui.setConditionIndex(2); // not waiting
         SuiRideEvent event = new SuiRideEvent(b, null, sui, 100);
         // condition != 1 => setEventResMessage path
         assertDoesNotThrow(() -> event.update(b));
@@ -516,15 +516,15 @@ public class SuiRideEventTest extends EventTestBase {
         sui.rideOn(from); // from is owner/rider
         // Manually make b ride in slot 1
         sui.getBoundYukkuri()[1] = b;
-        sui.setCurrent_bindbody_num(2);
+        sui.setBoundBodyCount(2);
         b.setParentLinkId(sui.getObjId());
         b.setFavoriteItem(FavItemType.SUI, sui);
-        sui.setCurrent_condition(1); // waiting
+        sui.setConditionIndex(1); // waiting
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         // from.getCurrentEvent() != this (null) AND condition==1 => rideOff ABORT
         UpdateState state = event.update(b);
         assertEquals(UpdateState.ABORT, state);
-        assertFalse(sui.isriding(b));
+        assertFalse(sui.isRiddenBy(b));
     }
 
     @Test
@@ -534,10 +534,10 @@ public class SuiRideEventTest extends EventTestBase {
         Sui sui = createSui(999);
         sui.rideOn(from);
         sui.getBoundYukkuri()[1] = b;
-        sui.setCurrent_bindbody_num(2);
+        sui.setBoundBodyCount(2);
         b.setParentLinkId(sui.getObjId());
         b.setFavoriteItem(FavItemType.SUI, sui);
-        sui.setCurrent_condition(2); // not waiting
+        sui.setConditionIndex(2); // not waiting
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         // from.getCurrentEvent() != this AND condition != 1 => no rideOff, returns null
         UpdateState state = event.update(b);
@@ -574,7 +574,7 @@ public class SuiRideEventTest extends EventTestBase {
 
             assertFalse(event.execute(rider));
 
-            assertTrue(sui.isriding(rider), "execute should actually place the rider onto the waiting sui");
+            assertTrue(sui.isRiddenBy(rider), "execute should actually place the rider onto the waiting sui");
             assertEquals(sui.getObjId(), rider.getParentLinkId(), "rider should link to the sui after boarding");
             assertEquals(sui, rider.getFavoriteItem(FavItemType.SUI), "first rider should become the owner of the sui");
             assertFalse(rider.isShadowVisible(), "boarded rider should hide its drop shadow");

@@ -3,7 +3,6 @@ package org.simyukkuri.logic;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.util.GameRandom;
@@ -16,7 +15,7 @@ public class YukkuriSelectionRule {
 
 	/**
 	 * 婚姻候補のリストを作る。既婚の場合は、相手のみを含むリストを作る.
-	 * 
+	 *
 	 * @param body 自分
 	 * @param age  ゆん生のステージ
 	 * @return 婚姻候補のリスト
@@ -36,7 +35,8 @@ public class YukkuriSelectionRule {
 			return activeFianceeList;
 		}
 
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry()
+				.entrySet()) {
 			Yukkuri candidate = entry.getValue();
 			// 自身はスキップ
 			if (candidate == body) {

@@ -3,13 +3,14 @@ package org.simyukkuri.draw;
 import java.io.Serializable;
 
 /**
- * awt代替のDimension
+ * awt代替のDimension.
  */
 public class Dimension4y implements Serializable {
 
 	private static final long serialVersionUID = -7555703845901421580L;
 	private int width;
 	private int height;
+
 	/**
 	 * 幅を返す。
 	 *
@@ -18,6 +19,7 @@ public class Dimension4y implements Serializable {
 	public int getWidth() {
 		return width;
 	}
+
 	/**
 	 * 幅をセットする。
 	 *
@@ -26,6 +28,7 @@ public class Dimension4y implements Serializable {
 	public void setWidth(int width) {
 		this.width = width;
 	}
+
 	/**
 	 * 高さを返す。
 	 *
@@ -34,6 +37,7 @@ public class Dimension4y implements Serializable {
 	public int getHeight() {
 		return height;
 	}
+
 	/**
 	 * 高さをセットする。
 	 *
@@ -42,6 +46,7 @@ public class Dimension4y implements Serializable {
 	public void setHeight(int height) {
 		this.height = height;
 	}
+
 	/**
 	 * 幅・高さ 0 で初期化する。
 	 */
@@ -49,6 +54,7 @@ public class Dimension4y implements Serializable {
 		width = 0;
 		height = 0;
 	}
+
 	/**
 	 * 幅と高さを指定して初期化する。
 	 *

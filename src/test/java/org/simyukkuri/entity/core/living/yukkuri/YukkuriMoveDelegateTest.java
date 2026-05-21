@@ -3,7 +3,6 @@ package org.simyukkuri.entity.core.living.yukkuri;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
-
 import org.simyukkuri.enums.PurposeOfMoving;
 
 class YukkuriMoveDelegateTest {

@@ -1,4 +1,5 @@
 package org.simyukkuri.enums;
+
 /** 知性 */
 public enum Intelligence {
 	/** バッジ級 */WISE,

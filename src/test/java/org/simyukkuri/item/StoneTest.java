@@ -476,7 +476,7 @@ class StoneTest extends ItemTestBase {
     @Test
     void testSetObjEXType() {
         Stone stone = new Stone();
-        stone.setObjEXType(WorldEntityKind.TRASH);
+		stone.setWorldEntityType(WorldEntityKind.TRASH);
         assertEquals(WorldEntityKind.TRASH, stone.getWorldEntityType());
     }
 

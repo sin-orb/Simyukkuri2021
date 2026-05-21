@@ -7,14 +7,12 @@ import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
@@ -26,8 +24,8 @@ import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
- * オレンジプレート
+/**
+ * オレンジプレート.
  */
 public class OrangePool extends WorldEntity {
 	private static final long serialVersionUID = -5312430078640748031L;
@@ -83,27 +81,30 @@ public class OrangePool extends WorldEntity {
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (itemRank == ItemRank.HOUSE) {
-			if (enabled)
+			if (enabled) {
 				layer[0] = imageLayers[0];
-			else
+			} else {
 				layer[0] = imageLayers[1];
+			}
 		} else if (itemRank == ItemRank.NORA) {
-			if (enabled)
+			if (enabled) {
 				layer[0] = imageLayers[2];
-			else
+			} else {
 				layer[0] = imageLayers[3];
+			}
 		} else {
-			if (enabled)
+			if (enabled) {
 				layer[0] = imageLayers[4];
-			else
+			} else {
 				layer[0] = imageLayers[5];
+			}
 		}
 		return 1;
 	}
 
 	/** アイテムの影画像を返す。 */
-	@Override
 	@Transient
+	@Override
 	public BufferedImage getShadowImage() {
 		return null;
 	}
@@ -114,17 +115,18 @@ public class OrangePool extends WorldEntity {
 	}
 
 	/** 衝突判定対象タイプを返す。 */
-	@Override
 	@Transient
+	@Override
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}
 
-	@Override
 	/** 衝突処理を行い、結果コードを返す。 */
+	@Override
 	public int objHitProcess(Entity targetObject) {
-		if (!enabled)
+		if (!enabled) {
 			return 0;
+		}
 		if (targetObject.getObjType() == Type.YUKKURI) {
 			Yukkuri body = (Yukkuri) targetObject;
 			body.giveJuice();
@@ -138,7 +140,7 @@ public class OrangePool extends WorldEntity {
 				if (body.getFootBakeLevel() != FootBake.CRITICAL) {
 					body.setFootBakePeriod(0);
 				}
-				if (body.isBurst() == false) {
+				if (!body.isBurst()) {
 					body.setCantDie();
 				}
 			}
@@ -147,29 +149,31 @@ public class OrangePool extends WorldEntity {
 		return 0;
 	}
 
-	@Override
-	@Transient
 	/** アイテムの購入価格を返す。 */
+	@Transient
+	@Override
 	public int getValue() {
 		if (itemRank == ItemRank.HOUSE) {
-			if (rescue)
+			if (rescue) {
 				return value[1];
-			else
+			} else {
 				return value[0];
+			}
 		} else {
 			return 0;
 		}
 	}
 
-	@Override
-	@Transient
 	/** アイテムの設置コストを返す。 */
+	@Transient
+	@Override
 	public int getCost() {
 		if (itemRank == ItemRank.HOUSE) {
-			if (rescue)
+			if (rescue) {
 				return cost[1];
-			else
+			} else {
 				return cost[0];
+			}
 		} else {
 			return 0;
 		}
@@ -225,7 +229,6 @@ public class OrangePool extends WorldEntity {
 
 		JPanel mainPanel = new JPanel();
 		JRadioButton[] buttons = new JRadioButton[OrangeType.values().length];
-		boolean result = false;
 
 		mainPanel.setLayout(new GridLayout(2, 1));
 		mainPanel.setPreferredSize(new Dimension(150, 100));
@@ -251,13 +254,14 @@ public class OrangePool extends WorldEntity {
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 		if (dialogResult == JOptionPane.OK_OPTION) {
-			if (buttons[0].isSelected())
+			if (buttons[0].isSelected()) {
 				orangePool.rescue = false;
-			else
+			} else {
 				orangePool.rescue = true;
-			result = true;
+			}
+			return true;
 		}
-		return result;
+		return false;
 	}
 
 	/** ゆっくりを救出するかを返す。 */

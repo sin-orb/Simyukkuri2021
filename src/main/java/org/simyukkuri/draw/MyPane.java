@@ -22,21 +22,18 @@ import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.engine.GameLoop;
 import org.simyukkuri.engine.ImageLoadService;
 import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.YukkuriType;
@@ -85,19 +82,28 @@ public class MyPane extends JPanel implements Runnable {
 	 * <br>
 	 * 順に、停止、1倍、2倍、4倍、10倍、最速
 	 */
-	public static final int PAUSE = -1, MAX = 1, DECUPLE = 10, QUINTUPLE = 20, DOUBLE = 50, NORMAL = 100;
+	public static final int PAUSE = -1;
+	public static final int MAX = 1;
+	public static final int DECUPLE = 10;
+	public static final int QUINTUPLE = 20;
+	public static final int DOUBLE = 50;
+	public static final int NORMAL = 100;
 	/** スピードの値管理 */
-	public static final int gameSpeed[] = { PAUSE, NORMAL, DOUBLE, QUINTUPLE, DECUPLE, MAX };
+	public static final int[] gameSpeed = { PAUSE, NORMAL, DOUBLE, QUINTUPLE, DECUPLE, MAX };
 
-	@SuppressWarnings("rawtypes")
 	/** ゆっくり追加ウィンドウ用コンボボックス群 */
+	@SuppressWarnings("rawtypes")
 	static JComboBox cb1;
+	/** ゆっくり追加ウィンドウ用コンボボックス群 */
 	@SuppressWarnings("rawtypes")
 	static JComboBox cb2;
+	/** ゆっくり追加ウィンドウ用コンボボックス群 */
 	@SuppressWarnings("rawtypes")
 	static JComboBox cb3;
+	/** ゆっくり追加ウィンドウ用コンボボックス群 */
 	@SuppressWarnings("rawtypes")
 	static JComboBox cb4;
+	/** ゆっくり追加ウィンドウ用コンボボックス群 */
 	@SuppressWarnings("rawtypes")
 	static JComboBox cb5;
 	static JCheckBox cb6;
@@ -383,46 +389,33 @@ public class MyPane extends JPanel implements Runnable {
 		}
 	}
 
-	/*------------------------------------------------------------------
-		ゆっくり追加ダイアログ
-	
-	*/
+	/** ゆっくり追加ダイアログを開く. */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void initBodies() {
-		List<Yukkuri> bodies = new LinkedList<Yukkuri>();
-		String[] options;
-		String[] ages;
-		String[] rare;
-		String[] mode;
-		String[] num;
-		String mess1, mess2, mess3, mess4, mess5;
-		final int BABY = 0, CHILD = 1, ADULT = 2;
-		MyAddYukkuriListener mayl = new MyAddYukkuriListener();
-
-		String[] tempAges = { GameText.read("draw_baby"),
+		final List<Yukkuri> bodies = new LinkedList<Yukkuri>();
+		final String[] options = { GameText.read("yes"), GameText.read("no") };
+		final String[] ages = { GameText.read("draw_baby"),
 				GameText.read("draw_child"), GameText.read("draw_adult") };
-		ages = tempAges;
-		String[] tempRare = { GameText.read("draw_normalsp"),
+		final String[] rare = { GameText.read("draw_normalsp"),
 				GameText.read("draw_raresp"), GameText.read("draw_predsp") };
-		rare = tempRare;
-		String[] tempo = { GameText.read("yes"), GameText.read("no") };
-		options = tempo;
-		String[] tempmode = { GameText.read("off"), GameText.read("draw_normalsp"),
+		final String[] mode = { GameText.read("off"), GameText.read("draw_normalsp"),
 				GameText.read("draw_raresp"), GameText.read("draw_normraresp") };
-		mode = tempmode;
-		String[] tempnum = { "1", "2", "3", "4", "5", "10", "50", "100" };
-		num = tempnum;
-		mess1 = GameText.read("draw_addmes");
-		mess2 = GameText.read("draw_addmore");
-		mess3 = GameText.read("draw_randommode");
-		mess4 = GameText.read("draw_addnum");
-		mess5 = GameText.read("draw_raperize");
+		final String[] num = { "1", "2", "3", "4", "5", "10", "50", "100" };
+		final String mess1 = GameText.read("draw_addmes");
+		final String mess2 = GameText.read("draw_addmore");
+		final String mess3 = GameText.read("draw_randommode");
+		final String mess4 = GameText.read("draw_addnum");
+		final String mess5 = GameText.read("draw_raperize");
+		final int babyIndex = 0;
+		final int childIndex = 1;
+		final int adultIndex = 2;
+		final MyAddYukkuriListener addYukkuriListener = new MyAddYukkuriListener();
 
 		for (int choice = 0; choice == 0;) {
-			JPanel panel = new JPanel();
-			JPanel panel2 = new JPanel();
-			JPanel panel3 = new JPanel();
-			JPanel panel4 = new JPanel();
+			final JPanel panel = new JPanel();
+			final JPanel panel2 = new JPanel();
+			final JPanel panel3 = new JPanel();
+			final JPanel panel4 = new JPanel();
 			cb1 = new JComboBox();
 			cb2 = new JComboBox(ages);
 			cb2.setSelectedIndex(2);
@@ -430,7 +423,7 @@ public class MyPane extends JPanel implements Runnable {
 			cb3 = new JComboBox(rare);
 			cb3.setSelectedIndex(0);
 			panel2.add(cb3);
-			cb3.addItemListener(mayl);
+			cb3.addItemListener(addYukkuriListener);
 			cb1 = new JComboBox();
 			if (cb3.getSelectedIndex() == 0) {
 				cb1.setModel(new DefaultComboBoxModel(GameLocale.isJapanese() ? namesCommonJ : namesCommonE));
@@ -443,7 +436,7 @@ public class MyPane extends JPanel implements Runnable {
 			JLabel modelabel = new JLabel(mess3);
 			panel3.add(modelabel);
 			cb4 = new JComboBox(mode);
-			cb4.addItemListener(mayl);
+			cb4.addItemListener(addYukkuriListener);
 			panel3.add(cb4);
 
 			JLabel numlabel = new JLabel(mess4);
@@ -451,7 +444,7 @@ public class MyPane extends JPanel implements Runnable {
 			cb5 = new JComboBox(num);
 			cb5.setEditable(true);
 			cb5.setPreferredSize(new java.awt.Dimension(60, 32));
-			cb5.addActionListener(mayl);
+			cb5.addActionListener(addYukkuriListener);
 			panel3.add(cb5);
 			JLabel rapelabel = new JLabel(mess5);
 			panel4.add(rapelabel);
@@ -518,46 +511,41 @@ public class MyPane extends JPanel implements Runnable {
 									selectType = YukkuriType.fromTypeID(GameRandom.nextInt(namesCommonJ.length));
 									break;
 								case 1:
-									selectType = YukkuriType.fromTypeID(GameRandom.nextInt(namesRareJ.length) + 1000);
+									selectType = YukkuriType.fromTypeID(
+											GameRandom.nextInt(namesRareJ.length) + 1000);
 									break;
 							}
 							selectAge = GameRandom.nextInt(3);
 							break;
 					}
 
-					boolean imageNagasiMode = false;
-					if (selectType == YukkuriType.REIMU && GameRandom.nextInt(20) == 0)
+					if (selectType == YukkuriType.REIMU && GameRandom.nextInt(20) == 0) {
 						selectType = YukkuriType.REMIRYA;
-					if (selectType == YukkuriType.REIMU && GameRandom.nextInt(15) == 0)
+					}
+					if (selectType == YukkuriType.REIMU && GameRandom.nextInt(15) == 0) {
 						selectType = YukkuriType.DEIBU;
-					if (selectType == YukkuriType.MARISA && GameRandom.nextInt(50) == 0)
+					}
+					if (selectType == YukkuriType.MARISA && GameRandom.nextInt(50) == 0) {
 						selectType = YukkuriType.MARISATSUMURI;
-					if (selectType == YukkuriType.MARISA && GameRandom.nextInt(50) == 0)
+					}
+					if (selectType == YukkuriType.MARISA && GameRandom.nextInt(50) == 0) {
 						selectType = YukkuriType.MARISAKOTATSUMURI;
-					if (selectType == YukkuriType.AYAYA && GameRandom.nextInt(20) == 0)
+					}
+					if (selectType == YukkuriType.AYAYA && GameRandom.nextInt(20) == 0) {
 						selectType = YukkuriType.KIMEEMARU;
+					}
 
 					// if(selectType == Reimu.type || selectType == Marisa.type)
-					{
-						if (SimYukkuri.NAGASI_MODE == 1) {
-							imageNagasiMode = true;
-						}
-						if (SimYukkuri.NAGASI_MODE == 2) {
-							if (GameRandom.nextInt(20) == 0) {
-								imageNagasiMode = true;
-							}
-						}
-					}
 
 					AgeState age;
 					switch (selectAge) {
-						case BABY:
+						case babyIndex:
 							age = AgeState.BABY;
 							break;
-						case CHILD:
+						case childIndex:
 							age = AgeState.CHILD;
 							break;
-						case ADULT:
+						case adultIndex:
 						default:
 							age = AgeState.ADULT;
 							break;
@@ -574,6 +562,8 @@ public class MyPane extends JPanel implements Runnable {
 					} else {
 						b.setRaper(false);
 					}
+					boolean imageNagasiMode = SimYukkuri.NAGASI_MODE == 1
+							|| (SimYukkuri.NAGASI_MODE == 2 && GameRandom.nextInt(20) == 0);
 					b.setImageNagasiMode(imageNagasiMode);
 
 					bodies.add(b);
@@ -586,8 +576,9 @@ public class MyPane extends JPanel implements Runnable {
 		for (Yukkuri b : bodies) {
 			synchronized (SimYukkuri.lock) {
 				terrarium.addYukkuri(b);
-				if (b.getRank() == YukkuriRank.KAIYU)
+				if (b.getRank() == YukkuriRank.KAIYU) {
 					Cash.buyYukkuri(b);
+				}
 			}
 		}
 	}
@@ -603,8 +594,8 @@ public class MyPane extends JPanel implements Runnable {
 	 * @param spr    対象ゆっくりのスプライト
 	 */
 	void calcDrawBodyPosition(Point4y origin, Sprite spr) {
-		int sizeW = Translate.transSize(spr.getImageW());
-		int sizeH = Translate.transSize(spr.getImageH());
+		final int sizeW = Translate.transSize(spr.getImageW());
+		final int sizeH = Translate.transSize(spr.getImageH());
 		int pivX = Translate.transSize(spr.getPivotX());
 		int pivY = Translate.transSize(spr.getPivotY());
 
@@ -619,8 +610,8 @@ public class MyPane extends JPanel implements Runnable {
 	 * @param rect オブジェクトの占有長方形
 	 */
 	void calcDrawPosition(Entity o, Rectangle4y rect) {
-		int sizeW = Translate.transSize(o.getW());
-		int sizeH = Translate.transSize(o.getH());
+		final int sizeW = Translate.transSize(o.getW());
+		final int sizeH = Translate.transSize(o.getH());
 		int pivX = Translate.transSize(o.getPivotX());
 		int pivY = Translate.transSize(o.getPivotY());
 		Translate.translate(o.getX(), o.getY(), tmpPoint);

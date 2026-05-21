@@ -1,7 +1,6 @@
 package org.simyukkuri.util;
 
 import java.util.Locale;
-
 import org.simyukkuri.system.ResourceUtil;
 
 /**

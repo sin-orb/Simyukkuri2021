@@ -1085,8 +1085,8 @@ public abstract class Yukkuri extends SocialEntity {
 	/**
 	 * 口ふさぎまたは修復（トグル）
 	 */
-	public void ShutMouth() {
-		abuseDelegate().ShutMouth();
+	public void shutMouth() {
+		abuseDelegate().shutMouth();
 	}
 
 	/**

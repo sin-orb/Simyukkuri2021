@@ -14,6 +14,9 @@ import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.util.WorldTestHelper;
 
+/**
+ * Transformation service のテスト.
+ */
 public class TransformationServiceTest {
 
 	@Test

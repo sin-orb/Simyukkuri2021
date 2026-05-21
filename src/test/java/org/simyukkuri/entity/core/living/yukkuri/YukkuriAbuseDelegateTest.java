@@ -60,7 +60,7 @@ class YukkuriAbuseDelegateTest {
 	void shutMouth_turnsOnShutmouth() {
 		StubBody body = new StubBody();
 		body.setShutmouth(false);
-		new YukkuriAbuseDelegate(body).ShutMouth();
+		new YukkuriAbuseDelegate(body).shutMouth();
 		assertTrue(body.isShutmouth());
 	}
 

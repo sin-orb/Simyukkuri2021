@@ -2,7 +2,6 @@ package org.simyukkuri.engine;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.Dna;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -54,6 +53,13 @@ public final class YukkuriFactory {
 	 */
 	@FunctionalInterface
 	public interface FamilyLinker {
+		/**
+		 * 家族を接続する.
+		 *
+		 * @param mama 母親
+		 * @param papa 父親
+		 * @param child 子供
+		 */
 		void link(Yukkuri mama, Yukkuri papa, Yukkuri child);
 	}
 

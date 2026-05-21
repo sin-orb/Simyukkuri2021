@@ -186,8 +186,8 @@ public class ToyLogic {
 					}
 
 					// 所有できない場合
-					if (((Sui) sui).NoCanBind()) {
-						Yukkuri bindBody = (Yukkuri) ((Sui) sui).getBindobj();
+					if (((Sui) sui).hasOwner()) {
+						Yukkuri bindBody = (Yukkuri) ((Sui) sui).getOwnerBody();
 						// 所有者が家族ではないならなにもしない
 						if (!(body.isParent(bindBody) || bindBody.isParent(body) || body.isPartner(bindBody)
 								|| bindBody.isSister(body))) {
@@ -206,7 +206,7 @@ public class ToyLogic {
 		}
 		// すぃーが見つかった場合
 		if (favoriteSui != null) {
-			Yukkuri bindBody = (Yukkuri) ((Sui) favoriteSui).getBindobj();
+			Yukkuri bindBody = (Yukkuri) ((Sui) favoriteSui).getOwnerBody();
 			// プレイヤーに持ち上げられたら所有権を消す
 			if (favoriteSui.isGrabbed() && favoriteSui.getZ() != 0) {
 				bindBody = null;

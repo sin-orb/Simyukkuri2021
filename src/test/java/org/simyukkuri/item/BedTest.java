@@ -666,7 +666,7 @@ class BedTest extends ItemTestBase {
     @Test
     void testSetObjEXType() {
         Bed bed = new Bed();
-        bed.setObjEXType(WorldEntityKind.BED);
+		bed.setWorldEntityType(WorldEntityKind.BED);
         assertEquals(WorldEntityKind.BED, bed.getWorldEntityType());
     }
 

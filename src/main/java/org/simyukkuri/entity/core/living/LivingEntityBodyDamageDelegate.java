@@ -22,7 +22,7 @@ public final class LivingEntityBodyDamageDelegate {
 
 	/** ダメージ更新の entry point. */
 	public void checkDamage() {
-		boolean healFlag = canHealDamageFromEnvironment();
+		final boolean healFlag = canHealDamageFromEnvironment();
 		applyDamageOverTime();
 		applyCriticalDamage();
 		applyBodyConditionDamage();

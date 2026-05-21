@@ -2,7 +2,6 @@ package org.simyukkuri.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import org.simyukkuri.system.ItemMenu;
 import org.simyukkuri.system.ItemMenu.ShapeMenu;
 

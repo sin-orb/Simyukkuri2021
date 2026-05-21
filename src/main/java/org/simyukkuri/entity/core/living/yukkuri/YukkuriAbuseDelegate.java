@@ -1,7 +1,6 @@
 package org.simyukkuri.entity.core.living.yukkuri;
 
 import java.util.Map;
-
 import org.simyukkuri.Const;
 import org.simyukkuri.entity.core.attachment.impl.Fire;
 import org.simyukkuri.entity.core.attachment.impl.Needle;
@@ -149,7 +148,7 @@ public final class YukkuriAbuseDelegate {
 	/**
 	 * 口ふさぎまたは修復（トグル）.
 	 */
-	public void ShutMouth() {
+	public void shutMouth() {
 		if (body.isDead()) {
 			return;
 		}

@@ -520,6 +520,7 @@ public abstract class LivingEntity extends Entity {
 	 * 空腹度 counter indicating how hungry を取得する. @return 空腹度 counter indicating how
 	 * hungry
 	 */
+	@com.fasterxml.jackson.annotation.JsonProperty("hungry")
 	public int getHungry() {
 		return hungry;
 	}
@@ -528,6 +529,7 @@ public abstract class LivingEntity extends Entity {
 	 * 空腹度 counter indicating how hungry を設定する. @param hungry 空腹度 counter indicating
 	 * how hungry
 	 */
+	@com.fasterxml.jackson.annotation.JsonProperty("hungry")
 	public void setHungry(int hungry) {
 		this.hungry = hungry;
 	}

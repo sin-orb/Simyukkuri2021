@@ -1,11 +1,10 @@
 package org.simyukkuri.system;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.effect.Effect;
@@ -46,9 +45,9 @@ import org.simyukkuri.field.impl.Pool;
 import org.simyukkuri.util.GameWorld;
 
 /**
- * テラリウム1ステージ分のゲーム世界状態を保持するクラス。
+ * テラリウム1ステージ分のゲーム世界状態を保持するクラス.
  * ゆっくりレジストリ・各種エンティティリポジトリ・フィールドデータを一括管理し、
- * セーブ／ロード時の Jackson シリアライズ単位となる。
+ * セーブ／ロード時の Jackson シリアライズ単位となる.
  */
 public class WorldState implements Serializable {
 
@@ -79,7 +78,7 @@ public class WorldState implements Serializable {
 	private transient Map<Integer, Entity> entityIndex;
 
 	/**
-	 * マップインデックスを指定してワールド状態を初期化する。
+	 * マップインデックスを指定してワールド状態を初期化する.
 	 *
 	 * @param idx マップインデックス
 	 */
@@ -92,7 +91,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * Jackson デシリアライズ用デフォルトコンストラクタ。
+	 * Jackson デシリアライズ用デフォルトコンストラクタ.
 	 */
 	public WorldState() {
 		alarmPeriod = 0;
@@ -113,7 +112,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 2次元グリッドを全要素 0 にリセットする。
+	 * 2次元グリッドを全要素 0 にリセットする.
 	 *
 	 * @param map リセット対象のグリッド
 	 */
@@ -126,8 +125,8 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * フィールドグリッドの指定矩形領域にビットフラグを設定または解除する。
-	 * {@code setFlag=true} のとき OR で属性を付加し、{@code false} のとき AND NOT で除去する。
+	 * フィールドグリッドの指定矩形領域にビットフラグを設定または解除する.
+	 * {@code setFlag=true} のとき OR で属性を付加し、{@code false} のとき AND NOT で除去する.
 	 *
 	 * @param map       フィールドグリッド（現在は内部で getCurrentWorldState() を使用）
 	 * @param x         矩形の左端 X 座標
@@ -165,8 +164,8 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 2点間の直線に沿って壁グリッドのビットフラグを設定または解除する。
-	 * 線幅は 1 ピクセル分太くなる（隣接グリッドにも書き込む）。
+	 * 2点間の直線に沿って壁グリッドのビットフラグを設定または解除する.
+	 * 線幅は 1 ピクセル分太くなる（隣接グリッドにも書き込む）.
 	 *
 	 * @param map       書き込み対象の壁グリッド
 	 * @param x1        始点 X 座標
@@ -206,7 +205,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * DOS 状態を開始する。既に DOS 状態なら何もせず false を返す。
+	 * DOS 状態を開始する.既に DOS 状態なら何もせず false を返す.
 	 *
 	 * @return DOS 開始に成功した場合 true、既に実行中なら false
 	 */
@@ -219,7 +218,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * DOS 状態を終了する。DOS 状態でなければ何もせず false を返す。
+	 * DOS 状態を終了する.DOS 状態でなければ何もせず false を返す.
 	 *
 	 * @return DOS 終了に成功した場合 true、実行中でなければ false
 	 */
@@ -232,7 +231,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * このワールドのマップインデックスを返す。
+	 * このワールドのマップインデックスを返す.
 	 *
 	 * @return マップインデックス
 	 */
@@ -241,7 +240,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * マップインデックスをセットする。
+	 * マップインデックスをセットする.
 	 *
 	 * @param mapIndex 新しいマップインデックス
 	 */
@@ -250,7 +249,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * アラーム発動までの残りティック数を返す。
+	 * アラーム発動までの残りティック数を返す.
 	 *
 	 * @return アラーム残りティック数
 	 */
@@ -259,7 +258,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * アラーム発動タイマーをセットする。
+	 * アラーム発動タイマーをセットする.
 	 *
 	 * @param alarmPeriod 残りティック数
 	 */
@@ -268,7 +267,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * アラームが発動中かどうかを返す。
+	 * アラームが発動中かどうかを返す.
 	 *
 	 * @return アラーム中なら true
 	 */
@@ -277,7 +276,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * アラーム発動フラグをセットする。
+	 * アラーム発動フラグをセットする.
 	 *
 	 * @param alarm true でアラーム発動
 	 */
@@ -286,7 +285,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * DOS（ゆっくりが大量にいる時の特殊処理）が実行中かどうかを返す。
+	 * DOS（ゆっくりが大量にいる時の特殊処理）が実行中かどうかを返す.
 	 *
 	 * @return DOS 実行中なら true
 	 */
@@ -295,7 +294,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * DOS フラグをセットする。
+	 * DOS フラグをセットする.
 	 *
 	 * @param hasDos true で DOS 実行中
 	 */
@@ -304,7 +303,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * ゆっくり個体 ID からゆっくりインスタンスへのマップを返す。
+	 * ゆっくり個体 ID からゆっくりインスタンスへのマップを返す.
 	 *
 	 * @return ゆっくりレジストリ
 	 */
@@ -313,7 +312,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * ゆっくりレジストリをセットする。
+	 * ゆっくりレジストリをセットする.
 	 *
 	 * @param yukkuriMap 新しいゆっくりレジストリ
 	 */
@@ -322,7 +321,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 食べ物マップを返す。
+	 * 食べ物マップを返す.
 	 *
 	 * @return 食べ物マップ
 	 */
@@ -331,7 +330,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 食べ物マップをセットする。主にデシリアライズ時に使用。
+	 * 食べ物マップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param food セットする食べ物マップ
 	 */
@@ -340,7 +339,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 取り出し中の食べ物マップを返す。
+	 * 取り出し中の食べ物マップを返す.
 	 *
 	 * @return 取り出し中食べ物マップ
 	 */
@@ -349,7 +348,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 取り出し中の食べ物マップをセットする。主にデシリアライズ時に使用。
+	 * 取り出し中の食べ物マップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param takenOutFood セットする取り出し中食べ物マップ
 	 */
@@ -358,7 +357,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * フンマップを返す。
+	 * フンマップを返す.
 	 *
 	 * @return フンマップ
 	 */
@@ -367,7 +366,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * フンマップをセットする。主にデシリアライズ時に使用。
+	 * フンマップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param shit セットするフンマップ
 	 */
@@ -376,7 +375,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 取り出し中のフンマップを返す。
+	 * 取り出し中のフンマップを返す.
 	 *
 	 * @return 取り出し中フンマップ
 	 */
@@ -385,7 +384,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 取り出し中のフンマップをセットする。主にデシリアライズ時に使用。
+	 * 取り出し中のフンマップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param takenOutShit セットする取り出し中フンマップ
 	 */
@@ -394,7 +393,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 嘔吐物マップを返す。
+	 * 嘔吐物マップを返す.
 	 *
 	 * @return 嘔吐物マップ
 	 */
@@ -403,7 +402,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 嘔吐物マップをセットする。主にデシリアライズ時に使用。
+	 * 嘔吐物マップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param vomit セットする嘔吐物マップ
 	 */
@@ -412,7 +411,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * トイレマップを返す。
+	 * トイレマップを返す.
 	 *
 	 * @return トイレマップ
 	 */
@@ -421,7 +420,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * トイレマップをセットする。主にデシリアライズ時に使用。
+	 * トイレマップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param toilet セットするトイレマップ
 	 */
@@ -430,7 +429,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * ベッドマップを返す。
+	 * ベッドマップを返す.
 	 *
 	 * @return ベッドマップ
 	 */
@@ -439,7 +438,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * ベッドマップをセットする。主にデシリアライズ時に使用。
+	 * ベッドマップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param bed セットするベッドマップ
 	 */
@@ -448,7 +447,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * おもちゃマップを返す。
+	 * おもちゃマップを返す.
 	 *
 	 * @return おもちゃマップ
 	 */
@@ -457,7 +456,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * おもちゃマップをセットする。主にデシリアライズ時に使用。
+	 * おもちゃマップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param toy セットするおもちゃマップ
 	 */
@@ -466,7 +465,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 小石マップを返す。
+	 * 小石マップを返す.
 	 *
 	 * @return 小石マップ
 	 */
@@ -475,7 +474,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 小石マップをセットする。主にデシリアライズ時に使用。
+	 * 小石マップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param stone セットする小石マップ
 	 */
@@ -484,7 +483,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * トランポリンマップを返す。
+	 * トランポリンマップを返す.
 	 *
 	 * @return トランポリンマップ
 	 */
@@ -493,7 +492,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * トランポリンマップをセットする。主にデシリアライズ時に使用。
+	 * トランポリンマップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param trampoline セットするトランポリンマップ
 	 */
@@ -502,7 +501,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 交配池マップを返す。
+	 * 交配池マップを返す.
 	 *
 	 * @return 交配池マップ
 	 */
@@ -511,7 +510,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 交配池マップをセットする。主にデシリアライズ時に使用。
+	 * 交配池マップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param breedingPool セットする交配池マップ
 	 */
@@ -520,7 +519,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 茎マップを返す。
+	 * 茎マップを返す.
 	 *
 	 * @return 茎マップ
 	 */
@@ -529,7 +528,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 茎マップをセットする。主にデシリアライズ時に使用。
+	 * 茎マップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param stalk セットする茎マップ
 	 */
@@ -538,7 +537,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 酢（乗り物アイテム）マップを返す。
+	 * 酢（乗り物アイテム）マップを返す.
 	 *
 	 * @return 酢マップ
 	 */
@@ -547,7 +546,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 酢マップをセットする。主にデシリアライズ時に使用。
+	 * 酢マップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param sui セットする酢マップ
 	 */
@@ -556,7 +555,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * ゴミ箱マップを返す。
+	 * ゴミ箱マップを返す.
 	 *
 	 * @return ゴミ箱マップ
 	 */
@@ -565,7 +564,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * ゴミ箱マップをセットする。主にデシリアライズ時に使用。
+	 * ゴミ箱マップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param trash セットするゴミ箱マップ
 	 */
@@ -574,7 +573,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 家マップを返す。
+	 * 家マップを返す.
 	 *
 	 * @return 家マップ
 	 */
@@ -583,7 +582,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 家マップをセットする。主にデシリアライズ時に使用。
+	 * 家マップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param house セットする家マップ
 	 */
@@ -592,7 +591,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * おかざりマップを返す。
+	 * おかざりマップを返す.
 	 *
 	 * @return おかざりマップ
 	 */
@@ -601,7 +600,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * おかざりマップをセットする。主にデシリアライズ時に使用。
+	 * おかざりマップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param okazari セットするおかざりマップ
 	 */
@@ -610,7 +609,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 自動エサ箱マップを返す。
+	 * 自動エサ箱マップを返す.
 	 *
 	 * @return 自動エサ箱マップ
 	 */
@@ -619,7 +618,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 自動エサ箱マップをセットする。主にデシリアライズ時に使用。
+	 * 自動エサ箱マップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param autofeeder セットする自動エサ箱マップ
 	 */
@@ -628,7 +627,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 食べ物製造機マップを返す。
+	 * 食べ物製造機マップを返す.
 	 *
 	 * @return 食べ物製造機マップ
 	 */
@@ -637,7 +636,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 食べ物製造機マップをセットする。主にデシリアライズ時に使用。
+	 * 食べ物製造機マップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param foodmaker セットする食べ物製造機マップ
 	 */
@@ -646,7 +645,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * ミキサーマップを返す。
+	 * ミキサーマップを返す.
 	 *
 	 * @return ミキサーマップ
 	 */
@@ -655,7 +654,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * ミキサーマップをセットする。主にデシリアライズ時に使用。
+	 * ミキサーマップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param mixer セットするミキサーマップ
 	 */
@@ -664,7 +663,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * ディフューザーマップを返す。
+	 * ディフューザーマップを返す.
 	 *
 	 * @return ディフューザーマップ
 	 */
@@ -673,7 +672,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * ディフューザーマップをセットする。主にデシリアライズ時に使用。
+	 * ディフューザーマップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param diffuser セットするディフューザーマップ
 	 */
@@ -682,7 +681,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * プレス機マップを返す。
+	 * プレス機マップを返す.
 	 *
 	 * @return プレス機マップ
 	 */
@@ -691,7 +690,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * プレス機マップをセットする。主にデシリアライズ時に使用。
+	 * プレス機マップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param machinePress セットするプレス機マップ
 	 */
@@ -700,7 +699,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * ホットプレートマップを返す。
+	 * ホットプレートマップを返す.
 	 *
 	 * @return ホットプレートマップ
 	 */
@@ -709,7 +708,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * ホットプレートマップをセットする。主にデシリアライズ時に使用。
+	 * ホットプレートマップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param hotPlate セットするホットプレートマップ
 	 */
@@ -718,7 +717,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 粘着プレートマップを返す。
+	 * 粘着プレートマップを返す.
 	 *
 	 * @return 粘着プレートマップ
 	 */
@@ -727,7 +726,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 粘着プレートマップをセットする。主にデシリアライズ時に使用。
+	 * 粘着プレートマップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param stickyPlate セットする粘着プレートマップ
 	 */
@@ -736,7 +735,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 加工プレートマップを返す。
+	 * 加工プレートマップを返す.
 	 *
 	 * @return 加工プレートマップ
 	 */
@@ -745,7 +744,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 加工プレートマップをセットする。主にデシリアライズ時に使用。
+	 * 加工プレートマップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param processorPlate セットする加工プレートマップ
 	 */
@@ -754,7 +753,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * ゴミシュートマップを返す。
+	 * ゴミシュートマップを返す.
 	 *
 	 * @return ゴミシュートマップ
 	 */
@@ -763,7 +762,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * ゴミシュートマップをセットする。主にデシリアライズ時に使用。
+	 * ゴミシュートマップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param garbagechute セットするゴミシュートマップ
 	 */
@@ -772,7 +771,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * ゴミ処理ステーションマップを返す。
+	 * ゴミ処理ステーションマップを返す.
 	 *
 	 * @return ゴミ処理ステーションマップ
 	 */
@@ -781,7 +780,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * ゴミ処理ステーションマップをセットする。主にデシリアライズ時に使用。
+	 * ゴミ処理ステーションマップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param garbageStation セットするゴミ処理ステーションマップ
 	 */
@@ -790,7 +789,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 製品シュートマップを返す。
+	 * 製品シュートマップを返す.
 	 *
 	 * @return 製品シュートマップ
 	 */
@@ -799,7 +798,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 製品シュートマップをセットする。主にデシリアライズ時に使用。
+	 * 製品シュートマップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param productchute セットする製品シュートマップ
 	 */
@@ -808,7 +807,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * オレンジプールマップを返す。
+	 * オレンジプールマップを返す.
 	 *
 	 * @return オレンジプールマップ
 	 */
@@ -817,7 +816,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * オレンジプールマップをセットする。主にデシリアライズ時に使用。
+	 * オレンジプールマップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param orangePool セットするオレンジプールマップ
 	 */
@@ -826,7 +825,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 雲母（空を飛べる乗り物アイテム）マップを返す。
+	 * 雲母（空を飛べる乗り物アイテム）マップを返す.
 	 *
 	 * @return 雲母マップ
 	 */
@@ -835,7 +834,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 雲母マップをセットする。主にデシリアライズ時に使用。
+	 * 雲母マップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param yunba セットする雲母マップ
 	 */
@@ -844,7 +843,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * ベルトコンベアオブジェクトマップを返す。
+	 * ベルトコンベアオブジェクトマップを返す.
 	 *
 	 * @return ベルトコンベアオブジェクトマップ
 	 */
@@ -853,7 +852,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * ベルトコンベアオブジェクトマップをセットする。主にデシリアライズ時に使用。
+	 * ベルトコンベアオブジェクトマップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param beltconveyorObj セットするベルトコンベアオブジェクトマップ
 	 */
@@ -862,7 +861,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * ベルトコンベアリストを返す。
+	 * ベルトコンベアリストを返す.
 	 *
 	 * @return ベルトコンベアリスト
 	 */
@@ -871,7 +870,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * ベルトコンベアリストをセットする。主にデシリアライズ時に使用。
+	 * ベルトコンベアリストをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param beltconveyor セットするベルトコンベアリスト
 	 */
@@ -880,7 +879,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 壁グリッドを返す。非ゼロのセルが壁を示す。
+	 * 壁グリッドを返す.非ゼロのセルが壁を示す.
 	 *
 	 * @return 壁グリッド
 	 */
@@ -889,7 +888,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 壁グリッドをセットする。主にデシリアライズ時に使用。
+	 * 壁グリッドをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param wallMap セットする壁グリッド
 	 */
@@ -898,7 +897,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * フィールドグリッドを返す。各セルはビットフラグで地形属性を保持する。
+	 * フィールドグリッドを返す.各セルはビットフラグで地形属性を保持する.
 	 *
 	 * @return フィールドグリッド
 	 */
@@ -907,7 +906,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * フィールドグリッドをセットする。主にデシリアライズ時に使用。
+	 * フィールドグリッドをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param fieldMap セットするフィールドグリッド
 	 */
@@ -916,7 +915,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * バリアリストを返す。
+	 * バリアリストを返す.
 	 *
 	 * @return バリアリスト
 	 */
@@ -925,7 +924,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * バリアリストをセットする。主にデシリアライズ時に使用。
+	 * バリアリストをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param barrier セットするバリアリスト
 	 */
@@ -934,7 +933,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 水場リストを返す。
+	 * 水場リストを返す.
 	 *
 	 * @return 水場リスト
 	 */
@@ -943,7 +942,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 水場リストをセットする。主にデシリアライズ時に使用。
+	 * 水場リストをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param pool セットする水場リスト
 	 */
@@ -952,7 +951,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 農場リストを返す。
+	 * 農場リストを返す.
 	 *
 	 * @return 農場リスト
 	 */
@@ -961,7 +960,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 農場リストをセットする。主にデシリアライズ時に使用。
+	 * 農場リストをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param farm セットする農場リスト
 	 */
@@ -970,7 +969,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * z ソートされた通常エフェクトマップを返す。
+	 * z ソートされた通常エフェクトマップを返す.
 	 *
 	 * @return 通常エフェクトマップ
 	 */
@@ -979,7 +978,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 通常エフェクトマップをセットする。主にデシリアライズ時に使用。
+	 * 通常エフェクトマップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param sortEffect セットする通常エフェクトマップ
 	 */
@@ -988,7 +987,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 常に最前面に描画されるエフェクトマップを返す。
+	 * 常に最前面に描画されるエフェクトマップを返す.
 	 *
 	 * @return 最前面エフェクトマップ
 	 */
@@ -997,7 +996,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 最前面エフェクトマップをセットする。主にデシリアライズ時に使用。
+	 * 最前面エフェクトマップをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param frontEffect セットする最前面エフェクトマップ
 	 */
@@ -1006,7 +1005,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * アクティブなイベントパケットリストを返す。
+	 * アクティブなイベントパケットリストを返す.
 	 *
 	 * @return イベントパケットリスト
 	 */
@@ -1015,7 +1014,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * イベントパケットリストをセットする。主にデシリアライズ時に使用。
+	 * イベントパケットリストをセットする.主にデシリアライズ時に使用.
 	 *
 	 * @param event セットするイベントパケットリスト
 	 */
@@ -1024,7 +1023,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * エンティティを ID とともにインデックスに登録する。
+	 * エンティティを ID とともにインデックスに登録する.
 	 *
 	 * @param id エンティティ ID
 	 * @param e  登録するエンティティ
@@ -1037,7 +1036,7 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 指定 ID のエンティティをインデックスから削除する。
+	 * 指定 ID のエンティティをインデックスから削除する.
 	 *
 	 * @param id 削除するエンティティ ID
 	 */
@@ -1048,8 +1047,8 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * エンティティ ID から全エンティティへの逆引きインデックスを返す。
-	 * 未構築の場合は再構築してから返す。
+	 * エンティティ ID から全エンティティへの逆引きインデックスを返す.
+	 * 未構築の場合は再構築してから返す.
 	 *
 	 * @return エンティティインデックス
 	 */
@@ -1062,43 +1061,109 @@ public class WorldState implements Serializable {
 	}
 
 	/**
-	 * 全リポジトリを走査してエンティティインデックスを再構築する。
-	 * セーブロード後などに呼ぶ。
+	 * 全リポジトリを走査してエンティティインデックスを再構築する.
+	 * セーブロード後などに呼ぶ.
 	 */
 	public void rebuildEntityIndex() {
 		entityIndex = new HashMap<>();
-		for (Map.Entry<Integer, Yukkuri> e : yukkuriMap.entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, Shit> e : foodRepo.getShit().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, Vomit> e : foodRepo.getVomit().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, Effect> e : effectRepo.getSortedEffects().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, Effect> e : effectRepo.getFrontEffects().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, Food> e : foodRepo.getFoods().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, Food> e : foodRepo.getTakenOutFoods().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, Shit> e : foodRepo.getTakenOutShits().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, Toilet> e : itemRepo.getToilets().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, Bed> e : itemRepo.getBeds().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, Toy> e : itemRepo.getToys().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, Stone> e : itemRepo.getStones().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, Trampoline> e : itemRepo.getTrampolines().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, BreedingPool> e : itemRepo.getBreedingPools().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, GarbageChute> e : machineRepo.getGarbageChutes().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, FoodMaker> e : machineRepo.getFoodMakers().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, OrangePool> e : machineRepo.getOrangePools().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, ProductChute> e : machineRepo.getProductChutes().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, StickyPlate> e : machineRepo.getStickyPlates().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, HotPlate> e : machineRepo.getHotPlates().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, ProcessorPlate> e : machineRepo.getProcessorPlates().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, Mixer> e : machineRepo.getMixers().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, AutoFeeder> e : machineRepo.getAutoFeeders().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, MachinePress> e : machineRepo.getMachinePresses().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, Stalk> e : itemRepo.getStalks().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, Diffuser> e : machineRepo.getDiffusers().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, Yunba> e : machineRepo.getYunbas().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, Sui> e : itemRepo.getSuis().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, Trash> e : itemRepo.getTrashObjects().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, GarbageStation> e : machineRepo.getGarbageStations().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, House> e : itemRepo.getHouses().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, BeltconveyorObj> e : machineRepo.getBeltconveyorObjects().entrySet()) entityIndex.put(e.getKey(), e.getValue());
-		for (Map.Entry<Integer, Okazari> e : itemRepo.getOkazaris().entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, Yukkuri> e : yukkuriMap.entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, Shit> e : foodRepo.getShit().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, Vomit> e : foodRepo.getVomit().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, Effect> e : effectRepo.getSortedEffects().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, Effect> e : effectRepo.getFrontEffects().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, Food> e : foodRepo.getFoods().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, Food> e : foodRepo.getTakenOutFoods().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, Shit> e : foodRepo.getTakenOutShits().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, Toilet> e : itemRepo.getToilets().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, Bed> e : itemRepo.getBeds().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, Toy> e : itemRepo.getToys().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, Stone> e : itemRepo.getStones().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, Trampoline> e : itemRepo.getTrampolines().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, BreedingPool> e : itemRepo.getBreedingPools().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, GarbageChute> e : machineRepo.getGarbageChutes().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, FoodMaker> e : machineRepo.getFoodMakers().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, OrangePool> e : machineRepo.getOrangePools().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, ProductChute> e : machineRepo.getProductChutes().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, StickyPlate> e : machineRepo.getStickyPlates().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, HotPlate> e : machineRepo.getHotPlates().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, ProcessorPlate> e : machineRepo.getProcessorPlates().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, Mixer> e : machineRepo.getMixers().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, AutoFeeder> e : machineRepo.getAutoFeeders().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, MachinePress> e : machineRepo.getMachinePresses().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, Stalk> e : itemRepo.getStalks().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, Diffuser> e : machineRepo.getDiffusers().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, Yunba> e : machineRepo.getYunbas().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, Sui> e : itemRepo.getSuis().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, Trash> e : itemRepo.getTrashObjects().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, GarbageStation> e : machineRepo.getGarbageStations().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, House> e : itemRepo.getHouses().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, BeltconveyorObj> e : machineRepo.getBeltconveyorObjects().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
+		for (Map.Entry<Integer, Okazari> e : itemRepo.getOkazaris().entrySet()) {
+			entityIndex.put(e.getKey(), e.getValue());
+		}
 	}
 }

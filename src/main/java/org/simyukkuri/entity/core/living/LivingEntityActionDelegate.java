@@ -1,7 +1,7 @@
 package org.simyukkuri.entity.core.living;
 
-import org.simyukkuri.enums.FootBake;
 import org.simyukkuri.enums.BurialState;
+import org.simyukkuri.enums.FootBake;
 
 /**
  * ゆっくりの行動制限ペナルティをまとめた委譲クラス.

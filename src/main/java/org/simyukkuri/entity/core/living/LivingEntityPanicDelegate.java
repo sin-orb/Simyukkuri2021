@@ -1,7 +1,7 @@
 package org.simyukkuri.entity.core.living;
 
-import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.PanicType;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 

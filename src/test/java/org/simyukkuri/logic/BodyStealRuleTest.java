@@ -48,7 +48,7 @@ public class BodyStealRuleTest {
 	void testHandleOkazariSteal_awakeWitnessBlocksSteal() {
 		Yukkuri thief = WorldTestHelper.createBody();
 		Yukkuri target = WorldTestHelper.createBody();
-		Yukkuri witness = WorldTestHelper.createBody();
+		final Yukkuri witness = WorldTestHelper.createBody();
 		thief.setAgeState(AgeState.ADULT);
 		target.setAgeState(AgeState.ADULT);
 		thief.setAttitude(Attitude.SHITHEAD);

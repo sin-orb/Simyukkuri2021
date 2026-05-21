@@ -67,16 +67,16 @@ public class GadgetTool {
 				body.checkReactionStalkMother(UnbirthBabyState.SAD);
 				break;
 
-			case 4:// 回復
-					// 痛めつけてから回復
-					// ダメージがある状態から復活した場合のセリフをしゃべる
+			case 4: // 回復
+				// 痛めつけてから回復
+				// ダメージがある状態から復活した場合のセリフをしゃべる
 				body.setDamage(body.getDamageLimitBase()[body.getAgeState().ordinal()] / 2);
 				// 実ゆの場合、親が反応する
 				body.checkReactionStalkMother(UnbirthBabyState.HAPPY);
 				body.giveJuice();
 				break;
-			case 5:// 言語破壊
-					// れいむの場合
+			case 5: // 言語破壊
+				// れいむの場合
 				if (body.getType() == YukkuriType.REIMU) {
 					body.setMsgType(YukkuriType.TARINAIREIMU);
 				} else {

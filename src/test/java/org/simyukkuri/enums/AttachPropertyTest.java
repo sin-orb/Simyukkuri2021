@@ -20,7 +20,8 @@ class AttachPropertyTest {
     }
 
     private void assertTrue(boolean condition) {
-        if (!condition)
+        if (!condition) {
             throw new AssertionError("Condition failed");
+        }
     }
 }

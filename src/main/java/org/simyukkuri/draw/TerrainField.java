@@ -102,6 +102,17 @@ public class TerrainField implements Serializable {
 	public static void loadTerrain(int index, ClassLoader loader, ImageObserver io) {
 
 		IniFileReader reader = null;
+		Map<String, BufferedImage> previousAssetMap = assetMap;
+		BufferedImage previousBackGround = backGround;
+		AffineTransform previousBgXform = bgXform;
+		LinearGradientPaint[] previousSkyColor = skyColor;
+		List<TerrainBillboard> previousFloorList = floorList;
+		List<TerrainBillboard> previousStructList = structList;
+		List<TerrainBillboard> previousCeilingList = ceilingList;
+		boolean previousIsPers = isPers;
+		int previousOwnerType = ownerType;
+		double previousScaleRateW = scaleRateW;
+		double previousScaleRateH = scaleRateH;
 
 		scaleRateW = (double) Translate.getBufferW() / (double) BG_W;
 		scaleRateH = (double) Translate.getBufferH() / (double) BG_H;
@@ -134,8 +145,19 @@ public class TerrainField implements Serializable {
 				ceilingList = new LinkedList<TerrainBillboard>();
 				loadTerrainAsset(loader, reader, mapName, io);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException | RuntimeException e) {
+			assetMap = previousAssetMap;
+			backGround = previousBackGround;
+			bgXform = previousBgXform;
+			skyColor = previousSkyColor;
+			floorList = previousFloorList;
+			structList = previousStructList;
+			ceilingList = previousCeilingList;
+			isPers = previousIsPers;
+			ownerType = previousOwnerType;
+			scaleRateW = previousScaleRateW;
+			scaleRateH = previousScaleRateH;
+			throw new IllegalStateException("terrain load failed", e);
 		}
 
 		// 未設定の空はデフォルトを設定
@@ -258,7 +280,7 @@ public class TerrainField implements Serializable {
 								BufferedImage img = ModLoader.loadBackImage(loader, mapName, value);
 								assetMap.put(value, img);
 							} catch (IOException e) {
-								e.printStackTrace();
+								throw new IllegalStateException("terrain asset load failed", e);
 							}
 							break;
 						default:

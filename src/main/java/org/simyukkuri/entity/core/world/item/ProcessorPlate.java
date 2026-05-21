@@ -10,15 +10,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.attachment.impl.Fire;
 import org.simyukkuri.entity.core.effect.Effect;
@@ -39,8 +37,8 @@ import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
- * 加工プレート
+/**
+ * 加工プレート.
  */
 public class ProcessorPlate extends WorldEntity {
 	private static final long serialVersionUID = -32909400197144018L;
@@ -56,7 +54,7 @@ public class ProcessorPlate extends WorldEntity {
 	/** 加工するタイプ */
 	protected ProcessType processType;
 	/** ランニングコスト */
-	protected int runningCost[] = { 500, 800, 2000, 3500 };
+	protected int[] runningCost = { 500, 800, 2000, 3500 };
 
 	/** 加工モード */
 	public static enum ProcessMode {
@@ -138,12 +136,12 @@ public class ProcessorPlate extends WorldEntity {
 		return hitCheckObjType;
 	}
 
-	@Override
 	/**
 	 * Enable hit check.
 	 *
-	 * @return Enable hit check
+	 * @return Enable hit check.
 	 */
+	@Override
 	public boolean enableHitCheck() {
 		return true;
 	}
@@ -183,18 +181,26 @@ public class ProcessorPlate extends WorldEntity {
 		return false;
 	}
 
+	/**
+	 * 衝突処理を行い、結果コードを返す。
+	 *
+	 * @param targetObject target object.
+	 * @return result code.
+	 */
 	@Override
-	/** 衝突処理を行い、結果コードを返す。 */
 	public int objHitProcess(Entity targetObject) {
-		if (!enabled)
+		if (!enabled) {
 			return 0;
-		if (targetObject == null)
+		}
+		if (targetObject == null) {
 			return 0;
+		}
 		if (targetObject instanceof Yukkuri) {
 			Yukkuri targetBody = (Yukkuri) targetObject;
 			// 切断されていたら何も起きない
-			if (targetBody.getCriticalDamageType() == CriticalDamageType.CUT)
+			if (targetBody.getCriticalDamageType() == CriticalDamageType.CUT) {
 				return 0;
+			}
 			// 初回
 			if (!activeBodies.contains(targetBody)) {
 				Effect effect;
@@ -267,18 +273,20 @@ public class ProcessorPlate extends WorldEntity {
 			switch (processType.mode) {
 				case HOTPLATE:
 					if (!targetBody.isDead()) {
-						if (targetBody.isSleeping())
+						if (targetBody.isSleeping()) {
 							targetBody.wakeup();
+						}
 						if (processType != ProcessType.HOTPLATE_MIDDLE
 								|| targetBody.getFootBakeLevel() != FootBake.MEDIUM) {
 							// 中火の場合は完全に足を焼かない
 							targetBody.addFootBakePeriod(processType.parameter);
 						}
 						targetBody.addDamage(20);
-						if (targetBody.isPealed())
+						if (targetBody.isPealed()) {
 							targetBody.addStress(400);
-						else
+						} else {
 							targetBody.addStress(40);
+						}
 						if (targetBody.isNotNYD()) {
 							targetBody.setHappiness(Happiness.VERY_SAD);
 							targetBody.setForceFace(ImageCode.PAIN.ordinal());
@@ -292,13 +300,15 @@ public class ProcessorPlate extends WorldEntity {
 					break;
 				case PAIN:
 					if (!targetBody.isDead()) {
-						if (targetBody.isSleeping())
+						if (targetBody.isSleeping()) {
 							targetBody.wakeup();
+						}
 						targetBody.addDamage(5);
-						if (targetBody.isPealed())
+						if (targetBody.isPealed()) {
 							targetBody.addStress(400);
-						else
+						} else {
 							targetBody.addStress(30);
+						}
 						if (targetBody.isNotNYD()) {
 							targetBody.setHappiness(Happiness.VERY_SAD);
 							targetBody.setForceFace(ImageCode.PAIN.ordinal());
@@ -343,8 +353,9 @@ public class ProcessorPlate extends WorldEntity {
 					if (targetBody.hasOkazari() || (targetBody.hasBraidCheck() && targetBody.isBraidType())) {
 						break;
 					}
-					if (targetBody.isSleeping())
+					if (targetBody.isSleeping()) {
 						targetBody.wakeup();
+					}
 					targetBody.cutHair();
 					targetBody.peal();
 					if (!targetBody.isDead()) {
@@ -359,8 +370,9 @@ public class ProcessorPlate extends WorldEntity {
 					if (targetBody.isCrushed() || targetBody.isBlind()) {
 						break;
 					}
-					if (targetBody.isSleeping())
+					if (targetBody.isSleeping()) {
 						targetBody.wakeup();
+					}
 					targetBody.breakeyes();
 					break;
 				case ACCELERATE:
@@ -368,8 +380,9 @@ public class ProcessorPlate extends WorldEntity {
 					if (targetBody.isCrushed() || targetBody.isDead()) {
 						break;
 					}
-					if (targetBody.isSleeping())
+					if (targetBody.isSleeping()) {
 						targetBody.wakeup();
+					}
 					// 赤、子ゆのみ
 					if (!targetBody.isAdult()) {
 						targetBody.setHappiness(Happiness.VERY_SAD);
@@ -385,8 +398,9 @@ public class ProcessorPlate extends WorldEntity {
 						break;
 					}
 					if (!targetBody.isShutmouth()) {
-						if (targetBody.isSleeping())
+						if (targetBody.isSleeping()) {
 							targetBody.wakeup();
+						}
 						targetBody.setMessage(GameMessages.getMessage(targetBody, MessagePool.Action.CantTalk), 40,
 								true,
 								true);
@@ -403,8 +417,9 @@ public class ProcessorPlate extends WorldEntity {
 					if (targetBody.hasOkazari()) {
 						break;
 					}
-					if (targetBody.isSleeping())
+					if (targetBody.isSleeping()) {
 						targetBody.wakeup();
+					}
 					if (targetBody.hasBraidCheck()) {
 						targetBody.takeBraid();
 					}
@@ -439,9 +454,13 @@ public class ProcessorPlate extends WorldEntity {
 		}
 	}
 
+	/**
+	 * アイテムの設置コストを返す。
+	 *
+	 * @return 設置コスト。
+	 */
 	@Override
 	@Transient
-	/** アイテムの設置コストを返す。 */
 	public int getCost() {
 		switch (processType.mode) {
 			case PAIN:
@@ -457,8 +476,9 @@ public class ProcessorPlate extends WorldEntity {
 			case PLUCKING:
 			case PACKING:
 				return runningCost[3];
+			default:
+				return 0;
 		}
-		return 0;
 	}
 
 	/** ワールドからこのアイテムを除去する。 */
@@ -505,35 +525,48 @@ public class ProcessorPlate extends WorldEntity {
 				JOptionPane.PLAIN_MESSAGE);
 
 		if (dialogResult == JOptionPane.OK_OPTION) {
-			if (buttons[0].isSelected())
+			if (buttons[0].isSelected()) {
 				plate.processType = ProcessType.HOTPLATE_MIN;
-			if (buttons[1].isSelected())
+			}
+			if (buttons[1].isSelected()) {
 				plate.processType = ProcessType.HOTPLATE_LOW;
-			if (buttons[2].isSelected())
+			}
+			if (buttons[2].isSelected()) {
 				plate.processType = ProcessType.HOTPLATE_MIDDLE;
-			if (buttons[3].isSelected())
+			}
+			if (buttons[3].isSelected()) {
 				plate.processType = ProcessType.HOTPLATE_HIGH;
-			if (buttons[4].isSelected())
+			}
+			if (buttons[4].isSelected()) {
 				plate.processType = ProcessType.HOTPLATE_MAX;
-			if (buttons[5].isSelected())
+			}
+			if (buttons[5].isSelected()) {
 				plate.processType = ProcessType.PAIN;
-			if (buttons[6].isSelected())
+			}
+			if (buttons[6].isSelected()) {
 				plate.processType = ProcessType.BAIBAI_OKAZARI_WITH_FIRE;
-			if (buttons[7].isSelected())
+			}
+			if (buttons[7].isSelected()) {
 				plate.processType = ProcessType.PEALING;
-			if (buttons[8].isSelected())
+			}
+			if (buttons[8].isSelected()) {
 				plate.processType = ProcessType.BLINDING;
-			if (buttons[9].isSelected())
+			}
+			if (buttons[9].isSelected()) {
 				plate.processType = ProcessType.ACCELERATE;
-			if (buttons[10].isSelected())
+			}
+			if (buttons[10].isSelected()) {
 				plate.processType = ProcessType.SHUTMOUTH;
-			if (buttons[11].isSelected())
+			}
+			if (buttons[11].isSelected()) {
 				plate.processType = ProcessType.PLUCKING;
-			if (buttons[12].isSelected())
+			}
+			if (buttons[12].isSelected()) {
 				plate.processType = ProcessType.PACKING;
-			setupSucceeded = true;
+			}
+			return true;
 		}
-		return setupSucceeded;
+		return false;
 	}
 
 	/**

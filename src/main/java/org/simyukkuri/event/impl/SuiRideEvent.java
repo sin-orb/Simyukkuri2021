@@ -155,7 +155,7 @@ public class SuiRideEvent extends EventPacket {
 		if (body.getFavoriteItem(FavItemType.SUI) != null) {
 
 			// 対象のすぃーに乗っていない場合は終了
-			if (!targetSui.isriding(body)) {
+			if (!targetSui.isRiddenBy(body)) {
 				return null;
 			}
 			Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
@@ -163,10 +163,10 @@ public class SuiRideEvent extends EventPacket {
 				return UpdateState.ABORT;
 			if (sourceBody == body) {
 				// 乗客数が上限、またはカウント50以上の場合
-				if (targetSui.getCurrent_bindbody_num() >= 3 || tick > 50) {
+				if (targetSui.getBoundBodyCount() >= 3 || tick > 50) {
 					body.setHappiness(Happiness.HAPPY);
 					// すぃーが待機中の場合
-					if (targetSui.getCurrent_condition() == 1) {
+					if (targetSui.getConditionIndex() == 1) {
 						// 乗ろうとしているゆっくりがいない、またはカウントが50の倍数の場合ランダムに移動する
 						// ※移動中はすぃーの状態を変えるなりなんなりした方がいいのでは
 						if (!memberRide || tick % 50 == 0) {
@@ -204,7 +204,7 @@ public class SuiRideEvent extends EventPacket {
 			} else {
 				// 処理対象とすぃーに乗ろうとしているゆっくりが異なる場合
 				// しゃべっていないかつ、すぃーが待機中ではない場合
-				if (!body.isTalking() && targetSui.getCurrent_condition() != 1) {
+				if (!body.isTalking() && targetSui.getConditionIndex() != 1) {
 					// すぃーに乗っている時のセリフ
 					body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.RidingSui),
 							Const.HOLDMESSAGE,
@@ -212,7 +212,7 @@ public class SuiRideEvent extends EventPacket {
 				}
 
 				// イベント実施中ではない、かつすぃーが待機中の場合
-				if (sourceBody.getCurrentEvent() != this && targetSui.getCurrent_condition() == 1) {
+				if (sourceBody.getCurrentEvent() != this && targetSui.getConditionIndex() == 1) {
 					// すぃーからおりる
 					if (!body.isTalking()) {
 						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.RideOffSui), true);
@@ -233,7 +233,7 @@ public class SuiRideEvent extends EventPacket {
 			body.moveToEvent(this, targetObject.getX(), targetObject.getY());
 			if (sourceBody == null)
 				return UpdateState.ABORT;
-			if (sourceBody == body && targetSui.iscanriding() || targetSui.getCurrent_bindbody_num() >= 3) {
+			if (sourceBody == body && targetSui.isOwnerRiding() || targetSui.getBoundBodyCount() >= 3) {
 				memberRide = false;
 				return UpdateState.ABORT;
 			}
@@ -271,7 +271,7 @@ public class SuiRideEvent extends EventPacket {
 
 		Sui targetSui = (Sui) targetObject;
 		// すぃーが待機状態
-		if (targetSui.getCurrent_condition() == 1) {
+		if (targetSui.getConditionIndex() == 1) {
 			// すぃーに乗る
 			targetSui.rideOn(body);
 			memberRide = false;

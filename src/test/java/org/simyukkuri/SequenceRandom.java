@@ -6,27 +6,27 @@ import java.util.Random;
  * A Random subclass that produces controlled sequences for testing.
  * Can be configured to return specific values to hit specific code branches.
  */
-public class SequenceRNG extends Random {
+public class SequenceRandom extends Random {
     private int[] sequence;
     private int index = 0;
     private boolean repeat = true;
 
     /**
-     * Create a SequenceRNG that returns values from the given sequence.
+     * Create a SequenceRandom that returns values from the given sequence.
      * 
      * @param sequence Array of values to return from nextInt()
      */
-    public SequenceRNG(int... sequence) {
+    public SequenceRandom(int... sequence) {
         this.sequence = sequence;
         this.index = 0;
     }
 
     /**
-     * Create a SequenceRNG with a specific seed for reproducible randomness.
+     * Create a SequenceRandom with a specific seed for reproducible randomness.
      * 
      * @param seed Seed for the random number generator
      */
-    public SequenceRNG(long seed) {
+    public SequenceRandom(long seed) {
         super(seed);
         this.sequence = null;
     }

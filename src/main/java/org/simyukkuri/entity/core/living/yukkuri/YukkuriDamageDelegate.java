@@ -17,9 +17,9 @@ import org.simyukkuri.event.impl.KillPredeatorEvent;
 import org.simyukkuri.event.impl.PredatorsGameEvent;
 import org.simyukkuri.event.impl.RaperReactionEvent;
 import org.simyukkuri.event.impl.RevengeAttackEvent;
+import org.simyukkuri.logic.EventLogic;
 import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.logic.YukkuriRelations;
-import org.simyukkuri.logic.EventLogic;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
@@ -156,6 +156,7 @@ public final class YukkuriDamageDelegate {
 										body.setFurifuri(true);
 										body.substractNumOfAnts(35);
 									}
+									// fall through
 								default:
 									// NOP.
 							}

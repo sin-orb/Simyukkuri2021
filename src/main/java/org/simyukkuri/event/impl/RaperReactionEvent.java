@@ -1,7 +1,6 @@
 package org.simyukkuri.event.impl;
 
 import java.util.Map;
-
 import org.simyukkuri.Const;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
@@ -18,8 +17,8 @@ import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.field.impl.Barrier;
-import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.logic.FamilyActionLogic;
+import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
@@ -27,12 +26,8 @@ import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
- * レイパー襲撃に対する反応イベント
- * protected Yukkuri from; // レイパー
- * protected Yukkuri getTo(); // 未使用
- * protected Entity target; // 未使用
- * protected int count; // 1
+/**
+ * レイパー襲撃に対する反応イベント.
  */
 public class RaperReactionEvent extends EventPacket {
 
@@ -54,12 +49,12 @@ public class RaperReactionEvent extends EventPacket {
 
 	}
 
-	/** ゆっくりの年齢（ティック）を返す。 */
+	/** ゆっくりの年齢（ティック）を返す. */
 	public int getAge() {
 		return age;
 	}
 
-	/** ゆっくりの年齢をセットする。 */
+	/** ゆっくりの年齢をセットする. */
 	public void setAge(int age) {
 		this.age = age;
 	}
@@ -114,8 +109,9 @@ public class RaperReactionEvent extends EventPacket {
 			} else {
 				// 飛べない固体
 				if ((body.isAdult() && !body.isDamaged() && !body.isSick() && !body.hasBabyOrStalk()
-						&& (body.isSmart() && body.getIntelligence() == Intelligence.FOOL) && !body.isDontMove()) ||
-						body.getType() == YukkuriType.DOSMARISA) {
+						&& (body.isSmart() && body.getIntelligence() == Intelligence.FOOL)
+						&& !body.isDontMove())
+						|| body.getType() == YukkuriType.DOSMARISA) {
 					// 健康でバカな善良な大人（またはドスまりさは状態に限らず常に）迎撃に向かう
 					state = ActionState.ATTACK;
 				} else {
@@ -164,8 +160,9 @@ public class RaperReactionEvent extends EventPacket {
 		if (sourceBody == null || sourceBody.isRemoved() || sourceBody.isDead() || !sourceBody.isRaper()) {
 			setFrom(searchNextTarget());
 			sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
-			if (sourceBody == null)
+			if (sourceBody == null) {
 				return UpdateState.ABORT;
+			}
 		}
 
 		if (GameRandom.nextInt(500) == 0) {
@@ -183,16 +180,17 @@ public class RaperReactionEvent extends EventPacket {
 				body.setForceFace(ImageCode.PUFF.ordinal());
 				moveTargetId(body);
 				if (GameRandom.nextInt(20) == 0) {
-					body.setWorldEventResMessage(GameMessages.getMessage(body, MessagePool.Action.AttackRapist),
-							Const.HOLDMESSAGE, true, false);
+					body.setWorldEventResMessage(
+							GameMessages.getMessage(body, MessagePool.Action.AttackRapist), Const.HOLDMESSAGE, true,
+							false);
 				}
 			}
 		} else {
 			// 賢い固体は反撃チェック
 			if ((age % 10) == 0) {
-				if (body.getType() == YukkuriType.DOSMARISA ||
-						(body.isAdult() && body.getIntelligence() == Intelligence.WISE &&
-								body.getPublicRank() != PublicRank.UNUN_SLAVE)) {
+				if (body.getType() == YukkuriType.DOSMARISA
+						|| (body.isAdult() && body.getIntelligence() == Intelligence.WISE
+								&& body.getPublicRank() != PublicRank.UNUN_SLAVE)) {
 					Yukkuri targetBody = null;
 					// 何らかの原因で発情が解除されたら制裁
 					if (!checkConditionOfTarget()) {
@@ -206,25 +204,29 @@ public class RaperReactionEvent extends EventPacket {
 					if (targetBody != null) {
 						int participantCount = 0;
 						// 反撃対象が見つかったら同イベント実行中の固体イベントを書き換え
-						for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
+						for (Map.Entry<Integer, Yukkuri> entry :
+								GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 							Yukkuri eventBody = entry.getValue();
 							if (eventBody.getCurrentEvent() instanceof RaperReactionEvent) {
 								// うんうん奴隷は不参加
-								if (eventBody.getPublicRank() == PublicRank.UNUN_SLAVE)
+								if (eventBody.getPublicRank() == PublicRank.UNUN_SLAVE) {
 									continue;
+								}
 								// 妊娠、大人以外は不参加.動けない場合も不参加
 								if (eventBody.hasBabyOrStalk() || eventBody.isSick() || !eventBody.isAdult()
-										|| eventBody.isDontMove())
+										|| eventBody.isDontMove()) {
 									continue;
+								}
 								// ドゲスは不参加、善良ほど参加しやすく
-								if (eventBody.getAttitude() == Attitude.SUPER_SHITHEAD)
+								if (eventBody.getAttitude() == Attitude.SUPER_SHITHEAD) {
 									participantCount = 1;
-								else if (eventBody.getAttitude() == Attitude.SHITHEAD)
+								} else if (eventBody.getAttitude() == Attitude.SHITHEAD) {
 									participantCount = GameRandom.nextInt(3);
-								else if (eventBody.getAttitude() == Attitude.AVERAGE)
+								} else if (eventBody.getAttitude() == Attitude.AVERAGE) {
 									participantCount = GameRandom.nextInt(2);
-								else
+								} else {
 									participantCount = 0;
+								}
 								// ドスは常に参加。ドスはとにかく群れをゆっくりさせるため、れいぱー駆除に命をかける
 								if (eventBody.getType() == YukkuriType.DOSMARISA) {
 									participantCount = 0;
@@ -305,8 +307,9 @@ public class RaperReactionEvent extends EventPacket {
 			setFrom(searchNextTarget());
 			sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 			// レイパー全滅でイベント終了
-			if (sourceBody == null)
+			if (sourceBody == null) {
 				return true;
+			}
 			return false;
 		}
 
@@ -406,10 +409,11 @@ public class RaperReactionEvent extends EventPacket {
 		} else if (body.getX() > mapX - 2) {
 			vx = 0;
 		} else {
-			if (vx > 0)
+			if (vx > 0) {
 				vx = mapX;
-			else
+			} else {
 				vx = 0;
+			}
 		}
 		int vy = body.getY() - sourceBody.getY();
 		if (body.getY() < 2) {
@@ -417,10 +421,11 @@ public class RaperReactionEvent extends EventPacket {
 		} else if (body.getY() > mapY - 2) {
 			vy = 0;
 		} else {
-			if (vy > 0)
+			if (vy > 0) {
 				vy = mapY;
-			else
+			} else {
 				vy = 0;
+			}
 		}
 		body.moveToEvent(this, vx, vy);
 	}

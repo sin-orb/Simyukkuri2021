@@ -10,6 +10,9 @@ import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 
+/**
+ * YukkuriLookup のテスト.
+ */
 public class YukkuriLookupTest {
 	@AfterEach
 	void tearDown() {

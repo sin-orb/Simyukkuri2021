@@ -233,23 +233,23 @@ public class MarisaTest {
             // Each value hits a different branch in the if/else chain
 
             // Branch 1: p <= 6 (values 0-6)
-            SimYukkuri.RND = new org.simyukkuri.SequenceRNG(3);
+            SimYukkuri.RND = new org.simyukkuri.SequenceRandom(3);
             obj.killTime();
 
             // Branch 2: p <= 14 (values 7-14)
-            SimYukkuri.RND = new org.simyukkuri.SequenceRNG(10);
+            SimYukkuri.RND = new org.simyukkuri.SequenceRandom(10);
             obj.killTime();
 
             // Branch 3: p <= 21 (values 15-21)
-            SimYukkuri.RND = new org.simyukkuri.SequenceRNG(18);
+            SimYukkuri.RND = new org.simyukkuri.SequenceRandom(18);
             obj.killTime();
 
             // Branch 4: p <= 28 (values 22-28)
-            SimYukkuri.RND = new org.simyukkuri.SequenceRNG(25);
+            SimYukkuri.RND = new org.simyukkuri.SequenceRandom(25);
             obj.killTime();
 
             // Branch 5: p > 28 (values 29-49)
-            SimYukkuri.RND = new org.simyukkuri.SequenceRNG(35);
+            SimYukkuri.RND = new org.simyukkuri.SequenceRandom(35);
             obj.killTime();
 
             assertNotNull(obj);
@@ -268,7 +268,7 @@ public class MarisaTest {
             Marisa obj = new Marisa();
 
             // Use a sequence to hit multiple branches in succession
-            SimYukkuri.RND = new org.simyukkuri.SequenceRNG(3, 10, 18, 25, 35, 40, 45);
+            SimYukkuri.RND = new org.simyukkuri.SequenceRandom(3, 10, 18, 25, 35, 40, 45);
 
             // Call killTime multiple times to execute different branches
             for (int i = 0; i < 7; i++) {

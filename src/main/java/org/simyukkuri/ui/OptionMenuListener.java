@@ -3,7 +3,6 @@ package org.simyukkuri.ui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
-
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;

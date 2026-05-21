@@ -1,7 +1,6 @@
 package org.simyukkuri.logic;
 
 import java.util.Map;
-
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;

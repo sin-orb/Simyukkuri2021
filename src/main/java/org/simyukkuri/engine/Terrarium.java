@@ -281,280 +281,300 @@ public class Terrarium implements Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void loadState(File file) throws IOException, ClassNotFoundException {
-		World tmpWorld = SaveDataCodec.load(file);
+		Translate.Snapshot previousTranslate = Translate.snapshot();
+		World previousWorld = GameWorld.get();
+		int previousYukkuriId = Numbering.INSTANCE.getYukkuriID();
+		int previousObjId = Numbering.INSTANCE.getObjId();
+		int previousNextWorldStateIndex = previousWorld != null ? previousWorld.getNextWorldStateIndex() : -1;
+		int previousWindowType = previousWorld != null ? previousWorld.getWindowType() : 0;
+		int previousTerrariumSizeIndex = previousWorld != null ? previousWorld.getTerrariumSizeIndex() : 0;
 
-		Numbering.INSTANCE.setYukkuriID(tmpWorld.getMaxUniqueId());
-		Numbering.INSTANCE.setObjId(tmpWorld.getMaxObjId());
-		tmpWorld.getPlayer().getInventoryView().clear();
-		List<Integer> _list = new ArrayList<Integer>();
-		for (Entity o : tmpWorld.getPlayer().getItemForSave()) {
-			int id = o.getObjId();
-			if (!_list.contains(id)) {
-				_list.add(id);
-				tmpWorld.getPlayer().getInventoryView().addElement(o);
-			}
-		}
-		// 持ち物を復元
-		if (MainCommandUI.getItemWindow() != null && MainCommandUI.getItemWindow().getInventoryView() != null) {
-			MainCommandUI.getItemWindow().getInventoryView().setModel(tmpWorld.getPlayer().getInventoryView());
-		}
-
-		// ウィンドウサイズを復元
-		tmpWorld.recalcWorldSize();
-		GameWorld.set(tmpWorld);
-
-		if (SimYukkuri.simYukkuri != null) {
-			if (GameWorld.get().getWindowType() != 2) {
-				SimYukkuri.simYukkuri.setWindowMode(GameWorld.get().getWindowType(),
-						GameWorld.get().getTerrariumSizeIndex());
-			} else {
-				SimYukkuri.simYukkuri.setFullScreenMode(GameWorld.get().getTerrariumSizeIndex());
-			}
-		}
-
-		// マップの復元
-		GameWorld.get().setNextWorldStateIndex(GameWorld.get().getCurrentWorldState().getWorldIndex());
-		if (GameView.getPane() != null) {
-			GameView.loadTerrainFile();
-		}
-		GameWorld.get().changeWorldState();
-		if (GameView.getPane() != null) {
-			GameView.createBackBuffer();
-		}
-		Translate.createTransTable(TerrainField.isPers());
-
-		// 遅延読み込みの復元
-		GameWorld.get().loadInterYukkuriImage();
-
-		// 茎と実ゆの参照を復元
-		for (WorldState mpd : GameWorld.get().getWorldStates()) {
-			for (Stalk s : mpd.getStalks().values()) {
-				Yukkuri b = mpd.getYukkuriRegistry().get(s.getPlantYukkuri());
-				if (b != null) {
-					// ゾンビ除去: ID一致のStalkを除去してから、Map側のインスタンスで上書き
-					b.getStalks().removeIf(z -> z.getStalkId().equals(s.getStalkId()));
-					b.getStalks().add(s);
+		try {
+			World tmpWorld = SaveDataCodec.load(file);
+			Numbering.INSTANCE.setYukkuriID(tmpWorld.getMaxUniqueId());
+			Numbering.INSTANCE.setObjId(tmpWorld.getMaxObjId());
+			tmpWorld.getPlayer().getInventoryView().clear();
+			List<Integer> _list = new ArrayList<Integer>();
+			for (Entity o : tmpWorld.getPlayer().getItemForSave()) {
+				int id = o.getObjId();
+				if (!_list.contains(id)) {
+					_list.add(id);
+					tmpWorld.getPlayer().getInventoryView().addElement(o);
 				}
 			}
-			for (Stalk s : mpd.getStalks().values()) {
-				Yukkuri parent = mpd.getYukkuriRegistry().get(s.getPlantYukkuri());
+			tmpWorld.recalcWorldSize();
+			GameWorld.set(tmpWorld);
 
-				for (Integer babyId : s.getAttachedBabyIds()) {
-					Yukkuri baby = mpd.getYukkuriRegistry().get(babyId);
+			if (SimYukkuri.simYukkuri != null) {
+				if (GameWorld.get().getWindowType() != 2) {
+					SimYukkuri.simYukkuri.setWindowMode(GameWorld.get().getWindowType(),
+							GameWorld.get().getTerrariumSizeIndex());
+				} else {
+					SimYukkuri.simYukkuri.setFullScreenMode(GameWorld.get().getTerrariumSizeIndex());
+				}
+			}
 
-					if (baby != null && parent != null && baby.isUnBirth()) {
-						baby.setParentLinkId(parent.getObjId());
-						baby.setBindStalk(s);
-						int i = s.getAttachedBabyIds().indexOf(babyId);
-						int babyZ = ((i % 5) * -2 + 14);
+			GameWorld.get().setNextWorldStateIndex(GameWorld.get().getCurrentWorldState().getWorldIndex());
+			if (GameView.getPane() != null) {
+				GameView.loadTerrainFile();
+			}
+			GameWorld.get().changeWorldState();
+			if (GameView.getPane() != null) {
+				GameView.createBackBuffer();
+			}
+			Translate.createTransTable(TerrainField.isPers());
+			GameWorld.get().loadInterYukkuriImage();
 
-						int actualZ = s.getZ() + babyZ;
+			for (WorldState mpd : GameWorld.get().getWorldStates()) {
+				for (Stalk s : mpd.getStalks().values()) {
+					Yukkuri b = mpd.getYukkuriRegistry().get(s.getPlantYukkuri());
+					if (b != null) {
+						b.getStalks().removeIf(z -> z.getStalkId().equals(s.getStalkId()));
+						b.getStalks().add(s);
+					}
+				}
+				for (Stalk s : mpd.getStalks().values()) {
+					Yukkuri parent = mpd.getYukkuriRegistry().get(s.getPlantYukkuri());
 
-						baby.setZ(actualZ);
-						baby.setCalcZ(actualZ);
+					for (Integer babyId : s.getAttachedBabyIds()) {
+						Yukkuri baby = mpd.getYukkuriRegistry().get(babyId);
+
+						if (baby != null && parent != null && baby.isUnBirth()) {
+							baby.setParentLinkId(parent.getObjId());
+							baby.setBindStalk(s);
+							int i = s.getAttachedBabyIds().indexOf(babyId);
+							int babyZ = ((i % 5) * -2 + 14);
+
+							int actualZ = s.getZ() + babyZ;
+
+							baby.setZ(actualZ);
+							baby.setCalcZ(actualZ);
+						}
 					}
 				}
 			}
-		}
 
-		// すぃーと乗客の参照を復元
-		for (WorldState mpd : GameWorld.get().getWorldStates()) {
-			for (Sui sui : mpd.getSuis().values()) {
-				Yukkuri[] previousBindBodies = sui.getBoundYukkuri();
-				Yukkuri[] restoredBindBodies = new Yukkuri[previousBindBodies == null ? 3 : previousBindBodies.length];
-				Yukkuri restoredOwner = null;
-				int restoredBindCount = 0;
+			for (WorldState mpd : GameWorld.get().getWorldStates()) {
+				for (Sui sui : mpd.getSuis().values()) {
+					Yukkuri[] previousBindBodies = sui.getBoundYukkuri();
+					Yukkuri[] restoredBindBodies = new Yukkuri[previousBindBodies == null ? 3 : previousBindBodies.length];
+					Yukkuri restoredOwner = null;
+					int restoredBindCount = 0;
 
-				if (sui.getBindobj() instanceof Yukkuri
-						&& ((Yukkuri) sui.getBindobj()).getParentLinkId() == sui.getObjId()) {
-					restoredOwner = (Yukkuri) sui.getBindobj();
-				}
-
-				for (Yukkuri b : mpd.getYukkuriRegistry().values()) {
-					if (b.getParentLinkId() != sui.getObjId()) {
-						continue;
+					if (sui.getOwnerBody() instanceof Yukkuri
+							&& ((Yukkuri) sui.getOwnerBody()).getParentLinkId() == sui.getObjId()) {
+						restoredOwner = (Yukkuri) sui.getOwnerBody();
 					}
-					if (restoredBindCount >= restoredBindBodies.length) {
-						break;
-					}
-					restoredBindBodies[restoredBindCount++] = b;
-					b.setShadowVisible(false);
-					if (restoredOwner == null) {
-						restoredOwner = b;
-					}
-				}
 
-				sui.setBoundYukkuri(restoredBindBodies);
-				sui.setCurrent_bindbody_num(restoredBindCount);
-				sui.setBindobj(restoredOwner);
-				sui.upDate();
-			}
-		}
-
-		// 自動えさやり機の生成物参照を復元
-		for (WorldState mpd : GameWorld.get().getWorldStates()) {
-			for (AutoFeeder feeder : mpd.getAutoFeeders().values()) {
-				Entity food = feeder.getFoods();
-				if (food == null) {
-					continue;
-				}
-
-				Entity restoredFood = null;
-				if (food instanceof Yukkuri) {
-					restoredFood = mpd.getYukkuriRegistry().values().stream()
-							.filter(b -> b.getObjId() == food.getObjId())
-							.findFirst()
-							.orElse(null);
-				} else if (food instanceof Food) {
-					restoredFood = mpd.getFoods().get(food.getObjId());
-				}
-
-				if (restoredFood != null) {
-					feeder.setFoods(restoredFood);
-				}
-			}
-		}
-
-		// ホットプレートの拘束中個体と煙参照を復元
-		for (WorldState mpd : GameWorld.get().getWorldStates()) {
-			for (HotPlate hotPlate : mpd.getHotPlates().values()) {
-				Yukkuri bindBody = hotPlate.getBoundYukkuri();
-				if (bindBody != null) {
-					Yukkuri restoredBody = mpd.getYukkuriRegistry().values().stream()
-							.filter(b -> b.getObjId() == bindBody.getObjId())
-							.findFirst()
-							.orElse(null);
-					hotPlate.setBoundYukkuri(restoredBody);
-				}
-
-				Effect smoke = hotPlate.getSmoke();
-				if (smoke != null) {
-					Effect restoredSmoke = mpd.getSortedEffects().get(smoke.getObjId());
-					if (restoredSmoke == null) {
-						restoredSmoke = mpd.getFrontEffects().get(smoke.getObjId());
-					}
-					hotPlate.setSmoke(restoredSmoke);
-				}
-			}
-		}
-
-		// 粘着板の拘束中個体を復元
-		for (WorldState mpd : GameWorld.get().getWorldStates()) {
-			for (StickyPlate stickyPlate : mpd.getStickyPlates().values()) {
-				Yukkuri bindBody = stickyPlate.getBoundYukkuri();
-				if (bindBody != null) {
-					Yukkuri restoredBody = mpd.getYukkuriRegistry().values().stream()
-							.filter(b -> b.getObjId() == bindBody.getObjId())
-							.findFirst()
-							.orElse(null);
-					stickyPlate.setBoundYukkuri(restoredBody);
-				}
-			}
-		}
-
-		// ミキサーの攪拌中個体とエフェクトを復元
-		for (WorldState mpd : GameWorld.get().getWorldStates()) {
-			for (Mixer mixer : mpd.getMixers().values()) {
-				Effect mix = mixer.getMix();
-				if (mix != null) {
-					Effect restoredMix = mpd.getSortedEffects().get(mix.getObjId());
-					if (restoredMix == null) {
-						restoredMix = mpd.getFrontEffects().get(mix.getObjId());
-					}
-					mixer.setMix(restoredMix);
-				}
-			}
-		}
-
-		// ダストシュートの拘束中オブジェクト参照を復元
-		for (WorldState mpd : GameWorld.get().getWorldStates()) {
-			for (GarbageChute garbageChute : mpd.getGarbageChutes().values()) {
-				List<Entity> restoredBindObjList = new ArrayList<>();
-				if (garbageChute.getBoundObjects() != null) {
-					for (Entity bindObj : garbageChute.getBoundObjects()) {
-						if (bindObj == null) {
+					for (Yukkuri b : mpd.getYukkuriRegistry().values()) {
+						if (b.getParentLinkId() != sui.getObjId()) {
 							continue;
 						}
-						Entity restoredObj = null;
-						if (bindObj instanceof Yukkuri) {
-							restoredObj = mpd.getYukkuriRegistry().values().stream()
-									.filter(b -> b.getObjId() == bindObj.getObjId())
-									.findFirst()
-									.orElse(null);
-						} else if (bindObj instanceof Food) {
-							restoredObj = mpd.getFoods().get(bindObj.getObjId());
-						} else if (bindObj instanceof Shit) {
-							restoredObj = mpd.getShit().get(bindObj.getObjId());
-						} else if (bindObj instanceof Vomit) {
-							restoredObj = mpd.getVomit().get(bindObj.getObjId());
-						} else if (bindObj instanceof Stalk) {
-							restoredObj = mpd.getStalks().get(bindObj.getObjId());
+						if (restoredBindCount >= restoredBindBodies.length) {
+							break;
 						}
-						if (restoredObj != null) {
-							restoredBindObjList.add(restoredObj);
+						restoredBindBodies[restoredBindCount++] = b;
+						b.setShadowVisible(false);
+						if (restoredOwner == null) {
+							restoredOwner = b;
 						}
 					}
-				}
-				garbageChute.setBoundObjects(restoredBindObjList);
 
-				Yukkuri bindBody = garbageChute.getBoundYukkuri();
-				if (bindBody != null) {
-					Yukkuri restoredBody = mpd.getYukkuriRegistry().values().stream()
-							.filter(b -> b.getObjId() == bindBody.getObjId())
-							.findFirst()
-							.orElse(null);
-					garbageChute.setBoundYukkuri(restoredBody);
+					sui.setBoundYukkuri(restoredBindBodies);
+					sui.setBoundBodyCount(restoredBindCount);
+					sui.setOwnerBody(restoredOwner);
+					sui.upDate();
 				}
 			}
-		}
 
-		// ゴミ捨て場の中身参照を復元
-		for (WorldState mpd : GameWorld.get().getWorldStates()) {
-			for (GarbageStation garbageStation : mpd.getGarbageStations().values()) {
-				Entity[] foods = garbageStation.getFoods();
-				if (foods == null) {
-					continue;
-				}
-				Entity[] restoredFoods = new Entity[foods.length];
-				for (int i = 0; i < foods.length; i++) {
-					Entity food = foods[i];
+			for (WorldState mpd : GameWorld.get().getWorldStates()) {
+				for (AutoFeeder feeder : mpd.getAutoFeeders().values()) {
+					Entity food = feeder.getFoods();
 					if (food == null) {
 						continue;
 					}
-					restoredFoods[i] = mpd.getFoods().get(food.getObjId());
-				}
-				garbageStation.setFoods(restoredFoods);
-			}
-		}
 
-		// ゆんばの作業対象参照を復元
-		for (WorldState mpd : GameWorld.get().getWorldStates()) {
-			for (Yunba yunba : mpd.getYunbas().values()) {
-				Entity target = yunba.getTarget();
-				if (target == null) {
-					continue;
-				}
+					Entity restoredFood = null;
+					if (food instanceof Yukkuri) {
+						restoredFood = mpd.getYukkuriRegistry().values().stream()
+								.filter(b -> b.getObjId() == food.getObjId())
+								.findFirst()
+								.orElse(null);
+					} else if (food instanceof Food) {
+						restoredFood = mpd.getFoods().get(food.getObjId());
+					}
 
-				Entity restoredTarget = null;
-				if (target instanceof Yukkuri) {
-					restoredTarget = mpd.getYukkuriRegistry().values().stream()
-							.filter(b -> b.getObjId() == target.getObjId())
-							.findFirst()
-							.orElse(null);
-				} else if (target instanceof Food) {
-					restoredTarget = mpd.getFoods().get(target.getObjId());
-				} else if (target instanceof Shit) {
-					restoredTarget = mpd.getShit().get(target.getObjId());
-				} else if (target instanceof Vomit) {
-					restoredTarget = mpd.getVomit().get(target.getObjId());
-				} else if (target instanceof Stalk) {
-					restoredTarget = mpd.getStalks().get(target.getObjId());
-				}
-
-				if (restoredTarget != null) {
-					yunba.setTarget(restoredTarget);
+					if (restoredFood != null) {
+						feeder.setFoods(restoredFood);
+					}
 				}
 			}
+
+			for (WorldState mpd : GameWorld.get().getWorldStates()) {
+				for (HotPlate hotPlate : mpd.getHotPlates().values()) {
+					Yukkuri bindBody = hotPlate.getBoundYukkuri();
+					if (bindBody != null) {
+						Yukkuri restoredBody = mpd.getYukkuriRegistry().values().stream()
+								.filter(b -> b.getObjId() == bindBody.getObjId())
+								.findFirst()
+								.orElse(null);
+						hotPlate.setBoundYukkuri(restoredBody);
+					}
+
+					Effect smoke = hotPlate.getSmoke();
+					if (smoke != null) {
+						Effect restoredSmoke = mpd.getSortedEffects().get(smoke.getObjId());
+						if (restoredSmoke == null) {
+							restoredSmoke = mpd.getFrontEffects().get(smoke.getObjId());
+						}
+						hotPlate.setSmoke(restoredSmoke);
+					}
+				}
+			}
+
+			for (WorldState mpd : GameWorld.get().getWorldStates()) {
+				for (StickyPlate stickyPlate : mpd.getStickyPlates().values()) {
+					Yukkuri bindBody = stickyPlate.getBoundYukkuri();
+					if (bindBody != null) {
+						Yukkuri restoredBody = mpd.getYukkuriRegistry().values().stream()
+								.filter(b -> b.getObjId() == bindBody.getObjId())
+								.findFirst()
+								.orElse(null);
+						stickyPlate.setBoundYukkuri(restoredBody);
+					}
+				}
+			}
+
+			for (WorldState mpd : GameWorld.get().getWorldStates()) {
+				for (Mixer mixer : mpd.getMixers().values()) {
+					Effect mix = mixer.getMix();
+					if (mix != null) {
+						Effect restoredMix = mpd.getSortedEffects().get(mix.getObjId());
+						if (restoredMix == null) {
+							restoredMix = mpd.getFrontEffects().get(mix.getObjId());
+						}
+						mixer.setMix(restoredMix);
+					}
+				}
+			}
+
+			for (WorldState mpd : GameWorld.get().getWorldStates()) {
+				for (GarbageChute garbageChute : mpd.getGarbageChutes().values()) {
+					List<Entity> restoredBindObjList = new ArrayList<>();
+					if (garbageChute.getBoundObjects() != null) {
+						for (Entity bindObj : garbageChute.getBoundObjects()) {
+							if (bindObj == null) {
+								continue;
+							}
+							Entity restoredObj = null;
+							if (bindObj instanceof Yukkuri) {
+								restoredObj = mpd.getYukkuriRegistry().values().stream()
+										.filter(b -> b.getObjId() == bindObj.getObjId())
+										.findFirst()
+										.orElse(null);
+							} else if (bindObj instanceof Food) {
+								restoredObj = mpd.getFoods().get(bindObj.getObjId());
+							} else if (bindObj instanceof Shit) {
+								restoredObj = mpd.getShit().get(bindObj.getObjId());
+							} else if (bindObj instanceof Vomit) {
+								restoredObj = mpd.getVomit().get(bindObj.getObjId());
+							} else if (bindObj instanceof Stalk) {
+								restoredObj = mpd.getStalks().get(bindObj.getObjId());
+							}
+							if (restoredObj != null) {
+								restoredBindObjList.add(restoredObj);
+							}
+						}
+					}
+					garbageChute.setBoundObjects(restoredBindObjList);
+
+					Yukkuri bindBody = garbageChute.getBoundYukkuri();
+					if (bindBody != null) {
+						Yukkuri restoredBody = mpd.getYukkuriRegistry().values().stream()
+								.filter(b -> b.getObjId() == bindBody.getObjId())
+								.findFirst()
+								.orElse(null);
+						garbageChute.setBoundYukkuri(restoredBody);
+					}
+				}
+			}
+
+			for (WorldState mpd : GameWorld.get().getWorldStates()) {
+				for (GarbageStation garbageStation : mpd.getGarbageStations().values()) {
+					Entity[] foods = garbageStation.getFoods();
+					if (foods == null) {
+						continue;
+					}
+					Entity[] restoredFoods = new Entity[foods.length];
+					for (int i = 0; i < foods.length; i++) {
+						Entity food = foods[i];
+						if (food == null) {
+							continue;
+						}
+						restoredFoods[i] = mpd.getFoods().get(food.getObjId());
+					}
+					garbageStation.setFoods(restoredFoods);
+				}
+			}
+
+			for (WorldState mpd : GameWorld.get().getWorldStates()) {
+				for (Yunba yunba : mpd.getYunbas().values()) {
+					Entity target = yunba.getTarget();
+					if (target == null) {
+						continue;
+					}
+
+					Entity restoredTarget = null;
+					if (target instanceof Yukkuri) {
+						restoredTarget = mpd.getYukkuriRegistry().values().stream()
+								.filter(b -> b.getObjId() == target.getObjId())
+								.findFirst()
+								.orElse(null);
+					} else if (target instanceof Food) {
+						restoredTarget = mpd.getFoods().get(target.getObjId());
+					} else if (target instanceof Shit) {
+						restoredTarget = mpd.getShit().get(target.getObjId());
+					} else if (target instanceof Vomit) {
+						restoredTarget = mpd.getVomit().get(target.getObjId());
+					} else if (target instanceof Stalk) {
+						restoredTarget = mpd.getStalks().get(target.getObjId());
+					}
+
+					if (restoredTarget != null) {
+						yunba.setTarget(restoredTarget);
+					}
+				}
+			}
+
+			if (MainCommandUI.getItemWindow() != null && MainCommandUI.getItemWindow().getInventoryView() != null) {
+				MainCommandUI.getItemWindow().getInventoryView().setModel(tmpWorld.getPlayer().getInventoryView());
+			}
+		} catch (IOException | RuntimeException | Error ex) {
+			GameWorld.set(previousWorld);
+			if (previousWorld != null) {
+				previousWorld.recalcWorldSize();
+			}
+			Numbering.INSTANCE.setYukkuriID(previousYukkuriId);
+			Numbering.INSTANCE.setObjId(previousObjId);
+			if (SimYukkuri.simYukkuri != null && previousWorld != null) {
+				if (previousWindowType != 2) {
+					SimYukkuri.simYukkuri.setWindowMode(previousWindowType, previousTerrariumSizeIndex);
+				} else {
+					SimYukkuri.simYukkuri.setFullScreenMode(previousTerrariumSizeIndex);
+				}
+			}
+			if (GameView.getPane() != null) {
+				try {
+					GameWorld.get().setNextWorldStateIndex(GameWorld.get().getCurrentWorldState().getWorldIndex());
+					GameView.loadTerrainFile();
+					GameView.createBackBuffer();
+				} catch (RuntimeException rollbackEx) {
+					System.err.println("Failed to restore terrain after load failure: " + rollbackEx.getMessage());
+				}
+			}
+			GameWorld.get().setNextWorldStateIndex(previousNextWorldStateIndex);
+			Translate.restore(previousTranslate);
+			throw ex;
 		}
 
 		System.gc();

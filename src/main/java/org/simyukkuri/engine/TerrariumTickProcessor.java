@@ -2,7 +2,6 @@ package org.simyukkuri.engine;
 
 import java.util.Iterator;
 import java.util.List;
-
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.world.WorldEntity;
 import org.simyukkuri.entity.core.world.bodylinked.Stalk;

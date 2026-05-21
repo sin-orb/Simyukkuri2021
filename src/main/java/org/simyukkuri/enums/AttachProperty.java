@@ -1,5 +1,6 @@
 package org.simyukkuri.enums;
-/** ゆっくりの体につくアタッチメントのプロパティ */
+
+/** ゆっくりの体につくアタッチメントのプロパティ. */
 public enum AttachProperty {
 	/** 赤ゆ用画像サイズ 原画をこの値で割る */BABY_SIZE, 
 	/** 子ゆ用画像サイズ  原画をこの値で割る*/CHILD_SIZE,

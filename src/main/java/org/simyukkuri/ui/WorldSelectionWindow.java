@@ -1,6 +1,4 @@
 package org.simyukkuri.ui;
-import org.simyukkuri.util.GameView;
-import org.simyukkuri.util.GameText;
 
 import java.awt.Container;
 import java.awt.Dialog;
@@ -12,21 +10,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-
 import javax.swing.ButtonGroup;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
-
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.util.GameWorld;
 import org.simyukkuri.draw.MyPane;
 import org.simyukkuri.draw.TerrainField;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.ui.MainCommandUI.ToolButtonLabel;
+import org.simyukkuri.util.GameText;
+import org.simyukkuri.util.GameView;
+import org.simyukkuri.util.GameWorld;
 
 /**
- * ワールド選択ウィンドウの作成クラス
+ * ワールド選択ウィンドウの作成クラス.
  */
 public class WorldSelectionWindow extends JDialog implements ActionListener, WindowListener {
 
@@ -44,10 +42,11 @@ public class WorldSelectionWindow extends JDialog implements ActionListener, Win
 		FOREST2(GameText.read("system_forest2"), "forest2"),
 		PLANT1(GameText.read("system_plant1"), "plant1"),
 		PLANT2(GameText.read("system_plant2"), "plant2"),
-		DISPOSER(GameText.read("system_disposer"), "disposer"),
-		;
+		DISPOSER(GameText.read("system_disposer"), "disposer");
+
 		private final String displayName;
 		private final String filePath;
+
 		private WorldSelection(String disp, String path) {
 			this.displayName = disp;
 			this.filePath = path;
@@ -64,14 +63,17 @@ public class WorldSelectionWindow extends JDialog implements ActionListener, Win
 		}
 
 		/** @return ワールドの表示名 */
+		@Override
 		public String toString() {
 			return this.displayName;
 		}
 	}
 
 	private JToggleButton[] butList;
+
 	/**
-	 * コンストラクタ
+	 * コンストラクタ.
+	 *
 	 * @param frame フレーム
 	 */
 	public WorldSelectionWindow(Frame frame) {
@@ -85,7 +87,7 @@ public class WorldSelectionWindow extends JDialog implements ActionListener, Win
 		butList = new JToggleButton[WorldSelection.values().length];
 		ButtonGroup bg = new ButtonGroup();
 		int i = 0;
-		for(WorldSelection m : WorldSelection.values()) {
+		for (WorldSelection m : WorldSelection.values()) {
 			butList[i] = new JToggleButton(m.getDisplayName());
 			butList[i].addActionListener(this);
 			bg.add(butList[i]);
@@ -104,17 +106,23 @@ public class WorldSelectionWindow extends JDialog implements ActionListener, Win
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		int idx = -1;
-		for(int i = 0; i < butList.length; i++) {
-			if(butList[i] == e.getSource()) {
+		for (int i = 0; i < butList.length; i++) {
+			if (butList[i] == e.getSource()) {
 				idx = i;
 				break;
 			}
 		}
-		
+
 		// 描画スレッドにロックをかける
+		int previousNextMap = GameWorld.get().getNextWorldStateIndex();
 		GameWorld.get().setNextWorldStateIndex(idx);
-		// 行き先設定
-		GameView.loadTerrainFile();
+		try {
+			// 行き先設定
+			GameView.loadTerrainFile();
+		} catch (RuntimeException ex) {
+			GameWorld.get().setNextWorldStateIndex(previousNextMap);
+			return;
+		}
 		Translate.createTransTable(TerrainField.isPers());
 		GameWorld.get().changeWorldState();
 		MyPane.setSelectedYukkuri(null);
@@ -154,6 +162,3 @@ public class WorldSelectionWindow extends JDialog implements ActionListener, Win
 	public void windowDeactivated(WindowEvent e) {
 	}
 }
-
-
-

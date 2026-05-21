@@ -12,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.ConstState;
-import org.simyukkuri.SequenceRNG;
+import org.simyukkuri.SequenceRandom;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.entity.core.living.yukkuri.Dna;
@@ -109,7 +109,7 @@ public class BabyDnaFactoryTest {
 
     @Test
     public void testCreateBabyDnaForceCreate() {
-        SimYukkuri.RND = new SequenceRNG(1, 1, 1, 1, 1, 1, 1);
+        SimYukkuri.RND = new SequenceRandom(1, 1, 1, 1, 1, 1, 1);
 
         Reimu mother = new Reimu();
         Marisa father = new Marisa();
@@ -123,7 +123,7 @@ public class BabyDnaFactoryTest {
 
     @Test
     public void testCreateBabyDnaNoHybridWhenDosMarisaParent() {
-        SimYukkuri.RND = new SequenceRNG(0, 0, 0, 0, 0, 0, 0);
+        SimYukkuri.RND = new SequenceRandom(0, 0, 0, 0, 0, 0, 0);
 
         DosMarisa mother = new DosMarisa();
         Reimu father = new Reimu();
@@ -137,7 +137,7 @@ public class BabyDnaFactoryTest {
 
     @Test
     public void testCreateBabyDnaFailsWhenRandomZeroAndForceDisabled() {
-        SimYukkuri.RND = new SequenceRNG(100, 100, 100);
+        SimYukkuri.RND = new SequenceRandom(100, 100, 100);
 
         Reimu mother = new Reimu();
         Reimu father = new Reimu();

@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.awt.LinearGradientPaint;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.net.URL;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -144,5 +145,46 @@ public class TerrainFieldTest {
         // Struct list should have 1 item
         List<TerrainBillboard> structList = TerrainField.getBillboards();
         assertEquals(1, structList.size());
+    }
+
+    @Test
+    public void testLoadTerrainFailureRestoresPreviousStaticState() throws Exception {
+        Field isPersField = TerrainField.class.getDeclaredField("isPers");
+        isPersField.setAccessible(true);
+        isPersField.set(null, true);
+
+        Field ownerTypeField = TerrainField.class.getDeclaredField("ownerType");
+        ownerTypeField.setAccessible(true);
+        ownerTypeField.set(null, 17);
+
+        String mapPath = WorldSelectionWindow.WorldSelection.values()[0].getFilePath();
+        Path backDir = tempDir.resolve("mod").resolve("back").resolve(mapPath);
+        Files.createDirectories(backDir);
+
+        Field backThemeField = ModLoader.class.getDeclaredField("backTheme");
+        backThemeField.setAccessible(true);
+        backThemeField.set(null, tempDir.toAbsolutePath().toString() + "/mod/back/");
+
+        ClassLoader missingResourceLoader = new ClassLoader(null) {
+            @Override
+            public URL getResource(String name) {
+                return null;
+            }
+
+            @Override
+            public java.io.InputStream getResourceAsStream(String name) {
+                return null;
+            }
+        };
+
+        try {
+            TerrainField.loadTerrain(0, missingResourceLoader, null);
+            throw new AssertionError("failed load should throw an IllegalStateException");
+        } catch (IllegalStateException expected) {
+            // expected
+        }
+
+        assertTrue(TerrainField.isPers(), "failed load should keep the previous perspective flag");
+        assertEquals(17, ownerTypeField.getInt(null), "failed load should keep the previous owner type");
     }
 }

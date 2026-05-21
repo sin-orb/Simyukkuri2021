@@ -3,7 +3,6 @@ package org.simyukkuri.engine;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.simyukkuri.entity.core.world.bodylinked.Okazari;
 import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.entity.core.world.mobile.Vomit;

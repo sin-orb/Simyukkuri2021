@@ -2,7 +2,6 @@ package org.simyukkuri.command;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import org.simyukkuri.command.GadgetMenu.ActionTarget;
 import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.ui.MainCommandUI;
@@ -12,12 +11,12 @@ import org.simyukkuri.ui.MainCommandUI;
  */
 public final class GadgetMenuPopupAction implements ActionListener {
 
-	@Override
 	/**
 	 * Action performed.
 	 *
 	 * @param e イベント
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 

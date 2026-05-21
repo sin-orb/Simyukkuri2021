@@ -10,6 +10,9 @@ import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.YukkuriType;
 
+/**
+ * Transformation policy のテスト.
+ */
 public class TransformationPolicyTest {
 
 	@Test

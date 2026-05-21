@@ -603,7 +603,7 @@ class TrashTest extends ItemTestBase {
     @Test
     void testSetObjEXType() {
         Trash trash = new Trash();
-        trash.setObjEXType(WorldEntityKind.TRASH);
+		trash.setWorldEntityType(WorldEntityKind.TRASH);
         assertEquals(WorldEntityKind.TRASH, trash.getWorldEntityType());
     }
 

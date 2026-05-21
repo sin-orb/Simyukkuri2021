@@ -2,14 +2,106 @@ package org.simyukkuri.draw;
 
 import java.awt.Polygon;
 import java.awt.Rectangle;
-
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
- * 座標変換クラス
- *
+/**
+ * Coordinate conversion helpers.
  */
 public class Translate {
+
+	public static final class Snapshot {
+		private final int mapScale;
+		private final int mapW;
+		private final int mapH;
+		private final int mapZ;
+		private final int fieldW;
+		private final int fieldH;
+		private final int bufferW;
+		private final int bufferH;
+		private final Rectangle4y displayArea;
+		private final float[] zoomTable;
+		private final int zoomRate;
+		private final int canvasW;
+		private final int canvasH;
+		private final float[] rateX;
+		private final int[] ofsX;
+		private final int[] mapToFieldY;
+		private final int fieldMinY;
+		private final float rateZ;
+		private final int[] fieldToMapY;
+		private final Polygon fieldPoly;
+
+		private Snapshot() {
+			mapScale = Translate.mapScale;
+			mapW = Translate.mapW;
+			mapH = Translate.mapH;
+			mapZ = Translate.mapZ;
+			fieldW = Translate.fieldW;
+			fieldH = Translate.fieldH;
+			bufferW = Translate.bufferW;
+			bufferH = Translate.bufferH;
+			displayArea = new Rectangle4y(Translate.displayArea.getX(), Translate.displayArea.getY(),
+					Translate.displayArea.getWidth(), Translate.displayArea.getHeight());
+			zoomTable = Translate.zoomTable != null ? Translate.zoomTable.clone() : null;
+			zoomRate = Translate.zoomRate;
+			canvasW = Translate.canvasW;
+			canvasH = Translate.canvasH;
+			rateX = Translate.rateX != null ? Translate.rateX.clone() : null;
+			ofsX = Translate.ofsX != null ? Translate.ofsX.clone() : null;
+			mapToFieldY = Translate.mapToFieldY != null ? Translate.mapToFieldY.clone() : null;
+			fieldMinY = Translate.fieldMinY;
+			rateZ = Translate.rateZ;
+			fieldToMapY = Translate.fieldToMapY != null ? Translate.fieldToMapY.clone() : null;
+			fieldPoly = Translate.fieldPoly != null
+					? new Polygon(Translate.fieldPoly.xpoints.clone(), Translate.fieldPoly.ypoints.clone(),
+							Translate.fieldPoly.npoints)
+					: null;
+		}
+	}
+
+	/**
+	 * 現在の変換状態を退避する。
+	 *
+	 * @return 退避した状態
+	 */
+	public static Snapshot snapshot() {
+		return new Snapshot();
+	}
+
+	/**
+	 * 退避した変換状態へ戻す。
+	 *
+	 * @param snapshot 退避した状態
+	 */
+	public static void restore(Snapshot snapshot) {
+		if (snapshot == null) {
+			return;
+		}
+		mapScale = snapshot.mapScale;
+		mapW = snapshot.mapW;
+		mapH = snapshot.mapH;
+		mapZ = snapshot.mapZ;
+		fieldW = snapshot.fieldW;
+		fieldH = snapshot.fieldH;
+		bufferW = snapshot.bufferW;
+		bufferH = snapshot.bufferH;
+		displayArea = new Rectangle4y(snapshot.displayArea.getX(), snapshot.displayArea.getY(),
+				snapshot.displayArea.getWidth(), snapshot.displayArea.getHeight());
+		zoomTable = snapshot.zoomTable != null ? snapshot.zoomTable.clone() : null;
+		zoomRate = snapshot.zoomRate;
+		canvasW = snapshot.canvasW;
+		canvasH = snapshot.canvasH;
+		rateX = snapshot.rateX != null ? snapshot.rateX.clone() : null;
+		ofsX = snapshot.ofsX != null ? snapshot.ofsX.clone() : null;
+		mapToFieldY = snapshot.mapToFieldY != null ? snapshot.mapToFieldY.clone() : null;
+		fieldMinY = snapshot.fieldMinY;
+		rateZ = snapshot.rateZ;
+		fieldToMapY = snapshot.fieldToMapY != null ? snapshot.fieldToMapY.clone() : null;
+		fieldPoly = snapshot.fieldPoly != null
+				? new Polygon(snapshot.fieldPoly.xpoints.clone(), snapshot.fieldPoly.ypoints.clone(),
+						snapshot.fieldPoly.npoints)
+				: null;
+	}
 
 	// フィールド画像に占める床部分の比率 現在のback.jpgからおよその値を持ってきている
 	private static final float PERS_X = 0.75f;
@@ -20,35 +112,35 @@ public class Translate {
 	/** 飛行種の最大高度、適当に画面外に出ない値で */
 	private static final float flyLimit = 0.175f;
 
-	/** スケール値、内部規定値*スケールがマップサイズになる */
+	/** スケール値、内部規定値*スケールがマップサイズになる。 */
 	private static int mapScale;
-	/** マップサイズ 内部計算で使用するオブジェクトの位置座標 */
+	/** マップサイズ。内部計算で使用するオブジェクトの位置座標。 */
 	private static int mapW;
 	private static int mapH;
 	private static int mapZ;
-	/** フィールドサイズ 実際に描画されるフィールドのピクセル値 */
+	/** フィールドサイズ。実際に描画されるフィールドのピクセル値。 */
 	private static int fieldW;
 	private static int fieldH;
-	/** バックバッファサイズ */
+	/** バックバッファサイズ。 */
 	private static int bufferW;
 	private static int bufferH;
-	/** バックバッファ描画位置、サイズ */
+	/** バックバッファ描画位置、サイズ。 */
 	private static Rectangle4y displayArea = new Rectangle4y();
 	private static float[] zoomTable;
 	private static int zoomRate = 0;
 
-	/** キャンバスサイズ 画面に描画されるウィンドウ枠の大きさ */
+	/** キャンバスサイズ。画面に描画されるウィンドウ枠の大きさ。 */
 	private static int canvasW;
 	private static int canvasH;
 
 	// 四角のマップを台形に歪めて配置するため
-	/** フィールド各Y座標でのXのスケールレートをテーブル化 */
+	/** フィールド各Y座標でのXのスケールレートをテーブル化。 */
 	private static float[] rateX;
 	private static int[] ofsX;
-	/** Y座標は直線なので単純なテーブル引きで済む */
+	/** Y座標は直線なので単純なテーブル引きで済む。 */
 	private static int[] mapToFieldY;
 	private static int fieldMinY;
-	/** Z座標はテーブルを使わずレート計算 */
+	/** Z座標はテーブルを使わずレート計算。 */
 	private static float rateZ;
 
 	/**
@@ -235,14 +327,14 @@ public class Translate {
 	/**
 	 * マップサイズを設定する.
 	 *
-	 * @param mW 幅
-	 * @param mH 奥行き
-	 * @param mZ 高さ
+	 * @param worldWidth 幅
+	 * @param worldHeight 奥行き
+	 * @param worldDepth 高さ
 	 */
-	public static final void setWorldSize(int mW, int mH, int mZ) {
-		mapW = mW + 1;
-		mapH = mH + 1;
-		mapZ = mZ + 1;
+	public static final void setWorldSize(int worldWidth, int worldHeight, int worldDepth) {
+		mapW = worldWidth + 1;
+		mapH = worldHeight + 1;
+		mapZ = worldDepth + 1;
 	}
 
 	/**
@@ -301,10 +393,11 @@ public class Translate {
 	 */
 	public static final void setZoomRate(int val) {
 		zoomRate = val;
-		if (zoomRate < 0)
+		if (zoomRate < 0) {
 			zoomRate = 0;
-		else if (zoomRate >= zoomTable.length)
+		} else if (zoomRate >= zoomTable.length) {
 			zoomRate = zoomTable.length - 1;
+		}
 	}
 
 	/**
@@ -361,15 +454,17 @@ public class Translate {
 	}
 
 	private static final void checkDisplayLimit() {
-		if (displayArea.getX() < 0)
+		if (displayArea.getX() < 0) {
 			displayArea.setX(0);
-		else if ((displayArea.getX() + displayArea.getWidth()) >= fieldW)
+		} else if ((displayArea.getX() + displayArea.getWidth()) >= fieldW) {
 			displayArea.setX(fieldW - displayArea.getWidth());
+		}
 
-		if (displayArea.getY() < 0)
+		if (displayArea.getY() < 0) {
 			displayArea.setY(0);
-		else if ((displayArea.getY() + displayArea.getHeight()) >= fieldH)
+		} else if ((displayArea.getY() + displayArea.getHeight()) >= fieldH) {
 			displayArea.setY(fieldH - displayArea.getHeight());
+		}
 	}
 
 	/**
@@ -480,10 +575,12 @@ public class Translate {
 	 * @param pos Point
 	 */
 	public static final void translate(int x, int y, Point4y pos) {
-		if (y < 0)
+		if (y < 0) {
 			y = 0;
-		if (y >= mapH)
+		}
+		if (y >= mapH) {
 			y = mapH - 1;
+		}
 		pos.setX(ofsX[y] + (int) (rateX[y] * x));
 		pos.setY(mapToFieldY[y]);
 		return;
@@ -507,19 +604,24 @@ public class Translate {
 	 * @return Point
 	 */
 	public static final Point4y invert(int x, int y) {
-		if (y < 0)
+		if (y < 0) {
 			return null;
-		if (y >= fieldH)
+		}
+		if (y >= fieldH) {
 			return null;
+		}
 
 		int py = fieldToMapY[y];
-		if (py < 0)
+		if (py < 0) {
 			return null;
+		}
 		int px = (int) ((x - ofsX[py]) / rateX[py]);
-		if (px < 0)
+		if (px < 0) {
 			return null;
-		if (px >= mapW)
+		}
+		if (px >= mapW) {
 			return null;
+		}
 		Point4y ret = new Point4y();
 		ret.setX(px);
 		ret.setY(py);
@@ -534,19 +636,24 @@ public class Translate {
 	 * @return Point
 	 */
 	public static final Point4y invertLimit(int x, int y) {
-		if (y < 0)
+		if (y < 0) {
 			y = 0;
-		if (y >= fieldH)
+		}
+		if (y >= fieldH) {
 			y = fieldH - 1;
+		}
 
 		int py = fieldToMapY[y];
-		if (py < 0)
+		if (py < 0) {
 			py = 0;
+		}
 		int px = (int) ((x - ofsX[py]) / rateX[py]);
-		if (px < 0)
+		if (px < 0) {
 			px = 0;
-		if (px >= mapW)
+		}
+		if (px >= mapW) {
 			px = mapW - 1;
+		}
 		Point4y ret = new Point4y();
 		ret.setX(px);
 		ret.setY(py);
@@ -561,10 +668,12 @@ public class Translate {
 	 * @return フィールド内かどうか
 	 */
 	public static final boolean inInvertLimit(int x, int y) {
-		if (y < 0)
+		if (y < 0) {
 			y = 0;
-		if (y >= fieldH)
+		}
+		if (y >= fieldH) {
 			y = fieldH - 1;
+		}
 
 		int py = fieldToMapY[y];
 		if (py < 0) {
@@ -665,8 +774,9 @@ public class Translate {
 	 */
 	public static final void invertFlying(int x, int y, int z, int pivX, Point4y pos) {
 		int py = fieldToMapY[y];
-		if (py < 0)
+		if (py < 0) {
 			py = 0;
+		}
 
 		int minX = x - pivX;
 		int maxX = x + pivX;
@@ -678,8 +788,9 @@ public class Translate {
 			x = maxX - pivX;
 		}
 		int px = (int) ((x - ofsX[py]) / rateX[py]);
-		if (z < 0)
+		if (z < 0) {
 			z = 0;
+		}
 		pos.setX(px);
 		pos.setY(z * mapZ / fieldH);
 	}
@@ -692,19 +803,24 @@ public class Translate {
 	 * @param pos 位置
 	 */
 	public static final void invertDelta(int x, int y, Point4y pos) {
-		if (y < 0)
+		if (y < 0) {
 			y = 0;
-		if (y >= fieldH)
+		}
+		if (y >= fieldH) {
 			y = fieldH - 1;
+		}
 
 		int py = fieldToMapY[y];
-		if (py < 0)
+		if (py < 0) {
 			py = 0;
+		}
 		int px = (int) (x / rateX[py]);
-		if (px < 0)
+		if (px < 0) {
 			px = 0;
-		if (px >= mapW)
+		}
+		if (px >= mapW) {
 			px = mapW - 1;
+		}
 		pos.setX(px);
 		pos.setY(py);
 	}
@@ -717,10 +833,12 @@ public class Translate {
 	 * @return 距離
 	 */
 	public static final int invertX(int x, int mapY) {
-		if (mapY < 0)
+		if (mapY < 0) {
 			mapY = 0;
-		if (mapY >= mapH)
+		}
+		if (mapY >= mapH) {
 			mapY = mapH - 1;
+		}
 		return (int) ((float) x / rateX[mapY]);
 	}
 
@@ -862,35 +980,26 @@ public class Translate {
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
 		Point4y pos;
 		pos = Translate.invertLimit(sx, sy);
-		int mSX = Math.max(0, Math.min(pos.getX(), Translate.mapW));
-		int mSY = Math.max(0, Math.min(pos.getY(), Translate.mapH));
+		int mapStartx = Math.max(0, Math.min(pos.getX(), Translate.mapW));
+		int mapStarty = Math.max(0, Math.min(pos.getY(), Translate.mapH));
 
-		pos = Translate.invertLimit(ex, ey);
-		int mEX = Math.max(0, Math.min(pos.getX(), Translate.mapW));
-		int mEY = Math.max(0, Math.min(pos.getY(), Translate.mapH));
-
-		// EX,EYのマップ座標xからSYにおけるフィールド座標xを取得する
-		Point4y posInv = new Point4y();
-		Translate.translate(mEX, mSY, posInv);
-		int fieldSX2 = posInv.getX();
-		Translate.translate(mSX, mEY, posInv);
-		int fieldSX3 = posInv.getX();
 		// マップ座標で調整されたフィールド座標を再取得する
-		Translate.translate(mSX, mSY, posInv);
-		int nsx = posInv.getX();
-		int nsy = posInv.getY();
-		Translate.translate(mEX, mEY, posInv);
-		int nex = posInv.getX();
-		int ney = posInv.getY();
-
-		polygonX[0] = nsx;
-		polygonY[0] = nsy;
-		polygonX[1] = fieldSX2;
-		polygonY[1] = nsy;
-		polygonX[3] = fieldSX3;
-		polygonY[3] = ney;
-		polygonX[2] = nex;
-		polygonY[2] = ney;
+		Point4y posInv = new Point4y();
+		Translate.translate(mapStartx, mapStarty, posInv);
+		polygonX[0] = posInv.getX();
+		polygonY[0] = posInv.getY();
+		pos = Translate.invertLimit(ex, ey);
+		int mapEndx = Math.max(0, Math.min(pos.getX(), Translate.mapW));
+		Translate.translate(mapEndx, mapStarty, posInv);
+		polygonX[1] = posInv.getX();
+		polygonY[1] = posInv.getY();
+		int mapEndy = Math.max(0, Math.min(pos.getY(), Translate.mapH));
+		Translate.translate(mapEndx, mapEndy, posInv);
+		polygonX[2] = posInv.getX();
+		polygonY[2] = posInv.getY();
+		Translate.translate(mapStartx, mapEndy, posInv);
+		polygonX[3] = posInv.getX();
+		polygonY[3] = posInv.getY();
 	}
 
 	/**
@@ -915,35 +1024,34 @@ public class Translate {
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
 		Point4y pos;
 		pos = Translate.invertLimit(sx, sy);
-		int mSX = Math.max(0, Math.min(pos.getX(), Translate.mapW));
-		int mSY = Math.max(0, Math.min(pos.getY(), Translate.mapH));
+		int mapStartx = Math.max(0, Math.min(pos.getX(), Translate.mapW));
+		int mapStarty = Math.max(0, Math.min(pos.getY(), Translate.mapH));
+		mapStartx += deltaX;
+		mapStarty += deltaY;
 
 		pos = Translate.invertLimit(ex, ey);
-		int mEX = Math.max(0, Math.min(pos.getX(), Translate.mapW));
-		int mEY = Math.max(0, Math.min(pos.getY(), Translate.mapH));
-
-		mSX += deltaX;
-		mEX += deltaX;
-		mSY += deltaY;
-		mEY += deltaY;
+		int mapEndx = Math.max(0, Math.min(pos.getX(), Translate.mapW));
+		int mapEndy = Math.max(0, Math.min(pos.getY(), Translate.mapH));
+		mapEndx += deltaX;
+		mapEndy += deltaY;
 
 		int swapValue = 0;
-		if (mEX < mSX) {
-			swapValue = mSX;
-			mSX = mEX;
-			mEX = swapValue;
+		if (mapEndx < mapStartx) {
+			swapValue = mapStartx;
+			mapStartx = mapEndx;
+			mapEndx = swapValue;
 		}
-		if (mEY < mSY) {
-			swapValue = mSY;
-			mSY = mEY;
-			mEY = swapValue;
+		if (mapEndy < mapStarty) {
+			swapValue = mapStarty;
+			mapStarty = mapEndy;
+			mapEndy = swapValue;
 		}
 		// マップ座標で調整されたフィールド座標を再取得する
 		Point4y posInv = new Point4y();
-		Translate.translate(mSX, mSY, posInv);
+		Translate.translate(mapStartx, mapStarty, posInv);
 		polygonX[0] = posInv.getX();
 		polygonY[0] = posInv.getY();
-		Translate.translate(mEX, mEY, posInv);
+		Translate.translate(mapEndx, mapEndy, posInv);
 		polygonX[1] = posInv.getX();
 		polygonY[1] = posInv.getY();
 	}
@@ -958,12 +1066,12 @@ public class Translate {
 	public static Point4y getFieldLimitForWorld(int x, int y) {
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
 		Point4y pos = Translate.invertLimit(x, y);
-		int mSX = Math.max(0, Math.min(pos.getX(), Translate.mapW));
-		int mSY = Math.max(0, Math.min(pos.getY(), Translate.mapH));
+		int mapX = Math.max(0, Math.min(pos.getX(), Translate.mapW));
+		int mapY = Math.max(0, Math.min(pos.getY(), Translate.mapH));
 
 		// マップ座標で調整されたフィールド座標を再取得する
 		Point4y retPos = new Point4y();
-		Translate.translate(mSX, mSY, retPos);
+		Translate.translate(mapX, mapY, retPos);
 		return retPos;
 	}
 
@@ -975,10 +1083,10 @@ public class Translate {
 	 * @return 壁の数
 	 */
 	public static int getCurrentWallGridValue(int x, int y) {
-		int mSX = Math.max(0, Math.min(x, Translate.mapW));
-		int mSY = Math.max(0, Math.min(y, Translate.mapH));
+		int mapX = Math.max(0, Math.min(x, Translate.mapW));
+		int mapY = Math.max(0, Math.min(y, Translate.mapH));
 
-		return GameWorld.get().getCurrentWorldState().getWallGrid()[mSX][mSY];
+		return GameWorld.get().getCurrentWorldState().getWallGrid()[mapX][mapY];
 	}
 
 	/**
@@ -989,10 +1097,10 @@ public class Translate {
 	 * @param num 数
 	 */
 	public static void setCurrentWallGridValue(int x, int y, int num) {
-		int mSX = Math.max(0, Math.min(x, Translate.mapW));
-		int mSY = Math.max(0, Math.min(y, Translate.mapH));
+		int mapX = Math.max(0, Math.min(x, Translate.mapW));
+		int mapY = Math.max(0, Math.min(y, Translate.mapH));
 
-		GameWorld.get().getCurrentWorldState().getWallGrid()[mSX][mSY] = num;
+		GameWorld.get().getCurrentWorldState().getWallGrid()[mapX][mapY] = num;
 	}
 
 	/**
@@ -1003,10 +1111,10 @@ public class Translate {
 	 * @return 数
 	 */
 	public static int getCurrentFieldGridValue(int x, int y) {
-		int mSX = Math.max(0, Math.min(x, Translate.mapW));
-		int mSY = Math.max(0, Math.min(y, Translate.mapH));
+		int mapX = Math.max(0, Math.min(x, Translate.mapW));
+		int mapY = Math.max(0, Math.min(y, Translate.mapH));
 
-		return GameWorld.get().getCurrentWorldState().getFieldGrid()[mSX][mSY];
+		return GameWorld.get().getCurrentWorldState().getFieldGrid()[mapX][mapY];
 	}
 
 	/**
@@ -1017,9 +1125,9 @@ public class Translate {
 	 * @param num 数
 	 */
 	public static void setCurrentFieldGridValue(int x, int y, int num) {
-		int mSX = Math.max(0, Math.min(x, Translate.mapW));
-		int mSY = Math.max(0, Math.min(y, Translate.mapH));
+		int mapX = Math.max(0, Math.min(x, Translate.mapW));
+		int mapY = Math.max(0, Math.min(y, Translate.mapH));
 
-		GameWorld.get().getCurrentWorldState().getFieldGrid()[mSX][mSY] = num;
+		GameWorld.get().getCurrentWorldState().getFieldGrid()[mapX][mapY] = num;
 	}
 }

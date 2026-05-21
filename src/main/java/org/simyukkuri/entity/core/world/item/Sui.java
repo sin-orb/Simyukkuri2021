@@ -5,16 +5,15 @@ import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
-import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.FavItemType;
 import org.simyukkuri.enums.Intelligence;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.WorldEntityKind;
 import org.simyukkuri.field.impl.Barrier;
@@ -23,8 +22,8 @@ import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
- * すぃー
+/**
+ * すぃー.
  */
 public class Sui extends WorldEntity {
 
@@ -41,48 +40,49 @@ public class Sui extends WorldEntity {
 	private static int ruld = 5;
 	private static int bf = 6;
 	private static int rdlu = 7;
-	private static int direction_num = 8;
+	private static final int DIRECTION_NUM = 8;
 
 	private static int shadow = 0;
 	private static int rest = 1;
 	private static int yukkuri = 2;
 	private static int out_of_control = 3;
-	private static int condition_num = 4;
-	private static BufferedImage[][] images = new BufferedImage[direction_num][condition_num];
+	private static final int CONDITION_NUM = 4;
+	private static BufferedImage[][] images = new BufferedImage[DIRECTION_NUM][CONDITION_NUM];
 
 	private static Rectangle4y boundary = new Rectangle4y();
 
-	private static int bindbody_num = 3;
-	private int current_bindbody_num = 0;
-	private Yukkuri[] bindBody = new Yukkuri[bindbody_num];
-	private Entity bindobj = null;
+	private static final int BIND_BODY_NUM = 3;
+	private int boundBodyCount = 0;
+	private Yukkuri[] ridingBodies = new Yukkuri[BIND_BODY_NUM];
+	private Entity ownerBody = null;
 
-	private int current_direction = bf;
-	private int current_condition = rest;
+	private int directionIndex = bf;
+	private int conditionIndex = rest;
 
-	private final static int[][] direction = { { lurd, fb, ldru },
+	private static final int[][] direction = { { lurd, fb, ldru },
 			{ rl, -1, lr },
 			{ ruld, bf, rdlu } };
-	private final static int ofs = 15;
-	private final static int ofsX = 5;
-	private final static int ofsY = 1;
-	private final static int[][] OfsX = {
+	private static final int ofs = 15;
+	private static final int ofsX = 5;
+	private static final int ofsY = 1;
+	private static final int[][] OfsX = {
 			{ -ofs - ofsX * 2, 0, ofs + ofsX * 2, -ofs - ofsX * 2, ofs + ofsX * 2, -ofs - ofsX * 2, 0, ofs + ofsX * 2 },
 			{ -ofsX * 2, 0, ofsX * 2, -ofsX * 2, ofsX * 2, -ofsX * 2, 0, ofsX * 2 },
 			{ 0, 0, 0, ofsX, -ofsX, 0, 0, 0 } };
-	private final static int[][] OfsY = { { -ofsY, -ofsY * 3, -ofsY, 0, 0, ofsY, ofsY * 2, ofsY },
+	private static final int[][] OfsY = { { -ofsY, -ofsY * 3, -ofsY, 0, 0, ofsY, ofsY * 2, ofsY },
 			{ 0, -ofsY * 2, 0, 0, 0, 0, ofsY, 0 },
 			{ ofsY, -ofsY, ofsY, 0, 0, -ofsY, 0, -ofsY }, };
 
 	private int destX = -1;
 	private int destY = -1;
-	private int vecX, vecY;
+	private int vecX;
+	private int vecY;
 	private int speed = 400;
 
 	/** 画像ロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 		String[] tmp = { "_shadow", "1", "2", "3" };
-		for (int i = 0; i < condition_num; i++) {
+		for (int i = 0; i < CONDITION_NUM; i++) {
 			images[bf][i] = ModLoader.loadItemImage(loader,
 					"sui" + File.separator + "sui_gray" + File.separator + "bf" + tmp[i] + ".png");
 			images[fb][i] = ModLoader.loadItemImage(loader,
@@ -106,7 +106,7 @@ public class Sui extends WorldEntity {
 	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
-		layer[0] = images[current_direction][current_condition];
+		layer[0] = images[directionIndex][conditionIndex];
 		return 1;
 	}
 
@@ -114,7 +114,7 @@ public class Sui extends WorldEntity {
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
-		return images[current_direction][shadow];
+		return images[directionIndex][shadow];
 	}
 
 	/**
@@ -132,17 +132,17 @@ public class Sui extends WorldEntity {
 		}
 
 		// すでに乗っているなら終了
-		for (int i = 0; i < bindbody_num; i++) {
-			if (bindBody[i] == b) {
+		for (int i = 0; i < BIND_BODY_NUM; i++) {
+			if (ridingBodies[i] == b) {
 				return false;
 			}
 		}
 
 		// すぃーの所有者が乗っていない場合、1枠あけておく
-		if ((bindobj != null) && (bindobj != b)) {
+		if ((ownerBody != null) && (ownerBody != b)) {
 			int passengerCount = 0;
-			for (int i = 0; i < bindbody_num; i++) {
-				if (bindBody[i] == null) {
+			for (int i = 0; i < BIND_BODY_NUM; i++) {
+				if (ridingBodies[i] == null) {
 					passengerCount++;
 				}
 			}
@@ -153,16 +153,16 @@ public class Sui extends WorldEntity {
 			}
 		}
 
-		for (int i = 0; i < bindbody_num; i++) {
-			if (bindBody[i] == null) {
-				bindBody[i] = b;
+		for (int i = 0; i < BIND_BODY_NUM; i++) {
+			if (ridingBodies[i] == null) {
+				ridingBodies[i] = b;
 				b.setParentLinkId(this.objId);
-				bindBody[i].setCalcX(x + OfsX[i][current_direction]);
-				bindBody[i].setCalcY(y + OfsY[i][current_direction] + 10);
-				bindBody[i].setCalcZ(1);
+				ridingBodies[i].setCalcX(x + OfsX[i][directionIndex]);
+				ridingBodies[i].setCalcY(y + OfsY[i][directionIndex] + 10);
+				ridingBodies[i].setCalcZ(1);
 				// すいーの所有者がいないなら所有者になる
-				if (bindobj == null) {
-					bindobj = b;
+				if (ownerBody == null) {
+					ownerBody = b;
 					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GetSui), true);
 					b.setFavoriteItem(FavItemType.SUI, this);
 				} else {
@@ -172,7 +172,7 @@ public class Sui extends WorldEntity {
 			}
 		}
 		// 乗客数カウントアップ
-		current_bindbody_num++;
+		boundBodyCount++;
 		b.setShadowVisible(false);
 
 		b.addMemories(5);
@@ -183,16 +183,17 @@ public class Sui extends WorldEntity {
 	}
 
 	/**
-	 * すぃーに乗れるかどうか
+	 * すぃーの所有者が乗っているかどうか.
 	 * 
-	 * @return すぃ～に乗れるかどうか
+	 * @return すぃーの所有者が乗っているかどうか
 	 */
 	@Transient
-	public boolean iscanriding() {
-		if (bindobj == null)
+	public boolean isOwnerRiding() {
+		if (ownerBody == null) {
 			return false;
-		for (int i = 0; i < bindbody_num; i++) {
-			if (bindBody[i] == bindobj) {
+		}
+		for (int i = 0; i < BIND_BODY_NUM; i++) {
+			if (ridingBodies[i] == ownerBody) {
 				return true;
 			}
 		}
@@ -200,16 +201,17 @@ public class Sui extends WorldEntity {
 	}
 
 	/**
-	 * すぃ～に乗ってるかどうか
+	 * 指定したゆっくりが乗っているかどうか.
 	 * 
-	 * @param b 判定するゆっくり
-	 * @return すぃ～に乗ってるかどうか
+	 * @param rider 判定するゆっくり
+	 * @return 指定したゆっくりが乗っているかどうか
 	 */
-	public boolean isriding(Yukkuri b) {
-		if (b == null)
+	public boolean isRiddenBy(Yukkuri rider) {
+		if (rider == null) {
 			return false;
-		for (int i = 0; i < bindbody_num; i++) {
-			if (bindBody[i] == b) {
+		}
+		for (int i = 0; i < BIND_BODY_NUM; i++) {
+			if (ridingBodies[i] == rider) {
 				return true;
 			}
 		}
@@ -219,17 +221,17 @@ public class Sui extends WorldEntity {
 	/**
 	 * すぃ～から降りる
 	 * 
-	 * @param b 降りるゆっくり
+	 * @param rider 降りるゆっくり
 	 */
-	public void rideOff(Yukkuri b) {
-		if (b == null) {
+	public void rideOff(Yukkuri rider) {
+		if (rider == null) {
 			return;
 		}
 
 		boolean isOwnerLeaving = false;
-		for (int i = 0; i < bindbody_num; i++) {
-			if (bindBody[i] == b) {
-				if (bindobj == b) {
+		for (int i = 0; i < BIND_BODY_NUM; i++) {
+			if (ridingBodies[i] == rider) {
+				if (ownerBody == rider) {
 					isOwnerLeaving = true;
 				}
 			}
@@ -237,33 +239,33 @@ public class Sui extends WorldEntity {
 		// 所有者が降りる場合
 		if (isOwnerLeaving) {
 			// 全員降ろす
-			for (int i = 0; i < bindbody_num; i++) {
-				if (bindBody[i] != null) {
-					bindBody[i].setParentLinkId(-1);
-					bindBody[i] = null;
+			for (int i = 0; i < BIND_BODY_NUM; i++) {
+				if (ridingBodies[i] != null) {
+					ridingBodies[i].setParentLinkId(-1);
+					ridingBodies[i] = null;
 				}
 			}
-			current_bindbody_num = 0;
+			boundBodyCount = 0;
 		} else {
 			// 対象だけ降ろす
-			b.setParentLinkId(-1);
-			for (int i = 0; i < bindbody_num; i++) {
-				if (bindBody[i] == b) {
-					bindBody[i] = null;
+			rider.setParentLinkId(-1);
+			for (int i = 0; i < BIND_BODY_NUM; i++) {
+				if (ridingBodies[i] == rider) {
+					ridingBodies[i] = null;
 				}
 			}
 			// 乗客を減らす
-			current_bindbody_num--;
+			boundBodyCount--;
 		}
 	}
 
 	/**
-	 * 誰も乗っていないかどうか
+	 * 所有者がいるかどうか.
 	 * 
-	 * @return 誰も乗っていないかどうか
+	 * @return 所有者がいるかどうか
 	 */
-	public boolean NoCanBind() {
-		return (bindobj != null);
+	public boolean hasOwner() {
+		return (ownerBody != null);
 	}
 
 	/** 境界線の取得 */
@@ -278,12 +280,12 @@ public class Sui extends WorldEntity {
 		return hitCheckObjType;
 	}
 
-	@Override
 	/**
 	 * Enable hit check.
 	 *
 	 * @return Enable hit check
 	 */
+	@Override
 	public boolean enableHitCheck() {
 		return true;
 	}
@@ -292,7 +294,7 @@ public class Sui extends WorldEntity {
 	@Override
 	public int objHitProcess(Entity o) {
 		Yukkuri b = (Yukkuri) o;
-		if (current_condition == out_of_control) {
+		if (conditionIndex == out_of_control) {
 			b.strikeByHammer();
 			b.strikeByObject(0, 1000, false, vecX, vecY);
 		}
@@ -303,23 +305,24 @@ public class Sui extends WorldEntity {
 	@Override
 	public void upDate() {
 		// 所有者がいるかつ消滅しているなら所有者をリセット
-		if (bindobj != null && bindobj.isRemoved()) {
-			bindobj = null;
+		if (ownerBody != null && ownerBody.isRemoved()) {
+			ownerBody = null;
 		}
 
-		for (int i = 0; i < bindbody_num; i++) {
-			// System.out.println(i + ":" + current_bindbody_num + ":" + bindBody[i]);
-			if (bindBody[i] == null)
-				continue;
-			// 乗客がマウスでつかまれている場合は降りる
-			if (bindBody[i].isGrabbed()) {
-				bindBody[i].clearActions();
-				rideOff(bindBody[i]);
+		for (int i = 0; i < BIND_BODY_NUM; i++) {
+			// System.out.println(i + ":" + boundBodyCount + ":" + ridingBodies[i]);
+			if (ridingBodies[i] == null) {
 				continue;
 			}
-			bindBody[i].setCalcX(x + OfsX[i][current_direction]);
-			bindBody[i].setCalcY(y + OfsY[i][current_direction] + 10);
-			bindBody[i].lookTo(destX, destY);
+			// 乗客がマウスでつかまれている場合は降りる
+			if (ridingBodies[i].isGrabbed()) {
+				ridingBodies[i].clearActions();
+				rideOff(ridingBodies[i]);
+				continue;
+			}
+			ridingBodies[i].setCalcX(x + OfsX[i][directionIndex]);
+			ridingBodies[i].setCalcY(y + OfsY[i][directionIndex] + 10);
+			ridingBodies[i].lookTo(destX, destY);
 		}
 	}
 
@@ -334,16 +337,16 @@ public class Sui extends WorldEntity {
 	public TickResult clockTick() {
 		setAge(getAge() + TICK);
 		if (isRemoved()) {
-			for (Yukkuri r : bindBody) {
+			for (Yukkuri r : ridingBodies) {
 				if (r != null) {
 					rideOff(r);
 					r.removeFavoriteItem(FavItemType.SUI);
 					r.clearActions();
 				}
 			}
-			if (bindobj instanceof Yukkuri) {
-				((Yukkuri) bindobj).removeFavoriteItem(FavItemType.SUI);
-				bindobj = null;
+			if (ownerBody instanceof Yukkuri) {
+				((Yukkuri) ownerBody).removeFavoriteItem(FavItemType.SUI);
+				ownerBody = null;
 			}
 			removeFromWorld();
 			return TickResult.REMOVED;
@@ -357,8 +360,9 @@ public class Sui extends WorldEntity {
 
 		if (getZ() > 0) {
 			z -= 5;
-			if (z < 0)
+			if (z < 0) {
 				z = 0;
+			}
 			return TickResult.NONE;
 		}
 
@@ -366,9 +370,9 @@ public class Sui extends WorldEntity {
 			setAge(0);
 			if (destX == -1 && destY == -1) {
 				speed = 400;
-				if (iscanriding()) {
+				if (isOwnerRiding()) {
 
-					Yukkuri b = (Yukkuri) bindobj;
+					Yukkuri b = (Yukkuri) ownerBody;
 					int bx = b.getDestX();
 					int by = b.getDestY();
 					if (bx == -1) {
@@ -453,14 +457,18 @@ public class Sui extends WorldEntity {
 			destY = -1;
 			return;
 		}
-		if (vecX < 0 && x < destX)
+		if (vecX < 0 && x < destX) {
 			x = destX;
-		if (vecX > 0 && x > destX)
+		}
+		if (vecX > 0 && x > destX) {
 			x = destX;
-		if (vecY < 0 && y < destY)
+		}
+		if (vecY < 0 && y < destY) {
 			y = destY;
-		if (vecY > 0 && y > destY)
+		}
+		if (vecY > 0 && y > destY) {
 			y = destY;
+		}
 
 		if (x < 0) {
 			x = 0;
@@ -479,14 +487,14 @@ public class Sui extends WorldEntity {
 		// update direction of the face
 		int directiontmp = direction[dirY + 1][dirX + 1];
 		if (directiontmp != -1) {
-			current_direction = directiontmp;
+			directionIndex = directiontmp;
 			if (speed > 900) {
-				current_condition = out_of_control;
+				conditionIndex = out_of_control;
 			} else {
-				current_condition = yukkuri;
+				conditionIndex = yukkuri;
 			}
 		} else {
-			current_condition = rest;
+			conditionIndex = rest;
 
 		}
 	}
@@ -514,76 +522,78 @@ public class Sui extends WorldEntity {
 	}
 
 	/**
-	 * Y座標を変更する.
+	 * Y 座標を上下にずらす.
 	 * 
-	 * @param A 変更するかどうか
+	 * @param moveDown 下方向にずらすかどうか
 	 */
-	public void ChangeY(boolean A) {
-		if (A) {
+	public void shiftVerticalPosition(boolean moveDown) {
+		if (moveDown) {
 			setForceY(y + boundary.getHeight() / 2);
-			for (Yukkuri b : bindBody) {
-				if (b == null)
+			for (Yukkuri b : ridingBodies) {
+				if (b == null) {
 					continue;
+				}
 				b.setForceY(b.getY() + boundary.getHeight());
 			}
 		} else {
 			setForceY(y - boundary.getHeight() / 2);
-			for (Yukkuri b : bindBody) {
-				if (b == null)
+			for (Yukkuri b : ridingBodies) {
+				if (b == null) {
 					continue;
+				}
 				b.setForceY(b.getY() - boundary.getHeight());
 			}
 		}
 	}
 
 	/** 現在バインドしているゆっくりの数を返す。 */
-	public int getCurrent_bindbody_num() {
-		return current_bindbody_num;
+	public int getBoundBodyCount() {
+		return boundBodyCount;
 	}
 
 	/** 現在バインドしているゆっくりの数をセットする。 */
-	public void setCurrent_bindbody_num(int current_bindbody_num) {
-		this.current_bindbody_num = current_bindbody_num;
+	public void setBoundBodyCount(int boundBodyCount) {
+		this.boundBodyCount = boundBodyCount;
 	}
 
 	/** 関連付けられているゆっくりを返す。 */
 	public Yukkuri[] getBoundYukkuri() {
-		return bindBody;
+		return ridingBodies;
 	}
 
 	/** 関連付けるゆっくりをセットする。 */
-	public void setBoundYukkuri(Yukkuri[] bindBody) {
-		this.bindBody = bindBody;
+	public void setBoundYukkuri(Yukkuri[] ridingBodies) {
+		this.ridingBodies = ridingBodies;
 	}
 
 	/** 吸引対象のエンティティを返す。 */
-	public Entity getBindobj() {
-		return bindobj;
+	public Entity getOwnerBody() {
+		return ownerBody;
 	}
 
 	/** 吸引対象のエンティティをセットする。 */
-	public void setBindobj(Entity bindobj) {
-		this.bindobj = bindobj;
+	public void setOwnerBody(Entity ownerBody) {
+		this.ownerBody = ownerBody;
 	}
 
 	/** 現在の移動方向を返す。 */
-	public int getCurrent_direction() {
-		return current_direction;
+	public int getDirectionIndex() {
+		return directionIndex;
 	}
 
 	/** 現在の移動方向をセットする。 */
-	public void setCurrent_direction(int current_direction) {
-		this.current_direction = current_direction;
+	public void setDirectionIndex(int directionIndex) {
+		this.directionIndex = directionIndex;
 	}
 
 	/** 現在の動作状態を返す。 */
-	public int getCurrent_condition() {
-		return current_condition;
+	public int getConditionIndex() {
+		return conditionIndex;
 	}
 
 	/** 現在の動作状態をセットする。 */
-	public void setCurrent_condition(int current_condition) {
-		this.current_condition = current_condition;
+	public void setConditionIndex(int conditionIndex) {
+		this.conditionIndex = conditionIndex;
 	}
 
 	/** 移動目標の X 座標を返す。 */

@@ -332,7 +332,7 @@ class ToyLogicTest {
         SimYukkuri.world.getCurrentWorldState().getTrampolines().put(trampoline.getObjId(), trampoline);
         // CHILD, canPlay=true → should reach the bounce path
         body.setAgeState(org.simyukkuri.enums.AgeState.CHILD);
-        SimYukkuri.RND = new org.simyukkuri.SequenceRNG(50, 50, 50, 50); // nextInt(100)+1 > accident → no kick boost
+        SimYukkuri.RND = new org.simyukkuri.SequenceRandom(50, 50, 50, 50); // nextInt(100)+1 > accident → no kick boost
         assertDoesNotThrow(() -> ToyLogic.checkTrampoline(body));
     }
 
@@ -350,7 +350,7 @@ class ToyLogicTest {
         trampoline.setObjId(7778);
         SimYukkuri.world.getCurrentWorldState().getTrampolines().put(trampoline.getObjId(), trampoline);
         body.setAgeState(org.simyukkuri.enums.AgeState.CHILD);
-        SimYukkuri.RND = new org.simyukkuri.SequenceRNG(50, 50, 50, 50);
+        SimYukkuri.RND = new org.simyukkuri.SequenceRandom(50, 50, 50, 50);
         assertDoesNotThrow(() -> ToyLogic.checkTrampoline(body));
     }
 
@@ -565,7 +565,7 @@ class ToyLogicTest {
     void testCheckSui_NoCanBind_NonFamily_Skip() {
         Yukkuri other = WorldTestHelper.createBody();
         Sui sui = new Sui(body.getX(), body.getY(), 0);
-        sui.setBindobj(other); // NoCanBind()=(bindobj!=null)=true; other is not family
+        sui.setOwnerBody(other); // hasOwner()=(ownerBody!=null)=true; other is not family
         SimYukkuri.world.getCurrentWorldState().getSuis().put(sui.getObjId(), sui);
         SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(other.getObjId(), other);
         // body has no favoriteItems SUI → enters loop → NoCanBind+non-family → skip →
@@ -595,7 +595,7 @@ class ToyLogicTest {
         Sui sui = new Sui(body.getX(), body.getY(), 0);
         sui.setGrabbed(true);
         sui.setZ(10);
-        // no bindobj → NoCanBind()=false → found in loop
+        // no owner body → hasOwner()=false → found in loop
         SimYukkuri.world.getCurrentWorldState().getSuis().put(sui.getObjId(), sui);
         SimYukkuri.RND = new org.simyukkuri.ConstState(200); // nextInt(150)=149
         assertDoesNotThrow(() -> ToyLogic.checkSui(body));
@@ -606,7 +606,7 @@ class ToyLogicTest {
     @Test
     void testCheckSui_BindBodySelf_FindGetSui() {
         Sui sui = new Sui(body.getX(), body.getY(), 0);
-        sui.setBindobj(body); // bindobj=self
+        sui.setOwnerBody(body); // ownerBody=self
         SimYukkuri.world.getCurrentWorldState().getSuis().put(sui.getObjId(), sui);
         body.setFavoriteItem(FavItemType.SUI, sui);
         org.simyukkuri.ConstState cs = new org.simyukkuri.ConstState(200);
@@ -621,7 +621,7 @@ class ToyLogicTest {
     void testCheckSui_BindBodyOther() {
         Yukkuri other = WorldTestHelper.createBody();
         Sui sui = new Sui(body.getX(), body.getY(), 0);
-        sui.setBindobj(other);
+        sui.setOwnerBody(other);
         SimYukkuri.world.getCurrentWorldState().getSuis().put(sui.getObjId(), sui);
         body.setFavoriteItem(FavItemType.SUI, sui);
         org.simyukkuri.ConstState cs = new org.simyukkuri.ConstState(200);
@@ -831,7 +831,7 @@ class ToyLogicTest {
         t.setObjId(2053);
         body.setAge(2401L);
         SimYukkuri.world.getCurrentWorldState().getTrampolines().put(t.getObjId(), t);
-        SimYukkuri.RND = new org.simyukkuri.SequenceRNG(50, 50, 50, 50);
+        SimYukkuri.RND = new org.simyukkuri.SequenceRandom(50, 50, 50, 50);
         assertDoesNotThrow(() -> ToyLogic.checkTrampoline(body));
     }
 
@@ -901,7 +901,7 @@ class ToyLogicTest {
     @Test
     void testCheckSui_BindBodySelf_Talking() {
         Sui sui = new Sui(body.getX(), body.getY(), 0);
-        sui.setBindobj(body);
+        sui.setOwnerBody(body);
         SimYukkuri.world.getCurrentWorldState().getSuis().put(sui.getObjId(), sui);
         body.setFavoriteItem(FavItemType.SUI, sui);
         body.setMessageTicks(1); // isTalking()=true → skip FindGetSui message
@@ -915,7 +915,7 @@ class ToyLogicTest {
     void testCheckSui_BindBodyOther_Talking() {
         Yukkuri other = WorldTestHelper.createBody();
         Sui sui = new Sui(body.getX(), body.getY(), 0);
-        sui.setBindobj(other);
+        sui.setOwnerBody(other);
         SimYukkuri.world.getCurrentWorldState().getSuis().put(sui.getObjId(), sui);
         body.setFavoriteItem(FavItemType.SUI, sui);
         body.setMessageTicks(1);
@@ -1026,7 +1026,7 @@ class ToyLogicTest {
         SimYukkuri.world.getCurrentWorldState().getTrampolines().put(t.getObjId(), t);
         body.setAgeState(org.simyukkuri.enums.AgeState.ADULT);
         body.setAttitude(Attitude.SHITHEAD); // isRude=true → L255 false (skip), L269 isRude=true
-        SimYukkuri.RND = new org.simyukkuri.SequenceRNG(50, 50, 50, 50);
+        SimYukkuri.RND = new org.simyukkuri.SequenceRandom(50, 50, 50, 50);
         assertDoesNotThrow(() -> ToyLogic.checkTrampoline(body));
     }
 

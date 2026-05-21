@@ -1,4 +1,5 @@
 package org.simyukkuri.enums;
+
 /** うれしさ度合い */
 public enum Happiness {
 	/** 超うれしい */VERY_HAPPY,

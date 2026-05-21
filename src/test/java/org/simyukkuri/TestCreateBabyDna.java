@@ -6,7 +6,7 @@ import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 
 public class TestCreateBabyDna {
     public static void main(String[] args) {
-        SimYukkuri.RND = new SequenceRNG(5, 10, 15, 20, 25);
+        SimYukkuri.RND = new SequenceRandom(5, 10, 15, 20, 25);
 
         Reimu mother = new Reimu();
         Marisa father = new Marisa();

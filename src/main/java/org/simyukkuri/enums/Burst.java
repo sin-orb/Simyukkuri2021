@@ -1,5 +1,6 @@
 package org.simyukkuri.enums;
-/** 破裂状態 */
+
+/** 破裂状態. */
 public enum Burst {
 	/** 兆候なし */NONE, 
 	/** まあ破裂しない */SAFE,

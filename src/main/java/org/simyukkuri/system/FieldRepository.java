@@ -3,7 +3,6 @@ package org.simyukkuri.system;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.simyukkuri.field.impl.Barrier;
 import org.simyukkuri.field.impl.Farm;
 import org.simyukkuri.field.impl.Pool;

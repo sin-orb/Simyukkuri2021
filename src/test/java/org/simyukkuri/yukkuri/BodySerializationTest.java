@@ -3,6 +3,7 @@ package org.simyukkuri.yukkuri;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 
@@ -36,6 +37,7 @@ public class BodySerializationTest {
                 // 3. Serialize using Jackson
                 ObjectMapper mapper = new ObjectMapper();
                 String json = mapper.writeValueAsString(reimu);
+                assertTrue(json.contains("\"hungry\":12345"));
 
                 // 4. Deserialize
                 Reimu loadedReimu = mapper.readValue(json, Reimu.class);
@@ -54,6 +56,9 @@ public class BodySerializationTest {
                 // Verify Damage matches
                 assertEquals(testDamage, loadedReimu.getDamage(),
                                 "Damage value should be preserved");
+
+                assertEquals(12345, loadedReimu.getHungry(),
+                                "hungry value should be preserved");
 
                 // Verify calculation logic (logic from previous bug)
                 // If damage limit was lost (reverted to default), this might fail or cause

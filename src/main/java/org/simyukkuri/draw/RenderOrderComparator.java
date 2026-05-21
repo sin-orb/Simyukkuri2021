@@ -1,7 +1,6 @@
 package org.simyukkuri.draw;
 
 import java.util.Comparator;
-
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.visual.TerrainBillboard;

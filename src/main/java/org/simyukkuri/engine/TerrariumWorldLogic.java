@@ -1,11 +1,10 @@
 package org.simyukkuri.engine;
 
 import java.util.Map;
-
+import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.PanicType;
 import org.simyukkuri.field.impl.Barrier;
-import org.simyukkuri.draw.Translate;
 import org.simyukkuri.util.GameWorld;
 
 /**
