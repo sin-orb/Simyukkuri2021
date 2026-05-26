@@ -89,7 +89,7 @@ public class FavCopyEventTest extends EventTestBase {
     void testSimpleEventAction_bIsParentOfFrom_returnsTrue() {
         Yukkuri b = createBody(1, 100, 100);
         Yukkuri from = createBody(2, 110, 110);
-        from.setParents(new int[] { b.getUniqueID(), -1 }); // b is father of from
+        from.setParents(new int[] { b.getUniqueId(), -1 }); // b is father of from
         FavCopyEvent event = new FavCopyEvent(from, null, null, 1);
         assertTrue(event.simpleEventAction(b));
     }
@@ -99,8 +99,8 @@ public class FavCopyEventTest extends EventTestBase {
     void testSimpleEventAction_bIsPartnerOfFrom_returnsTrue() {
         Yukkuri b = createBody(1, 100, 100);
         Yukkuri from = createBody(2, 110, 110);
-        b.setPartner(from.getUniqueID());
-        from.setPartner(b.getUniqueID());
+        b.setPartner(from.getUniqueId());
+        from.setPartner(b.getUniqueId());
         FavCopyEvent event = new FavCopyEvent(from, null, null, 1);
         assertTrue(event.simpleEventAction(b));
     }
@@ -112,8 +112,8 @@ public class FavCopyEventTest extends EventTestBase {
         Yukkuri from = createBody(2, 110, 110);
         b.setPublicRank(org.simyukkuri.enums.PublicRank.UNUN_SLAVE);
         from.setPublicRank(org.simyukkuri.enums.PublicRank.UNUN_SLAVE);
-        b.setPartner(from.getUniqueID());
-        from.setPartner(b.getUniqueID());
+        b.setPartner(from.getUniqueId());
+        from.setPartner(b.getUniqueId());
         FavCopyEvent event = new FavCopyEvent(from, null, null, 1);
         assertTrue(event.simpleEventAction(b));
     }
@@ -125,8 +125,8 @@ public class FavCopyEventTest extends EventTestBase {
         Yukkuri from = createBody(2, 110, 110);
         b.setPublicRank(org.simyukkuri.enums.PublicRank.UNUN_SLAVE);
         // from stays at default (not UnunSlave)
-        b.setPartner(from.getUniqueID());
-        from.setPartner(b.getUniqueID());
+        b.setPartner(from.getUniqueId());
+        from.setPartner(b.getUniqueId());
         FavCopyEvent event = new FavCopyEvent(from, null, null, 1);
         assertTrue(event.simpleEventAction(b));
     }
@@ -138,8 +138,8 @@ public class FavCopyEventTest extends EventTestBase {
         void testScenario_FamilyCopiesFavoriteBedAcrossEvent() {
             Yukkuri parent = createBody(1, 100, 100);
             Yukkuri child = createBody(2, 120, 120);
-            child.setPartner(parent.getUniqueID());
-            parent.setPartner(child.getUniqueID());
+            child.setPartner(parent.getUniqueId());
+            parent.setPartner(child.getUniqueId());
             Bed bed = new Bed();
             SimYukkuri.world.getCurrentWorldState().getBeds().put(bed.getObjId(), bed);
             parent.setFavoriteItem(FavItemType.BED, bed);

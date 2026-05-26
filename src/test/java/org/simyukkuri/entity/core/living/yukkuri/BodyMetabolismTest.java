@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -39,7 +38,7 @@ public class BodyMetabolismTest {
         WorldTestHelper.resetTerrariumState();
 
         body = new StubBody();
-        body.setUniqueID(1);
+        body.setUniqueId(1);
         body.setAge(100000); // Adult
         body.setShitType(YukkuriType.REIMU);
         gameMap.getYukkuriRegistry().put(1, body);

@@ -1,14 +1,13 @@
 package org.simyukkuri.engine;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.beans.Transient;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.effect.Effect;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -16,17 +15,14 @@ import org.simyukkuri.entity.core.living.yukkuri.impl.HybridYukkuri;
 import org.simyukkuri.entity.core.meta.Player;
 import org.simyukkuri.entity.core.world.WorldEntity;
 import org.simyukkuri.field.FieldShape;
-import org.simyukkuri.draw.Translate;
 import org.simyukkuri.system.WorldState;
 import org.simyukkuri.ui.WorldSelectionWindow;
 import org.simyukkuri.util.GameView;
 
-/***********************************************
- * 
+/**
  * 全ワールドデータ
  * プレイヤーと複数のマップ情報を保持
  * セーブデータになる
- * 
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class World implements Serializable {
@@ -230,11 +226,11 @@ public class World implements Serializable {
 	 */
 	public void recalcWorldSize() {
 		int terrariumSizeParcent = SimYukkuri.fieldScaleData[terrariumSizeIndex];
-		int MAX_X = SimYukkuri.DEFAULT_MAP_X[windowType] * terrariumSizeParcent / 100;
-		int MAX_Y = SimYukkuri.DEFAULT_MAP_Y[windowType] * terrariumSizeParcent / 100;
-		int MAX_Z = SimYukkuri.DEFAULT_MAP_Z[windowType] * terrariumSizeParcent / 100;
+		int maxX = SimYukkuri.DEFAULT_MAP_X[windowType] * terrariumSizeParcent / 100;
+		int maxY = SimYukkuri.DEFAULT_MAP_Y[windowType] * terrariumSizeParcent / 100;
+		int maxZ = SimYukkuri.DEFAULT_MAP_Z[windowType] * terrariumSizeParcent / 100;
 		Translate.setWorldScale(terrariumSizeParcent);
-		Translate.setWorldSize(MAX_X, MAX_Y, MAX_Z);
+		Translate.setWorldSize(maxX, maxY, maxZ);
 	}
 
 	/**
@@ -250,14 +246,14 @@ public class World implements Serializable {
 				Yukkuri b = entry.getValue();
 				if (b.getType() == HybridYukkuri.type) {
 					HybridYukkuri hb = (HybridYukkuri) b;
-					GameView.loadYukkuriImage(
-							org.simyukkuri.enums.YukkuriType.fromClassName(hb.getBaseYukkuri(0).getClass().getSimpleName()));
-					GameView.loadYukkuriImage(
-							org.simyukkuri.enums.YukkuriType.fromClassName(hb.getBaseYukkuri(1).getClass().getSimpleName()));
-					GameView.loadYukkuriImage(
-							org.simyukkuri.enums.YukkuriType.fromClassName(hb.getBaseYukkuri(2).getClass().getSimpleName()));
-					GameView.loadYukkuriImage(
-							org.simyukkuri.enums.YukkuriType.fromClassName(hb.getBaseYukkuri(3).getClass().getSimpleName()));
+					GameView.loadYukkuriImage(org.simyukkuri.enums.YukkuriType
+							.fromClassName(hb.getBaseYukkuri(0).getClass().getSimpleName()));
+					GameView.loadYukkuriImage(org.simyukkuri.enums.YukkuriType
+							.fromClassName(hb.getBaseYukkuri(1).getClass().getSimpleName()));
+					GameView.loadYukkuriImage(org.simyukkuri.enums.YukkuriType
+							.fromClassName(hb.getBaseYukkuri(2).getClass().getSimpleName()));
+					GameView.loadYukkuriImage(org.simyukkuri.enums.YukkuriType
+							.fromClassName(hb.getBaseYukkuri(3).getClass().getSimpleName()));
 				} else {
 					GameView.loadYukkuriImage(org.simyukkuri.enums.YukkuriType.fromClassName(b.getClass().getSimpleName()));
 				}

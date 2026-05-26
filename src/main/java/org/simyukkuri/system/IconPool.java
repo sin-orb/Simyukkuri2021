@@ -5,15 +5,13 @@ import java.awt.MediaTracker;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
-
 import javax.swing.ImageIcon;
-
 import org.simyukkuri.draw.MyPane;
 import org.simyukkuri.util.GameImages;
 import org.simyukkuri.util.GameText;
 
-/**********************************************
- * 各種アイコン、システム画像の保持
+/**
+ * 各種アイコン、システム画像の保持。
  */
 public class IconPool {
 
@@ -21,14 +19,14 @@ public class IconPool {
 	private static final String IMAGE_PATH = "images/icon/";
 
 	/** UIスキン */
-	public enum UISkin {
+	public enum UiSkin {
 		NINE_SLICE_UP("button0.png"),
 		NINE_SLICE_DOWN("button1.png"),
 		;
 
 		private final String fileName;
 
-		UISkin(String str) {
+		UiSkin(String str) {
 			fileName = str;
 		}
 
@@ -159,7 +157,7 @@ public class IconPool {
 		}
 	}
 
-	private static BufferedImage[] uiSkinImage = new BufferedImage[UISkin.values().length];
+	private static BufferedImage[] uiSkinImage = new BufferedImage[UiSkin.values().length];
 	private static BufferedImage[] buttonIconImage = new BufferedImage[ButtonIcon.values().length];
 	private static ImageIcon[] statusIconImage = new ImageIcon[StatusIcon.values().length];
 	private static BufferedImage[] cursorIconImage = new BufferedImage[CursorIcon.values().length];
@@ -170,7 +168,7 @@ public class IconPool {
 
 		MediaTracker mt = new MediaTracker((MyPane) io);
 
-		for (UISkin i : UISkin.values()) {
+		for (UiSkin i : UiSkin.values()) {
 			uiSkinImage[i.ordinal()] = GameImages.read(loader.getResourceAsStream(IMAGE_PATH + i.getFileName()));
 			mt.addImage(uiSkinImage[i.ordinal()], 0);
 		}
@@ -204,7 +202,7 @@ public class IconPool {
 	 * 
 	 * @return UIスキンイメージ
 	 */
-	public static BufferedImage[] getUISkinImageArray() {
+	public static BufferedImage[] getUiSkinImageArray() {
 		return uiSkinImage;
 	}
 
@@ -250,7 +248,7 @@ public class IconPool {
 	 * @param idx インデックス
 	 * @return UIスキンイメージ
 	 */
-	public static BufferedImage getUISkinImage(int idx) {
+	public static BufferedImage getUiSkinImage(int idx) {
 		return uiSkinImage[idx];
 	}
 

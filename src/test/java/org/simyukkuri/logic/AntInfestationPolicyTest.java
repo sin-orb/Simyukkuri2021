@@ -3,7 +3,6 @@ package org.simyukkuri.logic;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.awt.image.BufferedImage;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.ConstState;
@@ -28,7 +27,7 @@ public class AntInfestationPolicyTest {
 		Ants.setPivY(new int[] { 4, 5, 6 });
 
 		Reimu body = new Reimu();
-		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
 		SimYukkuri.RND = new ConstState(1);
 
 		AntInfestationPolicy.judgeNewAnt(body);

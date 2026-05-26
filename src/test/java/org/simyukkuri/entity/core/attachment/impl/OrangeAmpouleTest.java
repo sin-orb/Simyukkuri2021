@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -30,10 +29,10 @@ public class OrangeAmpouleTest {
         SimYukkuri.world = new World();
         WorldTestHelper.initializeEmptyMessagePool();
         OrangeAmpoule.setImages(buildImages());
-        OrangeAmpoule.setImgW(new int[] { 10, 20, 30 });
-        OrangeAmpoule.setImgH(new int[] { 11, 21, 31 });
-        OrangeAmpoule.setPivX(new int[] { 1, 2, 3 });
-        OrangeAmpoule.setPivY(new int[] { 4, 5, 6 });
+        OrangeAmpoule.setImgW(new int[] {10, 20, 30});
+        OrangeAmpoule.setImgH(new int[] {11, 21, 31});
+        OrangeAmpoule.setPivX(new int[] {1, 2, 3});
+        OrangeAmpoule.setPivY(new int[] {4, 5, 6});
     }
 
     @Test
@@ -50,7 +49,7 @@ public class OrangeAmpouleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         OrangeAmpoule ampoule = new OrangeAmpoule(parent);
 
-        assertEquals(parent.getUniqueID(), ampoule.getParent());
+        assertEquals(parent.getUniqueId(), ampoule.getParent());
         assertEquals(500, ampoule.getValue());
         assertEquals(0, ampoule.getCost());
         assertEquals(2, ampoule.getPivotX());
@@ -116,7 +115,7 @@ public class OrangeAmpouleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         OrangeAmpoule ampoule = new OrangeAmpoule(parent);
 
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueId());
 
         BufferedImage image = ampoule.getImage(parent);
         assertNull(image);
@@ -158,9 +157,15 @@ public class OrangeAmpouleTest {
         childParent.setDirection(Direction.LEFT);
         adultParent.setDirection(Direction.LEFT);
 
-        assertSame(OrangeAmpoule.getImages()[AgeState.BABY.ordinal()][0], babyAmpoule.getImage(babyParent));
-        assertSame(OrangeAmpoule.getImages()[AgeState.CHILD.ordinal()][0], childAmpoule.getImage(childParent));
-        assertSame(OrangeAmpoule.getImages()[AgeState.ADULT.ordinal()][0], adultAmpoule.getImage(adultParent));
+        assertSame(
+                OrangeAmpoule.getImages()[AgeState.BABY.ordinal()][0],
+                babyAmpoule.getImage(babyParent));
+        assertSame(
+                OrangeAmpoule.getImages()[AgeState.CHILD.ordinal()][0],
+                childAmpoule.getImage(childParent));
+        assertSame(
+                OrangeAmpoule.getImages()[AgeState.ADULT.ordinal()][0],
+                adultAmpoule.getImage(adultParent));
     }
 
     @Test
@@ -184,7 +189,7 @@ public class OrangeAmpouleTest {
         int origPivotX = ampoule.getPivotX();
         int origPivotY = ampoule.getPivotY();
 
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueId());
 
         ampoule.resetBoundary();
 
@@ -254,7 +259,10 @@ public class OrangeAmpouleTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         parent.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
+        SimYukkuri.world
+                .getCurrentWorldState()
+                .getYukkuriRegistry()
+                .put(parent.getUniqueId(), parent);
         return parent;
     }
 
@@ -262,7 +270,9 @@ public class OrangeAmpouleTest {
         BufferedImage[][] images = new BufferedImage[3][2];
         for (int age = 0; age < 3; age++) {
             for (int dir = 0; dir < 2; dir++) {
-                images[age][dir] = new BufferedImage(10 + age * 10, 10 + age * 10, BufferedImage.TYPE_INT_ARGB);
+                images[age][dir] =
+                        new BufferedImage(
+                                10 + age * 10, 10 + age * 10, BufferedImage.TYPE_INT_ARGB);
             }
         }
         return images;
@@ -273,6 +283,7 @@ public class OrangeAmpouleTest {
         try {
             OrangeAmpoule.loadImages(OrangeAmpoule.class.getClassLoader(), null);
         } catch (Exception e) {
+            // ignore
         }
     }
 

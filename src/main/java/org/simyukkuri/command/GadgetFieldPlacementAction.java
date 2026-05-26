@@ -4,13 +4,13 @@ import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.command.GadgetMenu.ActionTarget;
 import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.command.GadgetMenu.MainCategoryName;
+import org.simyukkuri.draw.Translate;
+import org.simyukkuri.entity.core.world.WorldEntity;
+import org.simyukkuri.entity.core.world.item.BeltconveyorObj;
 import org.simyukkuri.field.impl.Barrier;
 import org.simyukkuri.field.impl.Beltconveyor;
 import org.simyukkuri.field.impl.Farm;
 import org.simyukkuri.field.impl.Pool;
-import org.simyukkuri.draw.Translate;
-import org.simyukkuri.entity.core.world.WorldEntity;
-import org.simyukkuri.entity.core.world.item.BeltconveyorObj;
 
 /**
  * バリア/フィールド/コンベアの複数クリック設置処理
@@ -42,7 +42,7 @@ public class GadgetFieldPlacementAction {
 	}
 
 	private static void handleBarrierPlacement(GadgetMenuChoice item, int[] fieldMousePos) {
-		if (SimYukkuri.fieldSX == -1 || SimYukkuri.fieldSY == -1) {
+		if (SimYukkuri.fieldSx == -1 || SimYukkuri.fieldSy == -1) {
 			// 始点のクリック
 			SimYukkuri.fieldType = 0;
 			switch (item) {
@@ -85,10 +85,10 @@ public class GadgetFieldPlacementAction {
 
 			if (SimYukkuri.fieldType > 0) {
 				if (Translate.inInvertLimit(fieldMousePos[0], fieldMousePos[1])) {
-					SimYukkuri.fieldSX = fieldMousePos[0];
-					SimYukkuri.fieldSY = fieldMousePos[1];
-					SimYukkuri.fieldEX = SimYukkuri.fieldSX;
-					SimYukkuri.fieldEY = SimYukkuri.fieldSY;
+					SimYukkuri.fieldSx = fieldMousePos[0];
+					SimYukkuri.fieldSy = fieldMousePos[1];
+					SimYukkuri.fieldEx = SimYukkuri.fieldSx;
+					SimYukkuri.fieldEy = SimYukkuri.fieldSy;
 				}
 			}
 		} else {
@@ -105,46 +105,46 @@ public class GadgetFieldPlacementAction {
 					if (!Translate.inInvertLimit(fieldMousePos[0], fieldMousePos[1])) {
 						break;
 					}
-					SimYukkuri.fieldEX = fieldMousePos[0];
-					SimYukkuri.fieldEY = fieldMousePos[1];
-					if ((SimYukkuri.fieldSX != SimYukkuri.fieldEX)
-							|| (SimYukkuri.fieldSY != SimYukkuri.fieldEY)) {
-						new Barrier(SimYukkuri.fieldSX, SimYukkuri.fieldSY, SimYukkuri.fieldEX,
-								SimYukkuri.fieldEY, SimYukkuri.fieldType);
+					SimYukkuri.fieldEx = fieldMousePos[0];
+					SimYukkuri.fieldEy = fieldMousePos[1];
+					if ((SimYukkuri.fieldSx != SimYukkuri.fieldEx)
+							|| (SimYukkuri.fieldSy != SimYukkuri.fieldEy)) {
+						new Barrier(SimYukkuri.fieldSx, SimYukkuri.fieldSy, SimYukkuri.fieldEx,
+								SimYukkuri.fieldEy, SimYukkuri.fieldType);
 					}
-					SimYukkuri.fieldSX = SimYukkuri.fieldEX;
-					SimYukkuri.fieldSY = SimYukkuri.fieldEY;
-					SimYukkuri.fieldEX = SimYukkuri.fieldSX;
-					SimYukkuri.fieldEY = SimYukkuri.fieldSY;
+					SimYukkuri.fieldSx = SimYukkuri.fieldEx;
+					SimYukkuri.fieldSy = SimYukkuri.fieldEy;
+					SimYukkuri.fieldEx = SimYukkuri.fieldSx;
+					SimYukkuri.fieldEy = SimYukkuri.fieldSy;
 					break;
 				case POOL:
-					SimYukkuri.fieldEX = fieldMousePos[0];
-					SimYukkuri.fieldEY = fieldMousePos[1];
-					new Pool(SimYukkuri.fieldSX, SimYukkuri.fieldSY,
-							SimYukkuri.fieldEX, SimYukkuri.fieldEY);
-					SimYukkuri.fieldSX = -1;
-					SimYukkuri.fieldSY = -1;
-					SimYukkuri.fieldEX = -1;
-					SimYukkuri.fieldEY = -1;
+					SimYukkuri.fieldEx = fieldMousePos[0];
+					SimYukkuri.fieldEy = fieldMousePos[1];
+					new Pool(SimYukkuri.fieldSx, SimYukkuri.fieldSy,
+							SimYukkuri.fieldEx, SimYukkuri.fieldEy);
+					SimYukkuri.fieldSx = -1;
+					SimYukkuri.fieldSy = -1;
+					SimYukkuri.fieldEx = -1;
+					SimYukkuri.fieldEy = -1;
 					break;
 				case FARM:
-					SimYukkuri.fieldEX = fieldMousePos[0];
-					SimYukkuri.fieldEY = fieldMousePos[1];
-					new Farm(SimYukkuri.fieldSX, SimYukkuri.fieldSY, SimYukkuri.fieldEX, SimYukkuri.fieldEY);
-					SimYukkuri.fieldSX = -1;
-					SimYukkuri.fieldSY = -1;
-					SimYukkuri.fieldEX = -1;
-					SimYukkuri.fieldEY = -1;
+					SimYukkuri.fieldEx = fieldMousePos[0];
+					SimYukkuri.fieldEy = fieldMousePos[1];
+					new Farm(SimYukkuri.fieldSx, SimYukkuri.fieldSy, SimYukkuri.fieldEx, SimYukkuri.fieldEy);
+					SimYukkuri.fieldSx = -1;
+					SimYukkuri.fieldSy = -1;
+					SimYukkuri.fieldEx = -1;
+					SimYukkuri.fieldEy = -1;
 					break;
 				case BELTCONVEYOR:
-					SimYukkuri.fieldEX = fieldMousePos[0];
-					SimYukkuri.fieldEY = fieldMousePos[1];
-					new Beltconveyor(SimYukkuri.fieldSX, SimYukkuri.fieldSY, SimYukkuri.fieldEX,
-							SimYukkuri.fieldEY);
-					SimYukkuri.fieldSX = -1;
-					SimYukkuri.fieldSY = -1;
-					SimYukkuri.fieldEX = -1;
-					SimYukkuri.fieldEY = -1;
+					SimYukkuri.fieldEx = fieldMousePos[0];
+					SimYukkuri.fieldEy = fieldMousePos[1];
+					new Beltconveyor(SimYukkuri.fieldSx, SimYukkuri.fieldSy, SimYukkuri.fieldEx,
+							SimYukkuri.fieldEy);
+					SimYukkuri.fieldSx = -1;
+					SimYukkuri.fieldSy = -1;
+					SimYukkuri.fieldEx = -1;
+					SimYukkuri.fieldEy = -1;
 					break;
 				default:
 					break;
@@ -153,14 +153,14 @@ public class GadgetFieldPlacementAction {
 	}
 
 	private static void handleConveyorPlacement(GadgetMenuChoice item, int[] fieldMousePos) {
-		if (SimYukkuri.fieldSX == -1 || SimYukkuri.fieldSY == -1) {
+		if (SimYukkuri.fieldSx == -1 || SimYukkuri.fieldSy == -1) {
 			// 始点のクリック
 			switch (item) {
 				case BELTCONVEYOR_CUSTOM:
-					SimYukkuri.fieldSX = fieldMousePos[0];
-					SimYukkuri.fieldSY = fieldMousePos[1];
-					SimYukkuri.fieldEX = SimYukkuri.fieldSX;
-					SimYukkuri.fieldEY = SimYukkuri.fieldSY;
+					SimYukkuri.fieldSx = fieldMousePos[0];
+					SimYukkuri.fieldSy = fieldMousePos[1];
+					SimYukkuri.fieldEx = SimYukkuri.fieldSx;
+					SimYukkuri.fieldEy = SimYukkuri.fieldSy;
 					break;
 				default:
 					break;
@@ -169,13 +169,13 @@ public class GadgetFieldPlacementAction {
 			// 終点のクリック
 			switch (item) {
 				case BELTCONVEYOR_CUSTOM:
-					SimYukkuri.fieldEX = fieldMousePos[0];
-					SimYukkuri.fieldEY = fieldMousePos[1];
+					SimYukkuri.fieldEx = fieldMousePos[0];
+					SimYukkuri.fieldEy = fieldMousePos[1];
 					new BeltconveyorObj(0, 0, 5);
-					SimYukkuri.fieldSX = -1;
-					SimYukkuri.fieldSY = -1;
-					SimYukkuri.fieldEX = -1;
-					SimYukkuri.fieldEY = -1;
+					SimYukkuri.fieldSx = -1;
+					SimYukkuri.fieldSy = -1;
+					SimYukkuri.fieldEx = -1;
+					SimYukkuri.fieldEy = -1;
 					break;
 				default:
 					break;

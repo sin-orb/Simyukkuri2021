@@ -5,9 +5,8 @@ import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
@@ -16,7 +15,7 @@ import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.WorldEntityKind;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * 小石
  */
 public class Stone extends WorldEntity {
@@ -72,17 +71,17 @@ public class Stone extends WorldEntity {
 		return hitCheckObjType;
 	}
 
-	@Override
 	/** 衝突処理を行い、結果コードを返す。 */
+	@Override
 	public int objHitProcess(Entity targetObject) {
 		if (targetObject instanceof Yukkuri) {
 			Yukkuri body = (Yukkuri) targetObject;
 			if (body.getCriticalDamege() == CriticalDamageType.CUT) {
 				return 0;
 			}
-			if (body.isBaby())
+			if (body.isBaby()) {
 				body.bodyCut();
-			else {
+			} else {
 				body.bodyInjure();
 				body.runAway(getX(), getY());
 			}
@@ -96,18 +95,18 @@ public class Stone extends WorldEntity {
 		GameWorld.get().getCurrentWorldState().getStones().remove(objId);
 	}
 
-	@Override
 	/**
 	 * Grab.
 	 */
+	@Override
 	public void grab() {
 		grabbed = true;
 	}
 
-	@Override
 	/**
 	 * Kick.
 	 */
+	@Override
 	public void kick() {
 		kick(0, -8, -4);
 	}

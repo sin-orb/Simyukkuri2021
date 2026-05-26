@@ -1,12 +1,11 @@
 package org.simyukkuri.logic;
 
 import java.awt.Color;
-
 import org.simyukkuri.Const;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Intelligence;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.WindowType;
 import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.system.MessagePool;
@@ -43,29 +42,6 @@ public final class YukkuriEventState {
 	}
 
 	/**
-	 * ピコピコ付きメッセージを表示する。
-	 *
-	 * @param body      更新対象のゆっくり
-	 * @param message   表示文字列
-	 * @param interrupt 割り込み可否
-	 */
-	public static void setPikoMessage(Yukkuri body, String message, boolean interrupt) {
-		setMessage(body, message, WindowType.NORMAL, Const.HOLDMESSAGE, interrupt, true, false);
-	}
-
-	/**
-	 * ピコピコ付きメッセージを時間指定で表示する。
-	 *
-	 * @param body      更新対象のゆっくり
-	 * @param message   表示文字列
-	 * @param count     表示時間
-	 * @param interrupt 割り込み可否
-	 */
-	public static void setPikoMessage(Yukkuri body, String message, int count, boolean interrupt) {
-		setMessage(body, message, WindowType.NORMAL, count, interrupt, true, false);
-	}
-
-	/**
 	 * 時間指定の通常メッセージを表示する。
 	 *
 	 * @param body    更新対象のゆっくり
@@ -98,6 +74,77 @@ public final class YukkuriEventState {
 	 */
 	public static void setMessage(Yukkuri body, String message, int count, boolean interrupt, boolean piko) {
 		setMessage(body, message, WindowType.NORMAL, count, interrupt, piko, false);
+	}
+
+	/**
+	 * メッセージ本体の表示状態を更新する。
+	 *
+	 * @param body      更新対象のゆっくり
+	 * @param message   表示文字列
+	 * @param type      ウィンドウ種別
+	 * @param count     表示時間
+	 * @param interrupt 割り込み可否
+	 * @param piko      ピコピコ有無
+	 * @param nyd       非ゆっくり症メッセージかどうか
+	 */
+	public static void setMessage(Yukkuri body, String message, WindowType type, int count, boolean interrupt,
+			boolean piko, boolean nyd) {
+		if (!nyd && (body.isNyd() || body.isSleeping())) {
+			return;
+		}
+		if (body.isSilent() || body.isUnBirth()) {
+			body.setMessageTicks(0);
+			body.setMessageBuffer(null);
+			return;
+		}
+		if (!interrupt && GameRandom.nextInt(body.getSpeechDiscipline() + 1) != 0
+				&& body.getIntelligence() != Intelligence.WISE) {
+			message = GameMessages.getMessage(body, MessagePool.Action.BeingQuiet);
+			return;
+		}
+		if (!body.isCanTalk()) {
+			body.setMessageTicks(0);
+			body.setMessageBuffer(null);
+			return;
+		}
+		if (message == null || message.length() == 0) {
+			body.setMessageTicks(0);
+			body.setMessageBuffer(null);
+			return;
+		}
+		if (interrupt || body.getMessageTicks() == 0) {
+			body.setMessageTicks(count);
+			body.setMessageBuffer(message);
+			resetMessageActions(body, piko);
+			body.setOrigMessageLineColor(Const.WINDOW_COLOR[type.ordinal()][0]);
+			body.setOrigMessageBoxColor(Const.WINDOW_COLOR[type.ordinal()][1]);
+			body.setOrigMessageTextColor(Const.WINDOW_COLOR[type.ordinal()][2]);
+			body.setMessageWindowStroke(Const.WINDOW_STROKE[type.ordinal()]);
+			applyMessageWindowStyle(body);
+		}
+	}
+
+	/**
+	 * ピコピコ付きメッセージを表示する。
+	 *
+	 * @param body      更新対象のゆっくり
+	 * @param message   表示文字列
+	 * @param interrupt 割り込み可否
+	 */
+	public static void setPikoMessage(Yukkuri body, String message, boolean interrupt) {
+		setMessage(body, message, WindowType.NORMAL, Const.HOLDMESSAGE, interrupt, true, false);
+	}
+
+	/**
+	 * ピコピコ付きメッセージを時間指定で表示する。
+	 *
+	 * @param body      更新対象のゆっくり
+	 * @param message   表示文字列
+	 * @param count     表示時間
+	 * @param interrupt 割り込み可否
+	 */
+	public static void setPikoMessage(Yukkuri body, String message, int count, boolean interrupt) {
+		setMessage(body, message, WindowType.NORMAL, count, interrupt, true, false);
 	}
 
 	/**
@@ -159,54 +206,6 @@ public final class YukkuriEventState {
 	 */
 	public static void setNydMessage(Yukkuri body, String message, boolean piko) {
 		setMessage(body, message, WindowType.NORMAL, Const.HOLDMESSAGE, true, piko, true);
-	}
-
-	/**
-	 * メッセージ本体の表示状態を更新する。
-	 *
-	 * @param body      更新対象のゆっくり
-	 * @param message   表示文字列
-	 * @param type      ウィンドウ種別
-	 * @param count     表示時間
-	 * @param interrupt 割り込み可否
-	 * @param piko      ピコピコ有無
-	 * @param nyd       非ゆっくり症メッセージかどうか
-	 */
-	public static void setMessage(Yukkuri body, String message, WindowType type, int count, boolean interrupt,
-			boolean piko, boolean nyd) {
-		if (!nyd && (body.isNYD() || body.isSleeping())) {
-			return;
-		}
-		if (body.isSilent() || body.isUnBirth()) {
-			body.setMessageTicks(0);
-			body.setMessageBuffer(null);
-			return;
-		}
-		if (!interrupt && GameRandom.nextInt(body.getSpeechDiscipline() + 1) != 0
-				&& body.getIntelligence() != Intelligence.WISE) {
-			message = GameMessages.getMessage(body, MessagePool.Action.BeingQuiet);
-			return;
-		}
-		if (!body.isCanTalk()) {
-			body.setMessageTicks(0);
-			body.setMessageBuffer(null);
-			return;
-		}
-		if (message == null || message.length() == 0) {
-			body.setMessageTicks(0);
-			body.setMessageBuffer(null);
-			return;
-		}
-		if (interrupt || body.getMessageTicks() == 0) {
-			body.setMessageTicks(count);
-			body.setMessageBuffer(message);
-			resetMessageActions(body, piko);
-			body.setOrigMessageLineColor(Const.WINDOW_COLOR[type.ordinal()][0]);
-			body.setOrigMessageBoxColor(Const.WINDOW_COLOR[type.ordinal()][1]);
-			body.setOrigMessageTextColor(Const.WINDOW_COLOR[type.ordinal()][2]);
-			body.setMessageWindowStroke(Const.WINDOW_STROKE[type.ordinal()]);
-			applyMessageWindowStyle(body);
-		}
 	}
 
 	/**
@@ -274,7 +273,7 @@ public final class YukkuriEventState {
 		body.setTargetOffsetY(0);
 		body.setTargetBind(false);
 		body.stopPlaying();
-		body.setOfsXY(0, 0);
+		body.setOfsXy(0, 0);
 	}
 
 	/**

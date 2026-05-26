@@ -5,10 +5,9 @@ import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-
 import org.simyukkuri.command.GadgetAction;
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.effect.Effect;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -26,7 +25,7 @@ import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * ミキサー
  */
 public class Mixer extends WorldEntity {
@@ -63,10 +62,11 @@ public class Mixer extends WorldEntity {
 		if (enabled) {
 			if (bindBody != null) {
 				if (counter > 60) {
-					if (bindBody.getAnkoAmount() < (bindBody.getDamageLimit() >> 1))
+					if (bindBody.getAnkoAmount() < (bindBody.getDamageLimit() >> 1)) {
 						layer[0] = images[2];
-					else
+					} else {
 						layer[0] = images[1];
+					}
 				} else {
 					layer[0] = images[0];
 				}
@@ -98,30 +98,32 @@ public class Mixer extends WorldEntity {
 		return hitCheckObjType;
 	}
 
-	@Override
 	/**
 	 * Enable hit check.
 	 *
 	 * @return Enable hit check
 	 */
+	@Override
 	public boolean enableHitCheck() {
 		Yukkuri bindBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(bind);
-		if (bindBody != null)
+		if (bindBody != null) {
 			return false;
+		}
 		return true;
 	}
 
 	/** 衝突処理を行い、結果コードを返す。 */
 	@Override
 	public int objHitProcess(Entity o) {
-		if (!enabled)
+		if (!enabled) {
 			return 0;
+		}
 		Yukkuri bindBody = (Yukkuri) o;
 		bindBody.clearActions();
 		bindBody.setCalcX(x);
 		bindBody.setCalcY(y);
 		bindBody.setLockmove(true);
-		bind = bindBody.getUniqueID();
+		bind = bindBody.getUniqueId();
 		counter = 0;
 
 		return 1;
@@ -143,10 +145,11 @@ public class Mixer extends WorldEntity {
 					mix.setCalcX(x);
 					mix.setCalcY(y);
 				}
-				bind = bindBody.getUniqueID();
+				bind = bindBody.getUniqueId();
 			} else if (bindBody.getX() != x || bindBody.getY() != y || bindBody.getZ() != z || bindBody.isRemoved()) {
-				if (counter > 60)
+				if (counter > 60) {
 					bindBody.setCriticalDamageType(CriticalDamageType.CUT);
+				}
 				bindBody.setForceFace(-1);
 				bindBody.setLockmove(false);
 				bindBody.setShadowVisible(true);
@@ -162,24 +165,27 @@ public class Mixer extends WorldEntity {
 							-2, 0, 0, 0, false, -1, -1, false, false, false);
 				}
 				if (!bindBody.isDead()) {
-					if (bindBody.isSleeping())
+					if (bindBody.isSleeping()) {
 						bindBody.wakeup();
+					}
 					bindBody.addDamage(100);
 					bindBody.addStress(100);
 					bindBody.setHappiness(Happiness.VERY_SAD);
 					bindBody.setForceFace(ImageCode.PAIN.ordinal());
 					if (GameRandom.nextInt(10) == 0) {
-						if (bindBody.getCriticalDamageType() == CriticalDamageType.CUT)
+						if (bindBody.getCriticalDamageType() == CriticalDamageType.CUT) {
 							bindBody.setMessage(GameMessages.getMessage(bindBody, MessagePool.Action.Scream2), true);
-						else
+						} else {
 							bindBody.setMessage(GameMessages.getMessage(bindBody, MessagePool.Action.Scream), true);
+						}
 					}
 				}
 				// 材料採取
 				amount += 100;
 				sweet += bindBody.getStress();
-				if (bindBody.isSick())
+				if (bindBody.isSick()) {
 					sick = true;
+				}
 				if (bindBody.addAmount(-100)) {
 					bindBody.remove();
 					bind = -1;
@@ -191,13 +197,14 @@ public class Mixer extends WorldEntity {
 				// 一定量で餌生成
 				if (amount > 12000) {
 					WorldEntity oex = null;
-					if (sick)
-						oex = GadgetAction.putObjEX(Food.class, getX(), getY(), Food.FoodType.WASTE.ordinal());
-					else {
-						if (sweet > 200000)
-							oex = GadgetAction.putObjEX(Food.class, getX(), getY(), Food.FoodType.SWEETS1.ordinal());
-						else
-							oex = GadgetAction.putObjEX(Food.class, getX(), getY(), Food.FoodType.FOOD.ordinal());
+					if (sick) {
+						oex = GadgetAction.putObjEx(Food.class, getX(), getY(), Food.FoodType.WASTE.ordinal());
+					} else {
+						if (sweet > 200000) {
+							oex = GadgetAction.putObjEx(Food.class, getX(), getY(), Food.FoodType.SWEETS1.ordinal());
+						} else {
+							oex = GadgetAction.putObjEx(Food.class, getX(), getY(), Food.FoodType.FOOD.ordinal());
+						}
 					}
 					oex.kick(0, 6, -4);
 					GameWorld.get().getCurrentWorldState().getFoods().put(oex.objId, (Food) oex);

@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.entity.core.attachment.impl.ANYDAmpoule;
 import org.simyukkuri.entity.core.attachment.impl.AccelAmpoule;
+import org.simyukkuri.entity.core.attachment.impl.AnydAmpoule;
 import org.simyukkuri.entity.core.attachment.impl.BreedingAmpoule;
 import org.simyukkuri.entity.core.attachment.impl.HungryAmpoule;
 import org.simyukkuri.entity.core.attachment.impl.OrangeAmpoule;
@@ -281,34 +281,34 @@ final class GadgetAmpouleAction {
 				if (ev.isShiftDown()) {
 					int flag = 0;
 					if (targetObject instanceof Yukkuri) {
-						flag = ((Yukkuri) targetObject).getAttachmentSize(ANYDAmpoule.class);
+						flag = ((Yukkuri) targetObject).getAttachmentSize(AnydAmpoule.class);
 					}
 					for (Yukkuri body : bodyList) {
 						if (flag == 0) {
-							if (body.getAttachmentSize(ANYDAmpoule.class) == 0) {
-								body.addAttachment(new ANYDAmpoule(body));
+							if (body.getAttachmentSize(AnydAmpoule.class) == 0) {
+								body.addAttachment(new AnydAmpoule(body));
 							}
 						} else {
-							if (body.getAttachmentSize(ANYDAmpoule.class) != 0) {
-								body.removeAttachment(ANYDAmpoule.class);
+							if (body.getAttachmentSize(AnydAmpoule.class) != 0) {
+								body.removeAttachment(AnydAmpoule.class);
 							}
 						}
 					}
 				} else if (ev.isControlDown()) {
 					for (Yukkuri body : bodyList) {
-						if (body.getAttachmentSize(ANYDAmpoule.class) != 0) {
-							body.removeAttachment(ANYDAmpoule.class);
+						if (body.getAttachmentSize(AnydAmpoule.class) != 0) {
+							body.removeAttachment(AnydAmpoule.class);
 						} else {
-							body.addAttachment(new ANYDAmpoule(body));
+							body.addAttachment(new AnydAmpoule(body));
 						}
 					}
 				} else {
 					if (targetObject instanceof Yukkuri) {
 						Yukkuri body = (Yukkuri) targetObject;
-						if (body.getAttachmentSize(ANYDAmpoule.class) != 0) {
-							body.removeAttachment(ANYDAmpoule.class);
+						if (body.getAttachmentSize(AnydAmpoule.class) != 0) {
+							body.removeAttachment(AnydAmpoule.class);
 						} else {
-							body.addAttachment(new ANYDAmpoule(body));
+							body.addAttachment(new AnydAmpoule(body));
 						}
 					}
 				}

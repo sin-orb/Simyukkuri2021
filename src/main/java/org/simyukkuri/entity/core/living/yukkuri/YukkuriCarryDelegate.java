@@ -2,18 +2,17 @@ package org.simyukkuri.entity.core.living.yukkuri;
 
 import java.util.Map;
 import java.util.Set;
-
+import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.world.item.Food;
 import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.enums.PurposeOfMoving;
 import org.simyukkuri.enums.TakeoutItemType;
 import org.simyukkuri.enums.Where;
-import org.simyukkuri.system.WorldState;
-import org.simyukkuri.draw.Translate;
-import org.simyukkuri.util.GameWorld;
-import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.system.MessagePool;
+import org.simyukkuri.system.WorldState;
+import org.simyukkuri.util.GameMessages;
+import org.simyukkuri.util.GameWorld;
 
 /**
  * ゆっくりの所持品・持ち帰り関連を切り出した委譲クラス.

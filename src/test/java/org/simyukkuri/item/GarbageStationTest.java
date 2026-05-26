@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Field;
-
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.ConstState;
@@ -33,7 +32,11 @@ class GarbageStationTest extends ItemTestBase {
         item.setObjId(1);
         SimYukkuri.world.getCurrentWorldState().getGarbageStations().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentWorldState().getGarbageStations().containsKey(item.getObjId()));
+        assertTrue(
+                SimYukkuri.world
+                        .getCurrentWorldState()
+                        .getGarbageStations()
+                        .containsKey(item.getObjId()));
     }
 
     // --- GomiType enum ---
@@ -148,7 +151,7 @@ class GarbageStationTest extends ItemTestBase {
     @Test
     void testGetSetEnable() {
         GarbageStation item = new GarbageStation();
-        boolean[] enable = new boolean[] { true, false, true };
+        boolean[] enable = new boolean[] {true, false, true};
         item.setEnable(enable);
         assertArrayEquals(enable, item.getEnable());
     }
@@ -220,7 +223,7 @@ class GarbageStationTest extends ItemTestBase {
     @Test
     void testObjEXType_afterManualSet() {
         GarbageStation item = new GarbageStation();
-		item.setWorldEntityType(WorldEntityKind.GARBAGESTATION);
+        item.setWorldEntityType(WorldEntityKind.GARBAGESTATION);
         assertEquals(WorldEntityKind.GARBAGESTATION, item.getWorldEntityType());
     }
 
@@ -247,6 +250,7 @@ class GarbageStationTest extends ItemTestBase {
         try {
             GarbageStation.loadImages(GarbageStation.class.getClassLoader(), null);
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -263,6 +267,7 @@ class GarbageStationTest extends ItemTestBase {
         try {
             GarbageStation.setupGarbageSt(item);
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -272,6 +277,7 @@ class GarbageStationTest extends ItemTestBase {
             GarbageStation g = new GarbageStation(100, 100, 0);
             org.junit.jupiter.api.Assertions.assertNotNull(g);
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -284,7 +290,8 @@ class GarbageStationTest extends ItemTestBase {
             item.setEnabled(true);
 
             // Set throwingTime=0 so (operationTime(0) - 0) % 2400 == 0
-            java.lang.reflect.Field throwingField = GarbageStation.class.getDeclaredField("throwingTime");
+            java.lang.reflect.Field throwingField =
+                    GarbageStation.class.getDeclaredField("throwingTime");
             throwingField.setAccessible(true);
             throwingField.setInt(item, 0);
 
@@ -298,8 +305,9 @@ class GarbageStationTest extends ItemTestBase {
             enableField.setAccessible(true);
             boolean[] enable = (boolean[]) enableField.get(item);
             if (enable != null) {
-                for (int i = 0; i < enable.length; i++)
+                for (int i = 0; i < enable.length; i++) {
                     enable[i] = true;
+                }
             }
 
             // Use ConstState(0) so nextInt always returns 0
@@ -316,7 +324,8 @@ class GarbageStationTest extends ItemTestBase {
             GarbageStation item = new GarbageStation();
             item.setEnabled(true);
 
-            java.lang.reflect.Field throwingField = GarbageStation.class.getDeclaredField("throwingTime");
+            java.lang.reflect.Field throwingField =
+                    GarbageStation.class.getDeclaredField("throwingTime");
             throwingField.setAccessible(true);
             throwingField.setInt(item, 0);
 
@@ -327,16 +336,19 @@ class GarbageStationTest extends ItemTestBase {
             java.lang.reflect.Field enableField = GarbageStation.class.getDeclaredField("enable");
             enableField.setAccessible(true);
             boolean[] enable = (boolean[]) enableField.get(item);
-            if (enable != null)
-                for (int i = 0; i < enable.length; i++)
+            if (enable != null) {
+                for (int i = 0; i < enable.length; i++) {
                     enable[i] = true;
+                }
+            }
 
             // Set food[0] to a removed Food
             Food food = new Food(100, 100, 0);
             food.remove();
             java.lang.reflect.Field foodField = GarbageStation.class.getDeclaredField("food");
             foodField.setAccessible(true);
-            org.simyukkuri.entity.core.Entity[] foods = (org.simyukkuri.entity.core.Entity[]) foodField.get(item);
+            org.simyukkuri.entity.core.Entity[] foods =
+                    (org.simyukkuri.entity.core.Entity[]) foodField.get(item);
             foods[0] = food;
             foods[1] = food;
 
@@ -366,7 +378,8 @@ class GarbageStationTest extends ItemTestBase {
             item.setFoods(new Entity[2]);
             item.getEnable()[GomiType.WASTE.ordinal()] = true;
 
-            Field operationTimeField = org.simyukkuri.engine.Terrarium.class.getDeclaredField("operationTime");
+            Field operationTimeField =
+                    org.simyukkuri.engine.Terrarium.class.getDeclaredField("operationTime");
             operationTimeField.setAccessible(true);
             operationTimeField.setInt(null, 0);
             SimYukkuri.RND = new ConstState(0);
@@ -394,7 +407,8 @@ class GarbageStationTest extends ItemTestBase {
             emptyFood.setAmount(0);
             item.getFoods()[0] = emptyFood;
 
-            Field operationTimeField = org.simyukkuri.engine.Terrarium.class.getDeclaredField("operationTime");
+            Field operationTimeField =
+                    org.simyukkuri.engine.Terrarium.class.getDeclaredField("operationTime");
             operationTimeField.setAccessible(true);
             operationTimeField.setInt(null, 0);
             SimYukkuri.RND = new ConstState(0);

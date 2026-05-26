@@ -1,7 +1,6 @@
 package org.simyukkuri.event.impl;
 
 import java.util.List;
-
 import org.simyukkuri.Const;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -16,7 +15,7 @@ import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameText;
 
-/***************************************************
+/**
  * 葬式イベント
  * protected Yukkuri from; // イベントを発した個体
  * protected Yukkuri to; // 弔われる個体
@@ -32,7 +31,7 @@ public class FuneralEvent extends EventPacket {
 	int fromWaitCount = 0;
 
 	// 行動ステート
-	enum STATE {
+	enum State {
 		GO, // 移動
 		FIND, // 待機
 		INTRODUCE, // 死亡説明
@@ -44,7 +43,7 @@ public class FuneralEvent extends EventPacket {
 	}
 
 	/** 状態 */
-	private STATE state = STATE.GO;
+	private State state = State.GO;
 
 	/**
 	 * コンストラクタ.
@@ -121,20 +120,22 @@ public class FuneralEvent extends EventPacket {
 		if (from == null || b == null) {
 			return false;
 		}
-		if (from.getUniqueID() == b.getUniqueID()) {
+		if (from.getUniqueId() == b.getUniqueId()) {
 			return true;
 		}
 		// うんうん奴隷の場合は参加しない
-		if (b.getPublicRank() == PublicRank.UNUN_SLAVE)
+		if (b.getPublicRank() == PublicRank.UNUN_SLAVE) {
 			return false;
+		}
 		// 葬式の発端が別イベント進行中なら、子を巻き込まない
 		if (from.getCurrentEvent() != null && from.getCurrentEvent() != this) {
 			return false;
 		}
 		// 父母がいない場合は参加しない
-		if (org.simyukkuri.util.YukkuriLookup.getYukkuriById(b.getFather()) == null &&
-				org.simyukkuri.util.YukkuriLookup.getYukkuriById(b.getMother()) == null)
+		if (org.simyukkuri.util.YukkuriLookup.getYukkuriById(b.getFather()) == null
+				&& org.simyukkuri.util.YukkuriLookup.getYukkuriById(b.getMother()) == null) {
 			return false;
+		}
 		// 例外状況
 		if (!b.canEventResponse()) {
 			return false;
@@ -167,12 +168,12 @@ public class FuneralEvent extends EventPacket {
 	}
 
 	/** イベントの進行ステートを返す。 */
-	public STATE getState() {
+	public State getState() {
 		return state;
 	}
 
 	/** イベントの進行ステートをセットする。 */
-	public void setState(STATE state) {
+	public void setState(State state) {
 		this.state = state;
 	}
 
@@ -187,7 +188,7 @@ public class FuneralEvent extends EventPacket {
 		if (b == null || from == null) {
 			return UpdateState.ABORT;
 		}
-		if (b.isNYD()) {
+		if (b.isNyd()) {
 			return UpdateState.ABORT;
 		}
 		if (b.isDead() || b.isRemoved()) {
@@ -207,31 +208,35 @@ public class FuneralEvent extends EventPacket {
 		}
 		// 3秒に1回（FROMのみ tick を進め、参加者数に依らず30フレーム周期を保つ）
 		if (b == from) {
-			if (tick++ % 30 != 0)
+			if (tick++ % 30 != 0) {
 				return null;
+			}
 		} else {
-			if (tick % 30 != 0)
+			if (tick % 30 != 0) {
 				return null;
+			}
 		}
 		// 親を持ち上げたときの反応
 		if (!from.canflyCheck() && from.getZ() >= 5) {
-			if (GameRandom.nextInt(50) == 0)
+			if (GameRandom.nextInt(50) == 0) {
 				return UpdateState.ABORT;
-			else if (b == from) {
+			} else if (b == from) {
 				// 空処理
 			} else {
-				if (b.isSad())
+				if (b.isSad()) {
 					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.LookForParents), false);
-				else
+				} else {
 					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.LookForParents), true);
+				}
 				b.setHappiness(Happiness.SAD);
 				return null;
 			}
 		}
 
 		// 自慢中は寝ない
-		if (b.isSleeping())
+		if (b.isSleeping()) {
 			b.wakeup();
+		}
 		// 空腹状態なら60%にする(強制イベント救済措置)
 		if (b.isHungry()) {
 			b.setHungry(b.getHungryLimit() * 6 / 10);
@@ -243,7 +248,7 @@ public class FuneralEvent extends EventPacket {
 				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.SadnessForChild), true);
 			}
 			// 集まるとき以外は留まる
-			if (state != STATE.GO) {
+			if (state != State.GO) {
 				b.stay();
 			} else {
 				int colX = YukkuriLogic.calcCollisionX(b, from);
@@ -288,7 +293,7 @@ public class FuneralEvent extends EventPacket {
 					b.setHappiness(Happiness.SAD);
 					boolean gathered = YukkuriLogic.gatheringYukkuriFront(from, childrenList, this);
 					if (gathered) {
-						state = STATE.FIND;
+						state = State.FIND;
 						actionFlag = false;
 					}
 					b.stay(stayTicks);
@@ -298,7 +303,7 @@ public class FuneralEvent extends EventPacket {
 						b.setEventResMessage(GameMessages.getMessage(b, MessagePool.Action.SadnessForChild), 52,
 								true,
 								false);
-						state = STATE.START;
+						state = State.START;
 						actionFlag = false;
 					}
 					b.stay(stayTicks);
@@ -314,7 +319,7 @@ public class FuneralEvent extends EventPacket {
 							b.stay(stayTicks + 10);
 							b.addMemories(10);
 						} else {
-							state = STATE.INTRODUCE;
+							state = State.INTRODUCE;
 							actionFlag = false;
 						}
 					}
@@ -330,7 +335,7 @@ public class FuneralEvent extends EventPacket {
 							b.stay(stayTicks + 10);
 							b.addMemories(10);
 						} else {
-							state = STATE.SING;
+							state = State.SING;
 							actionFlag = false;
 						}
 					}
@@ -340,14 +345,15 @@ public class FuneralEvent extends EventPacket {
 						if (!actionFlag) {
 							b.setEventResMessage(GameMessages.getMessage(b, MessagePool.Action.Requiem), 52, true,
 									false);
-							if (GameRandom.nextBoolean())
+							if (GameRandom.nextBoolean()) {
 								actionFlag = true;
+							}
 							b.setNobinobi(true);
 							b.stay(stayTicks);
 							b.addMemories(10);
 							b.setHappiness(Happiness.HAPPY);
 						} else {
-							state = STATE.TALK;
+							state = State.TALK;
 							actionFlag = false;
 						}
 					}
@@ -357,13 +363,14 @@ public class FuneralEvent extends EventPacket {
 						if (!actionFlag) {
 							b.setEventResMessage(GameMessages.getMessage(b, MessagePool.Action.FuneralTalkFrom), 52,
 									true, false);
-							if (GameRandom.nextInt(4) == 0)
+							if (GameRandom.nextInt(4) == 0) {
 								actionFlag = true;
+							}
 							b.stay(stayTicks);
 							b.setHappiness(Happiness.HAPPY);
 							b.addMemories(10);
 						} else {
-							state = STATE.GOODBYE;
+							state = State.GOODBYE;
 							actionFlag = false;
 						}
 					}
@@ -383,7 +390,7 @@ public class FuneralEvent extends EventPacket {
 								b.addMemories(10);
 							}
 						} else {
-							state = STATE.END;
+							state = State.END;
 							actionFlag = false;
 						}
 					}
@@ -401,6 +408,7 @@ public class FuneralEvent extends EventPacket {
 							return UpdateState.ABORT;
 						}
 					}
+					break;
 				default:
 					break;
 			}
@@ -495,19 +503,22 @@ public class FuneralEvent extends EventPacket {
 									false);
 							if (b.isRude() && GameRandom.nextBoolean()) {
 								b.setFurifuri(true);
-							} else
+							} else {
 								b.getInVain(false);
+							}
 							b.stay(stayTicks);
 							b.addMemories(10);
 						}
 					}
 					break;
 				case END:
-					if (b.isRude())
+					if (b.isRude()) {
 						b.setEventResMessage(GameMessages.getMessage(b, MessagePool.Action.FuneralEND), 52, true,
 								false);
+					}
 					b.setHappiness(Happiness.HAPPY);
 					b.stay(52);
+					break;
 				default:
 					break;
 			}
@@ -525,12 +536,12 @@ public class FuneralEvent extends EventPacket {
 		return false;
 	}
 
-	@Override
 	/**
 	 * End.
 	 *
 	 * @param b the b
 	 */
+	@Override
 	public void end(Yukkuri b) {
 		b.setCurrentEvent(null);
 		return;

@@ -3,7 +3,7 @@ package org.simyukkuri.engine;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.MyPane;
 import org.simyukkuri.system.LoggerYukkuri;
-import org.simyukkuri.ui.MainCommandUI;
+import org.simyukkuri.ui.MainCommandUi;
 import org.simyukkuri.util.GameEnvironment;
 import org.simyukkuri.util.GameWorld;
 
@@ -38,7 +38,7 @@ public final class GameLoop {
 				if (GameWorld.get().getNextWorldStateIndex() != -1) {
 					continue;
 				}
-				speed = MyPane.gameSpeed[MainCommandUI.getSelectedGameSpeed()];
+				speed = MyPane.gameSpeed[MainCommandUi.getSelectedGameSpeed()];
 			}
 
 			if (speed != MyPane.PAUSE) {

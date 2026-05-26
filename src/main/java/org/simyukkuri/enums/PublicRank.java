@@ -1,4 +1,5 @@
 package org.simyukkuri.enums;
+
 /** 市民権 */
 public enum PublicRank {
 	/** 平民 */NONE,

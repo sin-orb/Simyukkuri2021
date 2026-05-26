@@ -6,15 +6,15 @@ import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.bodylinked.Okazari;
 import org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType;
 import org.simyukkuri.entity.core.world.item.Sui;
-import org.simyukkuri.enums.YukkuriBake;
-import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.FootBake;
 import org.simyukkuri.enums.HairState;
 import org.simyukkuri.enums.ImageCode;
+import org.simyukkuri.enums.YukkuriBake;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.system.YukkuriLayer;
-import org.simyukkuri.ui.MainCommandUI;
+import org.simyukkuri.ui.MainCommandUi;
 import org.simyukkuri.util.GameRandom;
 
 /**
@@ -36,16 +36,16 @@ public final class YukkuriRenderState {
 	 * @return 追加した画像数
 	 */
 	public static int getFaceImage(Yukkuri body, YukkuriLayer layer) {
-		int direction = body.getDirection().ordinal();
-		int idx = 0;
+		final int direction = body.getDirection().ordinal();
 
 		layer.getOption()[0] = 0;
 		applyFaceJumpOption(body, layer);
 
-		if (body.isNYD()) {
+		if (body.isNyd()) {
 			layer.getOption()[0] = 0;
 		}
 
+		int idx = 0;
 		if (body.getForceFace() != -1) {
 			idx += appendFace(body, body.getForceFace(), direction, layer, idx);
 			return appendFaceOverlays(body, direction, layer, idx);
@@ -58,7 +58,7 @@ public final class YukkuriRenderState {
 			idx += appendFace(body, ImageCode.SLEEPING.ordinal(), direction, layer, idx);
 		} else if (body.isPealed()) {
 			idx += appendFace(body, ImageCode.PEALEDFACE.ordinal(), direction, layer, idx);
-		} else if (body.isNYD()) {
+		} else if (body.isNyd()) {
 			idx += appendFace(body,
 					body.isUnBirth() ? ImageCode.NYD_FRONT_CRY2.ordinal() : ImageCode.NYD_FRONT_WIDE.ordinal(),
 					direction,
@@ -94,13 +94,13 @@ public final class YukkuriRenderState {
 	 * @return 追加した画像数
 	 */
 	public static int getImageIndex(Yukkuri body, YukkuriLayer layer) {
-		int direction = body.getDirection().ordinal();
-		int idx = 0;
+		final int direction = body.getDirection().ordinal();
 
 		layer.getOption()[0] = 0;
 		layer.getOption()[1] = 0;
 		layer.getOption()[2] = 0;
 
+		int idx = 0;
 		if (body.isBurned() && body.isDead()) {
 			idx += appendFace(body, ImageCode.BURNED.ordinal(), Const.LEFT, layer, idx);
 		} else if (body.isCrushed()) {
@@ -321,7 +321,7 @@ public final class YukkuriRenderState {
 					direction, layer, idx);
 		}
 		body.setBlinkType(ImageCode.SLEEPING.ordinal());
-		if (MainCommandUI.getSelectedGameSpeed() != 0) {
+		if (MainCommandUi.getSelectedGameSpeed() != 0) {
 			body.setBlinkCount(body.getBlinkCount() + 1);
 		}
 		return idx;
@@ -404,7 +404,7 @@ public final class YukkuriRenderState {
 			idx += appendFace(body, baseFace, direction, layer, idx);
 		}
 		body.setBlinkType(baseFace);
-		if (MainCommandUI.getSelectedGameSpeed() != 0) {
+		if (MainCommandUi.getSelectedGameSpeed() != 0) {
 			body.setBlinkCount(body.getBlinkCount() + 1);
 		}
 		if (body.getBlinkType() == baseFace && body.getBlinkCount() > 100) {

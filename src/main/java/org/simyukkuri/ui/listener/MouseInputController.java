@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.command.GadgetAction;
 import org.simyukkuri.command.GadgetMenu;
@@ -18,9 +17,9 @@ import org.simyukkuri.command.GadgetMenu.ActionTarget;
 import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.command.GadgetMenu.MainCategoryName;
 import org.simyukkuri.draw.MyPane;
-import org.simyukkuri.draw.RenderOrderComparator;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Rectangle4y;
+import org.simyukkuri.draw.RenderOrderComparator;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -32,9 +31,9 @@ import org.simyukkuri.field.impl.Beltconveyor;
 import org.simyukkuri.field.impl.Farm;
 import org.simyukkuri.field.impl.Pool;
 import org.simyukkuri.system.ItemMenu;
-import org.simyukkuri.system.WorldState;
 import org.simyukkuri.system.ItemMenu.ShapeMenuTarget;
-import org.simyukkuri.ui.MainCommandUI;
+import org.simyukkuri.system.WorldState;
+import org.simyukkuri.ui.MainCommandUi;
 
 /**
  * マウス入力をまとめる helper.
@@ -44,8 +43,10 @@ public class MouseInputController extends MouseAdapter {
 	private final Cursor cr = new Cursor(Cursor.HAND_CURSOR);
 	private final Cursor defCr = new Cursor(Cursor.DEFAULT_CURSOR);
 	private Entity grabbedObj = null;
-	private int startY = -1, startZ = -1;
-	private int oX = 0, oY = 0;
+	private int startY = -1;
+	private int startZ = -1;
+	private int oX = 0;
+	private int oY = 0;
 	@SuppressWarnings("unused")
 	private int altitude = 0;
 	private final Point4y translatePos = new Point4y();
@@ -74,8 +75,9 @@ public class MouseInputController extends MouseAdapter {
 		Entity o = null;
 		for (int i = num; i >= 0; i--) {
 			o = list4sort.get(i);
-			if (!o.isCanGrab())
+			if (!o.isCanGrab()) {
 				continue;
+			}
 
 			if (stalkMode && o instanceof Yukkuri) {
 				body = (Yukkuri) o;
@@ -86,7 +88,8 @@ public class MouseInputController extends MouseAdapter {
 				}
 			} else if (!stalkMode && o instanceof Stalk) {
 				stalk = (Stalk) o;
-				Yukkuri b = org.simyukkuri.util.GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(stalk.getPlantYukkuri());
+				Yukkuri b = org.simyukkuri.util.GameWorld.get().getCurrentWorldState()
+						.getYukkuriRegistry().get(stalk.getPlantYukkuri());
 				if (b != null) {
 					parent = b;
 				} else {
@@ -113,7 +116,7 @@ public class MouseInputController extends MouseAdapter {
 		if (found == null) {
 			List<WorldEntity> platformList = SimYukkuri.world.getPlatforms();
 			for (Iterator<WorldEntity> i = platformList.iterator(); i.hasNext();) {
-				WorldEntity oex = (WorldEntity) i.next();
+				WorldEntity oex = i.next();
 				Rectangle4y r = oex.getScreenRect();
 				Rectangle screenRect = new Rectangle(r.getX(), r.getY(), r.getWidth(), r.getHeight());
 				oex.getBoundaryShape(imageRect);
@@ -138,8 +141,9 @@ public class MouseInputController extends MouseAdapter {
 	// マウス位置の最も手前にあるシェイプを取得
 	private FieldShape getShapeFront(int mx, int my) {
 		Point4y pos = Translate.invert(mx, my);
-		if (pos == null)
+		if (pos == null) {
 			return null;
+		}
 		WorldState curMap = org.simyukkuri.util.GameWorld.get().getCurrentWorldState();
 		int flags = Translate.getCurrentFieldGridValue(pos.getX(), pos.getY());
 		if ((flags & FieldShape.FIELD_BELT) != 0) {
@@ -180,11 +184,11 @@ public class MouseInputController extends MouseAdapter {
 
 			if ((e.getModifiers() & MouseEvent.BUTTON1_MASK) == 0) {
 				if (javax.swing.SwingUtilities.isRightMouseButton(e)) {
-					if (SimYukkuri.fieldSX > -1 || SimYukkuri.fieldSY > -1) {
-						SimYukkuri.fieldSX = -1;
-						SimYukkuri.fieldSY = -1;
-						SimYukkuri.fieldEX = -1;
-						SimYukkuri.fieldEY = -1;
+					if (SimYukkuri.fieldSx > -1 || SimYukkuri.fieldSy > -1) {
+						SimYukkuri.fieldSx = -1;
+						SimYukkuri.fieldSy = -1;
+						SimYukkuri.fieldEx = -1;
+						SimYukkuri.fieldEy = -1;
 						ItemMenu.itemModeCancel(true);
 						return;
 					}
@@ -235,8 +239,9 @@ public class MouseInputController extends MouseAdapter {
 				return;
 			}
 			GadgetMenuChoice sel = GadgetMenu.getCurrentGadget();
-			if (sel == null)
+			if (sel == null) {
 				return;
+			}
 
 			if (sel.getActionTarget() == ActionTarget.IMMEDIATE) {
 				GadgetAction.immediateEvaluate(sel);
@@ -251,7 +256,7 @@ public class MouseInputController extends MouseAdapter {
 			ActionTarget foundType = ActionTarget.TERRAIN;
 
 			if (found instanceof Yukkuri) {
-				MainCommandUI.showStatus((Yukkuri) found);
+				MainCommandUi.showStatus((Yukkuri) found);
 				MyPane.setSelectedYukkuri((Yukkuri) found);
 				foundType = ActionTarget.BODY;
 			} else if (found != null) {
@@ -334,7 +339,7 @@ public class MouseInputController extends MouseAdapter {
 					startZ = SimYukkuri.fieldMousePos[1] + Translate.transSize(grabbedObj.getZ() * 58 / 10);
 					grabbedObj.grab();
 					if (grabbedObj instanceof Yukkuri) {
-						MainCommandUI.showStatus((Yukkuri) grabbedObj);
+						MainCommandUi.showStatus((Yukkuri) grabbedObj);
 						MyPane.setSelectedYukkuri((Yukkuri) grabbedObj);
 					}
 				}
@@ -421,8 +426,9 @@ public class MouseInputController extends MouseAdapter {
 							Yukkuri b = (Yukkuri) grabbedObj;
 							if (b.canPullOrPush() && !b.isDead()) {
 								b.wakeup();
-								if (b.getZ() <= 0)
+								if (b.getZ() <= 0) {
 									b.lockSetZ(newZ * Translate.getWorldDepth() / Translate.getCanvasH());
+								}
 							} else {
 								hitX = 4;
 								altitude = startZ - SimYukkuri.fieldMousePos[1];
@@ -453,9 +459,7 @@ public class MouseInputController extends MouseAdapter {
 							hitX = 1;
 							break;
 					}
-				}
-
-				else if (button == 2) {
+				} else if (button == 2) {
 					int newX = SimYukkuri.fieldMousePos[0] + oX;
 					int newY = SimYukkuri.fieldMousePos[1] + oY;
 					int hitX;
@@ -522,18 +526,21 @@ public class MouseInputController extends MouseAdapter {
 	public void mouseMoved(MouseEvent e) {
 		synchronized (SimYukkuri.lock) {
 			GadgetMenuChoice sel = GadgetMenu.getCurrentGadget();
-			if (sel == null)
+			if (sel == null) {
 				return;
+			}
 
 			if ((sel.getGroup() != MainCategoryName.BARRIER && sel.getGroup() != MainCategoryName.CONVEYOR)
-					|| sel.getInitOption() == 0)
+					|| sel.getInitOption() == 0) {
 				return;
-			if (SimYukkuri.fieldSX < 0 || SimYukkuri.fieldSY < 0)
+			}
+			if (SimYukkuri.fieldSx < 0 || SimYukkuri.fieldSy < 0) {
 				return;
+			}
 
 			Translate.transCanvasToField(e.getX(), e.getY(), SimYukkuri.fieldMousePos);
-			SimYukkuri.fieldEX = SimYukkuri.fieldMousePos[0];
-			SimYukkuri.fieldEY = SimYukkuri.fieldMousePos[1];
+			SimYukkuri.fieldEx = SimYukkuri.fieldMousePos[0];
+			SimYukkuri.fieldEy = SimYukkuri.fieldMousePos[1];
 			SimYukkuri.mouseNewX = SimYukkuri.fieldMousePos[0];
 			SimYukkuri.mouseNewY = SimYukkuri.fieldMousePos[1];
 		}
@@ -555,12 +562,14 @@ public class MouseInputController extends MouseAdapter {
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		int select;
-		select = MainCommandUI.getGameSpeedCombo().getSelectedIndex();
+		select = MainCommandUi.getGameSpeedCombo().getSelectedIndex();
 		select += e.getWheelRotation();
-		if (select < 0)
+		if (select < 0) {
 			select = 0;
-		if (select >= MainCommandUI.getGameSpeedCombo().getItemCount())
-			select = MainCommandUI.getGameSpeedCombo().getItemCount() - 1;
-		MainCommandUI.getGameSpeedCombo().setSelectedIndex(select);
+		}
+		if (select >= MainCommandUi.getGameSpeedCombo().getItemCount()) {
+			select = MainCommandUi.getGameSpeedCombo().getItemCount() - 1;
+		}
+		MainCommandUi.getGameSpeedCombo().setSelectedIndex(select);
 	}
 }

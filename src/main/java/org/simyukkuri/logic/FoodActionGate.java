@@ -1,10 +1,10 @@
 package org.simyukkuri.logic;
 
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.CoreAnkoState;
 import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.enums.TakeoutItemType;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.event.impl.FlyingEatEvent;
 import org.simyukkuri.event.impl.SuperEatingTimeEvent;
@@ -57,7 +57,7 @@ public final class FoodActionGate {
 		EventPacket ev = body.getCurrentEvent();
 		if (ev != null && ev.getPriority() != EventPacket.EventPriority.LOW) {
 			if (ev instanceof SuperEatingTimeEvent
-					&& ((SuperEatingTimeEvent) ev).getState() == SuperEatingTimeEvent.STATE.START) {
+					&& ((SuperEatingTimeEvent) ev).getState() == SuperEatingTimeEvent.State.START) {
 				forceEat[0] = true;
 			} else if (!body.isVeryHungry()) {
 				return true;
@@ -95,7 +95,7 @@ public final class FoodActionGate {
 					&& body.getCriticalDamageType() == null
 					&& !body.isPealed() && !body.isPacked() && !body.isShitting()
 					&& !body.isBirth() && !body.isSukkiri() && !body.isNeedled()
-					&& !body.isNYD() && body.getBurialState() == org.simyukkuri.enums.BurialState.NONE) {
+					&& !body.isNyd() && body.getBurialState() == org.simyukkuri.enums.BurialState.NONE) {
 				// currentEvent のみが阻害要因 → 食事を許可（スキップしない）
 			} else {
 				return true;

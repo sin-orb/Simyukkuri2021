@@ -12,7 +12,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Field;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -227,7 +226,8 @@ class BeltconveyorTest {
         List<Beltconveyor> list = SimYukkuri.world.getCurrentWorldState().getBeltconveyors();
         list.add(item);
         list.add(item2);
-        assertDoesNotThrow(() -> item2.executeShapePopup(org.simyukkuri.system.ItemMenu.ShapeMenu.TOP));
+        assertDoesNotThrow(
+                () -> item2.executeShapePopup(org.simyukkuri.system.ItemMenu.ShapeMenu.TOP));
         assertEquals(item2, list.get(0));
     }
 
@@ -238,7 +238,8 @@ class BeltconveyorTest {
         List<Beltconveyor> list = SimYukkuri.world.getCurrentWorldState().getBeltconveyors();
         list.add(item);
         list.add(item2);
-        assertDoesNotThrow(() -> item.executeShapePopup(org.simyukkuri.system.ItemMenu.ShapeMenu.DOWN));
+        assertDoesNotThrow(
+                () -> item.executeShapePopup(org.simyukkuri.system.ItemMenu.ShapeMenu.DOWN));
     }
 
     @Test
@@ -248,7 +249,8 @@ class BeltconveyorTest {
         List<Beltconveyor> list = SimYukkuri.world.getCurrentWorldState().getBeltconveyors();
         list.add(item);
         list.add(item2);
-        assertDoesNotThrow(() -> item.executeShapePopup(org.simyukkuri.system.ItemMenu.ShapeMenu.BOTTOM));
+        assertDoesNotThrow(
+                () -> item.executeShapePopup(org.simyukkuri.system.ItemMenu.ShapeMenu.BOTTOM));
     }
 
     // --- Constructor(int, int, int, int): headless → try/catch ---
@@ -335,10 +337,12 @@ class BeltconveyorTest {
             Class<?> dirClass = null;
             Class<?> spdClass = null;
             for (Class<?> c : inner) {
-                if (c.getSimpleName().equals("DirectCombo"))
+                if (c.getSimpleName().equals("DirectCombo")) {
                     dirClass = c;
-                if (c.getSimpleName().equals("SpeedCombo"))
+                }
+                if (c.getSimpleName().equals("SpeedCombo")) {
                     spdClass = c;
+                }
             }
             Object[] dirVals = dirClass.getEnumConstants(); // RIGHT=0
             Object[] spdVals = spdClass.getEnumConstants(); // SLOW=0, MIDDLE=1
@@ -376,8 +380,9 @@ class BeltconveyorTest {
         } catch (Exception e) {
             return;
         }
-        java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(200, 200,
-                java.awt.image.BufferedImage.TYPE_INT_RGB);
+        java.awt.image.BufferedImage img =
+                new java.awt.image.BufferedImage(
+                        200, 200, java.awt.image.BufferedImage.TYPE_INT_RGB);
         java.awt.Graphics2D g2 = img.createGraphics();
         try {
             item.drawShape(g2);
@@ -434,7 +439,7 @@ class BeltconveyorTest {
     private static int setupMenuOrdinal(String constantName) {
         try {
             Class<?> enumClass = Class.forName("org.simyukkuri.field.impl.Beltconveyor$SetupMenu");
-            @SuppressWarnings({ "rawtypes", "unchecked" })
+            @SuppressWarnings({"rawtypes", "unchecked"})
             Enum<?> constant = Enum.valueOf((Class) enumClass, constantName);
             return constant.ordinal();
         } catch (Exception e) {
@@ -442,11 +447,12 @@ class BeltconveyorTest {
         }
     }
 
-    private static void setPrivateEnumField(Beltconveyor item, String fieldName, String enumSimpleName,
-            String constantName) {
+    private static void setPrivateEnumField(
+            Beltconveyor item, String fieldName, String enumSimpleName, String constantName) {
         try {
-            Class<?> enumClass = Class.forName("org.simyukkuri.field.impl.Beltconveyor$" + enumSimpleName);
-            @SuppressWarnings({ "rawtypes", "unchecked" })
+            Class<?> enumClass =
+                    Class.forName("org.simyukkuri.field.impl.Beltconveyor$" + enumSimpleName);
+            @SuppressWarnings({"rawtypes", "unchecked"})
             Enum<?> constant = Enum.valueOf((Class) enumClass, constantName);
             Field field = Beltconveyor.class.getDeclaredField(fieldName);
             field.setAccessible(true);

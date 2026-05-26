@@ -26,7 +26,7 @@ public final class LivingEntityPanicDelegate {
 
 	/** パニック・恐怖状態の更新. @return 常に DONOTHING */
 	public TickResult checkFear() {
-		if (body.isNYD() || body.isUnBirth()) {
+		if (body.isNyd() || body.isUnBirth()) {
 			clearPanic();
 			return TickResult.NONE;
 		}

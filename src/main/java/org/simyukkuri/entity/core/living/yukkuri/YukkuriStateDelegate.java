@@ -3,14 +3,12 @@ package org.simyukkuri.entity.core.living.yukkuri;
 import org.simyukkuri.Const;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.enums.CoreAnkoState;
-import org.simyukkuri.enums.Damage;
 import org.simyukkuri.entity.core.attachment.impl.Fire;
-import org.simyukkuri.field.FieldShape;
-import org.simyukkuri.field.impl.Pool;
 import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.enums.Burst;
+import org.simyukkuri.enums.CoreAnkoState;
 import org.simyukkuri.enums.CriticalDamageType;
+import org.simyukkuri.enums.Damage;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.PanicType;
@@ -18,8 +16,10 @@ import org.simyukkuri.enums.UnbirthBabyState;
 import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.event.impl.BegForLifeEvent;
 import org.simyukkuri.event.impl.BreedEvent;
-import org.simyukkuri.logic.YukkuriRelations;
+import org.simyukkuri.field.FieldShape;
+import org.simyukkuri.field.impl.Pool;
 import org.simyukkuri.logic.EventLogic;
+import org.simyukkuri.logic.YukkuriRelations;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameEnvironment;
 import org.simyukkuri.util.GameMessages;
@@ -134,9 +134,8 @@ public final class YukkuriStateDelegate {
 				body.addStress(100);
 				// なつき度設定
 				body.addLovePlayer(-10);
-			}
-			// おそらとんでるみたい！
-			else {
+			} else {
+				// おそらとんでるみたい！
 				body.setPikoMessage(GameMessages.getMessage(body, MessagePool.Action.Flying), true);
 				body.addStress(-10);
 				// なつき度設定
@@ -378,9 +377,9 @@ public final class YukkuriStateDelegate {
 		}
 
 		// 畑にいるか
-		int xCoord = body.getX();
-		int yCoord = body.getY();
-		if ((Translate.getCurrentFieldGridValue(xCoord, yCoord) & FieldShape.FIELD_FARM) == 0) {
+		int xcoord = body.getX();
+		int ycoord = body.getY();
+		if ((Translate.getCurrentFieldGridValue(xcoord, ycoord) & FieldShape.FIELD_FARM) == 0) {
 			return;
 		}
 
@@ -416,7 +415,7 @@ public final class YukkuriStateDelegate {
 	 * 怒らせる.
 	 */
 	public void setAngry() {
-		if (body.isDead() || body.isNYD() || body.isSleeping()) {
+		if (body.isDead() || body.isNyd() || body.isSleeping()) {
 			return;
 		}
 		if (body.getDamageState() == org.simyukkuri.enums.Damage.NONE && !body.isVerySad()) {
@@ -470,7 +469,7 @@ public final class YukkuriStateDelegate {
 	 *
 	 * @param depth 深さ
 	 */
-	public void inWater(Pool.DEPTH depth) {
+	public void inWater(Pool.Depth depth) {
 		if (!body.isDead() && !body.isUnBirth()) {
 			if (body.isSleeping()) {
 				body.wakeup();
@@ -531,9 +530,9 @@ public final class YukkuriStateDelegate {
 	 * 環境によるパニック状態の設定.
 	 *
 	 * @param flag  すでにパニック状態か
-	 * @param pType パニックのタイプ
+	 * @param panicType パニックのタイプ
 	 */
-	public void setPanic(boolean flag, PanicType pType) {
+	public void setPanic(boolean flag, PanicType panicType) {
 		if (body.isDead() || body.isSleeping() || body.isUnBirth()) {
 			return;
 		}
@@ -549,7 +548,7 @@ public final class YukkuriStateDelegate {
 				body.setPanicPeriod(0);
 				return;
 			}
-			body.setPanicType(pType);
+			body.setPanicType(panicType);
 			body.setPanicPeriod(0);
 			body.setStayTicks(0);
 			body.setCalm();
@@ -601,7 +600,7 @@ public final class YukkuriStateDelegate {
 	/** 毒スチーム被曝時の行動停止・感情・メッセージ反応. */
 	public void onPoisonSteam() {
 		body.clearActions();
-		if (body.isNotNYD()) {
+		if (body.isNotNyd()) {
 			body.setHappiness(Happiness.VERY_SAD);
 			if (body.getDamageState() != Damage.NONE) {
 				body.setNegiMessage(GameMessages.getMessage(body, MessagePool.Action.PoisonDamage), true);

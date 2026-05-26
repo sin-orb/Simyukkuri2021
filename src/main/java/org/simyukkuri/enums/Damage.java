@@ -1,8 +1,9 @@
 package org.simyukkuri.enums;
+
 /** ダメージレベル */
 public enum Damage {
 	/** ダメージなし */NONE,
-	/** 少々のダメージ */SOME ,
+	/** 少々のダメージ */SOME,
 	/** かなりのダメージ */VERY,
 	/** ダメージ多すぎ */TOOMUCH
 }

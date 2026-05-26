@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
 import org.simyukkuri.util.GameLocale;
 
 /**
@@ -38,7 +37,6 @@ public class ResourceUtil {
 	}
 
 	private ResourceUtil() {
-		String classpath = System.getProperty("java.class.path");
 		ClassLoader loader = this.getClass().getClassLoader();
 		BufferedReader reader;
 
@@ -49,6 +47,7 @@ public class ResourceUtil {
 			try {
 				reader.close();
 			} catch (Exception e) {
+				e.getMessage();
 			}
 		}
 
@@ -58,11 +57,12 @@ public class ResourceUtil {
 			try {
 				reader.close();
 			} catch (Exception e) {
+				e.getMessage();
 			}
 		}
 
 		/* Read from file system via classpath entries */
-		String[] classpaths = classpath.split(java.io.File.pathSeparator);
+		String[] classpaths = System.getProperty("java.class.path").split(java.io.File.pathSeparator);
 		if (classpaths.length == 0 || (classpaths.length == 1 && classpaths[0].trim().length() == 0)) {
 			CodeSource codeSource = ResourceUtil.class.getProtectionDomain().getCodeSource();
 			if (codeSource != null && codeSource.getLocation() != null) {
@@ -72,17 +72,20 @@ public class ResourceUtil {
 						classpaths = new String[] { jarFile.getParentFile().getPath() };
 					}
 				} catch (URISyntaxException e) {
+					e.printStackTrace();
 				}
 			}
 		}
 
 		for (String cp : classpaths) {
-			if (cp == null || cp.trim().isEmpty())
+			if (cp == null || cp.trim().isEmpty()) {
 				continue;
+			}
 			File f = new File(cp);
 			String path = f.isFile() ? f.getParent() : cp;
-			if (path == null)
+			if (path == null) {
 				continue;
+			}
 
 			try (BufferedReader br = this.getReader(path, thisLocale.getLanguage())) {
 				if (null != br) {
@@ -92,6 +95,7 @@ public class ResourceUtil {
 					}
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -100,10 +104,12 @@ public class ResourceUtil {
 		try {
 			String path = "resources/simyukkuri." + lang + ".properties";
 			InputStream input = loader.getResourceAsStream(path);
-			if (input == null)
+			if (input == null) {
 				return null;
+			}
 			return new BufferedReader(new InputStreamReader(input, "UTF-8"));
 		} catch (Exception e) {
+			e.getMessage();
 			return null;
 		}
 	}
@@ -112,29 +118,34 @@ public class ResourceUtil {
 		try {
 			String p = path + "/resources/simyukkuri." + lang + ".properties";
 			File f = new File(p);
-			if (!f.exists())
+			if (!f.exists()) {
 				return null;
+			}
 			InputStream input = new FileInputStream(p);
 			return new BufferedReader(new InputStreamReader(input, "UTF-8"));
 		} catch (Exception e) {
+			e.getMessage();
 			return null;
 		}
 	}
 
 	private Map<String, String> readStrings(BufferedReader reader) {
 		Map<String, String> props = new HashMap<String, String>();
-		if (reader == null)
+		if (reader == null) {
 			return props;
+		}
 		try {
 			for (String line = reader.readLine(); null != line; line = reader.readLine()) {
 				String[] split = line.split("=");
-				if (split.length < 2)
+				if (split.length < 2) {
 					continue;
+				}
 				String key = split[0].trim();
 				String value = String.join("=", Arrays.copyOfRange(split, 1, split.length));
 				props.put(key, value);
 			}
 		} catch (Exception e) {
+			e.getMessage();
 		}
 		return props;
 	}
@@ -150,11 +161,13 @@ public class ResourceUtil {
 		Map<String, String> props = strings.get(lang);
 		Map<String, String> en = strings.get(enLocale.getLanguage());
 		Map<String, String> ja = strings.get(jaLocale.getLanguage());
-		if (null == props)
+		if (null == props) {
 			return GameLocale.isJapanese() ? ja.get(property) : en.get(property);
+		}
 		String v = props.get(property);
-		if (null == v)
+		if (null == v) {
 			return GameLocale.isJapanese() ? ja.get(property) : en.get(property);
+		}
 		return v;
 	}
 }

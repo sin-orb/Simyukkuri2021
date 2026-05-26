@@ -5,9 +5,8 @@ import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.effect.Effect;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -26,7 +25,7 @@ import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * ホットプレート
  */
 public class HotPlate extends WorldEntity {
@@ -59,12 +58,13 @@ public class HotPlate extends WorldEntity {
 			if (bindBody != null) {
 				FootBake f = null;
 				f = bindBody.getFootBakeLevel();
-				if (f == FootBake.CRITICAL)
+				if (f == FootBake.CRITICAL) {
 					layer[0] = images[2];
-				else if (f == FootBake.MEDIUM)
+				} else if (f == FootBake.MEDIUM) {
 					layer[0] = images[1];
-				else
+				} else {
 					layer[0] = images[0];
+				}
 			} else {
 				layer[0] = images[0];
 			}
@@ -100,15 +100,16 @@ public class HotPlate extends WorldEntity {
 		return hitCheckObjType;
 	}
 
-	@Override
 	/**
 	 * Enable hit check.
 	 *
 	 * @return Enable hit check
 	 */
+	@Override
 	public boolean enableHitCheck() {
-		if (bindBody != null)
+		if (bindBody != null) {
 			return false;
+		}
 		return true;
 	}
 
@@ -117,8 +118,9 @@ public class HotPlate extends WorldEntity {
 	public int objHitProcess(Entity o) {
 
 		bindBody = (Yukkuri) o;
-		if (bindBody.getCriticalDamageType() == CriticalDamageType.CUT)
+		if (bindBody.getCriticalDamageType() == CriticalDamageType.CUT) {
 			return 0;
+		}
 		bindBody.clearActions();
 		bindBody.setCalcX(x);
 		bindBody.setCalcY(y);
@@ -153,15 +155,16 @@ public class HotPlate extends WorldEntity {
 				bindBody = null;
 			} else {
 				if (!bindBody.isDead()) {
-					if (bindBody.isSleeping())
+					if (bindBody.isSleeping()) {
 						bindBody.wakeup();
+					}
 					bindBody.addFootBakePeriod(50);
 					bindBody.addDamage(20);
 					bindBody.addStress(20);
 					if (bindBody.getFootBakeLevel() == FootBake.CRITICAL) {
 						bindBody.setCanPullOrPush(true);
 					}
-					if (bindBody.isNotNYD()) {
+					if (bindBody.isNotNyd()) {
 						bindBody.setHappiness(Happiness.VERY_SAD);
 						bindBody.setForceFace(ImageCode.PAIN.ordinal());
 					}

@@ -62,7 +62,7 @@ public class SuiRideEventTest extends EventTestBase {
     public void testParameterizedConstructor_fromIsSet() {
         Yukkuri from = createBody(1, 100, 100);
         SuiRideEvent event = new SuiRideEvent(from, null, null, 100);
-        assertEquals(from.getUniqueID(), event.getFrom());
+        assertEquals(from.getUniqueId(), event.getFrom());
     }
 
     @Test
@@ -190,8 +190,8 @@ public class SuiRideEventTest extends EventTestBase {
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         from.setCurrentEvent(event);
-        from.setPartner(b.getUniqueID());
-        b.setPartner(from.getUniqueID());
+        from.setPartner(b.getUniqueId());
+        b.setPartner(from.getUniqueId());
         assertTrue(event.checkEventResponse(b));
     }
 
@@ -203,7 +203,7 @@ public class SuiRideEventTest extends EventTestBase {
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         from.setCurrentEvent(event);
         // Set from as father of b (PAPA index = 0)
-        b.getParents()[0] = from.getUniqueID();
+        b.getParents()[0] = from.getUniqueId();
         assertTrue(event.checkEventResponse(b));
     }
 
@@ -214,8 +214,8 @@ public class SuiRideEventTest extends EventTestBase {
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         from.setCurrentEvent(event);
-        from.setPartner(b.getUniqueID());
-        b.setPartner(from.getUniqueID());
+        from.setPartner(b.getUniqueId());
+        b.setPartner(from.getUniqueId());
         b.setExciting(true);
         assertFalse(event.checkEventResponse(b));
     }
@@ -227,8 +227,8 @@ public class SuiRideEventTest extends EventTestBase {
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         from.setCurrentEvent(event);
-        from.setPartner(b.getUniqueID());
-        b.setPartner(from.getUniqueID());
+        from.setPartner(b.getUniqueId());
+        b.setPartner(from.getUniqueId());
         b.setScare(true);
         assertFalse(event.checkEventResponse(b));
     }
@@ -240,8 +240,8 @@ public class SuiRideEventTest extends EventTestBase {
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         from.setCurrentEvent(event);
-        from.setPartner(b.getUniqueID());
-        b.setPartner(from.getUniqueID());
+        from.setPartner(b.getUniqueId());
+        b.setPartner(from.getUniqueId());
         b.setPublicRank(PublicRank.UNUN_SLAVE);
         assertFalse(event.checkEventResponse(b));
     }
@@ -554,8 +554,8 @@ public class SuiRideEventTest extends EventTestBase {
             Sui sui = createSui(999);
             SuiRideEvent event = new SuiRideEvent(owner, null, sui, 100);
             owner.setCurrentEvent(event);
-            owner.setPartner(partner.getUniqueID());
-            partner.setPartner(owner.getUniqueID());
+            owner.setPartner(partner.getUniqueId());
+            partner.setPartner(owner.getUniqueId());
             partner.setPublicRank(PublicRank.UNUN_SLAVE);
 
             assertFalse(event.checkEventResponse(partner));

@@ -5,9 +5,8 @@ import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
@@ -21,7 +20,7 @@ import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * プレス機
  */
 public class MachinePress extends WorldEntity {
@@ -30,7 +29,7 @@ public class MachinePress extends WorldEntity {
 	/** 処理対象(ゆっくり、うんうん、吐餡) */
 	public static final int hitCheckObjType = WorldEntity.YUKKURI | WorldEntity.SHIT | WorldEntity.VOMIT;
 	private static final int IMAGE_COUNT = 8; // このクラスの総使用画像数
-	private static int[] animationFrameCounts = { 8 };// アニメごとに何枚使うか
+	private static int[] animationFrameCounts = { 8 }; // アニメごとに何枚使うか
 	private static BufferedImage[] imageLayers = new BufferedImage[IMAGE_COUNT + 1];
 	private static Rectangle4y boundary = new Rectangle4y();
 
@@ -51,10 +50,11 @@ public class MachinePress extends WorldEntity {
 	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
-		if (enabled)
+		if (enabled) {
 			layer[0] = imageLayers[(int) getAge() / 2 % animationFrameCounts[0]];
-		else
+		} else {
 			layer[0] = imageLayers[animationFrameCounts[0]];
+		}
 		return 1;
 	}
 
@@ -82,7 +82,7 @@ public class MachinePress extends WorldEntity {
 	public int objHitProcess(Entity o) {
 		if (o.getObjType() == Type.YUKKURI) {
 			Yukkuri p = (Yukkuri) o;
-			if (!p.isDead() && p.isNotNYD() && GameRandom.nextInt(5) == 0) {
+			if (!p.isDead() && p.isNotNyd() && GameRandom.nextInt(5) == 0) {
 				p.setHappiness(Happiness.VERY_SAD);
 				p.setForceFace(ImageCode.CRYING.ordinal());
 				p.setMessage(GameMessages.getMessage(p, MessagePool.Action.KilledInFactory), 40, true, true);

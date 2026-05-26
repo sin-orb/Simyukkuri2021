@@ -3,7 +3,7 @@ set -eu
 
 cd "$(dirname "$0")/.."
 
-rm -rf bin
+rm -rf bin bin2 build/test-classes
 mkdir -p bin
 
 find src/main/java -name '*.java' | sort > /tmp/simyukkuri_sources.txt

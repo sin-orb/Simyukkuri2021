@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
@@ -33,13 +32,14 @@ public class BodyLogicTest {
         try {
             SimYukkuri.mypane = new MyPane();
         } catch (Throwable t) {
+            // ignore
         }
 
         // Manually initialize Vomit static arrays to avoid NPE in constructor
         setupVomitStatics();
 
         body = new StubBody();
-        body.setUniqueID(1);
+        body.setUniqueId(1);
         body.setAge(100000);
         body.setShitType(YukkuriType.REIMU);
         gameMap.getYukkuriRegistry().put(1, body);

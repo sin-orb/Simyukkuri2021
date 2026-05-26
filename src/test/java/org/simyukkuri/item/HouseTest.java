@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
@@ -33,7 +32,8 @@ class HouseTest extends ItemTestBase {
         item.setObjId(1);
         SimYukkuri.world.getCurrentWorldState().getHouses().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentWorldState().getHouses().containsKey(item.getObjId()));
+        assertTrue(
+                SimYukkuri.world.getCurrentWorldState().getHouses().containsKey(item.getObjId()));
     }
 
     // ---------------------------------------------------------------
@@ -120,6 +120,7 @@ class HouseTest extends ItemTestBase {
         try {
             House.loadImages(House.class.getClassLoader(), null);
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -141,13 +142,15 @@ class HouseTest extends ItemTestBase {
             House h = new House(100, 100, 0);
             org.junit.jupiter.api.Assertions.assertNotNull(h);
         } catch (Exception e) {
+            // ignore
         }
     }
 
     @Nested
     class RegressionScenarios {
         @Test
-        void testScenario_ConstructorWithArgsRegistersHouseTypeBoundaryAndCollision() throws Exception {
+        void testScenario_ConstructorWithArgsRegistersHouseTypeBoundaryAndCollision()
+                throws Exception {
             installHouseStatics();
 
             House house = new House(100, 120, 1);
@@ -155,7 +158,9 @@ class HouseTest extends ItemTestBase {
 
             assertEquals(House.HouseTable.HOUSE_NORA2, house.getHouseType());
             assertEquals(WorldEntity.ItemRank.NORA, house.getItemRank());
-            assertSame(house, SimYukkuri.world.getCurrentWorldState().getHouses().get(house.getObjId()));
+            assertSame(
+                    house,
+                    SimYukkuri.world.getCurrentWorldState().getHouses().get(house.getObjId()));
             assertEquals(60, house.getPivotX());
             assertEquals(20, house.getPivotY());
             assertEquals(120, house.getW());
@@ -182,7 +187,9 @@ class HouseTest extends ItemTestBase {
             Rectangle4y[] boundary = new Rectangle4y[House.HouseTable.values().length];
             for (int i = 0; i < House.HouseTable.values().length; i++) {
                 for (int j = 0; j < 4; j++) {
-                    images[i][j] = new BufferedImage(80 + (i * 40), 30 + (i * 10), BufferedImage.TYPE_INT_ARGB);
+                    images[i][j] =
+                            new BufferedImage(
+                                    80 + (i * 40), 30 + (i * 10), BufferedImage.TYPE_INT_ARGB);
                 }
                 boundary[i] = new Rectangle4y();
                 boundary[i].setWidth(images[i][0].getWidth());

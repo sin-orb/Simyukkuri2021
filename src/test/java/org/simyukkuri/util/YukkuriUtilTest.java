@@ -14,7 +14,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -60,11 +59,11 @@ public class YukkuriUtilTest {
 
     @Test
     public void testGetYukkuriClassName() {
-        assertEquals("Reimu", YukkuriType.fromTypeID(1).getClassName()); // 1 = Reimu.type
-        assertEquals("Marisa", YukkuriType.fromTypeID(0).getClassName()); // 0 = Marisa.type
+        assertEquals("Reimu", YukkuriType.fromTypeId(1).getClassName()); // 1 = Reimu.type
+        assertEquals("Marisa", YukkuriType.fromTypeId(0).getClassName()); // 0 = Marisa.type
 
         // Test invalid ID
-        assertNull(YukkuriType.fromTypeID(-999));
+        assertNull(YukkuriType.fromTypeId(-999));
     }
 
     @Test
@@ -89,7 +88,7 @@ public class YukkuriUtilTest {
 
         // Should return a valid yukkuri type
         assertNotNull(changelingType);
-        assertTrue(changelingType.getTypeID() >= 0);
+        assertTrue(changelingType.getTypeId() >= 0);
     }
 
     @Test
@@ -112,7 +111,7 @@ public class YukkuriUtilTest {
         YukkuriType randomType = YukkuriBirthTypeResolver.getRandomYukkuriType(parent);
 
         // Should return a valid type
-        assertTrue(randomType.getTypeID() >= 0);
+        assertTrue(randomType.getTypeId() >= 0);
     }
 
     @Test
@@ -123,7 +122,7 @@ public class YukkuriUtilTest {
         YukkuriType randomType = YukkuriBirthTypeResolver.getRandomYukkuriType(null);
 
         // Should still return a valid type
-        assertTrue(randomType.getTypeID() >= 0);
+        assertTrue(randomType.getTypeId() >= 0);
     }
 
     @Test
@@ -200,7 +199,7 @@ public class YukkuriUtilTest {
         org.simyukkuri.util.WorldTestHelper.initializeMinimalWorld();
         Reimu body = new Reimu();
         body.setObjId(42);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
         org.simyukkuri.entity.core.living.yukkuri.Yukkuri result = YukkuriLookup.findYukkuriByObjId(42);
         assertNotNull(result);
         assertEquals(42, result.getObjId());
@@ -627,7 +626,7 @@ public class YukkuriUtilTest {
                 Ants.setPivY(new int[] { 4, 5, 6 });
 
                 Reimu body = new Reimu();
-                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
+                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
                 SimYukkuri.RND = new ConstState(1);
 
                 AntInfestationPolicy.judgeNewAnt(body);

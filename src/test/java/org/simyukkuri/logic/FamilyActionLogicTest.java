@@ -46,15 +46,14 @@ class FamilyActionLogicTest {
         child.setY(55);
         child.setAge(0); // BABY
         child.setFirstEatStalk(true);
-        child.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT); // Ensure proper
-                                                                                                    // OKAZARI
+        child.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT); // Ensure proper OKAZARI
         parent.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
 
-        WorldTestHelper.addChild(parent, child.getUniqueID());
-        WorldTestHelper.setParents(child, parent.getUniqueID(), -1);
+        WorldTestHelper.addChild(parent, child.getUniqueId());
+        WorldTestHelper.setParents(child, parent.getUniqueId(), -1);
 
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueId(), parent);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueId(), child);
 
         originalRandom = SimYukkuri.RND;
         // Use ConstState(0) to force nextInt(X) to return 0, ensuring basic
@@ -166,8 +165,8 @@ class FamilyActionLogicTest {
         partner.setAge(parent.getAge() + 100);
         partner.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
 
-        parent.setPartner(partner.getUniqueID());
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueID(), partner);
+        parent.setPartner(partner.getUniqueId());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueId(), partner);
 
         partner.setCurrentEvent(new org.simyukkuri.event.EventPacket(partner, null, null, 1) {
             @Override
@@ -415,7 +414,7 @@ class FamilyActionLogicTest {
         stray.setX(60);
         stray.setY(60);
         stray.setHungry(0); // Starving
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(stray.getUniqueID(), stray);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(stray.getUniqueId(), stray);
 
         // Child is fine
         child.setHungry(child.getHungryLimit());
@@ -453,14 +452,14 @@ class FamilyActionLogicTest {
 
         Yukkuri partner = WorldTestHelper.createBody();
         partner.setAge(parent.getAge() + 10); // partner is OLDER
-        parent.setPartner(partner.getUniqueID());
-        partner.setPartner(parent.getUniqueID());
+        parent.setPartner(partner.getUniqueId());
+        partner.setPartner(parent.getUniqueId());
         partner.setHungry(0); // Not full
         partner.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
 
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueID(), partner);
-        WorldTestHelper.setParents(child, parent.getUniqueID(), partner.getUniqueID());
-        WorldTestHelper.addChild(partner, child.getUniqueID()); // Partner also needs to know about child
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueId(), partner);
+        WorldTestHelper.setParents(child, parent.getUniqueId(), partner.getUniqueId());
+        WorldTestHelper.addChild(partner, child.getUniqueId()); // Partner also needs to know about child
 
         // Child needs food
         child.setHungry(0);
@@ -475,9 +474,7 @@ class FamilyActionLogicTest {
         assertFalse(org.simyukkuri.logic.FamilyActionLogic.checkFamilyAction(partner), "Older partner should delegate");
     }
 
-    // =========================================================
     // Group 1: Other early return flags in checkFamilyAction L40
-    // =========================================================
 
     @Test
     void testCheckFamilyAction_EarlyReturns_OtherFlags() {
@@ -502,9 +499,7 @@ class FamilyActionLogicTest {
         parent.setToTakeout(false);
     }
 
-    // =========================================================
     // Group 2: isNYD check in self state
-    // =========================================================
 
     @Test
     void testCheckFamilyAction_IsNYD_ReturnsFalse() {
@@ -512,9 +507,7 @@ class FamilyActionLogicTest {
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
-    // =========================================================
     // Group 3: isBirth, isEating, nearToBirth checks
-    // =========================================================
 
     @Test
     void testCheckFamilyAction_IsBirth_ReturnsFalse() {
@@ -537,9 +530,7 @@ class FamilyActionLogicTest {
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
-    // =========================================================
     // Group 4: Partner second block checks
-    // =========================================================
 
     @Test
     void testCheckFamilyAction_PartnerLockmove_ReturnsFalse() {
@@ -547,8 +538,8 @@ class FamilyActionLogicTest {
         partner2.setAge(parent.getAge() + 100);
         partner2.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         partner2.setLockmove(true);
-        parent.setPartner(partner2.getUniqueID());
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner2.getUniqueID(), partner2);
+        parent.setPartner(partner2.getUniqueId());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner2.getUniqueId(), partner2);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
@@ -559,8 +550,8 @@ class FamilyActionLogicTest {
         partner2.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         partner2.setHasBaby(true);
         partner2.setPregnantPeriod(partner2.getPregPeriodBase());
-        parent.setPartner(partner2.getUniqueID());
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner2.getUniqueID(), partner2);
+        parent.setPartner(partner2.getUniqueId());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner2.getUniqueId(), partner2);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
@@ -570,8 +561,8 @@ class FamilyActionLogicTest {
         partner2.setAge(parent.getAge() + 100);
         partner2.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         partner2.setShitting(true);
-        parent.setPartner(partner2.getUniqueID());
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner2.getUniqueID(), partner2);
+        parent.setPartner(partner2.getUniqueId());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner2.getUniqueId(), partner2);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
@@ -581,8 +572,8 @@ class FamilyActionLogicTest {
         partner2.setAge(parent.getAge() + 100);
         partner2.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         partner2.setBirth(true);
-        parent.setPartner(partner2.getUniqueID());
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner2.getUniqueID(), partner2);
+        parent.setPartner(partner2.getUniqueId());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner2.getUniqueId(), partner2);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
@@ -592,14 +583,12 @@ class FamilyActionLogicTest {
         partner2.setAge(parent.getAge() + 100);
         partner2.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         partner2.setNeedled(true);
-        parent.setPartner(partner2.getUniqueID());
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner2.getUniqueID(), partner2);
+        parent.setPartner(partner2.getUniqueId());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner2.getUniqueId(), partner2);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
-    // =========================================================
     // Group 5: Parent isFull → bWantToEat=false
-    // =========================================================
 
     @Test
     void testCheckFamilyAction_ParentFull_ChildFull_ReturnsFalse() {
@@ -622,9 +611,7 @@ class FamilyActionLogicTest {
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
-    // =========================================================
     // Group 6: Child isNeedled → bWantToShit=bWantToEat=false
-    // =========================================================
 
     @Test
     void testCheckFamilyAction_ChildNeedled_ReturnsFalse() {
@@ -642,9 +629,7 @@ class FamilyActionLogicTest {
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
-    // =========================================================
     // Group 7: Child isShitting → bWantToShit=false
-    // =========================================================
 
     @Test
     void testCheckFamilyAction_BabyChildShitting_WantToShitFalse() {
@@ -665,9 +650,7 @@ class FamilyActionLogicTest {
         child.setShitting(false);
     }
 
-    // =========================================================
     // Group 8: Child shit >= 100% → bWantToShit=false
-    // =========================================================
 
     @Test
     void testCheckFamilyAction_BabyChildShitFull_WantToShitFalse() {
@@ -683,10 +666,8 @@ class FamilyActionLogicTest {
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
-    // =========================================================
     // Group 9: Child isHungry + isBaby → wantToShit=false; shitPercent>50 →
     // wantToEat=false
-    // =========================================================
 
     @Test
     void testCheckFamilyAction_BabyChildHungryAndShit60_BothFalse() {
@@ -705,9 +686,7 @@ class FamilyActionLogicTest {
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
-    // =========================================================
     // Group 10: Child isEating → bWantToEat=false
-    // =========================================================
 
     @Test
     void testCheckFamilyAction_ChildEating_WantToEatFalse() {
@@ -727,9 +706,7 @@ class FamilyActionLogicTest {
         child.setEating(false);
     }
 
-    // =========================================================
     // Group 11: Child isLockmove in child loop → continue (not break)
-    // =========================================================
 
     @Test
     void testCheckFamilyAction_ChildLockmove_Continue() {
@@ -747,9 +724,7 @@ class FamilyActionLogicTest {
         child.setLockmove(false);
     }
 
-    // =========================================================
     // Group 12: Non-baby child → bIsBaby=false → bWantToShit=false
-    // =========================================================
 
     @Test
     void testCheckFamilyAction_NoBabyChild_WantToShitFalse() {
@@ -790,9 +765,7 @@ class FamilyActionLogicTest {
         assertEquals(0, SimYukkuri.world.getCurrentWorldState().getEvents().size());
     }
 
-    // =========================================================
     // Group 13: goToShit direct tests
-    // =========================================================
 
     @Test
     void testGoToShit_CheckWaitFails_ReturnsFalse() {
@@ -812,9 +785,7 @@ class FamilyActionLogicTest {
         });
     }
 
-    // =========================================================
     // Group 14: goToEat direct tests
-    // =========================================================
 
     @Test
     void testGoToEat_NoFood_ReturnsFalse() {
@@ -846,9 +817,7 @@ class FamilyActionLogicTest {
         });
     }
 
-    // =========================================================
     // Group 15: checkRaperFamily
-    // =========================================================
 
     @Test
     void testCheckRaperFamily_TargetExists_ReturnsFalse() {
@@ -864,9 +833,7 @@ class FamilyActionLogicTest {
         assertTrue(FamilyActionLogic.checkRaperFamily());
     }
 
-    // =========================================================
     // Group 16: rideOnParent edge cases
-    // =========================================================
 
     @Test
     void testRideOnParent_EmptyList_ReturnsFalse() {
@@ -949,9 +916,7 @@ class FamilyActionLogicTest {
         assertFalse(FamilyActionLogic.rideOnParent(parent, list));
     }
 
-    // =========================================================
     // Group 17: proudChild direct tests
-    // =========================================================
 
     @Test
     void testProudChild_CheckWaitFails_ReturnsFalse() {
@@ -971,9 +936,7 @@ class FamilyActionLogicTest {
         });
     }
 
-    // =========================================================
     // Group 18: searchFood additional cases
-    // =========================================================
 
     @Test
     void testSearchFood_SWEETS1_Found() {
@@ -1036,8 +999,8 @@ class FamilyActionLogicTest {
         idiotBody.setY(50);
         idiotBody.setAge(idiotBody.getChildLimitBase() + 1);
         idiotBody.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
-        WorldTestHelper.addChild(idiotBody, child.getUniqueID());
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(idiotBody.getUniqueID(), idiotBody);
+        WorldTestHelper.addChild(idiotBody, child.getUniqueId());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(idiotBody.getUniqueId(), idiotBody);
         assertFalse(FamilyActionLogic.checkFamilyAction(idiotBody));
     }
 
@@ -1049,8 +1012,8 @@ class FamilyActionLogicTest {
         partner.setAge(parent.getAge() + 100);
         partner.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         partner.setCriticalDamageType(org.simyukkuri.enums.CriticalDamageType.INJURED);
-        parent.setPartner(partner.getUniqueID());
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueID(), partner);
+        parent.setPartner(partner.getUniqueId());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueId(), partner);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
@@ -1059,8 +1022,8 @@ class FamilyActionLogicTest {
         Yukkuri partner = WorldTestHelper.createBody();
         partner.setAge(parent.getAge() + 100);
         partner.takeOkazari(true);
-        parent.setPartner(partner.getUniqueID());
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueID(), partner);
+        parent.setPartner(partner.getUniqueId());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueId(), partner);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
@@ -1143,8 +1106,7 @@ class FamilyActionLogicTest {
     @Test
     void testCheckFamilyAction_HungryChildNoFood_GoesToEatFails() {
         setReady(parent);
-        child.setHungry(0); // hungry -> hungryPercent<80 -> wantToEat stays true; isHungry=true ->
-                            // wantToShit=false
+        child.setHungry(0); // hungry -> hungryPercent<80 -> wantToEat stays true; isHungry=true -> wantToShit=false
         child.setShit(0);
         SimYukkuri.RND = new ConstState(0) {
             @Override
@@ -1162,8 +1124,7 @@ class FamilyActionLogicTest {
     @Test
     void testCheckFamilyAction_WantToShitGoToShitCheckWaitFails() {
         // Do NOT call setReady(parent) -> checkWait fails
-        child.setHungry((int) (child.getHungryLimit() * 0.9)); // hungryPercent=90>=80 -> wantToEat=false;
-                                                               // isHungry=false
+        child.setHungry((int) (child.getHungryLimit() * 0.9)); // hungryPercent=90>=80 -> wantToEat=false; isHungry=false
         child.setShit((int) (child.getShitLimit() * 0.5)); // 50% -> bWantToShit stays true for baby
         parent.setLastActionTime(); // goToShit checkWait(2000) fails
         SimYukkuri.RND = new ConstState(0) {
@@ -1205,8 +1166,7 @@ class FamilyActionLogicTest {
     @Test
     void testCheckFamilyAction_RideOnParentReturnsTrueViaBed() {
         setReady(parent);
-        child.setHungry((int) (child.getHungryLimit() * 0.9)); // hungryPercent=90>=80 -> wantToEat=false;
-                                                               // isHungry=false
+        child.setHungry((int) (child.getHungryLimit() * 0.9)); // hungryPercent=90>=80 -> wantToEat=false; isHungry=false
         child.setShit(0); // bWantToShit=false
         child.setWakeUpTime(Long.MIN_VALUE / 2); // isSleepy=true even at age=0
 
@@ -1406,7 +1366,7 @@ class FamilyActionLogicTest {
         loner.setAge(loner.getChildLimitBase() + 1); // adult
         loner.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         // addChild を呼ばない → 子リスト空
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(loner.getUniqueID(), loner);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(loner.getUniqueId(), loner);
         assertFalse(FamilyActionLogic.checkFamilyAction(loner));
     }
 
@@ -1518,7 +1478,7 @@ class FamilyActionLogicTest {
             Yukkuri raper = WorldTestHelper.createBody();
             raper.setRaper(true);
             raper.setExciting(true);
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(raper.getUniqueID(), raper);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(raper.getUniqueId(), raper);
 
             parent.setUnBirth(true);
             child.setUnBirth(true);

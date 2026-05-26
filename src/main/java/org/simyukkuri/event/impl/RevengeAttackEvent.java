@@ -16,7 +16,7 @@ import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameView;
 
-/***************************************************
+/**
  * ゆっくりが攻撃されたときの反撃イベント
  * protected Yukkuri from; // イベントを発した個体
  * protected Yukkuri to; // 攻撃対象
@@ -53,14 +53,14 @@ public class RevengeAttackEvent extends EventPacket {
 	/** イベントの開始処理を実行する。 */
 	@Override
 	public void start(Yukkuri body) {
-		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		body.setToFood(false);
 		body.setToBed(false);
 		body.setToShit(false);
 		body.setToSteal(false);
 		body.setToSukkiri(false);
 		body.setToTakeout(true);
-		body.setWakeUpTime(body.getAge());// 眠気が覚める
+		body.setWakeUpTime(body.getAge()); // 眠気が覚める
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		if (targetBody != null) {
 			int colX = YukkuriLogic.calcCollisionX(body, targetBody);
 			body.moveToEvent(this, targetBody.getX() + colX, targetBody.getY());
@@ -74,8 +74,9 @@ public class RevengeAttackEvent extends EventPacket {
 	public UpdateState update(Yukkuri body) {
 		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		// 相手が消えてしまったらイベント中断
-		if (targetBody == null || targetBody.isRemoved() || targetBody.isTaken())
+		if (targetBody == null || targetBody.isRemoved() || targetBody.isTaken()) {
 			return UpdateState.ABORT;
+		}
 		// 相手に追いつけないケースがあるため、一定距離まで近づいたら相手を呼び止める
 		if (Translate.distance(body.getX(), body.getY(), targetBody.getX(), targetBody.getY()) < 2500) {
 			targetBody.stay();

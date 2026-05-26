@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
-
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.ConstState;
@@ -27,7 +26,11 @@ class BreedingPoolTest extends ItemTestBase {
         item.setObjId(1);
         SimYukkuri.world.getCurrentWorldState().getBreedingPools().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentWorldState().getBreedingPools().containsKey(item.getObjId()));
+        assertTrue(
+                SimYukkuri.world
+                        .getCurrentWorldState()
+                        .getBreedingPools()
+                        .containsKey(item.getObjId()));
     }
 
     @Test
@@ -138,7 +141,11 @@ class BreedingPoolTest extends ItemTestBase {
         item.setObjId(50);
         SimYukkuri.world.getCurrentWorldState().getBreedingPools().put(item.getObjId(), item);
         item.removeFromWorld();
-        assertFalse(SimYukkuri.world.getCurrentWorldState().getBreedingPools().containsKey(item.getObjId()));
+        assertFalse(
+                SimYukkuri.world
+                        .getCurrentWorldState()
+                        .getBreedingPools()
+                        .containsKey(item.getObjId()));
     }
 
     @Test
@@ -183,7 +190,7 @@ class BreedingPoolTest extends ItemTestBase {
         Yukkuri body = WorldTestHelper.createBody();
         body.setDead(true);
         body.setCrushed(true);
-        int expectedType = body.getType().getTypeID();
+        int expectedType = body.getType().getTypeId();
         item.objHitProcess(body);
         assertEquals(expectedType, item.getLiquidYukkuriType());
         assertTrue(body.isRemoved());
@@ -222,7 +229,7 @@ class BreedingPoolTest extends ItemTestBase {
         BreedingPool item = new BreedingPool();
         Yukkuri body = WorldTestHelper.createBody();
         body.setHasBaby(true); // hasBabyOrStalk() returns true
-        // isNYD() = false by default → setMessage or setPikoMessage path
+        // isNyd() = false by default → setMessage or setPikoMessage path
         assertDoesNotThrow(() -> item.cry(body));
     }
 
@@ -309,6 +316,7 @@ class BreedingPoolTest extends ItemTestBase {
         try {
             BreedingPool.loadImages(BreedingPool.class.getClassLoader(), null);
         } catch (Exception e) {
+            // ignore
         }
     }
 

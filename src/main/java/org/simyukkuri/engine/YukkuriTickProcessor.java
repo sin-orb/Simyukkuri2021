@@ -160,7 +160,7 @@ public final class YukkuriTickProcessor {
 			Stalk s = null;
 			for (Dna babyTypes : yukkuri.getStalkBabyTypes()) {
 				if (j % 5 == 0) {
-					s = (Stalk) GadgetAction.putObjEX(Stalk.class, yukkuri.getX(), yukkuri.getY(),
+					s = (Stalk) GadgetAction.putObjEx(Stalk.class, yukkuri.getX(), yukkuri.getY(),
 							yukkuri.getDirection().ordinal());
 					yukkuri.getStalks().add(s);
 					s.setPlantYukkuri(yukkuri);
@@ -269,7 +269,7 @@ public final class YukkuriTickProcessor {
 						fy = Math.max(0, fy);
 						fy = Math.min(fy, Translate.getWorldHeight());
 						org.simyukkuri.entity.core.world.item.Food food =
-								(org.simyukkuri.entity.core.world.item.Food) GadgetAction.putObjEX(
+								(org.simyukkuri.entity.core.world.item.Food) GadgetAction.putObjEx(
 										org.simyukkuri.entity.core.world.item.Food.class, fx, fy,
 										org.simyukkuri.entity.core.world.item.Food.FoodType.STALK.ordinal());
 						curMap.getFoods().put(food.objId, food);

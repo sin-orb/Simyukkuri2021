@@ -1,10 +1,10 @@
 package org.simyukkuri.entity.core.living.yukkuri;
 
+import org.simyukkuri.entity.core.world.item.Sui;
 import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.FootBake;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
-import org.simyukkuri.entity.core.world.item.Sui;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
@@ -55,10 +55,10 @@ public final class YukkuriPlayerRelationDelegate {
 		}
 
 		// 動けない場合,パニック中,すぃーに乗っている
-		if ((body.isLockmove()) ||
-				(body.getPanicType() != null) ||
-				(body.isSleeping()) ||
-				(body.takeMappedObj(body.getParentLinkId()) instanceof Sui)) {
+		if ((body.isLockmove())
+				|| (body.getPanicType() != null)
+				|| (body.isSleeping())
+				|| (body.takeMappedObj(body.getParentLinkId()) instanceof Sui)) {
 			return false;
 		}
 
@@ -69,7 +69,7 @@ public final class YukkuriPlayerRelationDelegate {
 		// 痛み：針が刺さっている、足カット、痛みを感じている、瀕死
 		// 拒絶：レイパーされている、うんうん中、食事中、出産中、攻撃している、攻撃されている、
 		// -----------------------------------------------------------
-		if (body.isNYD()) {
+		if (body.isNyd()) {
 			return false;
 		}
 
@@ -107,11 +107,11 @@ public final class YukkuriPlayerRelationDelegate {
 		}
 
 		// 切断されている場合
-		if ((body.getCriticalDamege() == CriticalDamageType.CUT) ||
-				(body.getFootBakeLevel() == FootBake.CRITICAL) ||
-				body.isDamaged() ||
-				body.isPealed() ||
-				body.isPacked()) {
+		if ((body.getCriticalDamege() == CriticalDamageType.CUT)
+				|| (body.getFootBakeLevel() == FootBake.CRITICAL)
+				|| body.isDamaged()
+				|| body.isPealed()
+				|| body.isPacked()) {
 			body.stayPurupuru(20);
 			body.setHappiness(Happiness.VERY_SAD);
 			body.addStress(100);

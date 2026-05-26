@@ -38,7 +38,7 @@ public class BodyDeadActionRuleTest {
 		Yukkuri parent = WorldTestHelper.createBody();
 		me.setAgeState(AgeState.ADULT);
 		parent.setDead(true);
-		WorldTestHelper.setParents(me, -1, parent.getUniqueID());
+		WorldTestHelper.setParents(me, -1, parent.getUniqueId());
 
 		assertTrue(YukkuriDeadActionRule.handleDeadYukkuriInteraction(parent, me));
 		assertEquals(Happiness.VERY_SAD, me.getHappiness());

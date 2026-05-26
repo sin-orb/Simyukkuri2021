@@ -1,6 +1,6 @@
 package org.simyukkuri.system;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -9,11 +9,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.HybridYukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Kimeemaru;
@@ -21,472 +23,230 @@ import org.simyukkuri.entity.core.living.yukkuri.impl.TarinaiReimu;
 import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.PredatorType;
+import org.simyukkuri.util.GameWorld;
 import org.simyukkuri.util.WorldTestHelper;
 
 class LoggerYukkuriTest {
 
-    @BeforeEach
-    void setUp() {
-        WorldTestHelper.resetWorld();
-        WorldTestHelper.initializeMinimalWorld();
-        WorldTestHelper.initializeStandardTranslate500();
-        // logPointerをリセットするためclearLog
-        LoggerYukkuri.clearLog();
-    }
-
-    @AfterEach
-    void tearDown() {
-        WorldTestHelper.resetWorld();
-    }
-
-    // --- Constants ---
-
-    @Test
-    void testTickConstant() {
-        assertEquals(1, LoggerYukkuri.TICK);
-    }
-
-    @Test
-    void testNumOfNormalConstant() {
-        assertEquals(0, LoggerYukkuri.NUM_OF_NORMAL);
-    }
-
-    @Test
-    void testNumOfLogDataTypeConstant() {
-        assertEquals(11, LoggerYukkuri.NUM_OF_LOGDATA_TYPE);
-    }
-
-    @Test
-    void testNumOfPredatorConstant() {
-        assertEquals(1, LoggerYukkuri.NUM_OF_PREDATOR);
-    }
-
-    @Test
-    void testNumOfRareConstant() {
-        assertEquals(2, LoggerYukkuri.NUM_OF_RARE);
-    }
-
-    @Test
-    void testNumOfTarinaiConstant() {
-        assertEquals(3, LoggerYukkuri.NUM_OF_TARINAI);
-    }
-
-    @Test
-    void testNumOfHybridConstant() {
-        assertEquals(4, LoggerYukkuri.NUM_OF_HYBRID);
-    }
-
-    @Test
-    void testNumOfBabyConstant() {
-        assertEquals(5, LoggerYukkuri.NUM_OF_BABY);
-    }
-
-    @Test
-    void testNumOfChildConstant() {
-        assertEquals(6, LoggerYukkuri.NUM_OF_CHILD);
-    }
-
-    @Test
-    void testNumOfAdultConstant() {
-        assertEquals(7, LoggerYukkuri.NUM_OF_ADULT);
-    }
-
-    @Test
-    void testNumOfSickConstant() {
-        assertEquals(8, LoggerYukkuri.NUM_OF_SICK);
-    }
-
-    @Test
-    void testNumOfShitConstant() {
-        assertEquals(9, LoggerYukkuri.NUM_OF_SHIT);
-    }
-
-    @Test
-    void testNumOfCashConstant() {
-        assertEquals(10, LoggerYukkuri.NUM_OF_CASH);
-    }
-
-    // --- setLogPage ---
-
-    @Test
-    void testSetLogPageWithinRange() {
-        LoggerYukkuri.setLogPage(2);
-        // No exception; we cannot directly read logPage, but it should not crash
-        assertDoesNotThrow(() -> LoggerYukkuri.setLogPage(0));
-    }
-
-    @Test
-    void testSetLogPageNegativeWrapsToThree() {
-        LoggerYukkuri.setLogPage(-1);
-        // logPage should be set to 3
-        // We verify by setting again and checking no crash
-        assertDoesNotThrow(() -> LoggerYukkuri.setLogPage(-1));
-    }
-
-    @Test
-    void testSetLogPageOverflowWrapsToZero() {
-        LoggerYukkuri.setLogPage(4);
-        // logPage should be set to 0
-        assertDoesNotThrow(() -> LoggerYukkuri.setLogPage(4));
-    }
-
-    @Test
-    void testSetLogPageExactBoundaryThree() {
-        LoggerYukkuri.setLogPage(3);
-        // 3 is within range [0,3], should not wrap
-        assertDoesNotThrow(() -> LoggerYukkuri.setLogPage(3));
-    }
-
-    // --- addLogPage ---
-
-    @Test
-    void testAddLogPagePositiveIncrement() {
-        LoggerYukkuri.setLogPage(0);
-        LoggerYukkuri.addLogPage(1);
-        // logPage should now be 1
-        assertDoesNotThrow(() -> LoggerYukkuri.addLogPage(0));
-    }
-
-    @Test
-    void testAddLogPageNegativeWraps() {
-        LoggerYukkuri.setLogPage(0);
-        LoggerYukkuri.addLogPage(-1);
-        // logPage goes to -1, wraps to 3
-        assertDoesNotThrow(() -> LoggerYukkuri.addLogPage(0));
-    }
-
-    @Test
-    void testAddLogPageOverflowWrapsToZero() {
-        LoggerYukkuri.setLogPage(3);
-        LoggerYukkuri.addLogPage(1);
-        // logPage goes to 4, wraps to 0
-        assertDoesNotThrow(() -> LoggerYukkuri.addLogPage(0));
-    }
-
-    // --- isShow / setShow ---
-
-    @Test
-    void testSetShowTrue() {
-        LoggerYukkuri.setShow(true);
-        assertTrue(LoggerYukkuri.isShow());
-    }
-
-    @Test
-    void testSetShowFalse() {
-        LoggerYukkuri.setShow(false);
-        assertFalse(LoggerYukkuri.isShow());
-    }
-
-    @Test
-    void testShowRoundTrip() {
-        LoggerYukkuri.setShow(true);
-        assertTrue(LoggerYukkuri.isShow());
-        LoggerYukkuri.setShow(false);
-        assertFalse(LoggerYukkuri.isShow());
-    }
-
-    // --- getClearLogTime / setClearLogTime ---
-
-    @Test
-    void testSetClearLogTime() {
-        LoggerYukkuri.setClearLogTime(42);
-        assertEquals(42, LoggerYukkuri.getClearLogTime());
-    }
-
-    @Test
-    void testSetClearLogTimeZero() {
-        LoggerYukkuri.setClearLogTime(0);
-        assertEquals(0, LoggerYukkuri.getClearLogTime());
-    }
-
-    @Test
-    void testClearLogTimeRoundTrip() {
-        LoggerYukkuri.setClearLogTime(999);
-        assertEquals(999, LoggerYukkuri.getClearLogTime());
-        LoggerYukkuri.setClearLogTime(0);
-        assertEquals(0, LoggerYukkuri.getClearLogTime());
-    }
-
-    // --- clearLog ---
-
-    @Test
-    void testClearLogDoesNotCrash() {
-        assertDoesNotThrow(() -> LoggerYukkuri.clearLog());
-    }
-
-    // --- run ---
-
-    @Test
-    void testRunDoesNotCrash() {
-        assertDoesNotThrow(() -> LoggerYukkuri.run());
-    }
-
-    // --- getLog ---
-
-    @Test
-    void testGetLogNegativeIndexReturnsNull() {
-        assertNull(LoggerYukkuri.getLog(-1));
-    }
-
-    @Test
-    void testGetLogOverflowIndexReturnsNull() {
-        assertNull(LoggerYukkuri.getLog(120));
-    }
-
-    @Test
-    void testGetLogLargeIndexReturnsNull() {
-        assertNull(LoggerYukkuri.getLog(999));
-    }
-
-    // --- getNumOfObjSumLog ---
-
-    @Test
-    void testGetNumOfObjSumLogNonNull() {
-        assertNotNull(LoggerYukkuri.getNumOfObjSumLog());
-    }
-
-    @Test
-    void testGetNumOfObjSumLogLength() {
-        assertEquals(LoggerYukkuri.NUM_OF_LOGDATA_TYPE, LoggerYukkuri.getNumOfObjSumLog().length);
-    }
-
-    // --- getNumOfObjNowLog ---
-
-    @Test
-    void testGetNumOfObjNowLogNonNull() {
-        assertNotNull(LoggerYukkuri.getNumOfObjNowLog());
-    }
-
-    @Test
-    void testGetNumOfObjNowLogLength() {
-        assertEquals(LoggerYukkuri.NUM_OF_LOGDATA_TYPE, LoggerYukkuri.getNumOfObjNowLog().length);
-    }
-
-    // --- outputLogFile ---
-
-    @Test
-    void testOutputLogFileDoesNotCrash() {
-        assertDoesNotThrow(() -> LoggerYukkuri.outputLogFile("test log message"));
-    }
-
-    // --- run with Yukkuri ---
-
-    @Test
-    void testRunWithNormalBody() {
-        Yukkuri b = WorldTestHelper.createBody();
-        b.setX(100);
-        b.setY(100);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
-        assertDoesNotThrow(() -> LoggerYukkuri.run());
-    }
-
-    @Test
-    void testRunWithBabyBody() {
-        Yukkuri b = WorldTestHelper.createBody();
-        b.setX(100);
-        b.setY(100);
-        b.setAgeState(AgeState.BABY);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
-        assertDoesNotThrow(() -> LoggerYukkuri.run());
-    }
-
-    @Test
-    void testRunWithChildBody() {
-        Yukkuri b = WorldTestHelper.createBody();
-        b.setX(100);
-        b.setY(100);
-        b.setAgeState(AgeState.CHILD);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
-        assertDoesNotThrow(() -> LoggerYukkuri.run());
-    }
-
-    @Test
-    void testRunWithPredatorBody() {
-        Yukkuri b = WorldTestHelper.createBody();
-        b.setX(100);
-        b.setY(100);
-        b.setPredatorType(PredatorType.BITE);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
-        assertDoesNotThrow(() -> LoggerYukkuri.run());
-    }
-
-    @Test
-    void testRunWithDeadBody() {
-        Yukkuri b = WorldTestHelper.createBody();
-        b.setX(100);
-        b.setY(100);
-        b.setDead(true);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
-        assertDoesNotThrow(() -> LoggerYukkuri.run());
-    }
-
-    @Test
-    void testRunWithSickBody() {
-        Yukkuri b = WorldTestHelper.createBody();
-        b.setX(100);
-        b.setY(100);
-        // sickはHPが低い状態で発動するのでHP=1に設定
-        // sickPeriod > incubationPeriodBaseにしてisSick()=trueにする
-        b.setSickPeriod(b.getIncubationPeriodBase() + 1);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
-        assertDoesNotThrow(() -> LoggerYukkuri.run());
-    }
-
-    @Test
-    void testRunWithMultipleBodies() {
-        for (int i = 0; i < 5; i++) {
-            Yukkuri b = WorldTestHelper.createBody();
-            b.setX(50 + i * 10);
-            b.setY(50);
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
-        }
-        assertDoesNotThrow(() -> LoggerYukkuri.run());
-    }
-
-    @Test
-    void testGetLogAfterRunReturnsData() {
-        // run()を120回以上呼んでoverwrappedにする
-        for (int i = 0; i < 125; i++) {
-            LoggerYukkuri.run();
-        }
-        // overwrapped後はgetLog(0)がnullではない
-        assertNotNull(LoggerYukkuri.getLog(0));
-    }
-
-    @Test
-    void testGetLogBeforeOverwrapped() {
-        // 1回だけrun()→logPointer=1, getLog(0)は利用可能か確認
-        LoggerYukkuri.run();
-        // overwrappedでないのでgetLog(119)はまだnull
-        // logPointer=1なのでlogRecord >= logPointerは使えないことを確認
-        assertDoesNotThrow(() -> LoggerYukkuri.getLog(0));
-    }
-
-    @Test
-    void testClearLogTimeTriggered() {
-        // clearLogTimeを1に設定してrun()を呼んだ後に確認
-        LoggerYukkuri.setClearLogTime(1);
-        assertDoesNotThrow(() -> LoggerYukkuri.run());
-    }
-
-    // --- run() additional body type branches ---
-
-    @Test
-    void testRunWithHybridBody() {
-        HybridYukkuri hybrid = new HybridYukkuri();
-        hybrid.setX(100);
-        hybrid.setY(100);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(hybrid.getUniqueID(), hybrid);
-        assertDoesNotThrow(() -> LoggerYukkuri.run());
-    }
-
-    @Test
-    void testRunWithTarinaiBody() {
-        TarinaiReimu tarinai = new TarinaiReimu();
-        tarinai.setX(100);
-        tarinai.setY(100);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(tarinai.getUniqueID(), tarinai);
-        assertDoesNotThrow(() -> LoggerYukkuri.run());
-    }
-
-    @Test
-    void testRunWithRareBody_Kimeemaru() {
-        Kimeemaru rare = new Kimeemaru();
-        rare.setX(100);
-        rare.setY(100);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(rare.getUniqueID(), rare);
-        assertDoesNotThrow(() -> LoggerYukkuri.run());
-    }
-
-    @Test
-    void testRunWithShitInMap() {
-        Shit shit = new Shit();
-        SimYukkuri.world.getCurrentWorldState().getShit().put(shit.getObjId(), shit);
-        assertDoesNotThrow(() -> LoggerYukkuri.run());
-    }
-
-    // --- displayLog (ResourceUtil returns null → NPE in drawString is expected)
-    // ---
-
-    private Graphics2D createG2() {
-        WorldTestHelper.initializeStandardTranslate500();
-        BufferedImage img = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
-        return img.createGraphics();
-    }
-
-    @Test
-    void testDisplayLog_page0_executesCode() {
-        LoggerYukkuri.setLogPage(0);
-        LoggerYukkuri.run();
-        Graphics2D g2 = createG2();
-        try {
-            LoggerYukkuri.displayLog(g2);
-        } catch (NullPointerException e) {
-            // expected: ResourceUtil.read() returns null → drawString(null,...) throws NPE
-        } finally {
-            g2.dispose();
-        }
-    }
-
-    @Test
-    void testDisplayLog_page1_executesCode() {
-        LoggerYukkuri.setLogPage(1);
-        Graphics2D g2 = createG2();
-        try {
-            LoggerYukkuri.displayLog(g2);
-        } catch (NullPointerException e) {
-            // expected
-        } finally {
-            g2.dispose();
-        }
-    }
-
-    @Test
-    void testDisplayLog_page2_executesCode() {
-        LoggerYukkuri.setLogPage(2);
-        Graphics2D g2 = createG2();
-        try {
-            LoggerYukkuri.displayLog(g2);
-        } catch (NullPointerException e) {
-            // expected
-        } finally {
-            g2.dispose();
-        }
-    }
-
-    @Test
-    void testDisplayLog_page3_executesCode() {
-        LoggerYukkuri.setLogPage(3);
-        Graphics2D g2 = createG2();
-        try {
-            LoggerYukkuri.displayLog(g2);
-        } catch (NullPointerException e) {
-            // expected
-        } finally {
-            g2.dispose();
-        }
-    }
-
-    // --- displayLog with run data populated ---
-
-    @Test
-    void testDisplayLog_withRunData_executesCode() {
-        for (int i = 0; i < 125; i++) {
-            LoggerYukkuri.run();
-        }
-        LoggerYukkuri.setLogPage(0);
-        Graphics2D g2 = createG2();
-        try {
-            LoggerYukkuri.displayLog(g2);
-        } catch (NullPointerException e) {
-            // expected
-        } finally {
-            g2.dispose();
-        }
-    }
-
-    @Test
-    void testConstructor_doesNotThrow() {
-        assertDoesNotThrow(() -> new LoggerYukkuri());
-    }
+	@BeforeEach
+	void setUp() throws ReflectiveOperationException {
+		WorldTestHelper.resetWorld();
+		WorldTestHelper.initializeMinimalWorld();
+		WorldTestHelper.initializeStandardTranslate500();
+		resetLoggerState();
+	}
+
+	@AfterEach
+	void tearDown() {
+		removeHandlers();
+		WorldTestHelper.resetWorld();
+	}
+
+	@Test
+	void testSetLogPageWrapsWithinValidRange() throws ReflectiveOperationException {
+		LoggerYukkuri.setLogPage(2);
+		assertEquals(2, getIntField("logPage"));
+
+		LoggerYukkuri.setLogPage(-1);
+		assertEquals(3, getIntField("logPage"));
+
+		LoggerYukkuri.setLogPage(4);
+		assertEquals(0, getIntField("logPage"));
+	}
+
+	@Test
+	void testAddLogPageWrapsRelativeToCurrentPage() throws ReflectiveOperationException {
+		LoggerYukkuri.setLogPage(0);
+		LoggerYukkuri.addLogPage(-1);
+		assertEquals(3, getIntField("logPage"));
+
+		LoggerYukkuri.addLogPage(1);
+		assertEquals(0, getIntField("logPage"));
+
+		LoggerYukkuri.addLogPage(4);
+		assertEquals(0, getIntField("logPage"));
+	}
+
+	@Test
+	void testSetShowStoresFlag() {
+		LoggerYukkuri.setShow(true);
+		assertTrue(LoggerYukkuri.isShow());
+
+		LoggerYukkuri.setShow(false);
+		assertFalse(LoggerYukkuri.isShow());
+	}
+
+	@Test
+	void testSetClearLogTimeStoresValue() {
+		LoggerYukkuri.setClearLogTime(42);
+		assertEquals(42, LoggerYukkuri.getClearLogTime());
+
+		LoggerYukkuri.setClearLogTime(0);
+		assertEquals(0, LoggerYukkuri.getClearLogTime());
+	}
+
+	@Test
+	void testOutputLogFileInstallsSingleFileHandler() {
+		removeHandlers();
+
+		LoggerYukkuri.outputLogFile("first");
+		assertEquals(1, LoggerYukkuri.logger.getHandlers().length);
+		assertTrue(LoggerYukkuri.logger.getHandlers()[0] instanceof FileHandler);
+
+		LoggerYukkuri.outputLogFile("second");
+		assertEquals(1, LoggerYukkuri.logger.getHandlers().length);
+	}
+
+	@Test
+	void testRunCountsCategoriesAgesSickShitAndCash() {
+		GameWorld.get().getPlayer().setCash(4321);
+
+		Yukkuri normalBaby = WorldTestHelper.createBody();
+		normalBaby.setAgeState(AgeState.BABY);
+		normalBaby.setX(100);
+		normalBaby.setY(100);
+		GameWorld.get().getCurrentWorldState().getYukkuriRegistry().put(normalBaby.getUniqueId(), normalBaby);
+
+		Yukkuri predatorChild = WorldTestHelper.createBody();
+		predatorChild.setAgeState(AgeState.CHILD);
+		predatorChild.setPredatorType(PredatorType.BITE);
+		predatorChild.setX(110);
+		predatorChild.setY(100);
+		GameWorld.get().getCurrentWorldState().getYukkuriRegistry().put(predatorChild.getUniqueId(), predatorChild);
+
+		HybridYukkuri hybridAdult = new HybridYukkuri();
+		hybridAdult.setAgeState(AgeState.ADULT);
+		hybridAdult.setX(120);
+		hybridAdult.setY(100);
+		GameWorld.get().getCurrentWorldState().getYukkuriRegistry().put(hybridAdult.getUniqueId(), hybridAdult);
+
+		TarinaiReimu tarinaiAdult = new TarinaiReimu();
+		tarinaiAdult.setAgeState(AgeState.ADULT);
+		tarinaiAdult.setX(130);
+		tarinaiAdult.setY(100);
+		GameWorld.get().getCurrentWorldState().getYukkuriRegistry().put(tarinaiAdult.getUniqueId(), tarinaiAdult);
+
+		Kimeemaru rareAdult = new Kimeemaru();
+		rareAdult.setAgeState(AgeState.ADULT);
+		rareAdult.setSickPeriod(rareAdult.getIncubationPeriodBase() + 1);
+		rareAdult.setX(140);
+		rareAdult.setY(100);
+		GameWorld.get().getCurrentWorldState().getYukkuriRegistry().put(rareAdult.getUniqueId(), rareAdult);
+
+		Shit shit = new Shit();
+		GameWorld.get().getCurrentWorldState().getShit().put(shit.getObjId(), shit);
+
+		LoggerYukkuri.run();
+
+		long[] current = LoggerYukkuri.getNumOfObjNowLog();
+		long[] sum = LoggerYukkuri.getNumOfObjSumLog();
+
+		long[] expected = new long[LoggerYukkuri.NUM_OF_LOGDATA_TYPE];
+		expected[LoggerYukkuri.NUM_OF_NORMAL] = 1;
+		expected[LoggerYukkuri.NUM_OF_PREDATOR] = 1;
+		expected[LoggerYukkuri.NUM_OF_RARE] = 1;
+		expected[LoggerYukkuri.NUM_OF_TARINAI] = 1;
+		expected[LoggerYukkuri.NUM_OF_HYBRID] = 1;
+		expected[LoggerYukkuri.NUM_OF_BABY] = 1;
+		expected[LoggerYukkuri.NUM_OF_CHILD] = 1;
+		expected[LoggerYukkuri.NUM_OF_ADULT] = 3;
+		expected[LoggerYukkuri.NUM_OF_SICK] = 1;
+		expected[LoggerYukkuri.NUM_OF_SHIT] = 1;
+		expected[LoggerYukkuri.NUM_OF_CASH] = 4321;
+
+		assertArrayEquals(expected, current);
+		assertArrayEquals(expected, sum);
+	}
+
+	@Test
+	void testGetLogRingBufferWrapsAfterOverwrap() throws ReflectiveOperationException {
+		for (int i = 0; i < 121; i++) {
+			LoggerYukkuri.run();
+		}
+
+		assertNotNull(LoggerYukkuri.getLog(0));
+		assertNull(LoggerYukkuri.getLog(-1));
+		assertNull(LoggerYukkuri.getLog(120));
+		assertTrue(getBooleanField("overwrapped"));
+		assertEquals(121, getIntField("logPointer"));
+	}
+
+	@Test
+	void testDisplayLogDoesNotMutateLoggerState() throws ReflectiveOperationException {
+		LoggerYukkuri.run();
+		int beforePointer = getIntField("logPointer");
+		long[] beforeNowLog = Arrays.copyOf(LoggerYukkuri.getNumOfObjNowLog(), LoggerYukkuri.NUM_OF_LOGDATA_TYPE);
+		long[] beforeSumLog = Arrays.copyOf(LoggerYukkuri.getNumOfObjSumLog(), LoggerYukkuri.NUM_OF_LOGDATA_TYPE);
+
+		BufferedImage image = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g2 = image.createGraphics();
+		try {
+			LoggerYukkuri.displayLog(g2);
+		} finally {
+			g2.dispose();
+		}
+
+		assertEquals(beforePointer, getIntField("logPointer"));
+		assertArrayEquals(beforeNowLog, LoggerYukkuri.getNumOfObjNowLog());
+		assertArrayEquals(beforeSumLog, LoggerYukkuri.getNumOfObjSumLog());
+	}
+
+	private static void resetLoggerState() throws ReflectiveOperationException {
+		setIntField("logPage", 0);
+		setIntField("logPointer", 0);
+		setBooleanField("overwrapped", false);
+		setBooleanField("show", false);
+		setIntField("clearLogTime", 0);
+		clearLongArray("prevLogData");
+		clearLongArray("logDataSum");
+		clearLongMatrix("logList");
+		removeHandlers();
+	}
+
+	private static void removeHandlers() {
+		for (Handler handler : LoggerYukkuri.logger.getHandlers()) {
+			LoggerYukkuri.logger.removeHandler(handler);
+			handler.close();
+		}
+	}
+
+	private static int getIntField(String name) throws ReflectiveOperationException {
+		Field field = LoggerYukkuri.class.getDeclaredField(name);
+		field.setAccessible(true);
+		return field.getInt(null);
+	}
+
+	private static boolean getBooleanField(String name) throws ReflectiveOperationException {
+		Field field = LoggerYukkuri.class.getDeclaredField(name);
+		field.setAccessible(true);
+		return field.getBoolean(null);
+	}
+
+	private static void setIntField(String name, int value) throws ReflectiveOperationException {
+		Field field = LoggerYukkuri.class.getDeclaredField(name);
+		field.setAccessible(true);
+		field.setInt(null, value);
+	}
+
+	private static void setBooleanField(String name, boolean value) throws ReflectiveOperationException {
+		Field field = LoggerYukkuri.class.getDeclaredField(name);
+		field.setAccessible(true);
+		field.setBoolean(null, value);
+	}
+
+	private static void clearLongArray(String name) throws ReflectiveOperationException {
+		Field field = LoggerYukkuri.class.getDeclaredField(name);
+		field.setAccessible(true);
+		long[] values = (long[]) field.get(null);
+		Arrays.fill(values, 0L);
+	}
+
+	private static void clearLongMatrix(String name) throws ReflectiveOperationException {
+		Field field = LoggerYukkuri.class.getDeclaredField(name);
+		field.setAccessible(true);
+		long[][] values = (long[][]) field.get(null);
+		for (long[] row : values) {
+			Arrays.fill(row, 0L);
+		}
+	}
 }

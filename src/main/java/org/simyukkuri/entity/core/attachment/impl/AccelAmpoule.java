@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-
 import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.attachment.Attachment;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -14,7 +13,7 @@ import org.simyukkuri.enums.Direction;
 import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.util.GameText;
 
-/****************************************
+/**
  * 成長促進アンプル
  *
  */
@@ -37,10 +36,10 @@ public class AccelAmpoule extends Attachment {
 			1 // アニメ画像枚数
 	};
 
-	/*** 画像ロード */
+	/** 画像ロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
-		int baby = AgeState.BABY.ordinal();
+		final int baby = AgeState.BABY.ordinal();
 		int child = AgeState.CHILD.ordinal();
 		int adult = AgeState.ADULT.ordinal();
 		images = new BufferedImage[3][2];
@@ -74,8 +73,9 @@ public class AccelAmpoule extends Attachment {
 	@Override
 	protected TickResult update() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
-		if (pa == null)
+		if (pa == null) {
 			return null;
+		}
 		if (!pa.isDead() && !pa.isAdult()) {
 			pa.addAge(TICK * 10000);
 		}
@@ -86,8 +86,9 @@ public class AccelAmpoule extends Attachment {
 	@Override
 	public BufferedImage getImage(Yukkuri b) {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
-		if (pa == null)
+		if (pa == null) {
 			return null;
+		}
 		if (b.getDirection() == Direction.RIGHT) {
 			return images[pa.getAgeState().ordinal()][1];
 		}
@@ -98,8 +99,9 @@ public class AccelAmpoule extends Attachment {
 	@Override
 	public void resetBoundary() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
-		if (pa == null)
+		if (pa == null) {
 			return;
+		}
 		setBoundary(pivX[pa.getAgeState().ordinal()],
 				pivY[pa.getAgeState().ordinal()],
 				imgW[pa.getAgeState().ordinal()],

@@ -1,4 +1,5 @@
 package org.simyukkuri.enums;
+
 /**オブジェクトのタイプ*/
 public enum Type {
 	/** ゆっくり */YUKKURI, 

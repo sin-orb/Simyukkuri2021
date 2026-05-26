@@ -4,9 +4,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-
 import javax.swing.JComboBox;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.engine.Terrarium;
@@ -17,7 +15,7 @@ import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.system.LoggerYukkuri;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.system.WorldState;
-import org.simyukkuri.ui.MainCommandUI;
+import org.simyukkuri.ui.MainCommandUi;
 
 /**
  * Test helper to initialize minimal World infrastructure for testing
@@ -47,10 +45,10 @@ public class WorldTestHelper {
 
             initialized = false;
 
-            org.simyukkuri.enums.Numbering.INSTANCE.setYukkuriID(0);
+            org.simyukkuri.enums.Numbering.INSTANCE.setYukkuriId(0);
             org.simyukkuri.enums.Numbering.INSTANCE.setObjId(0);
             resetTerrariumState();
-            resetMainCommandUIState();
+            resetMainCommandUiState();
             resetLoggerYukkuriState();
         } catch (Exception e) {
             System.err.println("Failed to reset states: " + e.getMessage());
@@ -165,7 +163,7 @@ public class WorldTestHelper {
     public static Yukkuri createBody() {
         Yukkuri b = new Marisa();
         b.setObjId(org.simyukkuri.enums.Numbering.INSTANCE.numberingObjId());
-        b.setUniqueID(org.simyukkuri.enums.Numbering.INSTANCE.numberingYukkuriID());
+        b.setUniqueId(org.simyukkuri.enums.Numbering.INSTANCE.numberingYukkuriId());
         return b;
     }
 
@@ -236,36 +234,36 @@ public class WorldTestHelper {
     /**
      * Reset MainCommandUI static state to a minimal headless-safe baseline.
      */
-    public static void resetMainCommandUIState() {
-        MainCommandUI.setSelectedGameSpeed(1);
-        MainCommandUI.setSelectedZoomScale(0);
-        MainCommandUI.setGameSpeedCombo(null);
-        MainCommandUI.setMainItemCombo(null);
-        MainCommandUI.setSubItemCombo(null);
-        MainCommandUI.setYuStatusLabel(new javax.swing.JLabel[12]);
-        MainCommandUI.setStatIconLabel(new javax.swing.JLabel[8]);
-        MainCommandUI.setItemIconLabel(new javax.swing.JLabel[1]);
-        MainCommandUI.setSystemButton(new javax.swing.JButton[7]);
-        MainCommandUI.setScriptButton(null);
-        MainCommandUI.setTargetButton(null);
-        MainCommandUI.setPinButton(null);
-        MainCommandUI.setHelpButton(null);
-        MainCommandUI.setOptionButton(null);
-        MainCommandUI.setPlayerButton(new javax.swing.JToggleButton[2]);
-        MainCommandUI.setOptionPopup(new javax.swing.JPopupMenu());
-        MainCommandUI.setWorldWindow(null);
-        MainCommandUI.setItemWindow(null);
+    public static void resetMainCommandUiState() {
+        MainCommandUi.setSelectedGameSpeed(1);
+        MainCommandUi.setSelectedZoomScale(0);
+        MainCommandUi.setGameSpeedCombo(null);
+        MainCommandUi.setMainItemCombo(null);
+        MainCommandUi.setSubItemCombo(null);
+        MainCommandUi.setYuStatusLabel(new javax.swing.JLabel[12]);
+        MainCommandUi.setStatIconLabel(new javax.swing.JLabel[8]);
+        MainCommandUi.setItemIconLabel(new javax.swing.JLabel[1]);
+        MainCommandUi.setSystemButton(new javax.swing.JButton[7]);
+        MainCommandUi.setScriptButton(null);
+        MainCommandUi.setTargetButton(null);
+        MainCommandUi.setPinButton(null);
+        MainCommandUi.setHelpButton(null);
+        MainCommandUi.setOptionButton(null);
+        MainCommandUi.setPlayerButton(new javax.swing.JToggleButton[2]);
+        MainCommandUi.setOptionPopup(new javax.swing.JPopupMenu());
+        MainCommandUi.setWorldWindow(null);
+        MainCommandUi.setItemWindow(null);
     }
 
     /**
      * Initialize the minimal MainCommandUI state needed by headless listener tests.
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static void initializeMainCommandUITestState() {
-        resetMainCommandUIState();
-        MainCommandUI.setGameSpeedCombo(new JComboBox(new String[] { "0", "1", "2" }));
-        MainCommandUI.setMainItemCombo(new JComboBox(org.simyukkuri.command.GadgetMenu.getMainCategory()));
-        MainCommandUI.setSubItemCombo(new JComboBox());
+    public static void initializeMainCommandUiTestState() {
+        resetMainCommandUiState();
+        MainCommandUi.setGameSpeedCombo(new JComboBox(new String[] { "0", "1", "2" }));
+        MainCommandUi.setMainItemCombo(new JComboBox(org.simyukkuri.command.GadgetMenu.getMainCategory()));
+        MainCommandUi.setSubItemCombo(new JComboBox());
     }
 
     /**

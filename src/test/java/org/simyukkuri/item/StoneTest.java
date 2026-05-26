@@ -553,7 +553,8 @@ class StoneTest extends ItemTestBase {
     @Test
     void testSetOfsXY() {
         Stone stone = new Stone(100, 100, 0);
-        stone.setOfsXY(15, 25);
+        stone.setOfsX(15);
+        stone.setOfsY(25);
         assertEquals(15, stone.getOfsX());
         assertEquals(25, stone.getOfsY());
     }
@@ -757,14 +758,14 @@ class StoneTest extends ItemTestBase {
     // ---------------------------------------------------------------
     // helper
     // ---------------------------------------------------------------
-    private java.lang.reflect.Field findField(Class<?> clazz, String name) {
-        while (clazz != null) {
-            try {
-                return clazz.getDeclaredField(name);
-            } catch (NoSuchFieldException e) {
-                clazz = clazz.getSuperclass();
-            }
-        }
-        return null;
-    }
+    // private java.lang.reflect.Field findField(Class<?> clazz, String name) {
+    //     while (clazz != null) {
+    //         try {
+    //             return clazz.getDeclaredField(name);
+    //         } catch (NoSuchFieldException e) {
+    //             clazz = clazz.getSuperclass();
+    //         }
+    //     }
+    //     return null;
+    // }
 }

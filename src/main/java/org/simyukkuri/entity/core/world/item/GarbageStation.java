@@ -8,14 +8,12 @@ import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
 import org.simyukkuri.command.GadgetAction;
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.world.WorldEntity;
 import org.simyukkuri.entity.core.world.item.Food.FoodType;
@@ -27,7 +25,7 @@ import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * ゴミ捨て場
  */
 public class GarbageStation extends WorldEntity {
@@ -103,12 +101,12 @@ public class GarbageStation extends WorldEntity {
 	};
 	/** 画像の入れもの */
 	public static final int hitCheckObjType = 0;
-	private static BufferedImage images[] = new BufferedImage[3];
+	private static BufferedImage[] images = new BufferedImage[3];
 	private static Rectangle4y boundary = new Rectangle4y();
 
 	private boolean[] enable = null;
 	private Entity[] food = null;
-	private int throwingTime = 100;// ゴミ捨て時刻
+	private int throwingTime = 100; // ゴミ捨て時刻
 	private int gettingP = 1;
 
 	/** 画像ロード */
@@ -151,8 +149,9 @@ public class GarbageStation extends WorldEntity {
 	/** 毎ティックの状態更新を行う。 */
 	@Override
 	public void upDate() {
-		if (!enabled)
+		if (!enabled) {
 			return;
+		}
 		if ((GameEnvironment.getOperationTime() - throwingTime) % 2400 == 0) {
 			for (int i = 0; i < 2; i++) {
 				if (GameRandom.nextInt(gettingP) == 0) {
@@ -183,7 +182,7 @@ public class GarbageStation extends WorldEntity {
 			} while (type < 0);
 			FoodType f = rndTable[type].getFoodType();
 			int px = (idx == 0 ? -20 : 20);
-			food[idx] = GadgetAction.putObjEX(Food.class, getX() + px, getY(), f.ordinal());
+			food[idx] = GadgetAction.putObjEx(Food.class, getX() + px, getY(), f.ordinal());
 			GameWorld.get().getCurrentWorldState().getFoods().put(food[idx].objId, (Food) food[idx]);
 		}
 	}
@@ -225,7 +224,6 @@ public class GarbageStation extends WorldEntity {
 	public static boolean setupGarbageSt(GarbageStation d) {
 		JPanel mainPanel = new JPanel();
 		JCheckBox[] checkBox = new JCheckBox[GomiType.values().length];
-		boolean ret = false;
 
 		mainPanel.setLayout(new GridLayout(4, 2));
 		mainPanel.setPreferredSize(new Dimension(240, 150));
@@ -243,6 +241,7 @@ public class GarbageStation extends WorldEntity {
 		}
 		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel, "ゴミ捨て場設定",
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+		boolean ret = false;
 		if (dlgRet == JOptionPane.OK_OPTION) {
 			for (int i = 0; i < checkBox.length; i++) {
 				d.enable[i] = checkBox[i].isSelected();
@@ -259,15 +258,17 @@ public class GarbageStation extends WorldEntity {
 		// 時間
 		iniValue = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataItemIniDir(), "GarbageStation",
 				"throwingTime");
-		if (iniValue >= 6)
+		if (iniValue >= 6) {
 			throwingTime = iniValue * 100 - 600;
-		else if (iniValue >= 0)
+		} else if (iniValue >= 0) {
 			throwingTime = iniValue * 100 + 1800;
+		}
 		// 確率
 		iniValue = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataItemIniDir(), "GarbageStation",
 				"gettingProbability");
-		if (iniValue != 0)
+		if (iniValue != 0) {
 			gettingP = iniValue;
+		}
 	}
 
 	/** 各ゴミ種別の有効フラグ配列を返す。 */

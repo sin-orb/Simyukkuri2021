@@ -1,35 +1,36 @@
 package org.simyukkuri.entity.core.attachment.impl;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.attachment.Attachment;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.AttachProperty;
-//import org.simyukkuri.Attachment.AttachProperty;
+// import org.simyukkuri.Attachment.AttachProperty;
 import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.util.GameText;
 
-/****************************************
+/**
  * バッジ
- * 
  */
 public class Badge extends Attachment {
 
 	private static final long serialVersionUID = -3180311818627859673L;
 	private static final String POS_KEY = "Badge";
-	/** 画像のサイズ */
-	private static int[] imgW, imgH;
-	/** 画像の描画原点の座標 */
-	private static int[] pivX, pivY;
+	/** 画像の幅 */
+	private static int[] imgW;
+	/** 画像の高さ */
+	private static int[] imgH;
+	/** 画像の描画原点X座標 */
+	private static int[] pivX;
+	/** 画像の描画原点Y座標 */
+	private static int[] pivY;
 	/** 継承元のenum AttachProperty の代入値 */
 	private static final int[] property = {
 			2, // 赤ゆ用画像サイズ 原画をこの値で割る
@@ -85,8 +86,9 @@ public class Badge extends Attachment {
 		int adult = AgeState.ADULT.ordinal();
 
 		for (BadgeRank i : BadgeRank.values()) {
-			if (i.getFileName() == null)
+			if (i.getFileName() == null) {
 				continue;
+			}
 
 			images[adult][i.ordinal()] = ModLoader.loadItemImage(loader, "badge" + File.separator + i.getFileName());
 			int w = images[adult][i.ordinal()].getWidth(io);
@@ -120,8 +122,9 @@ public class Badge extends Attachment {
 	@Override
 	public BufferedImage getImage(Yukkuri b) {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
-		if (pa == null)
+		if (pa == null) {
 			return null;
+		}
 		return images[pa.getAgeState().ordinal()][badgeRank.ordinal()];
 	}
 
@@ -136,8 +139,9 @@ public class Badge extends Attachment {
 	@Override
 	public void resetBoundary() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
-		if (pa == null)
+		if (pa == null) {
 			return;
+		}
 		setBoundary(pivX[pa.getAgeState().ordinal()],
 				pivY[pa.getAgeState().ordinal()],
 				imgW[pa.getAgeState().ordinal()],
@@ -148,7 +152,7 @@ public class Badge extends Attachment {
 	 * コンストラクタ.
 	 * 
 	 * @param body        装着されるゆっくり
-	 * @param ieBadgeRank バッジランク
+	 * @param badgeRank バッジランク
 	 */
 	public Badge(Yukkuri body, BadgeRank badgeRank) {
 		super(body);

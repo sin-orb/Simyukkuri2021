@@ -8,7 +8,7 @@ import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.field.impl.Barrier;
 import org.simyukkuri.util.GameText;
 
-/***************************************************
+/**
  * お気に入りの情報を家族で共有するシンプルアクション
  * protected Yukkuri from; // イベントを発した個体
  * protected Yukkuri to; // 未使用
@@ -35,8 +35,9 @@ public class FavCopyEvent extends EventPacket {
 	@Override
 	public boolean simpleEventAction(Yukkuri body) {
 		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
-		if (sourceBody == body || sourceBody == null)
+		if (sourceBody == body || sourceBody == null) {
 			return false;
+		}
 		// イベントの発信者が家族かチェック
 		if (body.isParent(sourceBody) || sourceBody.isParent(body) || body.isPartner(sourceBody)) {
 			if (!Barrier.acrossBarrier(body.getX(), body.getY(), sourceBody.getX(), sourceBody.getY(),
@@ -44,8 +45,8 @@ public class FavCopyEvent extends EventPacket {
 
 				// 片方だけがうんうん奴隷の場合はなにもしない
 				if (((body.getPublicRank() == PublicRank.UNUN_SLAVE)
-						&& (sourceBody.getPublicRank() == PublicRank.UNUN_SLAVE)) ||
-						((body.getPublicRank() != PublicRank.UNUN_SLAVE)
+						&& (sourceBody.getPublicRank() == PublicRank.UNUN_SLAVE))
+						|| ((body.getPublicRank() != PublicRank.UNUN_SLAVE)
 								&& (sourceBody.getPublicRank() != PublicRank.UNUN_SLAVE))) {
 					body.setFavoriteItem(FavItemType.BED, sourceBody.getFavoriteItem(FavItemType.BED));
 				}

@@ -1,11 +1,10 @@
 package org.simyukkuri.logic;
 
 import java.util.Iterator;
-
 import org.simyukkuri.entity.core.living.SocialEntity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.enums.YukkuriRelationType;
 import org.simyukkuri.enums.Parent;
+import org.simyukkuri.enums.YukkuriRelationType;
 
 /**
  * Body同士の家族関係を判定するためのロジック集約クラス。

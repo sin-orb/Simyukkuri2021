@@ -1,13 +1,12 @@
 package org.simyukkuri.logic;
 
 import java.util.Iterator;
-
 import org.simyukkuri.Const;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * イベントの処理ロジック
  */
 public class EventLogic {
@@ -81,7 +80,7 @@ public class EventLogic {
 	/**
 	 * ワールドイベントの開始チェック
 	 *
-	 * @param b 参加ゆっくり
+	 * @param body 参加ゆっくり
 	 * @return 始まるイベント
 	 */
 	public static final EventPacket checkWorldEvent(Yukkuri body) {
@@ -110,7 +109,7 @@ public class EventLogic {
 	/**
 	 * 個体イベントの開始チェック
 	 * 
-	 * @param b 対象ゆっくり
+	 * @param body 対象ゆっくり
 	 * @return 始めるイベント
 	 */
 	public static final EventPacket checkYukkuriEvent(Yukkuri body) {
@@ -141,7 +140,7 @@ public class EventLogic {
 	/**
 	 * ワールドイベントのチェック simpleEventAction用
 	 * 
-	 * @param b ゆっくり
+	 * @param body ゆっくり
 	 */
 	public static final void checkSimpleWorldEvent(Yukkuri body) {
 		EventPacket e;
@@ -149,8 +148,9 @@ public class EventLogic {
 		for (Iterator<EventPacket> i = GameWorld.get().getCurrentWorldState().getEvents().iterator(); i.hasNext();) {
 			e = i.next();
 			Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(e.getFrom());
-			if (from == body)
+			if (from == body) {
 				continue;
+			}
 			if (e.simpleEventAction(body)) {
 				continue;
 			}
@@ -160,7 +160,7 @@ public class EventLogic {
 	/**
 	 * 固体イベントのチェック simpleEventAction用
 	 * 
-	 * @param b ゆっくり
+	 * @param body ゆっくり
 	 */
 	public static final void checkSimpleYukkuriEvent(Yukkuri body) {
 		EventPacket e;
@@ -178,7 +178,7 @@ public class EventLogic {
 	/**
 	 * イベントの毎フレーム処理
 	 * 
-	 * @param b ゆっくり
+	 * @param body ゆっくり
 	 */
 	public static final void eventUpdate(Yukkuri body) {
 		YukkuriEventState.updateCurrentEvent(body);

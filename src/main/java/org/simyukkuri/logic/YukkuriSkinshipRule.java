@@ -50,9 +50,7 @@ public final class YukkuriSkinshipRule {
 			// 相手が汚れていてかつ自分が母親の時か、ランダムでぺろぺろ
 			if ((targetBody.isDirty() && actorBody.isMother(targetBody)) || GameRandom.nextBoolean()) {
 				actorBody.doPeropero(targetBody);
-			}
-			// 他はすりすり
-			else if (GameRandom.nextBoolean()) {
+			} else if (GameRandom.nextBoolean()) {
 				actorBody.doSurisuri(targetBody);
 			}
 			actorBody.clearActions();
@@ -75,9 +73,7 @@ public final class YukkuriSkinshipRule {
 			// 親がダメージ食らってたらランダムでぺろぺろ
 			if (targetBody.isDamaged() && GameRandom.nextBoolean()) {
 				actorBody.doPeropero(targetBody);
-			}
-			// 他はすりすり
-			else if (GameRandom.nextBoolean()) {
+			} else if (GameRandom.nextBoolean()) {
 				actorBody.doSurisuri(targetBody);
 			}
 			actorBody.clearActions();

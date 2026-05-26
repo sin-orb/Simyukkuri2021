@@ -1,9 +1,8 @@
 package org.simyukkuri.logic;
 
 import java.util.Map;
-
-import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.draw.Translate;
+import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
@@ -18,12 +17,12 @@ import org.simyukkuri.enums.TakeoutItemType;
 import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.event.impl.FavCopyEvent;
 import org.simyukkuri.field.impl.Barrier;
-import org.simyukkuri.util.GameEnvironment;
 import org.simyukkuri.system.WorldState;
+import org.simyukkuri.util.GameEnvironment;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * ベッド関係の処理
  */
 public class BedLogic {
@@ -48,13 +47,14 @@ public class BedLogic {
 	 */
 	public static final boolean checkBed(Yukkuri body, WorldState ws) {
 		// 他の用事がある場合
-		if (body.isToFood() || body.isToYukkuri() || /* body.isToBed() || */ body.isToShit() ||
-				body.isToSukkiri() || body.isToSteal() || body.isToTakeout()) {
+		if (body.isToFood() || body.isToYukkuri() || /* body.isToBed() || */ body.isToShit()
+				|| body.isToSukkiri() || body.isToSteal() || body.isToTakeout()) {
 			return false;
 		}
 
-		if (body.isIdiot())
+		if (body.isIdiot()) {
 			return false;
+		}
 
 		EventPacket currentEvent = body.getCurrentEvent();
 		if (body.nearToBirth()) {
@@ -68,7 +68,7 @@ public class BedLogic {
 		}
 
 		// 非ゆっくり症の場合
-		if (body.isNYD()) {
+		if (body.isNyd()) {
 			return false;
 		}
 
@@ -122,15 +122,16 @@ public class BedLogic {
 		if ((body.isSleepy() // 眠い
 				|| GameEnvironment.getDayState().ordinal() >= Terrarium.DayState.EVENING.ordinal() // 夜になった
 				|| body.nearToBirth()) // 出産間近
-				&& body.getCurrentEvent() == null) {// イベントがない <- イベントありのままだと不眠ディフューザーとかでおかしくなる
+				&& body.getCurrentEvent() == null) { // イベントがない <- イベントありのままだと不眠ディフューザーとかでおかしくなる
 			shouldSearchBed = true;
 		}
 		if (body.getCarryItem(TakeoutItemType.FOOD) != null) {
 			shouldSearchBed = true;
 		}
 
-		if (!shouldSearchBed)
+		if (!shouldSearchBed) {
 			return false;
+		}
 
 		boolean foundBed = false;
 		Entity targetObject = searchBed(body, ws);
@@ -183,7 +184,6 @@ public class BedLogic {
 	 */
 	public static Entity searchBed(Yukkuri body, WorldState ws) {
 		Entity targetObject = body.getFavoriteItem(FavItemType.BED);
-		int nearestDistance = body.getEyesightBase();
 		// うんうん奴隷の場合
 		if (body.getPublicRank() == PublicRank.UNUN_SLAVE) {
 			body.setFavoriteItem(FavItemType.BED, null);
@@ -205,6 +205,7 @@ public class BedLogic {
 		// うんうん奴隷ではない場合
 		if (body.getPublicRank() != PublicRank.UNUN_SLAVE) {
 			if (targetObject == null) {
+				int nearestDistance = body.getEyesightBase();
 				for (Map.Entry<Integer, Bed> entry : ws.getBeds().entrySet()) {
 					WorldEntity t = entry.getValue();
 					int distance = Translate.distance(body.getX(), body.getY(), t.getX(), t.getY());
@@ -220,6 +221,7 @@ public class BedLogic {
 			}
 			//// 仮 おうち検索
 			if (targetObject == null) {
+				int nearestDistance = body.getEyesightBase();
 				for (Map.Entry<Integer, House> entry : ws.getHouses().entrySet()) {
 					WorldEntity t = entry.getValue();
 					int distance = Translate.distance(body.getX(), body.getY(), t.getX(), t.getY());
@@ -236,6 +238,7 @@ public class BedLogic {
 		} else {
 			// うんうん奴隷の場合、トイレを探す
 			if (targetObject == null) {
+				int nearestDistance = body.getEyesightBase();
 				for (Map.Entry<Integer, Toilet> entry : ws.getToilets().entrySet()) {
 					WorldEntity t = entry.getValue();
 					int distance = Translate.distance(body.getX(), body.getY(), t.getX(), t.getY());

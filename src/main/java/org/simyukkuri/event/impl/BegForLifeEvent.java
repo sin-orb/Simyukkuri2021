@@ -13,7 +13,7 @@ import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameText;
 
-/***************************************************
+/**
  * 命乞いイベント
  * protected Yukkuri from; // イベントを発した個体
  * protected Yukkuri to; // 攻撃対象
@@ -102,8 +102,9 @@ public class BegForLifeEvent extends EventPacket {
 
 		setHighPriority();
 		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
-		if (body == sourceBody && !body.isUnBirth())
+		if (body == sourceBody && !body.isUnBirth()) {
 			return true;
+		}
 		return false;
 	}
 
@@ -145,9 +146,7 @@ public class BegForLifeEvent extends EventPacket {
 			body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ApologyToHuman), 20, false,
 					GameRandom.nextBoolean());
 			roop--;
-		}
-
-		else if (roop == 0 && roop2 != 0 && roop3 != 0) {
+		} else if (roop == 0 && roop2 != 0 && roop3 != 0) {
 			// 反応する
 			body.stay(80);
 			body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.BegForLife), 20, false,
@@ -191,18 +190,17 @@ public class BegForLifeEvent extends EventPacket {
 					case SHITHEAD:
 					case SUPER_SHITHEAD:
 						body.addStress(body.getStressLimit() / 10);
-						if (body.getIntelligence() == Intelligence.FOOL)
+						if (body.getIntelligence() == Intelligence.FOOL) {
 							body.plusAttitude(-30);
-						else
+						} else {
 							body.plusAttitude(-20);
+						}
 						break;
 					default:
 						break;
 				}
-			}
-
-			// 命乞い成功
-			else {
+			} else {
+				// 命乞い成功
 				// 賢くないゲス
 				if (body.isRude() && body.getIntelligence() != Intelligence.WISE) {
 					body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ThanksHuman), 25, true,

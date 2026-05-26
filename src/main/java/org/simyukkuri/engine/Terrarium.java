@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.TerrainField;
 import org.simyukkuri.draw.Translate;
@@ -34,11 +33,11 @@ import org.simyukkuri.enums.EffectType;
 import org.simyukkuri.enums.Numbering;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.system.WorldState;
-import org.simyukkuri.ui.MainCommandUI;
+import org.simyukkuri.ui.MainCommandUi;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * 各種オブジェクトの更新命令の発令所
  * <br>
  * 各種オブジェクトのインスタンス生成
@@ -61,7 +60,7 @@ public class Terrarium implements Serializable {
 		EVENING,
 		/** 夜 */
 		NIGHT
-	};
+	}
 
 	/**
 	 * 互換用の環境ミラー。
@@ -254,7 +253,7 @@ public class Terrarium implements Serializable {
 	/** ゆっくりのリスト */
 	private static List<Yukkuri> babyList = new LinkedList<Yukkuri>();
 	/** マップ全体が警戒モードになる時間 */
-	private final static int ALARM_PERIOD = 300; // 30 seconds
+	private static final int ALARM_PERIOD = 300; // 30 seconds
 
 	/**
 	 * セーブの実行部
@@ -263,7 +262,7 @@ public class Terrarium implements Serializable {
 	 * @throws IOException IO例外
 	 */
 	public static void saveState(File file) throws IOException {
-		GameWorld.get().setMaxUniqueId(Numbering.INSTANCE.getYukkuriID());
+		GameWorld.get().setMaxUniqueId(Numbering.INSTANCE.getYukkuriId());
 		GameWorld.get().setMaxObjId(Numbering.INSTANCE.getObjId());
 		Enumeration<Entity> enu = GameWorld.get().getPlayer().getInventoryView().elements();
 		while (enu.hasMoreElements()) {
@@ -283,7 +282,7 @@ public class Terrarium implements Serializable {
 	public static void loadState(File file) throws IOException, ClassNotFoundException {
 		Translate.Snapshot previousTranslate = Translate.snapshot();
 		World previousWorld = GameWorld.get();
-		int previousYukkuriId = Numbering.INSTANCE.getYukkuriID();
+		int previousYukkuriId = Numbering.INSTANCE.getYukkuriId();
 		int previousObjId = Numbering.INSTANCE.getObjId();
 		int previousNextWorldStateIndex = previousWorld != null ? previousWorld.getNextWorldStateIndex() : -1;
 		int previousWindowType = previousWorld != null ? previousWorld.getWindowType() : 0;
@@ -291,14 +290,14 @@ public class Terrarium implements Serializable {
 
 		try {
 			World tmpWorld = SaveDataCodec.load(file);
-			Numbering.INSTANCE.setYukkuriID(tmpWorld.getMaxUniqueId());
+			Numbering.INSTANCE.setYukkuriId(tmpWorld.getMaxUniqueId());
 			Numbering.INSTANCE.setObjId(tmpWorld.getMaxObjId());
 			tmpWorld.getPlayer().getInventoryView().clear();
-			List<Integer> _list = new ArrayList<Integer>();
+			List<Integer> list = new ArrayList<Integer>();
 			for (Entity o : tmpWorld.getPlayer().getItemForSave()) {
 				int id = o.getObjId();
-				if (!_list.contains(id)) {
-					_list.add(id);
+				if (!list.contains(id)) {
+					list.add(id);
 					tmpWorld.getPlayer().getInventoryView().addElement(o);
 				}
 			}
@@ -546,15 +545,15 @@ public class Terrarium implements Serializable {
 				}
 			}
 
-			if (MainCommandUI.getItemWindow() != null && MainCommandUI.getItemWindow().getInventoryView() != null) {
-				MainCommandUI.getItemWindow().getInventoryView().setModel(tmpWorld.getPlayer().getInventoryView());
+			if (MainCommandUi.getItemWindow() != null && MainCommandUi.getItemWindow().getInventoryView() != null) {
+				MainCommandUi.getItemWindow().getInventoryView().setModel(tmpWorld.getPlayer().getInventoryView());
 			}
 		} catch (IOException | RuntimeException | Error ex) {
 			GameWorld.set(previousWorld);
 			if (previousWorld != null) {
 				previousWorld.recalcWorldSize();
 			}
-			Numbering.INSTANCE.setYukkuriID(previousYukkuriId);
+			Numbering.INSTANCE.setYukkuriId(previousYukkuriId);
 			Numbering.INSTANCE.setObjId(previousObjId);
 			if (SimYukkuri.simYukkuri != null && previousWorld != null) {
 				if (previousWindowType != 2) {
@@ -674,7 +673,7 @@ public class Terrarium implements Serializable {
 	 * @param x    発生場所X座標
 	 * @param y    発生場所Y座標
 	 * @param z    発生場所Z座標
-	 * @param b    主
+	 * @param body 主
 	 * @param type 種類
 	 * @return 生成した吐餡
 	 */
@@ -688,7 +687,7 @@ public class Terrarium implements Serializable {
 	 * @param x    発生場所X座標
 	 * @param y    発生場所Y座標
 	 * @param z    発生場所Z座標
-	 * @param b    主
+	 * @param body 主
 	 * @param type 種類
 	 */
 	public void addCrushedVomit(int x, int y, int z, Yukkuri body, YukkuriType type) {
@@ -837,7 +836,7 @@ public class Terrarium implements Serializable {
 		}
 		if (!babyList.isEmpty()) {
 			for (Yukkuri baby : babyList) {
-				curMap.getYukkuriRegistry().put(baby.getUniqueID(), baby);
+				curMap.getYukkuriRegistry().put(baby.getUniqueId(), baby);
 			}
 			babyList.clear();
 		}

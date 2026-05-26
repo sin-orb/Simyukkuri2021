@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.awt.image.BufferedImage;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -74,7 +73,7 @@ public class OkazariTest {
 
         Okazari okazari = new Okazari(body, Okazari.OkazariType.DEFAULT);
 
-        assertEquals(body.getUniqueID(), okazari.getOwner());
+        assertEquals(body.getUniqueId(), okazari.getOwner());
         assertEquals(Okazari.OkazariType.DEFAULT, okazari.getOkazariType());
         assertNull(okazari.getOffsetPos()); // DEFAULT → offsetPos = null
         assertEquals(Type.OKAZARI, okazari.getObjType());
@@ -95,7 +94,7 @@ public class OkazariTest {
 
         Okazari okazari = new Okazari(body, Okazari.OkazariType.ADULT1);
 
-        assertEquals(body.getUniqueID(), okazari.getOwner());
+        assertEquals(body.getUniqueId(), okazari.getOwner());
         assertEquals(Okazari.OkazariType.ADULT1, okazari.getOkazariType());
         assertEquals(Type.OKAZARI, okazari.getObjType());
     }
@@ -247,7 +246,7 @@ public class OkazariTest {
         }
 
         Okazari okazari = new Okazari();
-        okazari.setOwner(body.getUniqueID());
+        okazari.setOwner(body.getUniqueId());
         okazari.setOffsetPos(offsets);
 
         Point4y result = okazari.takeOkazariOfsPos();
@@ -282,7 +281,7 @@ public class OkazariTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         body.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
         return body;
     }
 

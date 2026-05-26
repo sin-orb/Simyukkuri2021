@@ -1,13 +1,11 @@
 package org.simyukkuri.entity.core.living;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.awt.Rectangle;
 import java.beans.Transient;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import org.simyukkuri.Const;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Color4y;
@@ -22,14 +20,12 @@ import org.simyukkuri.entity.core.world.bodylinked.Okazari;
 import org.simyukkuri.entity.core.world.bodylinked.Stalk;
 import org.simyukkuri.entity.core.world.item.Bed;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.YukkuriBake;
 import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.enums.Burst;
 import org.simyukkuri.enums.CoreAnkoState;
 import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Damage;
 import org.simyukkuri.enums.Direction;
-import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.FavItemType;
 import org.simyukkuri.enums.FootBake;
 import org.simyukkuri.enums.HairState;
@@ -40,16 +36,18 @@ import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.enums.PurposeOfMoving;
 import org.simyukkuri.enums.TakeoutItemType;
 import org.simyukkuri.enums.TangType;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Trauma;
 import org.simyukkuri.enums.WindowType;
+import org.simyukkuri.enums.YukkuriBake;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.logic.AntInfestationPolicy;
 import org.simyukkuri.logic.YukkuriRelations;
-import org.simyukkuri.system.BasicStrokeEX;
-import org.simyukkuri.system.WorldState;
+import org.simyukkuri.system.BasicStrokeEx;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.system.Sprite;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameEnvironment;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
@@ -71,38 +69,44 @@ public abstract class LivingEntity extends Entity {
 	private transient LivingEntityActionDelegate actionDelegate;
 
 	LivingEntityBodyDamageDelegate bodyDamageDelegate() {
-		if (bodyDamageDelegate == null)
+		if (bodyDamageDelegate == null) {
 			bodyDamageDelegate = new LivingEntityBodyDamageDelegate(this);
+		}
 		return bodyDamageDelegate;
 	}
 
 	LivingEntitySleepDelegate sleepDelegate() {
-		if (sleepDelegate == null)
+		if (sleepDelegate == null) {
 			sleepDelegate = new LivingEntitySleepDelegate(this);
+		}
 		return sleepDelegate;
 	}
 
 	LivingEntityPanicDelegate panicDelegate() {
-		if (panicDelegate == null)
+		if (panicDelegate == null) {
 			panicDelegate = new LivingEntityPanicDelegate(this);
+		}
 		return panicDelegate;
 	}
 
 	LivingEntityHungerDelegate hungerDelegate() {
-		if (hungerDelegate == null)
+		if (hungerDelegate == null) {
 			hungerDelegate = new LivingEntityHungerDelegate(this);
+		}
 		return hungerDelegate;
 	}
 
 	LivingEntityBodyConditionDelegate bodyConditionDelegate() {
-		if (bodyConditionDelegate == null)
+		if (bodyConditionDelegate == null) {
 			bodyConditionDelegate = new LivingEntityBodyConditionDelegate(this);
+		}
 		return bodyConditionDelegate;
 	}
 
 	LivingEntityActionDelegate actionDelegate() {
-		if (actionDelegate == null)
+		if (actionDelegate == null) {
 			actionDelegate = new LivingEntityActionDelegate(this);
+		}
 		return actionDelegate;
 	}
 
@@ -208,25 +212,6 @@ public abstract class LivingEntity extends Entity {
 	}
 
 	/**
-	 * ピコピコメッセージを出す.
-	 *
-	 * @param message   メッセージ
-	 * @param interrupt 割り込み可否
-	 */
-	public void setPikoMessage(String message, boolean interrupt) {
-	}
-
-	/**
-	 * ピコピコメッセージを出す.
-	 *
-	 * @param message   メッセージ
-	 * @param count     表示時間
-	 * @param interrupt 割り込み可否
-	 */
-	public void setPikoMessage(String message, int count, boolean interrupt) {
-	}
-
-	/**
 	 * 時間指定メッセージを出す.
 	 *
 	 * @param message メッセージ
@@ -253,6 +238,39 @@ public abstract class LivingEntity extends Entity {
 	 * @param piko      ピコピコ可否
 	 */
 	public void setMessage(String message, int count, boolean interrupt, boolean piko) {
+	}
+
+	/**
+	 * ウィンドウ種別付きメッセージを出す.
+	 *
+	 * @param message   メッセージ
+	 * @param type      ウィンドウ種別
+	 * @param count     表示時間
+	 * @param interrupt 割り込み可否
+	 * @param piko      ピコピコ可否
+	 * @param nyd       非ゆっくり症かどうか
+	 */
+	public void setMessage(String message, WindowType type, int count, boolean interrupt, boolean piko,
+			boolean nyd) {
+	}
+
+	/**
+	 * ピコピコメッセージを出す.
+	 *
+	 * @param message   メッセージ
+	 * @param interrupt 割り込み可否
+	 */
+	public void setPikoMessage(String message, boolean interrupt) {
+	}
+
+	/**
+	 * ピコピコメッセージを出す.
+	 *
+	 * @param message   メッセージ
+	 * @param count     表示時間
+	 * @param interrupt 割り込み可否
+	 */
+	public void setPikoMessage(String message, int count, boolean interrupt) {
 	}
 
 	/**
@@ -293,20 +311,6 @@ public abstract class LivingEntity extends Entity {
 	 * @param piko      ピコピコ可否
 	 */
 	public void setEventResMessage(String message, int count, boolean interrupt, boolean piko) {
-	}
-
-	/**
-	 * ウィンドウ種別付きメッセージを出す.
-	 *
-	 * @param message   メッセージ
-	 * @param type      ウィンドウ種別
-	 * @param count     表示時間
-	 * @param interrupt 割り込み可否
-	 * @param piko      ピコピコ可否
-	 * @param NYD       非ゆっくり症かどうか
-	 */
-	public void setMessage(String message, WindowType type, int count, boolean interrupt, boolean piko,
-			boolean NYD) {
 	}
 
 	/**
@@ -430,8 +434,9 @@ public abstract class LivingEntity extends Entity {
 
 	/** ダメージを追加する（死亡時は無効）. @param amount 追加量 */
 	public final void addDamage(int amount) {
-		if (isDead())
+		if (isDead()) {
 			return;
+		}
 		damage += amount;
 	}
 
@@ -542,6 +547,20 @@ public abstract class LivingEntity extends Entity {
 	/** うんうんの溜まり具合 を設定する. @param shit うんうんの溜まり具合 */
 	public void setShit(int shit) {
 		this.shit = shit;
+	}
+
+	/** うんうん量を強制セットする。ibVeryShit=true の場合は限界値まで積む（排便中は無視）。 */
+	public void setShit(int inShit, boolean ibVeryShit) {
+		if (shitting) {
+			return;
+		}
+		if (ibVeryShit) {
+			if (shit < getShitLimitBase()[getAgeState().ordinal()]) {
+				shit = getShitLimitBase()[getAgeState().ordinal()] - inShit;
+			}
+		} else {
+			shit = inShit;
+		}
 	}
 
 	/** 舌の肥え を取得する. @return 舌の肥え */
@@ -1054,7 +1073,7 @@ public abstract class LivingEntity extends Entity {
 			setInOutTakeoutItem(false);
 		}
 		// しゃべれないor生まれていないor非ゆっくり症
-		if (isSilent() || isUnBirth() || isNYD()) {
+		if (isSilent() || isUnBirth() || isNyd()) {
 			if (isUnBirth()) {
 				setMessageTicks(0);
 				setMessageBuffer(null);
@@ -1285,10 +1304,10 @@ public abstract class LivingEntity extends Entity {
 	public final void doPurupuru() {
 		if (!isShakePhase()) {
 			setShakePhase(true);
-			setOfsXY(1, ofsY);
+			setOfsXy(1, ofsY);
 		} else {
 			setShakePhase(false);
-			setOfsXY(0, ofsY);
+			setOfsXy(0, ofsY);
 		}
 	}
 
@@ -1763,7 +1782,7 @@ public abstract class LivingEntity extends Entity {
 		if (hasBabyOrStalk()) {
 			return true;
 		}
-		if (isNYD()) {
+		if (isNyd()) {
 			return true;
 		}
 		if (isGotBurnedHeavily()) {
@@ -2210,15 +2229,15 @@ public abstract class LivingEntity extends Entity {
 	}
 
 	/** メッセージストローク */
-	protected BasicStrokeEX messageWindowStroke;
+	protected BasicStrokeEx messageWindowStroke;
 
 	/** メッセージストローク を取得する. @return メッセージストローク */
-	public BasicStrokeEX getMessageWindowStroke() {
+	public BasicStrokeEx getMessageWindowStroke() {
 		return messageWindowStroke;
 	}
 
 	/** メッセージストローク を設定する. @param messageWindowStroke メッセージストローク */
-	public void setMessageWindowStroke(BasicStrokeEX messageWindowStroke) {
+	public void setMessageWindowStroke(BasicStrokeEx messageWindowStroke) {
 		this.messageWindowStroke = messageWindowStroke;
 	}
 
@@ -2264,7 +2283,7 @@ public abstract class LivingEntity extends Entity {
 			Yukkuri bodyMother = GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(id);
 			if (bodyMother != null) {
 				if (!bodyMother.isDead() || bodyMother.isSleeping()) {
-					return bodyMother.getUniqueID();
+					return bodyMother.getUniqueId();
 				}
 			}
 		}
@@ -2288,7 +2307,7 @@ public abstract class LivingEntity extends Entity {
 		}
 
 		// 非ゆっくり症の場合
-		if (bodyMother.isNYD()) {
+		if (bodyMother.isNyd()) {
 			return;
 		}
 
@@ -2310,9 +2329,9 @@ public abstract class LivingEntity extends Entity {
 			// 茎があって親が生きてる
 			if (getBindStalk() != null) {
 				int id = getBindStalk().getPlantYukkuri();
-				Entity oBind = GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(id);
-				if (oBind != null && oBind instanceof Yukkuri) {
-					Yukkuri bodyBind = (Yukkuri) oBind;
+				Entity obind = GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(id);
+				if (obind != null && obind instanceof Yukkuri) {
+					Yukkuri bodyBind = (Yukkuri) obind;
 					if (bodyBind != null && !bodyBind.isDead() && !bodyBind.isRemoved()) {
 						return true;
 					}
@@ -2321,8 +2340,9 @@ public abstract class LivingEntity extends Entity {
 			// 救命オレンジプール上にいる
 			for (org.simyukkuri.entity.core.world.item.OrangePool pool : GameWorld.get().getCurrentWorldState().getOrangePools()
 					.values()) {
-				if (!pool.isRescue())
+				if (!pool.isRescue()) {
 					continue;
+				}
 				org.simyukkuri.draw.Rectangle4y b = org.simyukkuri.entity.core.world.item.OrangePool.getBounding();
 				int halfW = b.getWidth() >> 1;
 				int halfH = b.getHeight() >> 1;
@@ -2344,8 +2364,9 @@ public abstract class LivingEntity extends Entity {
 		Rectangle r = takeScreenRect();
 		for (java.util.Map.Entry<Integer, Bed> entry : GameWorld.get().getCurrentWorldState().getBeds().entrySet()) {
 			Bed bd = entry.getValue();
-			if (takeScreenRect(bd.getScreenRect()).intersects(r))
+			if (takeScreenRect(bd.getScreenRect()).intersects(r)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -2399,10 +2420,10 @@ public abstract class LivingEntity extends Entity {
 	/**
 	 * アリの数を減らす.
 	 *
-	 * @param A 減らしたいアリの数
+	 * @param amount 減らしたいアリの数
 	 */
-	public void substractNumOfAnts(int A) {
-		antCount -= A;
+	public void substractNumOfAnts(int amount) {
+		antCount -= amount;
 		if (antCount < 0) {
 			antCount = 0;
 		}
@@ -2445,40 +2466,34 @@ public abstract class LivingEntity extends Entity {
 	 * @return 自身が突然変異可能な状態かどうか
 	 */
 	public boolean canTransform() {
-		if (isDead())
+		if (isDead()) {
 			return false;
-		if (getStress() > 0)
+		}
+		if (getStress() > 0) {
 			return false;
-		if (getTangType() == TangType.POOR)
+		}
+		if (getTangType() == TangType.POOR) {
 			return false;
-		if (isDamaged())
+		}
+		if (isDamaged()) {
 			return false;
-		if (isFeelPain())
+		}
+		if (isFeelPain()) {
 			return false;
-		if (isUnBirth())
+		}
+		if (isUnBirth()) {
 			return false;
-		if (getPublicRank() == PublicRank.UNUN_SLAVE)
+		}
+		if (getPublicRank() == PublicRank.UNUN_SLAVE) {
 			return false;
-		if (isNYD())
+		}
+		if (isNyd()) {
 			return false;
-		if (isBlind() || isPealed() || isPacked() || isShutmouth())
+		}
+		if (isBlind() || isPealed() || isPacked() || isShutmouth()) {
 			return false;
-		if (getHairState() != HairState.DEFAULT)
-			return false;
-		return true;
-	}
-
-	/**
-	 * 行動できる状態かチェックする
-	 * ここでは動いたら見た目におかしくなる状況のみチェック
-	 *
-	 * @return
-	 */
-	public final boolean canAction() {
-		if (isDead() || getCriticalDamege() == CriticalDamageType.CUT || isPealed() ||
-				isPacked() || isSleeping() || isShitting() || isBirth() || isSukkiri() || isNeedled() ||
-				getCurrentEvent() != null || isNYD() ||
-				getBurialState() != BurialState.NONE) {
+		}
+		if (getHairState() != HairState.DEFAULT) {
 			return false;
 		}
 		return true;
@@ -2488,12 +2503,28 @@ public abstract class LivingEntity extends Entity {
 	 * 行動できる状態かチェックする
 	 * ここでは動いたら見た目におかしくなる状況のみチェック
 	 *
-	 * @return
+	 * @return 行動可能なら true
+	 */
+	public final boolean canAction() {
+		if (isDead() || getCriticalDamege() == CriticalDamageType.CUT || isPealed()
+				|| isPacked() || isSleeping() || isShitting() || isBirth() || isSukkiri() || isNeedled()
+				|| getCurrentEvent() != null || isNyd()
+				|| getBurialState() != BurialState.NONE) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * 行動できる状態かチェックする
+	 * ここでは動いたら見た目におかしくなる状況のみチェック
+	 *
+	 * @return 行動可能なら true
 	 */
 	public final boolean canActionForEvent() {
-		if (isDead() || getCriticalDamege() == CriticalDamageType.CUT || isPealed() ||
-				isPacked() || isSleeping() || isShitting() || isBirth() || isSukkiri() || isNeedled() ||
-				isNYD() || getBurialState() != BurialState.NONE) {
+		if (isDead() || getCriticalDamege() == CriticalDamageType.CUT || isPealed()
+				|| isPacked() || isSleeping() || isShitting() || isBirth() || isSukkiri() || isNeedled()
+				|| isNyd() || getBurialState() != BurialState.NONE) {
 			return false;
 		}
 		return true;
@@ -2631,16 +2662,17 @@ public abstract class LivingEntity extends Entity {
 	 */
 	@Transient
 	public int getExpandSizeW() {
-		int OE = 100 * hungry / getHungryLimit();
-		if (OE <= 5)
-			OE = 85;
-		else if (OE <= 20) {
-			OE += 80;
-		} else if (OE <= 100)
-			OE = 100;
+		int oe = 100 * hungry / getHungryLimit();
+		if (oe <= 5) {
+			oe = 85;
+		} else if (oe <= 20) {
+			oe += 80;
+		} else if (oe <= 100) {
+			oe = 100;
+		}
 		return (20 - 20 / (getBabyTypes().size() + 1)) + getBabyTypes().size() * 2
 				+ ((shit * 4 / 5) / getShitLimitBase()[getAgeState().ordinal()]) * 5
-				+ getSpriteSet()[getAgeState().ordinal()].getImageW() * (OE - 100) / 100
+				+ getSpriteSet()[getAgeState().ordinal()].getImageW() * (oe - 100) / 100
 				+ getGodHandHoldCount() / 2;
 	}
 
@@ -2662,8 +2694,9 @@ public abstract class LivingEntity extends Entity {
 	@Transient
 	public int getExternalForceW() {
 		int ret = 0;
-		if (externalPressure < 0)
+		if (externalPressure < 0) {
 			ret = -externalPressure;
+		}
 		return ret;
 	}
 
@@ -2735,7 +2768,7 @@ public abstract class LivingEntity extends Entity {
 	protected int unyoMode = 1;
 
 	/** うにょの強さ */
-	protected static final int UNYOSTRENGTH[] = { 4, 7, 10 };
+	protected static final int[] UNYOSTRENGTH = { 4, 7, 10 };
 
 	/** うにょ機能を使用するかどうかのフラグ を取得する. @return うにょ機能を使用するかどうかのフラグ */
 	public int getUnyoMode() {
@@ -2813,16 +2846,16 @@ public abstract class LivingEntity extends Entity {
 	}
 
 	/** ゆっくりのオブジェクトのユニークID */
-	protected int uniqueID = 0;
+	protected int uniqueId = 0;
 
 	/** ゆっくりのオブジェクトのユニークID を取得する. @return ゆっくりのオブジェクトのユニークID */
-	public int getUniqueID() {
+	public int getUniqueId() {
 		return objId;
 	}
 
-	/** ゆっくりのオブジェクトのユニークID を設定する. @param uniqueID ゆっくりのオブジェクトのユニークID */
-	public void setUniqueID(int uniqueID) {
-		this.uniqueID = uniqueID;
+	/** ゆっくりのオブジェクトのユニークID を設定する. @param uniqueId ゆっくりのオブジェクトのユニークID */
+	public void setUniqueId(int uniqueId) {
+		this.uniqueId = uniqueId;
 	}
 
 	/** ユニークIDで等値比較する。 */
@@ -2835,16 +2868,15 @@ public abstract class LivingEntity extends Entity {
 			return false;
 		}
 		LivingEntity other = (LivingEntity) o;
-		return getUniqueID() == other.getUniqueID();
+		return getUniqueId() == other.getUniqueId();
 	}
 
 	/** ユニークIDをハッシュコードとして返す。 */
 	@Override
 	public int hashCode() {
-		return getUniqueID() * 13;
+		return getUniqueId() * 13;
 	}
 
-	@Override
 	/**
 	 * Compares this object with another.
 	 *
@@ -2852,6 +2884,7 @@ public abstract class LivingEntity extends Entity {
 	 *
 	 * @return a negative integer, zero, or a positive integer
 	 */
+	@Override
 	public int compareTo(Object o) {
 		if (o == null) {
 			return 0;
@@ -2860,7 +2893,7 @@ public abstract class LivingEntity extends Entity {
 			return 0;
 		}
 		LivingEntity other = (LivingEntity) o;
-		return getUniqueID() - other.getUniqueID();
+		return getUniqueId() - other.getUniqueId();
 	}
 
 	/** どのゆっくり的なメッセージを言うか */
@@ -4017,13 +4050,13 @@ public abstract class LivingEntity extends Entity {
 
 	/** 非ゆっくり症（NYD）状態かどうかを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
-	public final boolean isNYD() {
+	public final boolean isNyd() {
 		return getCoreAnkoState() != CoreAnkoState.NORMAL;
 	}
 
 	/** 通常（非NYD）状態かどうかを返す。 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
-	public final boolean isNotNYD() {
+	public final boolean isNotNyd() {
 		return getCoreAnkoState() == CoreAnkoState.NORMAL;
 	}
 
@@ -4205,22 +4238,10 @@ public abstract class LivingEntity extends Entity {
 
 	/** うんうん量を加算する（排便中または 0 以下の場合は無視）。 */
 	public void plusShit(int s) {
-		if (shit == 0 || s <= 0)
+		if (shit == 0 || s <= 0) {
 			return;
-		shit += s;
-	}
-
-	/** うんうん量を強制セットする。ibVeryShit=true の場合は限界値まで積む（排便中は無視）。 */
-	public void setShit(int inShit, boolean ibVeryShit) {
-		if (shitting)
-			return;
-		if (ibVeryShit) {
-			if (shit < getShitLimitBase()[getAgeState().ordinal()]) {
-				shit = getShitLimitBase()[getAgeState().ordinal()] - inShit;
-			}
-		} else {
-			shit = inShit;
 		}
+		shit += s;
 	}
 
 	/**
@@ -4350,7 +4371,7 @@ public abstract class LivingEntity extends Entity {
 		l.setCurrentEvent(currentEvent);
 		l.setEventResult(eventResult);
 		// --- ID・識別 ---
-		l.setUniqueID(uniqueID);
+		l.setUniqueId(uniqueId);
 		l.setMsgType(msgType);
 		l.setShitType(shitType);
 		// --- その他状態 ---

@@ -89,7 +89,7 @@ public final class YukkuriDamageDelegate {
 		}
 		Vomit vomit = GameView.addVomit(body.getX(), body.getY(), body.getZ(), body, body.getShitType());
 		vomit.crushVomit();
-		if (body.isNotNYD()) {
+		if (body.isNotNyd()) {
 			if (body.isSmart() || body.getAgeState().ordinal() < eater.getAgeState().ordinal()
 					|| body.isLockmove() || body.isGotBurnedHeavily()) {
 				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.EatenByBody));
@@ -123,7 +123,7 @@ public final class YukkuriDamageDelegate {
 			Vomit vomit = GameView.addVomit(body.getX(), body.getY(), body.getZ(), body, body.getShitType());
 			vomit.crushVomit();
 		}
-		if (body.isNotNYD()) {
+		if (body.isNotNyd()) {
 			if (p == 0) {
 				body.setHappiness(Happiness.VERY_SAD);
 				if (GameRandom.nextInt(4) == 0) {
@@ -156,7 +156,7 @@ public final class YukkuriDamageDelegate {
 										body.setFurifuri(true);
 										body.substractNumOfAnts(35);
 									}
-									// fall through
+									break;
 								default:
 									// NOP.
 							}
@@ -206,24 +206,24 @@ public final class YukkuriDamageDelegate {
 		}
 		int ap = enemy.getStrength();
 		if (enemy.isDamaged()) {
-			ap *= 0.75f;
+			ap = (int) (ap * 0.75f);
 		}
 		if (body.isMelt()) {
-			ap *= 2.5f;
+			ap = (int) (ap * 2.5f);
 		} else if (body.isWet()) {
-			ap *= 1.5f;
+			ap = (int) (ap * 1.5f);
 		}
 		if (body.isHasPants()) {
-			ap *= 0.8f;
+			ap = (int) (ap * 0.8f);
 		}
 		if (body.isExciting()) {
-			ap *= 0.25f;
+			ap = (int) (ap * 0.25f);
 		}
 		if (body.isPredatorType() && !enemy.isPredatorType()) {
-			ap *= 0.25f;
+			ap = (int) (ap * 0.25f);
 		}
 		if (!body.isPredatorType() && enemy.isPredatorType()) {
-			ap *= 2f;
+			ap = (int) (ap * 2f);
 		}
 		int kickX = (enemy.getWeight() - body.getWeight()) / 100;
 		int kickY = (enemy.getWeight() - body.getWeight()) / 500;
@@ -271,7 +271,7 @@ public final class YukkuriDamageDelegate {
 				body.changeUnyo((int) (ap * 0.11f), 0, 0);
 				enemy.changeUnyo(GameRandom.nextInt(3), 0, 0);
 			}
-			if (body.isNotNYD() && !body.isUnBirth()) {
+			if (body.isNotNyd() && !body.isUnBirth()) {
 				if (event instanceof HateNoOkazariEvent) {
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Scream), true);
 					if (body.getPublicRank() != PublicRank.UNUN_SLAVE
@@ -333,12 +333,12 @@ public final class YukkuriDamageDelegate {
 		}
 		// 状態によるダメージ変化
 		if (body.isMelt()) {
-			ap *= 2.5f;
+			ap = (int) (ap * 2.5f);
 		} else if (body.isWet()) {
-			ap *= 1.5f;
+			ap = (int) (ap * 1.5f);
 		}
 		if (body.isHasPants()) {
-			ap *= 0.8;
+			ap = (int) (ap * 0.8);
 		}
 		// 吹っ飛び設定
 		// 体重差

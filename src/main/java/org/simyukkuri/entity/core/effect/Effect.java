@@ -1,20 +1,16 @@
 package org.simyukkuri.entity.core.effect;
 
-import java.awt.image.BufferedImage;
-import java.beans.Transient;
-
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
-
+import java.awt.image.BufferedImage;
+import java.beans.Transient;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.util.GameWorld;
 
-/****************************************
+/**
  * セーブデータに保存する必要の無い軽量エフェクト
- *
- *
  */
 @JsonTypeInfo(use = Id.CLASS)
 public abstract class Effect extends Entity {
@@ -83,17 +79,19 @@ public abstract class Effect extends Entity {
 		vx = velocityX;
 		vy = velocityY;
 		vz = velocityZ;
-		if (invert)
+		if (invert) {
 			direction = 1;
-		else
+		} else {
 			direction = 0;
+		}
 		lifeTime = life;
 		animeInterval = 0;
 		animeLoop = loop;
-		if (loop == 0)
+		if (loop == 0) {
 			animate = false;
-		else
+		} else {
 			animate = true;
+		}
 		animeEnd = end;
 		enableGravity = grav;
 		calcPos();
@@ -129,13 +127,15 @@ public abstract class Effect extends Entity {
 				animeInterval -= interval;
 				animeFrame++;
 				if (animeFrame == frames) {
-					if (animeEnd)
+					if (animeEnd) {
 						return TickResult.REMOVED;
+					}
 					animeFrame = 0;
 					if (animeLoop != -1) {
 						animeLoop--;
-						if (animeLoop <= 0)
+						if (animeLoop <= 0) {
 							animate = false;
+						}
 					}
 				}
 			}

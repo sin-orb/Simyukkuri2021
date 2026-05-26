@@ -339,19 +339,21 @@ class ShitTest {
     void testLoadImages_headless_executesCode() {
         try {
             org.simyukkuri.entity.core.world.mobile.Shit.loadImages(
-                    org.simyukkuri.entity.core.world.mobile.Shit.class.getClassLoader(),
-                    null);
+                    org.simyukkuri.entity.core.world.mobile.Shit.class.getClassLoader(), null);
         } catch (Exception e) {
+            // ignore
         }
     }
 
     @Test
     void testConstructorWithArgs_headless_executesCode() {
         try {
-            org.simyukkuri.entity.core.living.yukkuri.Yukkuri body = org.simyukkuri.util.WorldTestHelper.createBody();
-            new org.simyukkuri.entity.core.world.mobile.Shit(100, 100, 0, body,
-                    org.simyukkuri.enums.YukkuriType.REIMU);
+            org.simyukkuri.entity.core.living.yukkuri.Yukkuri body =
+                    org.simyukkuri.util.WorldTestHelper.createBody();
+            new org.simyukkuri.entity.core.world.mobile.Shit(
+                    100, 100, 0, body, org.simyukkuri.enums.YukkuriType.REIMU);
         } catch (Exception e) {
+            // ignore
         }
     }
 

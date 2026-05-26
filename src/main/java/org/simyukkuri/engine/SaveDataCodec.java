@@ -1,5 +1,6 @@
 package org.simyukkuri.engine;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -13,13 +14,10 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
 import javax.crypto.Cipher;
 import javax.crypto.Mac;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * セーブデータの JSON / GZIP / 暗号化を担当する.

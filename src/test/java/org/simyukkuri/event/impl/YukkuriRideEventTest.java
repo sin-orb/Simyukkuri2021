@@ -45,8 +45,8 @@ public class YukkuriRideEventTest {
         Yukkuri to = createBody();
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         assertEquals(EventPriority.MIDDLE, event.getPriority());
-        assertEquals(from.getUniqueID(), event.getFrom());
-        assertEquals(to.getUniqueID(), event.getTo());
+        assertEquals(from.getUniqueId(), event.getFrom());
+        assertEquals(to.getUniqueId(), event.getTo());
         assertEquals(100, event.getCount());
     }
 
@@ -178,6 +178,7 @@ public class YukkuriRideEventTest {
             f.setAccessible(true);
             f.setInt(event, 10000); // becomes 10001 after tick++ in update
         } catch (Exception e) {
+            // ignore
         }
         assertEquals(org.simyukkuri.event.EventPacket.UpdateState.ABORT, event.update(from));
     }
@@ -195,6 +196,7 @@ public class YukkuriRideEventTest {
             f.setAccessible(true);
             f.setInt(event, -1); // becomes 0 after tick++, 0%20==0
         } catch (Exception e) {
+            // ignore
         }
         assertDoesNotThrow(() -> event.update(from));
     }
@@ -321,7 +323,7 @@ public class YukkuriRideEventTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 }

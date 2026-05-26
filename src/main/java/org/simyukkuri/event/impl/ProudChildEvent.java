@@ -195,7 +195,7 @@ public class ProudChildEvent extends EventPacket {
 		if (body.getPanicType() != null) {
 			return UpdateState.ABORT;
 		}
-		if (body.isNYD()) {
+		if (body.isNyd()) {
 			return UpdateState.ABORT;
 		}
 		if (body.isDead() || body.isRemoved()) {
@@ -224,37 +224,37 @@ public class ProudChildEvent extends EventPacket {
 			return UpdateState.ABORT;
 		}
 
-			// 3秒に1回（FROMのみ tick を進め、参加者数に依らず30フレーム周期を保つ）
-			if (body == sourceBody) {
-				if (eventTick++ % 30 != 0) {
-					return null;
-				}
+		// 3秒に1回（FROMのみ tick を進め、参加者数に依らず30フレーム周期を保つ）
+		if (body == sourceBody) {
+			if (eventTick++ % 30 != 0) {
+				return null;
+			}
+		} else {
+			if (eventTick % 30 != 0) {
+				return null;
+			}
+		}
+		// 親を持ち上げたときの反応
+		if (!sourceBody.canflyCheck() && sourceBody.getZ() >= 2) {
+			if (GameRandom.nextInt(50) == 0) {
+				return UpdateState.ABORT;
+			} else if (body == sourceBody) {
+				// 空処理
 			} else {
-				if (eventTick % 30 != 0) {
-					return null;
-				}
-			}
-			// 親を持ち上げたときの反応
-			if (!sourceBody.canflyCheck() && sourceBody.getZ() >= 2) {
-				if (GameRandom.nextInt(50) == 0) {
-					return UpdateState.ABORT;
-				} else if (body == sourceBody) {
-					// 空処理
+				if (body.isSad()) {
+					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.LookForParents), false);
 				} else {
-					if (body.isSad()) {
-						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.LookForParents), false);
-					} else {
-						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.LookForParents), true);
-					}
-					body.setHappiness(Happiness.SAD);
-					return null;
+					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.LookForParents), true);
 				}
+				body.setHappiness(Happiness.SAD);
+				return null;
 			}
+		}
 
-			// 自慢中は寝ない
-			if (body.isSleeping()) {
-				body.wakeup();
-			}
+		// 自慢中は寝ない
+		if (body.isSleeping()) {
+			body.wakeup();
+		}
 		// 空腹状態なら60%にする(強制イベント救済措置)
 		if (body.isHungry()) {
 			body.setHungry(body.getHungryLimit() * 6 / 10);
@@ -364,9 +364,9 @@ public class ProudChildEvent extends EventPacket {
 							body.setEventResMessage(
 									GameMessages.getMessage(body, MessagePool.Action.ProudChildsSING), 52,
 									true, false);
-								if (GameRandom.nextBoolean()) {
-									childActionEnabled = true;
-								}
+							if (GameRandom.nextBoolean()) {
+								childActionEnabled = true;
+							}
 							body.setNobinobi(true);
 							body.stay(stayTicks);
 							body.addMemories(10);
@@ -472,22 +472,22 @@ public class ProudChildEvent extends EventPacket {
 									true, false);
 							if (body.isRude() && GameRandom.nextBoolean()) {
 								body.setFurifuri(true);
-								} else {
-									body.getInVain(false);
-								}
+							} else {
+								body.getInVain(false);
+							}
 							body.stay(stayTicks);
 							body.addMemories(10);
 						}
 					}
 					break;
 				case END:
-						if (body.isRude()) {
-							body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ProudChildsEND),
-									52, true,
-									false);
-						}
-						body.stay(52);
-						return UpdateState.ABORT;
+					if (body.isRude()) {
+						body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ProudChildsEND),
+								52, true,
+								false);
+					}
+					body.stay(52);
+					return UpdateState.ABORT;
 				default:
 					break;
 			}

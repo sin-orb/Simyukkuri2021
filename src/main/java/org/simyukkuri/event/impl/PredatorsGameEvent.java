@@ -1,7 +1,6 @@
 package org.simyukkuri.event.impl;
 
 import java.util.Map;
-
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -22,8 +21,8 @@ import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
- * 空中捕食イベント
+/**
+ * 空中捕食イベント.
  * protected Yukkuri from; // イベントを発した個体
  * protected Yukkuri to; // 未使用
  * protected Entity target; // 未使用
@@ -120,8 +119,9 @@ public class PredatorsGameEvent extends EventPacket {
 	public boolean checkEventResponse(Yukkuri b) {
 		priority = EventPriority.LOW;
 
-		if (b.isDead())
+		if (b.isDead()) {
 			return false;
+		}
 		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (b.isPredatorType() && b == from) {
 			// 遊び相手の決定
@@ -134,22 +134,27 @@ public class PredatorsGameEvent extends EventPacket {
 				if (b.canflyCheck()) {
 					wallMode = AgeState.ADULT.ordinal();
 				}
-				if (b == d)
+				if (b == d) {
 					continue;
+				}
 				// 生餌
 				if (!d.isDead()) {
 					// 捕食種では遊ばない
-					if (d.isPredatorType())
+					if (d.isPredatorType()) {
 						continue;
+					}
 					// 家族では遊ばない
-					if (b.isFamily(d))
+					if (b.isFamily(d)) {
 						continue;
+					}
 					// 飛べるのでは遊ばない
-					if (d.canflyCheck())
+					if (d.canflyCheck()) {
 						continue;
+					}
 					// かびてるやつは避ける
-					if (b.findSick(d))
+					if (b.findSick(d)) {
 						continue;
+					}
 					/// れみりゃやふらんはさくや、めーりんでは遊ばない
 					if ((d.getType() == YukkuriType.SAKUYA || d.getType() == YukkuriType.MEIRIN)
 							&& (b.getType() == YukkuriType.REMIRYA || b.getType() == YukkuriType.FRAN)) {
@@ -246,10 +251,11 @@ public class PredatorsGameEvent extends EventPacket {
 			// おもちゃのセリフ
 			if (GameRandom.nextInt(8) == 0) {
 				toy.setForceFace(ImageCode.CRYING.ordinal());
-				if (GameRandom.nextBoolean() && toy.getZ() > 0)
+				if (GameRandom.nextBoolean() && toy.getZ() > 0) {
 					toy.setPikoMessage(GameMessages.getMessage(toy, MessagePool.Action.Flying), true);
-				else
+				} else {
 					toy.setPikoMessage(GameMessages.getMessage(toy, MessagePool.Action.DontPlayMe), true);
+				}
 			}
 			// 高度に達してたら落とす
 			if (Math.abs(b.getZ() - Translate.getFlyHeightLimit()) < 3) {
@@ -270,19 +276,20 @@ public class PredatorsGameEvent extends EventPacket {
 					b.moveTo(toy.getX(), toy.getY(), Translate.getFlyHeightLimit());
 					// toy.addDamage(25);
 					tick = 20;
-				}
-				// それ以外は空中でいじめてダメージ
-				else {
+				} else {
+					// それ以外は空中でいじめてダメージ
 					b.moveTo(b.getX(), b.getY(), Translate.getFlyHeightLimit());
 					if (GameRandom.nextInt(12) == 0) {
-						if (b.isRude() && GameRandom.nextBoolean())
+						if (b.isRude() && GameRandom.nextBoolean()) {
 							b.setForceFace(ImageCode.RUDE.ordinal());
-						else
+						} else {
 							b.setForceFace(ImageCode.SMILE.ordinal());
+						}
 						toy.setForceFace(ImageCode.PAIN.ordinal());
 						toy.setPikoMessage(GameMessages.getMessage(toy, MessagePool.Action.Scream), true);
-						if (GameRandom.nextInt(100) == 0)
+						if (GameRandom.nextInt(100) == 0) {
 							toy.bodyInjure();
+						}
 						toy.addDamage(15);
 					}
 				}
@@ -294,10 +301,11 @@ public class PredatorsGameEvent extends EventPacket {
 				toy.setCalcX(b.getX());
 				toy.setCalcY(b.getY() + 1);
 				int toysHeight = b.getZ() + ofsZ[toy.getAgeState().ordinal()];
-				if (toysHeight >= 0)
+				if (toysHeight >= 0) {
 					toy.setCalcZ(toysHeight);
-				else
+				} else {
 					toy.setCalcZ(0);
+				}
 			}
 			return null;
 		}
@@ -314,40 +322,43 @@ public class PredatorsGameEvent extends EventPacket {
 		if ((b.getStepDist() + 2) >= Translate.distance(b.getX(), b.getY(), toy.getX(), toy.getY())) {
 			// 空中で遊ぶ場合はつかむ
 			if (FlyGame) {
-				if (b.isRude() && GameRandom.nextBoolean())
+				if (b.isRude() && GameRandom.nextBoolean()) {
 					b.setForceFace(ImageCode.RUDE.ordinal());
-				else
+				} else {
 					b.setForceFace(ImageCode.SMILE.ordinal());
+				}
 				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.CaughtYou), true);
 				toy.setParentLinkId(b.objId);
 				grabbing = true;
 				b.moveTo(b.getX(), b.getY(), 5);
-			}
-			// 体当たりで遊ぶ
-			else {
+			} else {
+				// 体当たりで遊ぶ
 				// b.setMessage(GameMessages.getMessage(b, MessagePool.Action.PlayTreasure));
-				if (GameRandom.nextBoolean())
+				if (GameRandom.nextBoolean()) {
 					b.setForceFace(ImageCode.RUDE.ordinal());
-				else
+				} else {
 					b.setForceFace(ImageCode.SMILE.ordinal());
+				}
 				toy.strikeByYukkuri(b, this, false);
-				if (b.canflyCheck())
+				if (b.canflyCheck()) {
 					b.moveTo(b.getX(), b.getY(), Translate.getFlyHeightLimit());
+				}
 				b.addStress(-50);
 				tick = 15;
 			}
-		}
-		// 非接触状態なら向かう
-		else {
+		} else {
+			// 非接触状態なら向かう
 			b.moveTo(toy.getX(), toy.getY(), toy.getZ() /* Translate.getFlyHeightLimit() */);
 			if (GameRandom.nextInt(10) == 0) {
-				if (b.isRude() && GameRandom.nextBoolean())
+				if (b.isRude() && GameRandom.nextBoolean()) {
 					b.setForceFace(ImageCode.RUDE.ordinal());
-				else
+				} else {
 					b.setForceFace(ImageCode.SMILE.ordinal());
+				}
 			}
-			if (GameRandom.nextInt(15) == 0)
+			if (GameRandom.nextInt(15) == 0) {
 				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HeyYouWait));
+			}
 			toy.stay();
 		}
 
@@ -366,13 +377,15 @@ public class PredatorsGameEvent extends EventPacket {
 			return true;
 		}
 		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
-		if (from == null)
+		if (from == null) {
 			return true;
+		}
 		// 相手が捕まれたらイベント中断
 		if (toy.isGrabbed()) {
 			Yukkuri to = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
-			if (to != null)
+			if (to != null) {
 				to.setParentLinkId(-1);
+			}
 			return true;
 		}
 		// 相手が死んだらイベント中断
@@ -390,14 +403,15 @@ public class PredatorsGameEvent extends EventPacket {
 			tick2 = 0;
 			FoodLogic.eatFood(b, Food.FoodType.BODY, Math.min(b.getEatAmount(), toy.getAnkoAmount()));
 			toy.eatYukkuri(Math.min(b.getEatAmount(), toy.getAnkoAmount()));
-			if (toy.isSick() && GameRandom.nextBoolean())
+			if (toy.isSick() && GameRandom.nextBoolean()) {
 				b.addSickPeriod(100);
+			}
 			if (toy.isDead()) {
 				toy.setMessage(GameMessages.getMessage(toy, MessagePool.Action.Dead));
 				toy.setParentLinkId(-1);
 				return true;
 			} else {
-				if (toy.isNotNYD()) {
+				if (toy.isNotNyd()) {
 					toy.setMessage(GameMessages.getMessage(toy, MessagePool.Action.EatenByBody2));
 					toy.setHappiness(Happiness.VERY_SAD);
 					toy.setForceFace(ImageCode.PAIN.ordinal());
@@ -407,13 +421,12 @@ public class PredatorsGameEvent extends EventPacket {
 		return false;
 	}
 
-	// イベント終了処理
-	@Override
 	/**
-	 * End.
+	 * イベント終了処理.
 	 *
-	 * @param b the b
+	 * @param b ゆっくり
 	 */
+	@Override
 	public void end(Yukkuri b) {
 		b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GameEnd));
 		grabbing = false;

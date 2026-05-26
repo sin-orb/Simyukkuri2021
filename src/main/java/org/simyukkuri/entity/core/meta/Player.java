@@ -3,16 +3,12 @@ package org.simyukkuri.entity.core.meta;
 import java.beans.Transient;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.swing.DefaultListModel;
-
 import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.ui.MainCommandUI;
+import org.simyukkuri.ui.MainCommandUi;
 
-/*********************************************
- * 
+/**
  * プレイヤー情報
- * 
  */
 public class Player extends Entity {
 
@@ -53,7 +49,7 @@ public class Player extends Entity {
 		cash += addcash;
 		// 手持ち資金が更新されたら表示変更
 		try {
-			MainCommandUI.showPlayerStatus();
+			MainCommandUi.showPlayerStatus();
 		} catch (Throwable ignore) {
 			// Headless or UI init failure; ignore in non-GUI contexts.
 		}

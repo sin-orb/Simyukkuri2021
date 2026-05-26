@@ -5,16 +5,15 @@ import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.WorldEntityKind;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * おもちゃ
  */
 public class Toy extends WorldEntity {
@@ -73,19 +72,19 @@ public class Toy extends WorldEntity {
 		GameWorld.get().getCurrentWorldState().getToys().remove(objId);
 	}
 
-	@Override
 	/**
 	 * Grab.
 	 */
+	@Override
 	public void grab() {
 		owner = null;
 		grabbed = true;
 	}
 
-	@Override
 	/**
 	 * Kick.
 	 */
+	@Override
 	public void kick() {
 		kick(0, -8, -4);
 	}
@@ -93,7 +92,7 @@ public class Toy extends WorldEntity {
 	/**
 	 * おもちゃの持ち主を設定する.
 	 * 
-	 * @param b おもちゃの持ち主
+	 * @param body おもちゃの持ち主
 	 */
 	public void setOwner(Yukkuri body) {
 		owner = body;
@@ -111,7 +110,7 @@ public class Toy extends WorldEntity {
 	/**
 	 * そのゆっくりに所有されているかどうか
 	 * 
-	 * @param b 判定したいゆっくり
+	 * @param body 判定したいゆっくり
 	 * @return そのゆっくりに所有されているかどうか
 	 */
 	@Transient

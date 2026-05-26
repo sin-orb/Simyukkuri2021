@@ -1,7 +1,6 @@
 package org.simyukkuri.logic;
 
 import java.util.Map;
-
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -11,7 +10,7 @@ import org.simyukkuri.event.impl.GetTrashOkazariEvent;
 import org.simyukkuri.field.impl.Barrier;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * ガラクタ関係の処理
  * ゴミや武器が必要なときにガラクタを検索して
  * イベントで取りに行く
@@ -26,8 +25,9 @@ public class TrashLogic {
 	 */
 	public static final boolean checkTrashOkazari(Yukkuri body) {
 
-		if (body.hasOkazari())
+		if (body.hasOkazari()) {
 			return false;
+		}
 
 		Entity trashCandidate = searchTrashObj(body);
 

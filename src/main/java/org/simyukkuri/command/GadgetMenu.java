@@ -3,10 +3,8 @@ package org.simyukkuri.command;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPopupMenu;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.world.item.AutoFeeder;
@@ -34,10 +32,10 @@ import org.simyukkuri.entity.core.world.item.Trampoline;
 import org.simyukkuri.entity.core.world.item.Trash;
 import org.simyukkuri.entity.core.world.item.Yunba;
 import org.simyukkuri.system.IconPool;
-import org.simyukkuri.ui.MainCommandUI;
+import org.simyukkuri.ui.MainCommandUi;
 import org.simyukkuri.util.GameText;
 
-/**********************************************
+/**
  * 各種コマンドメニューのまとめ
  * Ctrl+Shift+Fでのフォーマット禁止
  */
@@ -782,8 +780,10 @@ public class GadgetMenu {
 	private static String[][] currentHelpBuf = null;
 	/** ヘルプアイコン */
 	private static HelpIcon[][] currentHelpIcon = null;
-	/** ヘルプの幅・高さ */
-	private static int helpW, helpH;
+	/** ヘルプの幅 */
+	private static int helpW;
+	/** ヘルプの高さ */
+	private static int helpH;
 
 	/** アイコンの画像の入れ物 */
 	private static BufferedImage[] icon;
@@ -994,10 +994,11 @@ public class GadgetMenu {
 
 	/** 最新状態の右上の、中と下のウィンドウの表示のゲッター */
 	public static final GadgetMenuChoice getCurrentGadget() {
-		if (selectSub != null)
+		if (selectSub != null) {
 			return selectSub;
-		else if (selectMain != null)
+		} else if (selectMain != null) {
 			return selectMain;
+		}
 		return null;
 	}
 
@@ -1008,8 +1009,9 @@ public class GadgetMenu {
 	 * @return ヘルプアイコン
 	 */
 	public static final HelpIcon getHelpIcon(String str) {
-		if (str.indexOf("%") != 0)
+		if (str.indexOf("%") != 0) {
 			return null;
+		}
 		return HelpIcon.valueOf(str.substring(1));
 	}
 
@@ -1041,61 +1043,61 @@ public class GadgetMenu {
 		synchronized (SimYukkuri.lock) {
 			switch (mainSel) {
 				case TOOL:
-					MainCommandUI.getSubItemCombo().setModel(toolModel);
+					MainCommandUi.getSubItemCombo().setModel(toolModel);
 					GadgetMenu.setSelectSub(GadgetMenu.getToolCategory()[subSel]);
 					break;
 				case BODY_CHANGE:
-					MainCommandUI.getSubItemCombo().setModel(toolModel2);
+					MainCommandUi.getSubItemCombo().setModel(toolModel2);
 					GadgetMenu.setSelectSub(GadgetMenu.getToolCategory2()[subSel]);
 					break;
 				case AMPOULE:
-					MainCommandUI.getSubItemCombo().setModel(AmpouleModel);
+					MainCommandUi.getSubItemCombo().setModel(AmpouleModel);
 					GadgetMenu.setSelectSub(GadgetMenu.getAmpouleCategory()[subSel]);
 					break;
 				case FOODS:
-					MainCommandUI.getSubItemCombo().setModel(foodModel);
+					MainCommandUi.getSubItemCombo().setModel(foodModel);
 					GadgetMenu.setSelectSub(GadgetMenu.getFoodCategory()[subSel]);
 					break;
 				case CLEAN:
-					MainCommandUI.getSubItemCombo().setModel(cleanModel);
+					MainCommandUi.getSubItemCombo().setModel(cleanModel);
 					GadgetMenu.setSelectSub(GadgetMenu.getCleanCategory()[subSel]);
 					break;
 				case ACCESSORY:
-					MainCommandUI.getSubItemCombo().setModel(okazariModel);
+					MainCommandUi.getSubItemCombo().setModel(okazariModel);
 					GadgetMenu.setSelectSub(GadgetMenu.getOkazariCategory()[subSel]);
 					break;
 				case PANTS:
-					MainCommandUI.getSubItemCombo().setModel(pantsModel);
+					MainCommandUi.getSubItemCombo().setModel(pantsModel);
 					GadgetMenu.setSelectSub(GadgetMenu.getPantsCategory()[subSel]);
 					break;
 				case FLOOR:
-					MainCommandUI.getSubItemCombo().setModel(floorModel);
+					MainCommandUi.getSubItemCombo().setModel(floorModel);
 					GadgetMenu.setSelectSub(GadgetMenu.getFloorCategory()[subSel]);
 					break;
 				case BARRIER:
-					MainCommandUI.getSubItemCombo().setModel(barrierModel);
+					MainCommandUi.getSubItemCombo().setModel(barrierModel);
 					GadgetMenu.setSelectSub(GadgetMenu.getBarrierCategory()[subSel]);
 					break;
 				case TOYS:
-					MainCommandUI.getSubItemCombo().setModel(toyModel);
+					MainCommandUi.getSubItemCombo().setModel(toyModel);
 					GadgetMenu.setSelectSub(GadgetMenu.getToysCategory()[subSel]);
 					break;
 				case CONVEYOR:
-					MainCommandUI.getSubItemCombo().setModel(conveyorModel);
+					MainCommandUi.getSubItemCombo().setModel(conveyorModel);
 					GadgetMenu.setSelectSub(GadgetMenu.getConveyorCategory()[subSel]);
 					break;
 				case VOICE:
-					MainCommandUI.getSubItemCombo().setModel(voiceModel);
+					MainCommandUi.getSubItemCombo().setModel(voiceModel);
 					GadgetMenu.setSelectSub(GadgetMenu.getVoiceCategory()[subSel]);
 					break;
 				case DEBUG:
-					MainCommandUI.getSubItemCombo().setModel(testModel);
+					MainCommandUi.getSubItemCombo().setModel(testModel);
 					GadgetMenu.setSelectSub(GadgetMenu.getTestCategory()[subSel]);
 					break;
 				default:
 					break;
 			}
-			MainCommandUI.getSubItemCombo().setSelectedIndex(subSel);
+			MainCommandUi.getSubItemCombo().setSelectedIndex(subSel);
 		}
 	}
 
@@ -1141,8 +1143,9 @@ public class GadgetMenu {
 					tmpW += currentHelpBuf[i][j].length() * 12;
 				}
 			}
-			if (tmpW > helpW)
+			if (tmpW > helpW) {
 				helpW = tmpW;
+			}
 		}
 	}
 

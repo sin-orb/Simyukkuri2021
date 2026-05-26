@@ -63,8 +63,8 @@ class BodyExcitementRuleTest {
 		me.setRaper(false);
 		me.setStress(150);
 		you.setStress(90);
-		me.setPartner(you.getUniqueID());
-		you.setPartner(me.getUniqueID());
+		me.setPartner(you.getUniqueId());
+		you.setPartner(me.getUniqueId());
 
 		assertDoesNotThrow(() -> assertTrue(YukkuriExcitementRule.handleExcitingContact(you, me)));
 	}

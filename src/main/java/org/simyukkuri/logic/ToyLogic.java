@@ -2,7 +2,6 @@ package org.simyukkuri.logic;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -21,7 +20,7 @@ import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * おもちゃ関係の処理
  */
 public class ToyLogic {
@@ -42,8 +41,9 @@ public class ToyLogic {
 			return false;
 		}
 
-		if (canPlay(body) == false)
+		if (canPlay(body) == false) {
 			return false;
+		}
 		if (!body.isRude() && (body.isAdult() || body.wantToShit())) {
 			return false;
 		}
@@ -99,7 +99,7 @@ public class ToyLogic {
 					}
 					return true;
 				}
-				int kickStrength[] = { -1, -4, -6 };
+				int[] kickStrength = { -1, -4, -6 };
 				if (body.getAge() % 20 == 0) {
 					body.setHappiness(Happiness.HAPPY);
 					body.addStress(-400);
@@ -151,10 +151,11 @@ public class ToyLogic {
 			return false;
 		}
 
-		if (canPlay(body) == false)
+		if (canPlay(body) == false) {
 			return false;
+		}
 		if (// || GameRandom.nextInt(100) != 0 ||
-		body.takeMappedObj(body.getParentLinkId()) instanceof Sui) {
+				body.takeMappedObj(body.getParentLinkId()) instanceof Sui) {
 			return false;
 		}
 
@@ -254,8 +255,9 @@ public class ToyLogic {
 			return false;
 		}
 
-		if (canPlay(body) == false)
+		if (canPlay(body) == false) {
 			return false;
+		}
 		if (!body.isRude() && (body.isAdult() || body.wantToShit())) {
 			return false;
 		}
@@ -283,7 +285,7 @@ public class ToyLogic {
 
 		// 乗った場合
 		if (nearestDistance <= body.getStepDist()) {
-			int kickStrength[] = { -1, -4, -6 };
+			int[] kickStrength = { -1, -4, -6 };
 			if (body.getAge() % 20L == 0L) {
 				body.setHappiness(Happiness.HAPPY);
 				body.addStress(-200);

@@ -2,12 +2,13 @@ package org.simyukkuri.entity.core.living.yukkuri;
 
 import org.simyukkuri.Const;
 import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.world.bodylinked.Stalk;
+import org.simyukkuri.enums.BurialState;
+import org.simyukkuri.enums.PurposeOfMoving;
 import org.simyukkuri.logic.YukkuriMovement;
 import org.simyukkuri.util.GameRandom;
-import org.simyukkuri.draw.Translate;
-import org.simyukkuri.enums.BurialState;
 
 /**
  * ゆっくりの移動・茎更新を切り出した委譲クラス.
@@ -40,6 +41,8 @@ public final class YukkuriMoveDelegate {
 				break;
 			case -1:
 				curDir = (GameRandom.nextBoolean() ? 0 : curDir);
+				break;
+			default:
 				break;
 		}
 		return curDir;
@@ -173,8 +176,8 @@ public final class YukkuriMoveDelegate {
 	 * @param flag 移動目的がフードかどうか
 	 */
 	public void setToFood(boolean flag) {
-		body.setPurposeOfMoving(flag ? org.simyukkuri.enums.PurposeOfMoving.FOOD : body.getPurposeOfMoving() == org.simyukkuri.enums.PurposeOfMoving.FOOD
-				? org.simyukkuri.enums.PurposeOfMoving.NONE : body.getPurposeOfMoving());
+		body.setPurposeOfMoving(flag ? PurposeOfMoving.FOOD : body.getPurposeOfMoving() == PurposeOfMoving.FOOD
+				? PurposeOfMoving.NONE : body.getPurposeOfMoving());
 	}
 
 	/**
@@ -183,8 +186,8 @@ public final class YukkuriMoveDelegate {
 	 * @param flag 移動目的がすっきりかどうか
 	 */
 	public void setToSukkiri(boolean flag) {
-		body.setPurposeOfMoving(flag ? org.simyukkuri.enums.PurposeOfMoving.SUKKIRI : body.getPurposeOfMoving() == org.simyukkuri.enums.PurposeOfMoving.SUKKIRI
-				? org.simyukkuri.enums.PurposeOfMoving.NONE : body.getPurposeOfMoving());
+		body.setPurposeOfMoving(flag ? PurposeOfMoving.SUKKIRI : body.getPurposeOfMoving() == PurposeOfMoving.SUKKIRI
+				? PurposeOfMoving.NONE : body.getPurposeOfMoving());
 	}
 
 	/**
@@ -193,8 +196,8 @@ public final class YukkuriMoveDelegate {
 	 * @param flag 移動目的がうんうんかどうか
 	 */
 	public void setToShit(boolean flag) {
-		body.setPurposeOfMoving(flag ? org.simyukkuri.enums.PurposeOfMoving.SHIT : body.getPurposeOfMoving() == org.simyukkuri.enums.PurposeOfMoving.SHIT
-				? org.simyukkuri.enums.PurposeOfMoving.NONE : body.getPurposeOfMoving());
+		body.setPurposeOfMoving(flag ? PurposeOfMoving.SHIT : body.getPurposeOfMoving() == PurposeOfMoving.SHIT
+				? PurposeOfMoving.NONE : body.getPurposeOfMoving());
 	}
 
 	/**
@@ -203,8 +206,8 @@ public final class YukkuriMoveDelegate {
 	 * @param flag 移動目的がベッドかどうか
 	 */
 	public void setToBed(boolean flag) {
-		body.setPurposeOfMoving(flag ? org.simyukkuri.enums.PurposeOfMoving.BED : body.getPurposeOfMoving() == org.simyukkuri.enums.PurposeOfMoving.BED
-				? org.simyukkuri.enums.PurposeOfMoving.NONE : body.getPurposeOfMoving());
+		body.setPurposeOfMoving(flag ? PurposeOfMoving.BED : body.getPurposeOfMoving() == PurposeOfMoving.BED
+				? PurposeOfMoving.NONE : body.getPurposeOfMoving());
 	}
 
 	/**
@@ -213,8 +216,8 @@ public final class YukkuriMoveDelegate {
 	 * @param flag 移動目的が他のゆっくりかどうか
 	 */
 	public void setToYukkuri(boolean flag) {
-		body.setPurposeOfMoving(flag ? org.simyukkuri.enums.PurposeOfMoving.YUKKURI : body.getPurposeOfMoving() == org.simyukkuri.enums.PurposeOfMoving.YUKKURI
-				? org.simyukkuri.enums.PurposeOfMoving.NONE : body.getPurposeOfMoving());
+		body.setPurposeOfMoving(flag ? PurposeOfMoving.YUKKURI : body.getPurposeOfMoving() == PurposeOfMoving.YUKKURI
+				? PurposeOfMoving.NONE : body.getPurposeOfMoving());
 	}
 
 	/**
@@ -223,8 +226,8 @@ public final class YukkuriMoveDelegate {
 	 * @param flag 移動目的がおかざりを盗むためかどうか
 	 */
 	public void setToSteal(boolean flag) {
-		body.setPurposeOfMoving(flag ? org.simyukkuri.enums.PurposeOfMoving.STEAL : body.getPurposeOfMoving() == org.simyukkuri.enums.PurposeOfMoving.STEAL
-				? org.simyukkuri.enums.PurposeOfMoving.NONE : body.getPurposeOfMoving());
+		body.setPurposeOfMoving(flag ? PurposeOfMoving.STEAL : body.getPurposeOfMoving() == PurposeOfMoving.STEAL
+				? PurposeOfMoving.NONE : body.getPurposeOfMoving());
 	}
 
 	/**
@@ -233,15 +236,15 @@ public final class YukkuriMoveDelegate {
 	 * @param flag 移動目的がアイテムを持つことかどうか
 	 */
 	public void setToTakeout(boolean flag) {
-		body.setPurposeOfMoving(flag ? org.simyukkuri.enums.PurposeOfMoving.TAKEOUT : body.getPurposeOfMoving() == org.simyukkuri.enums.PurposeOfMoving.TAKEOUT
-				? org.simyukkuri.enums.PurposeOfMoving.NONE : body.getPurposeOfMoving());
+		body.setPurposeOfMoving(flag ? PurposeOfMoving.TAKEOUT : body.getPurposeOfMoving() == PurposeOfMoving.TAKEOUT
+				? PurposeOfMoving.NONE : body.getPurposeOfMoving());
 	}
 
 	/**
 	 * 移動目標のみをキャンセルする.
 	 */
 	public void clearTargets() {
-		body.setPurposeOfMoving(org.simyukkuri.enums.PurposeOfMoving.NONE);
+		body.setPurposeOfMoving(PurposeOfMoving.NONE);
 		body.stopStaying();
 	}
 
@@ -265,7 +268,7 @@ public final class YukkuriMoveDelegate {
 			return;
 		}
 		int mapX = Translate.getWorldWidth();
-		int mapY = Translate.getWorldHeight();
+		final int mapY = Translate.getWorldHeight();
 		if (target.getX() < 0) {
 			target.setCalcX(0);
 		}

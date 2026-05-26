@@ -11,10 +11,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Translate;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.item.BeltconveyorObj;
@@ -26,7 +25,7 @@ import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * 池
  */
 public class Pool extends FieldShape {
@@ -45,7 +44,7 @@ public class Pool extends FieldShape {
 	List<Entity> bindObjList = new LinkedList<Entity>();
 
 	/** 池の深さの列挙 */
-	public enum DEPTH {
+	public enum Depth {
 		NONE, // エリア外
 		EDGE, // 角でまだ入ってない
 		SHALLOW, // 浅い
@@ -129,12 +128,12 @@ public class Pool extends FieldShape {
 	public void drawShape(Graphics2D g2) {
 		int[] polygonX = new int[4];
 		int[] polygonY = new int[4];
-		Translate.getPolygonPoint(fieldSX, fieldSY, fieldEX, fieldEY, polygonX, polygonY);
+		Translate.getPolygonPoint(fieldSx, fieldSy, fieldEx, fieldEy, polygonX, polygonY);
 
 		g2.setPaint(ROCK_COLOR);
 		g2.fillPolygon(polygonX, polygonY, 4);
 
-		Translate.getPolygonPoint(fieldSX + 8, fieldSY + 8, fieldEX - 8, fieldEY - 8, waterPolygonX, waterPolygonY);
+		Translate.getPolygonPoint(fieldSx + 8, fieldSy + 8, fieldEx - 8, fieldEy - 8, waterPolygonX, waterPolygonY);
 		g2.setPaint(texture);
 		g2.fillPolygon(waterPolygonX, waterPolygonY, 4);
 	}
@@ -150,53 +149,55 @@ public class Pool extends FieldShape {
 	public Pool(int fsx, int fsy, int fex, int fey) {
 		Point4y start = Translate.getFieldLimitForWorld(fsx, fsy);
 		Point4y end = Translate.getFieldLimitForWorld(fex, fey);
-		fieldSX = start.getX();
-		fieldSY = start.getY();
-		fieldEX = end.getX();
-		fieldEY = end.getY();
+		fieldSx = start.getX();
+		fieldSy = start.getY();
+		fieldEx = end.getX();
+		fieldEy = end.getY();
 
 		int[] basePolygonX = new int[2];
 		int[] basePolygonY = new int[2];
-		Translate.getMovedPoint(fieldSX, fieldSY, fieldEX, fieldEY, 0, 0, 0, 0, basePolygonX, basePolygonY);
+		Translate.getMovedPoint(fieldSx, fieldSy, fieldEx, fieldEy, 0, 0, 0, 0, basePolygonX, basePolygonY);
 
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
 		Point4y pos = Translate.invertLimit(basePolygonX[0], basePolygonY[0]);
-		mapSX = Math.max(0, Math.min(pos.getX(), Translate.getWorldWidth()));
-		mapSY = Math.max(0, Math.min(pos.getY(), Translate.getWorldHeight()));
+		mapSx = Math.max(0, Math.min(pos.getX(), Translate.getWorldWidth()));
+		mapSy = Math.max(0, Math.min(pos.getY(), Translate.getWorldHeight()));
 
 		pos = Translate.invertLimit(basePolygonX[1], basePolygonY[1]);
-		mapEX = Math.max(0, Math.min(pos.getX(), Translate.getWorldWidth()));
-		mapEY = Math.max(0, Math.min(pos.getY(), Translate.getWorldHeight()));
+		mapEx = Math.max(0, Math.min(pos.getX(), Translate.getWorldWidth()));
+		mapEy = Math.max(0, Math.min(pos.getY(), Translate.getWorldHeight()));
 
 		// 規定サイズと位置へ合わせる
-		if ((mapEX - mapSX) < MIN_SIZE)
-			mapEX = mapSX + MIN_SIZE;
-		if ((mapEY - mapSY) < MIN_SIZE)
-			mapEY = mapSY + MIN_SIZE;
-		if (mapEX > Translate.getWorldWidth()) {
-			mapSX -= (mapEX - Translate.getWorldWidth());
-			mapEX -= (mapEX - Translate.getWorldWidth());
+		if ((mapEx - mapSx) < MIN_SIZE) {
+			mapEx = mapSx + MIN_SIZE;
 		}
-		if (mapEY > Translate.getWorldHeight()) {
-			mapSY -= (mapEY - Translate.getWorldHeight());
-			mapEY -= (mapEY - Translate.getWorldHeight());
+		if ((mapEy - mapSy) < MIN_SIZE) {
+			mapEy = mapSy + MIN_SIZE;
+		}
+		if (mapEx > Translate.getWorldWidth()) {
+			mapSx -= (mapEx - Translate.getWorldWidth());
+			mapEx -= (mapEx - Translate.getWorldWidth());
+		}
+		if (mapEy > Translate.getWorldHeight()) {
+			mapSy -= (mapEy - Translate.getWorldHeight());
+			mapEy -= (mapEy - Translate.getWorldHeight());
 		}
 
 		Point4y f = new Point4y();
-		Translate.translate(mapSX, mapSY, f);
-		fieldSX = f.getX();
-		fieldSY = f.getY();
-		Translate.translate(mapEX, mapEY, f);
-		fieldEX = f.getX();
-		fieldEY = f.getY();
+		Translate.translate(mapSx, mapSy, f);
+		fieldSx = f.getX();
+		fieldSy = f.getY();
+		Translate.translate(mapEx, mapEy, f);
+		fieldEx = f.getX();
+		fieldEy = f.getY();
 
-		fieldW = fieldEX - fieldSX + 1;
-		fieldH = fieldEY - fieldSY + 1;
-		mapW = mapEX - mapSX + 1;
-		mapH = mapEY - mapSY + 1;
+		fieldW = fieldEx - fieldSx + 1;
+		fieldH = fieldEy - fieldSy + 1;
+		mapW = mapEx - mapSx + 1;
+		mapH = mapEy - mapSy + 1;
 
 		GameWorld.get().getCurrentWorldState().getPools().add(this);
-		WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), mapSX, mapSY, mapW, mapH, true,
+		WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), mapSx, mapSy, mapW, mapH, true,
 				FIELD_POOL);
 	}
 
@@ -209,8 +210,8 @@ public class Pool extends FieldShape {
 	public static Pool getPool(int fx, int fy) {
 
 		for (Pool bc : GameWorld.get().getCurrentWorldState().getPools()) {
-			if (bc.fieldSX <= fx && fx <= bc.fieldEX
-					&& bc.fieldSY <= fy && fy <= bc.fieldEY) {
+			if (bc.fieldSx <= fx && fx <= bc.fieldEx
+					&& bc.fieldSy <= fy && fy <= bc.fieldEy) {
 				return bc;
 			}
 		}
@@ -219,12 +220,12 @@ public class Pool extends FieldShape {
 
 	/** 削除 */
 	public static void deletePool(Pool b) {
-		WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), b.mapSX, b.mapSY, b.mapW, b.mapH,
+		WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), b.mapSx, b.mapSy, b.mapW, b.mapH,
 				false, FIELD_POOL);
 		GameWorld.get().getCurrentWorldState().getPools().remove(b);
 		// 重なってた部分の復元
 		for (Pool bc : GameWorld.get().getCurrentWorldState().getPools()) {
-			WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), bc.mapSX, bc.mapSY, bc.mapW,
+			WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), bc.mapSx, bc.mapSy, bc.mapW,
 					bc.mapH, true, FIELD_POOL);
 		}
 	}
@@ -237,19 +238,19 @@ public class Pool extends FieldShape {
 	 * @param isField 渡された座標がフィールド座標かどうか
 	 */
 	public boolean checkContain(int inX, int inY, boolean isField) {
-		int xCoord = inX;
-		int yCoord = inY;
+		int xcord = inX;
+		int ycord = inY;
 		if (isField) {
 			Point4y pos = Translate.invertLimit(inX, inY);
-			xCoord = pos.getX();
-			yCoord = pos.getY();
+			xcord = pos.getX();
+			ycord = pos.getY();
 		}
 
 		Point4y posFirst = Translate.invertLimit(waterPolygonX[0], waterPolygonY[0]);
 		Point4y posSecond = Translate.invertLimit(waterPolygonX[2], waterPolygonY[2]);
 		if (posFirst != null && posSecond != null) {
-			if (posFirst.getX() <= xCoord && xCoord <= posSecond.getX() && posFirst.getY() <= yCoord
-					&& yCoord <= posSecond.getY()) {
+			if (posFirst.getX() <= xcord && xcord <= posSecond.getX() && posFirst.getY() <= ycord
+					&& ycord <= posSecond.getY()) {
 				return true;
 			}
 		}
@@ -287,19 +288,19 @@ public class Pool extends FieldShape {
 	/** 当たり判定されたオブジェクトへの処理 */
 	public int objHitProcess(Entity o) {
 		// 空中は無視
-		int zCoord = o.getZ();
-		if (0 < zCoord) {
+		int zcord = o.getZ();
+		if (0 < zcord) {
 			return 0;
 		}
 
 		boolean isInWater = false;
 		o.setInPool(true);
-		DEPTH depth = checkArea(o.getX(), o.getY());
+		Depth depth = checkArea(o.getX(), o.getY());
 		switch (depth) {
 			case EDGE:
 				o.setFallingUnderGround(false);
 				o.setMostDepth(0);
-				if (zCoord < 0) {
+				if (zcord < 0) {
 					o.setCalcZ(0);
 				}
 				break;
@@ -310,7 +311,7 @@ public class Pool extends FieldShape {
 					o.setMostDepth(-1);
 				}
 
-				if (zCoord == 0) {
+				if (zcord == 0) {
 					o.setCalcZ(-1);
 				}
 				break;
@@ -320,7 +321,7 @@ public class Pool extends FieldShape {
 				if (!o.isFallingUnderGround()) {
 					o.setMostDepth(-2);
 				}
-				if (zCoord == 0 || zCoord == -1) {
+				if (zcord == 0 || zcord == -1) {
 					o.setCalcZ(-2);
 				}
 				break;
@@ -366,7 +367,7 @@ public class Pool extends FieldShape {
 			}
 
 			if (isInWater) {
-				int tz = Translate.translateZ(zCoord - 1);
+				int tz = Translate.translateZ(zcord - 1);
 				int objectHeight = o.getH();
 
 				if (!likesWater) {
@@ -376,7 +377,7 @@ public class Pool extends FieldShape {
 					}
 
 					// 水深が深いと動けなくなる
-					if (zCoord < -depthLimit) {
+					if (zcord < -depthLimit) {
 						bodyTarget.setLockmove(true);
 					}
 
@@ -393,8 +394,8 @@ public class Pool extends FieldShape {
 
 					if (GameRandom.nextInt(deepWaterChance) == 0) {
 						bodyTarget.setFallingUnderGround(true);
-						o.setMostDepth(zCoord - 1);
-						o.setCalcZ(zCoord - 1);
+						o.setMostDepth(zcord - 1);
+						o.setCalcZ(zcord - 1);
 					}
 				}
 
@@ -405,7 +406,7 @@ public class Pool extends FieldShape {
 			}
 		} else {
 			// 溶ける
-			if (Translate.translateZ(zCoord) < -10) {
+			if (Translate.translateZ(zcord) < -10) {
 				o.remove();
 			}
 		}
@@ -420,46 +421,46 @@ public class Pool extends FieldShape {
 	 * @param y ある点のY座標
 	 * @return ある点の池の深さ
 	 */
-	public DEPTH checkArea(int x, int y) {
-		DEPTH depthW = DEPTH.NONE;
-		DEPTH depthH = DEPTH.NONE;
-		DEPTH depthResult = DEPTH.NONE;
+	public Depth checkArea(int x, int y) {
+		Depth depthW = Depth.NONE;
 		int edgeWidth = 10;
-		if (mapEX - mapSX < edgeWidth) {
+		if (mapEx - mapSx < edgeWidth) {
 			edgeWidth = 0;
 		}
 
 		int edgeHeight = 5;
-		if (mapEY - mapSY < edgeHeight) {
+		if (mapEy - mapSy < edgeHeight) {
 			edgeHeight = 0;
 		}
 
 		// --------------------------------------
 		// 左右判定
-		if (x < mapSX || mapEX < x) {
-			depthW = DEPTH.NONE;
-		} else if ((mapSX <= x && x < mapSX + edgeWidth) || (mapEX - edgeWidth < x && x <= mapEX)) {
-			depthW = DEPTH.EDGE;
-		} else if ((mapSX + edgeWidth <= x && x < mapSX + edgeWidth * 2)
-				|| (mapEX - edgeWidth * 2 < x && x <= mapEX - edgeWidth)) {
-			depthW = DEPTH.SHALLOW;
-		} else if (mapSX + edgeWidth * 2 <= x && x < mapEX - edgeWidth * 2) {
-			depthW = DEPTH.DEEP;
+		if (x < mapSx || mapEx < x) {
+			depthW = Depth.NONE;
+		} else if ((mapSx <= x && x < mapSx + edgeWidth) || (mapEx - edgeWidth < x && x <= mapEx)) {
+			depthW = Depth.EDGE;
+		} else if ((mapSx + edgeWidth <= x && x < mapSx + edgeWidth * 2)
+				|| (mapEx - edgeWidth * 2 < x && x <= mapEx - edgeWidth)) {
+			depthW = Depth.SHALLOW;
+		} else if (mapSx + edgeWidth * 2 <= x && x < mapEx - edgeWidth * 2) {
+			depthW = Depth.DEEP;
 		}
 		// --------------------------------------
 		// 上下判定
-		if (y < mapSY || mapEY < y) {
-			depthH = DEPTH.NONE;
-		} else if ((mapSY <= y && y < mapSY + edgeHeight) || (mapEY - edgeHeight < y && y <= mapEY)) {
-			depthH = DEPTH.EDGE;
-		} else if ((mapSY + edgeHeight <= y && y < mapSY + edgeHeight * 2)
-				|| (mapEY - edgeHeight * 2 < y && y <= mapEY - edgeHeight)) {
-			depthH = DEPTH.SHALLOW;
-		} else if (mapSY + edgeHeight * 2 <= y && y < mapEY - edgeHeight * 2) {
-			depthH = DEPTH.DEEP;
+		Depth depthH = Depth.NONE;
+		if (y < mapSy || mapEy < y) {
+			depthH = Depth.NONE;
+		} else if ((mapSy <= y && y < mapSy + edgeHeight) || (mapEy - edgeHeight < y && y <= mapEy)) {
+			depthH = Depth.EDGE;
+		} else if ((mapSy + edgeHeight <= y && y < mapSy + edgeHeight * 2)
+				|| (mapEy - edgeHeight * 2 < y && y <= mapEy - edgeHeight)) {
+			depthH = Depth.SHALLOW;
+		} else if (mapSy + edgeHeight * 2 <= y && y < mapEy - edgeHeight * 2) {
+			depthH = Depth.DEEP;
 		}
 
 		// 小さい方(浅い方)にあわせる
+		Depth depthResult;
 		if (depthW == depthH || depthW.ordinal() < depthH.ordinal()) {
 			depthResult = depthW;
 		} else {

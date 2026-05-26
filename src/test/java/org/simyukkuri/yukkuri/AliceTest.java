@@ -49,11 +49,14 @@ public class AliceTest {
     public void testAliceHybridType() {
         Alice alice = new Alice();
         // Alice always returns Alice type regardless of partner
-        assertEquals(org.simyukkuri.enums.YukkuriType.ALICE,
+        assertEquals(
+                org.simyukkuri.enums.YukkuriType.ALICE,
                 alice.getHybridType(org.simyukkuri.enums.YukkuriType.REIMU));
-        assertEquals(org.simyukkuri.enums.YukkuriType.ALICE,
+        assertEquals(
+                org.simyukkuri.enums.YukkuriType.ALICE,
                 alice.getHybridType(org.simyukkuri.enums.YukkuriType.MARISA));
-        assertEquals(org.simyukkuri.enums.YukkuriType.ALICE,
+        assertEquals(
+                org.simyukkuri.enums.YukkuriType.ALICE,
                 alice.getHybridType(org.simyukkuri.enums.YukkuriType.CHEN));
     }
 
@@ -110,16 +113,23 @@ public class AliceTest {
         Alice alice = new Alice();
         alice.tuneParameters(); // This sets rapist flag
 
-        assertFalse(invokeBoolean(alice, "isRaperExcitingFace", new Class<?>[] { int.class }, new Object[] { 0 }));
+        assertFalse(
+                invokeBoolean(
+                        alice,
+                        "isRaperExcitingFace",
+                        new Class<?>[] {int.class},
+                        new Object[] {0}));
     }
 
     private static boolean invokeBoolean(Object target, String methodName) {
         return invokeBoolean(target, methodName, new Class<?>[0], new Object[0]);
     }
 
-    private static boolean invokeBoolean(Object target, String methodName, Class<?>[] parameterTypes, Object[] args) {
+    private static boolean invokeBoolean(
+            Object target, String methodName, Class<?>[] parameterTypes, Object[] args) {
         try {
-            java.lang.reflect.Method method = target.getClass().getDeclaredMethod(methodName, parameterTypes);
+            java.lang.reflect.Method method =
+                    target.getClass().getDeclaredMethod(methodName, parameterTypes);
             method.setAccessible(true);
             return (boolean) method.invoke(target, args);
         } catch (ReflectiveOperationException e) {
@@ -318,6 +328,7 @@ public class AliceTest {
             Alice.loadImages(Alice.class.getClassLoader(), null);
             fl.setBoolean(null, oldVal);
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -327,19 +338,26 @@ public class AliceTest {
             java.lang.reflect.Field fp = Alice.class.getDeclaredField("imagePack");
             fp.setAccessible(true);
             int ranks = org.simyukkuri.enums.YukkuriRank.values().length;
-            java.awt.image.BufferedImage[][][][] pack = new java.awt.image.BufferedImage[ranks][200][20][20];
-            java.awt.image.BufferedImage dummy = new java.awt.image.BufferedImage(1, 1,
-                    java.awt.image.BufferedImage.TYPE_INT_ARGB);
-            for (int i = 0; i < ranks; i++)
-                for (int j = 0; j < 200; j++)
-                    for (int k = 0; k < 20; k++)
-                        for (int l = 0; l < 20; l++)
+            java.awt.image.BufferedImage[][][][] pack =
+                    new java.awt.image.BufferedImage[ranks][200][20][20];
+            java.awt.image.BufferedImage dummy =
+                    new java.awt.image.BufferedImage(
+                            1, 1, java.awt.image.BufferedImage.TYPE_INT_ARGB);
+            for (int i = 0; i < ranks; i++) {
+                for (int j = 0; j < 200; j++) {
+                    for (int k = 0; k < 20; k++) {
+                        for (int l = 0; l < 20; l++) {
                             pack[i][j][k][l] = dummy;
+                        }
+                    }
+                }
+            }
             fp.set(null, pack);
             Alice obj = new Alice();
             org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
             obj.getImage(0, 0, layer, 0);
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -348,13 +366,16 @@ public class AliceTest {
         try {
             Alice.loadIniFile(Alice.class.getClassLoader());
         } catch (Exception e) {
+            // ignore
         } finally {
             try {
                 java.lang.reflect.Field fa = Alice.class.getDeclaredField("AttachOffset");
                 fa.setAccessible(true);
-                if (fa.get(null) == null)
+                if (fa.get(null) == null) {
                     fa.set(null, new java.util.HashMap<>());
+                }
             } catch (Exception e) {
+                // ignore
             }
         }
     }

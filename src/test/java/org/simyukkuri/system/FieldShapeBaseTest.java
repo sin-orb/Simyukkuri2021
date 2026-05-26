@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Graphics2D;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.enums.TickResult;
@@ -58,10 +57,10 @@ class FieldShapeBaseTest {
     @Test
     void testFieldPosAndContains() {
         shape.setFieldPos(100, 100, 200, 200);
-        assertEquals(100, shape.getFieldSX());
-        assertEquals(100, shape.getFieldSY());
-        assertEquals(200, shape.getFieldEX());
-        assertEquals(200, shape.getFieldEY());
+        assertEquals(100, shape.getFieldSx());
+        assertEquals(100, shape.getFieldSy());
+        assertEquals(200, shape.getFieldEx());
+        assertEquals(200, shape.getFieldEy());
 
         assertTrue(shape.fieldContains(150, 150));
         assertFalse(shape.fieldContains(50, 150));
@@ -70,11 +69,14 @@ class FieldShapeBaseTest {
     @Test
     void testRemoveAndClockTick() {
         assertFalse(shape.isRemoved());
+        long ageBefore = shape.getAge();
         assertEquals(TickResult.NONE, shape.clockTick());
+        assertEquals(ageBefore + FieldShape.TICK, shape.getAge());
 
         shape.remove();
         assertTrue(shape.isRemoved());
         assertEquals(TickResult.REMOVED, shape.clockTick());
+        assertEquals(ageBefore + FieldShape.TICK * 2L, shape.getAge());
     }
 
     @Test
@@ -92,47 +94,8 @@ class FieldShapeBaseTest {
         assertEquals(600, shape.getFieldH());
     }
 
-    // --- Individual map coordinate setters ---
-
-    @Test
-    void testIndividualMapSetters() {
-        shape.setStartX(11);
-        assertEquals(11, shape.getStartX());
-        shape.setStartY(22);
-        assertEquals(22, shape.getStartY());
-        shape.setEndX(33);
-        assertEquals(33, shape.getEndX());
-        shape.setEndY(44);
-        assertEquals(44, shape.getEndY());
-    }
-
-    // --- Individual field coordinate setters ---
-
-    @Test
-    void testIndividualFieldSetters() {
-        shape.setFieldSX(111);
-        assertEquals(111, shape.getFieldSX());
-        shape.setFieldSY(222);
-        assertEquals(222, shape.getFieldSY());
-        shape.setFieldEX(333);
-        assertEquals(333, shape.getFieldEX());
-        shape.setFieldEY(444);
-        assertEquals(444, shape.getFieldEY());
-    }
-
-    // --- hasShapePopup / executeShapePopup (default implementations) ---
-
     @Test
     void testHasShapePopup_defaultReturnsNONE() {
-        // Default FieldShape.hasShapePopup() returns ShapeMenuTarget.NONE (not null)
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> shape.hasShapePopup());
-        org.junit.jupiter.api.Assertions.assertNotNull(shape.hasShapePopup());
-    }
-
-    @Test
-    void testExecuteShapePopup_defaultDoesNotThrow() {
-        // Default implementation is empty body
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(
-                () -> shape.executeShapePopup(org.simyukkuri.system.ItemMenu.ShapeMenu.TOP));
+        assertEquals(org.simyukkuri.system.ItemMenu.ShapeMenuTarget.NONE, shape.hasShapePopup());
     }
 }

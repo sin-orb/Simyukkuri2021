@@ -2,7 +2,6 @@ package org.simyukkuri.logic;
 
 import java.util.List;
 import java.util.Map;
-
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -41,8 +40,6 @@ public final class FoodNearestSearchPolicy {
 	 * @return 対象を発見した場合はそのオブジェクト、見つからない場合は null
 	 */
 	public static Entity searchFoodNearest(Yukkuri body, boolean[] forceEat, WorldState ws) {
-		Entity nearestFood = null;
-		int nearestDistance = body.getEyesightBase();
 		int wallMode = body.getAgeState().ordinal();
 		forceEat[0] = false;
 		if (body.isFull()) {
@@ -52,6 +49,9 @@ public final class FoodNearestSearchPolicy {
 		if (body.canflyCheck()) {
 			wallMode = AgeState.ADULT.ordinal();
 		}
+
+		Entity nearestFood = null;
+		int nearestDistance = body.getEyesightBase();
 
 		for (Map.Entry<Integer, Food> entry : ws.getFoods().entrySet()) {
 			Food food = entry.getValue();
@@ -78,8 +78,8 @@ public final class FoodNearestSearchPolicy {
 				if (plantBody == body) {
 					continue;
 				}
-				if (plantBody.getBurialState() != BurialState.ALL &&
-						!(plantBody.getBurialState() == BurialState.NEARLY_ALL && !plantBody.hasOkazari())) {
+				if (plantBody.getBurialState() != BurialState.ALL
+						&& !(plantBody.getBurialState() == BurialState.NEARLY_ALL && !plantBody.hasOkazari())) {
 					continue;
 				}
 

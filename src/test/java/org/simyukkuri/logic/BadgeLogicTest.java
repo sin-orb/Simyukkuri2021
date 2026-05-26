@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -21,8 +20,7 @@ import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.util.WorldTestHelper;
 
 /**
- * Test class for BadgeLogic.
- * BadgeLogic is pure business logic with no World dependencies - highly
+ * Test class for BadgeLogic. BadgeLogic is pure business logic with no World dependencies - highly
  * testable!
  */
 public class BadgeLogicTest {
@@ -34,8 +32,7 @@ public class BadgeLogicTest {
         WorldTestHelper.initializeStandardTranslate500();
     }
 
-    // ========== Null/Invalid Input Tests ==========
-
+    // Null/Invalid Input Tests
     @Test
     public void testBadgeTestNullBody() {
         boolean result = BadgeLogic.badgeTest(null);
@@ -60,12 +57,10 @@ public class BadgeLogicTest {
         assertFalse(result, "badgeTest should return false for removed body");
     }
 
-    // ========== Non-Kaiyu Tests ==========
-    // Note: Yukkuri doesn't have setRank/setIdiot setters
+    // Non-Kaiyu Tests    // Note: Yukkuri doesn't have setRank/setIdiot setters
     // These tests are simplified to test the method signature
 
     // ========== Kaiyu Badge Tests (Attitude x Intelligence combinations)
-    // ==========
 
     @Test
     public void testVeryNiceWiseGetsGold() {
@@ -140,14 +135,14 @@ public class BadgeLogicTest {
 
     @Test
     public void testIdiotGetsFake() {
-        org.simyukkuri.entity.core.living.yukkuri.impl.Tarinai yukkuri = new org.simyukkuri.entity.core.living.yukkuri.impl.Tarinai();
+        org.simyukkuri.entity.core.living.yukkuri.impl.Tarinai yukkuri =
+                new org.simyukkuri.entity.core.living.yukkuri.impl.Tarinai();
         yukkuri.setRank(YukkuriRank.KAIYU);
         assertTrue(BadgeLogic.badgeTest(yukkuri));
         assertEquals(Badge.BadgeRank.FAKE, getBadgeRank(yukkuri));
     }
 
-    // ========== Badge Attachment Tests ==========
-
+    // Badge Attachment Tests
     @Test
     public void testBadgeReplacesExisting() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.VERY_NICE, Intelligence.WISE);
@@ -160,16 +155,16 @@ public class BadgeLogicTest {
         // Second badge test - should remove existing badge
         boolean result2 = BadgeLogic.badgeTest(yukkuri);
         assertTrue(result2, "Second badgeTest should succeed");
-        assertEquals(0, yukkuri.getAttachmentSize(Badge.class), "Badge should be removed on second test");
+        assertEquals(
+                0,
+                yukkuri.getAttachmentSize(Badge.class),
+                "Badge should be removed on second test");
     }
 
-    // ========== Helper Methods ==========
-
+    // Helper Methods
     /**
-     * Creates a yukkuri with specified attitude and intelligence.
-     * Note: Yukkuri doesn't have setRank/setIdiot setters, so we just set what
-     * we
-     * can.
+     * Creates a yukkuri with specified attitude and intelligence. Note: Yukkuri doesn't have
+     * setRank/setIdiot setters, so we just set what we can.
      */
     private Reimu createKaiyuYukkuri(Attitude attitude, Intelligence intelligence) {
         Reimu yukkuri = new Reimu();
@@ -181,8 +176,9 @@ public class BadgeLogicTest {
 
     private Badge.BadgeRank getBadgeRank(Yukkuri b) {
         List<Attachment> list = b.getAttach();
-        if (list == null)
+        if (list == null) {
             return null;
+        }
         for (Attachment at : list) {
             if (at instanceof Badge) {
                 return ((Badge) at).getBadgeRank();

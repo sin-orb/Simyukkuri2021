@@ -48,8 +48,8 @@ public class SuperEatingTimeEventTest {
         Yukkuri to = createBody();
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, to, null, 10);
         assertEquals(EventPriority.HIGH, event.getPriority());
-        assertEquals(from.getUniqueID(), event.getFrom());
-        assertEquals(to.getUniqueID(), event.getTo());
+        assertEquals(from.getUniqueId(), event.getFrom());
+        assertEquals(to.getUniqueId(), event.getTo());
         assertEquals(10, event.getCount());
     }
 
@@ -106,20 +106,20 @@ public class SuperEatingTimeEventTest {
     @Test
     public void testGetState_defaultIsWAIT() {
         SuperEatingTimeEvent event = new SuperEatingTimeEvent();
-        assertEquals(SuperEatingTimeEvent.STATE.WAIT, event.getState());
+        assertEquals(SuperEatingTimeEvent.State.WAIT, event.getState());
     }
 
     @Test
     public void testSetState() {
         SuperEatingTimeEvent event = new SuperEatingTimeEvent();
-        event.setState(SuperEatingTimeEvent.STATE.GO);
-        assertEquals(SuperEatingTimeEvent.STATE.GO, event.getState());
+        event.setState(SuperEatingTimeEvent.State.GO);
+        assertEquals(SuperEatingTimeEvent.State.GO, event.getState());
 
-        event.setState(SuperEatingTimeEvent.STATE.START);
-        assertEquals(SuperEatingTimeEvent.STATE.START, event.getState());
+        event.setState(SuperEatingTimeEvent.State.START);
+        assertEquals(SuperEatingTimeEvent.State.START, event.getState());
 
-        event.setState(SuperEatingTimeEvent.STATE.END);
-        assertEquals(SuperEatingTimeEvent.STATE.END, event.getState());
+        event.setState(SuperEatingTimeEvent.State.END);
+        assertEquals(SuperEatingTimeEvent.State.END, event.getState());
     }
 
     // --- getMinimumStep ---
@@ -152,8 +152,8 @@ public class SuperEatingTimeEventTest {
     public void testCheckEventResponse_partner_returnsTrue() {
         Yukkuri from = createBody();
         Yukkuri partner = createBody();
-        from.setPartner(partner.getUniqueID());
-        partner.setPartner(from.getUniqueID());
+        from.setPartner(partner.getUniqueId());
+        partner.setPartner(from.getUniqueId());
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, null, 10);
         assertTrue(event.checkEventResponse(partner));
     }
@@ -212,12 +212,12 @@ public class SuperEatingTimeEventTest {
         assertDoesNotThrow(() -> event.toString());
     }
 
-    // --- STATE enum ---
+    // --- State enum ---
     @Test
     public void testStateEnum_allValues() {
-        SuperEatingTimeEvent.STATE[] states = SuperEatingTimeEvent.STATE.values();
+        SuperEatingTimeEvent.State[] states = SuperEatingTimeEvent.State.values();
         assertEquals(5, states.length);
-        for (SuperEatingTimeEvent.STATE s : states) {
+        for (SuperEatingTimeEvent.State s : states) {
             assertNotNull(s.name());
         }
     }
@@ -261,8 +261,8 @@ public class SuperEatingTimeEventTest {
     public void testUpdate_childBranch_partnerOfFrom_returnsNull() {
         Yukkuri from = createBody();
         Yukkuri partner = createBody();
-        from.setPartner(partner.getUniqueID());
-        partner.setPartner(from.getUniqueID());
+        from.setPartner(partner.getUniqueId());
+        partner.setPartner(from.getUniqueId());
         Food food = createFood();
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
         from.setCurrentEvent(event);
@@ -299,7 +299,7 @@ public class SuperEatingTimeEventTest {
         Yukkuri b = createBody();
         Food food = createFood();
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
-        event.setState(SuperEatingTimeEvent.STATE.GO);
+        event.setState(SuperEatingTimeEvent.State.GO);
         from.setCurrentEvent(event);
         // child GO branch: Barrier.onBarrier check, then setHappiness, then null
         assertNull(event.update(b));
@@ -313,7 +313,7 @@ public class SuperEatingTimeEventTest {
         Yukkuri child = createBody();
         Food food = createFood();
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
-        event.setState(SuperEatingTimeEvent.STATE.START_BEFORE);
+        event.setState(SuperEatingTimeEvent.State.START_BEFORE);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
         assertDoesNotThrow(() -> event.update(child));
@@ -325,7 +325,7 @@ public class SuperEatingTimeEventTest {
         Yukkuri child = createBody();
         Food food = createFood();
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
-        event.setState(SuperEatingTimeEvent.STATE.START);
+        event.setState(SuperEatingTimeEvent.State.START);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
         assertDoesNotThrow(() -> event.update(child));
@@ -337,7 +337,7 @@ public class SuperEatingTimeEventTest {
         Yukkuri child = createBody();
         Food food = createFood();
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
-        event.setState(SuperEatingTimeEvent.STATE.WAIT);
+        event.setState(SuperEatingTimeEvent.State.WAIT);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
         assertDoesNotThrow(() -> event.update(child));
@@ -352,10 +352,10 @@ public class SuperEatingTimeEventTest {
         child.setAgeState(AgeState.BABY);
         // Add child as from's child so createActiveChildList returns it
         from.addChild(child);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueId(), child);
         Food food = createFood();
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
-        event.setState(SuperEatingTimeEvent.STATE.WAIT);
+        event.setState(SuperEatingTimeEvent.State.WAIT);
         from.setCurrentEvent(event);
         assertDoesNotThrow(() -> event.update(from));
     }
@@ -366,10 +366,10 @@ public class SuperEatingTimeEventTest {
         Yukkuri child = createBody();
         child.setAgeState(AgeState.BABY);
         from.addChild(child);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueId(), child);
         Food food = createFood();
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
-        event.setState(SuperEatingTimeEvent.STATE.GO);
+        event.setState(SuperEatingTimeEvent.State.GO);
         from.setCurrentEvent(event);
         assertDoesNotThrow(() -> event.update(from));
     }
@@ -408,7 +408,7 @@ public class SuperEatingTimeEventTest {
     public void testCheckEventResponse_isChild_adult_returnsFalse() {
         Yukkuri from = createBody();
         Yukkuri child = createBody(); // ADULT by default
-        child.setParents(new int[] { from.getUniqueID(), -1 });
+        child.setParents(new int[] { from.getUniqueId(), -1 });
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, null, 10);
         assertFalse(event.checkEventResponse(child));
     }
@@ -419,7 +419,7 @@ public class SuperEatingTimeEventTest {
         Yukkuri from = createBody();
         Yukkuri child = createBody();
         child.setAgeState(AgeState.BABY);
-        child.setParents(new int[] { from.getUniqueID(), -1 });
+        child.setParents(new int[] { from.getUniqueId(), -1 });
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, null, 10);
         assertTrue(event.checkEventResponse(child));
     }
@@ -451,10 +451,10 @@ public class SuperEatingTimeEventTest {
         Yukkuri child = createBody();
         child.setAgeState(AgeState.BABY);
         from.addChild(child);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueId(), child);
         Food food = createFood();
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
-        event.setState(SuperEatingTimeEvent.STATE.START_BEFORE);
+        event.setState(SuperEatingTimeEvent.State.START_BEFORE);
         from.setCurrentEvent(event);
         SimYukkuri.RND = new org.simyukkuri.ConstState(1);
         try {
@@ -471,10 +471,10 @@ public class SuperEatingTimeEventTest {
         Yukkuri child = createBody();
         child.setAgeState(AgeState.BABY);
         from.addChild(child);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueId(), child);
         Food food = createFood();
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
-        event.setState(SuperEatingTimeEvent.STATE.START);
+        event.setState(SuperEatingTimeEvent.State.START);
         from.setCurrentEvent(event);
         from.setHungry(from.getHungryLimit()); // not very hungry
         SimYukkuri.RND = new org.simyukkuri.ConstState(1);
@@ -495,7 +495,7 @@ public class SuperEatingTimeEventTest {
         food.setAmount(0); // empty food
 
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
-        event.setState(SuperEatingTimeEvent.STATE.START);
+        event.setState(SuperEatingTimeEvent.State.START);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
 
@@ -514,7 +514,7 @@ public class SuperEatingTimeEventTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 
@@ -549,11 +549,11 @@ public class SuperEatingTimeEventTest {
             child.setAgeState(AgeState.BABY);
             child.setHungry(child.getHungryLimit());
             from.addChild(child);
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueId(), child);
             Food food = createFood();
 
             SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
-            event.setState(SuperEatingTimeEvent.STATE.START);
+            event.setState(SuperEatingTimeEvent.State.START);
             from.setCurrentEvent(event);
 
             assertNull(event.update(from));
@@ -574,7 +574,7 @@ public class SuperEatingTimeEventTest {
             int memoriesBefore = child.getMemories();
 
             SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
-            event.setState(SuperEatingTimeEvent.STATE.START);
+            event.setState(SuperEatingTimeEvent.State.START);
             from.setCurrentEvent(event);
             child.setCurrentEvent(event);
 

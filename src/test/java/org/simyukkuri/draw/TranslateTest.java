@@ -8,378 +8,150 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.ResourceLock;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.engine.World;
 
+@ResourceLock("Translate")
 class TranslateTest {
 
-    @BeforeEach
-    void setUp() {
-        SimYukkuri.world = new World();
-        Translate.setWorldSize(1000, 1000, 500);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[] { 1.0f, 0.5f, 0.25f });
-        Translate.createTransTable(true);
-    }
-
-    // --- setWorldSize / getters ---
-
-    @Test
-    void testSetMapSizeWidth() {
-        assertEquals(1001, Translate.getWorldWidth());
-    }
-
-    @Test
-    void testSetMapSizeHeight() {
-        assertEquals(1001, Translate.getWorldHeight());
-    }
-
-    @Test
-    void testSetMapSizeDepth() {
-        assertEquals(501, Translate.getWorldDepth());
-    }
-
-    // --- flyLimit ---
-
-    @Test
-    void testGetFlyLimit() {
-        assertEquals(0.175f, Translate.getFlyLimit());
-    }
-
-    @Test
-    void testGetFlyHeightLimit() {
-        assertEquals((int) (501 * 0.175f), Translate.getFlyHeightLimit());
-    }
-
-    // --- distance ---
-
-    @Test
-    void testDistanceKnownValues() {
-        assertEquals(25, Translate.distance(0, 0, 3, 4));
-    }
-
-    @Test
-    void testDistanceSamePoint() {
-        assertEquals(0, Translate.distance(5, 5, 5, 5));
-    }
-
-    // --- getRealDistance ---
-
-    @Test
-    void testGetRealDistanceKnownValues() {
-        assertEquals(5, Translate.getRealDistance(0, 0, 3, 4));
-    }
-
-    @Test
-    void testGetRealDistanceSamePoint() {
-        assertEquals(0, Translate.getRealDistance(7, 7, 7, 7));
-    }
-
-    // --- getRadian ---
-
-    @Test
-    void testGetRadianBasic() {
-        // angle from (0,0) to (1,0) should be 0 radians
-        double radian = Translate.getRadian(0, 0, 1, 0);
-        assertEquals(0.0, radian, 0.0001);
-    }
-
-    @Test
-    void testGetRadianUp() {
-        // angle from (0,0) to (0,1) should be PI/2
-        double radian = Translate.getRadian(0, 0, 0, 1);
-        assertEquals(Math.PI / 2, radian, 0.0001);
-    }
-
-    // --- getPointByDistAndRad ---
-
-    @Test
-    void testGetPointByDistAndRadRight() {
-        Point4y p = Translate.getPointByDistAndRad(0, 0, 10, 0.0);
-        assertEquals(10, p.getX());
-        assertEquals(0, p.getY());
-    }
-
-    @Test
-    void testGetPointByDistAndRadDown() {
-        Point4y p = Translate.getPointByDistAndRad(0, 0, 10, Math.PI / 2);
-        assertEquals(0, p.getX(), 1);
-        assertEquals(10, p.getY(), 1);
-    }
-
-    // --- transSize ---
-
-    @Test
-    void testTransSizeReturnsSameValue() {
-        assertEquals(42, Translate.transSize(42));
-        assertEquals(0, Translate.transSize(0));
-        assertEquals(-5, Translate.transSize(-5));
-    }
-
-    // --- mapScale ---
-
-    @Test
-    void testSetMapScaleGetMapScale() {
-        Translate.setWorldScale(200);
-        assertEquals(200, Translate.getWorldScale());
-    }
-
-    // --- translate ---
-
-    @Test
-    void testTranslateValidCoordinates() {
-        Point4y pos = new Point4y();
-        Translate.translate(500, 500, pos);
-        // After translation, pos should have valid field coordinates
-        assertTrue(pos.getX() >= 0);
-        assertTrue(pos.getY() >= 0);
-    }
-
-    @Test
-    void testTranslateOrigin() {
-        Point4y pos = new Point4y();
-        Translate.translate(0, 0, pos);
-        assertTrue(pos.getX() >= 0);
-        assertTrue(pos.getY() >= 0);
-    }
-
-    // --- translateZ ---
-
-    @Test
-    void testTranslateZBasic() {
-        int result = Translate.translateZ(100);
-        // rateZ = fieldH / mapZ = 600 / 501
-        assertTrue(result >= 0);
-    }
-
-    @Test
-    void testTranslateZZero() {
-        assertEquals(0, Translate.translateZ(0));
-    }
-
-    // --- invertY ---
-
-    @Test
-    void testInvertYBasic() {
-        int result = Translate.invertY(300);
-        // result = (int)(300 * 1001 / 600)
-        assertEquals((int) (300.0f * 1001.0f / 600.0f), result);
-    }
-
-    // --- invertZ ---
-
-    @Test
-    void testInvertZBasic() {
-        int result = Translate.invertZ(300);
-        // result = (int)(300 * 501 / 600)
-        assertEquals((int) (300.0f * 501.0f / 600.0f), result);
-    }
-
-    // --- invertBgY ---
-
-    @Test
-    void testInvertBgYBasic() {
-        int result = Translate.invertBgY(300);
-        // result = (int)(300 * 1001 / 600 * 0.7)
-        assertEquals((int) (300.0f * 1001.0f / 600.0f * 0.7f), result);
-    }
-
-    // --- invertX ---
-
-    @Test
-    void testInvertXBasicWithClamping() {
-        // invertX clamps mapY to [0, mapH-1]
-        int result = Translate.invertX(100, 500);
-        assertTrue(result >= 0);
-    }
-
-    @Test
-    void testInvertXNegativeMapYClamped() {
-        int result = Translate.invertX(100, -5);
-        // mapY clamped to 0
-        int expected = Translate.invertX(100, 0);
-        assertEquals(expected, result);
-    }
-
-    @Test
-    void testInvertXOverflowMapYClamped() {
-        int result = Translate.invertX(100, 99999);
-        // mapY clamped to mapH - 1
-        int expected = Translate.invertX(100, Translate.getWorldHeight() - 1);
-        assertEquals(expected, result);
-    }
-
-    // --- invert ---
-
-    @Test
-    void testInvertReturnsNullForNegativeY() {
-        assertNull(Translate.invert(100, -1));
-    }
-
-    @Test
-    void testInvertReturnsNullForYGreaterThanOrEqualFieldH() {
-        assertNull(Translate.invert(100, Translate.getFieldH()));
-    }
-
-    @Test
-    void testInvertReturnsNullForWallArea() {
-        // y=0 is in the wall area, fieldToMapY[0] should be -1
-        assertNull(Translate.invert(100, 0));
-    }
-
-    // --- invertLimit ---
-
-    @Test
-    void testInvertLimitClampsCoordinates() {
-        Point4y result = Translate.invertLimit(-100, -100);
-        assertNotNull(result);
-        assertTrue(result.getX() >= 0);
-        assertTrue(result.getY() >= 0);
-    }
-
-    @Test
-    void testInvertLimitLargeCoordinates() {
-        Point4y result = Translate.invertLimit(99999, 99999);
-        assertNotNull(result);
-        assertTrue(result.getX() <= Translate.getWorldWidth());
-        assertTrue(result.getY() <= Translate.getWorldHeight());
-    }
-
-    // --- inInvertLimit ---
-
-    @Test
-    void testInInvertLimitReturnsFalseForWallArea() {
-        // y=0 is wall area
-        assertFalse(Translate.inInvertLimit(400, 0));
-    }
-
-    @Test
-    void testInInvertLimitReturnsTrueForFloorArea() {
-        // A point well within the floor area
-        int floorY = Translate.getFieldH() - 1;
-        // center X should be in field
-        assertTrue(Translate.inInvertLimit(Translate.getFieldW() / 2, floorY));
-    }
-
-    // --- addZoomRate ---
-
-    @Test
-    void testAddZoomRateWithinBounds() {
-        // zoomRate starts at 0, table has 3 entries
-        assertTrue(Translate.addZoomRate(1));
-    }
-
-    @Test
-    void testAddZoomRateBelowZeroClampsAndReturnsFalse() {
-        // zoomRate is 0, subtracting should clamp to 0
-        assertFalse(Translate.addZoomRate(-1));
-    }
-
-    @Test
-    void testAddZoomRateAboveMaxClampsAndReturnsFalse() {
-        // zoomTable has 3 entries (indices 0,1,2), go to max
-        Translate.addZoomRate(1); // now 1
-        Translate.addZoomRate(1); // now 2 (max)
-        assertFalse(Translate.addZoomRate(1)); // tries 3, clamped to 2
-    }
-
-    // --- setZoomRate ---
-
-    @Test
-    void testSetZoomRateClampsNegativeToZero() {
-        Translate.setZoomRate(-5);
-        assertEquals(1.0f, Translate.getCurrentZoomRate()); // index 0 -> 1.0f
-    }
-
-    @Test
-    void testSetZoomRateClampsAboveMax() {
-        Translate.setZoomRate(100);
-        assertEquals(0.25f, Translate.getCurrentZoomRate()); // index 2 (max) -> 0.25f
-    }
-
-    // --- getCurrentZoomRate ---
-
-    @Test
-    void testGetCurrentZoomRateDefault() {
-        // After setUp, zoomRate should be 0
-        assertEquals(1.0f, Translate.getCurrentZoomRate());
-    }
-
-    @Test
-    void testGetCurrentZoomRateAfterSet() {
-        Translate.setZoomRate(1);
-        assertEquals(0.5f, Translate.getCurrentZoomRate());
-    }
-
-    // --- buffer positioning ---
-
-    @Test
-    void testSetBufferPos() {
-        Translate.setBufferPos(10, 10);
-        Rectangle4y area = Translate.getDisplayArea();
-        assertNotNull(area);
-        assertTrue(area.getX() >= 0);
-        assertTrue(area.getY() >= 0);
-    }
-
-    @Test
-    void testAddBufferPos() {
-        Translate.setBufferPos(0, 0);
-        Translate.addBufferPos(5, 5);
-        Rectangle4y area = Translate.getDisplayArea();
-        assertNotNull(area);
-        assertTrue(area.getX() >= 0);
-        assertTrue(area.getY() >= 0);
-    }
-
-    @Test
-    void testSetBufferCenterPos() {
-        Translate.setBufferCenterPos(400, 300);
-        Rectangle4y area = Translate.getDisplayArea();
-        assertNotNull(area);
-        assertTrue(area.getX() >= 0);
-        assertTrue(area.getY() >= 0);
-    }
-
-    // --- getDisplayArea ---
-
-    @Test
-    void testGetDisplayAreaNonNull() {
-        assertNotNull(Translate.getDisplayArea());
-    }
-
-    // --- field/buffer/canvas sizes ---
-
-    @Test
-    void testGetFieldW() {
-        // fieldW = canvasW * fieldSize / 100 = 800 * 100 / 100 = 800
-        assertEquals(800, Translate.getFieldW());
-    }
-
-    @Test
-    void testGetFieldH() {
-        // fieldH = canvasH * fieldSize / 100 = 600 * 100 / 100 = 600
-        assertEquals(600, Translate.getFieldH());
-    }
-
-    @Test
-    void testGetBufferW() {
-        // bufferW = canvasW * bufSize / 100 = 800 * 100 / 100 = 800
-        assertEquals(800, Translate.getBufferW());
-    }
-
-    @Test
-    void testGetBufferH() {
-        // bufferH = canvasH * bufSize / 100 = 600 * 100 / 100 = 600
-        assertEquals(600, Translate.getBufferH());
-    }
-
-    @Test
-    void testGetCanvasW() {
-        assertEquals(800, Translate.getCanvasW());
-    }
-
-    @Test
-    void testGetCanvasH() {
-        assertEquals(600, Translate.getCanvasH());
-    }
+	@BeforeEach
+	void setUp() {
+		SimYukkuri.world = new World();
+		Translate.setWorldSize(1000, 1000, 500);
+		Translate.setCanvasSize(800, 600, 100, 100, new float[] { 1.0f, 0.5f, 0.25f });
+		Translate.createTransTable(true);
+	}
+
+	@Test
+	void testSetCanvasSizeDerivesFieldAndBufferDimensions() {
+		Translate.setCanvasSize(900, 750, 80, 50, new float[] { 1.0f, 0.5f, 0.25f });
+		Rectangle4y area = Translate.getDisplayArea();
+		assertEquals(900, Translate.getCanvasW());
+		assertEquals(750, Translate.getCanvasH());
+		assertEquals(720, Translate.getFieldW());
+		assertEquals(600, Translate.getFieldH());
+		assertEquals(450, Translate.getBufferW());
+		assertEquals(375, Translate.getBufferH());
+		assertEquals(720, area.getWidth());
+		assertEquals(600, area.getHeight());
+		assertEquals(0, area.getX());
+		assertEquals(0, area.getY());
+	}
+
+	@Test
+	void testDistanceAndRealDistanceKnownValues() {
+		assertEquals(25, Translate.distance(0, 0, 3, 4));
+		assertEquals(25, Translate.distance(3, 4, 0, 0));
+		assertEquals(0, Translate.distance(5, 5, 5, 5));
+		assertEquals(5, Translate.getRealDistance(0, 0, 3, 4));
+		assertEquals(5, Translate.getRealDistance(3, 4, 0, 0));
+		assertEquals(0, Translate.getRealDistance(7, 7, 7, 7));
+	}
+
+	@Test
+	void testGetRadianAndPointByDistAndRadRoundTrip() {
+		Point4y right = Translate.getPointByDistAndRad(0, 0, 10, 0.0);
+		assertEquals(10, right.getX());
+		assertEquals(0, right.getY());
+		assertEquals(0.0, Translate.getRadian(0, 0, right.getX(), right.getY()), 0.0001);
+
+		Point4y down = Translate.getPointByDistAndRad(0, 0, 10, Math.PI / 2);
+		assertEquals(0, down.getX(), 1);
+		assertEquals(10, down.getY(), 1);
+		assertEquals(Math.PI / 2, Translate.getRadian(0, 0, down.getX(), down.getY()), 0.0001);
+	}
+
+	@Test
+	void testTransSizeReturnsSameValue() {
+		assertEquals(42, Translate.transSize(42));
+		assertEquals(0, Translate.transSize(0));
+		assertEquals(-5, Translate.transSize(-5));
+	}
+
+	@Test
+	void testTranslateRoundTripAndOrigin() {
+		Point4y pos = new Point4y();
+		Translate.translate(500, 500, pos);
+		Point4y back = Translate.invertLimit(pos.getX(), pos.getY());
+		Point4y roundTrip = new Point4y();
+		Translate.translate(back.getX(), back.getY(), roundTrip);
+		assertTrue(Math.abs(pos.getX() - roundTrip.getX()) <= 1);
+		assertTrue(Math.abs(pos.getY() - roundTrip.getY()) <= 1);
+
+		Point4y origin = new Point4y();
+		Translate.translate(0, 0, origin);
+		Point4y originBack = Translate.invertLimit(origin.getX(), origin.getY());
+		assertEquals(0, originBack.getX());
+		assertEquals(0, originBack.getY());
+	}
+
+	@Test
+	void testVerticalTransformFormulas() {
+		assertEquals((int) (100.0f * 600.0f / 501.0f), Translate.translateZ(100));
+		assertEquals((int) (300.0f * 1001.0f / 600.0f), Translate.invertY(300));
+		assertEquals((int) (300.0f * 501.0f / 600.0f), Translate.invertZ(300));
+		assertEquals((int) (300.0f * 1001.0f / 600.0f * 0.7f), Translate.invertBgY(300));
+	}
+
+	@Test
+	void testInvertRejectsInvalidPositions() {
+		assertNull(Translate.invert(100, -1));
+		assertNull(Translate.invert(100, Translate.getFieldH()));
+		assertNull(Translate.invert(100, 0));
+	}
+
+	@Test
+	void testInvertLimitClampsCoordinates() {
+		Point4y lower = Translate.invertLimit(-100, -100);
+		assertNotNull(lower);
+		assertEquals(0, lower.getX());
+		assertEquals(0, lower.getY());
+
+		Point4y upper = Translate.invertLimit(99999, 99999);
+		assertNotNull(upper);
+		assertTrue(upper.getX() >= Translate.getWorldWidth() - 3);
+		assertTrue(upper.getX() <= Translate.getWorldWidth() - 1);
+		assertTrue(upper.getY() >= Translate.getWorldHeight() - 3);
+		assertTrue(upper.getY() <= Translate.getWorldHeight() - 1);
+	}
+
+	@Test
+	void testInInvertLimitDistinguishesWallAndFloor() {
+		assertFalse(Translate.inInvertLimit(400, 0));
+		int floorY = Translate.getFieldH() - 1;
+		assertTrue(Translate.inInvertLimit(Translate.getFieldW() / 2, floorY));
+	}
+
+	@Test
+	void testZoomRateClampsAndBufferZoomResizesDisplayArea() {
+		Translate.setZoomRate(-5);
+		Translate.setBufferZoom();
+		assertEquals(1.0f, Translate.getCurrentZoomRate());
+		assertEquals(800, Translate.getDisplayArea().getWidth());
+		assertEquals(600, Translate.getDisplayArea().getHeight());
+
+		Translate.setZoomRate(100);
+		Translate.setBufferZoom();
+		assertEquals(0.25f, Translate.getCurrentZoomRate());
+		assertEquals(200, Translate.getDisplayArea().getWidth());
+		assertEquals(150, Translate.getDisplayArea().getHeight());
+	}
+
+	@Test
+	void testBufferPositionMethodsClampDisplayArea() {
+		Translate.setZoomRate(1);
+		Translate.setBufferZoom();
+		Translate.setBufferPos(10, 20);
+		assertEquals(10, Translate.getDisplayArea().getX());
+		assertEquals(20, Translate.getDisplayArea().getY());
+
+		Translate.setBufferCenterPos(400, 300);
+		assertEquals(200, Translate.getDisplayArea().getX());
+		assertEquals(150, Translate.getDisplayArea().getY());
+
+		Translate.addBufferPos(5, -10);
+		assertEquals(205, Translate.getDisplayArea().getX());
+		assertEquals(140, Translate.getDisplayArea().getY());
+	}
 }

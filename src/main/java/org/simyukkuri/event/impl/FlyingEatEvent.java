@@ -4,9 +4,9 @@ import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.item.Food;
-import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.logic.FoodLogic;
 import org.simyukkuri.system.MessagePool;
@@ -14,7 +14,7 @@ import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameText;
 
-/***************************************************
+/**
  * 空中捕食イベント
  * protected Yukkuri from; // イベントを発した個体
  * protected Yukkuri to; // 捕食対象
@@ -62,8 +62,9 @@ public class FlyingEatEvent extends EventPacket {
 	@Override
 	public void start(Yukkuri body) {
 		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
-		if (targetBody == null)
+		if (targetBody == null) {
 			return;
+		}
 		body.setToBed(false);
 		body.setToFood(false);
 		body.setToShit(false);
@@ -71,7 +72,7 @@ public class FlyingEatEvent extends EventPacket {
 		body.setToSukkiri(false);
 		body.setToTakeout(true);
 		body.moveToEvent(this, body.getX(), body.getY(), Translate.getFlyHeightLimit());
-		body.setWakeUpTime(body.getAge());// 眠気が覚める
+		body.setWakeUpTime(body.getAge()); // 眠気が覚める
 		targetBody.setParentLinkId(body.objId);
 	}
 
@@ -104,8 +105,9 @@ public class FlyingEatEvent extends EventPacket {
 		targetBody.setCalcZ(body.getZ() + ofsZ[targetBody.getAgeState().ordinal()]);
 
 		// 高度に達してたらexecuteへ
-		if (Math.abs(body.getZ() - Translate.getFlyHeightLimit()) < 3)
+		if (Math.abs(body.getZ() - Translate.getFlyHeightLimit()) < 3) {
 			return UpdateState.FORCE_EXEC;
+		}
 		return null;
 	}
 
@@ -115,8 +117,9 @@ public class FlyingEatEvent extends EventPacket {
 	@Override
 	public boolean execute(Yukkuri body) {
 		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
-		if (targetBody == null)
+		if (targetBody == null) {
 			return true;
+		}
 		// 相手が消えてしまったらイベント中断
 		if (targetBody.isRemoved()) {
 			// to.setParentLinkId(null);
@@ -133,8 +136,9 @@ public class FlyingEatEvent extends EventPacket {
 			tick = 0;
 			FoodLogic.eatFood(body, Food.FoodType.BODY, Math.min(body.getEatAmount(), targetBody.getAnkoAmount()));
 			targetBody.eatYukkuri(Math.min(body.getEatAmount(), targetBody.getAnkoAmount()));
-			if (targetBody != null && targetBody.isSick() && GameRandom.nextBoolean())
+			if (targetBody != null && targetBody.isSick() && GameRandom.nextBoolean()) {
 				body.addSickPeriod(100);
+			}
 			if (targetBody != null && targetBody.isCrushed()) {
 				// to.setParentLinkId(null);
 				return true;
@@ -151,7 +155,7 @@ public class FlyingEatEvent extends EventPacket {
 					// to.setParentLinkId(null);
 					return true;
 				}
-				if (targetBody != null && targetBody.isNotNYD()) {
+				if (targetBody != null && targetBody.isNotNyd()) {
 					targetBody.setMessage(GameMessages.getMessage(targetBody, MessagePool.Action.EatenByBody2));
 					targetBody.setHappiness(Happiness.VERY_SAD);
 					targetBody.setForceFace(ImageCode.PAIN.ordinal());
@@ -162,16 +166,17 @@ public class FlyingEatEvent extends EventPacket {
 	}
 
 	// イベント終了処理
-	@Override
 	/**
 	 * End.
 	 *
 	 * @param body the body
 	 */
+	@Override
 	public void end(Yukkuri body) {
 		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
-		if (targetBody != null)
+		if (targetBody != null) {
 			targetBody.setParentLinkId(-1);
+		}
 	}
 
 	/** イベント名の文字列表現を返す。 */

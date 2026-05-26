@@ -25,7 +25,11 @@ class OrangePoolTest extends ItemTestBase {
         item.setObjId(1);
         SimYukkuri.world.getCurrentWorldState().getOrangePools().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentWorldState().getOrangePools().containsKey(item.getObjId()));
+        assertTrue(
+                SimYukkuri.world
+                        .getCurrentWorldState()
+                        .getOrangePools()
+                        .containsKey(item.getObjId()));
     }
 
     @Test
@@ -162,6 +166,7 @@ class OrangePoolTest extends ItemTestBase {
         try {
             OrangePool.loadImages(OrangePool.class.getClassLoader(), null);
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -178,6 +183,7 @@ class OrangePoolTest extends ItemTestBase {
         try {
             OrangePool.setupOrange(item, true);
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -187,6 +193,7 @@ class OrangePoolTest extends ItemTestBase {
             OrangePool o = new OrangePool(100, 100, 0);
             org.junit.jupiter.api.Assertions.assertNotNull(o);
         } catch (Exception e) {
+            // ignore
         }
     }
 

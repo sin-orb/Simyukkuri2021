@@ -5,9 +5,8 @@ import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
@@ -16,7 +15,7 @@ import org.simyukkuri.enums.WorldEntityKind;
 import org.simyukkuri.system.Cash;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * 製品投入口
  */
 public class ProductChute extends WorldEntity {
@@ -43,10 +42,11 @@ public class ProductChute extends WorldEntity {
 	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
-		if (enabled)
+		if (enabled) {
 			layer[0] = imageLayers[0];
-		else
+		} else {
 			layer[0] = imageLayers[1];
+		}
 		return 1;
 	}
 

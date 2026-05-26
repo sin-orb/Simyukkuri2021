@@ -430,7 +430,8 @@ class TrashTest extends ItemTestBase {
     @Test
     void testSetOfsXY() {
         Trash trash = new Trash(100, 100, 0);
-        trash.setOfsXY(11, 22);
+        trash.setOfsX(11);
+        trash.setOfsY(22);
         assertEquals(11, trash.getOfsX());
         assertEquals(22, trash.getOfsY());
     }

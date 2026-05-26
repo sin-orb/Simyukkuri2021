@@ -2,11 +2,10 @@ package org.simyukkuri.event;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
-
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 
-/*****************************************************
+/**
  * ゆっくり同士や環境とのメッセージ伝達を行うためのイベントパックの抽象クラス
  * <br>
  * EventPacketにデータをセットして環境に対してアクションを起こす場合はTerrarium.eventListへ、
@@ -21,7 +20,7 @@ import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
  * 追加用の処理は基本EventLogicにあるものを使う
  */
 @JsonTypeInfo(use = Id.CLASS)
-abstract public class EventPacket implements java.io.Serializable {
+public abstract class EventPacket implements java.io.Serializable {
 
 	private static final long serialVersionUID = -6144966939057792982L;
 
@@ -96,7 +95,7 @@ abstract public class EventPacket implements java.io.Serializable {
 	 */
 	public EventPacket(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		setFrom(f);
-		to = t == null ? -1 : t.getUniqueID();
+		to = t == null ? -1 : t.getUniqueId();
 		target = tgt == null ? -1 : tgt.objId;
 		count = cnt;
 	}
@@ -110,8 +109,9 @@ abstract public class EventPacket implements java.io.Serializable {
 	public boolean countDown() {
 		// if(count == NO_LIMIT) return false;
 		count--;
-		if (count == 0)
+		if (count == 0) {
 			return true;
+		}
 		return false;
 	}
 
@@ -123,20 +123,35 @@ abstract public class EventPacket implements java.io.Serializable {
 	/** イベントを発した個体セッター */
 	public void setFrom(Yukkuri body) {
 		if (body != null) {
-			from = body.getUniqueID();
+			from = body.getUniqueId();
 		} else {
 			from = -1;
 		}
 	}
 
+	/** イベント発信者の objId をセットする。 */
+	public void setFrom(int from) {
+		this.from = from;
+	}
+
 	/** 特定の対象に向けた場合はその個体セッター */
 	public void setTo(Yukkuri body) {
-		to = body.getUniqueID();
+		to = body.getUniqueId();
+	}
+
+	/** イベント受信者の objId をセットする。 */
+	public void setTo(int to) {
+		this.to = to;
 	}
 
 	/** イベント対象セッター */
 	public void setTarget(Entity o) {
 		target = o.objId;
+	}
+
+	/** イベント受信対象の objId をセットする。 */
+	public void setTarget(int target) {
+		this.target = target;
 	}
 
 	/**
@@ -159,7 +174,7 @@ abstract public class EventPacket implements java.io.Serializable {
 	 * ワールドイベントの場合はイベント発行した本人に対してもチェックが発生するので
 	 * 処理を避けたければここでチェックを忘れず行う
 	 */
-	abstract public boolean checkEventResponse(Yukkuri body);
+	public abstract boolean checkEventResponse(Yukkuri body);
 
 	/**
 	 * イベント開始動作
@@ -167,7 +182,7 @@ abstract public class EventPacket implements java.io.Serializable {
 	 * 主に移動先の設定などに使用。
 	 * イベント用の移動はBody.moveToEvent()を使用する
 	 */
-	abstract public void start(Yukkuri body);
+	public abstract void start(Yukkuri body);
 
 	/**
 	 * 毎フレーム呼ばれるメソッド
@@ -188,7 +203,7 @@ abstract public class EventPacket implements java.io.Serializable {
 	 * falseを返している間は毎フレームupdateとexecuteが呼ばれるので、
 	 * 自前でステート管理すれば小芝居的なものも可能
 	 */
-	abstract public boolean execute(Yukkuri body);
+	public abstract boolean execute(Yukkuri body);
 
 	/**
 	 * イベント終了時に呼ばれるメソッド。
@@ -292,11 +307,6 @@ abstract public class EventPacket implements java.io.Serializable {
 		return target;
 	}
 
-	/** イベント受信対象の objId をセットする。 */
-	public void setTarget(int target) {
-		this.target = target;
-	}
-
 	/** イベントの残有効回数を返す。 */
 	public int getCount() {
 		return count;
@@ -305,16 +315,6 @@ abstract public class EventPacket implements java.io.Serializable {
 	/** イベントの残有効回数をセットする。 */
 	public void setCount(int count) {
 		this.count = count;
-	}
-
-	/** イベント発信者の objId をセットする。 */
-	public void setFrom(int from) {
-		this.from = from;
-	}
-
-	/** イベント受信者の objId をセットする。 */
-	public void setTo(int to) {
-		this.to = to;
 	}
 
 	/** イベントの優先度をセットする。 */
@@ -335,7 +335,9 @@ abstract public class EventPacket implements java.io.Serializable {
 	 */
 	protected final Yukkuri requireLiveSource() {
 		Yukkuri src = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
-		if (src == null || src.isRemoved() || src.isDead()) return null;
+		if (src == null || src.isRemoved() || src.isDead()) {
+			return null;
+		}
 		return src;
 	}
 

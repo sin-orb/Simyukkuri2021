@@ -15,8 +15,8 @@ public final class MainItemComboBoxListener implements ItemListener {
 	public void itemStateChanged(ItemEvent e) {
 		synchronized (SimYukkuri.lock) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
-				if (e.getSource() == MainCommandUI.getMainItemCombo()) {
-					GadgetMenu.setSelectMain(GadgetMenu.getMainCategory()[MainCommandUI.getMainItemCombo().getSelectedIndex()]);
+				if (e.getSource() == MainCommandUi.getMainItemCombo()) {
+					GadgetMenu.setSelectMain(GadgetMenu.getMainCategory()[MainCommandUi.getMainItemCombo().getSelectedIndex()]);
 					GadgetMenu.setSelectCategory(GadgetMenu.getSelectMain(), 0);
 					GadgetMenu.setSelectSub(MainCommandSelection.getSubItem(GadgetMenu.getSelectMain(), 0));
 				}

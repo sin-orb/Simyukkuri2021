@@ -4,9 +4,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.draw.Translate;
+import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.item.Food;
@@ -22,13 +21,13 @@ import org.simyukkuri.event.impl.SuperEatingTimeEvent;
 import org.simyukkuri.event.impl.YukkuriRideEvent;
 import org.simyukkuri.field.impl.Barrier;
 import org.simyukkuri.system.MessagePool;
-import org.simyukkuri.util.GameEnvironment;
 import org.simyukkuri.system.WorldState;
+import org.simyukkuri.util.GameEnvironment;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * 家族イベント関係の処理
  */
 public class FamilyActionLogic {
@@ -53,8 +52,8 @@ public class FamilyActionLogic {
 	 */
 	public static final boolean checkFamilyAction(Yukkuri body, WorldState ws) {
 		// 他の用事がある場合
-		if (body.isToFood() || body.isToYukkuri() || body.isToSukkiri() ||
-				body.isToBed() || body.isToShit() || body.isToSteal() || body.isToTakeout()) {
+		if (body.isToFood() || body.isToYukkuri() || body.isToSukkiri()
+				|| body.isToBed() || body.isToShit() || body.isToSteal() || body.isToTakeout()) {
 			return false;
 		}
 
@@ -94,14 +93,17 @@ public class FamilyActionLogic {
 
 		// --------------------------------------------------
 		// 自分の状態チェック
-		if (body.isIdiot() || body.isDamaged() || !body.hasOkazari())
+		if (body.isIdiot() || body.isDamaged() || !body.hasOkazari()) {
 			return false;
+		}
 		// うんうん奴隷の場合
-		if (body.getPublicRank() == PublicRank.UNUN_SLAVE)
+		if (body.getPublicRank() == PublicRank.UNUN_SLAVE) {
 			return false;
+		}
 		// 非ゆっくり症の場合
-		if (body.isNYD())
+		if (body.isNyd()) {
 			return false;
+		}
 		// うんうん中、出産中、食事中は終了
 		if (body.isShitting() || body.isBirth() || body.isEating() || body.nearToBirth()) {
 			return false;
@@ -119,11 +121,11 @@ public class FamilyActionLogic {
 		// -------------------------------
 		// 番の状態チェック
 		if (partnerBody != null) {
-			if (partnerBody.isDamaged() ||
-					partnerBody.isLockmove() ||
-					partnerBody.isNeedled() ||
-					partnerBody.getCriticalDamageType() != null ||
-					!partnerBody.hasOkazari()) {
+			if (partnerBody.isDamaged()
+					|| partnerBody.isLockmove()
+					|| partnerBody.isNeedled()
+					|| partnerBody.getCriticalDamageType() != null
+					|| !partnerBody.hasOkazari()) {
 				return false;
 			}
 			// 産気づいたら終了
@@ -480,8 +482,9 @@ public class FamilyActionLogic {
 					// 生ゴミ
 					case WASTE:
 						// 飢餓状態かバカ舌なら食べる
-						if (body.isTooHungry() || body.getTangType() == TangType.POOR)
+						if (body.isTooHungry() || body.getTangType() == TangType.POOR) {
 							isCandidate = true;
+						}
 						break;
 				}
 

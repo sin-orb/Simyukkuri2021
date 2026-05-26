@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
 import java.util.Random;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -39,10 +38,10 @@ public class PoisonAmpouleTest {
         originalRnd = SimYukkuri.RND;
         WorldTestHelper.initializeEmptyMessagePool();
         PoisonAmpoule.setImages(buildImages());
-        PoisonAmpoule.setImgW(new int[] { 10, 20, 30 });
-        PoisonAmpoule.setImgH(new int[] { 11, 21, 31 });
-        PoisonAmpoule.setPivX(new int[] { 1, 2, 3 });
-        PoisonAmpoule.setPivY(new int[] { 4, 5, 6 });
+        PoisonAmpoule.setImgW(new int[] {10, 20, 30});
+        PoisonAmpoule.setImgH(new int[] {11, 21, 31});
+        PoisonAmpoule.setPivX(new int[] {1, 2, 3});
+        PoisonAmpoule.setPivY(new int[] {4, 5, 6});
     }
 
     @AfterEach
@@ -64,7 +63,7 @@ public class PoisonAmpouleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
 
-        assertEquals(parent.getUniqueID(), ampoule.getParent());
+        assertEquals(parent.getUniqueId(), ampoule.getParent());
         assertEquals(500, ampoule.getValue());
         assertEquals(0, ampoule.getCost());
         assertEquals(2, ampoule.getPivotX());
@@ -119,8 +118,9 @@ public class PoisonAmpouleTest {
         ampoule.update();
 
         // Happinessが変更される（SADまたはVERY_SAD）
-        assertTrue(parent.getHappiness() == Happiness.SAD ||
-                parent.getHappiness() == Happiness.VERY_SAD);
+        assertTrue(
+                parent.getHappiness() == Happiness.SAD
+                        || parent.getHappiness() == Happiness.VERY_SAD);
     }
 
     @Test
@@ -128,7 +128,7 @@ public class PoisonAmpouleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
 
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueId());
 
         BufferedImage image = ampoule.getImage(parent);
         assertNull(image);
@@ -170,9 +170,15 @@ public class PoisonAmpouleTest {
         childParent.setDirection(Direction.LEFT);
         adultParent.setDirection(Direction.LEFT);
 
-        assertSame(PoisonAmpoule.getImages()[AgeState.BABY.ordinal()][0], babyAmpoule.getImage(babyParent));
-        assertSame(PoisonAmpoule.getImages()[AgeState.CHILD.ordinal()][0], childAmpoule.getImage(childParent));
-        assertSame(PoisonAmpoule.getImages()[AgeState.ADULT.ordinal()][0], adultAmpoule.getImage(adultParent));
+        assertSame(
+                PoisonAmpoule.getImages()[AgeState.BABY.ordinal()][0],
+                babyAmpoule.getImage(babyParent));
+        assertSame(
+                PoisonAmpoule.getImages()[AgeState.CHILD.ordinal()][0],
+                childAmpoule.getImage(childParent));
+        assertSame(
+                PoisonAmpoule.getImages()[AgeState.ADULT.ordinal()][0],
+                adultAmpoule.getImage(adultParent));
     }
 
     @Test
@@ -196,7 +202,7 @@ public class PoisonAmpouleTest {
         int origPivotX = ampoule.getPivotX();
         int origPivotY = ampoule.getPivotY();
 
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueId());
 
         ampoule.resetBoundary();
 
@@ -279,7 +285,10 @@ public class PoisonAmpouleTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         parent.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
+        SimYukkuri.world
+                .getCurrentWorldState()
+                .getYukkuriRegistry()
+                .put(parent.getUniqueId(), parent);
         return parent;
     }
 
@@ -287,7 +296,9 @@ public class PoisonAmpouleTest {
         BufferedImage[][] images = new BufferedImage[3][2];
         for (int age = 0; age < 3; age++) {
             for (int dir = 0; dir < 2; dir++) {
-                images[age][dir] = new BufferedImage(10 + age * 10, 10 + age * 10, BufferedImage.TYPE_INT_ARGB);
+                images[age][dir] =
+                        new BufferedImage(
+                                10 + age * 10, 10 + age * 10, BufferedImage.TYPE_INT_ARGB);
             }
         }
         return images;
@@ -298,6 +309,7 @@ public class PoisonAmpouleTest {
         try {
             PoisonAmpoule.loadImages(PoisonAmpoule.class.getClassLoader(), null);
         } catch (Exception e) {
+            // ignore
         }
     }
 

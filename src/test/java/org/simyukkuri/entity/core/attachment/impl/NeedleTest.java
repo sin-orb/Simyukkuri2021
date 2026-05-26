@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
 import java.util.Random;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -40,10 +39,10 @@ public class NeedleTest {
         SimYukkuri.world = new World();
         originalRnd = SimYukkuri.RND;
         Needle.setImages(buildImages());
-        Needle.setImgW(new int[] { 10, 20, 30 });
-        Needle.setImgH(new int[] { 11, 21, 31 });
-        Needle.setPivX(new int[] { 1, 2, 3 });
-        Needle.setPivY(new int[] { 4, 5, 6 });
+        Needle.setImgW(new int[] {10, 20, 30});
+        Needle.setImgH(new int[] {11, 21, 31});
+        Needle.setPivX(new int[] {1, 2, 3});
+        Needle.setPivY(new int[] {4, 5, 6});
         WorldTestHelper.initializeEmptyMessagePool();
     }
 
@@ -67,7 +66,7 @@ public class NeedleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         Needle needle = new Needle(parent);
 
-        assertEquals(parent.getUniqueID(), needle.getParent());
+        assertEquals(parent.getUniqueId(), needle.getParent());
         assertEquals(0, needle.getValue());
         assertEquals(0, needle.getCost());
         assertEquals(1, needle.getProcessInterval()); // 頻繁に更新
@@ -134,7 +133,7 @@ public class NeedleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         Needle needle = new Needle(parent);
 
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueId());
 
         BufferedImage image = needle.getImage(parent);
         assertNull(image);
@@ -177,8 +176,10 @@ public class NeedleTest {
         adultParent.setDirection(Direction.LEFT);
 
         assertSame(Needle.getImages()[AgeState.BABY.ordinal()][0], babyNeedle.getImage(babyParent));
-        assertSame(Needle.getImages()[AgeState.CHILD.ordinal()][0], childNeedle.getImage(childParent));
-        assertSame(Needle.getImages()[AgeState.ADULT.ordinal()][0], adultNeedle.getImage(adultParent));
+        assertSame(
+                Needle.getImages()[AgeState.CHILD.ordinal()][0], childNeedle.getImage(childParent));
+        assertSame(
+                Needle.getImages()[AgeState.ADULT.ordinal()][0], adultNeedle.getImage(adultParent));
     }
 
     @Test
@@ -202,7 +203,7 @@ public class NeedleTest {
         int origPivotX = needle.getPivotX();
         int origPivotY = needle.getPivotY();
 
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueId());
 
         needle.resetBoundary();
 
@@ -367,7 +368,10 @@ public class NeedleTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         parent.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
+        SimYukkuri.world
+                .getCurrentWorldState()
+                .getYukkuriRegistry()
+                .put(parent.getUniqueId(), parent);
         return parent;
     }
 
@@ -375,7 +379,9 @@ public class NeedleTest {
         BufferedImage[][] images = new BufferedImage[3][2];
         for (int age = 0; age < 3; age++) {
             for (int dir = 0; dir < 2; dir++) {
-                images[age][dir] = new BufferedImage(10 + age * 10, 10 + age * 10, BufferedImage.TYPE_INT_ARGB);
+                images[age][dir] =
+                        new BufferedImage(
+                                10 + age * 10, 10 + age * 10, BufferedImage.TYPE_INT_ARGB);
             }
         }
         return images;
@@ -511,6 +517,7 @@ public class NeedleTest {
         try {
             Needle.loadImages(Needle.class.getClassLoader(), null);
         } catch (Exception e) {
+            // ignore
         }
     }
 }

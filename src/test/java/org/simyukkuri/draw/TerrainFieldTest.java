@@ -3,19 +3,18 @@ package org.simyukkuri.draw;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.LinearGradientPaint;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.net.URL;
 import java.lang.reflect.Field;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-
 import javax.imageio.ImageIO;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -26,8 +25,7 @@ import org.simyukkuri.visual.TerrainBillboard;
 
 public class TerrainFieldTest {
 
-    @TempDir
-    Path tempDir;
+    @TempDir Path tempDir;
 
     private static String originalJarPath;
 
@@ -35,7 +33,8 @@ public class TerrainFieldTest {
     public void setUp() throws Exception {
         WorldTestHelper.resetStates();
         System.setProperty("java.awt.headless", "true");
-        WorldTestHelper.initializeTranslate(1000, 1000, 500, 900, 700, 100, 100, new float[] { 1.0f });
+        WorldTestHelper.initializeTranslate(
+                1000, 1000, 500, 900, 700, 100, 100, new float[] {1.0f});
 
         // Save original static fields if not already saved
         if (originalJarPath == null) {
@@ -93,10 +92,18 @@ public class TerrainFieldTest {
 
         // Check defaults for old format
         assertTrue(TerrainField.isPers());
+        assertEquals(0, getOwnerType());
+        assertTrue(getBillboardList("structList").isEmpty());
+        assertTrue(getBillboardList("floorList").isEmpty());
+        assertTrue(getBillboardList("ceilingList").isEmpty());
         assertNotNull(TerrainField.getBillboards());
+        assertEquals(0, TerrainField.getBillboards().size());
 
-        // morning sky should have default gradient
+        // morning / evening / night sky should have default gradients; day is intentionally null
         assertNotNull(TerrainField.getSkyGrad(0));
+        assertNull(TerrainField.getSkyGrad(1));
+        assertNotNull(TerrainField.getSkyGrad(2));
+        assertNotNull(TerrainField.getSkyGrad(3));
     }
 
     @Test
@@ -107,22 +114,23 @@ public class TerrainFieldTest {
         Files.createDirectories(backDir);
 
         Path bgIni = backDir.resolve("bg.ini");
-        String content = "[Asset]\n" +
-                "img=test_bg.png\n" +
-                "img=obj1.png\n" +
-                "[Environment]\n" +
-                "base=test_bg.png\n" +
-                "morning_top_rgba=255,0,0,255\n" +
-                "morning_bottom_rgba=0,0,255,255\n" +
-                "[Object]\n" +
-                "obj1.png=0.5,0.5,0.0\n" +
-                "[Floor]\n" +
-                "obj1.png=0.1,0.1,0.0\n" +
-                "[Ceiling]\n" +
-                "obj1.png=0.9,0.9,0.0\n" +
-                "[Owner]\n" +
-                "perspective=false\n" +
-                "owner=1\n";
+        String content =
+                "[Asset]\n"
+                        + "img=test_bg.png\n"
+                        + "img=obj1.png\n"
+                        + "[Environment]\n"
+                        + "base=test_bg.png\n"
+                        + "morning_top_rgba=255,0,0,255\n"
+                        + "morning_bottom_rgba=0,0,255,255\n"
+                        + "[Object]\n"
+                        + "obj1.png=0.5,0.5,0.0\n"
+                        + "[Floor]\n"
+                        + "obj1.png=0.1,0.1,0.0\n"
+                        + "[Ceiling]\n"
+                        + "obj1.png=0.9,0.9,0.0\n"
+                        + "[Owner]\n"
+                        + "perspective=false\n"
+                        + "owner=1\n";
         Files.write(bgIni, content.getBytes("UTF-8"));
 
         BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
@@ -136,15 +144,29 @@ public class TerrainFieldTest {
         TerrainField.loadTerrain(0, this.getClass().getClassLoader(), null);
 
         // Check custom format results
-        assertFalse(TerrainField.isPers(), "New format should set perspective to false as specified in INI");
+        assertFalse(
+                TerrainField.isPers(),
+                "New format should set perspective to false as specified in INI");
+        assertEquals(1, getOwnerType());
 
         // morning sky should be set from RGBA
         LinearGradientPaint morning = TerrainField.getSkyGrad(0);
         assertNotNull(morning);
+        assertNull(TerrainField.getSkyGrad(1));
+        assertNotNull(TerrainField.getSkyGrad(2));
+        assertNotNull(TerrainField.getSkyGrad(3));
 
-        // Struct list should have 1 item
-        List<TerrainBillboard> structList = TerrainField.getBillboards();
+        // All lists should have 1 item in the configured test terrain
+        List<TerrainBillboard> structList = getBillboardList("structList");
         assertEquals(1, structList.size());
+        assertEquals(1, getBillboardList("floorList").size());
+        assertEquals(1, getBillboardList("ceilingList").size());
+
+        TerrainBillboard struct = structList.get(0);
+        assertNotNull(struct.getImage());
+        assertEquals(1, struct.getImage().getWidth());
+        assertEquals(1, struct.getImage().getHeight());
+        assertEquals(Translate.invertBgY((int) (0.5d * Translate.getBufferH())), struct.getSortY());
     }
 
     @Test
@@ -165,17 +187,18 @@ public class TerrainFieldTest {
         backThemeField.setAccessible(true);
         backThemeField.set(null, tempDir.toAbsolutePath().toString() + "/mod/back/");
 
-        ClassLoader missingResourceLoader = new ClassLoader(null) {
-            @Override
-            public URL getResource(String name) {
-                return null;
-            }
+        ClassLoader missingResourceLoader =
+                new ClassLoader(null) {
+                    @Override
+                    public URL getResource(String name) {
+                        return null;
+                    }
 
-            @Override
-            public java.io.InputStream getResourceAsStream(String name) {
-                return null;
-            }
-        };
+                    @Override
+                    public java.io.InputStream getResourceAsStream(String name) {
+                        return null;
+                    }
+                };
 
         try {
             TerrainField.loadTerrain(0, missingResourceLoader, null);
@@ -185,6 +208,22 @@ public class TerrainFieldTest {
         }
 
         assertTrue(TerrainField.isPers(), "failed load should keep the previous perspective flag");
-        assertEquals(17, ownerTypeField.getInt(null), "failed load should keep the previous owner type");
+        assertEquals(
+                17, ownerTypeField.getInt(null), "failed load should keep the previous owner type");
+    }
+
+    private static List<TerrainBillboard> getBillboardList(String fieldName) {
+        switch (fieldName) {
+            case "structList": return TerrainField.getBillboards();
+            case "floorList": return TerrainField.getFloorList();
+            case "ceilingList": return TerrainField.getCeilingList();
+            default: throw new IllegalArgumentException("Unknown field: " + fieldName);
+        }
+    }
+
+    private static int getOwnerType() throws Exception {
+        Field field = TerrainField.class.getDeclaredField("ownerType");
+        field.setAccessible(true);
+        return field.getInt(null);
     }
 }

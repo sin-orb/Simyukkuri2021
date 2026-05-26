@@ -6,14 +6,13 @@ import java.beans.Transient;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.simyukkuri.draw.Dimension4y;
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Point4y;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.ImageCode;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.util.GameEnvironment;
@@ -39,8 +38,8 @@ public class WasaReimu extends Reimu {
 	private static BufferedImage[][][] imagesNora = new BufferedImage[ImageCode.values().length][2][3];
 	private static BufferedImage[][][][] imagesNagasi = new BufferedImage[ImageCode.values().length][2][3][ModLoader
 			.getMaxImgOtherVer() + 1];
-	private static int directionOffset[][] = new int[ImageCode.values().length][2];
-	private static int directionOffsetNagasi[][] = new int[ImageCode.values().length][2];
+	private static int[][] directionOffset = new int[ImageCode.values().length][2];
+	private static int[][] directionOffsetNagasi = new int[ImageCode.values().length][2];
 	private static Dimension4y[] boundary = new Dimension4y[3];
 	private static Dimension4y[] braidBoundary = new Dimension4y[3];
 	private static boolean imageLoaded = false;
@@ -54,8 +53,9 @@ public class WasaReimu extends Reimu {
 	/** イメージのロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
-		if (imageLoaded)
+		if (imageLoaded) {
 			return;
+		}
 
 		boolean res;
 		res = ModLoader.loadYukkuriImagePack(loader, imagesNora, directionOffset, ModLoader.getYkWordNora(), baseFileName,
@@ -146,8 +146,8 @@ public class WasaReimu extends Reimu {
 		return 1;
 	}
 
-	@Override
 	/** アタッチメントキーに対応する取り付け点座標を返す。 */
+	@Override
 	public Point4y[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}

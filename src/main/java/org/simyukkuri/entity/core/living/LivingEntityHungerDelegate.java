@@ -22,8 +22,9 @@ public final class LivingEntityHungerDelegate {
 			return;
 		}
 		if (body.isPealed() || body.isPacked()) {
-			if (body.getAge() % 7 == 0)
+			if (body.getAge() % 7 == 0) {
 				body.hungry -= LivingEntity.TICK;
+			}
 		}
 		if (body.isUnBirth()) {
 			if (!body.isPlantForUnbirthChild()) {
@@ -32,8 +33,9 @@ public final class LivingEntityHungerDelegate {
 				body.hungry = body.getHungryLimit();
 			}
 		} else if (body.isSleeping()) {
-			if (body.getAge() % 2 == 0)
+			if (body.getAge() % 2 == 0) {
 				body.hungry -= LivingEntity.TICK;
+			}
 		} else if (body.isExciting() && !body.isRaper()) {
 			body.hungry -= LivingEntity.TICK * (body.getBabyTypes().size() + 1);
 		} else {
@@ -58,15 +60,18 @@ public final class LivingEntityHungerDelegate {
 
 	/** ストレス値を下限 0 にクランプする. */
 	public void checkStress() {
-		if (body.stress < 0)
+		if (body.stress < 0) {
 			body.stress = 0;
+		}
 	}
 
 	/** バカ舌値を上下限にクランプする. */
 	public void checkTang() {
-		if (body.getTang() < 0)
+		if (body.getTang() < 0) {
 			body.setTang(0);
-		if (body.getTang() > body.getTangLevelBase()[2])
+		}
+		if (body.getTang() > body.getTangLevelBase()[2]) {
 			body.setTang(body.getTangLevelBase()[2]);
+		}
 	}
 }

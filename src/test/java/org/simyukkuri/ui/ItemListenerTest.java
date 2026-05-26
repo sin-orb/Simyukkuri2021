@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.event.ActionEvent;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
@@ -27,7 +26,7 @@ public class ItemListenerTest {
     public void setUp() {
         WorldTestHelper.resetWorld();
         SimYukkuri.world = new World();
-        WorldTestHelper.initializeMainCommandUITestState();
+        WorldTestHelper.initializeMainCommandUiTestState();
     }
 
     @Test
@@ -35,38 +34,38 @@ public class ItemListenerTest {
         ItemPopupSpeedAction action = new ItemPopupSpeedAction();
 
         // Initial speed
-        MainCommandUI.setSelectedGameSpeed(2);
-        MainCommandUI.getGameSpeedCombo().setSelectedIndex(2);
+        MainCommandUi.setSelectedGameSpeed(2);
+        MainCommandUi.getGameSpeedCombo().setSelectedIndex(2);
 
         // Popup visible -> speed should be 0
         action.popupMenuWillBecomeVisible(null);
-        assertEquals(0, MainCommandUI.getGameSpeedCombo().getSelectedIndex());
+        assertEquals(0, MainCommandUi.getGameSpeedCombo().getSelectedIndex());
 
         // Popup invisible -> speed should be restored to 2
         action.popupMenuWillBecomeInvisible(null);
-        assertEquals(2, MainCommandUI.getGameSpeedCombo().getSelectedIndex());
-        assertEquals(2, MainCommandUI.getSelectedGameSpeed());
+        assertEquals(2, MainCommandUi.getGameSpeedCombo().getSelectedIndex());
+        assertEquals(2, MainCommandUi.getSelectedGameSpeed());
     }
 
     @Test
     public void testUsePopupAction_pausesAndResumesSpeed() {
         ItemPopupSpeedAction action = new ItemPopupSpeedAction();
 
-        MainCommandUI.setSelectedGameSpeed(1);
-        MainCommandUI.getGameSpeedCombo().setSelectedIndex(1);
+        MainCommandUi.setSelectedGameSpeed(1);
+        MainCommandUi.getGameSpeedCombo().setSelectedIndex(1);
 
         action.popupMenuWillBecomeVisible(null);
-        assertEquals(0, MainCommandUI.getGameSpeedCombo().getSelectedIndex());
+        assertEquals(0, MainCommandUi.getGameSpeedCombo().getSelectedIndex());
 
         action.popupMenuWillBecomeInvisible(null);
-        assertEquals(1, MainCommandUI.getGameSpeedCombo().getSelectedIndex());
+        assertEquals(1, MainCommandUi.getGameSpeedCombo().getSelectedIndex());
     }
 
     @Test
     public void testGetMenuAction_PICKUP_Body() {
         Yukkuri b = new Reimu();
         b.setAgeState(AgeState.ADULT);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         ItemMenu.setGetTarget(b);
 
         ItemGetMenuAction action = new ItemGetMenuAction();
@@ -74,7 +73,7 @@ public class ItemListenerTest {
 
         action.actionPerformed(e);
 
-        assertFalse(SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().containsKey(b.getUniqueID()));
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().containsKey(b.getUniqueId()));
         assertTrue(SimYukkuri.world.getPlayer().getInventoryView().contains(b));
         assertTrue(b.isTaken());
         assertNull(ItemMenu.getGetTarget());
@@ -85,10 +84,10 @@ public class ItemListenerTest {
         Yukkuri b = new Reimu();
         b.setAgeState(AgeState.ADULT);
         Stalk stalk = new Stalk();
-        stalk.getAttachedBabyIds().add(b.getUniqueID());
+        stalk.getAttachedBabyIds().add(b.getUniqueId());
         b.setBindStalk(stalk);
         b.setParentLinkId(123);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         ItemMenu.setGetTarget(b);
 
         ItemGetMenuAction action = new ItemGetMenuAction();
@@ -96,7 +95,7 @@ public class ItemListenerTest {
 
         action.actionPerformed(e);
 
-        assertFalse(SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().containsKey(b.getUniqueID()));
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().containsKey(b.getUniqueId()));
         assertTrue(SimYukkuri.world.getPlayer().getInventoryView().contains(b));
         assertTrue(b.isTaken());
         assertNull(b.getBindStalk());

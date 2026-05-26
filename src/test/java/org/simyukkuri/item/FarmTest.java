@@ -158,10 +158,10 @@ class FarmTest {
     void testGetSetFieldPos_Getters() {
         Farm item = new Farm();
         item.setFieldPos(50, 60, 500, 600);
-        assertEquals(50, item.getFieldSX());
-        assertEquals(60, item.getFieldSY());
-        assertEquals(500, item.getFieldEX());
-        assertEquals(600, item.getFieldEY());
+        assertEquals(50, item.getFieldSx());
+        assertEquals(60, item.getFieldSy());
+        assertEquals(500, item.getFieldEx());
+        assertEquals(600, item.getFieldEy());
     }
 
     // --- Farm-specific getters/setters ---

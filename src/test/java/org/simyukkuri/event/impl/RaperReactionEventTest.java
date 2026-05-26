@@ -45,8 +45,8 @@ public class RaperReactionEventTest {
         Yukkuri from = createBody();
         Yukkuri to = createBody();
         RaperReactionEvent event = new RaperReactionEvent(from, to, null, 1);
-        assertEquals(from.getUniqueID(), event.getFrom());
-        assertEquals(to.getUniqueID(), event.getTo());
+        assertEquals(from.getUniqueId(), event.getFrom());
+        assertEquals(to.getUniqueId(), event.getTo());
         assertEquals(1, event.getCount());
     }
 
@@ -160,7 +160,7 @@ public class RaperReactionEventTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 
@@ -251,7 +251,8 @@ public class RaperReactionEventTest {
     public void testStart_NYD_earlyReturn() {
         Yukkuri from = createBody();
         Yukkuri b = createBody();
-        b.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NON_YUKKURI_DISEASE); // isNYD() = true
+        b.setCoreAnkoState(
+                org.simyukkuri.enums.CoreAnkoState.NON_YUKKURI_DISEASE); // isNyd() = true
         RaperReactionEvent event = new RaperReactionEvent(from, null, null, 1);
         event.setState(ActionState.ATTACK);
         assertDoesNotThrow(() -> event.start(b)); // returns early, no throw
@@ -307,7 +308,8 @@ public class RaperReactionEventTest {
             f.setAccessible(true);
             f.setInt(event, 1);
         } catch (Exception e) {
-            /* ignore */ }
+            /* ignore */
+        }
         SimYukkuri.RND = new org.simyukkuri.ConstState(1);
         try {
             assertDoesNotThrow(() -> event.update(b));
@@ -371,7 +373,7 @@ public class RaperReactionEventTest {
         RaperReactionEvent event = new RaperReactionEvent();
         Yukkuri result = event.searchNextTarget();
         assertNotNull(result);
-        assertEquals(raper.getUniqueID(), result.getUniqueID());
+        assertEquals(raper.getUniqueId(), result.getUniqueId());
     }
 
     // --- escapeTarget: from null → early return ---

@@ -1,4 +1,5 @@
 package org.simyukkuri.enums;
+
 /** トラウマ種類 */
 public enum Trauma {
 	/** トラウマなし */NONE,

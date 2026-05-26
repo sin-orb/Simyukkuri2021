@@ -45,8 +45,8 @@ public class RevengeAttackEventTest {
         Yukkuri from = createBody();
         Yukkuri to = createBody();
         RevengeAttackEvent event = new RevengeAttackEvent(from, to, null, 1);
-        assertEquals(from.getUniqueID(), event.getFrom());
-        assertEquals(to.getUniqueID(), event.getTo());
+        assertEquals(from.getUniqueId(), event.getFrom());
+        assertEquals(to.getUniqueId(), event.getTo());
         assertEquals(1, event.getCount());
     }
 
@@ -251,7 +251,7 @@ public class RevengeAttackEventTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 }

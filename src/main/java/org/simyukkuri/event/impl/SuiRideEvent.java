@@ -5,19 +5,19 @@ import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.item.Sui;
-import org.simyukkuri.enums.YukkuriRelationType;
 import org.simyukkuri.enums.FavItemType;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.PublicRank;
+import org.simyukkuri.enums.YukkuriRelationType;
 import org.simyukkuri.event.EventPacket;
-import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.logic.EventLogic;
+import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameText;
 
-/***************************************************
+/**
  * すぃーの乗車管理イベント
  * protected Yukkuri from; // 乗るゆっくり
  * protected Yukkuri to; // 未使用
@@ -73,8 +73,9 @@ public class SuiRideEvent extends EventPacket {
 			return false;
 		}
 		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
-		if (sourceBody == null)
+		if (sourceBody == null) {
 			return false;
+		}
 		if (sourceBody == body) {
 			return true;
 		}
@@ -109,8 +110,9 @@ public class SuiRideEvent extends EventPacket {
 							body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutSister));
 							break;
 						case YOUNGER_SISTER: // 妹
-							body.setMessage(
-									GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutElderSister));
+							String elderSisterMsg = GameMessages.getMessage(
+									body, MessagePool.Action.HateWithEnvyAboutElderSister);
+							body.setMessage(elderSisterMsg);
 							break;
 						default: // 他人
 							break;
@@ -159,8 +161,9 @@ public class SuiRideEvent extends EventPacket {
 				return null;
 			}
 			Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
-			if (sourceBody == null)
+			if (sourceBody == null) {
 				return UpdateState.ABORT;
+			}
 			if (sourceBody == body) {
 				// 乗客数が上限、またはカウント50以上の場合
 				if (targetSui.getBoundBodyCount() >= 3 || tick > 50) {
@@ -170,8 +173,10 @@ public class SuiRideEvent extends EventPacket {
 						// 乗ろうとしているゆっくりがいない、またはカウントが50の倍数の場合ランダムに移動する
 						// ※移動中はすぃーの状態を変えるなりなんなりした方がいいのでは
 						if (!memberRide || tick % 50 == 0) {
-							body.moveTo(GameRandom.nextInt(Translate.getWorldWidth()),
-									GameRandom.nextInt(Translate.getWorldHeight() - Sui.getBounding().getHeight() / 2));
+							int randX = GameRandom.nextInt(Translate.getWorldWidth());
+							int randY = GameRandom.nextInt(
+									Translate.getWorldHeight() - Sui.getBounding().getHeight() / 2);
+							body.moveTo(randX, randY);
 						}
 						// カウントが500を超える場合
 						if (tick > 500) {
@@ -231,8 +236,9 @@ public class SuiRideEvent extends EventPacket {
 			Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 			// 移動する
 			body.moveToEvent(this, targetObject.getX(), targetObject.getY());
-			if (sourceBody == null)
+			if (sourceBody == null) {
 				return UpdateState.ABORT;
+			}
 			if (sourceBody == body && targetSui.isOwnerRiding() || targetSui.getBoundBodyCount() >= 3) {
 				memberRide = false;
 				return UpdateState.ABORT;
@@ -280,12 +286,12 @@ public class SuiRideEvent extends EventPacket {
 		return false;
 	}
 
-	@Override
 	/**
 	 * End.
 	 *
 	 * @param body the body
 	 */
+	@Override
 	public void end(Yukkuri body) {
 		// 他のイベントで強制的にイベントが終わることがある
 		// すぃーにのってたら降りる

@@ -242,7 +242,7 @@ public final class YukkuriAbuseDelegate {
 		if (!body.canAction()) {
 			return;
 		}
-		if (body.isNotNYD()) {
+		if (body.isNotNyd()) {
 			if (body.isStalkCastration()) {
 				body.setHappiness(Happiness.VERY_SAD);
 				body.addStress(1000);
@@ -270,7 +270,7 @@ public final class YukkuriAbuseDelegate {
 		if (!body.canAction()) {
 			return;
 		}
-		if (body.isNotNYD()) {
+		if (body.isNotNyd()) {
 			if (body.isCastrated()) {
 				body.setHappiness(Happiness.VERY_SAD);
 				body.addStress(1000);
@@ -326,7 +326,7 @@ public final class YukkuriAbuseDelegate {
 			body.checkReactionStalkMother(UnbirthBabyState.ATTACKED);
 		}
 
-		if (body.isNotNYD() && !body.isUnBirth()) {
+		if (body.isNotNyd() && !body.isUnBirth()) {
 			body.setPanicType(PanicType.BURN);
 		}
 		body.setWet(false);

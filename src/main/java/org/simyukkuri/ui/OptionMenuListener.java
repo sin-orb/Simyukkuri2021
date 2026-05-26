@@ -17,7 +17,7 @@ public final class OptionMenuListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 
-		MainCommandUI.OptionPopup sel = MainCommandUI.OptionPopup.valueOf(command);
+		MainCommandUi.OptionPopup sel = MainCommandUi.OptionPopup.valueOf(command);
 		switch (sel) {
 			case INI_RELOAD:
 				GameView.loadImage(false, false, false, false, false, true);
@@ -30,7 +30,7 @@ public final class OptionMenuListener implements ActionListener {
 			default:
 				break;
 		}
-		MainCommandUI.getOptionPopup().setVisible(false);
-		MainCommandUI.getOptionButton().setSelected(false);
+		MainCommandUi.getOptionPopup().setVisible(false);
+		MainCommandUi.getOptionButton().setSelected(false);
 	}
 }

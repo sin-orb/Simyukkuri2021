@@ -15,7 +15,7 @@ public class NumberingTest {
     public void setUp() {
         // テストごとに ID をリセット（シングルトンの状態を制御）
         Numbering.INSTANCE.setObjId(0);
-        Numbering.INSTANCE.setYukkuriID(0);
+        Numbering.INSTANCE.setYukkuriId(0);
     }
 
     public static void main(String[] args) {
@@ -53,18 +53,18 @@ public class NumberingTest {
 
     @Test
     public void testNumberingYukkuriID() {
-        int id1 = Numbering.INSTANCE.numberingYukkuriID();
-        int id2 = Numbering.INSTANCE.numberingYukkuriID();
+        int id1 = Numbering.INSTANCE.numberingYukkuriId();
+        int id2 = Numbering.INSTANCE.numberingYukkuriId();
         assertEquals(1, id1);
         assertEquals(2, id2);
-        assertEquals(2, Numbering.INSTANCE.getYukkuriID());
+        assertEquals(2, Numbering.INSTANCE.getYukkuriId());
     }
 
     @Test
     public void testSetAndGetYukkuriID() {
-        Numbering.INSTANCE.setYukkuriID(500);
-        assertEquals(500, Numbering.INSTANCE.getYukkuriID());
-        int nextId = Numbering.INSTANCE.numberingYukkuriID();
+        Numbering.INSTANCE.setYukkuriId(500);
+        assertEquals(500, Numbering.INSTANCE.getYukkuriId());
+        int nextId = Numbering.INSTANCE.numberingYukkuriId();
         assertEquals(501, nextId);
     }
 

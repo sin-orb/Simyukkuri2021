@@ -138,13 +138,13 @@ public class FoodMaker extends WorldEntity {
 						stockFood = 3;
 					} else if (b.getType() == YukkuriType.MEIRIN) { // めーりん
 						stockFood = 8;
-					} else if (b.getType().getTypeID() >= YukkuriType.MARISAREIMU.getTypeID()) { // ハイブリッド・雑種
+					} else if (b.getType().getTypeId() >= YukkuriType.MARISAREIMU.getTypeId()) { // ハイブリッド・雑種
 						stockFood = 4;
-					} else if (b.getType().getTypeID() >= YukkuriType.REMIRYA.getTypeID()) { // 捕食種
+					} else if (b.getType().getTypeId() >= YukkuriType.REMIRYA.getTypeId()) { // 捕食種
 						stockFood = 1;
-					} else if (b.getType().getTypeID() >= YukkuriType.TARINAI.getTypeID()) { // 変異種
+					} else if (b.getType().getTypeId() >= YukkuriType.TARINAI.getTypeId()) { // 変異種
 						stockFood = 4;
-					} else if (b.getType().getTypeID() >= YukkuriType.YURUSANAE.getTypeID()) { // 希少種
+					} else if (b.getType().getTypeId() >= YukkuriType.YURUSANAE.getTypeId()) { // 希少種
 						stockFood = 1;
 					} else { // 通常種・
 						stockFood = 0;
@@ -219,13 +219,13 @@ public class FoodMaker extends WorldEntity {
 						foodType = foodTable[makeTable[stockFood][3]];
 					} else if (b.getType() == YukkuriType.MEIRIN) { // めーりん
 						foodType = foodTable[makeTable[stockFood][8]];
-					} else if (b.getType().getTypeID() >= YukkuriType.MARISAREIMU.getTypeID()) { // ハイブリッド・雑種
+					} else if (b.getType().getTypeId() >= YukkuriType.MARISAREIMU.getTypeId()) { // ハイブリッド・雑種
 						foodType = foodTable[makeTable[stockFood][4]];
-					} else if (b.getType().getTypeID() >= YukkuriType.REMIRYA.getTypeID()) { // 捕食種
+					} else if (b.getType().getTypeId() >= YukkuriType.REMIRYA.getTypeId()) { // 捕食種
 						foodType = foodTable[makeTable[stockFood][1]];
-					} else if (b.getType().getTypeID() >= YukkuriType.TARINAI.getTypeID()) { // 変異種
+					} else if (b.getType().getTypeId() >= YukkuriType.TARINAI.getTypeId()) { // 変異種
 						foodType = foodTable[makeTable[stockFood][4]];
-					} else if (b.getType().getTypeID() >= YukkuriType.YURUSANAE.getTypeID()) { // 希少種
+					} else if (b.getType().getTypeId() >= YukkuriType.YURUSANAE.getTypeId()) { // 希少種
 						foodType = foodTable[makeTable[stockFood][1]];
 					} else { // 通常種
 						foodType = foodTable[makeTable[stockFood][0]];
@@ -295,7 +295,7 @@ public class FoodMaker extends WorldEntity {
 				GameView.addVomit(x + (40 * dir), y, 0, null, YukkuriType.REIMU);
 			} else {
 				for (int i = 0; i < (foodAmount >> 1); i++) {
-					Food f = (Food) GadgetAction.putObjEX(Food.class, x + (40 * dir), y, foodType.ordinal());
+					Food f = (Food) GadgetAction.putObjEx(Food.class, x + (40 * dir), y, foodType.ordinal());
 					GameWorld.get().getCurrentWorldState().getFoods().put(f.objId, f);
 				}
 				foodAmount = 0;

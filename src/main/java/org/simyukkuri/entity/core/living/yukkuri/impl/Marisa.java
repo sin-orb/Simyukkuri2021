@@ -8,19 +8,18 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.simyukkuri.Const;
 import org.simyukkuri.draw.Dimension4y;
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Point4y;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.engine.transform.TransformationService;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.HairState;
 import org.simyukkuri.enums.ImageCode;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.util.GameEnvironment;
@@ -29,7 +28,7 @@ import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameWorld;
 import org.simyukkuri.util.IniFileUtil;
 
-/*****************************************************
+/**
  * まりさ。れいむまりさ、つむりまりさはこれを継承している
  */
 public class Marisa extends Yukkuri {
@@ -49,8 +48,8 @@ public class Marisa extends Yukkuri {
 	private static BufferedImage[][][] imagesNora = new BufferedImage[ImageCode.values().length][2][3];
 	private static BufferedImage[][][][] imagesNagasi = new BufferedImage[ImageCode
 			.values().length][2][3][ModLoader.getMaxImgOtherVer() + 1];
-	private static int directionOffset[][] = new int[ImageCode.values().length][2];
-	private static int directionOffsetNagasi[][] = new int[ImageCode.values().length][2];
+	private static int[][] directionOffset = new int[ImageCode.values().length][2];
+	private static int[][] directionOffsetNagasi = new int[ImageCode.values().length][2];
 	private static Dimension4y[] boundary = new Dimension4y[3];
 	private static Dimension4y[] braidBoundary = new Dimension4y[3];
 	private static boolean imageLoaded = false;
@@ -59,13 +58,14 @@ public class Marisa extends Yukkuri {
 	// iniファイルから読み込んだ初期値
 	private static int baseSpeed = 100;
 	// 個別表情管理(まりちゃ流し用)
-	private int imageVariantState[][] = new int[ImageCode.values().length][2];
+	private int[][] imageVariantState = new int[ImageCode.values().length][2];
 
 	/** イメージのロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
-		if (imageLoaded)
+		if (imageLoaded) {
 			return;
+		}
 
 		boolean res;
 		res = ModLoader.loadYukkuriImagePack(loader, imagesNagasi, directionOffsetNagasi, ModLoader.getYkWordNagasi(),
@@ -122,9 +122,7 @@ public class Marisa extends Yukkuri {
 			layer.getImage()[index] = imagePack[getRank().getImageIndex()][type][direction
 					* directionOffset[type][0]][getAgeState().ordinal()];
 			layer.getDir()[index] = direction * directionOffset[type][1];
-		}
-		// 流し絵の場合
-		else {
+		} else { // 流し絵の場合
 			// インターバル毎に初期化する
 			if (GameEnvironment.getInterval() == 0 && !isDead()) {
 				for (int i = 0; i < ImageCode.values().length; i++) {
@@ -185,10 +183,12 @@ public class Marisa extends Yukkuri {
 	@Override
 	public void execTransform() {
 		// 突然変異可能化チェック
-		if (!canTransform())
+		if (!canTransform()) {
 			return;
-		if (isRude())
-			return;// ゲスもだめ
+		}
+		if (isRude()) {
+			return; // ゲスもだめ
+		}
 		TransformationService.transform(this, YukkuriType.DOSMARISA);
 	}
 
@@ -201,8 +201,9 @@ public class Marisa extends Yukkuri {
 	@Override
 	public Yukkuri checkTransform() {
 		// 自身が突然変異可能かチェック
-		if (!canTransform())
+		if (!canTransform()) {
 			return null;
+		}
 
 		// 自分以外に幸せを感じている大人のゆっくりが10体以上いる
 		int adultCount = 0;
@@ -307,13 +308,13 @@ public class Marisa extends Yukkuri {
 	/** 胴体の表示状態に基づく画像インデックスをレイヤーにセットし番号を返す。 */
 	@Override
 	public int getImageIndex(YukkuriLayer layer) {
-		int direction = this.getDirection().ordinal();
-		int idx = 0;
+		final int direction = this.getDirection().ordinal();
 
 		layer.getOption()[0] = 0;
 		layer.getOption()[1] = 0;
 		layer.getOption()[2] = 0;
 
+		int idx = 0;
 		if (isBurned() && isDead()) {
 			// 焼死体
 			idx += getImage(ImageCode.BURNED.ordinal(), Const.LEFT, layer, idx);
@@ -539,10 +540,7 @@ public class Marisa extends Yukkuri {
 						idx += getImage(ImageCode.MROLL_RIGHT2_BRAID.ordinal(), Const.LEFT, layer, idx);
 					}
 				}
-			}
-
-			// 以下、普通のふりふり
-			else {
+			} else { // 以下、普通のふりふり
 				if (getAge() % 8 <= 3) {
 					idx += getImage(ImageCode.ROLL_LEFT_SHIT.ordinal(), Const.LEFT, layer, idx);
 
@@ -600,9 +598,7 @@ public class Marisa extends Yukkuri {
 			// 皮むき時
 			if (isPealed()) {
 				idx += getImage(ImageCode.PEALED.ordinal(), direction, layer, idx);
-			}
-			// 通常時
-			else {
+			} else { // 通常時
 				idx += getImage(ImageCode.BODY.ordinal(), direction, layer, idx);
 			}
 			layer.getOption()[0] = 1;
@@ -625,10 +621,10 @@ public class Marisa extends Yukkuri {
 
 	}
 
-	@Override
 	/**
 	 * Tune parameters.
 	 */
+	@Override
 	public void tuneParameters() {
 		/*
 		 * if (rnd.nextBoolean()) {
@@ -637,17 +633,17 @@ public class Marisa extends Yukkuri {
 		 */
 		// Tune individual parameters.
 		double factor = Math.random() + 1;
-		getHungryLimitBase()[AgeState.ADULT.ordinal()] *= factor;
-		getHungryLimitBase()[AgeState.CHILD.ordinal()] *= factor;
-		getHungryLimitBase()[AgeState.BABY.ordinal()] *= factor;
+		getHungryLimitBase()[AgeState.ADULT.ordinal()] = (int) (getHungryLimitBase()[AgeState.ADULT.ordinal()] * factor);
+		getHungryLimitBase()[AgeState.CHILD.ordinal()] = (int) (getHungryLimitBase()[AgeState.CHILD.ordinal()] * factor);
+		getHungryLimitBase()[AgeState.BABY.ordinal()] = (int) (getHungryLimitBase()[AgeState.BABY.ordinal()] * factor);
 		factor = Math.random() + 1;
-		getShitLimitBase()[AgeState.ADULT.ordinal()] *= factor;
-		getShitLimitBase()[AgeState.CHILD.ordinal()] *= factor;
-		getShitLimitBase()[AgeState.BABY.ordinal()] *= factor;
+		getShitLimitBase()[AgeState.ADULT.ordinal()] = (int) (getShitLimitBase()[AgeState.ADULT.ordinal()] * factor);
+		getShitLimitBase()[AgeState.CHILD.ordinal()] = (int) (getShitLimitBase()[AgeState.CHILD.ordinal()] * factor);
+		getShitLimitBase()[AgeState.BABY.ordinal()] = (int) (getShitLimitBase()[AgeState.BABY.ordinal()] * factor);
 		factor = Math.random() * 2 + 1;
-		getDamageLimitBase()[AgeState.ADULT.ordinal()] *= factor;
-		getDamageLimitBase()[AgeState.CHILD.ordinal()] *= factor;
-		getDamageLimitBase()[AgeState.BABY.ordinal()] *= factor;
+		getDamageLimitBase()[AgeState.ADULT.ordinal()] = (int) (getDamageLimitBase()[AgeState.ADULT.ordinal()] * factor);
+		getDamageLimitBase()[AgeState.CHILD.ordinal()] = (int) (getDamageLimitBase()[AgeState.CHILD.ordinal()] * factor);
+		getDamageLimitBase()[AgeState.BABY.ordinal()] = (int) (getDamageLimitBase()[AgeState.BABY.ordinal()] * factor);
 		factor = Math.random() + 0.5;
 		setBabyLimitBase((int) (getBabyLimitBase() * factor));
 		setChildLimitBase((int) (getChildLimitBase() * factor));
@@ -663,9 +659,9 @@ public class Marisa extends Yukkuri {
 		setImmunityStrength(GameRandom.nextInt(10) + 1);
 		// EYESIGHT /= 1;
 		factor = Math.random() + 1;
-		getStrengthBase()[AgeState.ADULT.ordinal()] *= factor;
-		getStrengthBase()[AgeState.CHILD.ordinal()] *= factor;
-		getStrengthBase()[AgeState.BABY.ordinal()] *= factor;
+		getStrengthBase()[AgeState.ADULT.ordinal()] = (int) (getStrengthBase()[AgeState.ADULT.ordinal()] * factor);
+		getStrengthBase()[AgeState.CHILD.ordinal()] = (int) (getStrengthBase()[AgeState.CHILD.ordinal()] * factor);
+		getStrengthBase()[AgeState.BABY.ordinal()] = (int) (getStrengthBase()[AgeState.BABY.ordinal()] * factor);
 		speed = baseSpeed;
 	}
 

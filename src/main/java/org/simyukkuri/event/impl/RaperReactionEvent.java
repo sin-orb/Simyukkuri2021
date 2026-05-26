@@ -127,7 +127,7 @@ public class RaperReactionEvent extends EventPacket {
 	/** イベントの開始処理を実行する。 */
 	@Override
 	public void start(Yukkuri body) {
-		if (body.isNYD()) {
+		if (body.isNyd()) {
 			return;
 		}
 		if (state == ActionState.ATTACK) {

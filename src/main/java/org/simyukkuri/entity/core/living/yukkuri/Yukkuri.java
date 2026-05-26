@@ -1,5 +1,9 @@
 package org.simyukkuri.entity.core.living.yukkuri;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -8,12 +12,6 @@ import java.beans.Transient;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
-
 import org.simyukkuri.Const;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Dimension4y;
@@ -32,32 +30,32 @@ import org.simyukkuri.entity.core.world.bodylinked.Stalk;
 import org.simyukkuri.entity.core.world.item.Food;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Attitude;
-import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.enums.Burst;
 import org.simyukkuri.enums.CoreAnkoState;
 import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Damage;
 import org.simyukkuri.enums.Direction;
-import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.FavItemType;
 import org.simyukkuri.enums.FootBake;
 import org.simyukkuri.enums.HairState;
-import org.simyukkuri.enums.PredatorType;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.Numbering;
 import org.simyukkuri.enums.PanicType;
 import org.simyukkuri.enums.Parent;
+import org.simyukkuri.enums.PredatorType;
 import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.enums.PurposeOfMoving;
 import org.simyukkuri.enums.TakeoutItemType;
 import org.simyukkuri.enums.TangType;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.UnbirthBabyState;
 import org.simyukkuri.enums.Where;
 import org.simyukkuri.enums.WindowType;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.field.impl.Pool;
@@ -66,12 +64,12 @@ import org.simyukkuri.logic.YukkuriEventState;
 import org.simyukkuri.logic.YukkuriExcretionRule;
 import org.simyukkuri.logic.YukkuriMovement;
 import org.simyukkuri.logic.YukkuriRelations;
-import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.system.ItemMenu.GetMenuTarget;
 import org.simyukkuri.system.ItemMenu.UseMenuTarget;
-import org.simyukkuri.ui.MainCommandUI;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.system.Sprite;
+import org.simyukkuri.system.YukkuriLayer;
+import org.simyukkuri.ui.MainCommandUi;
 import org.simyukkuri.util.GameEnvironment;
 import org.simyukkuri.util.GameLocale;
 import org.simyukkuri.util.GameMessages;
@@ -82,7 +80,9 @@ import org.simyukkuri.util.GameWorld;
 import org.simyukkuri.util.IniFileUtil;
 import org.simyukkuri.util.ListOperations;
 
-/*********************************************************
+
+
+/**
  * ゆっくり本体の元となる抽象クラス（動作のみ。）
  * 属性に関しては親クラスのBodyAttributesにすべて定義。
  *
@@ -452,25 +452,22 @@ public abstract class Yukkuri extends SocialEntity {
 				if (!isDead() && !isLockmove()) {
 					if (getCriticalDamageType() != CriticalDamageType.CUT && !grabbed && !isPealed() && !isPacked()) {
 						if (!isUnyoActionAll() && !isSleeping()) {
+							int unyoStr = UNYOSTRENGTH[getAgeState().ordinal()];
 							if (!canflyCheck()) {
-								if (getFootBakeLevel() == FootBake.NONE &&
-										!isDamaged() && !isSick() && !isFeelPain()
+								if (getFootBakeLevel() == FootBake.NONE
+										&& !isDamaged() && !isSick() && !isFeelPain()
 										&& takeMappedObj(getParentLinkId()) == null
 										&& !isPeropero() && !(isEating() && !isPikopiko())) {
 									changeUnyo(0, 0,
-											(int) (GameRandom
-													.nextInt(((int) UNYOSTRENGTH[getAgeState().ordinal()] / 3)))
-													+ UNYOSTRENGTH[getAgeState().ordinal()]);
+											GameRandom.nextInt(unyoStr / 3) + unyoStr);
 								}
 							} else if (z == 0) {
-								if (getFootBakeLevel() == FootBake.NONE &&
-										!isDamaged() && !isSick() && !isFeelPain()
+								if (getFootBakeLevel() == FootBake.NONE
+										&& !isDamaged() && !isSick() && !isFeelPain()
 										&& takeMappedObj(getParentLinkId()) == null
 										&& !isPeropero() && !(isEating() && !isPikopiko())) {
 									changeUnyo(0, 0,
-											(int) (GameRandom
-													.nextInt(((int) UNYOSTRENGTH[getAgeState().ordinal()] / 3)))
-													+ UNYOSTRENGTH[getAgeState().ordinal()]);
+											GameRandom.nextInt(unyoStr / 3) + unyoStr);
 								}
 							}
 						}
@@ -478,8 +475,8 @@ public abstract class Yukkuri extends SocialEntity {
 				}
 			}
 			if (GameRandom.nextInt(30) == 0 && (isSleeping() ? GameRandom.nextBoolean() : true)) {
-				changeUnyo((int) (GameRandom.nextInt(2)), (int) (GameRandom.nextInt(2)),
-						(int) (GameRandom.nextInt(2)));
+				changeUnyo(GameRandom.nextInt(2), GameRandom.nextInt(2),
+						GameRandom.nextInt(2));
 			}
 			if (isDamaged() ? (GameRandom.nextInt(5) == 0) : true) {
 				changeReUnyo();
@@ -489,39 +486,57 @@ public abstract class Yukkuri extends SocialEntity {
 
 	/** 皮むき状態になったときの処理を委譲する。 */
 	@Override
-	protected void onPealed() { stateDelegate().onPealed(); }
+	protected void onPealed() {
+		stateDelegate().onPealed();
+	}
 
 	/** まんじゅう詰め状態になったときの処理を委譲する。 */
 	@Override
-	protected void onPacked() { stateDelegate().onPacked(); }
+	protected void onPacked() {
+		stateDelegate().onPacked();
+	}
 
 	/** 轢き事故を受けたときの処理を委譲する。 */
 	@Override
-	protected void onCarAccident() { abuseDelegate().strikeByPress(); }
+	protected void onCarAccident() {
+		abuseDelegate().strikeByPress();
+	}
 
 	/** 毒蒸気を受けたときの処理を委譲する。 */
 	@Override
-	protected void onPoisonSteam() { stateDelegate().onPoisonSteam(); }
+	protected void onPoisonSteam() {
+		stateDelegate().onPoisonSteam();
+	}
 
 	/** 切断ダメージを受けたときの処理を委譲する。 */
 	@Override
-	protected void onCutDamageReaction() { stateDelegate().onCutDamageReaction(); }
+	protected void onCutDamageReaction() {
+		stateDelegate().onCutDamageReaction();
+	}
 
 	/** 傷つき叫び処理をステートデリゲートに委譲する。 */
 	@Override
-	protected void onInjuredScream(int x, int y) { stateDelegate().onInjuredScream(x, y); }
+	protected void onInjuredScream(int x, int y) {
+		stateDelegate().onInjuredScream(x, y);
+	}
 
 	/** 悪夢ハンドラをステートデリゲートに委譲する。 */
 	@Override
-	protected void onNightmare(boolean nightmare) { stateDelegate().onNightmare(nightmare); }
+	protected void onNightmare(boolean nightmare) {
+		stateDelegate().onNightmare(nightmare);
+	}
 
 	/** 空腹起床ハンドラをステートデリゲートに委譲する。 */
 	@Override
-	protected void onWakeByHunger() { stateDelegate().onWakeByHunger(); }
+	protected void onWakeByHunger() {
+		stateDelegate().onWakeByHunger();
+	}
 
 	/** 自然起床ハンドラをステートデリゲートに委譲する。 */
 	@Override
-	protected void onWakeupNaturally() { stateDelegate().onWakeupNaturally(); }
+	protected void onWakeupNaturally() {
+		stateDelegate().onWakeupNaturally();
+	}
 
 	/** 子ゆの状態変化通知を茎デリゲートに委譲する。 */
 	@Override
@@ -576,7 +591,7 @@ public abstract class Yukkuri extends SocialEntity {
 
 	/**
 	 * 標準のメッセージ表示
-	 * 
+	 *
 	 * @param message メッセージ
 	 */
 	public void setMessage(String message) {
@@ -584,29 +599,8 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	/**
-	 * ピコピコメッセージ表示
-	 * 
-	 * @param message   メッセージ
-	 * @param interrupt 現在メッセージ中でも割り込むかどうか
-	 */
-	public void setPikoMessage(String message, boolean interrupt) {
-		messageDelegate().setPikoMessage(message, interrupt);
-	}
-
-	/**
-	 * ピコピコメッセージ表示(時間指定)
-	 * 
-	 * @param message   メッセージ
-	 * @param count     メッセージ時間
-	 * @param interrupt 現在メッセージ中でも割り込むかどうか
-	 */
-	public void setPikoMessage(String message, int count, boolean interrupt) {
-		messageDelegate().setPikoMessage(message, count, interrupt);
-	}
-
-	/**
 	 * 時間指定メッセージ表示
-	 * 
+	 *
 	 * @param message メッセージ
 	 * @param count   メッセージ時間
 	 */
@@ -616,7 +610,7 @@ public abstract class Yukkuri extends SocialEntity {
 
 	/**
 	 * 割り込み指定メッセージ表示
-	 * 
+	 *
 	 * @param message   メッセージ
 	 * @param interrupt 現在メッセージ中でも割り込むかどうか
 	 */
@@ -626,7 +620,7 @@ public abstract class Yukkuri extends SocialEntity {
 
 	/**
 	 * 全指定メッセージ表示
-	 * 
+	 *
 	 * @param message   メッセージ
 	 * @param count     メッセージ時間
 	 * @param interrupt 現在メッセージ中でも割り込むかどうか
@@ -637,8 +631,43 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	/**
+	 * メッセージの実行部
+	 *
+	 * @param message   メッセージ
+	 * @param type      ウィンドウのタイプ
+	 * @param count     メッセージ時間
+	 * @param interrupt 現在メッセージ中でも割り込むかどうか
+	 * @param piko      ピコピコするかどうか
+	 * @param nyd       非ゆっくり症
+	 */
+	public void setMessage(String message, WindowType type, int count, boolean interrupt, boolean piko, boolean nyd) {
+		messageDelegate().setMessage(message, type, count, interrupt, piko, nyd);
+	}
+
+	/**
+	 * ピコピコメッセージ表示
+	 *
+	 * @param message   メッセージ
+	 * @param interrupt 現在メッセージ中でも割り込むかどうか
+	 */
+	public void setPikoMessage(String message, boolean interrupt) {
+		messageDelegate().setPikoMessage(message, interrupt);
+	}
+
+	/**
+	 * ピコピコメッセージ表示(時間指定)
+	 *
+	 * @param message   メッセージ
+	 * @param count     メッセージ時間
+	 * @param interrupt 現在メッセージ中でも割り込むかどうか
+	 */
+	public void setPikoMessage(String message, int count, boolean interrupt) {
+		messageDelegate().setPikoMessage(message, count, interrupt);
+	}
+
+	/**
 	 * ワールドイベント発生メッセージ
-	 * 
+	 *
 	 * @param message メッセージ
 	 * @param count   メッセージ時間
 	 */
@@ -648,7 +677,7 @@ public abstract class Yukkuri extends SocialEntity {
 
 	/**
 	 * ワールドイベント応答メッセージ
-	 * 
+	 *
 	 * @param message   メッセージ
 	 * @param count     メッセージ時間
 	 * @param interrupt 現在メッセージ中でも割り込むかどうか
@@ -660,7 +689,7 @@ public abstract class Yukkuri extends SocialEntity {
 
 	/**
 	 * 個体イベント発生メッセージ
-	 * 
+	 *
 	 * @param message メッセージ
 	 * @param count   メッセージ時間
 	 */
@@ -670,7 +699,7 @@ public abstract class Yukkuri extends SocialEntity {
 
 	/**
 	 * 個体イベント応答メッセージ
-	 * 
+	 *
 	 * @param message   メッセージ
 	 * @param count     メッセージ時間
 	 * @param interrupt 現在メッセージ中でも割り込むかどうか
@@ -682,7 +711,7 @@ public abstract class Yukkuri extends SocialEntity {
 
 	/**
 	 * 非ゆっくり症＆口封じ用メッセージ
-	 * 
+	 *
 	 * @param message メッセージ
 	 * @param piko    ピコピコするかどうか
 	 */
@@ -691,22 +720,8 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	/**
-	 * メッセージの実行部
-	 * 
-	 * @param message   メッセージ
-	 * @param type      ウィンドウのタイプ
-	 * @param count     メッセージ時間
-	 * @param interrupt 現在メッセージ中でも割り込むかどうか
-	 * @param piko      ピコピコするかどうか
-	 * @param NYD       非ゆっくり症
-	 */
-	public void setMessage(String message, WindowType type, int count, boolean interrupt, boolean piko, boolean NYD) {
-		messageDelegate().setMessage(message, type, count, interrupt, piko, NYD);
-	}
-
-	/**
 	 * ねぎぃメッセージを出す
-	 * 
+	 *
 	 * @param message メッセージ
 	 * @param piko    ピコピコするかどうか
 	 */
@@ -716,7 +731,7 @@ public abstract class Yukkuri extends SocialEntity {
 
 	/**
 	 * ねぎぃメッセージを出す
-	 * 
+	 *
 	 * @param message メッセージ
 	 * @param count   メッセージ時間
 	 * @param piko    ピコピコするかどうか
@@ -796,7 +811,7 @@ public abstract class Yukkuri extends SocialEntity {
 	@Transient
 	public Dna getDna() {
 		Dna ret = new Dna(getType(), getAttitude(), getIntelligence(), false);
-		ret.setFather(getUniqueID());
+		ret.setFather(getUniqueId());
 		return ret;
 	}
 
@@ -808,30 +823,36 @@ public abstract class Yukkuri extends SocialEntity {
 	@Transient
 	public final boolean isOnlyAmaama() {
 		// 動けない
-		if (getFootBakeLevel() == FootBake.CRITICAL && !canflyCheck())
+		if (getFootBakeLevel() == FootBake.CRITICAL && !canflyCheck()) {
 			return false;
+		}
 		boolean frag = false;
 		// 肥えた舌状態の時のみ
 		if (getTangType() == TangType.GOURMET && !isIdiot()) {
 			// 知性によって変わる
 			switch (getIntelligence()) {
 				case WISE:
-					if (isNoDamaged() && amaamaDiscipline >= 40)
+					if (isNoDamaged() && amaamaDiscipline >= 40) {
 						frag = true;
-					else if (amaamaDiscipline == 100)
+					} else if (amaamaDiscipline == 100) {
 						frag = true;
+					}
 					break;
 				case AVERAGE:
-					if (!isDamaged() && amaamaDiscipline >= 30)
+					if (!isDamaged() && amaamaDiscipline >= 30) {
 						frag = true;
-					else if (amaamaDiscipline >= 70)
+					} else if (amaamaDiscipline >= 70) {
 						frag = true;
+					}
 					break;
 				case FOOL:
-					if (!isDamagedHeavily() && amaamaDiscipline >= 20)
+					if (!isDamagedHeavily() && amaamaDiscipline >= 20) {
 						frag = true;
-					else if (amaamaDiscipline >= 50)
+					} else if (amaamaDiscipline >= 50) {
 						frag = true;
+					}
+					break;
+				default:
 					break;
 			}
 		}
@@ -841,8 +862,8 @@ public abstract class Yukkuri extends SocialEntity {
 	/**
 	 * スプライト画像のサイズ初期設定をする.
 	 * 
-	 * @param body
-	 * @param braid
+	 * @param body  ボディ境界
+	 * @param braid おさげ境界
 	 */
 	public void setBoundary(Dimension4y[] body, Dimension4y[] braid) {
 		spriteDelegate().setBoundary(body, braid);
@@ -883,12 +904,13 @@ public abstract class Yukkuri extends SocialEntity {
 	 */
 	public final void setForceFace(int f) {
 		// 非ゆっくり症個体、皮むき済み個体は顔変化なし
-		if (isPealed() || isNYD())
+		if (isPealed() || isNyd()) {
 			return;
-		else if (isRaperExcitingFace(f)) {
+		} else if (isRaperExcitingFace(f)) {
 			forceFace = ImageCode.EXCITING_RAPER.ordinal();
-		} else
+		} else {
 			forceFace = f;
+		}
 	}
 
 	/**
@@ -899,7 +921,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 */
 	protected boolean isRaperExcitingFace(int f) {
 		return false;
-	};
+	}
 
 	/**
 	 * 非ゆっくり症の表情を設定する.
@@ -908,10 +930,11 @@ public abstract class Yukkuri extends SocialEntity {
 	 */
 	public final void setNydForceFace(int f) {
 		// 非ゆっくり症未発症個体、皮むき済み個体は顔変化なし
-		if (isPealed() || isNotNYD())
+		if (isPealed() || isNotNyd()) {
 			return;
-		else
+		} else {
 			setForceFace(f);
+		}
 	}
 
 	// お持ち帰り関連
@@ -945,9 +968,9 @@ public abstract class Yukkuri extends SocialEntity {
 	/**
 	 * 影のロードを行う
 	 * 
-	 * @param loader
-	 * @param io
-	 * @throws IOException
+	 * @param loader クラスローダー
+	 * @param io     画像オブザーバー
+	 * @throws IOException 画像読み込みエラー
 	 */
 	public static void loadShadowImages(ClassLoader loader, ImageObserver io) throws IOException {
 		YukkuriSpriteDelegate.loadShadowImages(loader, io);
@@ -980,14 +1003,16 @@ public abstract class Yukkuri extends SocialEntity {
 	/**
 	 * ゆんやーする.
 	 * 
-	 * @param TF メッセージの有無
+	 * @param showMessage メッセージの有無
 	 */
-	public final void doYunnyaa(boolean TF) {
+	public final void doYunnyaa(boolean showMessage) {
 		// できない状態ならしない
-		if (!canAction())
+		if (!canAction()) {
 			return;
-		if (TF)
+		}
+		if (showMessage) {
 			setMessage(GameMessages.getMessage(this, MessagePool.Action.Yunnyaa), 50, true, true);
+		}
 		setYunnyaa(true);
 		stay(40);
 	}
@@ -1002,10 +1027,10 @@ public abstract class Yukkuri extends SocialEntity {
 	/**
 	 * 命乞いをする.
 	 * 
-	 * @param Ffrag 強制命乞いフラグ
+	 * @param forceBeg 強制命乞いフラグ
 	 */
-	public void begForLife(boolean Ffrag) {
-		eventDelegate().begForLife(Ffrag);
+	public void begForLife(boolean forceBeg) {
+		eventDelegate().begForLife(forceBeg);
 	}
 
 	/**
@@ -1020,10 +1045,10 @@ public abstract class Yukkuri extends SocialEntity {
 	/**
 	 * 先祖に加える
 	 * 
-	 * @param iAncList 先祖に加えたいリスト
+	 * @param ancestorList 先祖に加えたいリスト
 	 */
-	public final void addAncestor(List<Integer> iAncList) {
-		getAncestors().addAll(iAncList);
+	public final void addAncestor(List<Integer> ancestorList) {
+		getAncestors().addAll(ancestorList);
 	}
 
 	// 飛行種かどうか
@@ -1499,11 +1524,11 @@ public abstract class Yukkuri extends SocialEntity {
 	 * ゆっくり以外から食べられる（現在はアリのみ）
 	 * 
 	 * @param amount 食われる量
-	 * @param P      アリなら0
-	 * @param AV     食べられた際に吐くかどうか
+	 * @param p      アリなら0
+	 * @param av     食べられた際に吐くかどうか
 	 */
-	public void beEaten(int amount, int P, boolean AV) {
-		damageDelegate().beEaten(amount, P, AV);
+	public void beEaten(int amount, int p, boolean av) {
+		damageDelegate().beEaten(amount, p, av);
 	}
 
 	/**
@@ -1563,7 +1588,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * ゆっくりから攻撃を受けた時の処理
 	 * 
 	 * @param enemy          攻撃してきたゆっくり
-	 * @param e              イベント
+	 * @param event          イベント
 	 * @param allowDamageCap 手加減ありの場合
 	 */
 	public void strikeByYukkuri(Yukkuri enemy, EventPacket event, boolean allowDamageCap) {
@@ -1620,7 +1645,7 @@ public abstract class Yukkuri extends SocialEntity {
 	public final void kick() {
 		// 土に埋まっていないなら吹っ飛ぶ
 		if (getBurialState() == BurialState.NONE) {
-			int blowLevel[] = { -4, -3, -2 };
+			int[] blowLevel = { -4, -3, -2 };
 			kick(0, blowLevel[getAgeState().ordinal()] * 2, blowLevel[getAgeState().ordinal()]);
 		}
 		strikeByPunish();
@@ -1812,7 +1837,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 
 	 * @param depth 深さ
 	 */
-	public void inWater(Pool.DEPTH depth) {
+	public void inWater(Pool.Depth depth) {
 		stateDelegate().inWater(depth);
 	}
 
@@ -1827,10 +1852,10 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 環境によるパニック状態の設定
 	 * 
 	 * @param flag  すでにパニック状態か
-	 * @param pType パニックのタイプ
+	 * @param panicType パニックのタイプ
 	 */
-	public void setPanic(boolean flag, PanicType pType) {
-		stateDelegate().setPanic(flag, pType);
+	public void setPanic(boolean flag, PanicType panicType) {
+		stateDelegate().setPanic(flag, panicType);
 	}
 
 	/**
@@ -1862,8 +1887,9 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 押さえつけを放す
 	 */
 	public void releaseLockNobinobi() {
-		if (externalPressure == 0)
+		if (externalPressure == 0) {
 			return;
+		}
 		if (externalPressure < 0) {
 			externalPressure = 0;
 		} else if (externalPressure * 2 / 3 < getSize()) {
@@ -1906,13 +1932,14 @@ public abstract class Yukkuri extends SocialEntity {
 			int[] is = { -1, -1 };
 			setParents(is);
 			Yukkuri pa = YukkuriRelations.getPartnerYukkuri(this);
-			if (pa != null)
+			if (pa != null) {
 				pa.setPartner(-1);
+			}
 			setPartner(-1);
 			removeAllStalks();
 			setStalks(null);
-			if (GameWorld.get().getCurrentWorldState().getYukkuriRegistry().containsKey(this.getUniqueID())) {
-				GameWorld.get().getCurrentWorldState().getYukkuriRegistry().remove(this.getUniqueID());
+			if (GameWorld.get().getCurrentWorldState().getYukkuriRegistry().containsKey(this.getUniqueId())) {
+				GameWorld.get().getCurrentWorldState().getYukkuriRegistry().remove(this.getUniqueId());
 			}
 			getChildren().clear();
 			getElderSisters().clear();
@@ -1920,13 +1947,13 @@ public abstract class Yukkuri extends SocialEntity {
 			List<Yukkuri> bodies = new LinkedList<Yukkuri>(GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
 			for (Yukkuri b : bodies) {
 				if (b.getChildren() != null) {
-					ListOperations.removeFirstMatchingValue(b.getChildren(), getUniqueID());
+					ListOperations.removeFirstMatchingValue(b.getChildren(), getUniqueId());
 				}
 				if (b.getElderSisters() != null) {
-					ListOperations.removeFirstMatchingValue(b.getElderSisters(), getUniqueID());
+					ListOperations.removeFirstMatchingValue(b.getElderSisters(), getUniqueId());
 				}
 				if (b.getSisters() != null) {
-					ListOperations.removeFirstMatchingValue(b.getSisters(), getUniqueID());
+					ListOperations.removeFirstMatchingValue(b.getSisters(), getUniqueId());
 				}
 			}
 			getAttach().clear();
@@ -2046,7 +2073,7 @@ public abstract class Yukkuri extends SocialEntity {
 	@Transient
 	protected boolean isAliceRaper() {
 		return false;
-	};
+	}
 
 	/**
 	 * おさげ、羽、尻尾のグラフィックを返す。
@@ -2059,10 +2086,10 @@ public abstract class Yukkuri extends SocialEntity {
 		return spriteDelegate().getBraidImage(layer, type);
 	}
 
-	@Override
 	/**
 	 * Grab.
 	 */
+	@Override
 	public void grab() {
 		stalkDelegate().grab();
 	}
@@ -2095,21 +2122,27 @@ public abstract class Yukkuri extends SocialEntity {
 		tickAttachments();
 		clearRelation();
 
-		if (isDead()) return tickDeadBody();
+		if (isDead()) {
+			return tickDeadBody();
+		}
 		TickResult burstResult = tickBurstBody();
-		if (burstResult != null) return burstResult;
+		if (burstResult != null) {
+			return burstResult;
+		}
 
 		TickResult ageResult = tickAgeAndEnvironment();
-		if (ageResult != null) return ageResult;
+		if (ageResult != null) {
+			return ageResult;
+		}
 
-		if (!isDead()) plusGodHand();
+		if (!isDead()) {
+			plusGodHand();
+		}
 
-		boolean dontMove = getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE
-				|| isOnNonMovingConveyor() || isSurisuriFromPlayer() || isPealed() || isPacked();
+		if (GameEnvironment.isEndlessFurifuriSteam()) {
+			return tickEndlessFurifuri();
+		}
 
-		if (GameEnvironment.isEndlessFurifuriSteam()) return tickEndlessFurifuri();
-
-		TickResult retval = TickResult.NONE;
 		// check status
 		checkHungry();
 		checkDamage();
@@ -2130,6 +2163,8 @@ public abstract class Yukkuri extends SocialEntity {
 			checkAttitude();
 		}
 		// 妊娠状況チェック
+		boolean dontMove = getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE
+				|| isOnNonMovingConveyor() || isSurisuriFromPlayer() || isPealed() || isPacked();
 		boolean oldHasBaby = hasBabyOrStalk();
 		if (checkChildbirth()) {
 			dontMove = true;
@@ -2156,20 +2191,27 @@ public abstract class Yukkuri extends SocialEntity {
 		}
 
 		// パニック時はただ走る
-		if (getPanicType() != null && !isNeedled() && isNotNYD()) {
+		TickResult retval = TickResult.NONE;
+		if (getPanicType() != null && !isNeedled() && isNotNyd()) {
 			retval = checkFear();
-			if (isLockmove())
+			if (isLockmove()) {
 				dontMove = true;
-			if (isMelt())
+			}
+			if (isMelt()) {
 				dontMove = true;
-			if (getCriticalDamege() != null)
+			}
+			if (getCriticalDamege() != null) {
 				dontMove = true;
-			if (getFootBakeLevel() == FootBake.CRITICAL && !canflyCheck())
+			}
+			if (getFootBakeLevel() == FootBake.CRITICAL && !canflyCheck()) {
 				dontMove = true;
-			if (isNeedled())
+			}
+			if (isNeedled()) {
 				dontMove = true;
-			if (isUnBirth())
+			}
+			if (isUnBirth()) {
 				dontMove = true;
+			}
 			setHappiness(Happiness.VERY_SAD);
 			moveYukkuri(dontMove);
 			return retval;
@@ -2178,9 +2220,9 @@ public abstract class Yukkuri extends SocialEntity {
 		noticeNoOkazari();
 
 		// check can move or not
-		if (getCriticalDamageType() == CriticalDamageType.CUT ||
-				(getFootBakeLevel() == FootBake.CRITICAL && !canflyCheck()) ||
-				isNeedled() || getBurialState() != BurialState.NONE || isUnBirth()) {
+		if (getCriticalDamageType() == CriticalDamageType.CUT
+				|| (getFootBakeLevel() == FootBake.CRITICAL && !canflyCheck())
+				|| isNeedled() || getBurialState() != BurialState.NONE || isUnBirth()) {
 			dontMove = true;
 		}
 
@@ -2188,18 +2230,19 @@ public abstract class Yukkuri extends SocialEntity {
 		// check shit
 		int oldShit = shit;
 		// stop moving
-		if (checkShit())
+		if (checkShit()) {
 			dontMove = true;
+		}
 		// うんうん処理
 		if (!isShitting() && oldShit != 0 && shit == 0) {
 			if (!isHasPants()) {
 				if (!isAnalClose() && !(isFixBack() && isNeedled())) {
 					// 寝ているか粘着床についているか針が刺さっていたら体勢をかえられずに漏らす
-					if ((isLockmove() && isFixBack()) || isSleeping() || isNeedled() ||
-							getBurialState() != BurialState.NONE) {
+					if ((isLockmove() && isFixBack()) || isSleeping() || isNeedled()
+							|| getBurialState() != BurialState.NONE) {
 						retval = TickResult.CRUSHED_SHIT;
 					} else {
-						if (isNotNYD()) {
+						if (isNotNyd()) {
 							retval = TickResult.SHIT;
 						} else {
 							// 非ゆっくり症
@@ -2288,7 +2331,9 @@ public abstract class Yukkuri extends SocialEntity {
 			setMessageBuffer(null);
 		}
 		checkMessage();
-		if (SimYukkuri.UNYO) resetUnyo();
+		if (SimYukkuri.UNYO) {
+			resetUnyo();
+		}
 		setSilent(true);
 		setDeadPeriod(getDeadPeriod() + 1);
 		if (getRottingTimeBase() < getDeadPeriod()) {
@@ -2307,7 +2352,9 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	private TickResult tickBurstBody() {
-		if (!isBurst()) return null;
+		if (!isBurst()) {
+			return null;
+		}
 		toDead();
 		moveYukkuri(true);
 		checkMessage();
@@ -2319,29 +2366,36 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	private TickResult tickAgeAndEnvironment() {
-		boolean stopAge = getAttachmentSize(StopAmpoule.class) != 0;
-		boolean accelAge = getAttachmentSize(AccelAmpoule.class) != 0;
+		final boolean stopAge = getAttachmentSize(StopAmpoule.class) != 0;
+		final boolean accelAge = getAttachmentSize(AccelAmpoule.class) != 0;
 
 		if (GameEnvironment.getInterval() == 0) {
-			if (GameEnvironment.isAgeBoostSteam() && getAgeState() != AgeState.ADULT)
+			if (GameEnvironment.isAgeBoostSteam() && getAgeState() != AgeState.ADULT) {
 				addAge(10000);
-			if (GameEnvironment.isAgeStopSteam() && !accelAge)
+			}
+			if (GameEnvironment.isAgeStopSteam() && !accelAge) {
 				addAge(-256);
+			}
 		}
 		if (getBurialState() == BurialState.NONE || getBurialState() == BurialState.HALF) {
-			if (GameEnvironment.isRapidPregnantSteam())
+			if (GameEnvironment.isRapidPregnantSteam()) {
 				rapidPregnantPeriod();
+			}
 		}
 
 		// ageが変化しないと状態が変化しないロジックになっているのでそっとしておく
 		setAge(getAge() + TICK);
-		if (birthEventBlockedTicks > 0) birthEventBlockedTicks--;
+		if (birthEventBlockedTicks > 0) {
+			birthEventBlockedTicks--;
+		}
 
 		if (getAge() > getLifeLimitBase()) {
 			toDead();
 			moveYukkuri(true);
 			checkMessage();
-			if (isDead()) return TickResult.DEAD;
+			if (isDead()) {
+				return TickResult.DEAD;
+			}
 		}
 
 		AgeState curAge = getAgeState();
@@ -2374,7 +2428,7 @@ public abstract class Yukkuri extends SocialEntity {
 		if (canFurifuri()) {
 			setMessage(GameMessages.getMessage(this, MessagePool.Action.FuriFuri), 30);
 			setFurifuri(true);
-		} else if (isNotNYD()) {
+		} else if (isNotNyd()) {
 			setMessage(GameMessages.getMessage(this, MessagePool.Action.CantMove), 30);
 			setHappiness(Happiness.VERY_SAD);
 		} else {
@@ -2457,8 +2511,8 @@ public abstract class Yukkuri extends SocialEntity {
 		} else {
 			setFirstGround(true);
 		}
-		getParents()[Parent.PAPA.ordinal()] = papa == null ? -1 : papa.getUniqueID();
-		getParents()[Parent.MAMA.ordinal()] = mama == null ? -1 : mama.getUniqueID();
+		getParents()[Parent.PAPA.ordinal()] = papa == null ? -1 : papa.getUniqueId();
+		getParents()[Parent.MAMA.ordinal()] = mama == null ? -1 : mama.getUniqueId();
 		setRemoved(false);
 		if (GameRandom.nextBoolean()) {
 			setAttitude((papa != null ? papa.getAttitude() : null));
@@ -2563,8 +2617,9 @@ public abstract class Yukkuri extends SocialEntity {
 			}
 		} else if (GameWorld.get() != null) {
 			if (GameWorld.get().getCurrentWorldState().getWorldIndex() == 5
-					|| GameWorld.get().getCurrentWorldState().getWorldIndex() == 6)
+					|| GameWorld.get().getCurrentWorldState().getWorldIndex() == 6) {
 				bodyRank = YukkuriRank.YASEIYU;
+			}
 		}
 		// 生い立ちを設定
 		setRank(bodyRank);
@@ -2575,13 +2630,13 @@ public abstract class Yukkuri extends SocialEntity {
 			List<Integer> ancestorList = mama.getAncestors();
 			YukkuriType ancestorType = mama.getType();
 			addAncestor(ancestorList);
-			addAncestor(ancestorType.getTypeID());
+			addAncestor(ancestorType.getTypeId());
 		}
 		if (papa != null) {
 			List<Integer> ancestorList = papa.getAncestors();
 			YukkuriType ancestorType = papa.getType();
 			addAncestor(ancestorList);
-			addAncestor(ancestorType.getTypeID());
+			addAncestor(ancestorType.getTypeId());
 		}
 
 		hungry = getHungryLimitBase()[getAgeState().ordinal()] + (100 * getAgeState().ordinal());
@@ -2669,7 +2724,7 @@ public abstract class Yukkuri extends SocialEntity {
 		boolean isWindows = osName.contains("windows");
 		if (hasDisplay || isWindows) {
 			try {
-				speed = MyPane.getGameSpeed()[MainCommandUI.getSelectedGameSpeed()];
+				speed = MyPane.getGameSpeed()[MainCommandUi.getSelectedGameSpeed()];
 			} catch (Throwable ignore) {
 				speed = 100;
 			}
@@ -2709,19 +2764,27 @@ public abstract class Yukkuri extends SocialEntity {
 
 	/** 実ゆフラグのフィールド値を返す。 */
 	@Override
-	protected boolean getUnBirthField() { return unBirth; }
+	protected boolean getUnBirthField() {
+		return unBirth;
+	}
 
 	/** 実ゆフラグのフィールド値をセットする。 */
 	@Override
-	protected void setUnBirthField(boolean v) { unBirth = v; }
+	protected void setUnBirthField(boolean v) {
+		unBirth = v;
+	}
 
 	/** 妊娠期間を返す。 */
 	@Override
-	public int getPregnantPeriod() { return pregnantPeriod; }
+	public int getPregnantPeriod() {
+		return pregnantPeriod;
+	}
 
 	/** 妊娠期間をセットする。 */
 	@Override
-	public void setPregnantPeriod(int pregnantPeriod) { this.pregnantPeriod = pregnantPeriod; }
+	public void setPregnantPeriod(int pregnantPeriod) {
+		this.pregnantPeriod = pregnantPeriod;
+	}
 
 	/** 発情フラグ */
 	protected boolean exciting = false;
@@ -2732,27 +2795,51 @@ public abstract class Yukkuri extends SocialEntity {
 
 	/** 発情中かどうかを返す。死亡時は常に false。 */
 	@Override
-	public boolean isExciting() { return !dead && exciting; }
+	public boolean isExciting() {
+		return !dead && exciting;
+	}
 
 	/** 発情フラグをセットする。 */
 	@Override
-	public void setExciting(boolean exciting) { this.exciting = exciting; }
+	public void setExciting(boolean exciting) {
+		this.exciting = exciting;
+	}
+
+	/**
+	 * 発情状態を設定する.
+	 *
+	 * @param temp 発情状態
+	 */
+	public void setExciting(Boolean temp) {
+		if (temp) {
+			setForceFace(ImageCode.EXCITING.ordinal());
+		}
+		exciting = temp;
+	}
 
 	/** 強制発情中かどうかを返す。死亡・非発情時は常に false。 */
 	@Override
-	public boolean isForceExciting() { return !dead && exciting && forceExciting; }
+	public boolean isForceExciting() {
+		return !dead && exciting && forceExciting;
+	}
 
 	/** 強制発情フラグをセットする。 */
 	@Override
-	public void setForceExciting(boolean forceExciting) { this.forceExciting = forceExciting; }
+	public void setForceExciting(boolean forceExciting) {
+		this.forceExciting = forceExciting;
+	}
 
 	/** 発情期間を返す。 */
 	@Override
-	public int getExcitingPeriod() { return excitingPeriod; }
+	public int getExcitingPeriod() {
+		return excitingPeriod;
+	}
 
 	/** 発情期間をセットする。 */
 	@Override
-	public void setExcitingPeriod(int excitingPeriod) { this.excitingPeriod = excitingPeriod; }
+	public void setExcitingPeriod(int excitingPeriod) {
+		this.excitingPeriod = excitingPeriod;
+	}
 
 	/** 中枢餡の状態（非ゆっくり症フラグ) */
 	protected CoreAnkoState coreAnkoState = CoreAnkoState.NORMAL;
@@ -2907,11 +2994,15 @@ public abstract class Yukkuri extends SocialEntity {
 
 	/** 空を飛ぶか を取得する. @return 空を飛ぶか */
 	@Override
-	public boolean isFlyingType() { return flyingType; }
+	public boolean isFlyingType() {
+		return flyingType;
+	}
 
 	/** 空を飛ぶか を設定する. */
 	@Override
-	public void setFlyingType(boolean flyingType) { this.flyingType = flyingType; }
+	public void setFlyingType(boolean flyingType) {
+		this.flyingType = flyingType;
+	}
 
 	/** ぱんつ着用状態か を取得する. @return ぱんつ着用状態か */
 	public boolean isHasPants() {
@@ -3097,7 +3188,7 @@ public abstract class Yukkuri extends SocialEntity {
 				if (getBabyTypes().size() <= 0) {
 					setBirth(false);
 					pregnantPeriod = 0;
-					if (isNotNYD()) {
+					if (isNotNyd()) {
 						setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed2), true);
 						if (!isHasPants()) {
 							if (willingFurifuri()) {
@@ -3120,7 +3211,7 @@ public abstract class Yukkuri extends SocialEntity {
 				if (!birthAllowed) {
 					getBabyTypes().clear();
 					makeDirty(true);
-					if (isNotNYD()) {
+					if (isNotNyd()) {
 						if (isLockmove() && !isHasPants()) {
 							setHasPants(true);
 							setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed2), true);
@@ -3208,7 +3299,7 @@ public abstract class Yukkuri extends SocialEntity {
 	// public variables
 	// .INIファイルで変更可能な各ゆっくりのパラメータ.
 	/** うにょの動きの強さ */
-	public final static int UNYOSTRENGTH[] = { 4, 7, 10 };
+	public static final int[] UNYOSTRENGTH = { 4, 7, 10 };
 
 	/** 影画像の配列を返す。 */
 	public static BufferedImage[] getShadowImages() {
@@ -3290,15 +3381,11 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	/**
-	 * BodyAttributes レイヤーのフィールドを to へコピーする (名前・スプライトセット).
-	 */
-	@Override
-
-	/**
 	 * 画像がまりちゃ流しか を設定する.
-	 * 
+	 *
 	 * @return 画像がまりちゃ流しか
 	 */
+	@Override
 	public boolean isImageNagasiMode() {
 		return imageNagasiMode;
 	}
@@ -3313,27 +3400,15 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	/**
-	 * 蓄積ダメージ counter indicating damage を取得する.
-	 * 
-	 * @return 蓄積ダメージ counter indicating damage
+	 * ストレス値を設定する.
+	 *
+	 * @param s ストレス値
 	 */
 	public void setStress(int s) {
 		if (s > 0) {
 			this.stress = s;
 		}
 	}
-
-	/**
-	 * 強制発情フラグ want to sukkiri or not を取得する.
-	 * 
-	 * @return 強制発情フラグ want to sukkiri or not
-	 */
-
-	/**
-	 * 針の有無 を取得する.
-	 * 
-	 * @return 針の有無
-	 */
 
 	/**
 	 * 動けないかどうか を設定する.
@@ -3517,7 +3592,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 
 	 * @see #stay()
 	 * @see #stay(int)
-	 * @see ##stayPurupuru()
+	 * @see #stayPurupuru()
 	 * @see #stayPurupuru(int)
 	 * @see #isStaying()
 	 * @see #stopStaying()
@@ -3534,18 +3609,6 @@ public abstract class Yukkuri extends SocialEntity {
 	public void setStaying(boolean staying) {
 		this.staying = staying;
 	}
-
-	/**
-	 * 怒っているか否か を設定する.
-	 * 
-	 * @param angry 怒っているか否か
-	 */
-
-	/**
-	 * 壁に引っかかった回数 を設定する.
-	 * 
-	 * @param blockedTicks 壁に引っかかった回数
-	 */
 
 	/**
 	 * メッセージラインの色 を設定する.
@@ -3575,12 +3638,6 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	/**
-	 * ゆっくりの移動速度 を設定する.
-	 * 
-	 * @param speed ゆっくりの移動速度
-	 */
-
-	/**
 	 * たかっているアリの数 を設定する.
 	 * 
 	 * @param antCount たかっているアリの数
@@ -3595,8 +3652,8 @@ public abstract class Yukkuri extends SocialEntity {
 
 	/**
 	 * うにょの動きの強さ を取得する.
-	 * 
-	 * @return
+	 *
+	 * @return うにょの強さ配列
 	 */
 	public static int[] getUnyostrength() {
 		return UNYOSTRENGTH;
@@ -3605,12 +3662,12 @@ public abstract class Yukkuri extends SocialEntity {
 	/**
 	 * 売却額を返却する.
 	 * 
-	 * @param F 0が飼いゆ、1が加工品
+	 * @param f 0が飼いゆ、1が加工品
 	 * @return 売却額
 	 */
-	public int getSellingPrice(int F) {
-		// Fが0だと飼いゆとして、1だと加工品としての価値を返す
-		return saleValues[F];
+	public int getSellingPrice(int f) {
+		// 0が飼いゆとして、1が加工品としての価値を返す
+		return saleValues[f];
 	}
 
 	/**
@@ -3686,15 +3743,11 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param k 命乞い中かどうか
 	 */
 	public void setBegging(boolean k) {
-		if (burialState == BurialState.NONE)
+		if (burialState == BurialState.NONE) {
 			begging = k;
+		}
 	}
 
-	/**
-	 * 痛みを感じているかどうかを返却する.
-	 * 
-	 * @return 痛みを感じているか
-	 */
 	/**
 	 * この個体の属する、精神のAgeState(Enum)を返却する.
 	 * 
@@ -3705,11 +3758,6 @@ public abstract class Yukkuri extends SocialEntity {
 		return getAgeState();
 	}
 
-	/**
-	 * この個体のダメージ具合から、相当するDamage(Enum)を返却する.
-	 * 
-	 * @return この個体のダメージ具合から計算した、相当するDamage(Enum)
-	 */
 	/**
 	 * 死ねない期間中かどうかを取得する.
 	 * 
@@ -3750,23 +3798,6 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	/**
-	 * 睡眠中かどうかを取得する.
-	 * 死んでいないことが条件.
-	 * 
-	 * @return 睡眠中かどうか
-	 */
-	/**
-	 * 発情状態を設定する.
-	 * 
-	 * @param temp 発情状態
-	 */
-	public void setExciting(Boolean temp) {
-		if (temp)
-			setForceFace(ImageCode.EXCITING.ordinal());
-		exciting = temp;
-	}
-
-	/**
 	 * 汚れている期間を追加する.
 	 * 
 	 * @param val 追加する期間
@@ -3775,12 +3806,6 @@ public abstract class Yukkuri extends SocialEntity {
 		dirtyPeriod += val;
 	}
 
-	/**
-	 * ハイブリッドかどうかを取得する.
-	 * ハイブリッドのクラスでオーバーライドする.
-	 * 
-	 * @return ハイブリッドかどうか
-	 */
 	/**
 	 * 胎生妊娠してる赤ゆを取得
 	 * <br>
@@ -3985,12 +4010,6 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	/**
-	 * 行動目的を設定する.
-	 *
-	 * @param purposeOfMoving 行動目的
-	 */
-
-	/**
 	 * 取られているかどうかを設定する.
 	 * 
 	 * @param taken 取られているかどうか
@@ -4014,7 +4033,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * イベントの重要度で寝ていても起きたりできるようにするため
 	 * ここでは動いたら見た目におかしくなる状況のみチェック
 	 *
-	 * @return
+	 * @return 行動可能なら true
 	 */
 	public final boolean canEventResponse() {
 		return eventDelegate().canEventResponse();

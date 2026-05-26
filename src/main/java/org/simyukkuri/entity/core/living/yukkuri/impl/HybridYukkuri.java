@@ -1,19 +1,17 @@
 package org.simyukkuri.entity.core.living.yukkuri.impl;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.IOException;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import org.simyukkuri.draw.Dimension4y;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.Parent;
 import org.simyukkuri.enums.PredatorType;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.util.GameRandom;
@@ -58,34 +56,29 @@ public class HybridYukkuri extends Yukkuri {
 	 * 
 	 * @throws IOException IO例外
 	 */
-	public void loadImages_Hyblid() throws IOException {
-		HybridYukkuri parentTmp = null;
-		HybridYukkuri parentTmp2 = null;
-		Yukkuri doreiTmp = null;
-		Yukkuri doreiTmp2 = null;
+	public void loadImagesHybrid() throws IOException {
 		nameJ = "ゆっくり";
 		nameE = "Yukkuri";
 		nameJ2 = "ゆっくり";
 		nameE2 = "Yukkuri";
 		Yukkuri mama = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getParents()[Parent.MAMA.ordinal()]);
 		Yukkuri papa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getParents()[Parent.PAPA.ordinal()]);
-
+		Yukkuri doreiTmp = null;
+		Yukkuri doreiTmp2 = null;
 		if (mama == null && papa == null) {
 			doreiTmp = new Reimu(100, 100, 0, AgeState.BABY, null, null);
 			doreiTmp2 = doreiTmp;
 		} else {
 			if (mama != null) {
 				if (mama.getType() == YukkuriType.HYBRIDYUKKURI) {
-					parentTmp = (HybridYukkuri) mama;
-					doreiTmp = parentTmp.dorei;
+					doreiTmp = ((HybridYukkuri) mama).dorei;
 				} else {
 					doreiTmp = GameView.makeYukkuri(0, 0, 0,
 							mama.getType(), null, AgeState.BABY, mama, papa, false);
 				}
 			} else {
 				if (papa.getType() == YukkuriType.HYBRIDYUKKURI) {
-					parentTmp = (HybridYukkuri) papa;
-					doreiTmp = parentTmp.dorei;
+					doreiTmp = ((HybridYukkuri) papa).dorei;
 				} else {
 					doreiTmp = GameView.makeYukkuri(0, 0, 0, papa.getType(),
 							null, AgeState.BABY, mama, papa, false);
@@ -94,8 +87,7 @@ public class HybridYukkuri extends Yukkuri {
 
 			if (papa != null) {
 				if (papa.getType() == YukkuriType.HYBRIDYUKKURI) {
-					parentTmp2 = (HybridYukkuri) papa;
-					doreiTmp2 = parentTmp2.dorei;
+					doreiTmp2 = ((HybridYukkuri) papa).dorei;
 				} else {
 					doreiTmp2 = GameView.makeYukkuri(0, 0, 0, papa.getType(),
 							null, AgeState.BABY, mama, papa, false);
@@ -287,10 +279,11 @@ public class HybridYukkuri extends Yukkuri {
 		setFlyingType(dorei3.isFlyingType());
 		// 捕食種引継ぎ
 		if (dorei.isPredatorType()) {
-			if (isFlyingType())
+			if (isFlyingType()) {
 				setPredatorType(PredatorType.SUCTION);
-			else
+			} else {
 				setPredatorType(PredatorType.BITE);
+			}
 		} else {
 			setPredatorType(null);
 		}
@@ -324,8 +317,9 @@ public class HybridYukkuri extends Yukkuri {
 	/** 現在の表示状態に基づく画像をレイヤーにセットし、画像番号を返す。 */
 	@Override
 	public int getImage(int type, int direction, YukkuriLayer layer, int index) {
-		if (images == null || images[type] == null)
+		if (images == null || images[type] == null) {
 			return 0;
+		}
 		try {
 			images[type].setAgeState(getAgeState());
 			return images[type].getImage(type, direction, layer, index);
@@ -341,17 +335,18 @@ public class HybridYukkuri extends Yukkuri {
 	 * @return 型となるゆっくり
 	 */
 	public Yukkuri getBaseYukkuri(int idx) {
-		if (idx == 0)
+		if (idx == 0) {
 			return dorei;
-		else if (idx == 1)
+		} else if (idx == 1) {
 			return dorei2;
-		else if (idx == 2)
+		} else if (idx == 2) {
 			return dorei3;
+		}
 		return dorei4;
 	}
 
-	@Override
 	/** アタッチメントキーに対応する取り付け点座標を返す。 */
+	@Override
 	public Point4y[] getMountPoint(String key) {
 		return dorei.getMountPoint(key);
 	}
@@ -436,10 +431,10 @@ public class HybridYukkuri extends Yukkuri {
 
 	}
 
-	@Override
 	/**
 	 * Tune parameters.
 	 */
+	@Override
 	public void tuneParameters() {
 		/*
 		 * if (rnd.nextBoolean()) {
@@ -447,17 +442,17 @@ public class HybridYukkuri extends Yukkuri {
 		 * }
 		 */
 		double factor = Math.random() * 2 + 1;
-		getHungryLimitBase()[AgeState.ADULT.ordinal()] *= factor;
-		getHungryLimitBase()[AgeState.CHILD.ordinal()] *= factor;
-		getHungryLimitBase()[AgeState.BABY.ordinal()] *= factor;
+		getHungryLimitBase()[AgeState.ADULT.ordinal()] = (int) (getHungryLimitBase()[AgeState.ADULT.ordinal()] * factor);
+		getHungryLimitBase()[AgeState.CHILD.ordinal()] = (int) (getHungryLimitBase()[AgeState.CHILD.ordinal()] * factor);
+		getHungryLimitBase()[AgeState.BABY.ordinal()] = (int) (getHungryLimitBase()[AgeState.BABY.ordinal()] * factor);
 		factor = Math.random() * 2 + 1;
-		getShitLimitBase()[AgeState.ADULT.ordinal()] *= factor;
-		getShitLimitBase()[AgeState.CHILD.ordinal()] *= factor;
-		getShitLimitBase()[AgeState.BABY.ordinal()] *= factor;
+		getShitLimitBase()[AgeState.ADULT.ordinal()] = (int) (getShitLimitBase()[AgeState.ADULT.ordinal()] * factor);
+		getShitLimitBase()[AgeState.CHILD.ordinal()] = (int) (getShitLimitBase()[AgeState.CHILD.ordinal()] * factor);
+		getShitLimitBase()[AgeState.BABY.ordinal()] = (int) (getShitLimitBase()[AgeState.BABY.ordinal()] * factor);
 		factor = Math.random() + 0.5;
-		getDamageLimitBase()[AgeState.ADULT.ordinal()] *= factor;
-		getDamageLimitBase()[AgeState.CHILD.ordinal()] *= factor;
-		getDamageLimitBase()[AgeState.BABY.ordinal()] *= factor;
+		getDamageLimitBase()[AgeState.ADULT.ordinal()] = (int) (getDamageLimitBase()[AgeState.ADULT.ordinal()] * factor);
+		getDamageLimitBase()[AgeState.CHILD.ordinal()] = (int) (getDamageLimitBase()[AgeState.CHILD.ordinal()] * factor);
+		getDamageLimitBase()[AgeState.BABY.ordinal()] = (int) (getDamageLimitBase()[AgeState.BABY.ordinal()] * factor);
 		factor = Math.random() + 0.5;
 		setBabyLimitBase((int) (getBabyLimitBase() * factor));
 		setChildLimitBase((int) (getChildLimitBase() * factor));
@@ -473,12 +468,12 @@ public class HybridYukkuri extends Yukkuri {
 		setImmunityStrength(GameRandom.nextInt(10) + 1);
 		// EYESIGHT /= 4;
 		factor = Math.random() + 0.5;
-		getStrengthBase()[AgeState.ADULT.ordinal()] *= factor;
-		getStrengthBase()[AgeState.CHILD.ordinal()] *= factor;
-		getStrengthBase()[AgeState.BABY.ordinal()] *= factor;
+		getStrengthBase()[AgeState.ADULT.ordinal()] = (int) (getStrengthBase()[AgeState.ADULT.ordinal()] * factor);
+		getStrengthBase()[AgeState.CHILD.ordinal()] = (int) (getStrengthBase()[AgeState.CHILD.ordinal()] * factor);
+		getStrengthBase()[AgeState.BABY.ordinal()] = (int) (getStrengthBase()[AgeState.BABY.ordinal()] * factor);
 		images = new Yukkuri[ImageCode.values().length];
 		try {
-			loadImages_Hyblid();
+			loadImagesHybrid();
 		} catch (IOException e1) {
 			System.out.println("File I/O error");
 		}

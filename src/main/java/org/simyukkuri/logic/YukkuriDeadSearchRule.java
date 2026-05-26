@@ -73,7 +73,7 @@ public final class YukkuriDeadSearchRule {
 		if (!actorBody.isTalking()) {
 			if ((actorBody.isPredatorType() && targetBody.isPredatorType() || !actorBody.isPredatorType())
 					&& !GameEnvironment.isPredatorSteam()) {
-				if (actorBody.isNotNYD()) {
+				if (actorBody.isNotNyd()) {
 					// レイパー,捕食種じゃないなら気にする
 					if (!actorBody.isRaper() && !actorBody.isPredatorType()) {
 						actorBody.setMessage(GameMessages.getMessage(actorBody, MessagePool.Action.Scare));

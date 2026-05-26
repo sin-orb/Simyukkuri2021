@@ -1,24 +1,23 @@
 package org.simyukkuri.entity.core.living.yukkuri;
 
 import java.util.List;
-
 import org.simyukkuri.Const;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.attachment.impl.PoisonAmpoule;
 import org.simyukkuri.enums.CriticalDamageType;
+import org.simyukkuri.enums.FootBake;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
-import org.simyukkuri.enums.FootBake;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.enums.WindowType;
 import org.simyukkuri.event.impl.RaperWakeupEvent;
-import org.simyukkuri.logic.YukkuriLogic;
-import org.simyukkuri.logic.YukkuriRelations;
 import org.simyukkuri.logic.EventLogic;
 import org.simyukkuri.logic.FamilyActionLogic;
 import org.simyukkuri.logic.ToyLogic;
 import org.simyukkuri.logic.TrashLogic;
+import org.simyukkuri.logic.YukkuriLogic;
+import org.simyukkuri.logic.YukkuriRelations;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
@@ -92,13 +91,11 @@ public final class YukkuriEmotionDelegate {
 		// 非ゆっくり症チェック
 		if (body.hasNonYukkuriDisease()) {
 			return;
-		}
-		// イベント中
-		else if (body.getCurrentEvent() != null) {
+		} else if (body.getCurrentEvent() != null) {
+			// イベント中
 			return;
-		}
-		// プレイヤーにすりすりされている
-		else if (body.doSurisuriByPlayer()) {
+		} else if (body.doSurisuriByPlayer()) {
+			// プレイヤーにすりすりされている
 			return;
 		}
 
@@ -109,10 +106,9 @@ public final class YukkuriEmotionDelegate {
 			body.stay(40);
 			body.setHappiness(Happiness.VERY_SAD);
 			return;
-		}
-		// 加工中を想定した反応
-		else if ((body.isDamaged() || body.hasDisorder()) && body.isOnNonMovingConveyor() && !body.hasBabyOrStalk()
+		} else if ((body.isDamaged() || body.hasDisorder()) && body.isOnNonMovingConveyor() && !body.hasBabyOrStalk()
 				&& !body.isPealed()) {
+			// 加工中を想定した反応
 			if (GameRandom.nextInt(80) == 0) {
 				body.begForLife();
 			} else if (GameRandom.nextInt(40) == 0) {
@@ -121,38 +117,30 @@ public final class YukkuriEmotionDelegate {
 				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.KilledInFactory), WindowType.NORMAL,
 						Const.HOLDMESSAGE, true, GameRandom.nextBoolean(), false);
 			}
-		}
-		// 状態異常時
-		// 足切断
-		else if (body.getCriticalDamege() == CriticalDamageType.CUT || body.isPealed() || body.isPacked()) {
+		} else if (body.getCriticalDamege() == CriticalDamageType.CUT || body.isPealed() || body.isPacked()) {
+			// 状態異常時
+			// 足切断
 			return;
-		}
-		// 盲目
-		else if (body.checkEmotionBlind()) {
+		} else if (body.checkEmotionBlind()) {
+			// 盲目
 			return;
-		}
-		// しゃべれない
-		else if (body.checkEmotionCantSpeak()) {
+		} else if (body.checkEmotionCantSpeak()) {
+			// しゃべれない
 			return;
-		}
-		// 粘着系オブジェクトの貼り付け状態
-		else if (body.checkEmotionLockmove()) {
+		} else if (body.checkEmotionLockmove()) {
+			// 粘着系オブジェクトの貼り付け状態
 			return;
-		}
-		// 足焼き済み
-		else if (body.checkEmotionFootbake()) {
+		} else if (body.checkEmotionFootbake()) {
+			// 足焼き済み
 			return;
-		}
-		// 代替おかざりの捜索
-		else if (TrashLogic.checkTrashOkazari(body)) {
+		} else if (TrashLogic.checkTrashOkazari(body)) {
+			// 代替おかざりの捜索
 			return;
-		}
-		// おかざり、ぴこぴこなし
-		else if (body.checkEmotionNoOkazariPikopiko()) {
+		} else if (body.checkEmotionNoOkazariPikopiko()) {
+			// おかざり、ぴこぴこなし
 			return;
-		}
-		// 興奮時
-		else if (body.isExciting()) {
+		} else if (body.isExciting()) {
+			// 興奮時
 			body.setRelax(false);
 			return;
 		}
@@ -215,7 +203,7 @@ public final class YukkuriEmotionDelegate {
 				&& body.getAttachmentSize(PoisonAmpoule.class) == 0) {
 			// && moveTargetId == null) {
 			// すっきり発動条件
-			if (!body.isExciting() && body.isNotNYD() && GameRandom.nextInt(body.getExciteProb()) == 0) {
+			if (!body.isExciting() && body.isNotNyd() && GameRandom.nextInt(body.getExciteProb()) == 0) {
 				int r = 1;
 				int adjust = body.getExcitingDiscipline() * (body.isRude() ? 1 : 2);
 				if (body.isSuperRapist()) {
@@ -227,8 +215,6 @@ public final class YukkuriEmotionDelegate {
 				} else if (!body.isSoHungry() && !body.wantToShit()) {
 					r = GameRandom.nextInt(24 + adjust);
 				}
-				// すっきりーしにいく条件判定
-				boolean shouldExcite = false;
 				// ぺにぺにがないとダメ
 				if (body.isPenipeniCutted()) {
 					r = 1;
@@ -244,15 +230,16 @@ public final class YukkuriEmotionDelegate {
 				// if (isRaper() && (isExciting() || isForceExciting())) {
 				// setCurrentEvent(null);
 				// }
+				// すっきりーしにいく条件判定
+				boolean shouldExcite = false;
 				if (r == 0 && body.getCurrentEvent() == null) {
 					List<Yukkuri> fianceList = YukkuriLogic.createActiveFiances(body,
 							body.getAgeState().ordinal());
 					if (fianceList == null || fianceList.size() < 1) {
 						body.setHappiness(Happiness.SAD);
 						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.WantPartner));
-					}
-					// 他にゆっくりがいる
-					else {
+					} else {
+						// 他にゆっくりがいる
 						// レイパー
 						if (body.isRapist()) {
 							if (body.isRapist() && FamilyActionLogic.isRapeTarget()) {
@@ -287,6 +274,8 @@ public final class YukkuriEmotionDelegate {
 											case FOOL:
 												// 餡子脳は子の数を気にしない
 												shouldExcite = true;
+												break;
+											default:
 												break;
 										}
 									}
@@ -354,7 +343,8 @@ public final class YukkuriEmotionDelegate {
 			return;
 		}
 		switch (type) {
-			case 0: {
+			case 0:
+				{
 				body.clearActions();
 				body.setScare(false);
 				body.setAngry(false);
@@ -372,8 +362,9 @@ public final class YukkuriEmotionDelegate {
 				body.wakeup();
 				body.addLovePlayer(100);
 				break;
-			}
-			case 1: {
+				}
+			case 1:
+				{
 				body.wakeup();
 				body.clearActions();
 				body.setAngry();
@@ -384,8 +375,9 @@ public final class YukkuriEmotionDelegate {
 					body.doYunnyaa(true);
 				}
 				break;
-			}
-			case 2: {
+				}
+			case 2:
+				{
 				body.wakeup();
 				body.clearActions();
 				if (body.isNeedled() || (body.isGotBurnedHeavily()) && body.getFootBakeLevel() != FootBake.CRITICAL) {
@@ -410,7 +402,7 @@ public final class YukkuriEmotionDelegate {
 				}
 				body.stay(30);
 				break;
-			}
+				}
 			default:
 				break;
 		}

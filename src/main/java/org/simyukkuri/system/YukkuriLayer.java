@@ -2,9 +2,8 @@ package org.simyukkuri.system;
 
 import java.awt.image.BufferedImage;
 
-
-/**************************************************
- * ゆっくりのレイヤー画像テンポラリ
+/**
+ * ゆっくりのレイヤー画像テンポラリ.
  */
 public class YukkuriLayer {
 	/** 画像実体への参照 */
@@ -13,6 +12,7 @@ public class YukkuriLayer {
 	private int[] dir;
 	/** 汎用 */
 	private int[] option;
+
 	/**
 	 * コンストラクタ.
 	 */
@@ -21,7 +21,7 @@ public class YukkuriLayer {
 		dir = new int[10];
 		option = new int[10];
 	}
-	
+
 	/**
 	 * レイヤー画像配列（最大10枚）を返す。
 	 *
@@ -77,7 +77,7 @@ public class YukkuriLayer {
 	}
 
 	/**
-	 * 全レイヤーの画像参照・矩形インデックス・オプション値をリセットする。
+	 * 全レイヤーの画像参照・矩形インデックス・オプション値をリセットする.
 	 */
 	public void clear() {
 		for (int i = 0; i < image.length; i++) {
@@ -87,7 +87,3 @@ public class YukkuriLayer {
 		}
 	}
 }
-
-
-
-

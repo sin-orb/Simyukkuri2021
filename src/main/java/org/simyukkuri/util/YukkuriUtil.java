@@ -3,7 +3,6 @@ package org.simyukkuri.util;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
-
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
@@ -15,11 +14,10 @@ import org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType;
 import org.simyukkuri.enums.Direction;
 import org.simyukkuri.enums.HairState;
 import org.simyukkuri.enums.ImageCode;
-import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.system.Sprite;
+import org.simyukkuri.system.YukkuriLayer;
 
-/*****************************************************
- * 
+/**
  * ゆっくりの画像管理
  * 画像パターンの定義など
  * 新しい画像は、"HybridYukkuri.java"での定義も忘れずに!
@@ -27,9 +25,9 @@ import org.simyukkuri.system.Sprite;
 public class YukkuriUtil {
 
 	// ゆっくりの跳ね移動テーブル
-	private static final int BODY_JUMP[] = { 0, 8, 12, 14, 15, 14, 12, 8, 0 };
-	private static final int BODY_JUMP_LEVEL[] = { 2, 2, 1 };
-	private static final int BODY_FLY[] = { 0, 5, 10, 14, 14, 14, 10, 5, 0 };
+	private static final int[] BODY_JUMP = { 0, 8, 12, 14, 15, 14, 12, 8, 0 };
+	private static final int[] BODY_JUMP_LEVEL = { 2, 2, 1 };
+	private static final int[] BODY_FLY = { 0, 5, 10, 14, 14, 14, 10, 5, 0 };
 
 	// テンポラリ
 	private static YukkuriLayer layer = new YukkuriLayer();
@@ -58,17 +56,18 @@ public class YukkuriUtil {
 		int[] jumpTable;
 		if (b.isFlyingType()) {
 			jumpTable = BODY_FLY;
-		} else
+		} else {
 			jumpTable = BODY_JUMP;
+		}
 		int z = b.getZ();
 
 		// 本体描画
-		int numBB = b.getImageIndex(layer);
+		int numBb = b.getImageIndex(layer);
 
 		// 正面向き
 		if (layer.getOption()[0] == 0) {
 			// 全レイヤーを同一座標に描画
-			for (int i = 0; i < numBB; i++) {
+			for (int i = 0; i < numBb; i++) {
 				drawYukkuri(g2, z, 0, layer.getImage()[i], expand.getScreenRect()[layer.getDir()[i]].getX(),
 						expand.getScreenRect()[layer.getDir()[i]].getY(),
 						expand.getScreenRect()[layer.getDir()[i]].getWidth(),
@@ -77,12 +76,9 @@ public class YukkuriUtil {
 						base.getScreenRect()[layer.getDir()[i]].getHeight(), io);
 			}
 			// <-- TEST
-		}
-
-		// 通常(斜視)
-		else if (layer.getOption()[0] == 1) {
+		} else if (layer.getOption()[0] == 1) {
+			// 通常(斜視)
 			int faceOfsY = 0;
-			int faceOfsH = 0;
 			int okazariOfsY = 0;
 			// 妊娠時の各種位置ののオフセット計算
 			okazariOfsY -= (int) ((expand.getScreenRect()[direction].getHeight()
@@ -93,7 +89,7 @@ public class YukkuriUtil {
 			// 表情取得＆位置計算
 			int jy = 0;
 			int jh = 0;
-			int num2 = b.getFaceImage(layer2);
+			final int num2 = b.getFaceImage(layer2);
 			switch (layer2.getOption()[0]) {
 				case 0:
 				default:
@@ -137,9 +133,9 @@ public class YukkuriUtil {
 			expand.getScreenRect()[1].setHeight(expand.getScreenRect()[1].getHeight() + jh);
 
 			// 何かとリンクしてる場合の全体の高度補正
-			Entity oLinkParent = b.takeMappedObj(b.getParentLinkId());
-			if (oLinkParent != null && oLinkParent.getZ() < b.getZ() && oLinkParent instanceof Yukkuri) {
-				Yukkuri linkedBody = (Yukkuri) oLinkParent;
+			Entity linkParent = b.takeMappedObj(b.getParentLinkId());
+			if (linkParent != null && linkParent.getZ() < b.getZ() && linkParent instanceof Yukkuri) {
+				Yukkuri linkedBody = (Yukkuri) linkParent;
 				int linkedVerticalOffset = 0;
 				int linkedHorizontalOffset = 0;
 				YukkuriLayer layer2Link = new YukkuriLayer();
@@ -172,8 +168,8 @@ public class YukkuriUtil {
 						break;
 					case 5:
 						// ゆんやあーー
-						jh = Translate
-								.transSize(jumpTable[(int) b.getAge() / 2 % 9] / 2 / BODY_JUMP_LEVEL[ageIndex] * (-5));
+						jh = Translate.transSize(
+								jumpTable[(int) b.getAge() / 2 % 9] / 2 / BODY_JUMP_LEVEL[ageIndex] * (-5));
 						jy = -jh;
 						break;
 				}
@@ -187,6 +183,7 @@ public class YukkuriUtil {
 
 			// ひっぱり時の各種の位置補正計算
 			// 倍率は見た目で適当に調整
+			int faceOfsH = 0;
 			int force = b.getExternalPressure();
 			if (force > 0) {
 				faceOfsY += (int) ((float) force * 1.25f);
@@ -239,9 +236,9 @@ public class YukkuriUtil {
 					base.getScreenRect()[layer.getDir()[0]].getHeight(), io);
 
 			// 切断&溶解マスク
-			int numAB = b.getDamageImageIndex(layer);
-			if (numAB != 0) {
-				for (int i = 0; i < numAB; i++) {
+			int numAb = b.getDamageImageIndex(layer);
+			if (numAb != 0) {
+				for (int i = 0; i < numAb; i++) {
 					drawYukkuri(g2, z, (expand.getScreenRect()[layer.getDir()[i]].getHeight() / 4), layer.getImage()[i],
 							expand.getScreenRect()[layer.getDir()[i]].getX(),
 							expand.getScreenRect()[layer.getDir()[i]].getY()
@@ -367,7 +364,8 @@ public class YukkuriUtil {
 			int ofsX = Translate.transSize(at.getOfsX());
 			int ofsY = Translate.transSize(at.getOfsY());
 			int parentOrigin = at.getParentOrigin();
-			int bx, by;
+			int bx;
+			int by;
 			if (parentOrigin == 0) {
 				bx = base.getScreenRect()[direction].getX();
 				by = base.getScreenRect()[direction].getY() + base.getPivotY();

@@ -1,16 +1,15 @@
 package org.simyukkuri.logic;
 
 import java.util.List;
-
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.SocialEntity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.enums.YukkuriRelationType;
 import org.simyukkuri.enums.GatheringDirection;
+import org.simyukkuri.enums.YukkuriRelationType;
 import org.simyukkuri.event.EventPacket;
 
-/***************************************************
+/**
  * ゆっくり同士の処理
  */
 public class YukkuriLogic {
@@ -20,7 +19,7 @@ public class YukkuriLogic {
 	 */
 	public static enum ActionGo {
 		NONE, WAIT, GO, BACK
-	};
+	}
 
 	/**
 	 * 自分が相手にとって何なのか判定
@@ -68,15 +67,12 @@ public class YukkuriLogic {
 				&& !bodyOldMoveTarget.isRaper()) {
 			targetBody = bodyOldMoveTarget;
 			nearestDistance = Translate.distance(body.getX(), body.getY(), targetBody.getX(), targetBody.getY());
-		}
-		// つがいが既にいるなら優先して向かう
-		else if (partner != null) {
+		} else if (partner != null) {
+			// つがいが既にいるなら優先して向かう
 			targetBody = partner;
 			nearestDistance = Translate.distance(body.getX(), body.getY(), partner.getX(), partner.getY());
-		}
-
-		// 自分が泣き叫んでいるなら、他ゆに目をくれない。
-		else if (YukkuriPartnerEntryRule.shouldGoToParent(body)) {
+		} else if (YukkuriPartnerEntryRule.shouldGoToParent(body)) {
+			// 自分が泣き叫んでいるなら、他ゆに目をくれない。
 			checkNearParent(body);
 			return false;
 		} else {
@@ -128,7 +124,7 @@ public class YukkuriLogic {
 			return false;
 		}
 
-		if (target.isNYD()) {
+		if (target.isNyd()) {
 			return false;
 		}
 
@@ -155,10 +151,8 @@ public class YukkuriLogic {
 		}
 		if (target.isToSteal()) {
 			return false;
-		}
-
-		// 非接触状態の場合
-		else {
+		} else {
+			// 非接触状態の場合
 			YukkuriApproachRule.handleApproach(self, target, collisionOffsetX);
 		}
 		return true;
@@ -181,8 +175,9 @@ public class YukkuriLogic {
 
 		// お互いの位置から右と左最短距離を選択
 		int directionSign = 1;
-		if (from.getX() < to.getX())
+		if (from.getX() < to.getX()) {
 			directionSign = -1;
+		}
 		collisionOffsetX *= directionSign;
 
 		return collisionOffsetX;

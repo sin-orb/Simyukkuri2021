@@ -19,7 +19,11 @@ class TrampolineTest extends ItemTestBase {
         item.setObjId(1);
         SimYukkuri.world.getCurrentWorldState().getTrampolines().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentWorldState().getTrampolines().containsKey(item.getObjId()));
+        assertTrue(
+                SimYukkuri.world
+                        .getCurrentWorldState()
+                        .getTrampolines()
+                        .containsKey(item.getObjId()));
     }
 
     @Test
@@ -58,7 +62,11 @@ class TrampolineTest extends ItemTestBase {
         item.setObjId(55);
         SimYukkuri.world.getCurrentWorldState().getTrampolines().put(item.getObjId(), item);
         item.removeFromWorld();
-        assertFalse(SimYukkuri.world.getCurrentWorldState().getTrampolines().containsKey(item.getObjId()));
+        assertFalse(
+                SimYukkuri.world
+                        .getCurrentWorldState()
+                        .getTrampolines()
+                        .containsKey(item.getObjId()));
     }
 
     @Test
@@ -102,6 +110,7 @@ class TrampolineTest extends ItemTestBase {
         try {
             Trampoline.loadImages(Trampoline.class.getClassLoader(), null);
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -132,6 +141,7 @@ class TrampolineTest extends ItemTestBase {
         try {
             Trampoline.setupTrampoline(item);
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -141,6 +151,7 @@ class TrampolineTest extends ItemTestBase {
             Trampoline t = new Trampoline(100, 100, 0);
             org.junit.jupiter.api.Assertions.assertNotNull(t);
         } catch (Exception e) {
+            // ignore
         }
     }
 }

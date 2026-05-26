@@ -4,21 +4,20 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-
 import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.attachment.Attachment;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.AttachProperty;
-import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.HairState;
 import org.simyukkuri.enums.Happiness;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameText;
 
-/****************************************
+/**
  * 炎
  *
  */
@@ -33,9 +32,11 @@ public class Fire extends Attachment {
 	 */
 	private static BufferedImage[][] images;
 	/** 画像のサイズ */
-	private static int[] imgW, imgH;
+	private static int[] imgW;
+	private static int[] imgH;
 	/** 画像の描画原点の座標 */
-	private static int[] pivX, pivY;
+	private static int[] pivX;
+	private static int[] pivY;
 	/** 継承元のenum AttachProperty の代入値 */
 	private static final int[] property = {
 			4, // 赤ゆ用画像サイズ 原画をこの値で割る
@@ -83,8 +84,9 @@ public class Fire extends Attachment {
 		pivX = new int[3];
 		pivY = new int[3];
 		for (int i = 0; i < 3; i++) {
-			if (images[i][0] == null)
+			if (images[i][0] == null) {
 				continue;
+			}
 			imgW[i] = images[i][0].getWidth(io);
 			imgH[i] = images[i][0].getHeight(io);
 			pivX[i] = imgW[i] >> 1;
@@ -96,8 +98,9 @@ public class Fire extends Attachment {
 	@Override
 	public BufferedImage getImage(Yukkuri b) {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
-		if (pa == null)
+		if (pa == null) {
 			return null;
+		}
 		return images[pa.getAgeState().ordinal()][animeFrame];
 	}
 
@@ -105,12 +108,13 @@ public class Fire extends Attachment {
 	@Override
 	protected TickResult update() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
-		if (pa == null)
+		if (pa == null) {
 			return TickResult.NONE;
+		}
 		// 生きてたらセリフとダメージ加算
 		if (!pa.isDead()) {
 			pa.clearActions();
-			if (pa.isNotNYD()) {
+			if (pa.isNotNyd()) {
 				if (!pa.isTalking()) {
 					pa.setMessage(GameMessages.getMessage(pa, MessagePool.Action.Burning), 20, true, true);
 				}
@@ -153,7 +157,7 @@ public class Fire extends Attachment {
 		if (GameRandom.nextInt(3) == 0) {
 			Yukkuri bodyMother = org.simyukkuri.util.YukkuriLookup.getYukkuriById(pa.getBindStalkMotherCanNotice());
 			if (bodyMother != null) {
-				if (bodyMother.isNotNYD()) {
+				if (bodyMother.isNotNyd()) {
 					bodyMother.setHappiness(Happiness.VERY_SAD);
 					bodyMother.setMessage(GameMessages.getMessage(bodyMother, MessagePool.Action.AbuseBaby));
 					bodyMother.addStress(15);
@@ -167,10 +171,12 @@ public class Fire extends Attachment {
 	@Override
 	public void resetBoundary() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
-		if (pa == null)
+		if (pa == null) {
 			return;
-		if (pivX == null || pivY == null || imgW == null || imgH == null)
+		}
+		if (pivX == null || pivY == null || imgW == null || imgH == null) {
 			return;
+		}
 		int idx = pa.getAgeState().ordinal();
 		if (idx < 0 || idx >= pivX.length || idx >= pivY.length || idx >= imgW.length || idx >= imgH.length) {
 			return;

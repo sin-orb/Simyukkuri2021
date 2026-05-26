@@ -4,17 +4,15 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-
 import org.simyukkuri.Const;
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Translate;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Numbering;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.field.impl.Barrier;
@@ -39,8 +37,8 @@ public class Vomit extends Entity {
 	/** 吐餡の状態 */
 	public static final int NUM_OF_VOMIT_STATE = 3;
 
-	private static final int VOMITLIMIT[] = { 100 * 24 * 2, 100 * 24 * 4, 100 * 24 * 8 };
-	private String ownerName = null;;
+	private static final int[] VOMITLIMIT = { 100 * 24 * 2, 100 * 24 * 4, 100 * 24 * 8 };
+	private String ownerName = null;
 	private AgeState ageState;
 	private int falldownDamage = 0;
 	private int amount = 0;
@@ -49,7 +47,7 @@ public class Vomit extends Entity {
 	private static final String[] sizeDisplayName = { GameText.read("game_little"),
 			GameText.read("game_middle"),
 			GameText.read("game_big") };
-	private static final int value[] = { 50, 100, 300 };
+	private static final int[] value = { 50, 100, 300 };
 
 	private static BufferedImage[][][] images = null;
 	private static int[][] imgW = null;
@@ -74,11 +72,13 @@ public class Vomit extends Entity {
 		pivX = new int[name.length][3];
 		pivY = new int[name.length][3];
 
-		int sx, sy;
+		int sx;
+		int sy;
 
 		for (int i = 0; i < name.length; i++) {
-			if (name[i].getImageDirName().length() == 0)
+			if (name[i].getImageDirName().length() == 0) {
 				continue;
+			}
 
 			images[i][VOMIT_NORMAL][Const.ADULT_INDEX] = ImageIO
 					.read(loader.getResourceAsStream(path + name[i].getImageDirName() + "/toan.png"));
@@ -103,8 +103,9 @@ public class Vomit extends Entity {
 		}
 		for (int i = 0; i < name.length; i++) {
 			for (int j = 0; j < 3; j++) {
-				if (images[i][0][j] == null)
+				if (images[i][0][j] == null) {
 					continue;
+				}
 
 				imgW[i][j] = images[i][0][j].getWidth(io);
 				imgH[i][j] = images[i][0][j].getHeight(io);
@@ -188,6 +189,8 @@ public class Vomit extends Entity {
 			case ADULT:
 				amount = 100 * 4;
 				break;
+			default:
+				break;
 		}
 		calcPos();
 		setRemoved(false);
@@ -226,7 +229,7 @@ public class Vomit extends Entity {
 	/**
 	 * 吐餡を食べる.
 	 * 
-	 * @param eatAmount
+	 * @param eatAmount 食べる量
 	 */
 	public void eatVomit(int eatAmount) {
 		amount -= eatAmount;
@@ -247,7 +250,7 @@ public class Vomit extends Entity {
 	 * 吐餡をキックする.
 	 */
 	public void kick() {
-		int blowLevel[] = { -6, -5, -4 };
+		int[] blowLevel = { -6, -5, -4 };
 		kick(0, blowLevel[ageState.ordinal()] * 2, blowLevel[ageState.ordinal()]);
 	}
 

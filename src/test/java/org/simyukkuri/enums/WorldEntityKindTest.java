@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.simyukkuri.entity.core.world.bodylinked.Stalk;
 import org.simyukkuri.entity.core.world.item.Food;
 
-class ObjEXTypeTest {
+class WorldEntityKindTest {
 
     @Test
     void testGetClassPack() {

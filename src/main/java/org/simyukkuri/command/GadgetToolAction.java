@@ -4,7 +4,6 @@ import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.draw.Translate;
@@ -30,7 +29,8 @@ final class GadgetToolAction {
 				break;
 			case SNAPPING:
 				if (ev.isShiftDown()) {
-					for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
+					for (Map.Entry<Integer, Yukkuri> entry
+							: GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 						entry.getValue().kick();
 					}
 					Map<Integer, Shit> shits = GameWorld.get().getCurrentWorldState().getShit();
@@ -65,7 +65,8 @@ final class GadgetToolAction {
 				break;
 			case HAMMER:
 				if (ev.isShiftDown()) {
-					for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
+					for (Map.Entry<Integer, Yukkuri> entry
+							: GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 						Yukkuri body = entry.getValue();
 						body.strikeByHammer();
 						if (!body.isHasPants() && !body.isDead() && !body.isShutmouth()) {
@@ -124,7 +125,8 @@ final class GadgetToolAction {
 				break;
 			case PUNCH:
 				if (ev.isShiftDown()) {
-					for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
+					for (Map.Entry<Integer, Yukkuri> entry
+							: GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 						Yukkuri body = entry.getValue();
 						body.strikeByPunch();
 						if (!body.isHasPants() && !body.isDead() && !body.isShutmouth()) {
@@ -176,7 +178,8 @@ final class GadgetToolAction {
 				}
 				break;
 			case PEAL:
-				List<Yukkuri> bodyListP = new LinkedList<Yukkuri>(GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
+				List<Yukkuri> bodyListP = new LinkedList<Yukkuri>(
+						GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
 				if (ev.isShiftDown() || ev.isControlDown()) {
 					for (Yukkuri body : bodyListP) {
 						body.peal();
@@ -188,7 +191,8 @@ final class GadgetToolAction {
 				}
 				break;
 			case BLIND:
-				List<Yukkuri> bodyListB = new LinkedList<Yukkuri>(GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
+				List<Yukkuri> bodyListB = new LinkedList<Yukkuri>(
+						GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
 				if (ev.isShiftDown()) {
 					boolean shouldBreakEyes = true;
 					if (targetObject instanceof Yukkuri) {
@@ -210,7 +214,8 @@ final class GadgetToolAction {
 				}
 				break;
 			case SHUTMOUTH:
-				List<Yukkuri> bodyListS = new LinkedList<Yukkuri>(GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
+				List<Yukkuri> bodyListS = new LinkedList<Yukkuri>(
+						GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
 				if (ev.isShiftDown()) {
 					boolean shouldshutMouth = true;
 					if (targetObject instanceof Yukkuri) {
@@ -237,7 +242,8 @@ final class GadgetToolAction {
 				}
 				break;
 			case PACK:
-				List<Yukkuri> bodyListPa = new LinkedList<Yukkuri>(GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
+				List<Yukkuri> bodyListPa = new LinkedList<Yukkuri>(
+						GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
 				if (ev.isShiftDown()) {
 					boolean shouldPack = true;
 					if (targetObject instanceof Yukkuri) {

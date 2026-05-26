@@ -1,7 +1,6 @@
 package org.simyukkuri.engine.birth;
 
 import java.util.List;
-
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.Attitude;
 import org.simyukkuri.enums.Intelligence;
@@ -26,11 +25,11 @@ public final class YukkuriBirthTypeResolver {
 		// 66%で通常種、33%で希少種
 		if (GameRandom.nextInt(3) == 0) {
 			// 希少種
-			return YukkuriType.fromTypeID(1000 + GameRandom.nextInt(12));
+			return YukkuriType.fromTypeId(1000 + GameRandom.nextInt(12));
 		} else {
 			// 通常種
 			int i = GameRandom.nextInt(6);
-			if (i == 0) {// まりさ
+			if (i == 0) { // まりさ
 				switch (GameRandom.nextInt(5)) {
 					case 1:
 						return YukkuriType.MARISAKOTATSUMURI;
@@ -39,7 +38,7 @@ public final class YukkuriBirthTypeResolver {
 					default:
 						return YukkuriType.MARISA;
 				}
-			} else if (i == 1) {// れいむ
+			} else if (i == 1) { // れいむ
 				switch (GameRandom.nextInt(4)) {
 					case 2:
 						return YukkuriType.WASAREIMU;
@@ -49,7 +48,7 @@ public final class YukkuriBirthTypeResolver {
 						return YukkuriType.REIMU;
 				}
 			} else {
-				return YukkuriType.fromTypeID(i);
+				return YukkuriType.fromTypeId(i);
 			}
 		}
 	}
@@ -76,55 +75,57 @@ public final class YukkuriBirthTypeResolver {
 					switch (GameRandom.nextInt(5)) {
 						case 0:
 						case 2:
-							babyType = YukkuriType.REIMU.getTypeID();// 普通のれいむ
+							babyType = YukkuriType.REIMU.getTypeId(); // 普通のれいむ
 							break;
 						case 1:
-							babyType = YukkuriType.WASAREIMU.getTypeID();// わされいむ
+							babyType = YukkuriType.WASAREIMU.getTypeId(); // わされいむ
 							break;
 						case 4:
-							babyType = YukkuriType.TARINAI.getTypeID();// たりないれいむ
+							babyType = YukkuriType.TARINAI.getTypeId(); // たりないれいむ
 							break;
 						case 3:
-							babyType = YukkuriType.DEIBU.getTypeID();// でいぶ
+							babyType = YukkuriType.DEIBU.getTypeId(); // でいぶ
 							break;
 						default:
-							babyType = YukkuriType.REIMU.getTypeID();// 普通のれいむ
+							babyType = YukkuriType.REIMU.getTypeId(); // 普通のれいむ
 					}
 					break;
 				case 3: // ありす
-					babyType = YukkuriType.ALICE.getTypeID();
+					babyType = YukkuriType.ALICE.getTypeId();
 					break;
 				case 4: // みょん
-					babyType = YukkuriType.MYON.getTypeID();
+					babyType = YukkuriType.MYON.getTypeId();
 					break;
 				case 5: // ちぇん
-					babyType = YukkuriType.CHEN.getTypeID();
+					babyType = YukkuriType.CHEN.getTypeId();
 					break;
 				case 6: // たりないゆ
-					babyType = YukkuriType.TARINAI.getTypeID();
+					babyType = YukkuriType.TARINAI.getTypeId();
 					break;
 				case 7: // ゆるさなえ
-					babyType = YukkuriType.YURUSANAE.getTypeID();
+					babyType = YukkuriType.YURUSANAE.getTypeId();
 					break;
 				case 10: // ぱちゅりー
-					babyType = YukkuriType.PATCH.getTypeID();
+					babyType = YukkuriType.PATCH.getTypeId();
 					break;
 				case 11: // 希少種
 					babyType = 1000 + GameRandom.nextInt(12);
 					break;
+				default:
+					break;
 			}
 		} else {
 			if (parent != null) {
-				babyType = parent.getType().getTypeID();
+				babyType = parent.getType().getTypeId();
 				// 親がドスなら他のまりさが均等に出る
-				if (babyType == YukkuriType.DOSMARISA.getTypeID()) {
+				if (babyType == YukkuriType.DOSMARISA.getTypeId()) {
 					babyType = getMarisaType();
 				}
 			} else {
 				babyType = GameRandom.nextInt(6);
 			}
 		}
-		return YukkuriType.fromTypeID(babyType);
+		return YukkuriType.fromTypeId(babyType);
 	}
 
 	/**
@@ -135,11 +136,11 @@ public final class YukkuriBirthTypeResolver {
 	public static int getMarisaType() {
 		switch (GameRandom.nextInt(5)) {
 			case 1:
-				return YukkuriType.MARISAKOTATSUMURI.getTypeID();// こたつむり
+				return YukkuriType.MARISAKOTATSUMURI.getTypeId(); // こたつむり
 			case 2:
-				return YukkuriType.MARISATSUMURI.getTypeID();// つむり
+				return YukkuriType.MARISATSUMURI.getTypeId(); // つむり
 			default:
-				return YukkuriType.MARISA.getTypeID();
+				return YukkuriType.MARISA.getTypeId();
 		}
 	}
 
@@ -148,7 +149,7 @@ public final class YukkuriBirthTypeResolver {
 	 *
 	 * @param mother       母体
 	 * @param father       父体
-	 * @param iFatherType  父タイプ
+	 * @param fatherType   父タイプ
 	 * @param forceCreate  強制作成フラグ
 	 * @param fatherDamage 父ダメージ
 	 * @return 子タイプ
@@ -156,7 +157,6 @@ public final class YukkuriBirthTypeResolver {
 	public static YukkuriType resolveBabyType(Yukkuri mother, Yukkuri father, YukkuriType fatherType,
 			boolean forceCreate,
 			boolean fatherDamage) {
-		YukkuriType babyType;
 		YukkuriType motherType = mother.getType();
 
 		motherType = applyAncestorReversion(mother.getAncestors(), motherType);
@@ -191,6 +191,7 @@ public final class YukkuriBirthTypeResolver {
 			hybrid = false;
 		}
 
+		YukkuriType babyType;
 		if (hybrid) {
 			if (hybrid2 && mother != null && GameRandom.nextBoolean()) {
 				babyType = mother.getHybridType(fatherType);
@@ -228,7 +229,7 @@ public final class YukkuriBirthTypeResolver {
 
 	private static YukkuriType applyAncestorReversion(List<Integer> ancestorList, YukkuriType type) {
 		if (ancestorList != null && !ancestorList.isEmpty() && GameRandom.nextInt(100) == 0) {
-			return YukkuriType.fromTypeID(ancestorList.get(GameRandom.nextInt(ancestorList.size())));
+			return YukkuriType.fromTypeId(ancestorList.get(GameRandom.nextInt(ancestorList.size())));
 		}
 		return type;
 	}
@@ -270,15 +271,15 @@ public final class YukkuriBirthTypeResolver {
 	/**
 	 * 父体のゆっくりタイプを祖先遡り補正して返す。
 	 *
-	 * @param iFatherType 父タイプID（父体がいない場合の初期値）
-	 * @param father      父体（null 可）
+	 * @param fatherTypeId 父タイプID（父体がいない場合の初期値）
+	 * @param father       父体（null 可）
 	 * @return 補正後の父タイプID
 	 */
-	public static int resolveFatherType(int iFatherType, Yukkuri father) {
+	public static int resolveFatherType(int fatherTypeId, Yukkuri father) {
 		if (father == null) {
-			return iFatherType;
+			return fatherTypeId;
 		}
-		return applyAncestorReversion(father.getAncestors(), YukkuriType.fromTypeID(iFatherType)).getTypeID();
+		return applyAncestorReversion(father.getAncestors(), YukkuriType.fromTypeId(fatherTypeId)).getTypeId();
 	}
 
 	/**
@@ -288,7 +289,7 @@ public final class YukkuriBirthTypeResolver {
 	 * @return 補正後の母タイプID
 	 */
 	public static int resolveMotherType(Yukkuri mother) {
-		return applyAncestorReversion(mother.getAncestors(), mother.getType()).getTypeID();
+		return applyAncestorReversion(mother.getAncestors(), mother.getType()).getTypeId();
 	}
 
 	/**

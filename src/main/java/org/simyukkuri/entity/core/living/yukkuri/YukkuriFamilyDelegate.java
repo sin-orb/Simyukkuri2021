@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.TreeSet;
-
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.Parent;
@@ -47,7 +46,7 @@ public final class YukkuriFamilyDelegate {
 			body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ExtractingNeedleChild));
 		}
 
-		if (p.isNotNYD()) {
+		if (p.isNotNyd()) {
 			p.setMessage(GameMessages.getMessage(p, MessagePool.Action.NeedlePain), 60, true, false);
 			p.stayPurupuru(40);
 			p.setHappiness(Happiness.VERY_SAD);
@@ -86,7 +85,7 @@ public final class YukkuriFamilyDelegate {
 				continue;
 			}
 			if (!sister.isRemoved()) {
-				set.add(sister.getUniqueID());
+				set.add(sister.getUniqueId());
 			}
 		}
 		body.setSisters(new LinkedList<Integer>(set));
@@ -100,7 +99,7 @@ public final class YukkuriFamilyDelegate {
 				continue;
 			}
 			if (!elderSister.isRemoved()) {
-				set.add(elderSister.getUniqueID());
+				set.add(elderSister.getUniqueId());
 			}
 		}
 		body.setElderSisters(new LinkedList<Integer>(set));
@@ -114,7 +113,7 @@ public final class YukkuriFamilyDelegate {
 				continue;
 			}
 			if (!child.isRemoved()) {
-				set.add(child.getUniqueID());
+				set.add(child.getUniqueId());
 			}
 		}
 		body.setChildren(new LinkedList<Integer>(set));
@@ -125,16 +124,21 @@ public final class YukkuriFamilyDelegate {
 	 * 親子関係をなくす.
 	 */
 	public void clearRelation() {
-		if (YukkuriRelations.getParentYukkuri(body.getParents()[Parent.PAPA.ordinal()]) != null)
-			if (YukkuriRelations.getParentYukkuri(body.getParents()[Parent.PAPA.ordinal()]).isRemoved())
+		if (YukkuriRelations.getParentYukkuri(body.getParents()[Parent.PAPA.ordinal()]) != null) {
+			if (YukkuriRelations.getParentYukkuri(body.getParents()[Parent.PAPA.ordinal()]).isRemoved()) {
 				body.getParents()[Parent.PAPA.ordinal()] = -1;
-		if (YukkuriRelations.getParentYukkuri(body.getParents()[Parent.MAMA.ordinal()]) != null)
-			if (YukkuriRelations.getParentYukkuri(body.getParents()[Parent.MAMA.ordinal()]).isRemoved())
+			}
+		}
+		if (YukkuriRelations.getParentYukkuri(body.getParents()[Parent.MAMA.ordinal()]) != null) {
+			if (YukkuriRelations.getParentYukkuri(body.getParents()[Parent.MAMA.ordinal()]).isRemoved()) {
 				body.getParents()[Parent.MAMA.ordinal()] = -1;
+			}
+		}
 		if (body.getPartner() != -1) {
 			Yukkuri partnerCandidate = YukkuriRelations.getPartnerYukkuri(body);
-			if (partnerCandidate == null || partnerCandidate.isRemoved())
+			if (partnerCandidate == null || partnerCandidate.isRemoved()) {
 				body.setPartner(-1);
+			}
 		}
 	}
 }

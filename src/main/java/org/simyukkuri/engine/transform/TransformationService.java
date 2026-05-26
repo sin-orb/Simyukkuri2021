@@ -44,14 +44,14 @@ public final class TransformationService {
 				return;
 			}
 
-			int originalId = from.getUniqueID();
+			int originalId = from.getUniqueId();
 			Yukkuri to = YukkuriFactory.create(from.getX(), from.getY(), from.getZ(), targetType, null,
 					from.getAgeState(), null, null, false, GameView::loadYukkuriImage, dosMaker);
 			TransformationBodyCopier.copy(to, from);
 			TransformationPolicy.normalizeTransformedAge(to, from);
 
 			to.setObjId(originalId);
-			to.setUniqueID(originalId);
+			to.setUniqueId(originalId);
 			GameWorld.get().getCurrentWorldState().getYukkuriRegistry().remove(originalId);
 			GameWorld.get().getCurrentWorldState().getYukkuriRegistry().put(originalId, to);
 			GameWorld.get().getCurrentWorldState().registerEntity(originalId, to);

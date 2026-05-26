@@ -133,7 +133,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 				int target = -1;
 				for (int i = 0; i < sorted.size(); i++) {
 					Yukkuri body = sorted.get(i);
-					if (body.getUniqueID() > id) {
+					if (body.getUniqueId() > id) {
 						target = i;
 						break;
 					}
@@ -169,7 +169,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 				int target = -1;
 				for (int i = 0; i < sorted.size(); i++) {
 					Yukkuri body = sorted.get(i);
-					if (body.getUniqueID() < id) {
+					if (body.getUniqueId() < id) {
 						target = i;
 						break;
 					}
@@ -678,7 +678,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 	 * @param body ゆっくり
 	 */
 	public void giveYukkuriInfo(Yukkuri body) {
-		textField.setText(String.valueOf(body.getUniqueID()));
+		textField.setText(String.valueOf(body.getUniqueId()));
 		textField_1.setText(body.toString());
 		textField_2.setText(String.valueOf(body.getAge()));
 		String purpose = null;

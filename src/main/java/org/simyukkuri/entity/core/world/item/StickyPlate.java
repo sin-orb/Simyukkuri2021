@@ -7,14 +7,12 @@ import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
@@ -26,7 +24,7 @@ import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * 粘着板
  */
 public class StickyPlate extends WorldEntity {
@@ -79,15 +77,17 @@ public class StickyPlate extends WorldEntity {
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (itemRank == ItemRank.HOUSE) {
-			if (enabled)
+			if (enabled) {
 				layer[0] = images[0];
-			else
+			} else {
 				layer[0] = images[1];
+			}
 		} else {
-			if (enabled)
+			if (enabled) {
 				layer[0] = images[2];
-			else
+			} else {
 				layer[0] = images[3];
+			}
 		}
 		return 1;
 	}
@@ -111,15 +111,16 @@ public class StickyPlate extends WorldEntity {
 		return hitCheckObjType;
 	}
 
-	@Override
 	/**
 	 * Enable hit check.
 	 *
 	 * @return Enable hit check
 	 */
+	@Override
 	public boolean enableHitCheck() {
-		if (bindBody != null)
+		if (bindBody != null) {
 			return false;
+		}
 		return true;
 	}
 
@@ -131,10 +132,12 @@ public class StickyPlate extends WorldEntity {
 	/** 衝突処理を行い、結果コードを返す。 */
 	@Override
 	public int objHitProcess(Entity o) {
-		if (((Yukkuri) o).isDead())
+		if (((Yukkuri) o).isDead()) {
 			return 0;
-		if (((Yukkuri) o).getCriticalDamageType() == CriticalDamageType.CUT)
+		}
+		if (((Yukkuri) o).getCriticalDamageType() == CriticalDamageType.CUT) {
 			return 0;
+		}
 
 		if (bindBody != (Yukkuri) o) {
 			// 入れ替える場合
@@ -184,8 +187,8 @@ public class StickyPlate extends WorldEntity {
 
 			} else {
 				// ぷるぷる以外が原因で座標がずれている、死んでいる場合は初期化
-				if (((bindBody.getX() != x || bindBody.getY() != y) && !bindBody.isPurupuru()) ||
-						(bindBody.isRemoved() || bindBody.isDead())) {
+				if (((bindBody.getX() != x || bindBody.getY() != y) && !bindBody.isPurupuru())
+						|| (bindBody.isRemoved() || bindBody.isDead())) {
 					bindBody.setCanPullOrPush(false);
 					// 針が刺さっていない、死んでる
 					if (!bindBody.isNeedled() || bindBody.isDead()) {
@@ -249,7 +252,6 @@ public class StickyPlate extends WorldEntity {
 
 		JPanel mainPanel = new JPanel();
 		JRadioButton[] but = new JRadioButton[StickyType.values().length];
-		boolean ret = false;
 
 		mainPanel.setLayout(new GridLayout(2, 1));
 		mainPanel.setPreferredSize(new Dimension(100, 100));
@@ -269,13 +271,15 @@ public class StickyPlate extends WorldEntity {
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 		if (dlgRet == JOptionPane.OK_OPTION) {
-			if (but[0].isSelected())
+			if (but[0].isSelected()) {
 				s.fixBack = false;
-			if (but[1].isSelected())
+			}
+			if (but[1].isSelected()) {
 				s.fixBack = true;
-			ret = true;
+			}
+			return true;
 		}
-		return ret;
+		return false;
 	}
 
 	/** 粘着板の裏面固定かを返す。 */

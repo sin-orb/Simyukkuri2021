@@ -1,7 +1,6 @@
 package org.simyukkuri.logic;
 
 import java.util.Map;
-
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.attachment.impl.Fire;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -53,7 +52,7 @@ public final class YukkuriPartnerSearchRule {
 	/**
 	 * ゆっくりに対して最適なパートナー候補を選択して返す。
 	 *
-	 * @param b                 行動主体ゆっくり
+	 * @param body              行動主体ゆっくり
 	 * @param targetBody        現在の優先候補ゆっくり
 	 * @param minDistance       現在の最短距離（二乗値）
 	 * @param secondMinDistance 現在の第二候補最短距離（二乗値）
@@ -83,7 +82,7 @@ public final class YukkuriPartnerSearchRule {
 			} else if (GameEnvironment.isPredatorSteam()) {
 			} else {
 				if (body.getCurrentEvent() != null && body.getCurrentEvent().getClass().equals(KillPredeatorEvent.class)
-						&& body.isAdult() && body.isNotNYD() && !body.isPacked() && !body.isBurned()
+						&& body.isAdult() && body.isNotNyd() && !body.isPacked() && !body.isBurned()
 						&& !body.isHasBaby() && !body.isHasStalk()) {
 					body.setPanic(false, null);
 					body.setAngry();
@@ -95,10 +94,14 @@ public final class YukkuriPartnerSearchRule {
 						if (body.canAction() && !body.isPredatorType() && !candidateBody.isFamily(body)
 								&& !body.isSleeping()) {
 							if (candidateBody.getZ() < Translate.getFlyHeightLimit() || body.canflyCheck()) {
-								if (!Barrier.acrossBarrier(body.getX(), body.getY(), candidateBody.getX(),
-										candidateBody.getY(),
-										Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
-									if (body.isNotNYD() && !body.isNeedled() && !body.isRaper()) {
+								int ageOrd = body.getAgeState().ordinal();
+								int wallFlags = Barrier.BODY_BLOCK_FLAGS[ageOrd]
+										+ Barrier.BARRIER_KEKKAI;
+								boolean acrossWall = Barrier.acrossBarrier(
+										body.getX(), body.getY(),
+										candidateBody.getX(), candidateBody.getY(), wallFlags);
+								if (!acrossWall) {
+									if (body.isNotNyd() && !body.isNeedled() && !body.isRaper()) {
 										body.setPanic(true, PanicType.REMIRYA);
 									}
 								}

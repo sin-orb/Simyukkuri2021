@@ -6,34 +6,31 @@ import java.beans.Transient;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.simyukkuri.Const;
 import org.simyukkuri.draw.Dimension4y;
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Point4y;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.engine.transform.TransformationService;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Attitude;
-import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.HairState;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.PlayStyle;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.logic.ToyLogic;
-import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.system.MessagePool;
+import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.util.GameEnvironment;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.IniFileUtil;
 
-/*****************************************************
- * れいむ。でいぶ、わさ、まりされいむはこれを継承している
- */
+/** れいむ。でいぶ、わさ、まりされいむはこれを継承している */
 public class Reimu extends Yukkuri {
 	private static final long serialVersionUID = -7573106487924456286L;
 	/** れいむのタイプ */
@@ -50,8 +47,8 @@ public class Reimu extends Yukkuri {
 	private static BufferedImage[][][] imagesNora = new BufferedImage[ImageCode.values().length][2][3];
 	private static BufferedImage[][][][] imagesNagasi = new BufferedImage[ImageCode
 			.values().length][2][3][ModLoader.getMaxImgOtherVer() + 1];
-	private static int directionOffset[][] = new int[ImageCode.values().length][2];
-	private static int directionOffsetNagasi[][] = new int[ImageCode.values().length][2];
+	private static int[][] directionOffset = new int[ImageCode.values().length][2];
+	private static int[][] directionOffsetNagasi = new int[ImageCode.values().length][2];
 	private static Dimension4y[] boundary = new Dimension4y[3];
 	private static Dimension4y[] braidBoundary = new Dimension4y[3];
 	private static boolean imageLoaded = false;
@@ -60,13 +57,14 @@ public class Reimu extends Yukkuri {
 	// iniファイルから読み込んだ初期値
 	private static int baseSpeed = 100;
 	// 個別表情管理(まりちゃ流し用)
-	private int imageVariantState[][] = new int[ImageCode.values().length][2];
+	private int[][] imageVariantState = new int[ImageCode.values().length][2];
 
 	/** イメージのロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
-		if (imageLoaded)
+		if (imageLoaded) {
 			return;
+		}
 
 		boolean res;
 		res = ModLoader.loadYukkuriImagePack(loader, imagesNora, directionOffset, ModLoader.getYkWordNora(), baseFileName,
@@ -195,8 +193,9 @@ public class Reimu extends Yukkuri {
 	@Override
 	public Yukkuri checkTransform() {
 		// 自身が突然変異可能かチェック
-		if (!canTransform())
+		if (!canTransform()) {
 			return null;
+		}
 		// 大人であり、夫がいて夫がゲスではなく、自身がゲス
 		Yukkuri partner = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getPartner());
 		if (isAdult() && partner != null && !partner.isRude() && isRude()) {
@@ -210,17 +209,16 @@ public class Reimu extends Yukkuri {
 			// ゲスバカとドゲスは確実にでいぶ化
 			if ((isRude() && getIntelligence() != Intelligence.FOOL) || getAttitude() == Attitude.SUPER_SHITHEAD) {
 				return this;
-			}
-			// あとは1/2。
-			else if (GameRandom.nextBoolean()) {
+			} else if (GameRandom.nextBoolean()) {
+				// あとは1/2。
 				return this;
 			}
 		}
 		return null;
 	}
 
-	@Override
 	/** アタッチメントキーに対応する取り付け点座標を返す。 */
+	@Override
 	public Point4y[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}
@@ -297,13 +295,13 @@ public class Reimu extends Yukkuri {
 	/** 胴体の表示状態に基づく画像インデックスをレイヤーにセットし番号を返す。 */
 	@Override
 	public int getImageIndex(YukkuriLayer layer) {
-		int direction = this.getDirection().ordinal();
-		int idx = 0;
+		final int direction = this.getDirection().ordinal();
 
 		layer.getOption()[0] = 0;
 		layer.getOption()[1] = 0;
 		layer.getOption()[2] = 0;
 
+		int idx = 0;
 		if (isBurned() && isDead()) {
 			// 焼死体
 			idx += getImage(ImageCode.BURNED.ordinal(), Const.LEFT, layer, idx);
@@ -411,9 +409,8 @@ public class Reimu extends Yukkuri {
 			if (getOkazaris() != null && getOkazaris().getOkazariType() == OkazariType.DEFAULT) {
 				idx += getImage(ImageCode.ROLL_ACCESSORY.ordinal(), Const.LEFT, layer, idx);
 			}
-		}
-		// れいむ種専用
-		else if (isYunnyaa()) {
+		} else if (isYunnyaa()) {
+			// れいむ種専用
 			// ゆんやあ
 			/* if(getImageNagasiMode()) */ {
 				if (getAge() % 6 <= 1) {
@@ -505,15 +502,12 @@ public class Reimu extends Yukkuri {
 					}
 				}
 			}
-		}
-
-		else {
+		} else {
 			// 皮むき時
 			if (isPealed()) {
 				idx += getImage(ImageCode.PEALED.ordinal(), direction, layer, idx);
-			}
-			// 通常時
-			else {
+			} else {
+				// 通常時
 				idx += getImage(ImageCode.BODY.ordinal(), direction, layer, idx);
 			}
 			layer.getOption()[0] = 1;
@@ -522,76 +516,68 @@ public class Reimu extends Yukkuri {
 	}
 
 	// ゆっくりしてる時のアクション
-	// 個別の動作がある種ははこれをオーバーライドしているので注意
+	/** Kill time. 個別の動作がある種ははこれをオーバーライドしているので注意 */
 	@Override
-	/**
-	 * Kill time.
-	 */
 	public void killTime() {
-		if (getCurrentEvent() != null)
+		if (getCurrentEvent() != null) {
 			return;
-		if (getPlaying() != null)
+		}
+		if (getPlaying() != null) {
 			return;
+		}
 		int p = GameRandom.nextInt(50);
 		// 7/50でキリッ
 		if (p <= 6) {
 			getInVain(true);
-		}
-		// 7/50でのびのび
-		else if (p <= 14) {
-			// if yukkuri is not rude, she goes into her shell by discipline.
+		} else if (p <= 14) {
+			// 7/50でのびのび (if yukkuri is not rude, she goes into her shell by discipline)
 			setMessage(GameMessages.getMessage(this, MessagePool.Action.Nobinobi), 40);
 			setNobinobi(true);
 			addStress(-30);
 			stay(40);
-		}
-		// 7/50でおうた
-		else if (p <= 21) {
+		} else if (p <= 21) {
+			// 7/50でおうた
 			setMessage(GameMessages.getMessage(this, MessagePool.Action.ProudChildsSING), 40);
 			setNobinobi(true);
 			addStress(-30);
 			stay(40);
-		}
-		// 7/50でふりふり
-		else if (p <= 28 && willingFurifuri()) {
-			// if yukkuri is rude, she will not do furifuri by discipline.
+		} else if (p <= 28 && willingFurifuri()) {
+			// 7/50でふりふり (if yukkuri is rude, she will not do furifuri by discipline)
 			setMessage(GameMessages.getMessage(this, MessagePool.Action.FuriFuri), 30);
 			setFurifuri(true);
 			addStress(-50);
 			stay(30);
-		}
-		// 7/50でふりふりで腹減った
-		else if ((p <= 35 && isHungry()) || isSoHungry()) {
-			// 空腹時
+		} else if ((p <= 35 && isHungry()) || isSoHungry()) {
+			// 7/50でふりふりで腹減った (空腹時)
 			setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry), 30);
 			stay(30);
-		}
-		// 4/50でおもちゃで遊ぶ
-		else if (p <= 39) {
+		} else if (p <= 39) {
+			// 4/50でおもちゃで遊ぶ
 			if (ToyLogic.checkToy(this)) {
 				setPlaying(PlayStyle.BALL);
 				playingLimit = 150 + GameRandom.nextInt(100) - 49;
 				return;
-			} else
+			} else {
 				killTime();
-		}
-		// 3/50でトランポリンで遊ぶ
-		else if (p <= 42) {
+			}
+		} else if (p <= 42) {
+			// 3/50でトランポリンで遊ぶ
 			if (ToyLogic.checkTrampoline(this)) {
 				setPlaying(PlayStyle.TRAMPOLINE);
 				playingLimit = 150 + GameRandom.nextInt(100) - 49;
 				return;
-			} else
+			} else {
 				killTime();
-		}
-		// 1/50ですいーで遊ぶ
-		else if (p <= 43) {
+			}
+		} else if (p <= 43) {
+			// 1/50ですいーで遊ぶ
 			if (ToyLogic.checkSui(this)) {
 				setPlaying(PlayStyle.SUI);
 				playingLimit = 150 + GameRandom.nextInt(100) - 49;
 				return;
-			} else
+			} else {
 				killTime();
+			}
 		} else {
 			// おくるみありで汚れていない場合
 			if (isHasPants() && !isDirty() && GameRandom.nextInt(5) == 0) {
@@ -619,10 +605,8 @@ public class Reimu extends Yukkuri {
 
 	}
 
+	/** Tune parameters. */
 	@Override
-	/**
-	 * Tune parameters.
-	 */
 	public void tuneParameters() {
 		/*
 		 * if (GameRandom.nextBoolean()) {
@@ -630,17 +614,17 @@ public class Reimu extends Yukkuri {
 		 * }
 		 */
 		double factor = Math.random() * 2 + 1;
-		getHungryLimitBase()[AgeState.ADULT.ordinal()] *= factor;
-		getHungryLimitBase()[AgeState.CHILD.ordinal()] *= factor;
-		getHungryLimitBase()[AgeState.BABY.ordinal()] *= factor;
+		getHungryLimitBase()[AgeState.ADULT.ordinal()] = (int) (getHungryLimitBase()[AgeState.ADULT.ordinal()] * factor);
+		getHungryLimitBase()[AgeState.CHILD.ordinal()] = (int) (getHungryLimitBase()[AgeState.CHILD.ordinal()] * factor);
+		getHungryLimitBase()[AgeState.BABY.ordinal()] = (int) (getHungryLimitBase()[AgeState.BABY.ordinal()] * factor);
 		factor = Math.random() * 2 + 1;
-		getShitLimitBase()[AgeState.ADULT.ordinal()] *= factor;
-		getShitLimitBase()[AgeState.CHILD.ordinal()] *= factor;
-		getShitLimitBase()[AgeState.BABY.ordinal()] *= factor;
+		getShitLimitBase()[AgeState.ADULT.ordinal()] = (int) (getShitLimitBase()[AgeState.ADULT.ordinal()] * factor);
+		getShitLimitBase()[AgeState.CHILD.ordinal()] = (int) (getShitLimitBase()[AgeState.CHILD.ordinal()] * factor);
+		getShitLimitBase()[AgeState.BABY.ordinal()] = (int) (getShitLimitBase()[AgeState.BABY.ordinal()] * factor);
 		factor = Math.random() + 0.5;
-		getDamageLimitBase()[AgeState.ADULT.ordinal()] *= factor;
-		getDamageLimitBase()[AgeState.CHILD.ordinal()] *= factor;
-		getDamageLimitBase()[AgeState.BABY.ordinal()] *= factor;
+		getDamageLimitBase()[AgeState.ADULT.ordinal()] = (int) (getDamageLimitBase()[AgeState.ADULT.ordinal()] * factor);
+		getDamageLimitBase()[AgeState.CHILD.ordinal()] = (int) (getDamageLimitBase()[AgeState.CHILD.ordinal()] * factor);
+		getDamageLimitBase()[AgeState.BABY.ordinal()] = (int) (getDamageLimitBase()[AgeState.BABY.ordinal()] * factor);
 		factor = Math.random() + 0.5;
 		setBabyLimitBase((int) (getBabyLimitBase() * factor));
 		setChildLimitBase((int) (getChildLimitBase() * factor));
@@ -656,9 +640,9 @@ public class Reimu extends Yukkuri {
 		setImmunityStrength(GameRandom.nextInt(10) + 1);
 		// EYESIGHT /= 4;
 		factor = Math.random() + 0.5;
-		getStrengthBase()[AgeState.ADULT.ordinal()] *= factor;
-		getStrengthBase()[AgeState.CHILD.ordinal()] *= factor;
-		getStrengthBase()[AgeState.BABY.ordinal()] *= factor;
+		getStrengthBase()[AgeState.ADULT.ordinal()] = (int) (getStrengthBase()[AgeState.ADULT.ordinal()] * factor);
+		getStrengthBase()[AgeState.CHILD.ordinal()] = (int) (getStrengthBase()[AgeState.CHILD.ordinal()] * factor);
+		getStrengthBase()[AgeState.BABY.ordinal()] = (int) (getStrengthBase()[AgeState.BABY.ordinal()] * factor);
 
 		// speed = 120;
 		speed = baseSpeed;

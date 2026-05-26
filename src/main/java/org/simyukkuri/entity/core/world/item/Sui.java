@@ -127,7 +127,7 @@ public class Sui extends WorldEntity {
 		if (b == null) {
 			return false;
 		}
-		if (b.isNYD()) {
+		if (b.isNyd()) {
 			return false;
 		}
 

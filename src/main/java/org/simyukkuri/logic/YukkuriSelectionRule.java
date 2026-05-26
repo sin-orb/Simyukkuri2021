@@ -136,7 +136,7 @@ public class YukkuriSelectionRule {
 			if (childBody.isFirstGround() || childBody.isNewborn() || childBody.getZ() > childBody.getMostDepth()) {
 				continue;
 			}
-			if (childBody.isNYD() || childBody.isNotAllright()) {
+			if (childBody.isNyd() || childBody.isNotAllright()) {
 				continue;
 			}
 			if (!includeChildren) {

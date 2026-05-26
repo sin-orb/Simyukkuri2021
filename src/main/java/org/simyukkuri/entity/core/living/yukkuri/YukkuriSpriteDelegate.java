@@ -4,15 +4,14 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
-
 import org.simyukkuri.Const;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Dimension4y;
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.logic.YukkuriRenderState;
-import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.system.Sprite;
+import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.util.GameImages;
 import org.simyukkuri.util.GameRandom;
 
@@ -21,8 +20,10 @@ import org.simyukkuri.util.GameRandom;
  */
 public final class YukkuriSpriteDelegate {
 	private static BufferedImage[] shadowImages = new BufferedImage[3];
-	private static int[] shadowImgW = new int[3], shadowImgH = new int[3];
-	private static int[] shadowPivX = new int[3], shadowPivY = new int[3];
+	private static int[] shadowImgW = new int[3];
+	private static int[] shadowImgH = new int[3];
+	private static int[] shadowPivX = new int[3];
+	private static int[] shadowPivY = new int[3];
 
 	private final Yukkuri body;
 
@@ -485,7 +486,8 @@ public final class YukkuriSpriteDelegate {
 	 */
 	public static void loadShadowImages(ClassLoader loader, ImageObserver io) throws IOException {
 		final String path = "images/";
-		int sx, sy;
+		int sx;
+		int sy;
 
 		getShadowImages()[Const.ADULT_INDEX] = GameImages.read(loader.getResourceAsStream(path + "shadow.png"));
 

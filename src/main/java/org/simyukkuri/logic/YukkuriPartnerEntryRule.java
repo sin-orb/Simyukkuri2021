@@ -26,7 +26,7 @@ public final class YukkuriPartnerEntryRule {
 		if ((!body.isExciting() && !body.isRude() && body.wantToShit()) || body.nearToBirth()) {
 			return true;
 		}
-		if (body.isNYD()) {
+		if (body.isNyd()) {
 			return true;
 		}
 		if (body.getCurrentEvent() != null && body.getCurrentEvent().getPriority() != EventPriority.LOW) {

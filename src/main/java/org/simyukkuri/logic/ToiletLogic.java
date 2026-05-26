@@ -3,7 +3,6 @@ package org.simyukkuri.logic;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -17,12 +16,12 @@ import org.simyukkuri.enums.TakeoutItemType;
 import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.field.impl.Barrier;
 import org.simyukkuri.system.MessagePool;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
-import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * トイレ関係の処理
  */
 public class ToiletLogic {
@@ -60,8 +59,9 @@ public class ToiletLogic {
 	public static final boolean checkShit(Yukkuri body, WorldState ws) {
 		// A.トイレ行動中止
 		// 毎フレームチェックは重いのでインターバル
-		if (body.getAge() % 15 != 0)
+		if (body.getAge() % 15 != 0) {
 			return false;
+		}
 		if (body.canAction() == false || body.isIdiot() || body.isExciting() || body.nearToBirth()) {
 			return false;
 		}
@@ -69,18 +69,16 @@ public class ToiletLogic {
 			return false;
 		}
 		// 非ゆっくり症の場合
-		if (body.isNYD()) {
+		if (body.isNyd()) {
 			return false;
 		}
 
-		boolean shouldReturn = false;
-		int collisionX = body.getCollisionX();
 		boolean hasShit = false;
 		if (body.getCarryItem(TakeoutItemType.SHIT) != null) {
 			hasShit = true;
 		}
 
-		List<Toilet> toiletList = new LinkedList<>(ws.getToilets().values());
+		final List<Toilet> toiletList = new LinkedList<>(ws.getToilets().values());
 		List<Shit> shitList = new LinkedList<>(ws.getShit().values());
 		if (shitList == null || shitList.size() == 0) {
 			return false;
@@ -90,10 +88,10 @@ public class ToiletLogic {
 		// 子供のうんうんを運ぶする余裕が有るか
 		boolean canTransport = true;
 		// 前回チェックしたうんうんどれいがまだいるなら自分で運ばない
-		if (bodyUnunSlave != null &&
-				bodyUnunSlave.getPublicRank() == PublicRank.UNUN_SLAVE &&
-				!bodyUnunSlave.isDead() &&
-				!bodyUnunSlave.isRemoved()) {
+		if (bodyUnunSlave != null
+				&& bodyUnunSlave.getPublicRank() == PublicRank.UNUN_SLAVE
+				&& !bodyUnunSlave.isDead()
+				&& !bodyUnunSlave.isRemoved()) {
 			canTransport = false;
 		} else {
 			if (body.isDontMove() || body.isDamaged() || body.isFeelPain() == true || body.isSoHungry() == true) {
@@ -120,10 +118,12 @@ public class ToiletLogic {
 		boolean foundMyToilet = false;
 		if (canTransport) {
 			for (Shit s : shitList) {
-				if (s.getZ() != body.getZ())
+				if (s.getZ() != body.getZ()) {
 					continue;
-				if (body.getUniqueID() == s.getOwnerId())
+				}
+				if (body.getUniqueId() == s.getOwnerId()) {
 					continue;
+				}
 
 				// 壁があるなら無視
 				if (Barrier.acrossBarrier(body.getX(), body.getY(), s.getX(), s.getY(),
@@ -140,7 +140,8 @@ public class ToiletLogic {
 						} else {
 							// 壁があるなら無視
 							if (!Barrier.acrossBarrier(body.getX(), body.getY(), t.getX(), t.getY(),
-									Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+									Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]
+									+ Barrier.BARRIER_KEKKAI)) {
 								foundMyToilet = true;
 								break;
 							}
@@ -158,9 +159,12 @@ public class ToiletLogic {
 
 		// C.うんうん探索
 		// うんうんが近くにあるかチェック
+		boolean shouldReturn = false;
+		int collisionX = body.getCollisionX();
 		for (Shit s : shitList) {
-			if (s.getZ() != body.getZ())
+			if (s.getZ() != body.getZ()) {
 				continue;
+			}
 			// 壁があるなら無視
 			if (Barrier.acrossBarrier(body.getX(), body.getY(), s.getX(), s.getY(),
 					Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
@@ -174,7 +178,7 @@ public class ToiletLogic {
 				Yukkuri owner = null;
 				for (Map.Entry<Integer, Yukkuri> entry : ws.getYukkuriRegistry().entrySet()) {
 					Yukkuri otherBody = entry.getValue();
-					if (otherBody.getUniqueID() == bodyOwnerId) {
+					if (otherBody.getUniqueId() == bodyOwnerId) {
 						owner = otherBody;
 						break;
 					}
@@ -214,13 +218,13 @@ public class ToiletLogic {
 							&& body.getIntelligence() == Intelligence.FOOL && GameRandom.nextBoolean()) {
 						body.setForceFace(ImageCode.PUFF.ordinal());
 						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ShitIntimidation), false);
-					}
-					// ついでに足りないゆも
-					else if (body.isIdiot() && GameRandom.nextBoolean()) {
+					} else if (body.isIdiot() && GameRandom.nextBoolean()) {
+						// ついでに足りないゆも
 						body.setForceFace(ImageCode.PUFF.ordinal());
 						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ShitIntimidation), false);
-					} else
+					} else {
 						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateShit), false);
+					}
 					body.addStress(5);
 					shouldReturn = true;
 					break;
@@ -259,7 +263,7 @@ public class ToiletLogic {
 			return false;
 		}
 		// 非ゆっくり症の場合
-		if (body.isNYD()) {
+		if (body.isNyd()) {
 			return false;
 		}
 		if (body.getCurrentEvent() != null && body.getCurrentEvent().getPriority() != EventPacket.EventPriority.LOW) {
@@ -294,9 +298,8 @@ public class ToiletLogic {
 						body.dropTakeoutItem(TakeoutItemType.SHIT);
 						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateShit));
 						body.addStress(10);
-					}
-					// うんうんを持ち歩いていない場合
-					else {
+					} else {
+						// うんうんを持ち歩いていない場合
 						return false;
 					}
 				}
@@ -308,8 +311,9 @@ public class ToiletLogic {
 					Toilet t = entry.getValue();
 					// 自動清掃でないトイレに入った時の反応
 					if (!t.getAutoClean() && t.checkHitObj(null, body) && !body.isTalking()) {
-						if (body.isSleeping())
+						if (body.isSleeping()) {
 							body.wakeup();
+						}
 						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateShit));
 						body.runAway(t.getX(), t.getY());
 						break;
@@ -355,14 +359,12 @@ public class ToiletLogic {
 							body.stay();
 						}
 					}
-				}
-				// うんうんをしたい時は待機状態へ
-				else {
+				} else {
+					// うんうんをしたい時は待機状態へ
 					body.stay();
 				}
-			}
-			// 未到着の場合
-			else {
+			} else {
+				// 未到着の場合
 				body.moveTo(target.getX(), target.getY(), 0);
 			}
 			return true;
@@ -391,17 +393,17 @@ public class ToiletLogic {
 				// うんうん奴隷の場合
 				if (publicRank == PublicRank.UNUN_SLAVE) {
 					// うんうん奴隷用じゃないならスキップ
-					if (!((Toilet) t).isForSlave()) {
+					if (!t.isForSlave()) {
 						continue;
 					}
 				}
 				if (targetToilet != null) {
 					// うんうん奴隷用トイレを優先する
-					if ((targetToilet.isForSlave()) && !((Toilet) t).isForSlave()) {
+					if ((targetToilet.isForSlave()) && !t.isForSlave()) {
 						continue;
 					}
 				}
-				targetToilet = (Toilet) t;
+				targetToilet = t;
 				minDistance = distance;
 			}
 		}

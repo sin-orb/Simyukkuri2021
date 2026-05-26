@@ -10,7 +10,7 @@ import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameText;
 
-/***************************************************
+/**
  * ぺに切りの反応イベント
  * protected Yukkuri from; // イベントを発した個体
  * protected Yukkuri to; // 攻撃対象
@@ -53,8 +53,9 @@ public class CutPenipeniEvent extends EventPacket {
 
 		setHighPriority();
 		Yukkuri fromBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
-		if (body == fromBody)
+		if (body == fromBody) {
 			return true;
+		}
 		return false;
 	}
 
@@ -104,18 +105,19 @@ public class CutPenipeniEvent extends EventPacket {
 		} else if (tick == 20) {
 			// 驚く
 			body.setLockmove(false);
-			if (body.isNotNYD()) {
+			if (body.isNotNyd()) {
 				body.setForceFace(ImageCode.SURPRISE.ordinal());
-				if (GameRandom.nextInt(2) == 0)
+				if (GameRandom.nextInt(2) == 0) {
 					body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.Scream2), 30, true,
 							false);
-				else
+				} else {
 					body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.Surprise), 30, true,
 							false);
+				}
 			}
 		} else if (tick == 40) {
 			// 反応する
-			if (body.isNotNYD()) {
+			if (body.isNotNyd()) {
 				body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.PenipeniCutting), 50, true,
 						true);
 				body.setHappiness(Happiness.VERY_SAD);
@@ -144,8 +146,9 @@ public class CutPenipeniEvent extends EventPacket {
 					break;
 			}
 		} else if (tick == 70) {
-			if (GameRandom.nextBoolean())
+			if (GameRandom.nextBoolean()) {
 				body.doYunnyaa(true);
+			}
 			return UpdateState.FORCE_EXEC;
 		}
 		tick++;
@@ -161,12 +164,12 @@ public class CutPenipeniEvent extends EventPacket {
 	}
 
 	// イベント終了処理
-	@Override
 	/**
 	 * End.
 	 *
 	 * @param body the body
 	 */
+	@Override
 	public void end(Yukkuri body) {
 		body.setCalm();
 		body.setPenipeniCutted(true);

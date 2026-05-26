@@ -2,7 +2,6 @@ package org.simyukkuri.logic;
 
 import java.util.List;
 import java.util.Map;
-
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -47,22 +46,22 @@ public final class FoodSearchPolicy {
 	 * @return 対象を発見した場合はそのオブジェクト、見つからない場合は null
 	 */
 	public static Entity searchFoodStandard(Yukkuri body, boolean[] forceEat, WorldState ws) {
-		Entity targetObject = null;
-		Entity takeoutTargetObject = null;
-		int minDistance = body.getEyesightBase();
-		int looks = -1000;
 		int wallMode = body.getAgeState().ordinal();
 		forceEat[0] = false;
 		if (body.canflyCheck()) {
 			wallMode = AgeState.ADULT.ordinal();
 		}
 
+		Entity targetObject = null;
 		if (body.isSoHungry()) {
 			if (body.getCarryItem(TakeoutItemType.FOOD) != null) {
 				targetObject = body.dropTakeoutItem(TakeoutItemType.FOOD);
 			}
 		}
 
+		Entity takeoutTargetObject = null;
+		int minDistance = body.getEyesightBase();
+		int looks = -1000;
 		for (Map.Entry<Integer, Food> entry : ws.getFoods().entrySet()) {
 			Food f = entry.getValue();
 			if (f.isEmpty()) {
@@ -172,11 +171,11 @@ public final class FoodSearchPolicy {
 				if (plantBody == body) {
 					continue;
 				}
-				if (plantBody.getBurialState() != BurialState.ALL &&
-						!(plantBody.getBurialState() == BurialState.NEARLY_ALL && !plantBody.hasOkazari())) {
+				if (plantBody.getBurialState() != BurialState.ALL
+						&& !(plantBody.getBurialState() == BurialState.NEARLY_ALL && !plantBody.hasOkazari())) {
 					continue;
 				}
-				List<Integer> babyList = ((Stalk) s).getAttachedBabyIds();
+				List<Integer> babyList = s.getAttachedBabyIds();
 				if (babyList != null && babyList.size() != 0) {
 					boolean hasBaby = false;
 					for (int babyId : babyList) {

@@ -1,7 +1,6 @@
 package org.simyukkuri.entity.core.living.yukkuri;
 
 import java.awt.Color;
-
 import org.simyukkuri.draw.Color4y;
 import org.simyukkuri.enums.WindowType;
 import org.simyukkuri.logic.YukkuriEventState;
@@ -28,27 +27,6 @@ public final class YukkuriMessageDelegate {
 	 */
 	public void setMessage(String message) {
 		YukkuriEventState.setMessage(body, message);
-	}
-
-	/**
-	 * ピコピコ付きメッセージを出す.
-	 *
-	 * @param message メッセージ
-	 * @param interrupt 割り込み可否
-	 */
-	public void setPikoMessage(String message, boolean interrupt) {
-		YukkuriEventState.setPikoMessage(body, message, interrupt);
-	}
-
-	/**
-	 * 時間指定のピコピコ付きメッセージを出す.
-	 *
-	 * @param message メッセージ
-	 * @param count メッセージ時間
-	 * @param interrupt 割り込み可否
-	 */
-	public void setPikoMessage(String message, int count, boolean interrupt) {
-		YukkuriEventState.setPikoMessage(body, message, count, interrupt);
 	}
 
 	/**
@@ -81,6 +59,41 @@ public final class YukkuriMessageDelegate {
 	 */
 	public void setMessage(String message, int count, boolean interrupt, boolean piko) {
 		YukkuriEventState.setMessage(body, message, count, interrupt, piko);
+	}
+
+	/**
+	 * メッセージ送出の共通実装を呼ぶ.
+	 *
+	 * @param message メッセージ
+	 * @param type ウィンドウ種別
+	 * @param count メッセージ時間
+	 * @param interrupt 割り込み可否
+	 * @param piko ピコピコ可否
+	 * @param nyd 非ゆっくり症用かどうか
+	 */
+	public void setMessage(String message, WindowType type, int count, boolean interrupt, boolean piko, boolean nyd) {
+		YukkuriEventState.setMessage(body, message, type, count, interrupt, piko, nyd);
+	}
+
+	/**
+	 * ピコピコ付きメッセージを出す.
+	 *
+	 * @param message メッセージ
+	 * @param interrupt 割り込み可否
+	 */
+	public void setPikoMessage(String message, boolean interrupt) {
+		YukkuriEventState.setPikoMessage(body, message, interrupt);
+	}
+
+	/**
+	 * 時間指定のピコピコ付きメッセージを出す.
+	 *
+	 * @param message メッセージ
+	 * @param count メッセージ時間
+	 * @param interrupt 割り込み可否
+	 */
+	public void setPikoMessage(String message, int count, boolean interrupt) {
+		YukkuriEventState.setPikoMessage(body, message, count, interrupt);
 	}
 
 	/**
@@ -135,20 +148,6 @@ public final class YukkuriMessageDelegate {
 	 */
 	public void setNydMessage(String message, boolean piko) {
 		YukkuriEventState.setNydMessage(body, message, piko);
-	}
-
-	/**
-	 * メッセージ送出の共通実装を呼ぶ.
-	 *
-	 * @param message メッセージ
-	 * @param type ウィンドウ種別
-	 * @param count メッセージ時間
-	 * @param interrupt 割り込み可否
-	 * @param piko ピコピコ可否
-	 * @param NYD 非ゆっくり症用かどうか
-	 */
-	public void setMessage(String message, WindowType type, int count, boolean interrupt, boolean piko, boolean NYD) {
-		YukkuriEventState.setMessage(body, message, type, count, interrupt, piko, NYD);
 	}
 
 	/**

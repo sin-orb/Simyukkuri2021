@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
@@ -58,8 +57,9 @@ public class BodyRenderingTest {
                 clazz = clazz.getSuperclass();
             }
         }
-        if (field == null)
+        if (field == null) {
             throw new NoSuchFieldException(fieldName);
+        }
         field.setAccessible(true);
         field.set(obj, value);
     }
@@ -124,7 +124,8 @@ public class BodyRenderingTest {
         // damageState is calculated from damage field.
         // For Adult, limit is 16800. 16800 / 2 = 8400.
         body.setDamage(8400);
-        assertTrue(body.getDamageState() != Damage.NONE,
+        assertTrue(
+                body.getDamageState() != Damage.NONE,
                 "Damage state should not be NONE, was: " + body.getDamageState());
 
         body.setWet(true);

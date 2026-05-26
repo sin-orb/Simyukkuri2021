@@ -1,4 +1,5 @@
 package org.simyukkuri.enums;
+
 /** メッセージ表示の際のウィンドウタイプ。 */
 public enum WindowType {
 	/** 普通 */NORMAL,

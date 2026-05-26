@@ -3,7 +3,6 @@ package org.simyukkuri.util;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Map;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
@@ -29,11 +28,13 @@ public class BodyUtilTest {
         img = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
         g2 = img.createGraphics();
         try {
-            java.lang.reflect.Field imagePackField = org.simyukkuri.entity.core.living.yukkuri.impl.Marisa.class
-                    .getDeclaredField("imagePack");
+            java.lang.reflect.Field imagePackField =
+                    org.simyukkuri.entity.core.living.yukkuri.impl.Marisa.class.getDeclaredField(
+                            "imagePack");
             imagePackField.setAccessible(true);
-            BufferedImage[][][][] dummyPack = new BufferedImage[org.simyukkuri.enums.YukkuriRank
-                    .values().length][200][20][20];
+            BufferedImage[][][][] dummyPack =
+                    new BufferedImage[org.simyukkuri.enums.YukkuriRank.values().length][200][20][
+                            20];
             BufferedImage dummyImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
             for (int i = 0; i < dummyPack.length; i++) {
                 for (int j = 0; j < 200; j++) {
@@ -62,9 +63,11 @@ public class BodyUtilTest {
     }
 
     private void mockSprites(Yukkuri body) {
-        body.setSpriteSet(new Sprite[] { createMockSprite(), createMockSprite(), createMockSprite() });
-        body.setExpandSpr(new Sprite[] { createMockSprite(), createMockSprite(), createMockSprite() });
-        body.setBraidSpr(new Sprite[] { createMockSprite(), createMockSprite(), createMockSprite() });
+        body.setSpriteSet(
+                new Sprite[] {createMockSprite(), createMockSprite(), createMockSprite()});
+        body.setExpandSpr(
+                new Sprite[] {createMockSprite(), createMockSprite(), createMockSprite()});
+        body.setBraidSpr(new Sprite[] {createMockSprite(), createMockSprite(), createMockSprite()});
     }
 
     @Test
@@ -85,7 +88,7 @@ public class BodyUtilTest {
             body.setDirection(dir);
             for (AgeState age : AgeState.values()) {
                 body.setAgeState(age);
-                for (int force : new int[] { -10, 0, 10 }) {
+                for (int force : new int[] {-10, 0, 10}) {
                     body.setExternalPressure(force);
                     YukkuriUtil.drawYukkuri(g2, null, body);
                 }
@@ -130,7 +133,7 @@ public class BodyUtilTest {
         body.setFurifuri(true);
         YukkuriUtil.drawYukkuri(g2, null, body);
         body.setImageNagasiMode(true);
-        for (int age : new int[] { 0, 2, 4 }) {
+        for (int age : new int[] {0, 2, 4}) {
             body.setAge(age);
             YukkuriUtil.drawYukkuri(g2, null, body);
         }
@@ -159,16 +162,16 @@ public class BodyUtilTest {
         mockSprites(parent);
         parent.setZ(-10);
         body.setZ(0);
-        parent.setUniqueID(999);
+        parent.setUniqueId(999);
         try {
             java.lang.reflect.Field mapBodyField = WorldState.class.getDeclaredField("body");
             mapBodyField.setAccessible(true);
-            ((Map<Integer, Yukkuri>) mapBodyField.get(SimYukkuri.world.getCurrentWorldState())).put(
-                    parent.getUniqueID(),
-                    parent);
+            ((Map<Integer, Yukkuri>) mapBodyField.get(SimYukkuri.world.getCurrentWorldState()))
+                    .put(parent.getUniqueId(), parent);
         } catch (Exception e) {
+            // ignore
         }
-        body.setParentLinkId(parent.getUniqueID());
+        body.setParentLinkId(parent.getUniqueId());
         parent.setExciting(true);
         YukkuriUtil.drawYukkuri(g2, null, body);
         parent.setExciting(false);
@@ -228,11 +231,13 @@ public class BodyUtilTest {
 
         // Boundary check (Translate.fieldH < y)
         try {
-            java.lang.reflect.Field fieldH = org.simyukkuri.draw.Translate.class.getDeclaredField("fieldH");
+            java.lang.reflect.Field fieldH =
+                    org.simyukkuri.draw.Translate.class.getDeclaredField("fieldH");
             fieldH.setAccessible(true);
             fieldH.setInt(null, 500);
             YukkuriUtil.drawYukkuri(g2, 0, 0, img, 0, 600, 100, 100, 100, 100, null);
         } catch (Exception e) {
+            // ignore
         }
     }
 

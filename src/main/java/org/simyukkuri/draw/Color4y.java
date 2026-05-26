@@ -14,10 +14,14 @@ public class Color4y implements Serializable {
 	private int green;
 	private int alpha;
 
-	/** 値を0-255の範囲にクランプする */
+	/** 値を0-255の範囲にクランプする。 */
 	private static int clamp(int value) {
-		if (value < 0) return 0;
-		if (value > 255) return 255;
+		if (value < 0) {
+			return 0;
+		}
+		if (value > 255) {
+			return 255;
+		}
 		return value;
 	}
 
@@ -29,6 +33,7 @@ public class Color4y implements Serializable {
 	public int getRed() {
 		return red;
 	}
+
 	/**
 	 * 赤チャンネル値をセットする。0–255 にクランプされる。
 	 *
@@ -37,6 +42,7 @@ public class Color4y implements Serializable {
 	public void setRed(int red) {
 		this.red = clamp(red);
 	}
+
 	/**
 	 * 青チャンネル値（0–255）を返す。
 	 *
@@ -45,6 +51,7 @@ public class Color4y implements Serializable {
 	public int getBlue() {
 		return blue;
 	}
+
 	/**
 	 * 青チャンネル値をセットする。0–255 にクランプされる。
 	 *
@@ -53,6 +60,7 @@ public class Color4y implements Serializable {
 	public void setBlue(int blue) {
 		this.blue = clamp(blue);
 	}
+
 	/**
 	 * 緑チャンネル値（0–255）を返す。
 	 *
@@ -61,6 +69,7 @@ public class Color4y implements Serializable {
 	public int getGreen() {
 		return green;
 	}
+
 	/**
 	 * 緑チャンネル値をセットする。0–255 にクランプされる。
 	 *
@@ -69,6 +78,7 @@ public class Color4y implements Serializable {
 	public void setGreen(int green) {
 		this.green = clamp(green);
 	}
+
 	/**
 	 * アルファ（不透明度）チャンネル値（0–255）を返す。
 	 *
@@ -77,6 +87,7 @@ public class Color4y implements Serializable {
 	public int getAlpha() {
 		return alpha;
 	}
+
 	/**
 	 * アルファチャンネル値をセットする。0–255 にクランプされる。
 	 *
@@ -97,7 +108,7 @@ public class Color4y implements Serializable {
 	}
 
 	/**
-	 * RGBA 各チャンネルを指定して初期化する。各値は 0–255 にクランプされる。
+	 * RGBA 各チャンネルを指定して初期化する. 各値は 0–255 にクランプされる。
 	 *
 	 * @param red   赤チャンネル値
 	 * @param green 緑チャンネル値

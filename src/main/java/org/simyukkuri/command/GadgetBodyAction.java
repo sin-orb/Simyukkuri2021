@@ -3,7 +3,6 @@ package org.simyukkuri.command;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -99,24 +98,27 @@ public class GadgetBodyAction {
 				shouldGivePants = !((Yukkuri) targetObject).isHasPants();
 			}
 			for (Yukkuri body : bodyList) {
-				if (!shouldGivePants && body.isHasPants())
+				if (!shouldGivePants && body.isHasPants()) {
 					body.takePants();
-				else if (shouldGivePants && !body.isHasPants())
+				} else if (shouldGivePants && !body.isHasPants()) {
 					body.givePants();
+				}
 			}
 		} else if (ev.isControlDown()) {
 			for (Yukkuri body : bodyList) {
-				if (body.isHasPants())
+				if (body.isHasPants()) {
 					body.takePants();
-				else
+				} else {
 					body.givePants();
+				}
 			}
 		} else {
 			if (targetObject instanceof Yukkuri) {
-				if (((Yukkuri) targetObject).isHasPants())
+				if (((Yukkuri) targetObject).isHasPants()) {
 					((Yukkuri) targetObject).takePants();
-				else
+				} else {
 					((Yukkuri) targetObject).givePants();
+				}
 			}
 		}
 	}

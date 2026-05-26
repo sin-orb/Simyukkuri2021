@@ -1,21 +1,19 @@
 package org.simyukkuri.entity.core.world.mobile;
 
-//import java.awt.Point;
+// import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-
 import org.simyukkuri.Const;
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Translate;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Numbering;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.field.impl.Barrier;
@@ -40,7 +38,7 @@ public class Shit extends Entity {
 	/** うんうんの状態数 */
 	public static final int NUM_OF_SHIT_STATE = 3;
 
-	private static final int SHITLIMIT[] = { 100 * 24 * 2, 100 * 24 * 4, 100 * 24 * 8 };
+	private static final int[] SHITLIMIT = { 100 * 24 * 2, 100 * 24 * 4, 100 * 24 * 8 };
 	/** うんうんをしたゆっくりの名前。toString用 */
 	private String ownerName;
 	/** うんうんをしたゆっくりのUniqueID。誰がしたうんうんか？で子供のだったらトイレに運ぶ、とかの処理が可能 */
@@ -59,7 +57,7 @@ public class Shit extends Entity {
 			GameText.read("game_middle"),
 			GameText.read("game_big") };
 
-	private static final int value[] = { 50, 100, 300 };
+	private static final int[] value = { 50, 100, 300 };
 
 	private static BufferedImage[][][] images = null;
 	private static int[][] imgW = null;
@@ -84,11 +82,13 @@ public class Shit extends Entity {
 		pivX = new int[name.length][3];
 		pivY = new int[name.length][3];
 
-		int sx, sy;
+		int sx;
+		int sy;
 
 		for (int i = 0; i < name.length; i++) {
-			if (name[i].getImageDirName().length() == 0)
+			if (name[i].getImageDirName().length() == 0) {
 				continue;
+			}
 
 			images[i][SHIT_NORMAL][Const.ADULT_INDEX] = ImageIO
 					.read(loader.getResourceAsStream(path + name[i].getImageDirName() + "/unun.png"));
@@ -113,8 +113,9 @@ public class Shit extends Entity {
 		}
 		for (int i = 0; i < name.length; i++) {
 			for (int j = 0; j < 3; j++) {
-				if (images[i][0][j] == null)
+				if (images[i][0][j] == null) {
 					continue;
+				}
 				imgW[i][j] = images[i][0][j].getWidth(io);
 				imgH[i][j] = images[i][0][j].getHeight(io);
 				pivX[i][j] = imgW[i][j] >> 1;
@@ -175,7 +176,7 @@ public class Shit extends Entity {
 		objType = Type.SHIT;
 		shitType = type.ordinal();
 		ownerName = GameLocale.isJapanese() ? b.getNameJ() : b.getNameE();
-		ownerId = b.getUniqueID();
+		ownerId = b.getUniqueId();
 		x = initX;
 		y = initY;
 		z = initZ;
@@ -229,7 +230,7 @@ public class Shit extends Entity {
 	 * うんうんをキックする,
 	 */
 	public void kick() {
-		int blowLevel[] = { -6, -5, -4 };
+		int[] blowLevel = { -6, -5, -4 };
 		kick(0, blowLevel[ageState.ordinal()] * 2, blowLevel[ageState.ordinal()]);
 	}
 

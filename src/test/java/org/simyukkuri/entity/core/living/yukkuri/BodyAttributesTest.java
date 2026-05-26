@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -139,9 +138,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // 初期値・基本 getter/setter
-    // ===========================================
 
     @Test
     public void testInitialValues() {
@@ -315,9 +312,7 @@ public class BodyAttributesTest {
         assertEquals(50, body.getStress());
     }
 
-    // ===========================================
     // setAgeState / getAgeState
-    // ===========================================
 
     @Nested
     class AgeStateTests {
@@ -380,9 +375,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // ダメージ判定
-    // ===========================================
 
     @Nested
     class DamageTests {
@@ -428,9 +421,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // 痛み・破裂判定
-    // ===========================================
 
     @Nested
     class PainAndBurstTests {
@@ -486,9 +477,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // 性格判定 (Attitude)
-    // ===========================================
 
     @Nested
     class AttitudeTests {
@@ -530,9 +519,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // 空腹関連
-    // ===========================================
 
     @Nested
     class HungerTests {
@@ -602,9 +589,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // ストレス関連
-    // ===========================================
 
     @Nested
     class StressTests {
@@ -665,9 +650,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // うんうん関連
-    // ===========================================
 
     @Nested
     class ShitTests {
@@ -724,9 +707,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // 死亡ガードつき状態チェック (dead && flag)
-    // ===========================================
 
     @Nested
     class DeadGuardTests {
@@ -815,9 +796,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // 親子関連
-    // ===========================================
 
     @Nested
     class FamilyTests {
@@ -844,9 +823,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // あんこ量
-    // ===========================================
 
     @Nested
     class AmountTests {
@@ -883,9 +860,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // 病気関連
-    // ===========================================
 
     @Nested
     class SickTests {
@@ -959,36 +934,32 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // 非ゆっくり症 (NYD)
-    // ===========================================
 
     @Nested
     class NYDTests {
         @Test
         public void testIsNYDDefault() {
             body.setCoreAnkoState(CoreAnkoState.NORMAL);
-            assertFalse(body.isNYD());
-            assertTrue(body.isNotNYD());
+            assertFalse(body.isNyd());
+            assertTrue(body.isNotNyd());
         }
 
         @Test
         public void testIsNYDNear() {
             body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE_NEAR);
-            assertTrue(body.isNYD());
-            assertFalse(body.isNotNYD());
+            assertTrue(body.isNyd());
+            assertFalse(body.isNotNyd());
         }
 
         @Test
         public void testIsNYDDisease() {
             body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
-            assertTrue(body.isNYD());
+            assertTrue(body.isNyd());
         }
     }
 
-    // ===========================================
     // 老ゆ判定
-    // ===========================================
 
     @Nested
     class OldTests {
@@ -1005,9 +976,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // 眠気
-    // ===========================================
 
     @Nested
     class SleepTests {
@@ -1034,9 +1003,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // 発情関連
-    // ===========================================
 
     @Nested
     class ExcitingTests {
@@ -1063,9 +1030,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // アタッチメント管理
-    // ===========================================
 
     @Nested
     class AttachmentTests {
@@ -1080,7 +1045,7 @@ public class BodyAttributesTest {
                 b.getExpandSpr()[i] = new Sprite();
                 b.getBraidSpr()[i] = new Sprite();
             }
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
             TestAttachment a = new TestAttachment(b);
             b.addAttachment(a);
             assertEquals(1, b.getAttachmentSize(TestAttachment.class));
@@ -1098,7 +1063,7 @@ public class BodyAttributesTest {
                 b.getExpandSpr()[i] = new Sprite();
                 b.getBraidSpr()[i] = new Sprite();
             }
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
             TestAttachment a = new TestAttachment(b);
             b.addAttachment(a);
             b.removeAttachment(TestAttachment.class);
@@ -1106,9 +1071,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // 足焼き・体焼き
-    // ===========================================
 
     @Nested
     class BakeTests {
@@ -1199,9 +1162,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // 舌の肥え度
-    // ===========================================
 
     @Nested
     class TangTests {
@@ -1232,9 +1193,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // あまあまへの慣れ
-    // ===========================================
 
     @Nested
     class AmaamaDisciplineTests {
@@ -1260,9 +1219,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // プレイヤーへの愛
-    // ===========================================
 
     @Nested
     class LovePlayerTests {
@@ -1299,9 +1256,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // 思い出 (addMemories)
-    // ===========================================
 
     @Nested
     class MemoriesTests {
@@ -1346,9 +1301,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // 幸福度 (setHappiness)
-    // ===========================================
 
     @Nested
     class HappinessTests {
@@ -1397,9 +1350,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // canFurifuri
-    // ===========================================
 
     @Nested
     class FurifuriTests {
@@ -1429,9 +1380,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // Dequeue系
-    // ===========================================
 
     @Nested
     class DequeueTests {
@@ -1468,9 +1417,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // equals / hashCode / compareTo
-    // ===========================================
 
     @Nested
     class EqualsAndHashCodeTests {
@@ -1481,7 +1428,8 @@ public class BodyAttributesTest {
 
         @Test
         public void testEqualsWrongType() {
-            assertFalse(body.equals("string"));
+            Object wrongType = "string";
+            assertFalse(body.equals(wrongType));
         }
 
         @Test
@@ -1534,9 +1482,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // setCantDie / getSellingPrice
-    // ===========================================
 
     @Nested
     class MiscTests {
@@ -1565,9 +1511,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // getBurstState
-    // ===========================================
 
     @Nested
     class BurstStateTests {
@@ -1620,9 +1564,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // getDamageState
-    // ===========================================
 
     @Nested
     class DamageStateTests {
@@ -1663,9 +1605,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // getTangType
-    // ===========================================
 
     @Nested
     class TangTypeTests {
@@ -1688,9 +1628,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // addLovePlayer
-    // ===========================================
 
     @Nested
     class AddLovePlayerTests {
@@ -1726,9 +1664,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // addMemories (Intelligence switch)
-    // ===========================================
 
     @Nested
     class MemoriesIntelligenceTests {
@@ -1778,9 +1714,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // findSick (Intelligence switch)
-    // ===========================================
 
     @Nested
     class FindSickTests {
@@ -1836,9 +1770,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // setHappiness
-    // ===========================================
 
     @Nested
     class SetHappinessTests {
@@ -1911,9 +1843,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // PurposeOfMoving (移動目的)
-    // ===========================================
 
     @Nested
     class PurposeOfMovingTests {
@@ -2016,9 +1946,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // isVain / isNobinobi / isFurifuri
-    // ===========================================
 
     @Nested
     class ActionStateTests {
@@ -2145,9 +2073,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // getSellingPrice / getWeight
-    // ===========================================
 
     @Nested
     class PriceAndWeightTests {
@@ -2171,9 +2097,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // getStep / getStepDist / getCollision
-    // ===========================================
 
     @Nested
     class MovementTests {
@@ -2221,9 +2145,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // Sprite getters
-    // ===========================================
 
     @Nested
     class SpriteTests {
@@ -2249,9 +2171,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // isStressful / isVeryStressful
-    // ===========================================
 
     @Nested
     class StressLevelTests {
@@ -2288,9 +2208,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // getBabyTypesDequeue / getStalksDequeue
-    // ===========================================
 
     @Nested
     class BabyAndStalkTests {
@@ -2319,9 +2237,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // antCount
-    // ===========================================
 
     @Nested
     class AntsTests {
@@ -2352,9 +2268,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // isGotBurned / isGotBurnedHeavily (詳細)
-    // ===========================================
 
     @Nested
     class BurnedDetailTests {
@@ -2403,9 +2317,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // isDirty / isNormalDirty
-    // ===========================================
 
     @Nested
     class DirtyTests {
@@ -2461,9 +2373,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // isShitting / isSleeping
-    // ===========================================
 
     @Nested
     class ShittingAndSleepingTests {
@@ -2496,9 +2406,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // isForceExciting
-    // ===========================================
 
     @Nested
     class ForceExcitingTests {
@@ -2535,9 +2443,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // isEatenByAnimals / removeAnts
-    // ===========================================
 
     @Nested
     class EatenByAnimalsTests {
@@ -2555,9 +2461,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // resetAttachmentBoundary
-    // ===========================================
 
     @Nested
     class AttachmentBoundaryTests {
@@ -2578,16 +2482,14 @@ public class BodyAttributesTest {
                 b.getExpandSpr()[i] = new Sprite();
                 b.getBraidSpr()[i] = new Sprite();
             }
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
             TestAttachment a = new TestAttachment(b);
             b.addAttachment(a);
             b.resetAttachmentBoundary(); // should not throw
         }
     }
 
-    // ===========================================
     // addChildrenList / removeChildrenList (with real Yukkuri instances)
-    // ===========================================
 
     @Nested
     class ChildrenListTests {
@@ -2601,7 +2503,7 @@ public class BodyAttributesTest {
                 b.getExpandSpr()[i] = new Sprite();
                 b.getBraidSpr()[i] = new Sprite();
             }
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
             return b;
         }
 
@@ -2706,9 +2608,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // getDiarrhea (RND dependent but has deterministic branches)
-    // ===========================================
 
     @Nested
     class DiarrheaTests {
@@ -2753,9 +2653,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // willingFurifuri (RND dependent)
-    // ===========================================
 
     @Nested
     class WillingFurifuriTests {
@@ -2800,9 +2698,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // getCarryItem (WorldState dependent)
-    // ===========================================
 
     @Nested
     class TakeoutItemTests {
@@ -2866,9 +2762,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // Misc boolean getters (dead-dependent: isAngry, isScare)
-    // ===========================================
 
     @Nested
     class MiscDeadDependentTests {
@@ -2901,9 +2795,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // Misc boolean getters (NOT dead-dependent - just return field)
-    // ===========================================
 
     @Nested
     class MiscBooleanGetterTests {
@@ -2972,9 +2864,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // Simple boolean getters (not dead-dependent)
-    // ===========================================
 
     @Nested
     class SimpleBooleanGetterTests {
@@ -3225,9 +3115,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // addStress
-    // ===========================================
 
     @Nested
     class AddStressDetailedTests {
@@ -3273,9 +3161,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // setHappiness RND制御テスト
-    // ===========================================
 
     @Nested
     class SetHappinessRndTests {
@@ -3298,9 +3184,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // isOverPregnantLimit テスト (Yukkuri method)
-    // ===========================================
 
     @Nested
     class IsOverPregnantLimitTests {
@@ -3380,9 +3264,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // getDiarrhea RND分岐テスト
-    // ===========================================
 
     @Nested
     class GetDiarrheaRndTests {
@@ -3431,9 +3313,7 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // willingFurifuri RND分岐テスト追加
-    // ===========================================
 
     @Nested
     class WillingFurifuriRndTests {
@@ -3474,15 +3354,13 @@ public class BodyAttributesTest {
         }
     }
 
-    // ===========================================
     // setHappiness NYD分岐 RND テスト
-    // ===========================================
 
     @Nested
     class SetHappinessNydRndTests {
         @Test
         public void testSetHappinessNYDSetsSadPeriod() {
-            // isNYD() → sadPeriod = 1200 + RND.nextInt(400) - 200
+            // isNyd() → sadPeriod = 1200 + RND.nextInt(400) - 200
             body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             SimYukkuri.RND = new ConstState(200);
             body.setHappiness(Happiness.HAPPY); // NYD overrides to VERY_SAD

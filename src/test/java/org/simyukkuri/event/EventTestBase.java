@@ -25,7 +25,7 @@ public class EventTestBase {
         b.setObjId(id);
         b.setX(x);
         b.setY(y);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 }

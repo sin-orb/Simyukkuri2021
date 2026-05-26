@@ -251,7 +251,7 @@ public class HybridYukkuriTest {
         }
     }
 
-    // --- loadImages_Hyblid: mama/papa null → creates default Reimu ---
+    // --- loadImagesHybrid: mama/papa null → creates default Reimu ---
 
     @Test
     public void testLoadImages_Hyblid_noParents_executesCode() {
@@ -260,7 +260,7 @@ public class HybridYukkuriTest {
             HybridYukkuri hybrid = new HybridYukkuri();
             // no parents → mama=null, papa=null → creates Reimu
             try {
-                hybrid.loadImages_Hyblid();
+                hybrid.loadImagesHybrid();
             } catch (Exception e) {
                 // NPE or IOException expected in headless environment
             }
@@ -282,7 +282,7 @@ public class HybridYukkuriTest {
             // Use ConstState to control RNG (nextBoolean → true when nextInt(2)>0 ???
             // depends on impl)
             SimYukkuri.RND = new org.simyukkuri.ConstState(1);
-            hybrid.loadImages_Hyblid();
+            hybrid.loadImagesHybrid();
         } catch (Exception e) {
             // IOException loading images expected in headless
         } finally {

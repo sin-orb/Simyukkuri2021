@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -85,7 +84,7 @@ public class AttachmentTest {
 		StubAttachment att = new StubAttachment(parent);
 
 		assertEquals(Type.ATTACHMENT, att.getObjType());
-		assertEquals(parent.getUniqueID(), att.getParent());
+		assertEquals(parent.getUniqueId(), att.getParent());
 	}
 
 	@Test
@@ -104,7 +103,7 @@ public class AttachmentTest {
 		Yukkuri parent = createParent(AgeState.BABY);
 		StubAttachment att = new StubAttachment(parent);
 
-		assertEquals(parent.getUniqueID(), att.getParent());
+		assertEquals(parent.getUniqueId(), att.getParent());
 
 		att.setParent(999);
 		assertEquals(999, att.getParent());
@@ -442,7 +441,7 @@ public class AttachmentTest {
 	private Yukkuri createParent(AgeState ageState) {
 		Yukkuri parent = new Reimu();
 		parent.setAgeState(ageState);
-		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueId(), parent);
 		return parent;
 	}
 
@@ -463,7 +462,7 @@ public class AttachmentTest {
 			}
 		};
 		parent.setAgeState(ageState);
-		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueId(), parent);
 		return parent;
 	}
 

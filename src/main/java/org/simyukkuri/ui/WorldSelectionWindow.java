@@ -18,7 +18,7 @@ import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.MyPane;
 import org.simyukkuri.draw.TerrainField;
 import org.simyukkuri.draw.Translate;
-import org.simyukkuri.ui.MainCommandUI.ToolButtonLabel;
+import org.simyukkuri.ui.MainCommandUi.ToolButtonLabel;
 import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
@@ -139,7 +139,7 @@ public class WorldSelectionWindow extends JDialog implements ActionListener, Win
 	/** ウィンドウを閉じるときにツールボタンの選択を解除する。 */
 	@Override
 	public void windowClosing(WindowEvent e) {
-		MainCommandUI.getPlayerButton()[ToolButtonLabel.MOVE.ordinal()].setSelected(false);
+		MainCommandUi.getPlayerButton()[ToolButtonLabel.MOVE.ordinal()].setSelected(false);
 	}
 
 	@Override

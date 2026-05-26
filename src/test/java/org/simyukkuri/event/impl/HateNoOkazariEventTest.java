@@ -38,7 +38,7 @@ class HateNoOkazariEventTest {
             spr[i] = new org.simyukkuri.system.Sprite(10, 10, org.simyukkuri.system.Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 
@@ -56,8 +56,8 @@ class HateNoOkazariEventTest {
         Yukkuri to = createBody();
         HateNoOkazariEvent event = new HateNoOkazariEvent(from, to, null, 10);
         assertNotNull(event);
-        assertEquals(from.getUniqueID(), event.getFrom());
-        assertEquals(to.getUniqueID(), event.getTo());
+        assertEquals(from.getUniqueId(), event.getFrom());
+        assertEquals(to.getUniqueId(), event.getTo());
         assertEquals(10, event.getCount());
     }
 
@@ -116,7 +116,7 @@ class HateNoOkazariEventTest {
         Yukkuri from = createBody();
         Yukkuri responder = createBody();
         HateNoOkazariEvent event = new HateNoOkazariEvent();
-        event.setFrom(from.getUniqueID());
+        event.setFrom(from.getUniqueId());
         event.setTo(-1);
         assertFalse(event.checkEventResponse(responder));
     }
@@ -135,7 +135,7 @@ class HateNoOkazariEventTest {
     void testUpdate_returnsAbortWhenToIsNull() {
         Yukkuri b = createBody();
         HateNoOkazariEvent event = new HateNoOkazariEvent();
-        event.setFrom(b.getUniqueID());
+        event.setFrom(b.getUniqueId());
         event.setTo(-1);
         UpdateState result = event.update(b);
         assertEquals(UpdateState.ABORT, result);
@@ -265,8 +265,8 @@ class HateNoOkazariEventTest {
         Yukkuri responder = createBody();
         responder.setIntelligence(org.simyukkuri.enums.Intelligence.WISE);
         // make to the partner of responder
-        to.setPartner(responder.getUniqueID());
-        responder.setPartner(to.getUniqueID());
+        to.setPartner(responder.getUniqueId());
+        responder.setPartner(to.getUniqueId());
         HateNoOkazariEvent event = new HateNoOkazariEvent(from, to, null, 10);
         assertFalse(event.checkEventResponse(responder));
     }

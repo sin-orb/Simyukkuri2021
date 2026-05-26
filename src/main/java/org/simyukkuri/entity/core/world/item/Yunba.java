@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -22,10 +21,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
-
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
@@ -34,8 +32,8 @@ import org.simyukkuri.entity.core.world.bodylinked.Stalk;
 import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.entity.core.world.mobile.Vomit;
 import org.simyukkuri.enums.Attitude;
-import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Intelligence;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.WorldEntityKind;
 import org.simyukkuri.field.impl.Barrier;
@@ -47,7 +45,7 @@ import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * ゆんば
  */
 public class Yunba extends WorldEntity {
@@ -102,8 +100,8 @@ public class Yunba extends WorldEntity {
 	};
 
 	public static final int hitCheckObjType = 0;
-	private static BufferedImage bodyImages[][] = new BufferedImage[10][2];
-	private static BufferedImage images[][] = new BufferedImage[6][2];
+	private static BufferedImage[][] bodyImages = new BufferedImage[10][2];
+	private static BufferedImage[][] images = new BufferedImage[6][2];
 	private static Rectangle4y boundary = new Rectangle4y();
 
 	private static JCheckBox[][] checkBox;
@@ -187,15 +185,17 @@ public class Yunba extends WorldEntity {
 	public int getImageLayer(BufferedImage[] layer) {
 		for (int i = 0; i < layerCount; i++) {
 			if (drawLayer[i] == 0) {
-				if (itemRank == ItemRank.HOUSE)
+				if (itemRank == ItemRank.HOUSE) {
 					layer[i] = bodyImages[color][direction];
-				else
+				} else {
 					layer[i] = bodyImages[9][direction];
+				}
 			} else {
-				if (itemRank == ItemRank.HOUSE)
+				if (itemRank == ItemRank.HOUSE) {
 					layer[i] = images[drawLayer[i]][direction];
-				else
+				} else {
 					layer[i] = images[drawLayer[i] + 3][direction];
+				}
 			}
 		}
 		return layerCount;
@@ -266,8 +266,9 @@ public class Yunba extends WorldEntity {
 
 		if (getZ() > 0) {
 			z -= 5;
-			if (z < 0)
+			if (z < 0) {
 				z = 0;
+			}
 			action = null;
 			target = null;
 			return TickResult.NONE;
@@ -280,8 +281,9 @@ public class Yunba extends WorldEntity {
 			if (shitCheck) {
 				for (Map.Entry<Integer, Shit> entry : curMap.getShit().entrySet()) {
 					Shit o = entry.getValue();
-					if (GameRandom.nextBoolean())
+					if (GameRandom.nextBoolean()) {
 						continue;
+					}
 					// 追加
 					if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
 							&& Barrier.acrossBarrier(getX(), getY(), o.getX(), o.getY(), Barrier.ITEM_BLOCK_FLAG)) {
@@ -320,8 +322,9 @@ public class Yunba extends WorldEntity {
 				}
 				for (Map.Entry<Integer, Vomit> entry : curMap.getVomit().entrySet()) {
 					Vomit o = entry.getValue();
-					if (GameRandom.nextBoolean())
+					if (GameRandom.nextBoolean()) {
 						continue;
+					}
 					// 追加
 					if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
 							&& Barrier.acrossBarrier(getX(), getY(), o.getX(), o.getY(), Barrier.ITEM_BLOCK_FLAG)) {
@@ -348,17 +351,21 @@ public class Yunba extends WorldEntity {
 				if (curMap.getStalks() != null) {
 					for (Map.Entry<Integer, Stalk> entry : curMap.getStalks().entrySet()) {
 						Stalk s = entry.getValue();
-						if (norndCheck == false && GameRandom.nextBoolean())
+						if (norndCheck == false && GameRandom.nextBoolean()) {
 							continue;
+						}
 						int id = s.getPlantYukkuri();
-						if (GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(id) != null)
-							continue;
-						if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
-								&& Barrier.acrossBarrier(getX(), getY(), s.getX(), s.getY(), Barrier.ITEM_BLOCK_FLAG)) {
+						if (GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(id) != null) {
 							continue;
 						}
 						if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
-								&& Barrier.acrossBarrier(getX(), getY(), s.getX(), s.getY(), Barrier.NO_UNUN_BLOCK_FLAG)) {
+								&& Barrier.acrossBarrier(getX(), getY(), s.getX(), s.getY(),
+										Barrier.ITEM_BLOCK_FLAG)) {
+							continue;
+						}
+						if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
+								&& Barrier.acrossBarrier(getX(), getY(), s.getX(), s.getY(),
+										Barrier.NO_UNUN_BLOCK_FLAG)) {
 							continue;
 						}
 
@@ -377,16 +384,20 @@ public class Yunba extends WorldEntity {
 				if (curMap.getFoods() != null) {
 					for (Map.Entry<Integer, Food> entry : curMap.getFoods().entrySet()) {
 						Food f = entry.getValue();
-						if (f.getFoodType() != Food.FoodType.STALK)
+						if (f.getFoodType() != Food.FoodType.STALK) {
 							continue;
-						if (GameRandom.nextBoolean())
-							continue;
-						if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
-								&& Barrier.acrossBarrier(getX(), getY(), f.getX(), f.getY(), Barrier.ITEM_BLOCK_FLAG)) {
+						}
+						if (GameRandom.nextBoolean()) {
 							continue;
 						}
 						if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
-								&& Barrier.acrossBarrier(getX(), getY(), f.getX(), f.getY(), Barrier.NO_UNUN_BLOCK_FLAG)) {
+								&& Barrier.acrossBarrier(getX(), getY(), f.getX(), f.getY(),
+										Barrier.ITEM_BLOCK_FLAG)) {
+							continue;
+						}
+						if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
+								&& Barrier.acrossBarrier(getX(), getY(), f.getX(), f.getY(),
+										Barrier.NO_UNUN_BLOCK_FLAG)) {
 							continue;
 						}
 
@@ -405,11 +416,13 @@ public class Yunba extends WorldEntity {
 			if (bodyCheck && action == null) {
 				for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 					Yukkuri b = entry.getValue();
-					if (norndCheck == false && GameRandom.nextBoolean())
+					if (norndCheck == false && GameRandom.nextBoolean()) {
 						continue;
+					}
 					// 茎にぶら下がってる固体はスルー
-					if (b.hasBindStalk() || b.getZ() > 0)
+					if (b.hasBindStalk() || b.getZ() > 0) {
 						continue;
+					}
 
 					// 追加
 					if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
@@ -534,9 +547,7 @@ public class Yunba extends WorldEntity {
 							action = Action.KABI;
 							target = b;
 							break;
-						}
-						// ゲスの場合必ず実行
-						else if (b.isRude() && (b.isFurifuri() || b.getFurifuriDiscipline() != 0)
+						} else if (b.isRude() && (b.isFurifuri() || b.getFurifuriDiscipline() != 0) // ゲスの場合必ず実行
 								&& actionFlags[Action.RUDE.ordinal()][b.getAgeState().ordinal()]) {
 
 							// 他のゆんばのターゲットならスキップ
@@ -592,10 +603,12 @@ public class Yunba extends WorldEntity {
 			if (foodCheck && action == null) {
 				for (Map.Entry<Integer, Food> entry : curMap.getFoods().entrySet()) {
 					Food f = entry.getValue();
-					if (GameRandom.nextBoolean())
+					if (GameRandom.nextBoolean()) {
 						continue;
-					if (!f.isEmpty())
+					}
+					if (!f.isEmpty()) {
 						continue;
+					}
 					if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
 							&& Barrier.acrossBarrier(getX(), getY(), f.getX(), f.getY(), Barrier.ITEM_BLOCK_FLAG)) {
 						continue;
@@ -641,8 +654,9 @@ public class Yunba extends WorldEntity {
 
 			// 目的地到着
 			if ((destX == -1 && destY == -1) || nearTarget) {
-				if (action == null || target == null)
+				if (action == null || target == null) {
 					return TickResult.NONE;
+				}
 				if (target.isRemoved() || target.getZ() > 0) {
 					action = null;
 					target = null;
@@ -673,18 +687,20 @@ public class Yunba extends WorldEntity {
 						if (noDamageFallCheck) {
 							((Yukkuri) target).setNoDamageNextFall();
 						}
-						if (killCheck) {// 追加
+						if (killCheck) { // 追加
 							((Yukkuri) target).strikeByPress();
 						} else {
-							if (vecX > 5)
+							if (vecX > 5) {
 								vecX = 5;
-							else if (vecX < -5)
+							} else if (vecX < -5) {
 								vecX = -5;
+							}
 
-							if (vecY > 5)
+							if (vecY > 5) {
 								vecY = 5;
-							else if (vecY < -5)
+							} else if (vecY < -5) {
 								vecY = -5;
+							}
 							((Yukkuri) target).strikeByObject(1500, 500, mineutiCheck, vecX, vecY);
 						}
 						break;
@@ -717,7 +733,8 @@ public class Yunba extends WorldEntity {
 					// 対象が壁の向こうに移動したらリセット
 					// 追加
 					if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
-							&& Barrier.acrossBarrier(getX(), getY(), target.getX(), target.getY(), Barrier.ITEM_BLOCK_FLAG)) {
+							&& Barrier.acrossBarrier(getX(), getY(), target.getX(), target.getY(),
+									Barrier.ITEM_BLOCK_FLAG)) {
 
 						action = null;
 						target = null;
@@ -796,14 +813,18 @@ public class Yunba extends WorldEntity {
 			return;
 		}
 
-		if (vecX < 0 && x < destX)
+		if (vecX < 0 && x < destX) {
 			x = destX;
-		if (vecX > 0 && x > destX)
+		}
+		if (vecX > 0 && x > destX) {
 			x = destX;
-		if (vecY < 0 && y < destY)
+		}
+		if (vecY < 0 && y < destY) {
 			y = destY;
-		if (vecY > 0 && y > destY)
+		}
+		if (vecY > 0 && y > destY) {
 			y = destY;
+		}
 
 		int maxX = Translate.getWorldWidth();
 		int maxY = Translate.getWorldHeight();
@@ -882,12 +903,11 @@ public class Yunba extends WorldEntity {
 
 		JPanel mainPanel = new JPanel();
 		JPanel topPanel = new JPanel();
-		JPanel westPanel = new JPanel();
-		JPanel centerPanel = new JPanel();
-		JPanel southPanel = new JPanel();
+		final JPanel westPanel = new JPanel();
+		final JPanel centerPanel = new JPanel();
+		final JPanel southPanel = new JPanel();
 		Action[] action = Action.values();
 		checkBox = new JCheckBox[action.length][3];
-		boolean ret = false;
 
 		mainPanel.setLayout(new BorderLayout());
 
@@ -914,10 +934,11 @@ public class Yunba extends WorldEntity {
 			westPanel.add(but);
 			for (int j = 0; j < 3; j++) {
 				checkBox[i][j] = new JCheckBox("");
-				if (init)
+				if (init) {
 					checkBox[i][j].setSelected(y.actionFlags[i][j]);
-				else
+				} else {
 					checkBox[i][j].setSelected(defaultSetFlags[i][j]);
+				}
 				centerPanel.add(checkBox[i][j]);
 			}
 		}
@@ -931,28 +952,29 @@ public class Yunba extends WorldEntity {
 		centerPanel2.setLayout(new GridLayout(2, 5));
 		checkBox2 = new JCheckBox[1][5];
 
-		JLabel lw2_1 = new JLabel("");
-		westPanel2.add(lw2_1);
-		JLabel lw2_2 = new JLabel(GameText.read("item_noprocesstarget"));
-		westPanel2.add(lw2_2);
+		JLabel lw21 = new JLabel("");
+		westPanel2.add(lw21);
+		JLabel lw22 = new JLabel(GameText.read("item_noprocesstarget"));
+		westPanel2.add(lw22);
 
-		JLabel lc2_1 = new JLabel(GameText.read("attitude_verynice"));
-		centerPanel2.add(lc2_1);
-		JLabel lc2_2 = new JLabel(GameText.read("attitude_nice"));
-		centerPanel2.add(lc2_2);
-		JLabel lc2_3 = new JLabel(GameText.read("attitude_normal"));
-		centerPanel2.add(lc2_3);
-		JLabel lc2_4 = new JLabel(GameText.read("attitude_shithead"));
-		centerPanel2.add(lc2_4);
-		JLabel lc2_5 = new JLabel(GameText.read("attitude_supershithead"));
-		centerPanel2.add(lc2_5);
+		JLabel lc21 = new JLabel(GameText.read("attitude_verynice"));
+		centerPanel2.add(lc21);
+		JLabel lc22 = new JLabel(GameText.read("attitude_nice"));
+		centerPanel2.add(lc22);
+		JLabel lc23 = new JLabel(GameText.read("attitude_normal"));
+		centerPanel2.add(lc23);
+		JLabel lc24 = new JLabel(GameText.read("attitude_shithead"));
+		centerPanel2.add(lc24);
+		JLabel lc25 = new JLabel(GameText.read("attitude_supershithead"));
+		centerPanel2.add(lc25);
 		for (int i = 0; i < 1; i++) {
 			for (int j = 0; j < 5; j++) {
 				checkBox2[i][j] = new JCheckBox("");
-				if (init)
+				if (init) {
 					checkBox2[i][j].setSelected(y.actionFlags2[i][j]);
-				else
+				} else {
 					checkBox2[i][j].setSelected(defaultSetFlags2[i][j]);
+				}
 				centerPanel2.add(checkBox2[i][j]);
 			}
 		}
@@ -965,43 +987,46 @@ public class Yunba extends WorldEntity {
 		centerPanel3.setLayout(new GridLayout(2, 3));
 		checkBox3 = new JCheckBox[1][3];
 
-		JLabel lw3_1 = new JLabel("");
-		westPanel3.add(lw3_1);
-		JLabel lw3_2 = new JLabel(GameText.read("item_noprocesstarget"));
-		westPanel3.add(lw3_2);
+		JLabel lw31 = new JLabel("");
+		westPanel3.add(lw31);
+		JLabel lw32 = new JLabel(GameText.read("item_noprocesstarget"));
+		westPanel3.add(lw32);
 
-		JLabel lc3_1 = new JLabel(GameText.read("intel_badge"));
-		centerPanel3.add(lc3_1);
-		JLabel lc3_2 = new JLabel(GameText.read("intel_normal"));
-		centerPanel3.add(lc3_2);
-		JLabel lc3_3 = new JLabel(GameText.read("intel_fool"));
-		centerPanel3.add(lc3_3);
+		JLabel lc31 = new JLabel(GameText.read("intel_badge"));
+		centerPanel3.add(lc31);
+		JLabel lc32 = new JLabel(GameText.read("intel_normal"));
+		centerPanel3.add(lc32);
+		JLabel lc33 = new JLabel(GameText.read("intel_fool"));
+		centerPanel3.add(lc33);
 
 		for (int i = 0; i < 1; i++) {
 			for (int j = 0; j < 3; j++) {
 				checkBox3[i][j] = new JCheckBox("");
-				if (init)
+				if (init) {
 					checkBox3[i][j].setSelected(y.actionFlags3[i][j]);
-				else
+				} else {
 					checkBox3[i][j].setSelected(defaultSetFlags3[i][j]);
+				}
 				centerPanel3.add(checkBox3[i][j]);
 			}
 		}
 
 		// --------------------------------------------
-		for (int i = 0; i < Action.values().length - 6; i++) {// 追加
+		for (int i = 0; i < Action.values().length - 6; i++) { // 追加
 			checkBox[6 + i][0] = new JCheckBox(action[6 + i].toString());
-			if (init)
+			if (init) {
 				checkBox[6 + i][0].setSelected(y.actionFlags[6 + i][0]);
-			else
+			} else {
 				checkBox[6 + i][0].setSelected(defaultSetFlags[6 + i][0]);
+			}
 			southPanel.add(checkBox[6 + i][0]);
 		}
 		colorBox = new JComboBox(COL_LIST);
-		if (init)
+		if (init) {
 			colorBox.setSelectedIndex(y.color);
-		else
+		} else {
 			colorBox.setSelectedIndex(defaultColor);
+		}
 		southPanel.add(new JLabel(""));
 		southPanel.add(colorBox);
 
@@ -1046,6 +1071,7 @@ public class Yunba extends WorldEntity {
 				GameText.read("item_yunbasettings"), JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 
+		boolean ret = false;
 		if (dlgRet == JOptionPane.OK_OPTION) {
 			for (int i = 0; i < 6; i++) {
 				for (int j = 0; j < 3; j++) {
@@ -1067,7 +1093,7 @@ public class Yunba extends WorldEntity {
 					defaultSetFlags3[i][j] = checkBox3[i][j].isSelected();
 				}
 			}
-			for (int i = 0; i < Action.values().length - 6; i++) {// 追加
+			for (int i = 0; i < Action.values().length - 6; i++) { // 追加
 				y.actionFlags[6 + i][0] = checkBox[6 + i][0].isSelected();
 				defaultSetFlags[6 + i][0] = checkBox[6 + i][0].isSelected();
 			}
@@ -1085,85 +1111,104 @@ public class Yunba extends WorldEntity {
 			for (int i = 0; i < y.actionFlags.length; i++) {
 				for (int j = 0; j < 3; j++) {
 					if (i == Action.SHIT.ordinal()) {
-						if (y.actionFlags[i][0])
+						if (y.actionFlags[i][0]) {
 							y.shitCheck = true;
+						}
 					} else if (i == Action.STALK.ordinal()) {
-						if (y.actionFlags[i][0])
+						if (y.actionFlags[i][0]) {
 							y.stalkCheck = true;
+						}
 					} else if (i == Action.NORND.ordinal()) {
-						if (y.actionFlags[i][0])
+						if (y.actionFlags[i][0]) {
 							y.norndCheck = true;
+						}
 					} else if (i == Action.KILL.ordinal()) {
-						if (y.actionFlags[i][0])
+						if (y.actionFlags[i][0]) {
 							y.killCheck = true;
+						}
 					} else if (i == Action.MINEUTI.ordinal()) {
-						if (y.actionFlags[i][0])
+						if (y.actionFlags[i][0]) {
 							y.mineutiCheck = true;
+						}
 					} else if (i == Action.NODAMAGE_FALL.ordinal()) {
-						if (y.actionFlags[i][0])
+						if (y.actionFlags[i][0]) {
 							y.noDamageFallCheck = true;
+						}
 					} else if (i == Action.EMPFOOD.ordinal()) {
-						if (y.actionFlags[i][0])
+						if (y.actionFlags[i][0]) {
 							y.foodCheck = true;
+						}
 					} else {
-						if (y.actionFlags[i][j])
+						if (y.actionFlags[i][j]) {
 							y.bodyCheck = true;
+						}
 					}
 				}
 			}
 
 			boolean brush = false;
-			boolean spike = false;
 			if (y.actionFlags[Action.CLEAN.ordinal()][0]
 					|| y.actionFlags[Action.CLEAN.ordinal()][1]
-					|| y.actionFlags[Action.CLEAN.ordinal()][2])
+					|| y.actionFlags[Action.CLEAN.ordinal()][2]) {
 				brush = true;
+			}
 
 			if (y.actionFlags[Action.OKAZARI.ordinal()][0]
 					|| y.actionFlags[Action.OKAZARI.ordinal()][1]
-					|| y.actionFlags[Action.OKAZARI.ordinal()][2])
+					|| y.actionFlags[Action.OKAZARI.ordinal()][2]) {
 				brush = true;
+			}
 
 			if (y.actionFlags[Action.BODY_REMOVE.ordinal()][0]
 					|| y.actionFlags[Action.BODY_REMOVE.ordinal()][1]
-					|| y.actionFlags[Action.BODY_REMOVE.ordinal()][2])
+					|| y.actionFlags[Action.BODY_REMOVE.ordinal()][2]) {
 				brush = true;
+			}
 
 			if (y.actionFlags[Action.BODY_OKAZARI.ordinal()][0]
 					|| y.actionFlags[Action.BODY_OKAZARI.ordinal()][1]
-					|| y.actionFlags[Action.BODY_OKAZARI.ordinal()][2])
+					|| y.actionFlags[Action.BODY_OKAZARI.ordinal()][2]) {
 				brush = true;
+			}
 
 			if (y.actionFlags[Action.SHIT.ordinal()][0]
 					|| y.actionFlags[Action.SHIT.ordinal()][1]
-					|| y.actionFlags[Action.SHIT.ordinal()][2])
+					|| y.actionFlags[Action.SHIT.ordinal()][2]) {
 				brush = true;
+			}
 
+			boolean spike = false;
 			if (y.actionFlags[Action.KABI.ordinal()][0]
 					|| y.actionFlags[Action.KABI.ordinal()][1]
-					|| y.actionFlags[Action.KABI.ordinal()][2])
+					|| y.actionFlags[Action.KABI.ordinal()][2]) {
 				spike = true;
+			}
 
 			if (y.actionFlags[Action.RUDE.ordinal()][0]
 					|| y.actionFlags[Action.RUDE.ordinal()][1]
-					|| y.actionFlags[Action.RUDE.ordinal()][2])
+					|| y.actionFlags[Action.RUDE.ordinal()][2]) {
 				spike = true;
+			}
 
 			if (y.actionFlags[Action.DESTROY.ordinal()][0]
 					|| y.actionFlags[Action.DESTROY.ordinal()][1]
-					|| y.actionFlags[Action.DESTROY.ordinal()][2])
+					|| y.actionFlags[Action.DESTROY.ordinal()][2]) {
 				spike = true;
+			}
 
 			if (y.actionFlags[Action.ANTIRAPER.ordinal()][0]
 					|| y.actionFlags[Action.ANTIRAPER.ordinal()][1]
-					|| y.actionFlags[Action.ANTIRAPER.ordinal()][2])
+					|| y.actionFlags[Action.ANTIRAPER.ordinal()][2]) {
 				spike = true;
+			}
 
 			y.layerCount = 1;
-			if (brush)
+			if (brush) {
 				y.layerCount++;
-			if (spike)
+			}
+			if (spike) {
 				y.layerCount++;
+			}
 
 			y.drawLayer = new int[y.layerCount];
 			int i = 0;
@@ -1218,7 +1263,7 @@ public class Yunba extends WorldEntity {
 			if (yunba == this) {
 				continue;
 			}
-			if (((Yunba) yunba).target == o) {
+			if (yunba.target == o) {
 				return false;
 			}
 		}

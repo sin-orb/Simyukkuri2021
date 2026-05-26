@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.awt.image.BufferedImage;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -24,10 +23,10 @@ public class BadgeTest {
     public void setUp() {
         SimYukkuri.world = new World();
         Badge.setImages(buildImages());
-        Badge.setImgW(new int[] { 10, 20, 30 });
-        Badge.setImgH(new int[] { 11, 21, 31 });
-        Badge.setPivX(new int[] { 1, 2, 3 });
-        Badge.setPivY(new int[] { 4, 5, 6 });
+        Badge.setImgW(new int[] {10, 20, 30});
+        Badge.setImgH(new int[] {11, 21, 31});
+        Badge.setPivX(new int[] {1, 2, 3});
+        Badge.setPivY(new int[] {4, 5, 6});
     }
 
     @Test
@@ -53,7 +52,7 @@ public class BadgeTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         Badge badge = new Badge(parent, BadgeRank.BRONZE);
 
-        assertEquals(parent.getUniqueID(), badge.getParent());
+        assertEquals(parent.getUniqueId(), badge.getParent());
         assertEquals(BadgeRank.BRONZE, badge.getBadgeRank());
         assertEquals(BadgeRank.BRONZE, badge.getBadgeRank());
         assertEquals(0, badge.getValue());
@@ -87,7 +86,7 @@ public class BadgeTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         Badge badge = new Badge(parent, BadgeRank.BRONZE);
 
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueId());
 
         BufferedImage image = badge.getImage(parent);
         assertNull(image);
@@ -115,11 +114,14 @@ public class BadgeTest {
         Badge childBadge = new Badge(childParent, BadgeRank.GOLD);
         Badge adultBadge = new Badge(adultParent, BadgeRank.GOLD);
 
-        assertSame(Badge.getImages()[AgeState.BABY.ordinal()][BadgeRank.GOLD.ordinal()],
+        assertSame(
+                Badge.getImages()[AgeState.BABY.ordinal()][BadgeRank.GOLD.ordinal()],
                 babyBadge.getImage(babyParent));
-        assertSame(Badge.getImages()[AgeState.CHILD.ordinal()][BadgeRank.GOLD.ordinal()],
+        assertSame(
+                Badge.getImages()[AgeState.CHILD.ordinal()][BadgeRank.GOLD.ordinal()],
                 childBadge.getImage(childParent));
-        assertSame(Badge.getImages()[AgeState.ADULT.ordinal()][BadgeRank.GOLD.ordinal()],
+        assertSame(
+                Badge.getImages()[AgeState.ADULT.ordinal()][BadgeRank.GOLD.ordinal()],
                 adultBadge.getImage(adultParent));
     }
 
@@ -157,7 +159,7 @@ public class BadgeTest {
         int origPivotX = badge.getPivotX();
         int origPivotY = badge.getPivotY();
 
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueId());
 
         badge.resetBoundary();
 
@@ -193,7 +195,10 @@ public class BadgeTest {
     private static Yukkuri createParent(AgeState ageState) {
         Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
+        SimYukkuri.world
+                .getCurrentWorldState()
+                .getYukkuriRegistry()
+                .put(parent.getUniqueId(), parent);
         return parent;
     }
 
@@ -202,7 +207,9 @@ public class BadgeTest {
         BufferedImage[][] images = new BufferedImage[3][BadgeRank.values().length];
         for (int age = 0; age < 3; age++) {
             for (int rank = 0; rank < BadgeRank.values().length; rank++) {
-                images[age][rank] = new BufferedImage(10 + age * 10, 10 + age * 10, BufferedImage.TYPE_INT_ARGB);
+                images[age][rank] =
+                        new BufferedImage(
+                                10 + age * 10, 10 + age * 10, BufferedImage.TYPE_INT_ARGB);
             }
         }
         return images;
@@ -213,6 +220,7 @@ public class BadgeTest {
         try {
             Badge.loadImages(Badge.class.getClassLoader(), null);
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -227,7 +235,9 @@ public class BadgeTest {
             badge.setBadgeRank(BadgeRank.GOLD);
 
             assertEquals(BadgeRank.GOLD, badge.getBadgeRank());
-            assertSame(Badge.getImages()[AgeState.CHILD.ordinal()][BadgeRank.GOLD.ordinal()], badge.getImage(parent));
+            assertSame(
+                    Badge.getImages()[AgeState.CHILD.ordinal()][BadgeRank.GOLD.ordinal()],
+                    badge.getImage(parent));
         }
 
         @Test
@@ -239,7 +249,9 @@ public class BadgeTest {
             assertEquals(6, badge.getPivotY());
             assertEquals(30, badge.getW());
             assertEquals(31, badge.getH());
-            assertSame(Badge.getImages()[AgeState.ADULT.ordinal()][BadgeRank.SILVER.ordinal()], badge.getImage(parent));
+            assertSame(
+                    Badge.getImages()[AgeState.ADULT.ordinal()][BadgeRank.SILVER.ordinal()],
+                    badge.getImage(parent));
         }
     }
 }

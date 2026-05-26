@@ -1,8 +1,8 @@
 package org.simyukkuri.logic;
 
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.enums.YukkuriRelationType;
 import org.simyukkuri.enums.Happiness;
+import org.simyukkuri.enums.YukkuriRelationType;
 
 /**
  * ゆっくりの感情処理
@@ -20,16 +20,16 @@ public class EmotionLogic {
 		// -------------------------------------------------
 		// 対象の状態判定
 		// 自分がゲスかどうか
-		boolean isRude = b.isRude();
+		final boolean isRude = b.isRude();
 
 		// 自分との関係
-		YukkuriRelationType relation = YukkuriLogic.checkMyRelation(b, bodyTarget);
+		final YukkuriRelationType relation = YukkuriLogic.checkMyRelation(b, bodyTarget);
 
 		// 自分の幸福度
-		Happiness happinessMine = b.getHappiness();
+		final Happiness happinessMine = b.getHappiness();
 
 		// 相手の幸福度
-		Happiness happinessTarget = bodyTarget.getHappiness();
+		final Happiness happinessTarget = bodyTarget.getHappiness();
 
 		boolean[] abEmote = new boolean[7];
 

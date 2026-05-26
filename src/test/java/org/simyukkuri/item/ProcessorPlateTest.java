@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
@@ -29,8 +28,8 @@ class ProcessorPlateTest extends ItemTestBase {
     private static Yukkuri createReimuBody() {
         Yukkuri body = new Reimu();
         body.setObjId(Numbering.INSTANCE.numberingObjId());
-        body.setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
+        body.setUniqueId(Numbering.INSTANCE.numberingYukkuriId());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
         return body;
     }
 

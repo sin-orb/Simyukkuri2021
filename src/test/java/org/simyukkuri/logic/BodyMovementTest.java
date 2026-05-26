@@ -538,7 +538,7 @@ class BodyMovementTest {
 
 	private Yukkuri createMappedMoveTarget() {
 		Yukkuri target = WorldTestHelper.createBody();
-		GameWorld.get().getCurrentWorldState().getYukkuriRegistry().put(target.getUniqueID(), target);
+		GameWorld.get().getCurrentWorldState().getYukkuriRegistry().put(target.getUniqueId(), target);
 		return target;
 	}
 

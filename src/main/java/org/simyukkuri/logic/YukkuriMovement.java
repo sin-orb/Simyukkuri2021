@@ -1,7 +1,6 @@
 package org.simyukkuri.logic;
 
 import java.util.Map;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
@@ -365,7 +364,6 @@ public final class YukkuriMovement {
 	public static boolean applyExternalMotion(Yukkuri body) {
 		int mx = body.getVx() + body.getMotionX();
 		int my = body.getVy() + body.getMotionY();
-		int mz = body.getVz() + body.getMotionZ();
 
 		if (mx != 0) {
 			body.setX(body.getX() + mx);
@@ -407,6 +405,7 @@ public final class YukkuriMovement {
 			body.setFallingUnderGround(false);
 		}
 
+		int mz = body.getVz() + body.getMotionZ();
 		if ((mz != 0 || (!body.canflyCheck() && body.getMostDepth() != body.getZ() && body.getBindStalk() == null))
 				&& !body.isFallingUnderGround()) {
 			body.setFalldownDamage(body.getVz() > 0 ? body.getFalldownDamage() : 0);
@@ -630,7 +629,7 @@ public final class YukkuriMovement {
 			}
 
 			if (body.isFirstGround()) {
-				if (!body.isNYD()) {
+				if (!body.isNyd()) {
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TakeItEasy));
 					body.addStress(-400);
 					body.addMemories(20);

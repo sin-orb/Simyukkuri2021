@@ -1,7 +1,6 @@
 package org.simyukkuri.event.impl;
 
 import java.util.List;
-
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -10,14 +9,14 @@ import org.simyukkuri.enums.GatheringDirection;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.field.impl.Barrier;
-import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.logic.FoodLogic;
+import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameText;
 
-/***************************************************
+/**
  * すーぱーむーしゃむーしゃたいむイベント
  * protected Yukkuri from; // イベントを発した個体
  * protected Yukkuri to; // 未使用
@@ -29,11 +28,11 @@ public class SuperEatingTimeEvent extends EventPacket {
 	private static final long serialVersionUID = -2604356330046082053L;
 	int tick = 0;
 	int waitTicks = 0;
-	private STATE state = STATE.WAIT;
+	private State state = State.WAIT;
 	int minimumStep = 0;
 
 	/** 行動ステート */
-	public enum STATE {
+	public enum State {
 		/** 移動 */
 		GO,
 		/** 待機 */
@@ -96,8 +95,9 @@ public class SuperEatingTimeEvent extends EventPacket {
 	@Override
 	public boolean checkEventResponse(Yukkuri b) {
 		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
-		if (from == null)
+		if (from == null) {
 			return false;
+		}
 		if (from == b && !(b.isShutmouth())) {
 			return true;
 		}
@@ -120,16 +120,18 @@ public class SuperEatingTimeEvent extends EventPacket {
 			return true;
 		}
 
-		if (b.isNYD() || b.isTaken()) {
+		if (b.isNyd() || b.isTaken()) {
 			return false;
 		}
 
 		// Fromの子供だけ参加する(※Fromが教育係のときは全ての子供が参加するようにする？)
-		if (!b.isChild(from))
+		if (!b.isChild(from)) {
 			return false;
+		}
 		// 大人は終了
-		if (b.isAdult())
+		if (b.isAdult()) {
 			return false;
+		}
 
 		return true;
 	}
@@ -152,12 +154,12 @@ public class SuperEatingTimeEvent extends EventPacket {
 	}
 
 	/** イベントの進行ステートを返す。 */
-	public STATE getState() {
+	public State getState() {
 		return state;
 	}
 
 	/** イベントの進行ステートをセットする。 */
-	public void setState(STATE state) {
+	public void setState(State state) {
 		this.state = state;
 	}
 
@@ -172,7 +174,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 		if (b == null || from == null) {
 			return UpdateState.ABORT;
 		}
-		if (b.isNYD()) {
+		if (b.isNyd()) {
 			return UpdateState.ABORT;
 		}
 		if (b.isDead() || b.isRemoved()) {
@@ -180,8 +182,9 @@ public class SuperEatingTimeEvent extends EventPacket {
 		}
 
 		// 親が消えてしまったらイベント中断
-		if (from.isRemoved())
+		if (from.isRemoved()) {
 			return UpdateState.ABORT;
+		}
 		// ターゲットが消えてしまったらイベント中断
 		Entity target = b.takeMappedObj(this.target);
 		if (target == null || target.isRemoved()) {
@@ -276,7 +279,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 					}
 					// ステート移行
 					if (gathered) {
-						state = STATE.GO;
+						state = State.GO;
 					} else {
 						b.stay(100);
 					}
@@ -296,9 +299,9 @@ public class SuperEatingTimeEvent extends EventPacket {
 					}
 					Yukkuri firstChild = childrenList.get(0);
 					int distance = Translate.getRealDistance(b.getX(), b.getY(), firstChild.getX(), firstChild.getY());
-					int colXChild = Math.abs(YukkuriLogic.calcCollisionX(b, firstChild));
+					int colxChild = Math.abs(YukkuriLogic.calcCollisionX(b, firstChild));
 					// 一定距離を保つ
-					if (colXChild * 3 < distance) {
+					if (colxChild * 3 < distance) {
 						b.stay();
 					}
 
@@ -321,12 +324,11 @@ public class SuperEatingTimeEvent extends EventPacket {
 					// 餌の近くで待つ
 					if (distanceToFood <= 1) {
 						if (gathered) {
-							state = STATE.START_BEFORE;
+							state = State.START_BEFORE;
 						}
 						b.stay();
-					}
-					// 餌に近づく
-					else {
+					} else {
+						// 餌に近づく
 						b.moveToEvent(this, target.getX(), target.getY() - 20);
 						if (GameRandom.nextInt(50) == 0) {
 							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.WantFood));
@@ -363,7 +365,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 								childBody.addMemories(1);
 							}
 						}
-						state = STATE.START;
+						state = State.START;
 					} else {
 						// 番の処理
 						if (partner != null) {
@@ -452,8 +454,9 @@ public class SuperEatingTimeEvent extends EventPacket {
 								partner.stay(100);
 								if (GameRandom.nextInt(30) == 0) {
 									// 余裕なら子供の状態を喜ぶ
-									partner.setMessage(GameMessages.getMessage(b, MessagePool.Action.GladAboutChild),
-											false);
+									String msg = GameMessages.getMessage(
+											b, MessagePool.Action.GladAboutChild);
+									partner.setMessage(msg, false);
 									partner.setHappiness(Happiness.VERY_HAPPY);
 								}
 							}
@@ -463,10 +466,8 @@ public class SuperEatingTimeEvent extends EventPacket {
 				default:
 					break;
 			}
-		}
-
-		// 親以外の処理
-		else {
+		} else {
+			// 親以外の処理
 			// つがいはスキップ。主催側で処理
 			if (b.isPartner(from)) {
 				// 壁に引っかかってるなら終了

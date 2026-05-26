@@ -3,13 +3,11 @@ package org.simyukkuri.entity.core.living;
 import java.beans.Transient;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.simyukkuri.Const;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.attachment.impl.Ants;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.Attitude;
-import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.enums.CoreAnkoState;
 import org.simyukkuri.enums.CriticalDamageType;
@@ -22,6 +20,7 @@ import org.simyukkuri.enums.PanicType;
 import org.simyukkuri.enums.Parent;
 import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.enums.Trauma;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.logic.YukkuriIllnessRule;
 import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.logic.YukkuriRelations;
@@ -79,27 +78,39 @@ public abstract class SocialEntity extends LivingEntity {
 
 	/** パニックタイプを返す。 */
 	@Override
-	public PanicType getPanicType() { return panicType; }
+	public PanicType getPanicType() {
+		return panicType;
+	}
 
 	/** パニックタイプをセットする。 */
 	@Override
-	public void setPanicType(PanicType panicType) { this.panicType = panicType; }
+	public void setPanicType(PanicType panicType) {
+		this.panicType = panicType;
+	}
 
 	/** パニック継続時間を返す。 */
 	@Override
-	public int getPanicPeriod() { return panicPeriod; }
+	public int getPanicPeriod() {
+		return panicPeriod;
+	}
 
 	/** パニック継続時間をセットする。 */
 	@Override
-	public void setPanicPeriod(int panicPeriod) { this.panicPeriod = panicPeriod; }
+	public void setPanicPeriod(int panicPeriod) {
+		this.panicPeriod = panicPeriod;
+	}
 
 	/** トラウマの種別を返す。 */
 	@Override
-	public Trauma getTrauma() { return trauma; }
+	public Trauma getTrauma() {
+		return trauma;
+	}
 
 	/** トラウマの種別をセットする。 */
 	@Override
-	public void setTrauma(Trauma trauma) { this.trauma = trauma; }
+	public void setTrauma(Trauma trauma) {
+		this.trauma = trauma;
+	}
 
 	/** 性格（クズ・良いゆ等）の区分を返す。 */
 	public Attitude getAttitude() {
@@ -132,7 +143,7 @@ public abstract class SocialEntity extends LivingEntity {
 			this.happiness = Happiness.AVERAGE;
 			return;
 		}
-		if (isNYD()) {
+		if (isNyd()) {
 			this.happiness = Happiness.VERY_SAD;
 			sadPeriod = 1200 + GameRandom.nextInt(400) - 200;
 			return;
@@ -271,19 +282,27 @@ public abstract class SocialEntity extends LivingEntity {
 
 	/** ぺにぺにの去勢有無 を取得する. @return ぺにぺにの去勢有無 */
 	@Override
-	public boolean isPenipeniCutted() { return penipeniCutted; }
+	public boolean isPenipeniCutted() {
+		return penipeniCutted;
+	}
 
 	/** ぺにぺにの去勢有無 を設定する. */
 	@Override
-	public void setPenipeniCutted(boolean penipeniCutted) { this.penipeniCutted = penipeniCutted; }
+	public void setPenipeniCutted(boolean penipeniCutted) {
+		this.penipeniCutted = penipeniCutted;
+	}
 
 	/** 水が平気か を取得する. @return 水が平気か */
 	@Override
-	public boolean isLikeWater() { return likeWater; }
+	public boolean isLikeWater() {
+		return likeWater;
+	}
 
 	/** 水が平気か を設定する. */
 	@Override
-	public void setLikeWater(boolean likeWater) { this.likeWater = likeWater; }
+	public void setLikeWater(boolean likeWater) {
+		this.likeWater = likeWater;
+	}
 
 	/** 発情フラグ want to sukkiri or not を取得する. @return 発情フラグ want to sukkuri or not */
 	@Override
@@ -562,7 +581,7 @@ public abstract class SocialEntity extends LivingEntity {
 
 	/** @param val プレイヤーへの好感度に加算する値（上限・下限でクランプ） */
 	public void addLovePlayer(int val) {
-		if (isNYD()) {
+		if (isNyd()) {
 			lovePlayer = -1 * getLovePlayerLimitBase();
 			return;
 		}
@@ -581,16 +600,18 @@ public abstract class SocialEntity extends LivingEntity {
 				memories += memoryDelta / 2;
 				break;
 			case FOOL:
-				if (memoryDelta < 0)
+				if (memoryDelta < 0) {
 					memories += memoryDelta / 2;
-				else
+				} else {
 					memories += memoryDelta * 2;
+				}
 				break;
 			default:
-				if (memoryDelta < 0)
+				if (memoryDelta < 0) {
 					memories += memoryDelta;
-				else
+				} else {
 					memories += memoryDelta * 2;
+				}
 				break;
 		}
 	}
@@ -631,22 +652,30 @@ public abstract class SocialEntity extends LivingEntity {
 	 * @return 障害の有無
 	 */
 	public final boolean hasDisorder() {
-		if (isIdiot())
+		if (isIdiot()) {
 			return true;
-		if (isNYD())
+		}
+		if (isNyd()) {
 			return true;
-		if (!hasOkazari())
+		}
+		if (!hasOkazari()) {
 			return true;
-		if (!hasBraidCheck())
+		}
+		if (!hasBraidCheck()) {
 			return true;
-		if (isBlind())
+		}
+		if (isBlind()) {
 			return true;
-		if (isPacked())
+		}
+		if (isPacked()) {
 			return true;
-		if (isGotBurned())
+		}
+		if (isGotBurned()) {
 			return true;
-		if (getCriticalDamege() == CriticalDamageType.CUT)
+		}
+		if (getCriticalDamege() == CriticalDamageType.CUT) {
 			return true;
+		}
 
 		return false;
 	}
@@ -710,15 +739,18 @@ public abstract class SocialEntity extends LivingEntity {
 			case ADULT:
 				tolerance += 50;
 				break;
+			default:
+				break;
 		}
 		if (isRapist()) {
 			tolerance += 5000;
 		}
 		if (isSoHungry()) {
-			if (isVeryHungry())
+			if (isVeryHungry()) {
 				tolerance -= 5;
-			else
+			} else {
 				tolerance -= 3;
+			}
 		}
 		switch (getFootBakeLevel()) {
 			case MEDIUM:
@@ -768,8 +800,8 @@ public abstract class SocialEntity extends LivingEntity {
 			tolerance -= 10;
 		}
 		if (getChildren() != null) {
-			for (int iChild : getChildren()) {
-				Yukkuri childBody = YukkuriRelations.getYukkuriById(iChild);
+			for (int childId : getChildren()) {
+				Yukkuri childBody = YukkuriRelations.getYukkuriById(childId);
 				if (childBody == null || childBody.isAdult()) {
 					continue;
 				}
@@ -970,26 +1002,29 @@ public abstract class SocialEntity extends LivingEntity {
 			setHappiness(Happiness.SAD);
 			setForceFace(ImageCode.TIRED.ordinal());
 		}
-		if (canFurifuri())
+		if (canFurifuri()) {
 			setFurifuri(true);
+		}
 		makeDirty(false);
 		int ageIndex = isBaby() ? 0 : (isChild() ? 1 : 2);
-		int P = 1;
+		int prob = 1;
 		switch (getIntelligence()) {
 			case WISE:
-				P = getCleaningFailProbWise()[ageIndex];
+				prob = getCleaningFailProbWise()[ageIndex];
 				break;
 			case AVERAGE:
-				P = getCleaningFailProbAverage()[ageIndex];
+				prob = getCleaningFailProbAverage()[ageIndex];
 				break;
 			case FOOL:
-				P = getCleaningFailProbFool()[ageIndex];
+				prob = getCleaningFailProbFool()[ageIndex];
+				break;
+			default:
 				break;
 		}
-		if (P <= 0) {
-			P = 1;
+		if (prob <= 0) {
+			prob = 1;
 		}
-		if (GameRandom.nextInt(P) != 0) {
+		if (GameRandom.nextInt(prob) != 0) {
 			setStubbornlyDirty(true);
 		}
 	}
@@ -1019,8 +1054,9 @@ public abstract class SocialEntity extends LivingEntity {
 
 			boolean kusogaki = (isRude() && isBaby()) || (isChild() && isVeryRude());
 			int c = kusogaki ? 20 : 40;
-			if (getAge() % c != 0)
+			if (getAge() % c != 0) {
 				return;
+			}
 			if (kusogaki) {
 				setHappiness(Happiness.VERY_SAD);
 				setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Dirty), false);
@@ -1169,45 +1205,52 @@ public abstract class SocialEntity extends LivingEntity {
 	/** れいぱーかどうか */
 	@Transient
 	public final boolean isRaper() {
-		if (isUnBirth())
+		if (isUnBirth()) {
 			return false;
+		}
 		return isRapist();
 	}
 
 	/** れいぱーを設定する */
 	public final void setRaper(boolean b) {
-		if (isPenipeniCutted())
+		if (isPenipeniCutted()) {
 			setRapist(false);
-		else
+		} else {
 			setRapist(b);
+		}
 	}
 
 	/** スーパーれいぱーかどうか */
 	@Transient
 	public final boolean isSuperRaper() {
-		if (isUnBirth())
+		if (isUnBirth()) {
 			return false;
-		if (isPenipeniCutted())
+		}
+		if (isPenipeniCutted()) {
 			setSuperRapist(false);
+		}
 		return isSuperRapist();
 	}
 
 	/** すーぱーれいぱーを設定する */
 	public final void setSuperRaper(boolean b) {
-		if (isPenipeniCutted())
+		if (isPenipeniCutted()) {
 			setSuperRapist(false);
-		else
+		} else {
 			setSuperRapist(b);
+		}
 	}
 
 	// --- プレイヤー好感度 ---
 
 	/** プレイヤーが好きか嫌いかを返却する */
 	public final LovePlayer checkLovePlayerState() {
-		if (getLovePlayer() < -1 * getLovePlayerLimitBase() / 2)
+		if (getLovePlayer() < -1 * getLovePlayerLimitBase() / 2) {
 			return LovePlayer.BAD;
-		if (getLovePlayerLimitBase() / 2 < getLovePlayer())
+		}
+		if (getLovePlayerLimitBase() / 2 < getLovePlayer()) {
 			return LovePlayer.GOOD;
+		}
 		return LovePlayer.NONE;
 	}
 
@@ -1215,14 +1258,15 @@ public abstract class SocialEntity extends LivingEntity {
 
 	/** 強制的にゲス度をいじる */
 	public final void plusAttitude(int p) {
-		if (isNotChangeCharacter())
+		if (isNotChangeCharacter()) {
 			return;
+		}
 		setAttitudePoint(getAttitudePoint() + p);
 	}
 
 	/** ゲス度によって性格変更 */
 	public final void checkAttitude() {
-		if (isNYD() || isIdiot()) {
+		if (isNyd() || isIdiot()) {
 			setAttitudePoint(0);
 			return;
 		}
@@ -1247,17 +1291,22 @@ public abstract class SocialEntity extends LivingEntity {
 
 	/** 通常時の躾 */
 	public final void teachManner(int p) {
-		if (!beginDisciplineEmotion()) return;
+		if (!beginDisciplineEmotion()) {
+			return;
+		}
 		disclipline(p * 5);
 		boolean flag = false;
-		if (isFurifuri() || (isSukkiri() && !isRaper()))
+		if (isFurifuri() || (isSukkiri() && !isRaper())) {
 			flag = true;
-		if (isRude()) {
-			if (isTalking())
-				flag = true;
 		}
-		if (flag)
+		if (isRude()) {
+			if (isTalking()) {
+				flag = true;
+			}
+		}
+		if (flag) {
 			plusAttitude(p);
+		}
 	}
 
 	/** うんうん、興奮、ふりふり、セリフの抑制をする */
@@ -1435,15 +1484,17 @@ public abstract class SocialEntity extends LivingEntity {
 	/** 子ゆっくり数を返す。 */
 	@Transient
 	public int getChildrenCount() {
-		if (getChildren() == null)
+		if (getChildren() == null) {
 			return 0;
+		}
 		return getChildren().size();
 	}
 
 	/** 子ゆっくりをリストに追加する。 */
 	public void addChild(SocialEntity at) {
-		if (at != null)
-			getChildren().add(at.getUniqueID());
+		if (at != null) {
+			getChildren().add(at.getUniqueId());
+		}
 	}
 
 	/** 子ゆっくりをリストから除去する。 */
@@ -1453,8 +1504,9 @@ public abstract class SocialEntity extends LivingEntity {
 
 	/** 姉をリストに追加する。 */
 	public void addElderSister(SocialEntity at) {
-		if (at != null)
-			getElderSisters().add(at.getUniqueID());
+		if (at != null) {
+			getElderSisters().add(at.getUniqueId());
+		}
 	}
 
 	/** 姉をリストから除去する。 */
@@ -1464,8 +1516,9 @@ public abstract class SocialEntity extends LivingEntity {
 
 	/** 姉妹をリストに追加する。 */
 	public void addSister(SocialEntity at) {
-		if (at != null)
-			getSisters().add(at.getUniqueID());
+		if (at != null) {
+			getSisters().add(at.getUniqueId());
+		}
 	}
 
 	/** 姉妹をリストから除去する。 */

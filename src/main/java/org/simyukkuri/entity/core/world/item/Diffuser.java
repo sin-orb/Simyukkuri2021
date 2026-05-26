@@ -8,13 +8,11 @@ import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.effect.Effect;
 import org.simyukkuri.entity.core.world.WorldEntity;
 import org.simyukkuri.enums.EffectType;
@@ -25,7 +23,7 @@ import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * ディヒューザー
  */
 public class Diffuser extends WorldEntity {
@@ -72,7 +70,7 @@ public class Diffuser extends WorldEntity {
 	}
 
 	public static final int hitCheckObjType = 0;
-	private static BufferedImage images[] = new BufferedImage[3];
+	private static BufferedImage[] images = new BufferedImage[3];
 	private static Rectangle4y boundary = new Rectangle4y();
 
 	private boolean[] steamType = new boolean[SteamType.values().length];
@@ -115,8 +113,9 @@ public class Diffuser extends WorldEntity {
 	/** 毎ティックの状態更新を行う。 */
 	@Override
 	public void upDate() {
-		if (!enabled)
+		if (!enabled) {
 			return;
+		}
 		if (getAge() % 2400 == 0) {
 			Cash.addCash(-getCost());
 		}
@@ -182,7 +181,6 @@ public class Diffuser extends WorldEntity {
 
 		JPanel mainPanel = new JPanel();
 		JCheckBox[] checkBox = new JCheckBox[SteamType.values().length];
-		boolean ret = false;
 
 		mainPanel.setLayout(new GridLayout(7, 2));
 		mainPanel.setPreferredSize(new Dimension(260, 180));
@@ -193,8 +191,9 @@ public class Diffuser extends WorldEntity {
 
 			panel.setLayout(new FlowLayout(FlowLayout.LEFT));
 			panel.add(checkBox[i]);
-			if (init)
+			if (init) {
 				checkBox[i].setSelected(d.steamType[i]);
+			}
 
 			mainPanel.add(panel);
 		}
@@ -207,9 +206,9 @@ public class Diffuser extends WorldEntity {
 			for (int i = 0; i < checkBox.length; i++) {
 				d.steamType[i] = checkBox[i].isSelected();
 			}
-			ret = true;
+			return true;
 		}
-		return ret;
+		return false;
 	}
 
 	/** 同時に噴出するスチーム数を返す。 */

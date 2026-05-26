@@ -5,15 +5,14 @@ import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.world.WorldEntity;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.WorldEntityKind;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * 食べ物
  */
 public class Food extends WorldEntity {
@@ -150,8 +149,9 @@ public class Food extends WorldEntity {
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
 		for (EmptyImage i : EmptyImage.values()) {
-			if (i.getFileName() == null)
+			if (i.getFileName() == null) {
 				continue;
+			}
 
 			emptyImages[i.ordinal()] = ModLoader.loadItemImage(loader, "food" + File.separator + i.getFileName());
 			emptyBoundary[i.ordinal()] = new Rectangle4y();
@@ -162,8 +162,9 @@ public class Food extends WorldEntity {
 		}
 
 		for (FoodType i : FoodType.values()) {
-			if (i.getFileName() == null)
+			if (i.getFileName() == null) {
 				continue;
+			}
 
 			images[i.ordinal()] = ModLoader.loadItemImage(loader, "food" + File.separator + i.getFileName());
 			boundary[i.ordinal()] = new Rectangle4y();
@@ -211,9 +212,9 @@ public class Food extends WorldEntity {
 		GameWorld.get().getCurrentWorldState().getFoods().remove(objId);
 	}
 
+	/** アイテムの購入価格を返す。 */
 	@Override
 	@Transient
-	/** アイテムの購入価格を返す。 */
 	public int getValue() {
 		return foodType.getValue();
 	}

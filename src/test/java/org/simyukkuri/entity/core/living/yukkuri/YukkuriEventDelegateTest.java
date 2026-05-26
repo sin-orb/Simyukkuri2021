@@ -5,11 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-
 import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.PlayStyle;
-import org.simyukkuri.event.impl.CutPenipeniEvent;
 import org.simyukkuri.event.impl.BegForLifeEvent;
+import org.simyukkuri.event.impl.CutPenipeniEvent;
 
 class YukkuriEventDelegateTest {
 	@Test

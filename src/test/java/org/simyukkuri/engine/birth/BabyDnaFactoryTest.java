@@ -91,7 +91,7 @@ public class BabyDnaFactoryTest {
 
     @Test
     public void testCreateBabyDnaWithNullMother() {
-        Dna dna = BabyDnaFactory.createBabyDna(null, null, YukkuriType.fromTypeID(0), Attitude.AVERAGE,
+        Dna dna = BabyDnaFactory.createBabyDna(null, null, YukkuriType.fromTypeId(0), Attitude.AVERAGE,
                 Intelligence.AVERAGE,
                 false, false, true);
         assertNull(dna);
@@ -104,7 +104,7 @@ public class BabyDnaFactoryTest {
                 Intelligence.AVERAGE, false, false, true);
         assertNotNull(dna);
         assertEquals(-1, dna.getFather());
-        assertEquals(mother.getUniqueID(), dna.getMother());
+        assertEquals(mother.getUniqueId(), dna.getMother());
     }
 
     @Test
@@ -118,7 +118,7 @@ public class BabyDnaFactoryTest {
                 Intelligence.AVERAGE, false, false, true);
 
         assertNotNull(dna);
-        assertTrue(dna.getType().getTypeID() >= 0);
+        assertTrue(dna.getType().getTypeId() >= 0);
     }
 
     @Test
@@ -157,17 +157,17 @@ public class BabyDnaFactoryTest {
             SimYukkuri.RND = rng;
 
             Reimu mother = new Reimu();
-            mother.setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
+            mother.setUniqueId(Numbering.INSTANCE.numberingYukkuriId());
             Reimu father = new Reimu();
-            father.setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
+            father.setUniqueId(Numbering.INSTANCE.numberingYukkuriId());
 
             Dna dna = BabyDnaFactory.createBabyDna(mother, father, father.getType(), Attitude.NICE,
                     Intelligence.WISE, true, true, true);
 
             assertNotNull(dna);
             assertEquals(Tarinai.type, dna.getType());
-            assertEquals(mother.getUniqueID(), dna.getMother());
-            assertEquals(father.getUniqueID(), dna.getFather());
+            assertEquals(mother.getUniqueId(), dna.getMother());
+            assertEquals(father.getUniqueId(), dna.getFather());
             assertTrue(dna.isRaperChild());
         }
 
@@ -178,18 +178,18 @@ public class BabyDnaFactoryTest {
             SimYukkuri.RND = rng;
 
             Reimu mother = new Reimu();
-            mother.setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
+            mother.setUniqueId(Numbering.INSTANCE.numberingYukkuriId());
             mother.setPregnantLimit(0);
             Reimu father = new Reimu();
-            father.setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
+            father.setUniqueId(Numbering.INSTANCE.numberingYukkuriId());
 
             Dna dna = BabyDnaFactory.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
                     Intelligence.AVERAGE, false, false, true);
 
             assertNotNull(dna);
             assertEquals(TarinaiReimu.type, dna.getType());
-            assertEquals(mother.getUniqueID(), dna.getMother());
-            assertEquals(father.getUniqueID(), dna.getFather());
+            assertEquals(mother.getUniqueId(), dna.getMother());
+            assertEquals(father.getUniqueId(), dna.getFather());
             assertFalse(dna.isRaperChild());
         }
 
@@ -297,7 +297,7 @@ public class BabyDnaFactoryTest {
         @Test
         void testScenario_MotherAncestorAtavismCanOverrideBabyType() {
             Reimu mother = new Reimu();
-            mother.getAncestors().add(Marisa.type.getTypeID());
+            mother.getAncestors().add(Marisa.type.getTypeId());
             Reimu father = new Reimu();
             SimYukkuri.RND = new SequenceBooleanRng(
                     new int[] { 0, 0, 1, 1, 1, 1, 1, 1, 1 }, false);

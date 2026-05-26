@@ -19,18 +19,16 @@ import java.beans.Transient;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
@@ -48,7 +46,7 @@ import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * ベルコン2
  * <br>
  * 拡張、YukkuriFilterPanel
@@ -60,7 +58,7 @@ public class BeltconveyorObj extends WorldEntity {
 			+ WorldEntity.TOY + WorldEntity.VOMIT
 			+ WorldEntity.STALK;
 	private static final int images_num = 10;
-	private static int AnimeImagesNum[] = {
+	private static int[] AnimeImagesNum = {
 			5, 5
 	};
 	private static BufferedImage[] images = new BufferedImage[images_num];
@@ -72,24 +70,24 @@ public class BeltconveyorObj extends WorldEntity {
 	static int x_default = 50;
 	static int y_default = 50;
 	private int beltSpeed;
-	private int hou_before = 0;
-	private int obj_before = 0;
-	private int move_before = 0;
-	private int speed_before = 0;
+	private int houBefore = 0;
+	private int objBefore = 0;
+	private int moveBefore = 0;
+	private int speedBefore = 0;
 	private int targetType;
 	private int cantmove = 0;
 	private boolean moveOnce = false;
 	protected List<Entity> bindObjList = new LinkedList<Entity>(); // ベルトコンベア上で移動不可能な状態になっているアイテムのリスト
 
 	protected List<YukkuriType> selectedYukkuriType = new LinkedList<YukkuriType>(); // 処理対象のゆっくり
-	static protected List<String> istrOptionList = new LinkedList<String>(); // 処理対象設定(オプション)
+	protected static List<String> istrOptionList = new LinkedList<String>(); // 処理対象設定(オプション)
 	protected List<Boolean> obOptionSelectionList = new LinkedList<Boolean>(); // 処理対象設定(オプション)の選択状態
 
 	protected boolean filter = false;
-	protected int fieldSX;
-	protected int fieldSY;
-	protected int fieldEX;
-	protected int fieldEY;
+	protected int fieldSx;
+	protected int fieldSy;
+	protected int fieldEx;
+	protected int fieldEy;
 	protected int firstX;
 	protected int firstY;
 	protected int[] polygonX = new int[4];
@@ -117,11 +115,12 @@ public class BeltconveyorObj extends WorldEntity {
 	/** 画像リソースをロードする。 */
 	public static void loadImages(ClassLoader loader, ImageObserver io)
 			throws IOException {
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 10; i++) {
 			images[i] = ModLoader.loadItemImage(loader,
 					(new StringBuilder("beltconveyor/beltconveyor")).append(String.format("%03d", new Object[] {
 							Integer.valueOf(i + 1)
 					})).append(".png").toString());
+		}
 
 		boundary.setWidth(images[0].getWidth(io));
 		boundary.setHeight(images[0].getHeight(io));
@@ -145,8 +144,9 @@ public class BeltconveyorObj extends WorldEntity {
 	public int getImageLayer(BufferedImage[] layer) {
 		int frame = 0;
 
-		if (enabled)
+		if (enabled) {
 			frame = (int) getAge();
+		}
 
 		switch (option) { // 楽にアニメ指定できるようにしたいが後で
 			case 0:
@@ -171,7 +171,7 @@ public class BeltconveyorObj extends WorldEntity {
 	public int getImageLayer(Graphics2D g2, BufferedImage[] layer) {
 		int[] basePolygonX = new int[2];
 		int[] basePolygonY = new int[2];
-		Translate.getMovedPoint(fieldSX, fieldSY, fieldEX, fieldEY, firstX, firstY, x, y, basePolygonX, basePolygonY);
+		Translate.getMovedPoint(fieldSx, fieldSy, fieldEx, fieldEy, firstX, firstY, x, y, basePolygonX, basePolygonY);
 		Translate.getPolygonPoint(basePolygonX[0], basePolygonY[0], basePolygonX[1], basePolygonY[1], polygonX,
 				polygonY);
 		TexturePaint texture = new TexturePaint(layer[0],
@@ -220,19 +220,19 @@ public class BeltconveyorObj extends WorldEntity {
 
 	/** 指定座標がベルトコンベア上にあるかチェックする。 */
 	public boolean checkContain(int inX, int inY, boolean isField) {
-		int xCoord = inX;
-		int yCoord = inY;
+		int xc = inX;
+		int yc = inY;
 		if (isField) {
 			Point4y pos = Translate.invertLimit(inX, inY);
-			xCoord = pos.getX();
-			yCoord = pos.getY();
+			xc = pos.getX();
+			yc = pos.getY();
 		}
 
 		Point4y posFirst = Translate.invertLimit(polygonX[0], polygonY[0]);
 		Point4y posSecond = Translate.invertLimit(polygonX[2], polygonY[2]);
 		if (posFirst != null && posSecond != null) {
-			if (posFirst.getX() <= xCoord && xCoord <= posSecond.getX() && posFirst.getY() <= yCoord
-					&& yCoord <= posSecond.getY()) {
+			if (posFirst.getX() <= xc && xc <= posSecond.getX() && posFirst.getY() <= yc
+					&& yc <= posSecond.getY()) {
 				return true;
 			}
 		}
@@ -241,8 +241,9 @@ public class BeltconveyorObj extends WorldEntity {
 
 	/** 衝突判定を行い、範囲内のオブジェクトを搬送対象に追加する。 */
 	public boolean checkHitObj(Rectangle colRect, Entity o) {
-		if ((o instanceof Yukkuri) && ((Yukkuri) o).isLockmove())
+		if ((o instanceof Yukkuri) && ((Yukkuri) o).isLockmove()) {
 			return false;
+		}
 		if (o.isRemoved()) {
 			bindObjList.remove(o);
 		}
@@ -264,10 +265,10 @@ public class BeltconveyorObj extends WorldEntity {
 	// 箱を斜めから見下ろしている形式なので奥のxと手前のxで同じ座標でも垂直にならない
 	/** 衝突処理を行い、結果コードを返す。 */
 	public int objHitProcess(Entity o) {
-		int objX = o.getX();
-		int objY = o.getY();
-		int objW = o.getW();
-		int objH = o.getH();
+		final int objX = o.getX();
+		final int objY = o.getY();
+		final int objW = o.getW();
+		final int objH = o.getH();
 		int attr = 16;
 
 		// フィルター有効時
@@ -282,39 +283,51 @@ public class BeltconveyorObj extends WorldEntity {
 				// 性格
 				switch (bodyTarget.getAttitude()) {
 					case VERY_NICE:
-						if (!obOptionSelectionList.get(0))
+						if (!obOptionSelectionList.get(0)) {
 							return 0;
+						}
 						break;
 					case NICE:
-						if (!obOptionSelectionList.get(1))
+						if (!obOptionSelectionList.get(1)) {
 							return 0;
+						}
 						break;
 					case AVERAGE:
-						if (!obOptionSelectionList.get(2))
+						if (!obOptionSelectionList.get(2)) {
 							return 0;
+						}
 						break;
 					case SHITHEAD:
-						if (!obOptionSelectionList.get(3))
+						if (!obOptionSelectionList.get(3)) {
 							return 0;
+						}
 						break;
 					case SUPER_SHITHEAD:
-						if (!obOptionSelectionList.get(4))
+						if (!obOptionSelectionList.get(4)) {
 							return 0;
+						}
+						break;
+					default:
 						break;
 				}
 				// 知性
 				switch (bodyTarget.getIntelligence()) {
 					case WISE:
-						if (!obOptionSelectionList.get(5))
+						if (!obOptionSelectionList.get(5)) {
 							return 0;
+						}
 						break;
 					case AVERAGE:
-						if (!obOptionSelectionList.get(6))
+						if (!obOptionSelectionList.get(6)) {
 							return 0;
+						}
 						break;
 					case FOOL:
-						if (!obOptionSelectionList.get(7))
+						if (!obOptionSelectionList.get(7)) {
 							return 0;
+						}
+						break;
+					default:
 						break;
 				}
 				// 死体のみチェック
@@ -329,48 +342,54 @@ public class BeltconveyorObj extends WorldEntity {
 		if (targetType != 0) {
 			switch (targetType) {
 				case 1:
-					if (!(o instanceof Yukkuri))
+					if (!(o instanceof Yukkuri)) {
 						return 0;
+					}
 					break;
 				case 2:
-					if (!(o instanceof Shit || o instanceof Vomit))
+					if (!(o instanceof Shit || o instanceof Vomit)) {
 						return 0;
+					}
 					break;
 				case 3:
-					if (!(o instanceof Food) || o instanceof Shit || o instanceof Vomit || o instanceof Yukkuri)
+					if (!(o instanceof Food) || o instanceof Shit || o instanceof Vomit || o instanceof Yukkuri) {
 						return 0;
+					}
 					break;
 				case 4:
-					if (!(o instanceof Stalk))
+					if (!(o instanceof Stalk)) {
 						return 0;
+					}
 					break;
 				default:
-					if (o instanceof Yukkuri)
+					if (o instanceof Yukkuri) {
 						return 0;
+					}
 					break;
 			}
 		}
-		if (o instanceof Yukkuri)
+		if (o instanceof Yukkuri) {
 			attr = Barrier.BODY_BLOCK_FLAGS[((Yukkuri) o).getAgeState().ordinal()];
+		}
 		if (!Barrier.onBarrier(objX, objY, objW >> 1, objH >> 2, attr)) {
 			boolean shouldMove = true;
 			// 一体づつ流す設定の時
 			if (moveOnce == true) {
 				if ((bindObjList != null) && bindObjList.contains(o) == true) {
-					for (Entity oBind : bindObjList) {
-						if (oBind == null || oBind.isRemoved()) {
+					for (Entity obind : bindObjList) {
+						if (obind == null || obind.isRemoved()) {
 							continue;
 						}
 						// 対象が優先度最大になったらスキップ
-						if (oBind == o) {
+						if (obind == o) {
 							break;
 						}
 						int attrBind = 16;
-						if (oBind instanceof Yukkuri) {
-							attrBind = Barrier.BODY_BLOCK_FLAGS[((Yukkuri) oBind).getAgeState().ordinal()];
+						if (obind instanceof Yukkuri) {
+							attrBind = Barrier.BODY_BLOCK_FLAGS[((Yukkuri) obind).getAgeState().ordinal()];
 						}
 						// リスト上の優先データがフィールドにひかかっていないなら終了
-						if (!Barrier.onBarrier(oBind.getX(), oBind.getY(), oBind.getW() >> 1, oBind.getH() >> 2,
+						if (!Barrier.onBarrier(obind.getX(), obind.getY(), obind.getW() >> 1, obind.getH() >> 2,
 								attrBind)) {
 							shouldMove = false;
 							break;
@@ -411,8 +430,9 @@ public class BeltconveyorObj extends WorldEntity {
 
 	/** 維持コストを定期的に引く。 */
 	public void upDate() {
-		if (getAge() % 2400L == 0L)
+		if (getAge() % 2400L == 0L) {
 			Cash.addCash(-getCost());
+		}
 	}
 
 	/** ベルト速度を返す。 */
@@ -484,16 +504,22 @@ public class BeltconveyorObj extends WorldEntity {
 
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	/** ベルトコンベアの隣接関係を登録し、登録成功かどうかを返す。 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static boolean setBeltconveyors(BeltconveyorObj belt, boolean init) {
-		String HOU_LIST[] = {
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new GridLayout(5, 2));
+		String[] houList = {
 				GameText.read("inside"),
 				GameText.read("outside"),
 				GameText.read("right"),
 				GameText.read("left")
 		};
-		String OBJ_LIST[] = {
+		JComboBox houBox = new JComboBox(houList);
+		houBox.setSelectedIndex(hou_default);
+		mainPanel.add(new JLabel(GameText.read("item_direction")));
+		mainPanel.add(houBox);
+		String[] objList = {
 				GameText.read("all"),
 				GameText.read("item_onlyyu"),
 				GameText.read("item_onlyanko"),
@@ -501,33 +527,26 @@ public class BeltconveyorObj extends WorldEntity {
 				GameText.read("item_onlystalk"),
 				GameText.read("item_exceptyu")
 		};
-		String MOVE_LIST[] = {
+		JComboBox objBox = new JComboBox(objList);
+		objBox.setSelectedIndex(obj_default);
+		mainPanel.add(new JLabel(GameText.read("item_target")));
+		mainPanel.add(objBox);
+		String[] moveList = {
 				GameText.read("item_movable"),
 				GameText.read("item_immovable"),
 				GameText.read("item_immovableonlyone")
 		};
-		String SPEED_LIST[] = {
+		JComboBox moveBox = new JComboBox(moveList);
+		moveBox.setSelectedIndex(move_default);
+		mainPanel.add(new JLabel(GameText.read("item_moveornot")));
+		mainPanel.add(moveBox);
+		String[] speedList = {
 				"x1.00", "x2.00", "x3.00", "x4.00"
 		};
-
-		JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new GridLayout(5, 2));
-		JComboBox hou_Box = new JComboBox(HOU_LIST);
-		hou_Box.setSelectedIndex(hou_default);
-		mainPanel.add(new JLabel(GameText.read("item_direction")));
-		mainPanel.add(hou_Box);
-		JComboBox obj_Box = new JComboBox(OBJ_LIST);
-		obj_Box.setSelectedIndex(obj_default);
-		mainPanel.add(new JLabel(GameText.read("item_target")));
-		mainPanel.add(obj_Box);
-		JComboBox move_Box = new JComboBox(MOVE_LIST);
-		move_Box.setSelectedIndex(move_default);
-		mainPanel.add(new JLabel(GameText.read("item_moveornot")));
-		mainPanel.add(move_Box);
-		JComboBox speed_Box = new JComboBox(SPEED_LIST);
-		speed_Box.setSelectedIndex(speed_default);
+		JComboBox speedBox = new JComboBox(speedList);
+		speedBox.setSelectedIndex(speed_default);
 		mainPanel.add(new JLabel(GameText.read("item_speed")));
-		mainPanel.add(speed_Box);
+		mainPanel.add(speedBox);
 
 		ButtonListener buttonListener = new ButtonListener();
 		buttonListener.master = belt;
@@ -541,10 +560,10 @@ public class BeltconveyorObj extends WorldEntity {
 		}
 
 		if (init) {
-			hou_Box.setSelectedIndex(belt.hou_before);
-			obj_Box.setSelectedIndex(belt.obj_before);
-			move_Box.setSelectedIndex(belt.move_before);
-			speed_Box.setSelectedIndex(belt.speed_before);
+			houBox.setSelectedIndex(belt.houBefore);
+			objBox.setSelectedIndex(belt.objBefore);
+			moveBox.setSelectedIndex(belt.moveBefore);
+			speedBox.setSelectedIndex(belt.speedBefore);
 		}
 
 		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel,
@@ -554,13 +573,13 @@ public class BeltconveyorObj extends WorldEntity {
 		}
 
 		int hou;
-		belt.hou_before = hou_default = hou = hou_Box.getSelectedIndex();
+		belt.houBefore = hou_default = hou = houBox.getSelectedIndex();
 		int obj;
-		belt.obj_before = obj_default = obj = obj_Box.getSelectedIndex();
+		belt.objBefore = obj_default = obj = objBox.getSelectedIndex();
 		int move;
-		belt.move_before = move_default = move = move_Box.getSelectedIndex();
+		belt.moveBefore = move_default = move = moveBox.getSelectedIndex();
 		int speed;
-		belt.speed_before = speed_default = speed = speed_Box.getSelectedIndex();
+		belt.speedBefore = speed_default = speed = speedBox.getSelectedIndex();
 
 		belt.setOption(hou);
 		switch (obj) {
@@ -619,16 +638,16 @@ public class BeltconveyorObj extends WorldEntity {
 		belt.beltSpeed = speed + 1;
 		// ----------------------
 		if (!init) {
-			Point4y pS = Translate.getFieldLimitForWorld(SimYukkuri.fieldSX, SimYukkuri.fieldSY);
-			Point4y pE = Translate.getFieldLimitForWorld(SimYukkuri.fieldEX, SimYukkuri.fieldEY);
-			belt.fieldSX = pS.getX();
-			belt.fieldSY = pS.getY();
-			belt.fieldEX = pE.getX();
-			belt.fieldEY = pE.getY();
+			Point4y start = Translate.getFieldLimitForWorld(SimYukkuri.fieldSx, SimYukkuri.fieldSy);
+			Point4y end = Translate.getFieldLimitForWorld(SimYukkuri.fieldEx, SimYukkuri.fieldEy);
+			belt.fieldSx = start.getX();
+			belt.fieldSy = start.getY();
+			belt.fieldEx = end.getX();
+			belt.fieldEy = end.getY();
 
 			int[] basePolygonX = new int[2];
 			int[] basePolygonY = new int[2];
-			Translate.getMovedPoint(belt.fieldSX, belt.fieldSY, belt.fieldEX, belt.fieldEY, 0, 0, 0, 0, basePolygonX,
+			Translate.getMovedPoint(belt.fieldSx, belt.fieldSy, belt.fieldEx, belt.fieldEy, 0, 0, 0, 0, basePolygonX,
 					basePolygonY);
 
 			int centerX = basePolygonX[0] + Math.abs(basePolygonX[1] - basePolygonX[0]) / 2;
@@ -640,7 +659,7 @@ public class BeltconveyorObj extends WorldEntity {
 			belt.setCalcY(pos.getY());
 
 			BeltconveyorObj.boundary.setWidth(Math.abs(basePolygonX[1] - basePolygonX[0]));
-			BeltconveyorObj.boundary.setHeight(Math.abs(SimYukkuri.fieldEY - SimYukkuri.fieldSY));
+			BeltconveyorObj.boundary.setHeight(Math.abs(SimYukkuri.fieldEy - SimYukkuri.fieldSy));
 			BeltconveyorObj.boundary.setX(Math.abs(basePolygonX[1] - basePolygonX[0]) >> 1);
 			BeltconveyorObj.boundary.setY(Math.abs(basePolygonY[1] - basePolygonY[0]) >> 1);
 		}
@@ -678,43 +697,43 @@ public class BeltconveyorObj extends WorldEntity {
 	}
 
 	/** 前フレームの方向を返す。 */
-	public int getHou_before() {
-		return hou_before;
+	public int getHouBefore() {
+		return houBefore;
 	}
 
 	/** 前フレームの方向をセットする。 */
-	public void setHou_before(int hou_before) {
-		this.hou_before = hou_before;
+	public void setHouBefore(int houBefore) {
+		this.houBefore = houBefore;
 	}
 
 	/** 前フレームのオブジェクト ID を返す。 */
-	public int getObj_before() {
-		return obj_before;
+	public int getObjBefore() {
+		return objBefore;
 	}
 
 	/** 前フレームのオブジェクト ID をセットする。 */
-	public void setObj_before(int obj_before) {
-		this.obj_before = obj_before;
+	public void setObjBefore(int objBefore) {
+		this.objBefore = objBefore;
 	}
 
 	/** 前フレームの移動状態を返す。 */
-	public int getMove_before() {
-		return move_before;
+	public int getMoveBefore() {
+		return moveBefore;
 	}
 
 	/** 前フレームの移動状態をセットする。 */
-	public void setMove_before(int move_before) {
-		this.move_before = move_before;
+	public void setMoveBefore(int moveBefore) {
+		this.moveBefore = moveBefore;
 	}
 
 	/** 前フレームの移動速度を返す。 */
-	public int getSpeed_before() {
-		return speed_before;
+	public int getSpeedBefore() {
+		return speedBefore;
 	}
 
 	/** 前フレームの移動速度をセットする。 */
-	public void setSpeed_before(int speed_before) {
-		this.speed_before = speed_before;
+	public void setSpeedBefore(int speedBefore) {
+		this.speedBefore = speedBefore;
 	}
 
 	/** ターゲットの種別を返す。 */
@@ -768,43 +787,43 @@ public class BeltconveyorObj extends WorldEntity {
 	}
 
 	/** フィールド矩形の始点 X 座標を返す。 */
-	public int getFieldSX() {
-		return fieldSX;
+	public int getFieldSx() {
+		return fieldSx;
 	}
 
 	/** フィールド矩形の始点 X 座標をセットする。 */
-	public void setFieldSX(int fieldSX) {
-		this.fieldSX = fieldSX;
+	public void setFieldSx(int fieldSx) {
+		this.fieldSx = fieldSx;
 	}
 
 	/** フィールド矩形の始点 Y 座標を返す。 */
-	public int getFieldSY() {
-		return fieldSY;
+	public int getFieldSy() {
+		return fieldSy;
 	}
 
 	/** フィールド矩形の始点 Y 座標をセットする。 */
-	public void setFieldSY(int fieldSY) {
-		this.fieldSY = fieldSY;
+	public void setFieldSy(int fieldSy) {
+		this.fieldSy = fieldSy;
 	}
 
 	/** フィールド矩形の終点 X 座標を返す。 */
-	public int getFieldEX() {
-		return fieldEX;
+	public int getFieldEx() {
+		return fieldEx;
 	}
 
 	/** フィールド矩形の終点 X 座標をセットする。 */
-	public void setFieldEX(int fieldEX) {
-		this.fieldEX = fieldEX;
+	public void setFieldEx(int fieldEx) {
+		this.fieldEx = fieldEx;
 	}
 
 	/** フィールド矩形の終点 Y 座標を返す。 */
-	public int getFieldEY() {
-		return fieldEY;
+	public int getFieldEy() {
+		return fieldEy;
 	}
 
 	/** フィールド矩形の終点 Y 座標をセットする。 */
-	public void setFieldEY(int fieldEY) {
-		this.fieldEY = fieldEY;
+	public void setFieldEy(int fieldEy) {
+		this.fieldEy = fieldEy;
 	}
 
 	/** 配置時の初期 X 座標を返す。 */
@@ -879,6 +898,7 @@ public class BeltconveyorObj extends WorldEntity {
 						master.setSelectedYukkuriTypes(arrayTemp);
 						master.setOptionSelections(obOptionSelectionList);
 					}
+					break;
 				default:
 					break;
 			}

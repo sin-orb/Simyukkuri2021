@@ -9,11 +9,10 @@ import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
 import org.simyukkuri.command.GadgetAction;
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Translate;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.bodylinked.Stalk;
@@ -27,7 +26,7 @@ import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * 畑
  * <br>
  * これはほかのアイテムと違い、ObjEXを継承していないので注意。
@@ -90,6 +89,8 @@ public class Farm extends FieldShape {
 				farmList.remove(this);
 				farmList.add(this);
 				break;
+			default:
+				break;
 		}
 	}
 
@@ -119,7 +120,7 @@ public class Farm extends FieldShape {
 	/** シェイプの外形を描画する。 */
 	@Override
 	public void drawShape(Graphics2D g2) {
-		Translate.getPolygonPoint(fieldSX, fieldSY, fieldEX, fieldEY, polygonX, polygonY);
+		Translate.getPolygonPoint(fieldSx, fieldSy, fieldEx, fieldEy, polygonX, polygonY);
 		g2.setPaint(texture);
 		g2.fillPolygon(polygonX, polygonY, 4);
 	}
@@ -135,53 +136,55 @@ public class Farm extends FieldShape {
 	public Farm(int fsx, int fsy, int fex, int fey) {
 		Point4y startPoint = Translate.getFieldLimitForWorld(fsx, fsy);
 		Point4y endPoint = Translate.getFieldLimitForWorld(fex, fey);
-		fieldSX = startPoint.getX();
-		fieldSY = startPoint.getY();
-		fieldEX = endPoint.getX();
-		fieldEY = endPoint.getY();
+		fieldSx = startPoint.getX();
+		fieldSy = startPoint.getY();
+		fieldEx = endPoint.getX();
+		fieldEy = endPoint.getY();
 
 		int[] basePolygonX = new int[2];
 		int[] basePolygonY = new int[2];
-		Translate.getMovedPoint(fieldSX, fieldSY, fieldEX, fieldEY, 0, 0, 0, 0, basePolygonX, basePolygonY);
+		Translate.getMovedPoint(fieldSx, fieldSy, fieldEx, fieldEy, 0, 0, 0, 0, basePolygonX, basePolygonY);
 
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
 		Point4y mapStart = Translate.invertLimit(basePolygonX[0], basePolygonY[0]);
-		mapSX = Math.max(0, Math.min(mapStart.getX(), Translate.getWorldWidth()));
-		mapSY = Math.max(0, Math.min(mapStart.getY(), Translate.getWorldHeight()));
+		mapSx = Math.max(0, Math.min(mapStart.getX(), Translate.getWorldWidth()));
+		mapSy = Math.max(0, Math.min(mapStart.getY(), Translate.getWorldHeight()));
 
 		Point4y mapEnd = Translate.invertLimit(basePolygonX[1], basePolygonY[1]);
-		mapEX = Math.max(0, Math.min(mapEnd.getX(), Translate.getWorldWidth()));
-		mapEY = Math.max(0, Math.min(mapEnd.getY(), Translate.getWorldHeight()));
+		mapEx = Math.max(0, Math.min(mapEnd.getX(), Translate.getWorldWidth()));
+		mapEy = Math.max(0, Math.min(mapEnd.getY(), Translate.getWorldHeight()));
 
 		// 規定サイズと位置へ合わせる
-		if ((mapEX - mapSX) < MIN_SIZE)
-			mapEX = mapSX + MIN_SIZE;
-		if ((mapEY - mapSY) < MIN_SIZE)
-			mapEY = mapSY + MIN_SIZE;
-		if (mapEX > Translate.getWorldWidth()) {
-			mapSX -= (mapEX - Translate.getWorldWidth());
-			mapEX -= (mapEX - Translate.getWorldWidth());
+		if ((mapEx - mapSx) < MIN_SIZE) {
+			mapEx = mapSx + MIN_SIZE;
 		}
-		if (mapEY > Translate.getWorldHeight()) {
-			mapSY -= (mapEY - Translate.getWorldHeight());
-			mapEY -= (mapEY - Translate.getWorldHeight());
+		if ((mapEy - mapSy) < MIN_SIZE) {
+			mapEy = mapSy + MIN_SIZE;
+		}
+		if (mapEx > Translate.getWorldWidth()) {
+			mapSx -= (mapEx - Translate.getWorldWidth());
+			mapEx -= (mapEx - Translate.getWorldWidth());
+		}
+		if (mapEy > Translate.getWorldHeight()) {
+			mapSy -= (mapEy - Translate.getWorldHeight());
+			mapEy -= (mapEy - Translate.getWorldHeight());
 		}
 
 		Point4y f = new Point4y();
-		Translate.translate(mapSX, mapSY, f);
-		fieldSX = f.getX();
-		fieldSY = f.getY();
-		Translate.translate(mapEX, mapEY, f);
-		fieldEX = f.getX();
-		fieldEY = f.getY();
+		Translate.translate(mapSx, mapSy, f);
+		fieldSx = f.getX();
+		fieldSy = f.getY();
+		Translate.translate(mapEx, mapEy, f);
+		fieldEx = f.getX();
+		fieldEy = f.getY();
 
-		fieldW = fieldEX - fieldSX + 1;
-		fieldH = fieldEY - fieldSY + 1;
-		mapW = mapEX - mapSX + 1;
-		mapH = mapEY - mapSY + 1;
+		fieldW = fieldEx - fieldSx + 1;
+		fieldH = fieldEy - fieldSy + 1;
+		mapW = mapEx - mapSx + 1;
+		mapH = mapEy - mapSy + 1;
 
 		GameWorld.get().getCurrentWorldState().getFarms().add(this);
-		WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), mapSX, mapSY, mapW, mapH, true,
+		WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), mapSx, mapSy, mapW, mapH, true,
 				FIELD_FARM);
 	}
 
@@ -194,8 +197,8 @@ public class Farm extends FieldShape {
 	public static Farm getFarm(int fx, int fy) {
 
 		for (Farm targetFarm : GameWorld.get().getCurrentWorldState().getFarms()) {
-			if (targetFarm.fieldSX <= fx && fx <= targetFarm.fieldEX
-					&& targetFarm.fieldSY <= fy && fy <= targetFarm.fieldEY) {
+			if (targetFarm.fieldSx <= fx && fx <= targetFarm.fieldEx
+					&& targetFarm.fieldSy <= fy && fy <= targetFarm.fieldEy) {
 				return targetFarm;
 			}
 		}
@@ -204,14 +207,14 @@ public class Farm extends FieldShape {
 
 	/** 削除 */
 	public static void deleteFarm(Farm farm) {
-		WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), farm.mapSX, farm.mapSY, farm.mapW,
+		WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), farm.mapSx, farm.mapSy, farm.mapW,
 				farm.mapH,
 				false,
 				FIELD_FARM);
 		GameWorld.get().getCurrentWorldState().getFarms().remove(farm);
 		// 重なってた部分の復元
 		for (Farm targetFarm : GameWorld.get().getCurrentWorldState().getFarms()) {
-			WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), targetFarm.mapSX, targetFarm.mapSY,
+			WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), targetFarm.mapSx, targetFarm.mapSy,
 					targetFarm.mapW,
 					targetFarm.mapH,
 					true,
@@ -227,19 +230,19 @@ public class Farm extends FieldShape {
 	 * @param isField 渡された座標がフィールド座標かどうか
 	 */
 	public boolean checkContain(int inX, int inY, boolean isField) {
-		int xCoord = inX;
-		int yCoord = inY;
+		int xcord = inX;
+		int ycord = inY;
 		if (isField) {
 			Point4y pos = Translate.invertLimit(inX, inY);
-			xCoord = pos.getX();
-			yCoord = pos.getY();
+			xcord = pos.getX();
+			ycord = pos.getY();
 		}
 
 		Point4y posFirst = Translate.invertLimit(polygonX[0], polygonY[0]);
 		Point4y posSecond = Translate.invertLimit(polygonX[2], polygonY[2]);
 		if (posFirst != null && posSecond != null) {
-			if (posFirst.getX() <= xCoord && xCoord <= posSecond.getX() && posFirst.getY() <= yCoord
-					&& yCoord <= posSecond.getY()) {
+			if (posFirst.getX() <= xcord && xcord <= posSecond.getX() && posFirst.getY() <= ycord
+					&& ycord <= posSecond.getY()) {
 				return true;
 			}
 		}
@@ -269,10 +272,10 @@ public class Farm extends FieldShape {
 			return 0;
 		}
 		// 空中は無視
-		int zCoord = o.getZ();
+		int zcord = o.getZ();
 		if (o instanceof Yukkuri) {
 			Yukkuri body = (Yukkuri) o;
-			if (0 < zCoord) {
+			if (0 < zcord) {
 				if (body.getBurialState() != BurialState.NONE) {
 					o.setMostDepth(0);
 					body.setLockmove(false);
@@ -281,7 +284,7 @@ public class Farm extends FieldShape {
 				}
 			}
 		} else {
-			if (0 < zCoord) {
+			if (0 < zcord) {
 				if (o.getMostDepth() != 0) {
 					o.setMostDepth(0);
 				}
@@ -305,6 +308,11 @@ public class Farm extends FieldShape {
 		giveAmount(o);
 
 		return 1;
+	}
+
+	/** 農場の産出量を返す。 */
+	public int getAmount() {
+		return amount;
 	}
 
 	/** あるオブジェクトを肥料に変換する際に、そのオブジェクトの目方の減りを計算＆実行 */
@@ -363,8 +371,8 @@ public class Farm extends FieldShape {
 			}
 
 			// 土にかなり埋まってたら茎がはえる
-			if (body.getBurialState() == BurialState.NEARLY_ALL ||
-					body.getBurialState() == BurialState.ALL) {
+			if (body.getBurialState() == BurialState.NEARLY_ALL
+					|| body.getBurialState() == BurialState.ALL) {
 				// 茎が生えていたら救済モード(10%回復)
 				if (body.isHasStalk() && fertilizerAmount <= amount) {
 					if (body.isSoHungry()) {
@@ -379,7 +387,7 @@ public class Farm extends FieldShape {
 				}
 
 				if (!body.isHasStalk() && 1000 < amount) {
-					Stalk stalk = (Stalk) GadgetAction.putObjEX(Stalk.class, body.getX(), body.getY(),
+					Stalk stalk = (Stalk) GadgetAction.putObjEx(Stalk.class, body.getX(), body.getY(),
 							body.getDirection().ordinal());
 					GameWorld.get().getCurrentWorldState().getStalks().put(stalk.objId, stalk);
 					if (body.getStalks() != null) {
@@ -392,7 +400,7 @@ public class Farm extends FieldShape {
 					// 余裕がありそうならランダムで茎を生やす
 					if (3000 < amount && !body.isDamaged()) {
 						if (GameRandom.nextInt(100) == 0) {
-							Stalk stalk = (Stalk) GadgetAction.putObjEX(Stalk.class, body.getX(), body.getY(),
+							Stalk stalk = (Stalk) GadgetAction.putObjEx(Stalk.class, body.getX(), body.getY(),
 									body.getDirection().ordinal());
 							GameWorld.get().getCurrentWorldState().getStalks().put(stalk.objId, stalk);
 							if (body.getStalks() != null) {
@@ -406,11 +414,6 @@ public class Farm extends FieldShape {
 				}
 			}
 		}
-	}
-
-	/** 農場の産出量を返す。 */
-	public int getAmount() {
-		return amount;
 	}
 
 	/** 農場の産出量をセットする。 */

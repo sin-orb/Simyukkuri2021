@@ -1,7 +1,6 @@
 package org.simyukkuri.logic;
 
 import java.util.Map;
-
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -43,12 +42,8 @@ public final class FoodUnunSlaveSearchPolicy {
 	 * @return 対象を発見した場合はそのオブジェクト、見つからない場合は null
 	 */
 	public static Entity searchFoodForUnunSlave(Yukkuri body, boolean[] forceEat, WorldState ws) {
-		Entity targetObject = null;
-		int minDistance = body.getEyesightBase();
 		int wallMode = body.getAgeState().ordinal();
-
 		forceEat[0] = false;
-
 		if (body.canflyCheck()) {
 			wallMode = AgeState.ADULT.ordinal();
 		}
@@ -59,6 +54,8 @@ public final class FoodUnunSlaveSearchPolicy {
 			}
 		}
 
+		Entity targetObject = null;
+		int minDistance = body.getEyesightBase();
 		if (targetObject == null) {
 			for (Map.Entry<Integer, Shit> entry : ws.getShit().entrySet()) {
 				Shit shit = entry.getValue();
@@ -150,9 +147,9 @@ public final class FoodUnunSlaveSearchPolicy {
 							Barrier.BODY_BLOCK_FLAGS[wallMode] + Barrier.BARRIER_KEKKAI)) {
 						continue;
 					}
-					if (food.getFoodType() == Food.FoodType.WASTE ||
-							food.getFoodType() == Food.FoodType.WASTE_NORA ||
-							food.getFoodType() == Food.FoodType.WASTE_YASEI) {
+					if (food.getFoodType() == Food.FoodType.WASTE
+							|| food.getFoodType() == Food.FoodType.WASTE_NORA
+							|| food.getFoodType() == Food.FoodType.WASTE_YASEI) {
 						if (body.isTooHungry()) {
 							targetObject = food;
 							break;

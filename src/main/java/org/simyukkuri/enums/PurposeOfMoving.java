@@ -1,4 +1,5 @@
 package org.simyukkuri.enums;
+
 /**移動目的の定義*/
 public enum PurposeOfMoving {
 	

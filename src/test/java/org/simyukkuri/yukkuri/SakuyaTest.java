@@ -217,6 +217,7 @@ public class SakuyaTest {
             Sakuya.loadImages(Sakuya.class.getClassLoader(), null);
             fl.setBoolean(null, oldVal);
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -227,19 +228,26 @@ public class SakuyaTest {
             java.lang.reflect.Field fp = Sakuya.class.getDeclaredField("imagePack");
             fp.setAccessible(true);
             int ranks = org.simyukkuri.enums.YukkuriRank.values().length;
-            java.awt.image.BufferedImage[][][][] pack = new java.awt.image.BufferedImage[ranks][200][20][20];
-            java.awt.image.BufferedImage dummy = new java.awt.image.BufferedImage(1, 1,
-                    java.awt.image.BufferedImage.TYPE_INT_ARGB);
-            for (int i = 0; i < ranks; i++)
-                for (int j = 0; j < 200; j++)
-                    for (int k = 0; k < 20; k++)
-                        for (int l = 0; l < 20; l++)
+            java.awt.image.BufferedImage[][][][] pack =
+                    new java.awt.image.BufferedImage[ranks][200][20][20];
+            java.awt.image.BufferedImage dummy =
+                    new java.awt.image.BufferedImage(
+                            1, 1, java.awt.image.BufferedImage.TYPE_INT_ARGB);
+            for (int i = 0; i < ranks; i++) {
+                for (int j = 0; j < 200; j++) {
+                    for (int k = 0; k < 20; k++) {
+                        for (int l = 0; l < 20; l++) {
                             pack[i][j][k][l] = dummy;
+                        }
+                    }
+                }
+            }
             fp.set(null, pack);
             Sakuya obj = new Sakuya();
             org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
             obj.getImage(0, 0, layer, 0);
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -248,13 +256,16 @@ public class SakuyaTest {
         try {
             Sakuya.loadIniFile(Sakuya.class.getClassLoader());
         } catch (Exception e) {
+            // ignore
         } finally {
             try {
                 java.lang.reflect.Field fa = Sakuya.class.getDeclaredField("AttachOffset");
                 fa.setAccessible(true);
-                if (fa.get(null) == null)
+                if (fa.get(null) == null) {
                     fa.set(null, new java.util.HashMap<>());
+                }
             } catch (Exception e) {
+                // ignore
             }
         }
     }

@@ -4,19 +4,18 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Rectangle4y;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.util.GameRandom;
 
-/***************************************************
+/**
  * おかざりオブジェクトクラス
- * 
+ *
  */
 public class Okazari extends WorldEntity {
 
@@ -57,10 +56,10 @@ public class Okazari extends WorldEntity {
 
 	/**
 	 * ゴミおかざりの画像読み込み
-	 * 
-	 * @param loader
-	 * @param io
-	 * @throws IOException
+	 *
+	 * @param loader ローダ
+	 * @param io     イメージオブザーバ
+	 * @throws IOException IO例外
 	 */
 	public static final void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
@@ -118,20 +117,21 @@ public class Okazari extends WorldEntity {
 			return null;
 		}
 		Yukkuri body = org.simyukkuri.util.YukkuriLookup.getYukkuriById(owner);
-		if (body == null)
+		if (body == null) {
 			return null;
+		}
 		return offsetPos[body.getAgeState().ordinal()];
 	}
 
 	/**
 	 * コンストラクタ.
-	 * 
-	 * @param b    ゆっくりのインスタンス
+	 *
+	 * @param body ゆっくりのインスタンス
 	 * @param type おかざりのタイプ
 	 */
 	public Okazari(Yukkuri body, OkazariType type) {
 
-		owner = body.getUniqueID();
+		owner = body.getUniqueId();
 		okazariType = type;
 		if (okazariType.getFileName() == null) {
 			offsetPos = null;

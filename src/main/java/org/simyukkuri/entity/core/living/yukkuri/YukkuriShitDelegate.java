@@ -95,8 +95,8 @@ public final class YukkuriShitDelegate {
 
 		// うんうん無効判定
 		// 溶けている場合,完全足焼きした場合,食事中、ぺろぺろ中、すっきり中はうんうんしない
-		if ((body.getFootBakeLevel() == FootBake.CRITICAL && !body.isPealed()) ||
-				body.isMelt() || body.isEating() || body.isPeropero() || body.isSukkiri() || body.isPacked()) {
+		if ((body.getFootBakeLevel() == FootBake.CRITICAL && !body.isPealed())
+				|| body.isMelt() || body.isEating() || body.isPeropero() || body.isSukkiri() || body.isPacked()) {
 			body.setShit(shit);
 			return false;
 		}
@@ -131,7 +131,6 @@ public final class YukkuriShitDelegate {
 			dropChanceDivisor = 10;
 		}
 
-		boolean cantMove = false;
 		// 蓄積実行
 		if (GameRandom.nextInt(dropChanceDivisor) == 0) {
 			if (body.isFull()) {
@@ -142,8 +141,8 @@ public final class YukkuriShitDelegate {
 		}
 
 		// ちぎれ状態の場合は餡子を漏らす
-		if ((body.getCriticalDamege() == CriticalDamageType.CUT || body.isPealed()) &&
-				body.getBurialState() == BurialState.NONE) {
+		if ((body.getCriticalDamege() == CriticalDamageType.CUT || body.isPealed())
+				&& body.getBurialState() == BurialState.NONE) {
 			if (shit > body.getShitLimitBase()[body.getAgeState().ordinal()] - Entity.TICK * Const.SHITSTAY * 2) {
 				GameView.addCrushedVomit(body.getX() + 3 - GameRandom.nextInt(6), body.getY() - 2, 0,
 						body,
@@ -159,6 +158,7 @@ public final class YukkuriShitDelegate {
 			}
 		}
 
+		boolean cantMove = false;
 		// 寝ている場合はうんうん限界の1.5倍までは我慢できる
 		if (body.isSleeping()) {
 			if (shit < (body.getShitLimitBase()[body.getAgeState().ordinal()] * 1.5f)) {
@@ -169,19 +169,19 @@ public final class YukkuriShitDelegate {
 		}
 
 		// 非ゆっくり症ではない場合
-		if (body.isNotNYD() && body.getBurialState() == BurialState.NONE) {
+		if (body.isNotNyd() && body.getBurialState() == BurialState.NONE) {
 			// うんうん奴隷ではない場合
 			if (body.getPublicRank() != PublicRank.UNUN_SLAVE) {
-				Entity oTarget = body.takeMoveTarget();
+				Entity target = body.takeMoveTarget();
 				// もしトイレに到着していたら即排泄へ
-				if (body.isToShit() && oTarget instanceof Toilet) {
-					if (((Toilet) oTarget).checkHitObj(body)) {
+				if (body.isToShit() && target instanceof Toilet) {
+					if (((Toilet) target).checkHitObj(body)) {
 						if (shit < body.getShitLimitBase()[body.getAgeState().ordinal()]
 								- Entity.TICK * Const.SHITSTAY + 1) {
 							shit = body.getShitLimitBase()[body.getAgeState().ordinal()]
 									- Entity.TICK * Const.SHITSTAY + 1;
 						}
-					} else if (body.checkOnBed()) {// トイレがある場合
+					} else if (body.checkOnBed()) { // トイレがある場合
 						// 大人で寝てたなら起きる
 						if (body.getAgeState() == AgeState.ADULT && body.isSleeping()) {
 							body.wakeup();
@@ -202,10 +202,8 @@ public final class YukkuriShitDelegate {
 							return false;
 						}
 					}
-				}
-				// トイレがない場合
-				else if (body.checkOnBed()) {
-					// ベッドの上では我慢する
+				} else if (body.checkOnBed()) {
+					// トイレがない場合: ベッドの上では我慢する
 					if (shit < (body.getShitLimitBase()[body.getAgeState().ordinal()] * 1.5f)) {
 						body.setShitting(false);
 						body.setShit(shit);
@@ -281,13 +279,13 @@ public final class YukkuriShitDelegate {
 					body.addStress(200);
 				}
 
-				if (body.isHasPants() || body.isNYD()) {
+				if (body.isHasPants() || body.isNyd()) {
 					body.makeDirty(true);
 					body.setHappiness(Happiness.VERY_SAD);
 					body.addStress(400);
 				}
 
-				if (body.isNotNYD()) {
+				if (body.isNotNyd()) {
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Shit2));
 					body.stay();
 					if (!body.isHasPants()) {
@@ -308,7 +306,7 @@ public final class YukkuriShitDelegate {
 			} else {
 				// 塞がってたら膨らんで破裂
 				body.wakeup();
-				if (body.isNotNYD()) {
+				if (body.isNotNyd()) {
 					if (body.getBurstState() == Burst.NEAR) {
 						if (GameRandom.nextInt(10) == 0) {
 							body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Inflation));

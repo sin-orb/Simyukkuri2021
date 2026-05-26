@@ -4,9 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.awt.Color;
-
 import org.junit.jupiter.api.Test;
-import org.simyukkuri.system.BasicStrokeEX;
+import org.simyukkuri.system.BasicStrokeEx;
 
 class ConstTest {
 
@@ -76,11 +75,12 @@ class ConstTest {
     void testWindowStroke() {
         assertNotNull(Const.WINDOW_STROKE);
         assertEquals(5, Const.WINDOW_STROKE.length);
-        assertTrue(Const.WINDOW_STROKE[0] instanceof BasicStrokeEX);
+        assertTrue(Const.WINDOW_STROKE[0] instanceof BasicStrokeEx);
     }
 
     private void assertTrue(boolean b) {
-        if (!b)
+        if (!b) {
             throw new AssertionError();
+        }
     }
 }

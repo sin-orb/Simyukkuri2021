@@ -2,7 +2,6 @@ package org.simyukkuri.logic;
 
 import java.util.List;
 import java.util.Map;
-
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
@@ -12,8 +11,8 @@ import org.simyukkuri.enums.Direction;
 import org.simyukkuri.enums.GatheringDirection;
 import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.field.impl.Barrier;
-import org.simyukkuri.util.YukkuriLookup;
 import org.simyukkuri.util.GameWorld;
+import org.simyukkuri.util.YukkuriLookup;
 
 /**
  * ゆっくりの集合移動ロジック.
@@ -88,7 +87,6 @@ public final class YukkuriGatheringRule {
 
 		boolean success = true;
 		for (Yukkuri body : targetList) {
-			int gap = 10;
 			if (body == null) {
 				continue;
 			}
@@ -97,9 +95,9 @@ public final class YukkuriGatheringRule {
 			}
 
 			processedCount++;
-			int zShift = 0;
+			int dz = 0;
 			if (body.canflyCheck()) {
-				zShift = topObject.getZ();
+				dz = topObject.getZ();
 			}
 
 			collisionOffset = Translate.invertX(body.getCollisionX(), frontCenter.getY());
@@ -107,6 +105,7 @@ public final class YukkuriGatheringRule {
 			int y = 0;
 			boolean moved = false;
 
+			int gap = 10;
 			if ((maxRowSize == 1) || (processedCount % maxRowSize == 1)) {
 				lineIndex++;
 				if (nextFrontCenter != null) {
@@ -139,6 +138,8 @@ public final class YukkuriGatheringRule {
 						x = frontCenter.getX() + lineOffset;
 						y = frontCenter.getY();
 						break;
+					default:
+						break;
 				}
 
 				if (x < 0) {
@@ -156,9 +157,9 @@ public final class YukkuriGatheringRule {
 				row = 1;
 				if (isOddLayout) {
 					if (event == null) {
-						body.moveToYukkuri(frontCenter, x, y, zShift);
+						body.moveToYukkuri(frontCenter, x, y, dz);
 					} else {
-						body.moveToEvent(event, x, y, zShift);
+						body.moveToEvent(event, x, y, dz);
 					}
 					moved = true;
 				}
@@ -215,6 +216,8 @@ public final class YukkuriGatheringRule {
 							y = frontCenter.getY() + (collisionOffset + gap) * (2 * row - 1) * horizontalDirection;
 						}
 						break;
+					default:
+						break;
 				}
 
 				if (x < 0) {
@@ -229,9 +232,9 @@ public final class YukkuriGatheringRule {
 				}
 
 				if (event == null) {
-					body.moveToYukkuri(topObject, x, y, zShift);
+					body.moveToYukkuri(topObject, x, y, dz);
 				} else {
-					body.moveToEvent(event, x, y, zShift);
+					body.moveToEvent(event, x, y, dz);
 				}
 
 				if (horizontalDirection == -1) {
@@ -279,9 +282,9 @@ public final class YukkuriGatheringRule {
 				continue;
 			}
 			int collisionOffset = Math.abs(YukkuriLogic.calcCollisionX(body, currentBody));
-			int zShift = 0;
+			int dz = 0;
 			if (body.canflyCheck()) {
-				zShift = currentBody.getZ();
+				dz = currentBody.getZ();
 			}
 			int dist = Translate.getRealDistance(body.getX(), body.getY(), currentBody.getX(), currentBody.getY());
 			int targetDistance = dist - collisionOffset * 2;
@@ -293,9 +296,9 @@ public final class YukkuriGatheringRule {
 			int x = p2.getX();
 			int y = p2.getY();
 			if (event == null) {
-				body.moveToYukkuri(currentBody, x, y, zShift);
+				body.moveToYukkuri(currentBody, x, y, dz);
 			} else {
-				body.moveToEvent(event, x, y, zShift);
+				body.moveToEvent(event, x, y, dz);
 			}
 			body.setTargetBind(false);
 			currentBody = body;

@@ -3,31 +3,31 @@ package org.simyukkuri.entity.core.attachment.impl;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
-
 import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.attachment.Attachment;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.AttachProperty;
 import org.simyukkuri.enums.Direction;
-import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.UnbirthBabyState;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameText;
 
-/****************************************
+/**
  * 針
- * 
+ *
  */
 public class Needle extends Attachment {
 
 	private static final long serialVersionUID = 4370778209880937836L;
 	/** 識別キー */
-	private static final String POS_KEY = "Needle", POS_KEY_IN_ANAL = "Needle_In_Anal";
+	private static final String POS_KEY = "Needle";
+	private static final String POS_KEY_IN_ANAL = "Needle_In_Anal";
 	/**
 	 * 画像の入れ物
 	 * <br>
@@ -35,9 +35,11 @@ public class Needle extends Attachment {
 	 */
 	private static BufferedImage[][] images;
 	/** 画像のサイズ */
-	private static int[] imgW, imgH;
+	private static int[] imgW;
+	private static int[] imgH;
 	/** 画像の描画原点の座標 */
-	private static int[] pivX, pivY;
+	private static int[] pivX;
+	private static int[] pivY;
 	/** 継承元のenum AttachProperty の代入値 */
 	private static final int[] property = {
 			3, // 赤ゆ用画像サイズ 原画をこの値で割る
@@ -58,7 +60,7 @@ public class Needle extends Attachment {
 	 */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
-		int baby = AgeState.BABY.ordinal();
+		final int baby = AgeState.BABY.ordinal();
 		int child = AgeState.CHILD.ordinal();
 		int adult = AgeState.ADULT.ordinal();
 		images = new BufferedImage[3][2];
@@ -92,17 +94,19 @@ public class Needle extends Attachment {
 	@Override
 	protected TickResult update() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
-		if (pa == null)
+		if (pa == null) {
 			return TickResult.NONE;
+		}
 		// 生きてたらセリフとダメージ加算
 		if (!pa.isDead()) {
 			pa.clearActions();
-			if (pa.isSleeping())
+			if (pa.isSleeping()) {
 				pa.wakeup();
+			}
 			if (pa.isFixBack()) {
 				pa.setDirection(Direction.LEFT);
 			}
-			if (pa.isNotNYD()) {
+			if (pa.isNotNyd()) {
 				if (pa.isFixBack()) {
 					if (!pa.isTalking()) {
 						pa.setMessage(GameMessages.getMessage(pa, MessagePool.Action.NeedleScreamInAnal), 20,
@@ -139,8 +143,9 @@ public class Needle extends Attachment {
 	@Override
 	public BufferedImage getImage(Yukkuri b) {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
-		if (pa == null)
+		if (pa == null) {
 			return null;
+		}
 		if (b.getDirection() == Direction.RIGHT) {
 			return images[pa.getAgeState().ordinal()][1];
 		}

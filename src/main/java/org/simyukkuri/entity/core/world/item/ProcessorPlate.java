@@ -287,7 +287,7 @@ public class ProcessorPlate extends WorldEntity {
 						} else {
 							targetBody.addStress(40);
 						}
-						if (targetBody.isNotNYD()) {
+						if (targetBody.isNotNyd()) {
 							targetBody.setHappiness(Happiness.VERY_SAD);
 							targetBody.setForceFace(ImageCode.PAIN.ordinal());
 							if (GameRandom.nextInt(10) == 0) {
@@ -309,7 +309,7 @@ public class ProcessorPlate extends WorldEntity {
 						} else {
 							targetBody.addStress(30);
 						}
-						if (targetBody.isNotNYD()) {
+						if (targetBody.isNotNyd()) {
 							targetBody.setHappiness(Happiness.VERY_SAD);
 							targetBody.setForceFace(ImageCode.PAIN.ordinal());
 							if (GameRandom.nextInt(15) == 0) {
@@ -505,7 +505,6 @@ public class ProcessorPlate extends WorldEntity {
 
 		JPanel mainPanel = new JPanel();
 		JRadioButton[] buttons = new JRadioButton[ProcessType.values().length];
-		boolean setupSucceeded = false;
 
 		mainPanel.setLayout(new GridLayout(7, 1));
 		mainPanel.setPreferredSize(new Dimension(150, 100));

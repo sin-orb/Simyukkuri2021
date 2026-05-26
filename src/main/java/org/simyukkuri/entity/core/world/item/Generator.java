@@ -5,13 +5,12 @@ import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-
 import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.world.WorldEntity;
-import org.simyukkuri.enums.WorldEntityKind;
 import org.simyukkuri.enums.Type;
+import org.simyukkuri.enums.WorldEntityKind;
 
-/***************************************************
+/**
  * 発電機(開発途上)
  */
 public class Generator extends WorldEntity {
@@ -44,10 +43,11 @@ public class Generator extends WorldEntity {
 	/** アイテム画像をレイヤー配列にセットし、使用レイヤー数を返す。 */
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
-		if (enabled)
+		if (enabled) {
 			layer[0] = imageLayers[0];
-		else
+		} else {
 			layer[0] = imageLayers[1];
+		}
 		return 1;
 	}
 

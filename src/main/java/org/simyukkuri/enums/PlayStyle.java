@@ -1,4 +1,5 @@
 package org.simyukkuri.enums;
+
 /** 何で遊ぶか. */
 public enum PlayStyle {
 	/** 陰陽玉 */

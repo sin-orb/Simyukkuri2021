@@ -9,7 +9,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPopupMenu;
 import javax.swing.JToggleButton;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
@@ -20,34 +19,34 @@ public class MainCommandUITest {
 
     @BeforeEach
     public void setUp() {
-        WorldTestHelper.resetMainCommandUIState();
+        WorldTestHelper.resetMainCommandUiState();
     }
 
     // --- MENU_PANE_X constant ---
 
     @Test
     public void testMenuPaneXConstant() {
-        assertEquals(124, MainCommandUI.MENU_PANE_X);
+        assertEquals(124, MainCommandUi.MENU_PANE_X);
     }
 
     // --- getSelectedGameSpeed / setSelectedGameSpeed ---
 
     @Test
     public void testGetSetSelectedGameSpeed() {
-        int orig = MainCommandUI.getSelectedGameSpeed();
-        MainCommandUI.setSelectedGameSpeed(3);
-        assertEquals(3, MainCommandUI.getSelectedGameSpeed());
-        MainCommandUI.setSelectedGameSpeed(orig); // restore
+        int orig = MainCommandUi.getSelectedGameSpeed();
+        MainCommandUi.setSelectedGameSpeed(3);
+        assertEquals(3, MainCommandUi.getSelectedGameSpeed());
+        MainCommandUi.setSelectedGameSpeed(orig); // restore
     }
 
     // --- getSelectedZoomScale / setSelectedZoomScale ---
 
     @Test
     public void testGetSetSelectedZoomScale() {
-        int orig = MainCommandUI.getSelectedZoomScale();
-        MainCommandUI.setSelectedZoomScale(2);
-        assertEquals(2, MainCommandUI.getSelectedZoomScale());
-        MainCommandUI.setSelectedZoomScale(orig); // restore
+        int orig = MainCommandUi.getSelectedZoomScale();
+        MainCommandUi.setSelectedZoomScale(2);
+        assertEquals(2, MainCommandUi.getSelectedZoomScale());
+        MainCommandUi.setSelectedZoomScale(orig); // restore
     }
 
     // --- getGameSpeedCombo / setGameSpeedCombo ---
@@ -56,8 +55,8 @@ public class MainCommandUITest {
     public void testGetSetGameSpeedCombo() {
         @SuppressWarnings("rawtypes")
         JComboBox combo = new JComboBox();
-        MainCommandUI.setGameSpeedCombo(combo);
-        assertSame(combo, MainCommandUI.getGameSpeedCombo());
+        MainCommandUi.setGameSpeedCombo(combo);
+        assertSame(combo, MainCommandUi.getGameSpeedCombo());
     }
 
     // --- getMainItemCombo / setMainItemCombo ---
@@ -66,8 +65,8 @@ public class MainCommandUITest {
     public void testGetSetMainItemCombo() {
         @SuppressWarnings("rawtypes")
         JComboBox combo = new JComboBox();
-        MainCommandUI.setMainItemCombo(combo);
-        assertSame(combo, MainCommandUI.getMainItemCombo());
+        MainCommandUi.setMainItemCombo(combo);
+        assertSame(combo, MainCommandUi.getMainItemCombo());
     }
 
     // --- getSubItemCombo / setSubItemCombo ---
@@ -76,8 +75,8 @@ public class MainCommandUITest {
     public void testGetSetSubItemCombo() {
         @SuppressWarnings("rawtypes")
         JComboBox combo = new JComboBox();
-        MainCommandUI.setSubItemCombo(combo);
-        assertSame(combo, MainCommandUI.getSubItemCombo());
+        MainCommandUi.setSubItemCombo(combo);
+        assertSame(combo, MainCommandUi.getSubItemCombo());
     }
 
     // --- getYuStatusLabel / setYuStatusLabel ---
@@ -88,8 +87,8 @@ public class MainCommandUITest {
         for (int i = 0; i < labels.length; i++) {
             labels[i] = new JLabel("test" + i);
         }
-        MainCommandUI.setYuStatusLabel(labels);
-        assertSame(labels, MainCommandUI.getYuStatusLabel());
+        MainCommandUi.setYuStatusLabel(labels);
+        assertSame(labels, MainCommandUi.getYuStatusLabel());
     }
 
     // --- getStatIconLabel / setStatIconLabel ---
@@ -100,8 +99,8 @@ public class MainCommandUITest {
         for (int i = 0; i < labels.length; i++) {
             labels[i] = new JLabel();
         }
-        MainCommandUI.setStatIconLabel(labels);
-        assertSame(labels, MainCommandUI.getStatIconLabel());
+        MainCommandUi.setStatIconLabel(labels);
+        assertSame(labels, MainCommandUi.getStatIconLabel());
     }
 
     // --- getItemIconLabel / setItemIconLabel ---
@@ -110,8 +109,8 @@ public class MainCommandUITest {
     public void testGetSetItemIconLabel() {
         JLabel[] labels = new JLabel[1];
         labels[0] = new JLabel();
-        MainCommandUI.setItemIconLabel(labels);
-        assertSame(labels, MainCommandUI.getItemIconLabel());
+        MainCommandUi.setItemIconLabel(labels);
+        assertSame(labels, MainCommandUi.getItemIconLabel());
     }
 
     // --- getSystemButton / setSystemButton ---
@@ -122,8 +121,8 @@ public class MainCommandUITest {
         for (int i = 0; i < buttons.length; i++) {
             buttons[i] = new JButton();
         }
-        MainCommandUI.setSystemButton(buttons);
-        assertSame(buttons, MainCommandUI.getSystemButton());
+        MainCommandUi.setSystemButton(buttons);
+        assertSame(buttons, MainCommandUi.getSystemButton());
     }
 
     // --- getScriptButton / setScriptButton ---
@@ -131,8 +130,8 @@ public class MainCommandUITest {
     @Test
     public void testGetSetScriptButton() {
         JToggleButton btn = new JToggleButton();
-        MainCommandUI.setScriptButton(btn);
-        assertSame(btn, MainCommandUI.getScriptButton());
+        MainCommandUi.setScriptButton(btn);
+        assertSame(btn, MainCommandUi.getScriptButton());
     }
 
     // --- getTargetButton / setTargetButton ---
@@ -140,8 +139,8 @@ public class MainCommandUITest {
     @Test
     public void testGetSetTargetButton() {
         JToggleButton btn = new JToggleButton();
-        MainCommandUI.setTargetButton(btn);
-        assertSame(btn, MainCommandUI.getTargetButton());
+        MainCommandUi.setTargetButton(btn);
+        assertSame(btn, MainCommandUi.getTargetButton());
     }
 
     // --- getPinButton / setPinButton ---
@@ -149,8 +148,8 @@ public class MainCommandUITest {
     @Test
     public void testGetSetPinButton() {
         JToggleButton btn = new JToggleButton();
-        MainCommandUI.setPinButton(btn);
-        assertSame(btn, MainCommandUI.getPinButton());
+        MainCommandUi.setPinButton(btn);
+        assertSame(btn, MainCommandUi.getPinButton());
     }
 
     // --- getHelpButton / setHelpButton ---
@@ -158,8 +157,8 @@ public class MainCommandUITest {
     @Test
     public void testGetSetHelpButton() {
         JToggleButton btn = new JToggleButton();
-        MainCommandUI.setHelpButton(btn);
-        assertSame(btn, MainCommandUI.getHelpButton());
+        MainCommandUi.setHelpButton(btn);
+        assertSame(btn, MainCommandUi.getHelpButton());
     }
 
     // --- getOptionButton / setOptionButton ---
@@ -167,8 +166,8 @@ public class MainCommandUITest {
     @Test
     public void testGetSetOptionButton() {
         JToggleButton btn = new JToggleButton();
-        MainCommandUI.setOptionButton(btn);
-        assertSame(btn, MainCommandUI.getOptionButton());
+        MainCommandUi.setOptionButton(btn);
+        assertSame(btn, MainCommandUi.getOptionButton());
     }
 
     // --- getPlayerButton / setPlayerButton ---
@@ -179,8 +178,8 @@ public class MainCommandUITest {
         for (int i = 0; i < buttons.length; i++) {
             buttons[i] = new JToggleButton();
         }
-        MainCommandUI.setPlayerButton(buttons);
-        assertSame(buttons, MainCommandUI.getPlayerButton());
+        MainCommandUi.setPlayerButton(buttons);
+        assertSame(buttons, MainCommandUi.getPlayerButton());
     }
 
     // --- getOptionPopup / setOptionPopup ---
@@ -188,24 +187,24 @@ public class MainCommandUITest {
     @Test
     public void testGetSetOptionPopup() {
         JPopupMenu popup = new JPopupMenu();
-        MainCommandUI.setOptionPopup(popup);
-        assertSame(popup, MainCommandUI.getOptionPopup());
+        MainCommandUi.setOptionPopup(popup);
+        assertSame(popup, MainCommandUi.getOptionPopup());
     }
 
     // --- getWorldSelectionWindow / setWorldSelectionWindow ---
 
     @Test
     public void testGetSetWorldSelectionWindow() {
-        MainCommandUI.setWorldWindow(null);
-        assertNull(MainCommandUI.getWorldWindow());
+        MainCommandUi.setWorldWindow(null);
+        assertNull(MainCommandUi.getWorldWindow());
     }
 
     // --- getItemWindow / setItemWindow ---
 
     @Test
     public void testGetSetItemWindow() {
-        MainCommandUI.setItemWindow(null);
-        assertNull(MainCommandUI.getItemWindow());
+        MainCommandUi.setItemWindow(null);
+        assertNull(MainCommandUi.getItemWindow());
     }
 
     // --- clearStatus: headless → try/catch ---
@@ -215,7 +214,7 @@ public class MainCommandUITest {
         SimYukkuri.world = new World();
         WorldTestHelper.initializeStandardTranslate500();
         try {
-            MainCommandUI.clearStatus();
+            MainCommandUi.clearStatus();
         } catch (NullPointerException e) {
             // Expected if GUI components are null in headless environment
         }
@@ -228,7 +227,7 @@ public class MainCommandUITest {
         SimYukkuri.world = new World();
         WorldTestHelper.initializeStandardTranslate500();
         try {
-            MainCommandUI.showStatus(null);
+            MainCommandUi.showStatus(null);
         } catch (Exception e) {
             // Expected in headless environment
         }
@@ -241,7 +240,7 @@ public class MainCommandUITest {
         SimYukkuri.world = new World();
         WorldTestHelper.initializeStandardTranslate500();
         try {
-            MainCommandUI.showPlayerStatus();
+            MainCommandUi.showPlayerStatus();
         } catch (Exception e) {
             // Expected in headless environment
         }

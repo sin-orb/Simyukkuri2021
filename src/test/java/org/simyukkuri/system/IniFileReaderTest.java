@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -13,7 +14,6 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -22,22 +22,6 @@ import org.junit.jupiter.api.Test;
  * IniFileReader requires file I/O - limited testability.
  */
 public class IniFileReaderTest {
-
-    @Test
-    public void testConstructorFile() {
-        File testFile = new File("test.ini");
-        IniFileReader reader = new IniFileReader(testFile, null);
-
-        assertNotNull(reader);
-    }
-
-    @Test
-    public void testConstructorResource() {
-        File testFile = new File("test.ini");
-        IniFileReader reader = new IniFileReader(testFile, "resource/test.ini");
-
-        assertNotNull(reader);
-    }
 
     @Test
     public void testOpenNonExistent() {
@@ -55,14 +39,7 @@ public class IniFileReaderTest {
         File testFile = new File("test.ini");
         IniFileReader reader = new IniFileReader(testFile, null);
 
-        // Reading without opening should return null or throw exception
-        try {
-            HashMap<String, String> result = reader.readNext();
-            assertNull(result);
-        } catch (NullPointerException e) {
-            // Expected - reader not opened
-            assertNotNull(e);
-        }
+        assertThrows(NullPointerException.class, reader::readNext);
     }
 
     @Test
@@ -70,14 +47,7 @@ public class IniFileReaderTest {
         File testFile = new File("test.ini");
         IniFileReader reader = new IniFileReader(testFile, null);
 
-        // Close should not crash even if not opened
-        try {
-            reader.close();
-            assertTrue(true);
-        } catch (Exception e) {
-            // Should handle gracefully
-            assertNotNull(e);
-        }
+        assertThrows(NullPointerException.class, reader::close);
     }
 
     @Test
@@ -201,7 +171,7 @@ public class IniFileReaderTest {
             reader.open(getClass().getClassLoader());
 
             HashMap<String, String> first = reader.readNext();
-            HashMap<String, String> second = reader.readNext();
+            final HashMap<String, String> second = reader.readNext();
 
             assertNotNull(first);
             assertEquals("Sect", first.get(IniFileReader.INI_SECTION));
@@ -229,7 +199,7 @@ public class IniFileReaderTest {
             reader.open(getClass().getClassLoader());
 
             HashMap<String, String> first = reader.readNext();
-            HashMap<String, String> second = reader.readNext();
+            final HashMap<String, String> second = reader.readNext();
 
             assertNotNull(first);
             assertEquals("First", first.get(IniFileReader.INI_SECTION));

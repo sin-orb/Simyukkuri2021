@@ -1,16 +1,14 @@
 package org.simyukkuri.yukkuri;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class SerializationTest {
 
@@ -35,8 +33,9 @@ public class SerializationTest {
             // lower).
             // For checking purposes, we just set a specific high damage value.
             int testDamage = tunedLimit - 100;
-            if (testDamage < 0)
+            if (testDamage < 0) {
                 testDamage = 0;
+            }
             reimu.setDamage(testDamage);
 
             System.out.println("Set Damage: " + testDamage);

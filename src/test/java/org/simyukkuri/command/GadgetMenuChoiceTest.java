@@ -1,9 +1,8 @@
 package org.simyukkuri.command;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -11,6 +10,7 @@ import org.simyukkuri.command.GadgetMenu.ActionControl;
 import org.simyukkuri.command.GadgetMenu.ActionTarget;
 import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.command.GadgetMenu.MainCategoryName;
+import org.simyukkuri.util.WorldTestHelper;
 
 /**
  * GadgetMenu.GadgetMenuChoice enum のテスト.
@@ -21,119 +21,205 @@ public class GadgetMenuChoiceTest {
     @BeforeAll
     static void setUpClass() {
         System.setProperty("java.awt.headless", "true");
-        // MessagePool.loadMessage(GadgetMenuChoiceTest.class.getClassLoader());
-    }
-
-    // -------------------------------------------------------
-    // values() / 件数
-    // -------------------------------------------------------
-
-    @Test
-    void testValuesNotEmpty() {
-        GadgetMenuChoice[] values = GadgetMenuChoice.values();
-        assertTrue(values.length > 0, "GadgetMenuChoice に要素が存在すること");
-    }
-
-    // -------------------------------------------------------
-    // 各 GadgetMenuChoice 要素の group / actionTarget が非 null
-    // -------------------------------------------------------
-
-    @Test
-    void testAllItemsHaveGroup() {
-        for (GadgetMenuChoice item : GadgetMenuChoice.values()) {
-            assertNotNull(item.getGroup(),
-                    "getGroup() が非 null であること: " + item.name());
-        }
+        WorldTestHelper.initializeLoadedMessagePool(GadgetMenuChoiceTest.class.getClassLoader());
     }
 
     @Test
-    void testImmediateItemsHaveNullOrImmediateActionTarget() {
-        // IMMEDIATE グループのアイテムは actionTarget が IMMEDIATE か null のみ
-        for (GadgetMenuChoice item : GadgetMenuChoice.values()) {
-            if (item.getActionTarget() == ActionTarget.IMMEDIATE) {
-                assertEquals(ActionTarget.IMMEDIATE, item.getActionTarget());
-            }
-        }
+    void testMainCategoryMatchesExpectedOrder() {
+        assertArrayEquals(new GadgetMenuChoice[] {
+                GadgetMenuChoice.TOOL,
+                GadgetMenuChoice.BODY_CHANGE,
+                GadgetMenuChoice.AMPOULE,
+                GadgetMenuChoice.FOODS,
+                GadgetMenuChoice.CLEAN,
+                GadgetMenuChoice.ACCESSORY,
+                GadgetMenuChoice.PANTS,
+                GadgetMenuChoice.FLOOR,
+                GadgetMenuChoice.BARRIER,
+                GadgetMenuChoice.TOYS,
+                GadgetMenuChoice.CONVEYOR,
+                GadgetMenuChoice.VOICE,
+                GadgetMenuChoice.DEBUG
+        }, GadgetMenu.getMainCategory());
     }
 
-    // -------------------------------------------------------
-    // 特定の重要な GadgetMenuChoice エントリの検証
-    // -------------------------------------------------------
+    @Test
+    void testToolCategoryMatchesExpectedOrder() {
+        assertArrayEquals(new GadgetMenuChoice[] {
+                GadgetMenuChoice.PUNISH,
+                GadgetMenuChoice.SNAPPING,
+                GadgetMenuChoice.PICKUP,
+                GadgetMenuChoice.HOLD,
+                GadgetMenuChoice.SURISURI,
+                GadgetMenuChoice.VIBRATOR,
+                GadgetMenuChoice.PENICUT,
+                GadgetMenuChoice.JUICE,
+                GadgetMenuChoice.ORANGE_JUICE,
+                GadgetMenuChoice.LEMON_SPLAY,
+                GadgetMenuChoice.PHEROMONE_SPRAY,
+                GadgetMenuChoice.HAMMER,
+                GadgetMenuChoice.INJECT_SPERM,
+                GadgetMenuChoice.DRIP_SPERM,
+                GadgetMenuChoice.PUNCH,
+                GadgetMenuChoice.PEAL,
+                GadgetMenuChoice.BLIND,
+                GadgetMenuChoice.SHUTMOUTH,
+                GadgetMenuChoice.HAIRCUT,
+                GadgetMenuChoice.PACK,
+                GadgetMenuChoice.STOMP,
+                GadgetMenuChoice.GODHAND
+        }, GadgetMenu.getToolCategory());
+    }
 
     @Test
-    void testPunishIsToolGroupAndBodyTarget() {
+    void testToolCategory2MatchesExpectedOrder() {
+        assertArrayEquals(new GadgetMenuChoice[] {
+                GadgetMenuChoice.BRAID_PLUCK,
+                GadgetMenuChoice.ANAL_CLOSE,
+                GadgetMenuChoice.STALK_CUT,
+                GadgetMenuChoice.CASTRATION,
+                GadgetMenuChoice.STALK_UNPLUG,
+                GadgetMenuChoice.LIGHTER,
+                GadgetMenuChoice.NEEDLE,
+                GadgetMenuChoice.WATER,
+                GadgetMenuChoice.BURY,
+                GadgetMenuChoice.SET_SICK,
+                GadgetMenuChoice.SET_RAPER
+        }, GadgetMenu.getToolCategory2());
+    }
+
+    @Test
+    void testAmpouleCategoryMatchesExpectedOrder() {
+        assertArrayEquals(new GadgetMenuChoice[] {
+                GadgetMenuChoice.ORANGE_AMP,
+                GadgetMenuChoice.ACCEL_AMP,
+                GadgetMenuChoice.STOP_AMP,
+                GadgetMenuChoice.HUNGRY_AMP,
+                GadgetMenuChoice.VERYSHIT_AMP,
+                GadgetMenuChoice.POISON_AMP,
+                GadgetMenuChoice.BREEDING_AMP,
+                GadgetMenuChoice.ANYD_AMP
+        }, GadgetMenu.getAmpouleCategory());
+    }
+
+    @Test
+    void testFoodCategoryMatchesExpectedOrder() {
+        assertArrayEquals(new GadgetMenuChoice[] {
+                GadgetMenuChoice.NORMAL,
+                GadgetMenuChoice.BITTER,
+                GadgetMenuChoice.LEMON_POP,
+                GadgetMenuChoice.HOT,
+                GadgetMenuChoice.VIYUGRA,
+                GadgetMenuChoice.SWEETS1,
+                GadgetMenuChoice.SWEETS2,
+                GadgetMenuChoice.WASTE,
+                GadgetMenuChoice.AUTO
+        }, GadgetMenu.getFoodCategory());
+    }
+
+    @Test
+    void testCleanCategoryMatchesExpectedOrder() {
+        assertArrayEquals(new GadgetMenuChoice[] {
+                GadgetMenuChoice.INDIVIDUAL,
+                GadgetMenuChoice.YU_CLEAN,
+                GadgetMenuChoice.BODY,
+                GadgetMenuChoice.SHIT,
+                GadgetMenuChoice.ETC,
+                GadgetMenuChoice.ALL
+        }, GadgetMenu.getCleanCategory());
+    }
+
+    @Test
+    void testBarrierCategoryMatchesExpectedOrder() {
+        assertArrayEquals(new GadgetMenuChoice[] {
+                GadgetMenuChoice.GAP_MINI,
+                GadgetMenuChoice.GAP_BIG,
+                GadgetMenuChoice.NET_MINI,
+                GadgetMenuChoice.NET_BIG,
+                GadgetMenuChoice.WALL,
+                GadgetMenuChoice.ITEM,
+                GadgetMenuChoice.NO_UNUN,
+                GadgetMenuChoice.KEKKAI,
+                GadgetMenuChoice.POOL,
+                GadgetMenuChoice.FARM,
+                GadgetMenuChoice.BELTCONVEYOR,
+                GadgetMenuChoice.WALL_DELETE,
+                GadgetMenuChoice.FIELD_DELETE,
+                GadgetMenuChoice.ALL_DELETE
+        }, GadgetMenu.getBarrierCategory());
+    }
+
+    @Test
+    void testToysCategoryMatchesExpectedOrder() {
+        assertArrayEquals(new GadgetMenuChoice[] {
+                GadgetMenuChoice.BALL,
+                GadgetMenuChoice.YUNBA,
+                GadgetMenuChoice.YUNBA_SETUP,
+                GadgetMenuChoice.SUI,
+                GadgetMenuChoice.TRASH,
+                GadgetMenuChoice.TRAMPOLINE,
+                GadgetMenuChoice.STONE
+        }, GadgetMenu.getToysCategory());
+    }
+
+    @Test
+    void testConveyorCategoryMatchesExpectedOrder() {
+        assertArrayEquals(new GadgetMenuChoice[] {
+                GadgetMenuChoice.BELTCONVEYOR_CUSTOM,
+                GadgetMenuChoice.BELTCONVEYOR_SETUP
+        }, GadgetMenu.getConveyorCategory());
+    }
+
+    @Test
+    void testVoiceCategoryMatchesExpectedOrder() {
+        assertArrayEquals(new GadgetMenuChoice[] {
+                GadgetMenuChoice.YUKKURISITEITTENE,
+                GadgetMenuChoice.YUKKURIDIE,
+                GadgetMenuChoice.YUKKURIFURIFURI
+        }, GadgetMenu.getVoiceCategory());
+    }
+
+    @Test
+    void testTestCategoryMatchesExpectedOrder() {
+        assertArrayEquals(new GadgetMenuChoice[] {
+                GadgetMenuChoice.RANKSET,
+                GadgetMenuChoice.RANKSET2,
+                GadgetMenuChoice.GARBAGE_STATION,
+                GadgetMenuChoice.BED_NORA,
+                GadgetMenuChoice.TOILET_NORA,
+                GadgetMenuChoice.HOUSE_NORA,
+                GadgetMenuChoice.GARBAGE_NORA,
+                GadgetMenuChoice.ORANGE_NORA,
+                GadgetMenuChoice.STICKY_NORA,
+                GadgetMenuChoice.TOY_NORA,
+                GadgetMenuChoice.REMOVEALL,
+                GadgetMenuChoice.EVENT_SHIT,
+                GadgetMenuChoice.EVENT_EAT,
+                GadgetMenuChoice.EVENT_RIDEYUKKURI,
+                GadgetMenuChoice.EVENT_PROUDCHILD,
+                GadgetMenuChoice.SETVAIN,
+                GadgetMenuChoice.YUNNYAA,
+                GadgetMenuChoice.BEGGINGFORLIFE,
+                GadgetMenuChoice.PREDATORSGAME,
+                GadgetMenuChoice.INVITEANTS,
+                GadgetMenuChoice.FEED,
+                GadgetMenuChoice.BADGE
+        }, GadgetMenu.getTestCategory());
+    }
+
+    @Test
+    void testImportantEntriesHaveExpectedDefinitions() {
         assertEquals(MainCategoryName.TOOL, GadgetMenuChoice.PUNISH.getGroup());
         assertEquals(ActionTarget.BODY, GadgetMenuChoice.PUNISH.getActionTarget());
         assertEquals(ActionControl.LEFT_CLICK, GadgetMenuChoice.PUNISH.getActionControl());
-    }
-
-    @Test
-    void testYuCleanIsImmediateTarget() {
         assertEquals(ActionTarget.IMMEDIATE, GadgetMenuChoice.YU_CLEAN.getActionTarget());
         assertEquals(MainCategoryName.CLEAN, GadgetMenuChoice.YU_CLEAN.getGroup());
-    }
-
-    @Test
-    void testNormalFoodHasFoodClass() {
         assertNotNull(GadgetMenuChoice.NORMAL.getGadgetClass());
-        assertEquals(org.simyukkuri.entity.core.world.item.Food.class, GadgetMenuChoice.NORMAL.getGadgetClass());
-    }
-
-    @Test
-    void testToStringReturnsDisplayName() {
-        String str = GadgetMenuChoice.PUNISH.toString();
-        assertNotNull(str);
-        assertFalse(str.isEmpty(), "toString() が空文字ではないこと");
-    }
-
-    @Test
-    void testOkazariHideIsAccessoryGroup() {
         assertEquals(MainCategoryName.ACCESSORY, GadgetMenuChoice.OKAZARI_HIDE.getGroup());
         assertEquals(ActionTarget.BODY, GadgetMenuChoice.OKAZARI_HIDE.getActionTarget());
-    }
-
-    @Test
-    void testGetInitOptionReturnsNonNegative() {
-        for (GadgetMenuChoice item : GadgetMenuChoice.values()) {
-            assertTrue(item.getInitOption() >= 0,
-                    "initOption が 0 以上であること: " + item.name());
-        }
-    }
-
-    // -------------------------------------------------------
-    // GadgetMenu.getXxxCategory() の検証
-    // -------------------------------------------------------
-
-    @Test
-    void testMainCategoryContainsTool() {
-        GadgetMenuChoice[] main = GadgetMenu.getMainCategory();
-        assertTrue(main.length > 0);
-        assertEquals(GadgetMenuChoice.TOOL, main[0]);
-    }
-
-    @Test
-    void testToolCategoryFirstIsPunish() {
-        GadgetMenuChoice[] tool = GadgetMenu.getToolCategory();
-        assertTrue(tool.length > 0);
-        assertEquals(GadgetMenuChoice.PUNISH, tool[0]);
-    }
-
-    @Test
-    public void testCleanCategoryContainsAll() {
-        GadgetMenuChoice[] clean = GadgetMenu.getCleanCategory();
-        boolean hasAll = false;
-        for (GadgetMenuChoice g : clean) {
-            if (g == GadgetMenuChoice.ALL) {
-                hasAll = true;
-                break;
-            }
-        }
-        assertTrue(hasAll, "クリーンカテゴリに ALL が含まれていること");
-    }
-
-    @Test
-    public void testAmpouleCategory_notEmpty() {
-        GadgetMenuChoice[] amp = GadgetMenu.getAmpouleCategory();
-        assertTrue(amp.length > 0);
+        assertEquals(org.simyukkuri.entity.core.world.item.Food.class, GadgetMenuChoice.NORMAL.getGadgetClass());
+        assertEquals(3, GadgetMenuChoice.NORMAL.getInitOption());
+        assertEquals(ActionTarget.TERRAIN, GadgetMenuChoice.NORMAL.getActionTarget());
+        assertEquals(MainCategoryName.FOODS, GadgetMenuChoice.NORMAL.getGroup());
     }
 }

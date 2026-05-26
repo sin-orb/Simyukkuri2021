@@ -44,8 +44,8 @@ public class RaperWakeupEventTest {
         Yukkuri from = createBody();
         Yukkuri to = createBody();
         RaperWakeupEvent event = new RaperWakeupEvent(from, to, null, 1);
-        assertEquals(from.getUniqueID(), event.getFrom());
-        assertEquals(to.getUniqueID(), event.getTo());
+        assertEquals(from.getUniqueId(), event.getFrom());
+        assertEquals(to.getUniqueId(), event.getTo());
         assertEquals(1, event.getCount());
     }
 
@@ -110,7 +110,7 @@ public class RaperWakeupEventTest {
         assertDoesNotThrow(() -> event.toString());
     }
 
-    // --- simpleEventAction: b.isNYD() → canEventResponse=false → true ---
+    // --- simpleEventAction: b.isNyd() → canEventResponse=false → true ---
     @Test
     public void testSimpleEventAction_bIsNYD_returnsTrue() {
         Yukkuri from = createBody();
@@ -166,7 +166,7 @@ public class RaperWakeupEventTest {
             assertTrue(bystander.getEvents().get(0) instanceof RaperReactionEvent,
                     "normal bystander should queue a RaperReactionEvent");
             RaperReactionEvent queued = (RaperReactionEvent) bystander.getEvents().get(0);
-            assertEquals(raper.getUniqueID(), queued.getFrom(),
+            assertEquals(raper.getUniqueId(), queued.getFrom(),
                     "queued reaction should point back to the waking raper");
             assertNull(bystander.getCurrentEvent(), "wake-up notice should only queue the reaction at this stage");
         }
@@ -176,7 +176,7 @@ public class RaperWakeupEventTest {
             Yukkuri sourceRaper = createBody();
             Yukkuri chainedRaper = createBody();
             chainedRaper.setRapist(true);
-            chainedRaper.setPartner(sourceRaper.getUniqueID());
+            chainedRaper.setPartner(sourceRaper.getUniqueId());
             chainedRaper.setExciting(false);
             chainedRaper.setForceExciting(false);
             RaperWakeupEvent event = new RaperWakeupEvent(sourceRaper, null, null, 1);
@@ -200,7 +200,7 @@ public class RaperWakeupEventTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 }

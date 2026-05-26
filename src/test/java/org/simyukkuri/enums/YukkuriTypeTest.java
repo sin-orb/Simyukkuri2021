@@ -26,7 +26,7 @@ public class YukkuriTypeTest {
         assertEquals("Reimu", reimu.getClassName());
         assertEquals("reimu", reimu.getMessageFileName());
         assertEquals("reimu", reimu.getImageDirName());
-        assertTrue(reimu.getTypeID() >= 0);
+        assertTrue(reimu.getTypeId() >= 0);
 
         YukkuriType marisa = YukkuriType.MARISA;
         assertEquals("Marisa", marisa.getClassName());
@@ -49,18 +49,18 @@ public class YukkuriTypeTest {
     public void testTypeIDsAreUnique() {
         java.util.Set<Integer> ids = new java.util.HashSet<>();
         for (YukkuriType type : YukkuriType.values()) {
-            boolean added = ids.add(type.getTypeID());
-            assertTrue(added, "Duplicate typeID found: " + type.getTypeID() + " for " + type.name());
+            boolean added = ids.add(type.getTypeId());
+            assertTrue(added, "Duplicate typeID found: " + type.getTypeId() + " for " + type.name());
         }
     }
 
     @Test
     public void testLookupByClassNameAndTypeID() {
         assertEquals(YukkuriType.REIMU, YukkuriType.fromClassName("Reimu"));
-        assertEquals(YukkuriType.MARISA, YukkuriType.fromTypeID(0));
+        assertEquals(YukkuriType.MARISA, YukkuriType.fromTypeId(0));
         assertNull(YukkuriType.fromClassName(null));
         assertNull(YukkuriType.fromClassName("UnknownClass"));
-        assertNull(YukkuriType.fromTypeID(-999));
+        assertNull(YukkuriType.fromTypeId(-999));
     }
 
     @Test

@@ -1,7 +1,6 @@
 package org.simyukkuri.logic;
 
 import java.util.Map;
-
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -15,7 +14,7 @@ import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameEnvironment;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * 餌関係の処理
  */
 public class FoodLogic {
@@ -80,15 +79,15 @@ public class FoodLogic {
 				}
 				if (plantBody != null) {
 					// 地中に埋まっているなら引っこ抜いて食べる。それ以外はスキップ
-					if (plantBody.getBurialState() != BurialState.ALL &&
-							!(plantBody.getBurialState() == BurialState.NEARLY_ALL && !plantBody.hasOkazari())) {
+					if (plantBody.getBurialState() != BurialState.ALL
+							&& !(plantBody.getBurialState() == BurialState.NEARLY_ALL
+								&& !plantBody.hasOkazari())) {
 						body.clearActions();
 						return false;
 					}
 				}
-			}
-			// 食べることができなかったら他の餌候補を探す
-			else {
+			} else {
+				// 食べることができなかったら他の餌候補を探す
 				if (!body.canflyCheck() && food.getZ() != 0) {
 					body.clearActions();
 					return false;
@@ -97,9 +96,8 @@ public class FoodLogic {
 
 			if ((body.getStepDist() + 2) >= Translate.distance(body.getX(), body.getY(), food.getX(), food.getY())) {
 				return FoodArrivalActionPolicy.handleArrivedFood(body, food, forceEat, ws);
-			}
-			// 餌に未到着の時
-			else {
+			} else {
+				// 餌に未到着の時
 				return FoodApproachPolicy.handleUnarrivedFood(body, food);
 			}
 		}
@@ -128,9 +126,8 @@ public class FoodLogic {
 		// C2.探索して補足した餌に対する反応
 		if (candidate != null) {
 			return FoodFoundReaction.handleFoundFood(body, candidate, forceEat);
-		}
-		// 何も見つからなかったとき
-		else {
+		} else {
+			// 何も見つからなかったとき
 			FoodNoFoodReaction.handleNoFoodFound(body);
 		}
 		return false;
@@ -192,13 +189,14 @@ public class FoodLogic {
 		int secondaryNearestDistance = nearestDistance;
 		int deadNearestDistance = nearestDistance;
 		int size = body.getAgeState().ordinal();
-		int looks = -1000;
 		int wallMode = body.getAgeState().ordinal();
 		forceEat[0] = false;
 		// 飛行可能なら壁以外は通過可能
 		if (body.canflyCheck()) {
 			wallMode = AgeState.ADULT.ordinal();
 		}
+
+		int looks = -1000;
 
 		// ゆっくりから検索
 		for (Map.Entry<Integer, Yukkuri> entry : ws.getYukkuriRegistry().entrySet()) {
@@ -223,8 +221,9 @@ public class FoodLogic {
 			}
 		}
 		// 自分より小さい相手がいなかったら副目標にする
-		if (candidate == null)
+		if (candidate == null) {
 			candidate = candidate2;
+		}
 
 		FoodPredatorFoodPolicy.FoodSearchResult foodResult = FoodPredatorFoodPolicy.searchFood(body, forceEat, wallMode,
 				candidate, deadCandidate, nearestDistance, looks, ws);
@@ -252,7 +251,7 @@ public class FoodLogic {
 	 * お持ち帰り判定
 	 * 
 	 * @param body ゆっくり
-	 * @param o    エサオブジェクト
+	 * @param target エサオブジェクト
 	 * @return 持ち帰るかどうか
 	 */
 	public static boolean checkTakeout(Yukkuri body, Entity target) {

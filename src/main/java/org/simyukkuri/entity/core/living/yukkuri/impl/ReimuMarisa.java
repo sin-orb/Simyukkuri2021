@@ -6,14 +6,13 @@ import java.beans.Transient;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.simyukkuri.draw.Dimension4y;
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Point4y;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.ImageCode;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.util.GameEnvironment;
@@ -41,8 +40,8 @@ public class ReimuMarisa extends Marisa {
 	private static BufferedImage[][][] imagesNora = new BufferedImage[ImageCode.values().length][2][3];
 	private static BufferedImage[][][][] imagesNagasi = new BufferedImage[ImageCode.values().length][2][3][ModLoader
 			.getMaxImgOtherVer() + 1];
-	private static int directionOffset[][] = new int[ImageCode.values().length][2];
-	private static int directionOffsetNagasi[][] = new int[ImageCode.values().length][2];
+	private static int[][] directionOffset = new int[ImageCode.values().length][2];
+	private static int[][] directionOffsetNagasi = new int[ImageCode.values().length][2];
 	private static Dimension4y[] boundary = new Dimension4y[3];
 	private static Dimension4y[] braidBoundary = new Dimension4y[3];
 	private static boolean imageLoaded = false;
@@ -51,13 +50,14 @@ public class ReimuMarisa extends Marisa {
 	// iniファイルから読み込んだ初期値
 	private static int baseSpeed = 100;
 	// 個別表情管理(まりちゃ流し用)
-	private int imageVariantState[][] = new int[ImageCode.values().length][2];
+	private int[][] imageVariantState = new int[ImageCode.values().length][2];
 
 	/** イメージのロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
-		if (imageLoaded)
+		if (imageLoaded) {
 			return;
+		}
 
 		boolean res;
 		res = ModLoader.loadYukkuriImagePack(loader, imagesNagasi, directionOffsetNagasi, ModLoader.getYkWordNagasi(),
@@ -154,8 +154,8 @@ public class ReimuMarisa extends Marisa {
 		return 1;
 	}
 
-	@Override
 	/** アタッチメントキーに対応する取り付け点座標を返す。 */
+	@Override
 	public Point4y[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}
@@ -223,23 +223,23 @@ public class ReimuMarisa extends Marisa {
 
 	}
 
-	@Override
 	/**
 	 * Tune parameters.
 	 */
+	@Override
 	public void tuneParameters() {
 		double factor = Math.random() + 1;
-		getHungryLimitBase()[AgeState.ADULT.ordinal()] *= factor;
-		getHungryLimitBase()[AgeState.CHILD.ordinal()] *= factor;
-		getHungryLimitBase()[AgeState.BABY.ordinal()] *= factor;
+		getHungryLimitBase()[AgeState.ADULT.ordinal()] = (int) (getHungryLimitBase()[AgeState.ADULT.ordinal()] * factor);
+		getHungryLimitBase()[AgeState.CHILD.ordinal()] = (int) (getHungryLimitBase()[AgeState.CHILD.ordinal()] * factor);
+		getHungryLimitBase()[AgeState.BABY.ordinal()] = (int) (getHungryLimitBase()[AgeState.BABY.ordinal()] * factor);
 		factor = Math.random() + 0.5;
-		getShitLimitBase()[AgeState.ADULT.ordinal()] *= factor;
-		getShitLimitBase()[AgeState.CHILD.ordinal()] *= factor;
-		getShitLimitBase()[AgeState.BABY.ordinal()] *= factor;
+		getShitLimitBase()[AgeState.ADULT.ordinal()] = (int) (getShitLimitBase()[AgeState.ADULT.ordinal()] * factor);
+		getShitLimitBase()[AgeState.CHILD.ordinal()] = (int) (getShitLimitBase()[AgeState.CHILD.ordinal()] * factor);
+		getShitLimitBase()[AgeState.BABY.ordinal()] = (int) (getShitLimitBase()[AgeState.BABY.ordinal()] * factor);
 		factor = Math.random() + 0.5;
-		getDamageLimitBase()[AgeState.ADULT.ordinal()] *= factor;
-		getDamageLimitBase()[AgeState.CHILD.ordinal()] *= factor;
-		getDamageLimitBase()[AgeState.BABY.ordinal()] *= factor;
+		getDamageLimitBase()[AgeState.ADULT.ordinal()] = (int) (getDamageLimitBase()[AgeState.ADULT.ordinal()] * factor);
+		getDamageLimitBase()[AgeState.CHILD.ordinal()] = (int) (getDamageLimitBase()[AgeState.CHILD.ordinal()] * factor);
+		getDamageLimitBase()[AgeState.BABY.ordinal()] = (int) (getDamageLimitBase()[AgeState.BABY.ordinal()] * factor);
 		factor = Math.random() + 0.5;
 		setBabyLimitBase((int) (getBabyLimitBase() * factor));
 		setChildLimitBase((int) (getChildLimitBase() * factor));
@@ -255,9 +255,9 @@ public class ReimuMarisa extends Marisa {
 		setImmunityStrength(GameRandom.nextInt(10) + 1);
 		// EYESIGHT /= 4;
 		factor = Math.random() + 0.5;
-		getStrengthBase()[AgeState.ADULT.ordinal()] *= factor;
-		getStrengthBase()[AgeState.CHILD.ordinal()] *= factor;
-		getStrengthBase()[AgeState.BABY.ordinal()] *= factor;
+		getStrengthBase()[AgeState.ADULT.ordinal()] = (int) (getStrengthBase()[AgeState.ADULT.ordinal()] * factor);
+		getStrengthBase()[AgeState.CHILD.ordinal()] = (int) (getStrengthBase()[AgeState.CHILD.ordinal()] * factor);
+		getStrengthBase()[AgeState.BABY.ordinal()] = (int) (getStrengthBase()[AgeState.BABY.ordinal()] * factor);
 
 		// speed = 130;
 		speed = baseSpeed;

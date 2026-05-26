@@ -1,10 +1,8 @@
 package org.simyukkuri.entity.core;
 
-import java.beans.Transient;
-
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
-
+import java.beans.Transient;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Rectangle4y;
@@ -18,9 +16,7 @@ import org.simyukkuri.system.ItemMenu.UseMenuTarget;
 import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameWorld;
 
-/*********************************************************
- * すべてのゲーム内オブジェクトの元となるクラス
- */
+/** すべてのゲーム内オブジェクトの元となるクラス */
 @SuppressWarnings("rawtypes")
 @JsonTypeInfo(use = Id.CLASS)
 public class Entity implements java.io.Serializable, Comparable {
@@ -45,12 +41,16 @@ public class Entity implements java.io.Serializable, Comparable {
 	 * 基本内部パラメータ3
 	 * マップ座標
 	 */
-	protected int x, y, z;
+	protected int x;
+	protected int y;
+	protected int z;
 	/**
 	 * 基本内部パラメータ4
 	 * 衝撃を伴う、外力による移動量ベクトル
 	 */
-	protected int vx, vy, vz;
+	protected int vx;
+	protected int vy;
+	protected int vz;
 	/**
 	 * 基本内部パラメータ5
 	 * コンベアなど拘束による移動量ベクトル
@@ -128,17 +128,20 @@ public class Entity implements java.io.Serializable, Comparable {
 	 * 画面描画情報2
 	 * 画像サイズ
 	 */
-	protected int imgW, imgH;
+	protected int imgW;
+	protected int imgH;
 	/**
 	 * 画面描画情報3
 	 * 画像原点 基本床敷きは中心、立っているものは足元
 	 */
-	protected int pivX, pivY;
+	protected int pivX;
+	protected int pivY;
 	/**
 	 * 画面描画情報4
 	 * 描画オフセット 振動など判定を無視した演出用
 	 */
-	protected int ofsX, ofsY;
+	protected int ofsX;
+	protected int ofsY;
 	/**
 	 * このオブジェクトのユニークID
 	 */
@@ -157,8 +160,9 @@ public class Entity implements java.io.Serializable, Comparable {
 	/** 経過時間追加 */
 	public void addAge(long val) {
 		setAge(getAge() + val);
-		if (getAge() < 0)
+		if (getAge() < 0) {
 			setAge(0);
+		}
 	}
 
 	/** x座標ゲッター */
@@ -183,45 +187,45 @@ public class Entity implements java.io.Serializable, Comparable {
 	 */
 	@Transient
 	public int[] getVxyz() {
-		int V[] = { vx, vy, vz };
-		return V;
+		int[] vals = { vx, vy, vz };
+		return vals;
 	}
 
 	/** x座標セッター */
-	public void setCalcX(int X) {
-		if (X < 0 && enableWall) {
+	public void setCalcX(int nx) {
+		if (nx < 0 && enableWall) {
 			x = 0;
-		} else if (X > Translate.getWorldWidth() && enableWall) {
+		} else if (nx > Translate.getWorldWidth() && enableWall) {
 			x = Translate.getWorldWidth();
 		} else {
-			x = X;
+			x = nx;
 		}
 	}
 
 	/** y座標セッター */
-	public void setCalcY(int Y) {
-		if (Y < 0 && enableWall) {
+	public void setCalcY(int ny) {
+		if (ny < 0 && enableWall) {
 			y = 0;
-		} else if (Y > Translate.getWorldHeight() && enableWall) {
+		} else if (ny > Translate.getWorldHeight() && enableWall) {
 			y = Translate.getWorldHeight();
 		} else {
-			y = Y;
+			y = ny;
 		}
 	}
 
 	/** z座標セッター */
-	public void setCalcZ(int Z) {
+	public void setCalcZ(int nz) {
 		if (z < mostDepth && enableWall) {
 			if (fallingUnderGround) {
-				z = Z;
+				z = nz;
 			} else {
 				z = mostDepth;
 			}
 		}
-		if (Z > Translate.getWorldDepth() && enableWall) {
+		if (nz > Translate.getWorldDepth() && enableWall) {
 			z = Translate.getWorldDepth();
 		} else {
-			z = Z;
+			z = nz;
 		}
 	}
 
@@ -242,20 +246,20 @@ public class Entity implements java.io.Serializable, Comparable {
 
 	/**
 	 * X座標を強制的に設定する.
-	 * 
-	 * @param X X座標
+	 *
+	 * @param nx X座標
 	 */
-	public void setForceX(int X) {
-		x = X;
+	public void setForceX(int nx) {
+		x = nx;
 	}
 
 	/**
-	 * Y座標を強制的に設定suru.
-	 * 
-	 * @param Y Y座標
+	 * Y座標を強制的に設定する.
+	 *
+	 * @param ny Y座標
 	 */
-	public void setForceY(int Y) {
-		y = Y;
+	public void setForceY(int ny) {
+		y = ny;
 	}
 
 	/**
@@ -292,14 +296,14 @@ public class Entity implements java.io.Serializable, Comparable {
 	}
 
 	/**
-	 * オフセット量設定
-	 * 
-	 * @param X
-	 * @param Y
+	 * オフセット量設定.
+	 *
+	 * @param ofsx X方向オフセット量
+	 * @param ofsy Y方向オフセット量
 	 */
-	public void setOfsXY(int X, int Y) {
-		ofsX = X;
-		ofsY = Y;
+	public void setOfsXy(int ofsx, int ofsy) {
+		ofsX = ofsx;
+		ofsY = ofsy;
 	}
 
 	/** 描画時の実際のx座標ゲッター */
@@ -622,10 +626,10 @@ public class Entity implements java.io.Serializable, Comparable {
 	}
 
 	/** ケリを入れられる */
-	public void kick(int vX, int vY, int vZ) {
-		vx = vX;
-		vy = vY;
-		vz = vZ;
+	public void kick(int kx, int ky, int kz) {
+		vx = kx;
+		vy = ky;
+		vz = kz;
 	}
 
 	/** kick(int vX, int vY, int vZ)のショートカット */
@@ -660,68 +664,99 @@ public class Entity implements java.io.Serializable, Comparable {
 	}
 
 	private static Entity findEntityInAllMaps(WorldState m, int i) {
-		if (m.getAutoFeeders().containsKey(i))
+		if (m.getAutoFeeders().containsKey(i)) {
 			return m.getAutoFeeders().get(i);
-		if (m.getBeds().containsKey(i))
+		}
+		if (m.getBeds().containsKey(i)) {
 			return m.getBeds().get(i);
-		if (m.getBeltconveyorObjects().containsKey(i))
+		}
+		if (m.getBeltconveyorObjects().containsKey(i)) {
 			return m.getBeltconveyorObjects().get(i);
-		if (m.getBreedingPools().containsKey(i))
+		}
+		if (m.getBreedingPools().containsKey(i)) {
 			return m.getBreedingPools().get(i);
-		if (m.getDiffusers().containsKey(i))
+		}
+		if (m.getDiffusers().containsKey(i)) {
 			return m.getDiffusers().get(i);
-		if (m.getFoods().containsKey(i))
+		}
+		if (m.getFoods().containsKey(i)) {
 			return m.getFoods().get(i);
-		if (m.getFoodMakers().containsKey(i))
+		}
+		if (m.getFoodMakers().containsKey(i)) {
 			return m.getFoodMakers().get(i);
-		if (m.getFrontEffects().containsKey(i))
+		}
+		if (m.getFrontEffects().containsKey(i)) {
 			return m.getFrontEffects().get(i);
-		if (m.getGarbageChutes().containsKey(i))
+		}
+		if (m.getGarbageChutes().containsKey(i)) {
 			return m.getGarbageChutes().get(i);
-		if (m.getGarbageStations().containsKey(i))
+		}
+		if (m.getGarbageStations().containsKey(i)) {
 			return m.getGarbageStations().get(i);
-		if (m.getHotPlates().containsKey(i))
+		}
+		if (m.getHotPlates().containsKey(i)) {
 			return m.getHotPlates().get(i);
-		if (m.getHouses().containsKey(i))
+		}
+		if (m.getHouses().containsKey(i)) {
 			return m.getHouses().get(i);
-		if (m.getMachinePresses().containsKey(i))
+		}
+		if (m.getMachinePresses().containsKey(i)) {
 			return m.getMachinePresses().get(i);
-		if (m.getMixers().containsKey(i))
+		}
+		if (m.getMixers().containsKey(i)) {
 			return m.getMixers().get(i);
-		if (m.getOkazaris().containsKey(i))
+		}
+		if (m.getOkazaris().containsKey(i)) {
 			return m.getOkazaris().get(i);
-		if (m.getOrangePools().containsKey(i))
+		}
+		if (m.getOrangePools().containsKey(i)) {
 			return m.getOrangePools().get(i);
-		if (m.getProcessorPlates().containsKey(i))
+		}
+		if (m.getProcessorPlates().containsKey(i)) {
 			return m.getProcessorPlates().get(i);
-		if (m.getProductChutes().containsKey(i))
+		}
+		if (m.getProductChutes().containsKey(i)) {
 			return m.getProductChutes().get(i);
-		if (m.getShit().containsKey(i))
+		}
+		if (m.getShit().containsKey(i)) {
 			return m.getShit().get(i);
-		if (m.getSortedEffects().containsKey(i))
+		}
+		if (m.getSortedEffects().containsKey(i)) {
 			return m.getSortedEffects().get(i);
-		if (m.getStalks().containsKey(i))
+		}
+		if (m.getStalks().containsKey(i)) {
 			return m.getStalks().get(i);
-		if (m.getStickyPlates().containsKey(i))
+		}
+		if (m.getStickyPlates().containsKey(i)) {
 			return m.getStickyPlates().get(i);
-		if (m.getStones().containsKey(i))
+		}
+		if (m.getStones().containsKey(i)) {
 			return m.getStones().get(i);
-		if (m.getSuis().containsKey(i))
+		}
+		if (m.getSuis().containsKey(i)) {
 			return m.getSuis().get(i);
-		if (m.getToilets().containsKey(i))
+		}
+		if (m.getToilets().containsKey(i)) {
 			return m.getToilets().get(i);
-		if (m.getToys().containsKey(i))
+		}
+		if (m.getToys().containsKey(i)) {
 			return m.getToys().get(i);
-		if (m.getTrampolines().containsKey(i))
+		}
+		if (m.getTrampolines().containsKey(i)) {
 			return m.getTrampolines().get(i);
-		if (m.getTrashObjects().containsKey(i))
+		}
+		if (m.getTrashObjects().containsKey(i)) {
 			return m.getTrashObjects().get(i);
-		if (m.getVomit().containsKey(i))
+		}
+		if (m.getVomit().containsKey(i)) {
 			return m.getVomit().get(i);
-		if (m.getYunbas().containsKey(i))
+		}
+		if (m.getYunbas().containsKey(i)) {
 			return m.getYunbas().get(i);
-		if (m.getYukkuriRegistry().containsKey(i))
+		}
+		if (m.getYukkuriRegistry().containsKey(i)) {
 			return m.getYukkuriRegistry().get(i);
+		}
 		return null;
 	}
 
@@ -857,26 +892,22 @@ public class Entity implements java.io.Serializable, Comparable {
 
 	/**
 	 * X座標の加速度を設定する.
-	 * 
-	 * @param bx X座標の加速度
+	 *
+	 * @param motionX X座標の加速度
 	 */
 	public void setMotionX(int motionX) {
 		this.motionX = motionX;
 	}
 
-	/**
-	 * Y座標の加速度を取得する.
-	 * 
-	 * @param bx Y座標の加速度
-	 */
+	/** Y座標の加速度を取得する. */
 	public int getMotionY() {
 		return motionY;
 	}
 
 	/**
 	 * Y座標の加速度を設定する.
-	 * 
-	 * @param by Y座標の加速度
+	 *
+	 * @param motionY Y座標の加速度
 	 */
 	public void setMotionY(int motionY) {
 		this.motionY = motionY;
@@ -892,8 +923,8 @@ public class Entity implements java.io.Serializable, Comparable {
 	 * 座標をマップの範囲内に収める
 	 */
 	public void calcPos() {
-		int mapX = Translate.getWorldWidth();
-		int mapY = Translate.getWorldHeight();
+		final int mapX = Translate.getWorldWidth();
+		final int mapY = Translate.getWorldHeight();
 		if (x < 0) {
 			x = 0;
 		}

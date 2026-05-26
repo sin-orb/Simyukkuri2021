@@ -33,7 +33,7 @@ public final class YukkuriWakeupRule {
 			if (otherBody.isDead() || otherBody.isRemoved() || otherBody.isUnBirth()) {
 				continue;
 			}
-			if (otherBody.isNYD()) {
+			if (otherBody.isNyd()) {
 				continue;
 			}
 			if (body.getPublicRank() == PublicRank.NONE && otherBody.getPublicRank() == PublicRank.UNUN_SLAVE) {

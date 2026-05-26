@@ -39,8 +39,8 @@ public class BodyUnunSlaveEmotionRuleTest {
 		me.setPublicRank(PublicRank.UNUN_SLAVE);
 		me.setHappiness(org.simyukkuri.enums.Happiness.AVERAGE);
 		you.setHappiness(org.simyukkuri.enums.Happiness.VERY_HAPPY);
-		me.setPartner(you.getUniqueID());
-		you.setPartner(me.getUniqueID());
+		me.setPartner(you.getUniqueId());
+		you.setPartner(me.getUniqueId());
 		SimYukkuri.RND = new ConstState(0);
 
 		assertDoesNotThrow(() -> YukkuriUnunSlaveEmotionRule.checkEmotionFromUnunSlave(me, you));

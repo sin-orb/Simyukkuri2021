@@ -6,13 +6,12 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.beans.Transient;
 import java.util.List;
-
-import org.simyukkuri.util.GameWorld;
 import org.simyukkuri.draw.Color4y;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.field.FieldShape;
 import org.simyukkuri.system.WorldState;
+import org.simyukkuri.util.GameWorld;
 
 /* 
  *    Copyright 2013 Mimisuke
@@ -30,7 +29,7 @@ import org.simyukkuri.system.WorldState;
  *  limitations under the License.
  */
 
-/***************************************************
+/**
  * 壁
  * <br>
  * これはほかのアイテムと違い、ObjEXを継承していないので注意。
@@ -75,19 +74,19 @@ public class Barrier extends FieldShape {
 	 */
 	public Barrier(int fsx, int fsy, int fex, int fey, int type) {
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
-		fieldSX = fsx;
-		fieldSY = fsy;
-		fieldEX = fex;
-		fieldEY = fey;
+		fieldSx = fsx;
+		fieldSy = fsy;
+		fieldEx = fex;
+		fieldEy = fey;
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
 		Point4y pos;
-		pos = Translate.invertLimit(fieldSX, fieldSY);
-		mapSX = Math.max(0, Math.min(pos.getX(), Translate.getWorldWidth()));
-		mapSY = Math.max(0, Math.min(pos.getY(), Translate.getWorldHeight()));
+		pos = Translate.invertLimit(fieldSx, fieldSy);
+		mapSx = Math.max(0, Math.min(pos.getX(), Translate.getWorldWidth()));
+		mapSy = Math.max(0, Math.min(pos.getY(), Translate.getWorldHeight()));
 
-		pos = Translate.invertLimit(fieldEX, fieldEY);
-		mapEX = Math.max(0, Math.min(pos.getX(), Translate.getWorldWidth()));
-		mapEY = Math.max(0, Math.min(pos.getY(), Translate.getWorldHeight()));
+		pos = Translate.invertLimit(fieldEx, fieldEy);
+		mapEx = Math.max(0, Math.min(pos.getX(), Translate.getWorldWidth()));
+		mapEy = Math.max(0, Math.min(pos.getY(), Translate.getWorldHeight()));
 
 		attribute = type;
 		switch (type) {
@@ -115,9 +114,11 @@ public class Barrier extends FieldShape {
 			case BARRIER_KEKKAI:
 				color = new Color4y(192, 192, 192, 255);
 				break;
+			default:
+				break;
 		}
 
-		WorldState.setWallLine(GameWorld.get().getCurrentWorldState().getWallGrid(), mapSX, mapSY, mapEX, mapEY, true,
+		WorldState.setWallLine(GameWorld.get().getCurrentWorldState().getWallGrid(), mapSx, mapSy, mapEx, mapEy, true,
 				attribute);
 		GameWorld.get().getCurrentWorldState().getBarriers().add(this);
 	}
@@ -136,7 +137,7 @@ public class Barrier extends FieldShape {
 	@Override
 	public void drawShape(Graphics2D g2) {
 		g2.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue()));
-		g2.drawLine(fieldSX, fieldSY, fieldEX, fieldEY);
+		g2.drawLine(fieldSx, fieldSy, fieldEx, fieldEy);
 	}
 
 	/** 除去 */
@@ -210,7 +211,7 @@ public class Barrier extends FieldShape {
 	 * @return 壁が動線(視線)上にあるかどうか
 	 */
 	public static boolean acrossBarrier(int x1, int y1, int x2, int y2, int attr) {
-		WorldState tmp = GameWorld.get().getCurrentWorldState();
+		final WorldState tmp = GameWorld.get().getCurrentWorldState();
 
 		x1 = Math.max(0, Math.min(x1, Translate.getWorldWidth()));
 		x2 = Math.max(0, Math.min(x2, Translate.getWorldWidth()));

@@ -36,7 +36,7 @@ class KillPredeatorEventTest {
             spr[i] = new org.simyukkuri.system.Sprite(10, 10, org.simyukkuri.system.Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 
@@ -54,8 +54,8 @@ class KillPredeatorEventTest {
         Yukkuri to = createBody();
         KillPredeatorEvent event = new KillPredeatorEvent(from, to, null, 10);
         assertNotNull(event);
-        assertEquals(from.getUniqueID(), event.getFrom());
-        assertEquals(to.getUniqueID(), event.getTo());
+        assertEquals(from.getUniqueId(), event.getFrom());
+        assertEquals(to.getUniqueId(), event.getTo());
         assertEquals(10, event.getCount());
     }
 
@@ -82,7 +82,7 @@ class KillPredeatorEventTest {
         b.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
         KillPredeatorEvent event = new KillPredeatorEvent();
         // NYD body: canEventResponse() may return false → return true(skip)
-        // OR if canEventResponse() passes → isNYD() → return false
+        // OR if canEventResponse() passes → isNyd() → return false
         // Either way, assertDoesNotThrow
         assertDoesNotThrow(() -> event.checkEventResponse(b));
     }
@@ -143,7 +143,7 @@ class KillPredeatorEventTest {
     @Test
     void testStart_NYDBody_returnsEarly() {
         Yukkuri b = createBody();
-        b.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE); // isNYD() returns true
+        b.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE); // isNyd() returns true
         KillPredeatorEvent event = new KillPredeatorEvent();
         assertDoesNotThrow(() -> event.start(b));
     }
@@ -222,7 +222,7 @@ class KillPredeatorEventTest {
         Yukkuri predator = createBody();
         predator.setPredatorType(PredatorType.BITE);
         // predator is parent of b (b.getParents()[0]=predator)
-        b.setParents(new int[] { predator.getUniqueID(), -1 });
+        b.setParents(new int[] { predator.getUniqueId(), -1 });
         KillPredeatorEvent event = new KillPredeatorEvent();
         // predator.isParent(b) → skip that predator → bIsNearPredator=false → false
         assertFalse(event.checkEventResponse(b));

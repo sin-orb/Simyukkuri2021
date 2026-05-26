@@ -12,7 +12,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
@@ -100,29 +99,29 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testGetSetHou_before() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setHou_before(3);
-        assertEquals(3, belt.getHou_before());
+        belt.setHouBefore(3);
+        assertEquals(3, belt.getHouBefore());
     }
 
     @Test
     void testGetSetObj_before() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setObj_before(2);
-        assertEquals(2, belt.getObj_before());
+        belt.setObjBefore(2);
+        assertEquals(2, belt.getObjBefore());
     }
 
     @Test
     void testGetSetMove_before() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setMove_before(1);
-        assertEquals(1, belt.getMove_before());
+        belt.setMoveBefore(1);
+        assertEquals(1, belt.getMoveBefore());
     }
 
     @Test
     void testGetSetSpeed_before() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setSpeed_before(4);
-        assertEquals(4, belt.getSpeed_before());
+        belt.setSpeedBefore(4);
+        assertEquals(4, belt.getSpeedBefore());
     }
 
     @Test
@@ -224,29 +223,29 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testGetSetFieldSX() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setFieldSX(100);
-        assertEquals(100, belt.getFieldSX());
+        belt.setFieldSx(100);
+        assertEquals(100, belt.getFieldSx());
     }
 
     @Test
     void testGetSetFieldSY() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setFieldSY(200);
-        assertEquals(200, belt.getFieldSY());
+        belt.setFieldSy(200);
+        assertEquals(200, belt.getFieldSy());
     }
 
     @Test
     void testGetSetFieldEX() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setFieldEX(500);
-        assertEquals(500, belt.getFieldEX());
+        belt.setFieldEx(500);
+        assertEquals(500, belt.getFieldEx());
     }
 
     @Test
     void testGetSetFieldEY() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setFieldEY(600);
-        assertEquals(600, belt.getFieldEY());
+        belt.setFieldEy(600);
+        assertEquals(600, belt.getFieldEy());
     }
 
     @Test

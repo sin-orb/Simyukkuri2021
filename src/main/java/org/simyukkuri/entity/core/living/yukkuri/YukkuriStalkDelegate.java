@@ -55,7 +55,7 @@ public final class YukkuriStalkDelegate {
 	 * @param stalk 茎のインスタンス
 	 */
 	public void removeStalk(Stalk stalk) {
-		if (!body.isDead() && !body.isSleeping() && body.isNotNYD()) {
+		if (!body.isDead() && !body.isSleeping() && body.isNotNyd()) {
 			body.setHappiness(Happiness.VERY_SAD);
 			body.addStress(700);
 			body.setMessage(GameMessages.getMessage(body, MessagePool.Action.AbuseBaby));
@@ -156,7 +156,7 @@ public final class YukkuriStalkDelegate {
 			return;
 		}
 		if (body.getBindStalk().getAttachedBabyIds() != null) {
-			int idx = body.getBindStalk().getAttachedBabyIds().indexOf(body.getUniqueID());
+			int idx = body.getBindStalk().getAttachedBabyIds().indexOf(body.getUniqueId());
 			if (idx >= 0) {
 				body.getBindStalk().getAttachedBabyIds().set(idx, null);
 			}
@@ -176,12 +176,10 @@ public final class YukkuriStalkDelegate {
 					body.stay();
 					break;
 				}
-				// fall through
+				reactToChildKilled();
+				break;
 			case KILLED:
-				body.setHappiness(Happiness.VERY_SAD);
-				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.AbuseBabyKilled));
-				body.addStress(500);
-				body.stay();
+				reactToChildKilled();
 				break;
 			case SAD:
 				body.setHappiness(Happiness.SAD);
@@ -198,5 +196,12 @@ public final class YukkuriStalkDelegate {
 			default:
 				break;
 		}
+	}
+
+	private void reactToChildKilled() {
+		body.setHappiness(Happiness.VERY_SAD);
+		body.setMessage(GameMessages.getMessage(body, MessagePool.Action.AbuseBabyKilled));
+		body.addStress(500);
+		body.stay();
 	}
 }

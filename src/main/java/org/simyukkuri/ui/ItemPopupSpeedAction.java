@@ -12,15 +12,15 @@ public final class ItemPopupSpeedAction implements PopupMenuListener {
 	/** ポップアップ表示時にゲームを停止する。 */
 	@Override
 	public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-		speedBackup = MainCommandUI.getSelectedGameSpeed();
-		MainCommandUI.getGameSpeedCombo().setSelectedIndex(0);
+		speedBackup = MainCommandUi.getSelectedGameSpeed();
+		MainCommandUi.getGameSpeedCombo().setSelectedIndex(0);
 	}
 
 	/** ポップアップ非表示時にゲーム速度を復元する。 */
 	@Override
 	public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-		MainCommandUI.setSelectedGameSpeed(speedBackup);
-		MainCommandUI.getGameSpeedCombo().setSelectedIndex(speedBackup);
+		MainCommandUi.setSelectedGameSpeed(speedBackup);
+		MainCommandUi.getGameSpeedCombo().setSelectedIndex(speedBackup);
 	}
 
 	@Override

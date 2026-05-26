@@ -13,8 +13,8 @@ public final class GameSpeedComboBoxListener implements ItemListener {
 	public void itemStateChanged(ItemEvent e) {
 		synchronized (SimYukkuri.lock) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
-				if (e.getSource() == MainCommandUI.getGameSpeedCombo()) {
-					MainCommandUI.setSelectedGameSpeed(MainCommandUI.getGameSpeedCombo().getSelectedIndex());
+				if (e.getSource() == MainCommandUi.getGameSpeedCombo()) {
+					MainCommandUi.setSelectedGameSpeed(MainCommandUi.getGameSpeedCombo().getSelectedIndex());
 				}
 			}
 		}

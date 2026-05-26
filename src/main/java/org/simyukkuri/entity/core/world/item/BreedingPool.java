@@ -7,14 +7,12 @@ import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Dna;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -31,9 +29,7 @@ import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
- * 養殖プール
- */
+/** 養殖プール */
 public class BreedingPool extends WorldEntity {
 
 	private static final long serialVersionUID = -2544191380264314199L;
@@ -124,18 +120,21 @@ public class BreedingPool extends WorldEntity {
 		return hitCheckObjType;
 	}
 
-	@Override
 	/** 衝突処理を行い、結果コードを返す。 */
+	@Override
 	public int objHitProcess(Entity targetObject) {
-		if (!enabled)
+		if (!enabled) {
 			return 0;
+		}
 		if (targetObject.getObjType() == Type.YUKKURI) {
 			Yukkuri body = (Yukkuri) targetObject;
 			// 避妊されてたら妊娠しない
-			if (body.isCastrated() && !stalkPool)
+			if (body.isCastrated() && !stalkPool) {
 				return 0;
-			if (body.isStalkCastration() && stalkPool)
+			}
+			if (body.isStalkCastration() && stalkPool) {
 				return 0;
+			}
 
 			// 工業用専用の特殊処理
 			if (option == 3 || option == 7) {
@@ -145,8 +144,9 @@ public class BreedingPool extends WorldEntity {
 				}
 				// 赤ゆには茎を実らせない
 				if (stalkPool) {
-					if (body.isBaby())
+					if (body.isBaby()) {
 						return 0;
+					}
 				}
 				// ゆっくりが膨らんでる時の糞抜き
 				if (body.isInfration()) {
@@ -171,9 +171,9 @@ public class BreedingPool extends WorldEntity {
 					if (liquidYukkuriType == -1) {
 						babyType = body.getType();
 					} else if (!body.isHybrid() && liquidYukkuriType < 10000 && (GameRandom.nextInt(50) == 0)) {
-						babyType = body.getHybridType(YukkuriType.fromTypeID(liquidYukkuriType));
+						babyType = body.getHybridType(YukkuriType.fromTypeId(liquidYukkuriType));
 					} else if (GameRandom.nextBoolean()) {
-						babyType = YukkuriType.fromTypeID(liquidYukkuriType);
+						babyType = YukkuriType.fromTypeId(liquidYukkuriType);
 					} else {
 						babyType = body.getType();
 					}
@@ -241,21 +241,21 @@ public class BreedingPool extends WorldEntity {
 					Cash.addCash(-getCost());
 				}
 			} else if (body.isDead() && liquidYukkuriType == -1 && body.isCrushed()) {
-				liquidYukkuriType = body.getType().getTypeID();
+				liquidYukkuriType = body.getType().getTypeId();
 				body.remove();
 			}
 		}
 		return 0;
 	}
 
-	@Override
 	/** アイテムの購入価格を返す。 */
+	@Override
 	public int getValue() {
 		return value[option];
 	}
 
-	@Override
 	/** アイテムの設置コストを返す。 */
+	@Override
 	public int getCost() {
 		return cost[option];
 	}
@@ -269,7 +269,7 @@ public class BreedingPool extends WorldEntity {
 	/** プール上のゆっくりを泣かせる処理 */
 	public void cry(Yukkuri body) {
 		if (body.hasBabyOrStalk()) {
-			if (body.isNYD()) {
+			if (body.isNyd()) {
 				body.setNydMessage(GameMessages.getMessage(body, MessagePool.Action.NonYukkuriDisease), false);
 			} else if (GameRandom.nextInt(40) == 0) {
 				body.setPikoMessage(GameMessages.getMessage(body, MessagePool.Action.PoolSukkiri), true);
@@ -309,7 +309,6 @@ public class BreedingPool extends WorldEntity {
 
 		JPanel mainPanel = new JPanel();
 		JRadioButton[] buttons = new JRadioButton[PoolType.values().length];
-		boolean setupSucceeded = false;
 
 		mainPanel.setLayout(new GridLayout(4, 2));
 		mainPanel.setPreferredSize(new Dimension(350, 150));
@@ -332,81 +331,58 @@ public class BreedingPool extends WorldEntity {
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 		if (dialogResult == JOptionPane.OK_OPTION) {
-			// 廉価版
 			if (buttons[0].isSelected()) {
+				// 廉価版
 				pool.highQuality = false;
-				// o.rapidGrowth = false;
 				pool.stalkPool = false;
-				// o.industrial = false;
 				pool.lastSelected = 0;
 				pool.option = 0;
-			}
-			// 通常版
-			else if (buttons[1].isSelected()) {
+			} else if (buttons[1].isSelected()) {
+				// 通常版
 				pool.highQuality = false;
-				// o.rapidGrowth = true;
 				pool.stalkPool = false;
-				// o.industrial = false;
 				pool.lastSelected = 1;
 				pool.option = 1;
-			}
-			// プロ用
-			else if (buttons[2].isSelected()) {
+			} else if (buttons[2].isSelected()) {
+				// プロ用
 				pool.highQuality = true;
-				// o.rapidGrowth = true;
 				pool.stalkPool = false;
-				// o.industrial = false;
 				pool.lastSelected = 2;
 				pool.option = 2;
-			}
-			// 工業用
-			else if (buttons[3].isSelected()) {
+			} else if (buttons[3].isSelected()) {
+				// 工業用
 				pool.highQuality = true;
-				// o.rapidGrowth = true;
 				pool.stalkPool = false;
-				// o.industrial = true;
 				pool.lastSelected = 3;
 				pool.option = 3;
-			}
-			// 廉価版(茎)
-			else if (buttons[4].isSelected()) {
+			} else if (buttons[4].isSelected()) {
+				// 廉価版(茎)
 				pool.highQuality = false;
-				// o.rapidGrowth = false;
 				pool.stalkPool = true;
-				// o.industrial = false;
 				pool.lastSelected = 4;
 				pool.option = 4;
-			}
-			// 通常版(茎)
-			else if (buttons[5].isSelected()) {
+			} else if (buttons[5].isSelected()) {
+				// 通常版(茎)
 				pool.highQuality = false;
-				// o.rapidGrowth = true;
 				pool.stalkPool = true;
-				// o.industrial = false;
 				pool.lastSelected = 5;
 				pool.option = 5;
-			}
-			// プロ用(茎)
-			else if (buttons[6].isSelected()) {
+			} else if (buttons[6].isSelected()) {
+				// プロ用(茎)
 				pool.highQuality = true;
-				// o.rapidGrowth = true;
 				pool.stalkPool = true;
-				// o.industrial = false;
 				pool.lastSelected = 6;
 				pool.option = 6;
-			}
-			// 工業用(茎)
-			else if (buttons[7].isSelected()) {
+			} else if (buttons[7].isSelected()) {
+				// 工業用(茎)
 				pool.highQuality = true;
-				// o.rapidGrowth = true;
 				pool.stalkPool = true;
-				// o.industrial = true;
 				pool.lastSelected = 7;
 				pool.option = 7;
 			}
-			setupSucceeded = true;
+			return true;
 		}
-		return setupSucceeded;
+		return false;
 	}
 
 	/** 高品質モードかどうかを返す。 */

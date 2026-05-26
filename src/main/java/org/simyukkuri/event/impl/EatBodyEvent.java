@@ -13,7 +13,7 @@ import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameView;
 
-/***************************************************
+/**
  * 死体食事中におかざりがもどってきたイベント
  * protected Yukkuri from; // 食べてる側
  * protected Yukkuri to; // 食べられてる側
@@ -54,8 +54,9 @@ public class EatBodyEvent extends EventPacket {
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
 		if (org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom()) == body && body.canEventResponse()
-				&& body.getAttitude() != Attitude.SUPER_SHITHEAD)
+				&& body.getAttitude() != Attitude.SUPER_SHITHEAD) {
 			return true;
+		}
 		return false;
 	}
 
@@ -64,8 +65,9 @@ public class EatBodyEvent extends EventPacket {
 	@Override
 	public void start(Yukkuri body) {
 		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
-		if (targetBody == null)
+		if (targetBody == null) {
 			return;
+		}
 		// ゆっくりが隠れないように死体の奥に出る
 		body.moveToEvent(this, targetBody.getX() + 5, targetBody.getY() + 4);
 	}
@@ -79,29 +81,33 @@ public class EatBodyEvent extends EventPacket {
 		// 複数の動作を順次行うのでtickで管理
 		if (tick == 0) {
 			// 固まる
-			if (targetBody != null)
+			if (targetBody != null) {
 				body.lookTo(targetBody.getX(), targetBody.getY());
+			}
 			body.setLockmove(true);
 			body.setMessage(null, true);
 			body.setForceFace(ImageCode.NORMAL.ordinal());
 			body.stay();
 		} else if (tick == 10) {
 			// 驚く
-			if (targetBody != null)
+			if (targetBody != null) {
 				body.lookTo(targetBody.getX(), targetBody.getY());
+			}
 			body.setLockmove(false);
 			body.setForceFace(ImageCode.SURPRISE.ordinal());
 			body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.Surprise), 52, true, false);
 			body.stay();
 		} else if (tick == 70) {
 			// 吐く
-			if (targetBody != null)
+			if (targetBody != null) {
 				body.lookTo(targetBody.getX(), targetBody.getY());
+			}
 			body.setForceFace(ImageCode.CRYING.ordinal());
 			body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.Vomit), 62, true, false);
 			int ofsX = Translate.invertX(body.getCollisionX() >> 1, body.getY());
-			if (body.getDirection() == Direction.LEFT)
+			if (body.getDirection() == Direction.LEFT) {
 				ofsX = -ofsX;
+			}
 			GameView.addVomit(body.getX() + ofsX, body.getY(), body.getZ(), body, body.getShitType());
 			body.stay();
 		} else if (tick == 120) {
@@ -122,13 +128,14 @@ public class EatBodyEvent extends EventPacket {
 					body.addStress(700);
 					break;
 			}
-			if (body.isNotNYD()) {
+			if (body.isNotNyd()) {
 				body.setHappiness(Happiness.VERY_SAD);
 			}
 			return true;
 		} else {
-			if (targetBody != null)
+			if (targetBody != null) {
 				body.lookTo(targetBody.getX(), targetBody.getY());
+			}
 			body.stay();
 		}
 		tick++;
@@ -136,12 +143,12 @@ public class EatBodyEvent extends EventPacket {
 	}
 
 	// もしもの時のために解除
-	@Override
 	/**
 	 * End.
 	 *
 	 * @param body the body
 	 */
+	@Override
 	public void end(Yukkuri body) {
 		body.setLockmove(false);
 		return;

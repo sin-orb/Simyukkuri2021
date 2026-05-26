@@ -3,10 +3,10 @@ package org.simyukkuri.logic;
 import org.simyukkuri.entity.core.attachment.impl.Badge;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.Attitude;
-import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.Intelligence;
+import org.simyukkuri.enums.YukkuriRank;
 
-/***************************************************
+/**
  * バッジ関連
  */
 public class BadgeLogic {

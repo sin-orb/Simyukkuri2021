@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Method;
 import java.security.SecureRandom;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -70,7 +69,7 @@ public class BodyBehaviorTest {
         WorldTestHelper.initializeLoadedMessagePool(getClass().getClassLoader());
 
         body = new StubBody();
-        body.setUniqueID(1);
+        body.setUniqueId(1);
         body.setAge(100000); // Adult
         body.setRank(YukkuriRank.KAIYU);
         body.setMsgType(YukkuriType.REIMU);
@@ -129,7 +128,7 @@ public class BodyBehaviorTest {
         body.setPanic(true, PanicType.BURN);
 
         StubBody neighbor = new StubBody();
-        neighbor.setUniqueID(2);
+        neighbor.setUniqueId(2);
         neighbor.setX(body.getX() + 10);
         neighbor.setY(body.getY());
         world.getCurrentWorldState().getYukkuriRegistry().put(2, neighbor);
@@ -145,7 +144,7 @@ public class BodyBehaviorTest {
         body.giveFire();
 
         StubBody neighbor = new StubBody();
-        neighbor.setUniqueID(2);
+        neighbor.setUniqueId(2);
         neighbor.setX(body.getX() + 1);
         neighbor.setY(body.getY());
         world.getCurrentWorldState().getYukkuriRegistry().put(2, neighbor);
@@ -178,7 +177,7 @@ public class BodyBehaviorTest {
             body.setPanic(true, PanicType.BURN);
 
             StubBody raper = new StubBody();
-            raper.setUniqueID(2);
+            raper.setUniqueId(2);
             raper.setX(body.getX() + 10);
             raper.setY(body.getY());
             raper.setRaper(true);
@@ -194,7 +193,7 @@ public class BodyBehaviorTest {
             body.giveFire();
 
             StubBody distant = new StubBody();
-            distant.setUniqueID(2);
+            distant.setUniqueId(2);
             distant.setX(body.getX() + 1000);
             distant.setY(body.getY() + 1000);
             world.getCurrentWorldState().getYukkuriRegistry().put(2, distant);

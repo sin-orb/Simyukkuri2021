@@ -44,8 +44,8 @@ public class SuiSpeakeTest {
         Yukkuri from = createBody();
         Yukkuri to = createBody();
         SuiSpeake event = new SuiSpeake(from, to, null, 1);
-        assertEquals(from.getUniqueID(), event.getFrom());
-        assertEquals(to.getUniqueID(), event.getTo());
+        assertEquals(from.getUniqueId(), event.getFrom());
+        assertEquals(to.getUniqueId(), event.getTo());
         assertEquals(1, event.getCount());
     }
 
@@ -245,8 +245,8 @@ public class SuiSpeakeTest {
             };
             Yukkuri from = createBody();
             Yukkuri b = createBody();
-            from.setPartner(b.getUniqueID());
-            b.setPartner(from.getUniqueID());
+            from.setPartner(b.getUniqueId());
+            b.setPartner(from.getUniqueId());
             SuiSpeake event = new SuiSpeake(from, null, null, 1);
             // from != null, b == partner of from, target=null →
             // setMessage(WantingSuiPartner)
@@ -310,7 +310,7 @@ public class SuiSpeakeTest {
             };
             Yukkuri db = createBody();
             Yukkuri b = createBody();
-            b.setParents(new int[] { db.getUniqueID(), -1 }); // db is father of b
+            b.setParents(new int[] { db.getUniqueId(), -1 }); // db is father of b
             org.simyukkuri.entity.core.world.item.Sui sui = createSui(db, 0, 0);
             SuiSpeake event = new SuiSpeake((Yukkuri) null, null, sui, 1);
             assertDoesNotThrow(() -> event.simpleEventAction(b));
@@ -333,7 +333,7 @@ public class SuiSpeakeTest {
             };
             Yukkuri db = createBody();
             Yukkuri b = createBody();
-            b.setParents(new int[] { -1, db.getUniqueID() }); // db is mother of b
+            b.setParents(new int[] { -1, db.getUniqueId() }); // db is mother of b
             org.simyukkuri.entity.core.world.item.Sui sui = createSui(db, 0, 0);
             SuiSpeake event = new SuiSpeake((Yukkuri) null, null, sui, 1);
             assertDoesNotThrow(() -> event.simpleEventAction(b));
@@ -355,8 +355,8 @@ public class SuiSpeakeTest {
             };
             Yukkuri db = createBody();
             Yukkuri b = createBody();
-            b.setPartner(db.getUniqueID());
-            db.setPartner(b.getUniqueID());
+            b.setPartner(db.getUniqueId());
+            db.setPartner(b.getUniqueId());
             org.simyukkuri.entity.core.world.item.Sui sui = createSui(db, 0, 0);
             SuiSpeake event = new SuiSpeake((Yukkuri) null, null, sui, 1);
             assertDoesNotThrow(() -> event.simpleEventAction(b));
@@ -378,7 +378,7 @@ public class SuiSpeakeTest {
             };
             Yukkuri db = createBody();
             Yukkuri b = createBody();
-            db.setParents(new int[] { b.getUniqueID(), -1 }); // b is father of db
+            db.setParents(new int[] { b.getUniqueId(), -1 }); // b is father of db
             org.simyukkuri.entity.core.world.item.Sui sui = createSui(db, 0, 0);
             SuiSpeake event = new SuiSpeake((Yukkuri) null, null, sui, 1);
             assertDoesNotThrow(() -> event.simpleEventAction(b));
@@ -402,8 +402,8 @@ public class SuiSpeakeTest {
             Yukkuri sharedMama = createBody();
             Yukkuri db = createBody();
             Yukkuri b = createBody();
-            db.setParents(new int[] { -1, sharedMama.getUniqueID() });
-            b.setParents(new int[] { -1, sharedMama.getUniqueID() });
+            db.setParents(new int[] { -1, sharedMama.getUniqueId() });
+            b.setParents(new int[] { -1, sharedMama.getUniqueId() });
             db.setAge(200); // db older than b (b has default age ~50-150)
             org.simyukkuri.entity.core.world.item.Sui sui = createSui(db, 0, 0);
             SuiSpeake event = new SuiSpeake((Yukkuri) null, null, sui, 1);
@@ -428,8 +428,8 @@ public class SuiSpeakeTest {
             Yukkuri sharedMama = createBody();
             Yukkuri db = createBody();
             Yukkuri b = createBody();
-            db.setParents(new int[] { -1, sharedMama.getUniqueID() });
-            b.setParents(new int[] { -1, sharedMama.getUniqueID() });
+            db.setParents(new int[] { -1, sharedMama.getUniqueId() });
+            b.setParents(new int[] { -1, sharedMama.getUniqueId() });
             db.setAge(0);
             b.setAge(200); // b is older
             org.simyukkuri.entity.core.world.item.Sui sui = createSui(db, 0, 0);
@@ -474,7 +474,7 @@ public class SuiSpeakeTest {
             };
             Yukkuri from = createBody();
             Yukkuri b = createBody();
-            from.setParents(new int[] { b.getUniqueID(), -1 }); // b is parent of from
+            from.setParents(new int[] { b.getUniqueId(), -1 }); // b is parent of from
             SuiSpeake event = new SuiSpeake(from, null, null, 1);
             assertDoesNotThrow(() -> event.simpleEventAction(b));
         } finally {
@@ -497,8 +497,8 @@ public class SuiSpeakeTest {
             from.setX(1000);
             from.setY(1000); // far from b
             Yukkuri b = createBody(); // at 0,0
-            from.setPartner(b.getUniqueID());
-            b.setPartner(from.getUniqueID());
+            from.setPartner(b.getUniqueId());
+            b.setPartner(from.getUniqueId());
             SuiSpeake event = new SuiSpeake(from, null, null, 1);
             assertDoesNotThrow(() -> event.simpleEventAction(b));
         } finally {
@@ -519,7 +519,7 @@ public class SuiSpeakeTest {
             };
             Yukkuri from = createBody();
             Yukkuri b = createBody();
-            b.setParents(new int[] { -1, from.getUniqueID() }); // from is mother of b
+            b.setParents(new int[] { -1, from.getUniqueId() }); // from is mother of b
             org.simyukkuri.entity.core.world.item.Sui sui = createSui(new Reimu(), 0, 0);
             SuiSpeake event = new SuiSpeake(from, null, sui, 1);
             assertDoesNotThrow(() -> event.simpleEventAction(b));
@@ -542,7 +542,7 @@ public class SuiSpeakeTest {
             };
             Yukkuri from = createBody();
             Yukkuri b = createBody();
-            b.setParents(new int[] { from.getUniqueID(), -1 }); // from is father of b
+            b.setParents(new int[] { from.getUniqueId(), -1 }); // from is father of b
             org.simyukkuri.entity.core.world.item.Sui sui = createSui(new Reimu(), 0, 0);
             SuiSpeake event = new SuiSpeake(from, null, sui, 1);
             assertDoesNotThrow(() -> event.simpleEventAction(b));
@@ -564,8 +564,8 @@ public class SuiSpeakeTest {
             };
             Yukkuri from = createBody();
             Yukkuri b = createBody();
-            b.setPartner(from.getUniqueID());
-            from.setPartner(b.getUniqueID());
+            b.setPartner(from.getUniqueId());
+            from.setPartner(b.getUniqueId());
             org.simyukkuri.entity.core.world.item.Sui sui = createSui(new Reimu(), 0, 0);
             SuiSpeake event = new SuiSpeake(from, null, sui, 1);
             assertDoesNotThrow(() -> event.simpleEventAction(b));
@@ -587,7 +587,7 @@ public class SuiSpeakeTest {
             };
             Yukkuri from = createBody();
             Yukkuri b = createBody();
-            from.setParents(new int[] { b.getUniqueID(), -1 }); // b is father of from
+            from.setParents(new int[] { b.getUniqueId(), -1 }); // b is father of from
             org.simyukkuri.entity.core.world.item.Sui sui = createSui(new Reimu(), 0, 0);
             SuiSpeake event = new SuiSpeake(from, null, sui, 1);
             assertDoesNotThrow(() -> event.simpleEventAction(b));
@@ -610,8 +610,8 @@ public class SuiSpeakeTest {
             Yukkuri sharedMama = createBody();
             Yukkuri from = createBody();
             Yukkuri b = createBody();
-            from.setParents(new int[] { -1, sharedMama.getUniqueID() });
-            b.setParents(new int[] { -1, sharedMama.getUniqueID() });
+            from.setParents(new int[] { -1, sharedMama.getUniqueId() });
+            b.setParents(new int[] { -1, sharedMama.getUniqueId() });
             from.setAge(200);
             b.setAge(0); // from is elder
             org.simyukkuri.entity.core.world.item.Sui sui = createSui(new Reimu(), 0, 0);
@@ -637,8 +637,8 @@ public class SuiSpeakeTest {
             Yukkuri sharedMama = createBody();
             Yukkuri from = createBody();
             Yukkuri b = createBody();
-            from.setParents(new int[] { -1, sharedMama.getUniqueID() });
-            b.setParents(new int[] { -1, sharedMama.getUniqueID() });
+            from.setParents(new int[] { -1, sharedMama.getUniqueId() });
+            b.setParents(new int[] { -1, sharedMama.getUniqueId() });
             from.setAge(0);
             b.setAge(200); // b is elder, from is younger
             org.simyukkuri.entity.core.world.item.Sui sui = createSui(new Reimu(), 0, 0);
@@ -719,7 +719,7 @@ public class SuiSpeakeTest {
                         "wanting-sui branch should queue exactly one world event");
                 assertTrue(SimYukkuri.world.getCurrentWorldState().getEvents().get(0) instanceof SuiSpeake,
                         "wanting-sui branch should queue another SuiSpeake world event");
-                assertEquals(b.getUniqueID(),
+                assertEquals(b.getUniqueId(),
                         SimYukkuri.world.getCurrentWorldState().getEvents().get(0).getFrom(),
                         "queued world event should remember which body started talking about sui");
             } finally {
@@ -765,7 +765,7 @@ public class SuiSpeakeTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 

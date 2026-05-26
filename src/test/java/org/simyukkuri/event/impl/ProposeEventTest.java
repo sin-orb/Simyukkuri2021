@@ -28,7 +28,7 @@ public class ProposeEventTest extends EventTestBase {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 
@@ -57,8 +57,8 @@ public class ProposeEventTest extends EventTestBase {
         Yukkuri to = createBody(2, 120, 120);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         assertEquals(EventPacket.EventPriority.HIGH, event.getPriority());
-        assertEquals(from.getUniqueID(), event.getFrom());
-        assertEquals(to.getUniqueID(), event.getTo());
+        assertEquals(from.getUniqueId(), event.getFrom());
+        assertEquals(to.getUniqueId(), event.getTo());
         assertEquals(10, event.getCount());
     }
 
@@ -152,7 +152,7 @@ public class ProposeEventTest extends EventTestBase {
         Yukkuri to = createBody(2, 120, 120);
         // to already has a partner
         Yukkuri partner = createBody(3, 200, 200);
-        to.setPartner(partner.getUniqueID());
+        to.setPartner(partner.getUniqueId());
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         assertFalse(event.acceptPropose(from, to));
     }
@@ -275,7 +275,7 @@ public class ProposeEventTest extends EventTestBase {
         Yukkuri from = createSprBody(100, 100);
         Yukkuri to = createSprBody(120, 120);
         Yukkuri otherPartner = createSprBody(200, 200);
-        to.setPartner(otherPartner.getUniqueID());
+        to.setPartner(otherPartner.getUniqueId());
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.tick = 40;
         // to already married → acceptPropose=false → failure path
@@ -289,7 +289,7 @@ public class ProposeEventTest extends EventTestBase {
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.tick = 60;
         // set from.partner = to (success case)
-        from.setPartner(to.getUniqueID());
+        from.setPartner(to.getUniqueId());
         assertDoesNotThrow(() -> event.execute(from));
     }
 
@@ -424,7 +424,7 @@ public class ProposeEventTest extends EventTestBase {
         to.setIntelligence(org.simyukkuri.enums.Intelligence.WISE); // to.findSick(from) = true
         // Make acceptPropose fail first (to already married)
         Yukkuri partner = createSprBody(200, 200);
-        to.setPartner(partner.getUniqueID());
+        to.setPartner(partner.getUniqueId());
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.tick = 40;
         assertDoesNotThrow(() -> event.execute(from));
@@ -437,7 +437,7 @@ public class ProposeEventTest extends EventTestBase {
         Yukkuri to = createSprBody(120, 120);
         to.setAttitude(org.simyukkuri.enums.Attitude.SHITHEAD); // isRude() = true
         Yukkuri partner = createSprBody(200, 200);
-        to.setPartner(partner.getUniqueID()); // acceptPropose = false (already married)
+        to.setPartner(partner.getUniqueId()); // acceptPropose = false (already married)
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.tick = 40;
         assertDoesNotThrow(() -> event.execute(from));
@@ -451,7 +451,7 @@ public class ProposeEventTest extends EventTestBase {
         from.setAttitude(org.simyukkuri.enums.Attitude.VERY_NICE);
         to.setAttitude(org.simyukkuri.enums.Attitude.VERY_NICE);
         Yukkuri partner = createSprBody(200, 200);
-        to.setPartner(partner.getUniqueID());
+        to.setPartner(partner.getUniqueId());
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.tick = 40;
         assertDoesNotThrow(() -> event.execute(from));
@@ -465,7 +465,7 @@ public class ProposeEventTest extends EventTestBase {
         from.setAttitude(org.simyukkuri.enums.Attitude.NICE);
         to.setAttitude(org.simyukkuri.enums.Attitude.NICE);
         Yukkuri partner = createSprBody(200, 200);
-        to.setPartner(partner.getUniqueID());
+        to.setPartner(partner.getUniqueId());
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.tick = 40;
         assertDoesNotThrow(() -> event.execute(from));
@@ -479,7 +479,7 @@ public class ProposeEventTest extends EventTestBase {
         from.setAttitude(org.simyukkuri.enums.Attitude.SHITHEAD);
         to.setAttitude(org.simyukkuri.enums.Attitude.SUPER_SHITHEAD);
         Yukkuri partner = createSprBody(200, 200);
-        to.setPartner(partner.getUniqueID());
+        to.setPartner(partner.getUniqueId());
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.tick = 40;
         assertDoesNotThrow(() -> event.execute(from));
@@ -511,8 +511,8 @@ public class ProposeEventTest extends EventTestBase {
         event.tick = 40;
         event.execute(from); // set to.partner and stress/mem
 
-        assertEquals(to.getUniqueID(), from.getPartner());
-        assertEquals(from.getUniqueID(), to.getPartner());
+        assertEquals(to.getUniqueId(), from.getPartner());
+        assertEquals(from.getUniqueId(), to.getPartner());
         assertTrue(from.getStress() < fromInitialStress, "Stress should decrease on success");
         assertTrue(to.getStress() < toInitialStress, "Stress should decrease on success");
         assertTrue(from.getMemories() > fromInitialMem, "Memories should increase on success");
@@ -534,7 +534,7 @@ public class ProposeEventTest extends EventTestBase {
 
         // Make to already married so acceptPropose fails
         Yukkuri partner = createSprBody(200, 200);
-        to.setPartner(partner.getUniqueID());
+        to.setPartner(partner.getUniqueId());
 
         int fromInitialStress = from.getStress();
         int toInitialStress = to.getStress();

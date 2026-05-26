@@ -11,8 +11,8 @@ public class YukkuriTypeMappingTest {
     public void testTypeClassNameRoundTrip() {
         for (YukkuriType type : YukkuriType.values()) {
             assertEquals(type, YukkuriType.fromClassName(type.getClassName()));
-            assertEquals(type, YukkuriType.fromTypeID(type.getTypeID()));
-            assertEquals(type.getClassName(), YukkuriType.fromTypeID(type.getTypeID()).getClassName());
+            assertEquals(type, YukkuriType.fromTypeId(type.getTypeId()));
+            assertEquals(type.getClassName(), YukkuriType.fromTypeId(type.getTypeId()).getClassName());
         }
     }
 }

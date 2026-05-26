@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-
 import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.engine.birth.YukkuriBirthTypeResolver;
 import org.simyukkuri.entity.core.attachment.Attachment;
@@ -16,9 +15,9 @@ import org.simyukkuri.enums.Direction;
 import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.util.GameText;
 
-/****************************************
+/**
  * 精子アンプル
- * 
+ *
  */
 public class BreedingAmpoule extends Attachment {
 
@@ -31,9 +30,11 @@ public class BreedingAmpoule extends Attachment {
 	 */
 	private static BufferedImage[][] images;
 	/** 画像のサイズ */
-	private static int[] imgW, imgH;
+	private static int[] imgW;
+	private static int[] imgH;
 	/** 画像の描画原点の座標 */
-	private static int[] pivX, pivY;
+	private static int[] pivX;
+	private static int[] pivY;
 	/** 継承元のenum AttachProperty の代入値 */
 	private static final int[] property = {
 			2, // 赤ゆ用画像サイズ 原画をこの値で割る
@@ -54,7 +55,7 @@ public class BreedingAmpoule extends Attachment {
 	 */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
-		int baby = AgeState.BABY.ordinal();
+		final int baby = AgeState.BABY.ordinal();
 		int child = AgeState.CHILD.ordinal();
 		int adult = AgeState.ADULT.ordinal();
 		images = new BufferedImage[3][2];
@@ -88,8 +89,9 @@ public class BreedingAmpoule extends Attachment {
 	@Override
 	protected TickResult update() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
-		if (pa == null)
+		if (pa == null) {
 			return TickResult.NONE;
+		}
 		// 死んでる/焼かれてる/壊れてる/胎生去勢 の場合は何もしない
 		if (pa.isDead() || pa.isBurned() || pa.isCrushed() || pa.isCastrated()) {
 			return TickResult.NONE;
@@ -106,8 +108,9 @@ public class BreedingAmpoule extends Attachment {
 	@Override
 	public BufferedImage getImage(Yukkuri b) {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
-		if (pa == null)
+		if (pa == null) {
 			return null;
+		}
 		if (b.getDirection() == Direction.RIGHT) {
 			return images[pa.getAgeState().ordinal()][1];
 		}
@@ -118,8 +121,9 @@ public class BreedingAmpoule extends Attachment {
 	@Override
 	public void resetBoundary() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
-		if (pa == null)
+		if (pa == null) {
 			return;
+		}
 		setBoundary(pivX[pa.getAgeState().ordinal()],
 				pivY[pa.getAgeState().ordinal()],
 				imgW[pa.getAgeState().ordinal()],

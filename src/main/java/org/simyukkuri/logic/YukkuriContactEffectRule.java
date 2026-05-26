@@ -37,7 +37,7 @@ public final class YukkuriContactEffectRule {
 		if (actorBody.isAdult() && !targetBody.isAdult()
 				&& (targetBody.isChild(actorBody) || actorBody.isMother(targetBody))
 				&& (actorBody.getIntelligence() == org.simyukkuri.enums.Intelligence.FOOL && !targetBody.hasOkazari())) {
-			if (actorBody.getCurrentEvent() == null && targetBody.isNYD() && GameRandom.nextBoolean()) {
+			if (actorBody.getCurrentEvent() == null && targetBody.isNyd() && GameRandom.nextBoolean()) {
 				actorBody.clearActions();
 				EventLogic.addWorldEvent(new HateNoOkazariEvent(actorBody, targetBody, null, 10), actorBody,
 						GameMessages.getMessage(actorBody, MessagePool.Action.HateYukkuri));

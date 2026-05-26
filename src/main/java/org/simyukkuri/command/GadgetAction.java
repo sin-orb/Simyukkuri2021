@@ -198,7 +198,7 @@ public class GadgetAction {
 	 * @param initOption 設置アイテムのオプション情報
 	 * @return WorldEntity
 	 */
-	public static WorldEntity putObjEX(Class<?> cls, int px, int py, int initOption) {
+	public static WorldEntity putObjEx(Class<?> cls, int px, int py, int initOption) {
 		WorldEntity placedObject = null;
 		try {
 			Constructor<?> cst = cls.getConstructor(int.class, int.class, int.class);
@@ -217,7 +217,7 @@ public class GadgetAction {
 	 * <br>
 	 * Toolカテゴリの実行
 	 *
-	 * @param item         実行内容
+	 * @param actionItem  実行内容
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
@@ -230,7 +230,7 @@ public class GadgetAction {
 	 * <br>
 	 * 道具2カテゴリの実行
 	 *
-	 * @param item         実行内容
+	 * @param actionItem  実行内容
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
@@ -243,7 +243,7 @@ public class GadgetAction {
 	 * <br>
 	 * アンプルカテゴリの実行
 	 *
-	 * @param item         実行内容
+	 * @param actionItem  実行内容
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
@@ -256,7 +256,7 @@ public class GadgetAction {
 	 * <br>
 	 * 清掃カテゴリの実行
 	 *
-	 * @param item         実行内容
+	 * @param actionItem  実行内容
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
@@ -269,7 +269,7 @@ public class GadgetAction {
 	 * <br>
 	 * おかざりカテゴリの実行
 	 *
-	 * @param item         実行内容
+	 * @param actionItem  実行内容
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
@@ -282,7 +282,7 @@ public class GadgetAction {
 	 * <br>
 	 * おくるみカテゴリの実行
 	 *
-	 * @param item         実行内容
+	 * @param actionItem  実行内容
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
@@ -295,7 +295,7 @@ public class GadgetAction {
 	 * <br>
 	 * 床設置カテゴリの実行
 	 *
-	 * @param item         実行内容
+	 * @param actionItem  実行内容
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
@@ -308,7 +308,7 @@ public class GadgetAction {
 	 * <br>
 	 * おもちゃカテゴリの実行
 	 *
-	 * @param item         実行内容
+	 * @param actionItem  実行内容
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
@@ -321,7 +321,7 @@ public class GadgetAction {
 	 * <br>
 	 * コンベアカテゴリの実行
 	 *
-	 * @param item         実行内容
+	 * @param actionItem  実行内容
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
@@ -334,7 +334,7 @@ public class GadgetAction {
 	 * <br>
 	 * 声かけカテゴリの実行
 	 *
-	 * @param item         実行内容
+	 * @param actionItem  実行内容
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
@@ -347,7 +347,7 @@ public class GadgetAction {
 	 * <br>
 	 * テストカテゴリの実行
 	 *
-	 * @param item         実行内容
+	 * @param actionItem  実行内容
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */

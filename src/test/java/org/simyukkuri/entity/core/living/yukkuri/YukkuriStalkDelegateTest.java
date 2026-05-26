@@ -1,12 +1,11 @@
 package org.simyukkuri.entity.core.living.yukkuri;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-
 import org.simyukkuri.entity.core.world.bodylinked.Stalk;
 
 class YukkuriStalkDelegateTest {
@@ -36,12 +35,12 @@ class YukkuriStalkDelegateTest {
 		Stalk stalk = new Stalk();
 		body.setBindStalk(stalk);
 		body.setParentLinkId(42);
-		stalk.getAttachedBabyIds().add(body.getUniqueID());
+		stalk.getAttachedBabyIds().add(body.getUniqueId());
 
 		new YukkuriStalkDelegate(body).detachFromStalk();
 
 		assertNull(body.getBindStalk());
-		assertFalse(stalk.getAttachedBabyIds().contains(body.getUniqueID()));
+		assertFalse(stalk.getAttachedBabyIds().contains(body.getUniqueId()));
 		assertEquals(-1, body.getParentLinkId());
 	}
 

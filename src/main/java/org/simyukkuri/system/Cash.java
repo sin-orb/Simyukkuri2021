@@ -47,6 +47,8 @@ public class Cash {
 			case ADULT:
 				val /= 1;
 				break;
+			default:
+				break;
 		}
 		addCash(-val);
 		return val;
@@ -74,17 +76,20 @@ public class Cash {
 					break;
 				case ADULT:
 					break;
+				default:
+					break;
 			}
 			// ストレス度査定
-			float G = body.getStress() / body.getStressLimit();
-			if (G <= 0)
-				G = 0;
-			// else if(G<=2)G*=1;
-			else if (G > 2 && G <= 20)
-				G = (G / 6) + (5 / 3);
-			else
-				G = 5;
-			val *= G;
+			float grade = body.getStress() / body.getStressLimit();
+			if (grade <= 0) {
+				grade = 0;
+			// else if(grade<=2)grade*=1;
+			} else if (grade > 2 && grade <= 20) {
+				grade = (grade / 6) + (5 / 3);
+			} else {
+				grade = 5;
+			}
+			val = (int) (val * grade);
 			addCash(val);
 			return val;
 		}
@@ -108,12 +113,16 @@ public class Cash {
 			case ADULT:
 				val /= 3;
 				break;
+			default:
+				break;
 		}
 		// 増減額
-		if (body.hasDisorder())
+		if (body.hasDisorder()) {
 			val /= 4;
-		if (!body.hasOkazari())
+		}
+		if (!body.hasOkazari()) {
 			val /= 2;
+		}
 		switch (body.getAttitude()) {
 			case VERY_NICE:
 				val *= 4;
@@ -130,17 +139,22 @@ public class Cash {
 			case SUPER_SHITHEAD:
 				val /= 20;
 				break;
+			default:
+				break;
 		}
 		switch (body.getIntelligence()) {
 			case WISE:
-				if (!body.isRude())
+				if (!body.isRude()) {
 					val *= 3 / 2;
+				}
 				break;
 			case AVERAGE:
 				// 無補正
 				break;
 			case FOOL:
 				val /= 10;
+				break;
+			default:
 				break;
 		}
 		addCash(val);

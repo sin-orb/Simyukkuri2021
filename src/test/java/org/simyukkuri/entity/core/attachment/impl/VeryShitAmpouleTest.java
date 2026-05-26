@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -26,10 +25,10 @@ public class VeryShitAmpouleTest {
     public void setUp() {
         SimYukkuri.world = new World();
         VeryShitAmpoule.setImages(buildImages());
-        VeryShitAmpoule.setImgW(new int[] { 10, 20, 30 });
-        VeryShitAmpoule.setImgH(new int[] { 11, 21, 31 });
-        VeryShitAmpoule.setPivX(new int[] { 1, 2, 3 });
-        VeryShitAmpoule.setPivY(new int[] { 4, 5, 6 });
+        VeryShitAmpoule.setImgW(new int[] {10, 20, 30});
+        VeryShitAmpoule.setImgH(new int[] {11, 21, 31});
+        VeryShitAmpoule.setPivX(new int[] {1, 2, 3});
+        VeryShitAmpoule.setPivY(new int[] {4, 5, 6});
     }
 
     @Test
@@ -46,7 +45,7 @@ public class VeryShitAmpouleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
 
-        assertEquals(parent.getUniqueID(), ampoule.getParent());
+        assertEquals(parent.getUniqueId(), ampoule.getParent());
         assertEquals(500, ampoule.getValue());
         assertEquals(0, ampoule.getCost());
         assertEquals(2, ampoule.getPivotX());
@@ -112,7 +111,7 @@ public class VeryShitAmpouleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
 
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueId());
 
         BufferedImage image = ampoule.getImage(parent);
         assertNull(image);
@@ -154,9 +153,15 @@ public class VeryShitAmpouleTest {
         childParent.setDirection(Direction.LEFT);
         adultParent.setDirection(Direction.LEFT);
 
-        assertSame(VeryShitAmpoule.getImages()[AgeState.BABY.ordinal()][0], babyAmpoule.getImage(babyParent));
-        assertSame(VeryShitAmpoule.getImages()[AgeState.CHILD.ordinal()][0], childAmpoule.getImage(childParent));
-        assertSame(VeryShitAmpoule.getImages()[AgeState.ADULT.ordinal()][0], adultAmpoule.getImage(adultParent));
+        assertSame(
+                VeryShitAmpoule.getImages()[AgeState.BABY.ordinal()][0],
+                babyAmpoule.getImage(babyParent));
+        assertSame(
+                VeryShitAmpoule.getImages()[AgeState.CHILD.ordinal()][0],
+                childAmpoule.getImage(childParent));
+        assertSame(
+                VeryShitAmpoule.getImages()[AgeState.ADULT.ordinal()][0],
+                adultAmpoule.getImage(adultParent));
     }
 
     @Test
@@ -180,7 +185,7 @@ public class VeryShitAmpouleTest {
         int origPivotX = ampoule.getPivotX();
         int origPivotY = ampoule.getPivotY();
 
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueId());
 
         ampoule.resetBoundary();
 
@@ -224,8 +229,13 @@ public class VeryShitAmpouleTest {
             case ADULT:
                 parent.setAge(60000); // ADULT: age >= 50400
                 break;
+            default:
+                break;
         }
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
+        SimYukkuri.world
+                .getCurrentWorldState()
+                .getYukkuriRegistry()
+                .put(parent.getUniqueId(), parent);
         return parent;
     }
 
@@ -233,7 +243,9 @@ public class VeryShitAmpouleTest {
         BufferedImage[][] images = new BufferedImage[3][2];
         for (int age = 0; age < 3; age++) {
             for (int dir = 0; dir < 2; dir++) {
-                images[age][dir] = new BufferedImage(10 + age * 10, 10 + age * 10, BufferedImage.TYPE_INT_ARGB);
+                images[age][dir] =
+                        new BufferedImage(
+                                10 + age * 10, 10 + age * 10, BufferedImage.TYPE_INT_ARGB);
             }
         }
         return images;
@@ -244,6 +256,7 @@ public class VeryShitAmpouleTest {
         try {
             VeryShitAmpoule.loadImages(VeryShitAmpoule.class.getClassLoader(), null);
         } catch (Exception e) {
+            // ignore
         }
     }
 

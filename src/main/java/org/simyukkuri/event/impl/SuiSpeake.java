@@ -12,7 +12,7 @@ import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameText;
 
-/***************************************************
+/**
  * すぃーに関連した会話イベント
  * protected Yukkuri from; // 乗るゆっくり
  * protected Yukkuri to; // 未使用
@@ -38,8 +38,9 @@ public class SuiSpeake extends EventPacket {
 	/** ゆっくり以外のエンティティに対する簡易参加チェック。 */
 	@Override
 	public boolean simpleEventAction(Yukkuri b) {
-		if (b.getCurrentEvent() != null || b.isTalking() || GameRandom.nextInt(20) != 0)
+		if (b.getCurrentEvent() != null || b.isTalking() || GameRandom.nextInt(20) != 0) {
 			return true;
+		}
 		if (!b.canEventResponse()) {
 			return false;
 		}
@@ -57,8 +58,9 @@ public class SuiSpeake extends EventPacket {
 			} else {
 				if (Translate.distance(b.getX(), b.getY(), target.getX(), target.getY()) < 200000) {
 					Yukkuri db = (Yukkuri) ((Sui) target).getOwnerBody();
-					if (db == null)
+					if (db == null) {
 						return false;
+					}
 					if (db.isParent(b)) {
 						if (db.isFather(b)) {
 							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.DrivingSuiPAPA), true);
@@ -83,8 +85,9 @@ public class SuiSpeake extends EventPacket {
 				}
 			}
 		} else {
-			if (sourceBody == b)
+			if (sourceBody == b) {
 				return false;
+			}
 			if (target == null) {
 				if (Translate.distance(b.getX(), b.getY(), sourceBody.getX(), sourceBody.getY()) < 200000) {
 					if (b.isParent(sourceBody)) {

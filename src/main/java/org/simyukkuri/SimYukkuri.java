@@ -37,7 +37,7 @@ import org.simyukkuri.entity.core.living.yukkuri.Dna;
 import org.simyukkuri.system.IconPool;
 import org.simyukkuri.system.ItemMenu;
 import org.simyukkuri.ui.InputController;
-import org.simyukkuri.ui.MainCommandUI;
+import org.simyukkuri.ui.MainCommandUi;
 import org.simyukkuri.ui.listener.MouseInputController;
 import org.simyukkuri.util.GameLocale;
 import org.simyukkuri.util.GameMessages;
@@ -100,11 +100,11 @@ public class SimYukkuri extends JFrame {
 	/** スレッド */
 	static Thread mythread;
 	/** ドラッグ始点 */
-	public static int fieldSX = -1;
-	public static int fieldSY = -1;
+	public static int fieldSx = -1;
+	public static int fieldSy = -1;
 	/** ドラッグ終点 */
-	public static int fieldEX = -1;
-	public static int fieldEY = -1;
+	public static int fieldEx = -1;
+	public static int fieldEy = -1;
 	/** 「フィールド」オブジェクトのタイプ */
 	public static int fieldType = 0;
 
@@ -147,7 +147,7 @@ public class SimYukkuri extends JFrame {
 		mypane.setBorder(new EmptyBorder(0, 0, 0, 0));
 
 		// 右メニュー作成
-		final JPanel ui = MainCommandUI.createInterface(PAINT_PANE_Y[paintPaneMode]);
+		final JPanel ui = MainCommandUi.createInterface(PAINT_PANE_Y[paintPaneMode]);
 
 		// setup my pane
 		mypane.setFocusable(true);
@@ -354,8 +354,8 @@ public class SimYukkuri extends JFrame {
 		paintPaneMode = size;
 
 		Insets inset = getInsets();
-		setPreferredSize(new java.awt.Dimension(PAINT_PANE_X[size] + MainCommandUI.MENU_PANE_X, PAINT_PANE_Y[size]));
-		setSize(inset.left + inset.right + PAINT_PANE_X[size] + MainCommandUI.MENU_PANE_X,
+		setPreferredSize(new java.awt.Dimension(PAINT_PANE_X[size] + MainCommandUi.MENU_PANE_X, PAINT_PANE_Y[size]));
+		setSize(inset.left + inset.right + PAINT_PANE_X[size] + MainCommandUi.MENU_PANE_X,
 				inset.top + inset.bottom + PAINT_PANE_Y[size]);
 		setLocation(new java.awt.Point(100, 0));
 		Translate.setCanvasSize(PAINT_PANE_X[size], PAINT_PANE_Y[size], fieldScaleData[scale], bufferSizeData[scale],
@@ -376,12 +376,12 @@ public class SimYukkuri extends JFrame {
 		// 縦横比を固定するため高さ基準に計算
 		int h = rect.height;
 		int w = (int) ((double) h * ASPECT);
-		if ((w + MainCommandUI.MENU_PANE_X) > rect.width) {
+		if ((w + MainCommandUi.MENU_PANE_X) > rect.width) {
 			// 横にUIを足して画面からはみ出たら再計算
-			w -= MainCommandUI.MENU_PANE_X;
+			w -= MainCommandUi.MENU_PANE_X;
 			h = (int) ((double) w / ASPECT);
 		}
-		setSize(w + MainCommandUI.MENU_PANE_X, h);
+		setSize(w + MainCommandUi.MENU_PANE_X, h);
 		setLocation(new java.awt.Point(0, 0));
 		Translate.setCanvasSize(w, h, fieldScaleData[scale], bufferSizeData[scale], fieldZoomRate[scale]);
 		mypane.setPreferredSize(new java.awt.Dimension(Translate.getCanvasW(), Translate.getCanvasH()));

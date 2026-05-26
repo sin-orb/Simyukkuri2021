@@ -14,7 +14,7 @@ public final class OptionPopupListener implements PopupMenuListener {
 	/** ポップアップ非表示時にオプションボタンの選択を解除する。 */
 	@Override
 	public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-		MainCommandUI.getOptionButton().setSelected(false);
+		MainCommandUi.getOptionButton().setSelected(false);
 	}
 
 	@Override

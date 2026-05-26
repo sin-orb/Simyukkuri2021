@@ -8,9 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JCheckBox;
-
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.enums.YukkuriType;
 

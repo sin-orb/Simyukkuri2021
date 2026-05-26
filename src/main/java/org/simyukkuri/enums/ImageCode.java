@@ -18,16 +18,16 @@ public enum ImageCode {
 	FRONT_BRAID("front", "braid", false),
 	FRONT_SEALED("front", "sealed", false),
 	FRONT_INJURED("front", "injured", false),
-	FRONT_HAIR2("front","hair2",false),
+	FRONT_HAIR2("front", "hair2", false),
 	ROLL_LEFT_SHIT("front", "roll_left", false),
-	ROLL_LEFT_HAIR("front","hair_left",false),
+	ROLL_LEFT_HAIR("front", "hair_left", false),
 	ROLL_LEFT_BLIND("front", "blind_left", false),
 	ROLL_LEFT_PANTS("front", "left_pants", false),
 	ROLL_LEFT_BRAID("front", "braid_left", false),
 	ROLL_LEFT_SEALED("front", "sealed_left", false),
 	ROLL_LEFT_INJURED("front", "injured_left", false),
 	ROLL_RIGHT_SHIT("front", "roll_right", false),
-	ROLL_RIGHT_HAIR("front","hair_right",false),
+	ROLL_RIGHT_HAIR("front", "hair_right", false),
 	ROLL_RIGHT_BLIND("front", "blind_right", false),
 	ROLL_RIGHT_PANTS("front", "right_pants", false),
 	ROLL_RIGHT_BRAID("front", "braid_right", false),
@@ -37,11 +37,11 @@ public enum ImageCode {
 	PACKED1("front", "packed1", false),
 	PACKED2("front", "packed2", false),
 
-	//もるケツまりさ用正面画像
+	// もるケツまりさ用正面画像
 	MROLL_LEFT_SHIT("Mfront", "roll_left", false),
 	MROLL_ACCESSORY_LEFT("Mfront", "okazari_left", false),
-	MROLL_LEFT_HAIR("Mfront","hair_left",false),
-	MROLL_LEFT_HAIR2("Mfront","hair2_left",false),
+	MROLL_LEFT_HAIR("Mfront", "hair_left", false),
+	MROLL_LEFT_HAIR2("Mfront", "hair2_left", false),
 	MROLL_LEFT_BLIND("Mfront", "blind_left", false),
 	MROLL_LEFT_PANTS("Mfront", "left_pants", false),
 	MROLL_LEFT_BRAID("Mfront", "braid_left", false),
@@ -50,8 +50,8 @@ public enum ImageCode {
 	MROLL_LEFT_INJURED("Mfront", "injured_left", false),
 	MROLL_RIGHT_SHIT("Mfront", "roll_right", false),
 	MROLL_ACCESSORY_RIGHT("Mfront", "okazari_right", false),
-	MROLL_RIGHT_HAIR("Mfront","hair_right",false),
-	MROLL_RIGHT_HAIR2("Mfront","hair2_right",false),
+	MROLL_RIGHT_HAIR("Mfront", "hair_right", false),
+	MROLL_RIGHT_HAIR2("Mfront", "hair2_right", false),
 	MROLL_RIGHT_BLIND("Mfront", "blind_right", false),
 	MROLL_RIGHT_PANTS("Mfront", "right_pants", false),
 	MROLL_RIGHT_BRAID("Mfront", "braid_right", false),
@@ -59,8 +59,8 @@ public enum ImageCode {
 	MROLL_RIGHT_INJURED("Mfront", "injured_right", false),
 	MROLL_LEFT2_SHIT("Mfront", "roll_left2", false),
 	MROLL_ACCESSORY_LEFT2("Mfront", "okazari_left2", false),
-	MROLL_LEFT2_HAIR("Mfront","hair_left2",false),
-	MROLL_LEFT2_HAIR2("Mfront","hair2_left2",false),
+	MROLL_LEFT2_HAIR("Mfront", "hair_left2", false),
+	MROLL_LEFT2_HAIR2("Mfront", "hair2_left2", false),
 	MROLL_LEFT2_CUTBRAID("Mfront", "cutbraid_left2", false),
 	MROLL_LEFT2_BLIND("Mfront", "blind_left2", false),
 	MROLL_LEFT2_PANTS("Mfront", "left2_pants", false),
@@ -69,19 +69,19 @@ public enum ImageCode {
 	MROLL_LEFT2_INJURED("Mfront", "injured_left2", false),
 	MROLL_RIGHT2_SHIT("Mfront", "roll_right2", false),
 	MROLL_ACCESSORY_RIGHT2("Mfront", "okazari_right2", false),
-	MROLL_RIGHT2_HAIR("Mfront","hair_right2",false),
-	MROLL_RIGHT2_HAIR2("Mfront","hair2_right2",false),
+	MROLL_RIGHT2_HAIR("Mfront", "hair_right2", false),
+	MROLL_RIGHT2_HAIR2("Mfront", "hair2_right2", false),
 	MROLL_RIGHT2_BLIND("Mfront", "blind_right2", false),
 	MROLL_RIGHT2_PANTS("Mfront", "right2_pants", false),
 	MROLL_RIGHT2_BRAID("Mfront", "braid_right2", false),
 	MROLL_RIGHT2_SEALED("Mfront", "sealed_right2", false),
 	MROLL_RIGHT2_INJURED("Mfront", "injured_right2", false),
 
-	//れいむゆんやぁ用画像
+	// れいむゆんやぁ用画像
 	YUNYAA1("Yunyaa", "body_1", true),
 	YUNYAA1_ACCESSORY("Yunyaa", "okazari_1", true),
-	YUNYAA1_HAIR("Yunyaa","hair_1",true),
-	YUNYAA1_HAIR2("Yunyaa","hair2_1",true),
+	YUNYAA1_HAIR("Yunyaa", "hair_1", true),
+	YUNYAA1_HAIR2("Yunyaa", "hair2_1", true),
 	YUNYAA1_BLIND("Yunyaa", "blind_1", true),
 	YUNYAA1_PANTS("Yunyaa", "pants_1", true),
 	YUNYAA1_BRAID("Yunyaa", "braid_1", true),
@@ -90,8 +90,8 @@ public enum ImageCode {
 	YUNYAA1_DIRTY("Yunyaa", "dirty_1", true),
 	YUNYAA2("Yunyaa", "body_2", true),
 	YUNYAA2_ACCESSORY("Yunyaa", "okazari_2", true),
-	YUNYAA2_HAIR("Yunyaa","hair_2",true),
-	YUNYAA2_HAIR2("Yunyaa","hair2_2",true),
+	YUNYAA2_HAIR("Yunyaa", "hair_2", true),
+	YUNYAA2_HAIR2("Yunyaa", "hair2_2", true),
 	YUNYAA2_CUTBRAID("Yunyaa", "cutbraid_2", true),
 	YUNYAA2_BLIND("Yunyaa", "blind_2", true),
 	YUNYAA2_PANTS("Yunyaa", "pants_2", true),
@@ -100,8 +100,8 @@ public enum ImageCode {
 	YUNYAA2_DIRTY("Yunyaa", "dirty_2", true),
 	YUNYAA3("Yunyaa", "body_3", true),
 	YUNYAA3_ACCESSORY("Yunyaa", "okazari_3", true),
-	YUNYAA3_HAIR("Yunyaa","hair_3",true),
-	YUNYAA3_HAIR3("Yunyaa","hair3_3",true),
+	YUNYAA3_HAIR("Yunyaa", "hair_3", true),
+	YUNYAA3_HAIR3("Yunyaa", "hair3_3", true),
 	YUNYAA3_CUTBRAID("Yunyaa", "cutbraid_3", true),
 	YUNYAA3_BLIND("Yunyaa", "blind_3", true),
 	YUNYAA3_PANTS("Yunyaa", "pants_3", true),
@@ -133,24 +133,24 @@ public enum ImageCode {
 	STAIN2("shit2", null, true),
 	WET("wet", null, true),
 	MELT("melt", null, true),
-	MELT_PEALED("melt_pealed",null,true),
+	MELT_PEALED("melt_pealed", null, true),
 	LICK("lick", null, true),
 	NOMNOM("nomnom", null, true),
-	BLIND("blind",null,true),
-	SHUTMOUTH("shutmouth",null,true),
-	HUNGRY0("hungry0",null,true),
-	HUNGRY1("hungry1",null,true),
-	HUNGRY2("hungry2",null,true),
-	HAIR0("hair","hair0",true),
-	HAIR1("hair","hair1",true),
-	HAIR2("hair","hair2",true),
+	BLIND("blind", null, true),
+	SHUTMOUTH("shutmouth", null, true),
+	HUNGRY0("hungry0", null, true),
+	HUNGRY1("hungry1", null, true),
+	HUNGRY2("hungry2", null, true),
+	HAIR0("hair", "hair0", true),
+	HAIR1("hair", "hair1", true),
+	HAIR2("hair", "hair2", true),
 	BRAID("braid", "braid", true),
 	BRAID_BACK("braid", "braid_back", true),
 	BRAID_CUT("braid", "braid_cut", true),
 	BRAID_MV0("braid", "braid_mv_0", true),
 	BRAID_MV1("braid", "braid_mv_1", true),
 	BRAID_MV2("braid", "braid_mv_2", true),
-	//BRAID_BACK_CUT("braid", "braid_back_cut", true),
+	// BRAID_BACK_CUT("braid", "braid_back_cut", true),
 	BRAID_BACK_MV0("braid", "braid_back_mv_0", true),
 	BRAID_BACK_MV1("braid", "braid_back_mv_1", true),
 	BRAID_BACK_MV2("braid", "braid_back_mv_2", true),
@@ -159,7 +159,7 @@ public enum ImageCode {
 	CRYING("faces", "crying", true),
 	DEAD("faces", "dead", true),
 	EXCITING("faces", "exciting", true),
-	EXCITING_RAPER("faces","exciting2",true),
+	EXCITING_RAPER("faces", "exciting2", true),
 	CUTPENIPENI("faces", "penicut", true),
 	NORMAL("faces", "normal", true),
 	PAIN("faces", "pain", true),
@@ -180,8 +180,8 @@ public enum ImageCode {
 	PUFF0("faces", "puff0", true),
 	RUDE0("faces", "rude0", true),
 	TIRED0("faces", "tired0", true),
-	PEALEDFACE("faces","pealed", true),
-	PEALEDDEADFACE("faces","dead_pealed", true),
+	PEALEDFACE("faces", "pealed", true),
+	PEALEDDEADFACE("faces", "dead_pealed", true),
 	// 顔(非ゆっくり症)NonYukkuriDisease
 	NYD_FRONT("faces/NonYukkuriDisease", "front", true),
 	NYD_FRONT_CRY1("faces/NonYukkuriDisease", "front_crying01", true),
@@ -214,18 +214,22 @@ public enum ImageCode {
 	
 	/**
 	 * jarファイルのパスを取得する.
-	 * @param isSecond 
-	 * @return
+	 *
+	 * @param isSecond 右向き画像を使う場合はtrue
+	 * @return jarファイルのパス
 	 */
 	public String getJarPath(boolean isSecond) {
 		String buf = dir1;
 
-		if(dir2 != null) {
+		if (dir2 != null) {
 			buf = buf + "/" + dir2;
 		}
-		if(secondary) {
-			if(isSecond) buf = "right" + "/" + buf;
-			else buf = "left" + "/" + buf;
+		if (secondary) {
+			if (isSecond) {
+				buf = "right" + "/" + buf;
+			} else {
+				buf = "left" + "/" + buf;
+			}
 		}
 		return buf;
 	}
@@ -234,15 +238,18 @@ public enum ImageCode {
 	public String getFilePath(boolean isSecond) {
 		String buf = dir1;
 
-		if(dir2 != null) {
+		if (dir2 != null) {
 			buf = buf + File.separator + dir2;
 		}
 
-		if(secondary) {
-			if(isSecond) buf = "right" + File.separator + buf;
-			else buf = "left" + File.separator + buf;
+		if (secondary) {
+			if (isSecond) {
+				buf = "right" + File.separator + buf;
+			} else {
+				buf = "left" + File.separator + buf;
+			}
 		}
-	return buf;
+		return buf;
 	}
 
 	/** 左右非対称（右向き画像が別ファイル）かを返す。 */

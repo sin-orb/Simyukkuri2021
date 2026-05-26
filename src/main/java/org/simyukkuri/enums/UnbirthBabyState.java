@@ -1,4 +1,5 @@
 package org.simyukkuri.enums;
+
 /** 生まれていない赤ゆの状態 */
 public enum UnbirthBabyState {
 	/** 特筆なし */NONE,

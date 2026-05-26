@@ -1,10 +1,9 @@
 package org.simyukkuri.effect;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.awt.image.BufferedImage;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
@@ -47,32 +46,38 @@ public class EffectCoverageTest {
     public void testBakeSmoke() {
         BakeSmoke.setImageLayers(dummyImages);
         BakeSmoke effect = new BakeSmoke(0, 0, 0, 0, 0, 0, false, 10, 0, false, false, false);
-        assertNotNull(effect.getImage());
-        new BakeSmoke();
+        assertEquals(dummyImages[0], effect.getImage());
+        assertEquals(3, effect.getFrames());
+        assertEquals(0, effect.getDirection());
     }
 
     @Test
     public void testSteam() {
         Steam.setImageLayers(dummyImages);
         Steam effect = new Steam(0, 0, 0, 0, 0, 0, false, 10, 0, false, false, false);
-        assertNotNull(effect.getImage());
-        new Steam();
+        assertEquals(dummyImages[0], effect.getImage());
+        assertEquals(1, effect.getFrames());
+        assertEquals(0, effect.getDirection());
     }
 
     @Test
     public void testMix() {
         Mix.setImageLayers(dummyImages);
         Mix effect = new Mix(0, 0, 0, 0, 0, 0, false, 10, 0, false, false, false);
-        assertNotNull(effect.getImage());
-        new Mix();
+        assertEquals(dummyImages[0], effect.getImage());
+        assertEquals(3, effect.getFrames());
+        assertEquals(0, effect.getDirection());
     }
 
     @Test
     public void testHit() {
         Hit.setImageLayers(dummyImages2D);
         Hit effect = new Hit(0, 0, 0, 0, 0, 0, false, 10, 0, false, false, false);
-        assertNotNull(effect.getImage());
-        new Hit();
+        assertEquals(dummyImages2D[0][0], effect.getImage());
+        effect.setDirection(1);
+        effect.setAnimeFrame(3);
+        assertEquals(dummyImages2D[1][3], effect.getImage());
+        assertEquals(4, effect.getFrames());
     }
 
     @Test

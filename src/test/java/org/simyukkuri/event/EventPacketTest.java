@@ -84,8 +84,8 @@ public class EventPacketTest {
 
         TestEventPacket packet = new TestEventPacket(from, to, target, 10);
 
-        assertEquals(from.getUniqueID(), packet.getFrom());
-        assertEquals(to.getUniqueID(), packet.getTo());
+        assertEquals(from.getUniqueId(), packet.getFrom());
+        assertEquals(to.getUniqueId(), packet.getTo());
         assertEquals(42, packet.getTarget());
         assertEquals(10, packet.getCount());
     }
@@ -96,7 +96,7 @@ public class EventPacketTest {
 
         TestEventPacket packet = new TestEventPacket(from, null, null, 5);
 
-        assertEquals(from.getUniqueID(), packet.getFrom());
+        assertEquals(from.getUniqueId(), packet.getFrom());
         assertEquals(-1, packet.getTo()); // t == null → -1
         assertEquals(-1, packet.getTarget()); // tgt == null → -1
     }
@@ -134,7 +134,7 @@ public class EventPacketTest {
         Yukkuri b = createBody();
 
         packet.setFrom(b);
-        assertEquals(b.getUniqueID(), packet.getFrom());
+        assertEquals(b.getUniqueId(), packet.getFrom());
     }
 
     @Test
@@ -154,7 +154,7 @@ public class EventPacketTest {
         Yukkuri b = createBody();
 
         packet.setTo(b);
-        assertEquals(b.getUniqueID(), packet.getTo());
+        assertEquals(b.getUniqueId(), packet.getTo());
     }
 
     // --- setTarget(Entity) ---
@@ -275,8 +275,8 @@ public class EventPacketTest {
             Yukkuri from = createBody();
             Yukkuri to = createBody();
             CutPenipeniEvent event = new CutPenipeniEvent(from, to, null, 10);
-            assertEquals(from.getUniqueID(), event.getFrom());
-            assertEquals(to.getUniqueID(), event.getTo());
+            assertEquals(from.getUniqueId(), event.getFrom());
+            assertEquals(to.getUniqueId(), event.getTo());
             assertEquals(10, event.getCount());
         }
 
@@ -347,8 +347,8 @@ public class EventPacketTest {
             Yukkuri from = createBody();
             Yukkuri to = createBody();
             EatBodyEvent event = new EatBodyEvent(from, to, null, 30);
-            assertEquals(from.getUniqueID(), event.getFrom());
-            assertEquals(to.getUniqueID(), event.getTo());
+            assertEquals(from.getUniqueId(), event.getFrom());
+            assertEquals(to.getUniqueId(), event.getTo());
             assertEquals(30, event.getCount());
         }
 
@@ -409,8 +409,8 @@ public class EventPacketTest {
             Yukkuri from = createBody();
             Yukkuri to = createBody();
             BreedEvent event = new BreedEvent(from, to, null, 2);
-            assertEquals(from.getUniqueID(), event.getFrom());
-            assertEquals(to.getUniqueID(), event.getTo());
+            assertEquals(from.getUniqueId(), event.getFrom());
+            assertEquals(to.getUniqueId(), event.getTo());
             assertEquals(2, event.getCount());
         }
 
@@ -467,7 +467,7 @@ public class EventPacketTest {
         public void testCheckEventResponse_trueWhenPartner() {
             Yukkuri from = createBody();
             Yukkuri b = createBody();
-            b.setPartner(from.getUniqueID());
+            b.setPartner(from.getUniqueId());
             BreedEvent event = new BreedEvent(from, null, null, 2);
             assertTrue(event.checkEventResponse(b));
         }
@@ -536,7 +536,7 @@ public class EventPacketTest {
             Yukkuri f = createBodyWithOkazari();
             Yukkuri t = createBody();
             Yukkuri partner = createBody();
-            t.setPartner(partner.getUniqueID());
+            t.setPartner(partner.getUniqueId());
             ProposeEvent event = new ProposeEvent(f, t, null, 1);
             assertFalse(event.acceptPropose(f, t));
         }
@@ -693,7 +693,7 @@ public class EventPacketTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 }

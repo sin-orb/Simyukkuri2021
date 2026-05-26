@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
 import java.util.Random;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -40,10 +39,10 @@ public class FireTest {
         SimYukkuri.world = new World();
         originalRnd = SimYukkuri.RND;
         Fire.setImages(buildImages());
-        Fire.setImgW(new int[] { 10, 20, 30 });
-        Fire.setImgH(new int[] { 11, 21, 31 });
-        Fire.setPivX(new int[] { 1, 2, 3 });
-        Fire.setPivY(new int[] { 4, 5, 6 });
+        Fire.setImgW(new int[] {10, 20, 30});
+        Fire.setImgH(new int[] {11, 21, 31});
+        Fire.setPivX(new int[] {1, 2, 3});
+        Fire.setPivY(new int[] {4, 5, 6});
         WorldTestHelper.initializeEmptyMessagePool();
     }
 
@@ -68,7 +67,7 @@ public class FireTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         Fire fire = new Fire(parent);
 
-        assertEquals(parent.getUniqueID(), fire.getParent());
+        assertEquals(parent.getUniqueId(), fire.getParent());
         assertEquals(0, fire.getValue());
         assertEquals(0, fire.getCost());
         assertEquals(1, fire.getProcessInterval()); // 頻繁に更新
@@ -108,7 +107,7 @@ public class FireTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         Fire fire = new Fire(parent);
 
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueId());
 
         BufferedImage image = fire.getImage(parent);
         assertNull(image);
@@ -180,7 +179,7 @@ public class FireTest {
         int origPivotX = fire.getPivotX();
         int origPivotY = fire.getPivotY();
 
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueId());
 
         fire.resetBoundary();
 
@@ -431,7 +430,7 @@ public class FireTest {
         Yukkuri parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(false);
-        // NYD状態にする（isNotNYD() == false）
+        // NYD状態にする（isNotNyd() == false）
         parent.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
 
         TickResult result = fire.update();
@@ -459,7 +458,10 @@ public class FireTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         parent.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
+        SimYukkuri.world
+                .getCurrentWorldState()
+                .getYukkuriRegistry()
+                .put(parent.getUniqueId(), parent);
         return parent;
     }
 
@@ -468,7 +470,9 @@ public class FireTest {
         BufferedImage[][] images = new BufferedImage[3][ANIME_FRAMES];
         for (int age = 0; age < 3; age++) {
             for (int frame = 0; frame < ANIME_FRAMES; frame++) {
-                images[age][frame] = new BufferedImage(10 + age * 10, 10 + age * 10, BufferedImage.TYPE_INT_ARGB);
+                images[age][frame] =
+                        new BufferedImage(
+                                10 + age * 10, 10 + age * 10, BufferedImage.TYPE_INT_ARGB);
             }
         }
         return images;
@@ -548,7 +552,7 @@ public class FireTest {
 
             fire.update();
 
-            // 母親のhappinessは変わらない（NYDだから isNotNYD()==false）
+            // 母親のhappinessは変わらない（NYDだから isNotNyd()==false）
             assertFalse(mother.getHappiness() == Happiness.VERY_SAD);
         }
 
@@ -616,6 +620,7 @@ public class FireTest {
         try {
             Fire.loadImages(Fire.class.getClassLoader(), null);
         } catch (Exception e) {
+            // ignore
         }
     }
 }

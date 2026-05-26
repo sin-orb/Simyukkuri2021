@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -52,7 +51,7 @@ import org.simyukkuri.field.impl.Farm;
 import org.simyukkuri.field.impl.Pool;
 import org.simyukkuri.util.WorldTestHelper;
 
-class MapPlaceDataTest {
+class WorldStateTest {
 
     @BeforeEach
     void setUp() {

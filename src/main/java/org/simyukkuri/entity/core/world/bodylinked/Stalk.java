@@ -7,12 +7,10 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-
 import javax.imageio.ImageIO;
-
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
@@ -95,8 +93,9 @@ public class Stalk extends WorldEntity {
 	@Override
 	@Transient
 	public BufferedImage getShadowImage() {
-		if (plantYukkuri == -1)
+		if (plantYukkuri == -1) {
 			return imageLayers[2];
+		}
 		return null;
 	}
 
@@ -170,9 +169,14 @@ public class Stalk extends WorldEntity {
 		if (b == null) {
 			plantYukkuri = -1;
 		} else {
-			plantYukkuri = b.getUniqueID();
+			plantYukkuri = b.getUniqueId();
 		}
 		bindObj = plantYukkuri;
+	}
+
+	/** 実ゆの ID を直接セットする。 */
+	public void setPlantYukkuri(int plantYukkuri) {
+		this.plantYukkuri = plantYukkuri;
 	}
 
 	/**
@@ -209,7 +213,7 @@ public class Stalk extends WorldEntity {
 	@Transient
 	public void addAttachedBaby(Yukkuri b) {
 		if (bindBabies.size() < 5) {
-			bindBabies.add(b == null ? -1 : b.getUniqueID());
+			bindBabies.add(b == null ? -1 : b.getUniqueId());
 		}
 	}
 
@@ -243,53 +247,53 @@ public class Stalk extends WorldEntity {
 
 	/**
 	 * X座標を設定する.
-	 * 
-	 * @param X座標
+	 *
+	 * @param x X座標
 	 */
 	@Transient
-	public void setCalcX(int X) {
-		if (X < 0 && plantYukkuri == -1) {
-			x = 0;
-		} else if (X > Translate.getWorldWidth() && plantYukkuri == -1) {
-			x = Translate.getWorldWidth();
+	public void setCalcX(int x) {
+		if (x < 0 && plantYukkuri == -1) {
+			this.x = 0;
+		} else if (x > Translate.getWorldWidth() && plantYukkuri == -1) {
+			this.x = Translate.getWorldWidth();
 		} else {
-			x = X;
+			this.x = x;
 		}
 	}
 
 	/**
 	 * Y座標を設定する.
-	 * 
-	 * @param Y座標
+	 *
+	 * @param y Y座標
 	 */
 	@Transient
-	public void setCalcY(int Y) {
-		if (Y < 0 && plantYukkuri == -1) {
-			y = 0;
-		} else if (Y > Translate.getWorldHeight() && plantYukkuri == -1) {
-			y = Translate.getWorldHeight();
+	public void setCalcY(int y) {
+		if (y < 0 && plantYukkuri == -1) {
+			this.y = 0;
+		} else if (y > Translate.getWorldHeight() && plantYukkuri == -1) {
+			this.y = Translate.getWorldHeight();
 		} else {
-			y = Y;
+			this.y = y;
 		}
 	}
 
 	/**
 	 * Z座標を設定する.
-	 * 
-	 * @param Z座標
+	 *
+	 * @param z Z座標
 	 */
 	@Transient
-	public void setCalcZ(int Z) {
-		if (Z < mostDepth && plantYukkuri == -1) {
+	public void setCalcZ(int z) {
+		if (z < mostDepth && plantYukkuri == -1) {
 			if (isFallingUnderGround()) {
-				z = Z;
+				this.z = z;
 			} else {
-				z = mostDepth;
+				this.z = mostDepth;
 			}
-		} else if (Z > Translate.getWorldDepth() && plantYukkuri == -1) {
-			z = Translate.getWorldDepth();
+		} else if (z > Translate.getWorldDepth() && plantYukkuri == -1) {
+			this.z = Translate.getWorldDepth();
 		} else {
-			z = Z;
+			this.z = z;
 		}
 	}
 
@@ -332,10 +336,10 @@ public class Stalk extends WorldEntity {
 		}
 	}
 
-	@Override
 	/**
 	 * Grab.
 	 */
+	@Override
 	public void grab() {
 		grabbed = true;
 		if (takePlantYukkuri() != null) {
@@ -511,11 +515,6 @@ public class Stalk extends WorldEntity {
 	/** 茎に実っている実ゆの数をセットする。 */
 	public void setAmount(int amount) {
 		this.amount = amount;
-	}
-
-	/** 実ゆの ID を直接セットする。 */
-	public void setPlantYukkuri(int plantYukkuri) {
-		this.plantYukkuri = plantYukkuri;
 	}
 
 	/** 付きゆっくり（赤ゆ）の ID リストをセットする。 */

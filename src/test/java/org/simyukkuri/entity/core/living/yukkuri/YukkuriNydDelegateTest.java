@@ -11,6 +11,6 @@ class YukkuriNydDelegateTest {
 		StubBody body = new StubBody();
 
 		assertFalse(new YukkuriNydDelegate(body).hasNonYukkuriDisease());
-		assertTrue(body.isNotNYD());
+		assertTrue(body.isNotNyd());
 	}
 }

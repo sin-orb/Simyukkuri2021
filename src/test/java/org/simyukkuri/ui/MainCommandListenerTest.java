@@ -3,9 +3,7 @@ package org.simyukkuri.ui;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.awt.event.ItemEvent;
-
 import javax.swing.JComboBox;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
@@ -19,7 +17,7 @@ public class MainCommandListenerTest {
     public void setUp() {
         WorldTestHelper.resetWorld();
         SimYukkuri.world = new World();
-        WorldTestHelper.initializeMainCommandUITestState();
+        WorldTestHelper.initializeMainCommandUiTestState();
     }
 
     @Test
@@ -27,13 +25,13 @@ public class MainCommandListenerTest {
         GameSpeedComboBoxListener speedListener = new GameSpeedComboBoxListener();
 
         @SuppressWarnings("unchecked")
-        JComboBox<String> combo = MainCommandUI.getGameSpeedCombo();
+        JComboBox<String> combo = MainCommandUi.getGameSpeedCombo();
         combo.setSelectedIndex(2);
 
         ItemEvent e = new ItemEvent(combo, ItemEvent.ITEM_STATE_CHANGED, combo.getSelectedItem(), ItemEvent.SELECTED);
         speedListener.itemStateChanged(e);
 
-        assertEquals(2, MainCommandUI.getSelectedGameSpeed());
+        assertEquals(2, MainCommandUi.getSelectedGameSpeed());
     }
 
     @Test
@@ -41,7 +39,7 @@ public class MainCommandListenerTest {
         MainItemComboBoxListener itemListener = new MainItemComboBoxListener();
 
         @SuppressWarnings("unchecked")
-        JComboBox<GadgetMenu.GadgetMenuChoice> combo = MainCommandUI.getMainItemCombo();
+        JComboBox<GadgetMenu.GadgetMenuChoice> combo = MainCommandUi.getMainItemCombo();
         combo.setSelectedIndex(1);
 
         ItemEvent e = new ItemEvent(combo, ItemEvent.ITEM_STATE_CHANGED, combo.getSelectedItem(), ItemEvent.SELECTED);
@@ -58,7 +56,7 @@ public class MainCommandListenerTest {
         GadgetMenu.setSelectMain(GadgetMenu.GadgetMenuChoice.FOODS);
 
         @SuppressWarnings("unchecked")
-        JComboBox<GadgetMenu.GadgetMenuChoice> combo = MainCommandUI.getSubItemCombo();
+        JComboBox<GadgetMenu.GadgetMenuChoice> combo = MainCommandUi.getSubItemCombo();
         // Add items to match indices in GadgetMenu.FoodCategory
         combo.addItem(GadgetMenu.GadgetMenuChoice.NORMAL);
         combo.addItem(GadgetMenu.GadgetMenuChoice.BITTER);

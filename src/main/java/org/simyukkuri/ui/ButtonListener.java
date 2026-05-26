@@ -2,16 +2,14 @@ package org.simyukkuri.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.MyPane;
+import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.system.LoggerYukkuri;
 import org.simyukkuri.util.GameEnvironment;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
-import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 
 /**
  * Main command area のボタン入力を処理する.
@@ -27,53 +25,53 @@ public final class ButtonListener implements ActionListener {
 		}
 
 		Object source = e.getSource();
-		JButton[] items = MainCommandUI.getSystemButton();
+		JButton[] items = MainCommandUi.getSystemButton();
 
-		if (source.equals(items[MainCommandUI.SystemButtonLabel.SAVE.ordinal()])) {
+		if (source.equals(items[MainCommandUi.SystemButtonLabel.SAVE.ordinal()])) {
 			SimYukkuri.simYukkuri.doSave();
-		} else if (source.equals(items[MainCommandUI.SystemButtonLabel.LOAD.ordinal()])) {
+		} else if (source.equals(items[MainCommandUi.SystemButtonLabel.LOAD.ordinal()])) {
 			SimYukkuri.simYukkuri.doLoad();
-		} else if (source.equals(items[MainCommandUI.SystemButtonLabel.ADDBODY.ordinal()])) {
+		} else if (source.equals(items[MainCommandUi.SystemButtonLabel.ADDBODY.ordinal()])) {
 			GameView.initBodies();
-		} else if (source.equals(items[MainCommandUI.SystemButtonLabel.PREV.ordinal()])) {
+		} else if (source.equals(items[MainCommandUi.SystemButtonLabel.PREV.ordinal()])) {
 			LoggerYukkuri.addLogPage(-1);
-		} else if (source.equals(items[MainCommandUI.SystemButtonLabel.LOG.ordinal()])) {
+		} else if (source.equals(items[MainCommandUi.SystemButtonLabel.LOG.ordinal()])) {
 			LoggerYukkuri.setShow(!LoggerYukkuri.isShow());
-		} else if (source.equals(items[MainCommandUI.SystemButtonLabel.NEXT.ordinal()])) {
+		} else if (source.equals(items[MainCommandUi.SystemButtonLabel.NEXT.ordinal()])) {
 			LoggerYukkuri.addLogPage(1);
-		} else if (source.equals(items[MainCommandUI.SystemButtonLabel.LOGCLEAR.ordinal()])) {
+		} else if (source.equals(items[MainCommandUi.SystemButtonLabel.LOGCLEAR.ordinal()])) {
 			LoggerYukkuri.clearLog();
 			LoggerYukkuri.setClearLogTime(GameEnvironment.getOperationTime());
-		} else if (source.equals(MainCommandUI.getPlayerButton()[MainCommandUI.ToolButtonLabel.MOVE.ordinal()])) {
-			if (MainCommandUI.getPlayerButton()[MainCommandUI.ToolButtonLabel.MOVE.ordinal()].isSelected()) {
-				MainCommandUI.getWorldWindow().setVisible(true);
+		} else if (source.equals(MainCommandUi.getPlayerButton()[MainCommandUi.ToolButtonLabel.MOVE.ordinal()])) {
+			if (MainCommandUi.getPlayerButton()[MainCommandUi.ToolButtonLabel.MOVE.ordinal()].isSelected()) {
+				MainCommandUi.getWorldWindow().setVisible(true);
 			} else {
-				MainCommandUI.getWorldWindow().setVisible(false);
+				MainCommandUi.getWorldWindow().setVisible(false);
 			}
-		} else if (source.equals(MainCommandUI.getPlayerButton()[MainCommandUI.ToolButtonLabel.BAG.ordinal()])) {
-			if (MainCommandUI.getPlayerButton()[MainCommandUI.ToolButtonLabel.BAG.ordinal()].isSelected()) {
-				MainCommandUI.getItemWindow().setVisible(true);
+		} else if (source.equals(MainCommandUi.getPlayerButton()[MainCommandUi.ToolButtonLabel.BAG.ordinal()])) {
+			if (MainCommandUi.getPlayerButton()[MainCommandUi.ToolButtonLabel.BAG.ordinal()].isSelected()) {
+				MainCommandUi.getItemWindow().setVisible(true);
 			} else {
-				MainCommandUI.getItemWindow().setVisible(false);
+				MainCommandUi.getItemWindow().setVisible(false);
 				GameWorld.get().getPlayer().setHoldItem(null);
 			}
-		} else if (source.equals(MainCommandUI.getScriptButton())) {
-			MyPane.setDisableScript(MainCommandUI.getScriptButton().isSelected());
-		} else if (source.equals(MainCommandUI.getTargetButton())) {
-			MyPane.setEnableTarget(MainCommandUI.getTargetButton().isSelected());
-		} else if (source.equals(MainCommandUI.getHelpButton())) {
-			MyPane.setDisableHelp(MainCommandUI.getHelpButton().isSelected());
-		} else if (source.equals(MainCommandUI.getOptionButton())) {
-			if (MainCommandUI.getOptionButton().isSelected()) {
-				MainCommandUI.getOptionPopup().show(MainCommandUI.getOptionButton(), 0,
-						MainCommandUI.getOptionButton().getHeight());
+		} else if (source.equals(MainCommandUi.getScriptButton())) {
+			MyPane.setDisableScript(MainCommandUi.getScriptButton().isSelected());
+		} else if (source.equals(MainCommandUi.getTargetButton())) {
+			MyPane.setEnableTarget(MainCommandUi.getTargetButton().isSelected());
+		} else if (source.equals(MainCommandUi.getHelpButton())) {
+			MyPane.setDisableHelp(MainCommandUi.getHelpButton().isSelected());
+		} else if (source.equals(MainCommandUi.getOptionButton())) {
+			if (MainCommandUi.getOptionButton().isSelected()) {
+				MainCommandUi.getOptionPopup().show(MainCommandUi.getOptionButton(), 0,
+						MainCommandUi.getOptionButton().getHeight());
 			} else {
-				MainCommandUI.getOptionPopup().setVisible(false);
+				MainCommandUi.getOptionPopup().setVisible(false);
 			}
-		} else if (source.equals(MainCommandUI.getPinButton())) {
+		} else if (source.equals(MainCommandUi.getPinButton())) {
 			Yukkuri selected = MyPane.getSelectedYukkuri();
 			if (selected != null && !selected.isRemoved()) {
-				selected.setPinned(MainCommandUI.getPinButton().isSelected());
+				selected.setPinned(MainCommandUi.getPinButton().isSelected());
 			}
 		}
 	}

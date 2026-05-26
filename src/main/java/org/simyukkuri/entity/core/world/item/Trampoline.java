@@ -7,17 +7,15 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.IOException;
-
 import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.world.WorldEntity;
 import org.simyukkuri.enums.Type;
@@ -26,7 +24,7 @@ import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * とらんぽりん
  */
 public class Trampoline extends WorldEntity {
@@ -95,18 +93,18 @@ public class Trampoline extends WorldEntity {
 		GameWorld.get().getCurrentWorldState().getTrampolines().remove(objId);
 	}
 
-	@Override
 	/**
 	 * Grab.
 	 */
+	@Override
 	public void grab() {
 		grabbed = true;
 	}
 
-	@Override
 	/**
 	 * Kick.
 	 */
+	@Override
 	public void kick() {
 		kick(0, -8, -4);
 	}
@@ -181,7 +179,7 @@ public class Trampoline extends WorldEntity {
 		t.accident1 = 0;
 		t.accident2 = 0;
 		JPanel mainPanel = new JPanel();
-		JRadioButton but[] = new JRadioButton[TrampolineType.values().length];
+		JRadioButton[] but = new JRadioButton[TrampolineType.values().length];
 		mainPanel.setLayout(new GridLayout(4, 1));
 		mainPanel.setPreferredSize(new Dimension(150, 100));
 		ButtonGroup bg = new ButtonGroup();
@@ -192,10 +190,10 @@ public class Trampoline extends WorldEntity {
 		}
 
 		but[1].setSelected(true);
-		String kagenmess[] = {
+		String[] kagenmess = {
 				"0", "1", "10", "20", "50", "100"
 		};
-		String jogenmess[] = {
+		String[] jogenmess = {
 				"0", "1", "10", "20", "50", "100"
 		};
 		JComboBox accident1Box = new JComboBox(kagenmess);
@@ -209,10 +207,11 @@ public class Trampoline extends WorldEntity {
 		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel,
 				GameText.read("item_trampolinesettings"), 2, -1);
 		if (dlgRet == 0) {
-			if (but[0].isSelected())
+			if (but[0].isSelected()) {
 				t.option = 0;
-			else
+			} else {
 				t.option = 1;
+			}
 			try {
 				t.accident1 = Integer.parseInt(accident1Box.getSelectedItem().toString());
 			} catch (NumberFormatException ne) {
@@ -223,14 +222,16 @@ public class Trampoline extends WorldEntity {
 			} catch (NumberFormatException ne) {
 				t.accident2 = 0;
 			}
-			if (t.accident1 < 0)
+			if (t.accident1 < 0) {
 				t.accident1 = 0;
-			else if (t.accident1 > 100)
+			} else if (t.accident1 > 100) {
 				t.accident1 = 100;
-			if (t.accident2 < 0)
+			}
+			if (t.accident2 < 0) {
 				t.accident2 = 0;
-			else if (t.accident2 > 100)
+			} else if (t.accident2 > 100) {
 				t.accident2 = 100;
+			}
 		} else {
 			return false;
 		}

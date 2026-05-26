@@ -2,7 +2,6 @@ package org.simyukkuri.util;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 
@@ -540,31 +539,31 @@ public class IniFileUtil {
 			}
 			b.getMyNames()[2] = b.getAdultNames()[nameIndex];
 		}
-		int previousNameDIndex = -1;
+		int prevDamagedNameIndex = -1;
 
 		// ダメージ時一人称設定
 		if (b.getBabyNamesDamaged() != null && 0 < b.getBabyNamesDamaged().length) {
 			int nameCount = b.getBabyNamesDamaged().length;
 			int nameIndex = GameRandom.nextInt(nameCount);
 			b.getMyNamesDamaged()[0] = b.getBabyNamesDamaged()[nameIndex];
-			previousNameDIndex = nameIndex;
+			prevDamagedNameIndex = nameIndex;
 		}
 		if (b.getChildNamesDamaged() != null && 0 < b.getChildNamesDamaged().length) {
 			int nameCount = b.getChildNamesDamaged().length;
 			int nameIndex = GameRandom.nextInt(nameCount);
 			// 名前リストで同じ並びの物があればを優先する
-			if (previousNameDIndex < nameCount) {
-				nameIndex = previousNameDIndex;
+			if (prevDamagedNameIndex < nameCount) {
+				nameIndex = prevDamagedNameIndex;
 			}
-			previousNameDIndex = nameIndex;
+			prevDamagedNameIndex = nameIndex;
 			b.getMyNamesDamaged()[1] = b.getChildNamesDamaged()[nameIndex];
 		}
 		if (b.getAdultNamesDamaged() != null && 0 < b.getAdultNamesDamaged().length) {
 			int nameCount = b.getAdultNamesDamaged().length;
 			int nameIndex = GameRandom.nextInt(nameCount);
 			// 名前リストで同じ並びの物があればを優先する
-			if (previousNameDIndex < nameCount) {
-				nameIndex = previousNameDIndex;
+			if (prevDamagedNameIndex < nameCount) {
+				nameIndex = prevDamagedNameIndex;
 			}
 			b.getMyNamesDamaged()[2] = b.getAdultNamesDamaged()[nameIndex];
 		}

@@ -79,8 +79,9 @@ public class EatBodyEventTest extends EventTestBase {
         // tick=0,10,70,120未満を順次実行
         for (int i = 0; i < 15; i++) {
             boolean done = event.execute(eater);
-            if (done)
+            if (done) {
                 break;
+            }
         }
         // 例外なく動作すればOK
         assertNotNull(eater);

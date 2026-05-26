@@ -8,13 +8,13 @@ import org.junit.jupiter.api.Test;
 
 public class IconPoolTest {
 
-    // --- UISkin enum ---
+    // --- UiSkin enum ---
 
     @Test
-    public void testUISkinEnum_values() {
-        IconPool.UISkin[] skins = IconPool.UISkin.values();
+    public void testUiSkinEnum_values() {
+        IconPool.UiSkin[] skins = IconPool.UiSkin.values();
         assertTrue(skins.length > 0);
-        for (IconPool.UISkin s : skins) {
+        for (IconPool.UiSkin s : skins) {
             assertNotNull(s.name());
             assertNotNull(s.getFileName());
         }
@@ -80,11 +80,11 @@ public class IconPoolTest {
         }
     }
 
-    // --- getUISkinImageArray ---
+    // --- getUiSkinImageArray ---
 
     @Test
-    public void testGetUISkinImageArray_notNull() {
-        assertNotNull(IconPool.getUISkinImageArray());
+    public void testGetUiSkinImageArray_notNull() {
+        assertNotNull(IconPool.getUiSkinImageArray());
     }
 
     // --- getButtonIconImageArray ---

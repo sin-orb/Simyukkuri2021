@@ -1,7 +1,6 @@
 package org.simyukkuri.logic;
 
 import java.util.Map;
-
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.item.Stone;
@@ -10,7 +9,7 @@ import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * 小石関係の処理
  */
 public class StoneLogic {
@@ -45,9 +44,9 @@ public class StoneLogic {
 				continue;
 			}
 			if (b.getStepDist() > distance) {
-				if (b.isBaby())
+				if (b.isBaby()) {
 					b.bodyCut();
-				else {
+				} else {
 					b.bodyInjure();
 					b.runAway(t.getX(), t.getY());
 				}

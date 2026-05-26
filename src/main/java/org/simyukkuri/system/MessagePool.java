@@ -736,7 +736,7 @@ public class MessagePool {
 				if (msg != null && msg.size() > 0) {
 					String key = createTagKey(flags);
 					if (key != null) {
-						act.getMessages().put(key, (String[]) msg.toArray(new String[] {}));
+						act.getMessages().put(key, msg.toArray(new String[] {}));
 					}
 					msg = new LinkedList<String>();
 				}
@@ -827,7 +827,7 @@ public class MessagePool {
 		if (body.isShutmouth()) {
 			if (body.isSleeping()) {
 				return null;
-			} else if (body.isNYD()) {
+			} else if (body.isNyd()) {
 				action = MessagePool.Action.NYDCantTalk;
 			} else {
 				action = MessagePool.Action.CantTalk;

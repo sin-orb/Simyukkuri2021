@@ -129,13 +129,16 @@ class BedLogicTest {
         bed.setY(150);
         // Set bed dimensions so nextInt(ofsX) doesn't throw
         try {
-            java.lang.reflect.Field wf = org.simyukkuri.entity.core.Entity.class.getDeclaredField("w");
+            java.lang.reflect.Field wf =
+                    org.simyukkuri.entity.core.Entity.class.getDeclaredField("w");
             wf.setAccessible(true);
             wf.setInt(bed, 20);
-            java.lang.reflect.Field hf = org.simyukkuri.entity.core.Entity.class.getDeclaredField("h");
+            java.lang.reflect.Field hf =
+                    org.simyukkuri.entity.core.Entity.class.getDeclaredField("h");
             hf.setAccessible(true);
             hf.setInt(bed, 20);
         } catch (Exception e) {
+            // ignore
         }
         SimYukkuri.world.getCurrentWorldState().getBeds().put(bed.getObjId(), bed);
         try {
@@ -228,7 +231,9 @@ class BedLogicTest {
 
             assertTrue(BedLogic.checkBed(body));
             assertNotNull(body.getFavoriteItem(org.simyukkuri.enums.FavItemType.BED));
-            assertEquals(bed.getObjId(), body.getFavoriteItem(org.simyukkuri.enums.FavItemType.BED).getObjId());
+            assertEquals(
+                    bed.getObjId(),
+                    body.getFavoriteItem(org.simyukkuri.enums.FavItemType.BED).getObjId());
         }
     }
 
@@ -237,7 +242,8 @@ class BedLogicTest {
     @Test
     void testSearchBed_UnunSlave_withToilet_findsToilet() {
         body.setPublicRank(PublicRank.UNUN_SLAVE);
-        org.simyukkuri.entity.core.world.item.Toilet toilet = new org.simyukkuri.entity.core.world.item.Toilet();
+        org.simyukkuri.entity.core.world.item.Toilet toilet =
+                new org.simyukkuri.entity.core.world.item.Toilet();
         toilet.setX(100);
         toilet.setY(100); // same position as body
         SimYukkuri.world.getCurrentWorldState().getToilets().put(toilet.getObjId(), toilet);
@@ -287,12 +293,16 @@ class BedLogicTest {
     @Test
     void testCheckBed_isIdiot_returnsFalse() {
         // TarinaiReimu overrides isIdiot() to return true
-        org.simyukkuri.entity.core.living.yukkuri.impl.TarinaiReimu tarinai = new org.simyukkuri.entity.core.living.yukkuri.impl.TarinaiReimu();
+        org.simyukkuri.entity.core.living.yukkuri.impl.TarinaiReimu tarinai =
+                new org.simyukkuri.entity.core.living.yukkuri.impl.TarinaiReimu();
         tarinai.setX(100);
         tarinai.setY(100);
         tarinai.setObjId(org.simyukkuri.enums.Numbering.INSTANCE.numberingObjId());
-        tarinai.setUniqueID(org.simyukkuri.enums.Numbering.INSTANCE.numberingYukkuriID());
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(tarinai.getObjId(), tarinai);
+        tarinai.setUniqueId(org.simyukkuri.enums.Numbering.INSTANCE.numberingYukkuriId());
+        SimYukkuri.world
+                .getCurrentWorldState()
+                .getYukkuriRegistry()
+                .put(tarinai.getObjId(), tarinai);
         // line 43: isIdiot()=true → return false
         assertFalse(BedLogic.checkBed(tarinai));
     }
@@ -304,26 +314,28 @@ class BedLogicTest {
         body.setHasBaby(true);
         body.setPregnantPeriod(body.getPregPeriodBase()); // nearToBirth()=true
         // Set HIGH priority event at lines 46-49: getPriority()==HIGH → return false
-        org.simyukkuri.event.EventPacket highEvent = new org.simyukkuri.event.EventPacket() {
-            private static final long serialVersionUID = 1L;
-            {
-                this.priority = org.simyukkuri.event.EventPacket.EventPriority.HIGH;
-            }
+        org.simyukkuri.event.EventPacket highEvent =
+                new org.simyukkuri.event.EventPacket() {
+                    private static final long serialVersionUID = 1L;
 
-            @Override
-            public boolean checkEventResponse(org.simyukkuri.entity.core.living.yukkuri.Yukkuri b) {
-                return true;
-            }
+                    {
+                        this.priority = org.simyukkuri.event.EventPacket.EventPriority.HIGH;
+                    }
 
-            @Override
-            public void start(org.simyukkuri.entity.core.living.yukkuri.Yukkuri b) {
-            }
+                    @Override
+                    public boolean checkEventResponse(
+                            org.simyukkuri.entity.core.living.yukkuri.Yukkuri b) {
+                        return true;
+                    }
 
-            @Override
-            public boolean execute(org.simyukkuri.entity.core.living.yukkuri.Yukkuri b) {
-                return false;
-            }
-        };
+                    @Override
+                    public void start(org.simyukkuri.entity.core.living.yukkuri.Yukkuri b) {}
+
+                    @Override
+                    public boolean execute(org.simyukkuri.entity.core.living.yukkuri.Yukkuri b) {
+                        return false;
+                    }
+                };
         body.setCurrentEvent(highEvent);
         assertFalse(BedLogic.checkBed(body));
     }
@@ -334,26 +346,28 @@ class BedLogicTest {
     void testCheckBed_notNearToBirth_MiddleEvent_returnsFalse() {
         // MIDDLE priority event and !nearToBirth → line 52: priority!=LOW → return
         // false
-        org.simyukkuri.event.EventPacket middleEvent = new org.simyukkuri.event.EventPacket() {
-            private static final long serialVersionUID = 1L;
-            {
-                this.priority = org.simyukkuri.event.EventPacket.EventPriority.MIDDLE;
-            }
+        org.simyukkuri.event.EventPacket middleEvent =
+                new org.simyukkuri.event.EventPacket() {
+                    private static final long serialVersionUID = 1L;
 
-            @Override
-            public boolean checkEventResponse(org.simyukkuri.entity.core.living.yukkuri.Yukkuri b) {
-                return true;
-            }
+                    {
+                        this.priority = org.simyukkuri.event.EventPacket.EventPriority.MIDDLE;
+                    }
 
-            @Override
-            public void start(org.simyukkuri.entity.core.living.yukkuri.Yukkuri b) {
-            }
+                    @Override
+                    public boolean checkEventResponse(
+                            org.simyukkuri.entity.core.living.yukkuri.Yukkuri b) {
+                        return true;
+                    }
 
-            @Override
-            public boolean execute(org.simyukkuri.entity.core.living.yukkuri.Yukkuri b) {
-                return false;
-            }
-        };
+                    @Override
+                    public void start(org.simyukkuri.entity.core.living.yukkuri.Yukkuri b) {}
+
+                    @Override
+                    public boolean execute(org.simyukkuri.entity.core.living.yukkuri.Yukkuri b) {
+                        return false;
+                    }
+                };
         body.setCurrentEvent(middleEvent);
         assertFalse(BedLogic.checkBed(body));
     }
@@ -362,7 +376,7 @@ class BedLogicTest {
 
     @Test
     void testCheckBed_isNYD_returnsFalse() {
-        // NonYukkuriDiseaseNear makes isNYD()=true → line 58: return false
+        // NonYukkuriDiseaseNear makes isNyd()=true → line 58: return false
         body.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NON_YUKKURI_DISEASE_NEAR);
         assertFalse(BedLogic.checkBed(body));
     }
@@ -378,8 +392,11 @@ class BedLogicTest {
         body.setToBed(true);
         body.setMoveTargetId(bed.getObjId());
         // Setup FOOD takeout at line 95: getCarryItem(FOOD) != null → dropTakeoutItem
-        org.simyukkuri.entity.core.world.item.Food food = new org.simyukkuri.entity.core.world.item.Food(100, 100,
-                org.simyukkuri.entity.core.world.item.Food.FoodType.FOOD.ordinal());
+        org.simyukkuri.entity.core.world.item.Food food =
+                new org.simyukkuri.entity.core.world.item.Food(
+                        100,
+                        100,
+                        org.simyukkuri.entity.core.world.item.Food.FoodType.FOOD.ordinal());
         food.setAmount(100);
         SimYukkuri.world.getCurrentWorldState().getTakenOutFoods().put(food.getObjId(), food);
         body.getCarryItems().put(org.simyukkuri.enums.TakeoutItemType.FOOD, food.getObjId());
@@ -391,12 +408,16 @@ class BedLogicTest {
     @Test
     void testSearchBed_FlyingType_WallModeAdult_DoesNotThrow() {
         // Remirya is a flying type with hasBraid=true → canflyCheck()=true
-        org.simyukkuri.entity.core.living.yukkuri.impl.Remirya remirya = new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya();
+        org.simyukkuri.entity.core.living.yukkuri.impl.Remirya remirya =
+                new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setObjId(org.simyukkuri.enums.Numbering.INSTANCE.numberingObjId());
-        remirya.setUniqueID(org.simyukkuri.enums.Numbering.INSTANCE.numberingYukkuriID());
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(remirya.getObjId(), remirya);
+        remirya.setUniqueId(org.simyukkuri.enums.Numbering.INSTANCE.numberingYukkuriId());
+        SimYukkuri.world
+                .getCurrentWorldState()
+                .getYukkuriRegistry()
+                .put(remirya.getObjId(), remirya);
         // line 168-170: canflyCheck()=true → wallMode=AgeState.ADULT.ordinal()
         assertDoesNotThrow(() -> BedLogic.searchBed(remirya));
     }

@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import org.simyukkuri.command.GadgetMenu.ActionTarget;
 import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
-import org.simyukkuri.ui.MainCommandUI;
+import org.simyukkuri.ui.MainCommandUi;
 
 /**
  * GadgetMenu popup の選択を UI に反映する listener.
@@ -21,11 +21,11 @@ public final class GadgetMenuPopupAction implements ActionListener {
 		String command = e.getActionCommand();
 
 		GadgetMenuChoice sel = GadgetMenuChoice.valueOf(command);
-		MainCommandUI.getMainItemCombo().setSelectedIndex(sel.getGroup().ordinal() - 1);
+		MainCommandUi.getMainItemCombo().setSelectedIndex(sel.getGroup().ordinal() - 1);
 		GadgetMenu.setSelectMain(GadgetMenuChoice.values()[sel.getGroup().ordinal() - 1]);
 		GadgetMenu.setSelectSub(sel);
 		GadgetMenu.setActionHelp(sel);
-		MainCommandUI.getSubItemCombo().setSelectedIndex(getIndex(sel));
+		MainCommandUi.getSubItemCombo().setSelectedIndex(getIndex(sel));
 
 		if (sel.getActionTarget() == ActionTarget.IMMEDIATE) {
 			GadgetAction.immediateEvaluate(sel);

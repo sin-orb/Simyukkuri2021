@@ -1,12 +1,14 @@
 package org.simyukkuri.system;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.Random;
-
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Locale;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Point4y;
@@ -16,89 +18,147 @@ import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Attitude;
 import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.YukkuriType;
-import org.simyukkuri.util.WorldTestHelper;
+import org.simyukkuri.system.MessageBundle.MessageTag;
+import org.simyukkuri.util.GameLocale;
+import org.simyukkuri.util.GameRandom;
+import org.simyukkuri.util.RandomSource;
 
 /**
  * MessagePool のテスト.
  */
 public class MessagePoolTest {
 
+    private static final RandomSource DETERMINISTIC_RANDOM = new RandomSource() {
+        @Override
+        public int nextInt(int bound) {
+            return 0;
+        }
+
+        @Override
+        public boolean nextBoolean() {
+            return false;
+        }
+    };
+
+    private static Object previousPool;
+
     @BeforeAll
-    public static void setUpClass() {
+    public static void setUpClass() throws Exception {
         System.setProperty("java.awt.headless", "true");
-        SimYukkuri.RND = new Random();
+        Field poolField = MessagePool.class.getDeclaredField("pool_j");
+        poolField.setAccessible(true);
+        previousPool = poolField.get(null);
+        poolField.set(null, createSyntheticMessagePool());
+    }
+
+    @AfterAll
+    public static void tearDownClass() throws Exception {
+        Field poolField = MessagePool.class.getDeclaredField("pool_j");
+        poolField.setAccessible(true);
+        poolField.set(null, previousPool);
+    }
+
+    @BeforeEach
+    public void setUp() {
         SimYukkuri.world = new World();
-        WorldTestHelper.initializeLoadedMessagePool(MessagePoolTest.class.getClassLoader());
+        GameLocale.setOverride(() -> Locale.JAPANESE);
+        GameRandom.setOverride(DETERMINISTIC_RANDOM);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        GameRandom.clearOverride();
+        GameLocale.clearOverride();
     }
 
     @Test
-    public void testPlaceholderReplacement_Name() {
-        DummyBody body = new DummyBody();
-        body.setMyNameCustom("ReimuTest");
-        body.setMsgType(YukkuriType.ALICE);
+    public void testPlaceholderReplacementNameAndName2() {
+        DummyBody body = new DummyBody(YukkuriType.HYBRIDYUKKURI, "HybridBody", "HybridBody2");
         String msg = MessagePool.getMessage(body, MessagePool.Action.Birth);
-        assertNotNull(msg);
-        assertTrue(msg.contains("ReimuTest"), "Message should contain replaced name: " + msg);
+        assertEquals("ゆっきゅりちていっちぇね！HybridBodyはHybridBody2だよ！", msg);
     }
 
     @Test
-    public void testPlaceholderReplacement_Partner() {
-        DummyBody body = new DummyBody();
-        DummyBody partner = new DummyBody();
-        partner.setMyNameCustom("PartnerReimu");
-        body.setPartner(partner.getUniqueID());
-        org.simyukkuri.util.YukkuriLookup.getYukkuriById(partner.getUniqueID()); // ensure it's in world
+    public void testPlaceholderReplacementPartner() {
+        DummyBody body = new DummyBody(YukkuriType.DEIBU, "BodyReimu", "BodyReimu2");
+        DummyBody partner = new DummyBody(YukkuriType.DEIBU, "PartnerReimu", "PartnerReimu2");
+        body.setPartner(partner.getUniqueId());
 
-        // FindPartner or similar likely uses %partner
-        String msg = MessagePool.getMessage(body, MessagePool.Action.ProposeYes);
-        assertNotNull(msg);
-        // This depends on the actual message content in reimu_j.txt
-        // If the message doesn't have %partner, this might fail.
-        // But we want to ensure it doesn't return empty string (which happens if
-        // %partner is expected but partner is null)
+        String msg = MessagePool.getMessage(body, MessagePool.Action.Propose);
+        assertEquals("ゆん！PartnerReimu！BodyReimuのおよめさんになってほしいよ！", msg);
     }
 
     @Test
-    public void testTagSelection_Damage() {
-        DummyBody body = new DummyBody();
+    public void testTagSelectionDamage() {
+        DummyBody body = new DummyBody(YukkuriType.REIMU, "ReimuTest", "ReimuTest2");
         body.setCustomDamage(100);
-        String msgDamaged = MessagePool.getMessage(body, MessagePool.Action.Scream);
-        // We can't easily verify the "content" without knowing the file,
-        // but we can verify it returns a valid tag-based message.
-        assertNotNull(msgDamaged);
-        assertFalse(msgDamaged.contains("NO TAG"), "Should find a damaged tag message");
+
+        String msg = MessagePool.getMessage(body, MessagePool.Action.Scream);
+        assertEquals("ゆ、ゆ、ゆ、、、", msg);
     }
 
     @Test
-    public void testTagSelection_Pants() {
-        DummyBody body = new DummyBody();
+    public void testTagSelectionPants() {
+        DummyBody body = new DummyBody(YukkuriType.REIMU, "ReimuTest", "ReimuTest2");
         body.setHasPantsCustom(true);
-        // RelaxOkurumi (wrapped in okurumi/pants)
-        String msgPants = MessagePool.getMessage(body, MessagePool.Action.RelaxOkurumi);
-        assertNotNull(msgPants);
-        assertFalse(msgPants.contains("NO TAG"), "Should find a pants tag message");
+
+        String msg = MessagePool.getMessage(body, MessagePool.Action.RelaxOkurumi);
+        assertEquals("う～♪う～♪", msg);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static HashMap<String, MessageBundle>[] createSyntheticMessagePool() {
+        HashMap<String, MessageBundle>[] pool = new HashMap[YukkuriType.values().length];
+        pool[YukkuriType.HYBRIDYUKKURI.ordinal()] = new HashMap<String, MessageBundle>();
+        pool[YukkuriType.DEIBU.ordinal()] = new HashMap<String, MessageBundle>();
+        pool[YukkuriType.REIMU.ordinal()] = new HashMap<String, MessageBundle>();
+
+        put(pool[YukkuriType.HYBRIDYUKKURI.ordinal()], MessagePool.Action.Birth,
+                "normal_", "ゆっきゅりちていっちぇね！%nameは%name2だよ！", MessageTag.normal);
+        put(pool[YukkuriType.DEIBU.ordinal()], MessagePool.Action.Propose,
+                "normal_adult_", "ゆん！%partner！%nameのおよめさんになってほしいよ！",
+                MessageTag.normal, MessageTag.adult);
+        put(pool[YukkuriType.REIMU.ordinal()], MessagePool.Action.Scream,
+                "normal_adult_damage_", "ゆ、ゆ、ゆ、、、",
+                MessageTag.normal, MessageTag.adult, MessageTag.damage);
+        put(pool[YukkuriType.REIMU.ordinal()], MessagePool.Action.RelaxOkurumi,
+                "normal_adult_pants_", "う～♪う～♪",
+                MessageTag.normal, MessageTag.adult, MessageTag.pants);
+
+        return pool;
+    }
+
+    private static void put(HashMap<String, MessageBundle> map, MessagePool.Action action, String key,
+            String message, MessageTag... tags) {
+        MessageBundle bundle = new MessageBundle();
+        bundle.setNormalFlag(true);
+        for (MessageTag tag : tags) {
+            bundle.getNormalTag()[tag.ordinal()] = true;
+        }
+        bundle.getMessages().put(key, new String[] { message });
+        map.put(action.name(), bundle);
     }
 
     /**
      * テスト用の最小限の Yukkuri 実装.
      */
     static class DummyBody extends Yukkuri {
-        private String customName = "れいむ";
-        private int customDamage = 0;
+        private final YukkuriType type;
+        private final String customName;
+        private final String customName2;
+        private int customDamage;
         private Attitude customAttitude = Attitude.AVERAGE;
-        private boolean hasPants = false;
+        private boolean hasPants;
 
-        public DummyBody() {
+        DummyBody(YukkuriType type, String customName, String customName2) {
             super();
-            setMsgType(YukkuriType.REIMU);
+            this.type = type;
+            this.customName = customName;
+            this.customName2 = customName2;
+            setMsgType(type);
             setRank(YukkuriRank.KAIYU);
             setAgeState(AgeState.ADULT);
-            // Put in world so MessagePool can resolve %partner from the registry
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(getUniqueID(), this);
-        }
-
-        public void setMyNameCustom(String name) {
-            this.customName = name;
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(getUniqueId(), this);
         }
 
         @Override
@@ -111,8 +171,8 @@ public class MessagePoolTest {
             return customName + "(D)";
         }
 
-        public void setCustomDamage(int d) {
-            this.customDamage = d;
+        void setCustomDamage(int damage) {
+            this.customDamage = damage;
         }
 
         @Override
@@ -125,10 +185,6 @@ public class MessagePoolTest {
             return customDamage > 0;
         }
 
-        public void setCustomAttitude(Attitude a) {
-            this.customAttitude = a;
-        }
-
         @Override
         public Attitude getAttitude() {
             return customAttitude;
@@ -136,32 +192,32 @@ public class MessagePoolTest {
 
         @Override
         public boolean isRude() {
-            return (customAttitude == Attitude.SHITHEAD || customAttitude == Attitude.SUPER_SHITHEAD);
+            return customAttitude == Attitude.SHITHEAD || customAttitude == Attitude.SUPER_SHITHEAD;
         }
 
         @Override
         public YukkuriType getType() {
-            return YukkuriType.REIMU;
+            return type;
         }
 
         @Override
         public String getNameJ() {
-            return "れいむ";
+            return customName;
         }
 
         @Override
         public String getNameE() {
-            return "Reimu";
+            return customName;
         }
 
         @Override
         public String getNameJ2() {
-            return "Reimu2J";
+            return customName2;
         }
 
         @Override
         public String getNameE2() {
-            return "Reimu2E";
+            return customName2;
         }
 
         @Override
@@ -169,8 +225,8 @@ public class MessagePoolTest {
             return hasPants;
         }
 
-        public void setHasPantsCustom(boolean b) {
-            this.hasPants = b;
+        void setHasPantsCustom(boolean hasPants) {
+            this.hasPants = hasPants;
         }
 
         @Override

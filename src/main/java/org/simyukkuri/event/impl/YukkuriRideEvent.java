@@ -1,7 +1,7 @@
 package org.simyukkuri.event.impl;
 
-import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.draw.Translate;
+import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.item.Food;
@@ -18,7 +18,7 @@ import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameText;
 
-/***************************************************
+/**
  * おちびちゃん運びイベント
  * protected Yukkuri from; // 乗せるゆっくり
  * protected Yukkuri to; // 乗るゆっくり
@@ -36,7 +36,7 @@ public class YukkuriRideEvent extends EventPacket {
 	 */
 	public YukkuriRideEvent(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		super(f, t, tgt, cnt);
-		priority = EventPriority.MIDDLE;// 食事、睡眠、トイレよりは上
+		priority = EventPriority.MIDDLE; // 食事、睡眠、トイレよりは上
 	}
 
 	/** Jackson デシリアライズ用デフォルトコンストラクタ。 */
@@ -267,12 +267,12 @@ public class YukkuriRideEvent extends EventPacket {
 		return false;
 	}
 
-	@Override
 	/**
 	 * End.
 	 *
 	 * @param body the body
 	 */
+	@Override
 	public void end(Yukkuri body) {
 		// 他のイベントで強制的にイベントが終わることがある
 		// 子供をおろす

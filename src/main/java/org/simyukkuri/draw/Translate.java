@@ -9,6 +9,9 @@ import org.simyukkuri.util.GameWorld;
  */
 public class Translate {
 
+	/**
+	 * 変換状態のスナップショット。
+	 */
 	public static final class Snapshot {
 		private final int mapScale;
 		private final int mapW;

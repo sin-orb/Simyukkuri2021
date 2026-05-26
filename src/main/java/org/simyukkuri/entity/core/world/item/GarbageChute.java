@@ -7,10 +7,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
@@ -22,7 +21,7 @@ import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * ダストシュート
  */
 public class GarbageChute extends WorldEntity {
@@ -58,15 +57,17 @@ public class GarbageChute extends WorldEntity {
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (itemRank == ItemRank.HOUSE) {
-			if (enabled)
+			if (enabled) {
 				layer[0] = images[0];
-			else
+			} else {
 				layer[0] = images[1];
+			}
 		} else {
-			if (enabled)
+			if (enabled) {
 				layer[0] = images[2];
-			else
+			} else {
 				layer[0] = images[3];
+			}
 		}
 		return 1;
 	}
@@ -108,8 +109,9 @@ public class GarbageChute extends WorldEntity {
 				if (bindBody.isOverPregnantLimit()) {
 					bindBody.setPikoMessage(GameMessages.getMessage(bindBody, MessagePool.Action.DontThrowMeAway), 60,
 							true);
-				} else
+				} else {
 					bindBody.setMessage(GameMessages.getMessage(bindBody, MessagePool.Action.Surprise), 60, true, true);
+				}
 			}
 			o.setFallingUnderGround(true);
 		} else {
@@ -135,9 +137,9 @@ public class GarbageChute extends WorldEntity {
 			}
 			o.setCalcX(this.getX());
 			o.setCalcY(this.getY());
-			int zCoord = o.getZ();
-			o.setCalcZ(zCoord - 2);
-			int translateZ = Translate.translateZ(zCoord - 1);
+			int zz = o.getZ();
+			o.setCalcZ(zz - 2);
+			int translateZ = Translate.translateZ(zz - 1);
 			int collisionX = o.getH();
 			if (translateZ < -collisionX) {
 				bindObjList.remove(o);

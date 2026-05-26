@@ -22,7 +22,7 @@ public class BreedEventTest extends EventTestBase {
         child.setAgeState(org.simyukkuri.enums.AgeState.CHILD);
 
         // Set parent/child relationship
-        WorldTestHelper.setParents(child, -1, parent.getUniqueID());
+        WorldTestHelper.setParents(child, -1, parent.getUniqueId());
 
         BreedEvent event = new BreedEvent(parent, child, null, 10);
 
@@ -35,7 +35,7 @@ public class BreedEventTest extends EventTestBase {
     void testCheckEventResponse_BabyChildOfFromDoesNotParticipate() {
         Yukkuri parent = createBody(1, 100, 100);
         Yukkuri baby = createBody(2, 120, 120);
-        WorldTestHelper.setParents(baby, -1, parent.getUniqueID());
+        WorldTestHelper.setParents(baby, -1, parent.getUniqueId());
         baby.setAgeState(org.simyukkuri.enums.AgeState.BABY);
         baby.setBirthMessageForced(true);
 
@@ -48,7 +48,7 @@ public class BreedEventTest extends EventTestBase {
     void testCheckEventResponse_BabyChildOfFromBirthEventBlockedDoesNotParticipate() {
         Yukkuri parent = createBody(1, 100, 100);
         Yukkuri baby = createBody(2, 120, 120);
-        WorldTestHelper.setParents(baby, -1, parent.getUniqueID());
+        WorldTestHelper.setParents(baby, -1, parent.getUniqueId());
         baby.setAgeState(org.simyukkuri.enums.AgeState.BABY);
         baby.setBirthMessageForced(false);
         baby.setBirthEventBlockedTicks(300);
@@ -62,7 +62,7 @@ public class BreedEventTest extends EventTestBase {
     void testCheckEventResponse_BabyChildOfFrom_withoutBirthMessage_participates() {
         Yukkuri parent = createBody(1, 100, 100);
         Yukkuri baby = createBody(2, 120, 120);
-        WorldTestHelper.setParents(baby, -1, parent.getUniqueID());
+        WorldTestHelper.setParents(baby, -1, parent.getUniqueId());
         baby.setAgeState(org.simyukkuri.enums.AgeState.BABY);
         baby.setBirthMessageForced(false);
 
@@ -213,8 +213,8 @@ public class BreedEventTest extends EventTestBase {
     void testCheckEventResponse_fromIsPartnerOfB_returnsTrue() {
         Yukkuri parent = createBody(1, 100, 100);
         Yukkuri b = createBody(2, 120, 120);
-        b.setPartner(parent.getUniqueID());
-        parent.setPartner(b.getUniqueID());
+        b.setPartner(parent.getUniqueId());
+        parent.setPartner(b.getUniqueId());
         BreedEvent event = new BreedEvent(parent, null, null, 10);
         assertTrue(event.checkEventResponse(b));
     }
@@ -223,7 +223,7 @@ public class BreedEventTest extends EventTestBase {
     void testCheckEventResponse_bIsParentOfFrom_returnsTrue() {
         Yukkuri parent = createBody(1, 100, 100);
         Yukkuri b = createBody(2, 120, 120);
-        parent.setParents(new int[] { b.getUniqueID(), -1 }); // b is father of parent
+        parent.setParents(new int[] { b.getUniqueId(), -1 }); // b is father of parent
         BreedEvent event = new BreedEvent(parent, null, null, 10);
         assertTrue(event.checkEventResponse(b));
     }
@@ -254,7 +254,7 @@ public class BreedEventTest extends EventTestBase {
     void testUpdate_BabyChildOfFrom_returnsAbort() {
         Yukkuri from = createBody(1, 100, 100);
         Yukkuri b = createBody(2, 105, 105);
-        WorldTestHelper.setParents(b, -1, from.getUniqueID());
+        WorldTestHelper.setParents(b, -1, from.getUniqueId());
         b.setAgeState(org.simyukkuri.enums.AgeState.BABY);
         b.setBirthMessageForced(true);
         from.setBirth(true);
@@ -268,7 +268,7 @@ public class BreedEventTest extends EventTestBase {
     void testUpdate_BabyChildBirthEventBlocked_returnsAbort() {
         Yukkuri from = createBody(1, 100, 100);
         Yukkuri b = createBody(2, 105, 105);
-        WorldTestHelper.setParents(b, -1, from.getUniqueID());
+        WorldTestHelper.setParents(b, -1, from.getUniqueId());
         b.setAgeState(org.simyukkuri.enums.AgeState.BABY);
         b.setBirthMessageForced(false);
         b.setBirthEventBlockedTicks(300);
@@ -359,7 +359,7 @@ public class BreedEventTest extends EventTestBase {
         void testScenario_ChildResponderLeavesEventAfterGreeting() {
             Yukkuri from = createBody(1, 100, 100);
             Yukkuri child = createBody(2, 120, 120);
-            WorldTestHelper.setParents(child, -1, from.getUniqueID());
+            WorldTestHelper.setParents(child, -1, from.getUniqueId());
             child.setAgeState(org.simyukkuri.enums.AgeState.BABY);
             child.setBirthMessageForced(false);
             from.setHasBaby(true);

@@ -6,21 +6,20 @@ import java.beans.Transient;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.simyukkuri.command.GadgetAction;
 import org.simyukkuri.draw.Dimension4y;
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Point4y;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.item.Bed;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.PlayStyle;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.logic.ToyLogic;
-import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.system.MessagePool;
+import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameWorld;
@@ -44,7 +43,7 @@ public class Alice extends Yukkuri {
 	private static BufferedImage[][][][] imagePack = new BufferedImage[YukkuriRank.values().length][][][];
 	private static BufferedImage[][][] imagesKai = new BufferedImage[ImageCode.values().length][2][3];
 	private static BufferedImage[][][] imagesNora = new BufferedImage[ImageCode.values().length][2][3];
-	private static int directionOffset[][] = new int[ImageCode.values().length][2];
+	private static int[][] directionOffset = new int[ImageCode.values().length][2];
 	private static Dimension4y[] boundary = new Dimension4y[3];
 	private static Dimension4y[] braidBoundary = new Dimension4y[3];
 	private static boolean imageLoaded = false;
@@ -62,7 +61,7 @@ public class Alice extends Yukkuri {
 	@Override
 	protected boolean isRaperExcitingFace(int f) {
 		return isRaper() && f == ImageCode.EXCITING.ordinal();
-	};
+	}
 
 	/**
 	 * ありすのみオーバーライド。ありすかつれいぱーかどうかを返却する.
@@ -73,13 +72,14 @@ public class Alice extends Yukkuri {
 	@Transient
 	protected boolean isAliceRaper() {
 		return isRaper();
-	};
+	}
 
 	/** 画像ロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
-		if (imageLoaded)
+		if (imageLoaded) {
 			return;
+		}
 
 		boolean res;
 		res = ModLoader.loadYukkuriImagePack(loader, imagesNora, directionOffset, ModLoader.getYkWordNora(), baseFileName,
@@ -125,8 +125,8 @@ public class Alice extends Yukkuri {
 		return 1;
 	}
 
-	@Override
 	/** アタッチメントキーに対応する取り付け点座標を返す。 */
+	@Override
 	public Point4y[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}
@@ -197,75 +197,67 @@ public class Alice extends Yukkuri {
 	}
 
 	// ゆっくりしてる時のアクション
-	// 個別の動作がある種ははこれをオーバーライドしているので注意
+	/** Kill time. 個別の動作がある種ははこれをオーバーライドしているので注意 */
 	@Override
-	/**
-	 * Kill time.
-	 */
 	public void killTime() {
-		if (getCurrentEvent() != null)
+		if (getCurrentEvent() != null) {
 			return;
-		if (getPlaying() != null)
+		}
+		if (getPlaying() != null) {
 			return;
+		}
 		int p = GameRandom.nextInt(50);
 		// 7/50でキリッ
 		if (p <= 6) {
 			getInVain(true);
-		}
-		// 7/50でのびのび
-		else if (p <= 14) {
-			// if yukkuri is not rude, she goes into her shell by discipline.
+		} else if (p <= 14) {
+			// 7/50でのびのび (if yukkuri is not rude, she goes into her shell by discipline)
 			setMessage(GameMessages.getMessage(this, MessagePool.Action.Nobinobi), 40);
 			setNobinobi(true);
 			addStress(-30);
 			stay(40);
-		}
-		// 7/50でこーでねーと
-		else if (p <= 21 && getRank() != YukkuriRank.KAIYU) {
+		} else if (p <= 21 && getRank() != YukkuriRank.KAIYU) {
+			// 7/50でこーでねーと
 			coordinate();
 			addStress(-30);
 			stay(40);
-		}
-		// 7/50でふりふり
-		else if (p <= 28 && willingFurifuri()) {
-			// if yukkuri is rude, she will not do furifuri by discipline.
+		} else if (p <= 28 && willingFurifuri()) {
+			// 7/50でふりふり (if yukkuri is rude, she will not do furifuri by discipline)
 			setMessage(GameMessages.getMessage(this, MessagePool.Action.FuriFuri), 30);
 			setFurifuri(true);
 			addStress(-50);
 			stay(30);
-		}
-		// 7/50でふりふりで腹減った
-		else if ((p <= 35 && isHungry()) || isSoHungry()) {
-			// 空腹時
+		} else if ((p <= 35 && isHungry()) || isSoHungry()) {
+			// 7/50でふりふりで腹減った (空腹時)
 			setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry), 30);
 			stay(30);
-		}
-		// 4/50でおもちゃで遊ぶ
-		else if (p <= 39) {
+		} else if (p <= 39) {
+			// 4/50でおもちゃで遊ぶ
 			if (ToyLogic.checkToy(this)) {
 				setPlaying(PlayStyle.BALL);
 				playingLimit = 150 + GameRandom.nextInt(100) - 49;
 				return;
-			} else
+			} else {
 				killTime();
-		}
-		// 3/50でトランポリンで遊ぶ
-		else if (p <= 42) {
+			}
+		} else if (p <= 42) {
+			// 3/50でトランポリンで遊ぶ
 			if (ToyLogic.checkTrampoline(this)) {
 				setPlaying(PlayStyle.TRAMPOLINE);
 				playingLimit = 150 + GameRandom.nextInt(100) - 49;
 				return;
-			} else
+			} else {
 				killTime();
-		}
-		// 1/50ですいーで遊ぶ
-		else if (p <= 43) {
+			}
+		} else if (p <= 43) {
+			// 1/50ですいーで遊ぶ
 			if (ToyLogic.checkSui(this)) {
 				setPlaying(PlayStyle.SUI);
 				playingLimit = 150 + GameRandom.nextInt(100) - 49;
 				return;
-			} else
+			} else {
 				killTime();
+			}
 		} else {
 			// おくるみありで汚れていない場合
 			if (isHasPants() && !isDirty() && GameRandom.nextInt(5) == 0) {
@@ -289,7 +281,7 @@ public class Alice extends Yukkuri {
 				i = 1;
 			}
 			getInVain(true);
-			Bed bed = (Bed) GadgetAction.putObjEX(Bed.class, getX(), getY(), i);
+			Bed bed = (Bed) GadgetAction.putObjEx(Bed.class, getX(), getY(), i);
 			GameWorld.get().getCurrentWorldState().getBeds().put(bed.objId, bed);
 			return;
 		}
@@ -312,10 +304,10 @@ public class Alice extends Yukkuri {
 
 	}
 
-	@Override
 	/**
 	 * Tune parameters.
 	 */
+	@Override
 	public void tuneParameters() {
 		/*
 		 * if (GameRandom.nextBoolean()) {
@@ -326,17 +318,17 @@ public class Alice extends Yukkuri {
 			setRapist(true);
 		}
 		double factor = Math.random() + 1;
-		getHungryLimitBase()[AgeState.ADULT.ordinal()] *= factor;
-		getHungryLimitBase()[AgeState.CHILD.ordinal()] *= factor;
-		getHungryLimitBase()[AgeState.BABY.ordinal()] *= factor;
+		getHungryLimitBase()[AgeState.ADULT.ordinal()] = (int) (getHungryLimitBase()[AgeState.ADULT.ordinal()] * factor);
+		getHungryLimitBase()[AgeState.CHILD.ordinal()] = (int) (getHungryLimitBase()[AgeState.CHILD.ordinal()] * factor);
+		getHungryLimitBase()[AgeState.BABY.ordinal()] = (int) (getHungryLimitBase()[AgeState.BABY.ordinal()] * factor);
 		factor = Math.random() + 1;
-		getShitLimitBase()[AgeState.ADULT.ordinal()] *= factor;
-		getShitLimitBase()[AgeState.CHILD.ordinal()] *= factor;
-		getShitLimitBase()[AgeState.BABY.ordinal()] *= factor;
+		getShitLimitBase()[AgeState.ADULT.ordinal()] = (int) (getShitLimitBase()[AgeState.ADULT.ordinal()] * factor);
+		getShitLimitBase()[AgeState.CHILD.ordinal()] = (int) (getShitLimitBase()[AgeState.CHILD.ordinal()] * factor);
+		getShitLimitBase()[AgeState.BABY.ordinal()] = (int) (getShitLimitBase()[AgeState.BABY.ordinal()] * factor);
 		factor = Math.random() + 1;
-		getDamageLimitBase()[AgeState.ADULT.ordinal()] *= factor;
-		getDamageLimitBase()[AgeState.CHILD.ordinal()] *= factor;
-		getDamageLimitBase()[AgeState.BABY.ordinal()] *= factor;
+		getDamageLimitBase()[AgeState.ADULT.ordinal()] = (int) (getDamageLimitBase()[AgeState.ADULT.ordinal()] * factor);
+		getDamageLimitBase()[AgeState.CHILD.ordinal()] = (int) (getDamageLimitBase()[AgeState.CHILD.ordinal()] * factor);
+		getDamageLimitBase()[AgeState.BABY.ordinal()] = (int) (getDamageLimitBase()[AgeState.BABY.ordinal()] * factor);
 		factor = Math.random() + 0.5;
 		setBabyLimitBase((int) (getBabyLimitBase() * factor));
 		setChildLimitBase((int) (getChildLimitBase() * factor));
@@ -352,9 +344,9 @@ public class Alice extends Yukkuri {
 		setImmunityStrength(GameRandom.nextInt(10) + 1);
 		// EYESIGHT /= 2;
 		factor = Math.random() + 0.5;
-		getStrengthBase()[AgeState.ADULT.ordinal()] *= factor;
-		getStrengthBase()[AgeState.CHILD.ordinal()] *= factor;
-		getStrengthBase()[AgeState.BABY.ordinal()] *= factor;
+		getStrengthBase()[AgeState.ADULT.ordinal()] = (int) (getStrengthBase()[AgeState.ADULT.ordinal()] * factor);
+		getStrengthBase()[AgeState.CHILD.ordinal()] = (int) (getStrengthBase()[AgeState.CHILD.ordinal()] * factor);
+		getStrengthBase()[AgeState.BABY.ordinal()] = (int) (getStrengthBase()[AgeState.BABY.ordinal()] * factor);
 		speed = baseSpeed;
 	}
 }

@@ -2,7 +2,6 @@ package org.simyukkuri.command;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.bodylinked.Stalk;
@@ -49,6 +48,7 @@ final class GadgetCleanupAction {
 				break;
 			case REMOVEALL:
 				isRemoveAll = true;
+				break;
 			default:
 				break;
 		}
@@ -56,9 +56,9 @@ final class GadgetCleanupAction {
 		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
 		List<Shit> shitList = new LinkedList<Shit>(GameWorld.get().getCurrentWorldState().getShit().values());
 		List<Vomit> vomitList = new LinkedList<Vomit>(GameWorld.get().getCurrentWorldState().getVomit().values());
-		List<Food> foodList = new LinkedList<Food>(GameWorld.get().getCurrentWorldState().getFoods().values());
-		List<Stalk> stalkList = new LinkedList<Stalk>(GameWorld.get().getCurrentWorldState().getStalks().values());
-		List<Barrier> wallList = GameWorld.get().getCurrentWorldState().getBarriers();
+		final List<Food> foodList = new LinkedList<Food>(GameWorld.get().getCurrentWorldState().getFoods().values());
+		final List<Stalk> stalkList = new LinkedList<Stalk>(GameWorld.get().getCurrentWorldState().getStalks().values());
+		final List<Barrier> wallList = GameWorld.get().getCurrentWorldState().getBarriers();
 		if (isBody) {
 			for (Yukkuri body : bodyList) {
 				if (!body.isDead()) {

@@ -18,7 +18,7 @@ public final class FoodNoFoodReaction {
 	 * 空振り時の気分・メッセージ更新を行う.
 	 */
 	public static void handleNoFoodFound(Yukkuri body) {
-		if (!body.isNotNYD()) {
+		if (!body.isNotNyd()) {
 			return;
 		}
 		if (!body.isSoHungry() || !body.isLockmove()) {

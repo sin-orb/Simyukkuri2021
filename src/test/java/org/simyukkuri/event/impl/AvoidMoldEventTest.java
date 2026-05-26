@@ -38,7 +38,7 @@ class AvoidMoldEventTest {
             spr[i] = new org.simyukkuri.system.Sprite(10, 10, org.simyukkuri.system.Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 
@@ -56,8 +56,8 @@ class AvoidMoldEventTest {
         Yukkuri to = createBody();
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         assertNotNull(event);
-        assertEquals(from.getUniqueID(), event.getFrom());
-        assertEquals(to.getUniqueID(), event.getTo());
+        assertEquals(from.getUniqueId(), event.getFrom());
+        assertEquals(to.getUniqueId(), event.getTo());
         assertEquals(10, event.getCount());
     }
 
@@ -121,7 +121,7 @@ class AvoidMoldEventTest {
         Yukkuri responder = createBody();
         // Create event with no 'to' body registered in map
         AvoidMoldEvent event = new AvoidMoldEvent();
-        event.setFrom(from.getUniqueID());
+        event.setFrom(from.getUniqueId());
         event.setTo(-1);
         UpdateState result = event.update(responder);
         assertEquals(UpdateState.ABORT, result);
@@ -144,7 +144,7 @@ class AvoidMoldEventTest {
         Yukkuri responder = createBody();
         AvoidMoldEvent event = new AvoidMoldEvent();
         event.setFrom(-1);
-        event.setTo(to.getUniqueID());
+        event.setTo(to.getUniqueId());
         boolean result = event.execute(responder);
         assertTrue(result);
     }
@@ -253,7 +253,7 @@ class AvoidMoldEventTest {
         Yukkuri from = createBody(); // adult
         Yukkuri to = createBody();
         // Set from as parent of to
-        org.simyukkuri.util.WorldTestHelper.addChild(from, to.getUniqueID());
+        org.simyukkuri.util.WorldTestHelper.addChild(from, to.getUniqueId());
         from.setIntelligence(org.simyukkuri.enums.Intelligence.FOOL);
         SimYukkuri.RND = new org.simyukkuri.ConstState(0); // RND.nextInt(5)==0 → doPeropero
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
@@ -264,7 +264,7 @@ class AvoidMoldEventTest {
     void testExecute_adultParent_WISE_doesNotThrow() {
         Yukkuri from = createBody(); // adult
         Yukkuri to = createBody();
-        org.simyukkuri.util.WorldTestHelper.addChild(from, to.getUniqueID());
+        org.simyukkuri.util.WorldTestHelper.addChild(from, to.getUniqueId());
         from.setIntelligence(org.simyukkuri.enums.Intelligence.WISE);
         SimYukkuri.RND = new org.simyukkuri.ConstState(0); // sayApologyMessage + strike
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
@@ -275,7 +275,7 @@ class AvoidMoldEventTest {
     void testExecute_adultParent_DEFAULT_doesNotThrow() {
         Yukkuri from = createBody(); // adult
         Yukkuri to = createBody();
-        org.simyukkuri.util.WorldTestHelper.addChild(from, to.getUniqueID());
+        org.simyukkuri.util.WorldTestHelper.addChild(from, to.getUniqueId());
         from.setIntelligence(org.simyukkuri.enums.Intelligence.AVERAGE);
         SimYukkuri.RND = new org.simyukkuri.ConstState(1); // nextInt(5)!=0 → saySadMessage
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
@@ -300,7 +300,7 @@ class AvoidMoldEventTest {
         from.setAgeState(org.simyukkuri.enums.AgeState.CHILD);
         Yukkuri to = createBody(); // parent (to is from's parent)
         // Make to have from as child (so from.isChild(to) is true)
-        org.simyukkuri.util.WorldTestHelper.addChild(to, from.getUniqueID());
+        org.simyukkuri.util.WorldTestHelper.addChild(to, from.getUniqueId());
         from.setIntelligence(org.simyukkuri.enums.Intelligence.FOOL);
         SimYukkuri.RND = new org.simyukkuri.ConstState(1); // nextInt(5)!=0
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
@@ -344,7 +344,7 @@ class AvoidMoldEventTest {
     void testExecute_adultParent_FOOL_saySadMessage_returnsFalse() {
         Yukkuri from = createBody();
         Yukkuri to = createBody();
-        to.setParents(new int[] { from.getUniqueID(), -1 }); // from.isParent(to) = true
+        to.setParents(new int[] { from.getUniqueId(), -1 }); // from.isParent(to) = true
         from.setIntelligence(org.simyukkuri.enums.Intelligence.FOOL);
         SimYukkuri.RND = new org.simyukkuri.ConstState(1); // nextInt(5)=1 → saySadMessage path
         try {
@@ -359,7 +359,7 @@ class AvoidMoldEventTest {
     void testExecute_adultParent_WISE_returnsFalse() {
         Yukkuri from = createBody();
         Yukkuri to = createBody();
-        to.setParents(new int[] { from.getUniqueID(), -1 }); // from.isParent(to) = true
+        to.setParents(new int[] { from.getUniqueId(), -1 }); // from.isParent(to) = true
         from.setIntelligence(org.simyukkuri.enums.Intelligence.WISE);
         SimYukkuri.RND = new org.simyukkuri.ConstState(1); // nextInt(5)=1 → no apology
         try {
@@ -375,7 +375,7 @@ class AvoidMoldEventTest {
     void testExecute_adultParent_DEFAULT_trueWhenApology() {
         Yukkuri from = createBody();
         Yukkuri to = createBody();
-        org.simyukkuri.util.WorldTestHelper.addChild(from, to.getUniqueID());
+        org.simyukkuri.util.WorldTestHelper.addChild(from, to.getUniqueId());
         from.setIntelligence(org.simyukkuri.enums.Intelligence.AVERAGE);
         SimYukkuri.RND = new org.simyukkuri.ConstState(0); // nextInt(5)=0 → sayApology+strike+true
         try {
@@ -392,8 +392,8 @@ class AvoidMoldEventTest {
         Yukkuri from = createBody();
         Yukkuri to = createBody();
         // siblings (same father)
-        from.setParents(new int[] { sharedParent.getUniqueID(), -1 });
-        to.setParents(new int[] { sharedParent.getUniqueID(), -1 });
+        from.setParents(new int[] { sharedParent.getUniqueId(), -1 });
+        to.setParents(new int[] { sharedParent.getUniqueId(), -1 });
         from.setIntelligence(org.simyukkuri.enums.Intelligence.FOOL);
         SimYukkuri.RND = new org.simyukkuri.ConstState(1);
         try {
@@ -408,8 +408,8 @@ class AvoidMoldEventTest {
         Yukkuri sharedParent = createBody();
         Yukkuri from = createBody();
         Yukkuri to = createBody();
-        from.setParents(new int[] { sharedParent.getUniqueID(), -1 });
-        to.setParents(new int[] { sharedParent.getUniqueID(), -1 });
+        from.setParents(new int[] { sharedParent.getUniqueId(), -1 });
+        to.setParents(new int[] { sharedParent.getUniqueId(), -1 });
         from.setIntelligence(org.simyukkuri.enums.Intelligence.WISE);
         SimYukkuri.RND = new org.simyukkuri.ConstState(0); // sayApology + runAway → true
         try {
@@ -424,8 +424,8 @@ class AvoidMoldEventTest {
         Yukkuri sharedParent = createBody();
         Yukkuri from = createBody();
         Yukkuri to = createBody();
-        from.setParents(new int[] { sharedParent.getUniqueID(), -1 });
-        to.setParents(new int[] { sharedParent.getUniqueID(), -1 });
+        from.setParents(new int[] { sharedParent.getUniqueId(), -1 });
+        to.setParents(new int[] { sharedParent.getUniqueId(), -1 });
         from.setIntelligence(org.simyukkuri.enums.Intelligence.AVERAGE);
         SimYukkuri.RND = new org.simyukkuri.ConstState(1); // saySadMessage+false path
         try {
@@ -441,7 +441,7 @@ class AvoidMoldEventTest {
         Yukkuri from = createBody();
         from.setAgeState(org.simyukkuri.enums.AgeState.CHILD);
         Yukkuri to = createBody();
-        from.setParents(new int[] { to.getUniqueID(), -1 }); // from.isChild(to) = to.isParent(from)
+        from.setParents(new int[] { to.getUniqueId(), -1 }); // from.isChild(to) = to.isParent(from)
         from.setIntelligence(org.simyukkuri.enums.Intelligence.WISE);
         SimYukkuri.RND = new org.simyukkuri.ConstState(1);
         try {
@@ -458,8 +458,8 @@ class AvoidMoldEventTest {
         Yukkuri from = createBody();
         from.setAgeState(org.simyukkuri.enums.AgeState.CHILD);
         Yukkuri to = createBody();
-        from.setParents(new int[] { sharedParent.getUniqueID(), -1 });
-        to.setParents(new int[] { sharedParent.getUniqueID(), -1 });
+        from.setParents(new int[] { sharedParent.getUniqueId(), -1 });
+        to.setParents(new int[] { sharedParent.getUniqueId(), -1 });
         from.setIntelligence(org.simyukkuri.enums.Intelligence.FOOL);
         SimYukkuri.RND = new org.simyukkuri.ConstState(1);
         try {
@@ -475,8 +475,8 @@ class AvoidMoldEventTest {
         Yukkuri from = createBody();
         from.setAgeState(org.simyukkuri.enums.AgeState.CHILD);
         Yukkuri to = createBody();
-        from.setParents(new int[] { sharedParent.getUniqueID(), -1 });
-        to.setParents(new int[] { sharedParent.getUniqueID(), -1 });
+        from.setParents(new int[] { sharedParent.getUniqueId(), -1 });
+        to.setParents(new int[] { sharedParent.getUniqueId(), -1 });
         from.setIntelligence(org.simyukkuri.enums.Intelligence.WISE);
         SimYukkuri.RND = new org.simyukkuri.ConstState(0);
         try {
@@ -491,7 +491,7 @@ class AvoidMoldEventTest {
     void testSaySadMessage_isParent_doesNotThrow() {
         Yukkuri from = createBody();
         Yukkuri to = createBody();
-        org.simyukkuri.util.WorldTestHelper.addChild(from, to.getUniqueID()); // from.isParent(to)
+        org.simyukkuri.util.WorldTestHelper.addChild(from, to.getUniqueId()); // from.isParent(to)
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         assertDoesNotThrow(() -> event.saySadMessage(from, to));
     }
@@ -501,8 +501,8 @@ class AvoidMoldEventTest {
     void testSaySadMessage_isPartner_doesNotThrow() {
         Yukkuri from = createBody();
         Yukkuri to = createBody();
-        from.setPartner(to.getUniqueID());
-        to.setPartner(from.getUniqueID());
+        from.setPartner(to.getUniqueId());
+        to.setPartner(from.getUniqueId());
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         assertDoesNotThrow(() -> event.saySadMessage(from, to));
     }
@@ -512,7 +512,7 @@ class AvoidMoldEventTest {
     void testSaySadMessage_toIsParent_doesNotThrow() {
         Yukkuri from = createBody();
         Yukkuri to = createBody();
-        from.setParents(new int[] { to.getUniqueID(), -1 }); // to.isParent(from) = true
+        from.setParents(new int[] { to.getUniqueId(), -1 }); // to.isParent(from) = true
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         assertDoesNotThrow(() -> event.saySadMessage(from, to));
     }
@@ -522,7 +522,7 @@ class AvoidMoldEventTest {
     void testSayApologyMessage_isParent_doesNotThrow() {
         Yukkuri from = createBody();
         Yukkuri to = createBody();
-        org.simyukkuri.util.WorldTestHelper.addChild(from, to.getUniqueID()); // from.isParent(to)
+        org.simyukkuri.util.WorldTestHelper.addChild(from, to.getUniqueId()); // from.isParent(to)
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         assertDoesNotThrow(() -> event.sayApologyMessage(from, to));
     }

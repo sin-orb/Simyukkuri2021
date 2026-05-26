@@ -33,7 +33,7 @@ public final class YukkuriSurisuriRule {
 		if (GameRandom.nextInt(10) != 0) {
 			return YukkuriLogic.ActionGo.NONE;
 		}
-		if (body.isIdiot() || body.isNYD()) {
+		if (body.isIdiot() || body.isNyd()) {
 			return YukkuriLogic.ActionGo.NONE;
 		}
 

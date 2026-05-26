@@ -75,7 +75,7 @@ public final class YukkuriOtherRelationDelegate {
 			body.addStress(-100);
 			p.addStress(-100);
 			body.setHappiness(Happiness.VERY_HAPPY);
-			if (body.isNotNYD()) {
+			if (body.isNotNyd()) {
 				p.setHappiness(Happiness.VERY_HAPPY);
 			}
 		}

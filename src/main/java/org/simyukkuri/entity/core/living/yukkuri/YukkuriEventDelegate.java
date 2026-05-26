@@ -1,15 +1,15 @@
 package org.simyukkuri.entity.core.living.yukkuri;
 
-import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.BurialState;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.PanicType;
 import org.simyukkuri.enums.PlayStyle;
-import org.simyukkuri.event.impl.CutPenipeniEvent;
 import org.simyukkuri.event.impl.BegForLifeEvent;
-import org.simyukkuri.logic.YukkuriEventState;
+import org.simyukkuri.event.impl.CutPenipeniEvent;
 import org.simyukkuri.logic.EventLogic;
 import org.simyukkuri.logic.ToyLogic;
+import org.simyukkuri.logic.YukkuriEventState;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
@@ -83,31 +83,27 @@ public final class YukkuriEventDelegate {
 		// 6/50でキリッ
 		if (p <= 5) {
 			body.getInVain(true);
-		}
-		// 6/50でのびのび
-		else if (p <= 11) {
+		} else if (p <= 11) {
+			// 6/50でのびのび
 			// if yukkuri is not rude, she goes into her shell by discipline.
 			body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Nobinobi), 40);
 			body.setNobinobi(true);
 			body.addStress(-50);
 			body.stay(40);
-		}
-		// 6/50でふりふり
-		else if (p <= 17 && body.willingFurifuri()) {
+		} else if (p <= 17 && body.willingFurifuri()) {
+			// 6/50でふりふり
 			// if yukkuri is rude, she will not do furifuri by discipline.
 			body.setMessage(GameMessages.getMessage(body, MessagePool.Action.FuriFuri), 40);
 			body.setFurifuri(true);
 			body.addStress(-70);
 			body.stay(30);
-		}
-		// 6/50で腹減った
-		else if ((p <= 23 && body.isHungry()) || body.isSoHungry()) {
+		} else if ((p <= 23 && body.isHungry()) || body.isSoHungry()) {
+			// 6/50で腹減った
 			// 空腹時
 			body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Hungry), 30);
 			body.stay(30);
-		}
-		// 6/50でおもちゃで遊ぶ
-		else if (p <= 29) {
+		} else if (p <= 29) {
+			// 6/50でおもちゃで遊ぶ
 			if (ToyLogic.checkToy(body)) {
 				body.setPlaying(PlayStyle.BALL);
 				body.setPlayingLimit(150 + GameRandom.nextInt(100) - 49);
@@ -115,9 +111,8 @@ public final class YukkuriEventDelegate {
 			} else {
 				killTime();
 			}
-		}
-		// 6/50でトランポリンで遊ぶ
-		else if (p <= 35) {
+		} else if (p <= 35) {
+			// 6/50でトランポリンで遊ぶ
 			if (ToyLogic.checkTrampoline(body)) {
 				body.setPlaying(PlayStyle.TRAMPOLINE);
 				body.setPlayingLimit(150 + GameRandom.nextInt(100) - 49);
@@ -125,9 +120,8 @@ public final class YukkuriEventDelegate {
 			} else {
 				killTime();
 			}
-		}
-		// 6/50ですいーで遊ぶ
-		else if (p <= 41) {
+		} else if (p <= 41) {
+			// 6/50ですいーで遊ぶ
 			if (ToyLogic.checkSui(body)) {
 				body.setPlaying(PlayStyle.SUI);
 				body.setPlayingLimit(150 + GameRandom.nextInt(100) - 49);
@@ -216,9 +210,10 @@ public final class YukkuriEventDelegate {
 	 * @return イベントに反応できるなら true
 	 */
 	public boolean canEventResponse() {
-		if (body.isDead() || body.getCriticalDamege() == CriticalDamageType.CUT || body.isPealed() ||
-				body.isPacked() || (body.isBlind() && !isCutPeni()) || body.isSleeping() || body.isShitting() || body.isBirth() || body.isSukkiri() ||
-				body.isNeedled() || body.getCurrentEvent() != null || body.isNYD() || body.isTaken()
+		if (body.isDead() || body.getCriticalDamege() == CriticalDamageType.CUT || body.isPealed()
+				|| body.isPacked() || (body.isBlind() && !isCutPeni()) || body.isSleeping()
+				|| body.isShitting() || body.isBirth() || body.isSukkiri()
+				|| body.isNeedled() || body.getCurrentEvent() != null || body.isNyd() || body.isTaken()
 				|| body.getBurialState() != BurialState.NONE || body.isLockmove() || body.isStarving()) {
 			return false;
 		}

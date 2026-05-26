@@ -50,9 +50,9 @@ class BodyPartnerSearchRuleTest {
 		pheromone.setY(40);
 		pheromone.setPheromone(true);
 
-		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(me.getUniqueID(), me);
-		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(closer.getUniqueID(), closer);
-		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(pheromone.getUniqueID(), pheromone);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(me.getUniqueId(), me);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(closer.getUniqueId(), closer);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(pheromone.getUniqueId(), pheromone);
 
 		YukkuriPartnerSearchRule.SearchResult result = YukkuriPartnerSearchRule.selectTargets(me, null,
 				me.getEyesightBase(),
@@ -73,8 +73,8 @@ class BodyPartnerSearchRuleTest {
 		target.setX(50);
 		target.setY(40);
 
-		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(me.getUniqueID(), me);
-		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(target.getUniqueID(), target);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(me.getUniqueId(), me);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(target.getUniqueId(), target);
 
 		YukkuriPartnerSearchRule.SearchResult result = YukkuriPartnerSearchRule.selectTargets(me, null,
 				me.getEyesightBase(),
@@ -101,9 +101,9 @@ class BodyPartnerSearchRuleTest {
 		normal.setY(40);
 		normal.setOkazaris(null);
 
-		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(me.getUniqueID(), me);
-		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(predator.getUniqueID(), predator);
-		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(normal.getUniqueID(), normal);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(me.getUniqueId(), me);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(predator.getUniqueId(), predator);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(normal.getUniqueId(), normal);
 
 		YukkuriPartnerSearchRule.SearchResult result = YukkuriPartnerSearchRule.selectTargets(me, null,
 				me.getEyesightBase(),

@@ -6,7 +6,7 @@ import org.simyukkuri.entity.core.world.bodylinked.Okazari;
 import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.util.GameText;
 
-/***************************************************
+/**
  * ゴミからおかざり入手イベント
  * protected Yukkuri from; // イベントを発した個体
  * protected Yukkuri to; // 未使用
@@ -52,10 +52,12 @@ public class GetTrashOkazariEvent extends EventPacket {
 	@Override
 	public UpdateState update(Yukkuri body) {
 		Entity targetObject = body.takeMappedObj(this.target);
-		if (targetObject.isRemoved())
+		if (targetObject.isRemoved()) {
 			return UpdateState.ABORT;
-		if (body.hasOkazari())
+		}
+		if (body.hasOkazari()) {
 			return UpdateState.ABORT;
+		}
 		body.moveToEvent(this, targetObject.getX(), targetObject.getY());
 		return null;
 	}
@@ -66,8 +68,9 @@ public class GetTrashOkazariEvent extends EventPacket {
 	@Override
 	public boolean execute(Yukkuri body) {
 		Entity targetObject = body.takeMappedObj(this.target);
-		if (targetObject.isRemoved())
+		if (targetObject.isRemoved()) {
 			return true;
+		}
 		// おかざりランダム入手
 		body.giveOkazari(Okazari.getRandomOkazari(body.getAgeState()));
 		return true;

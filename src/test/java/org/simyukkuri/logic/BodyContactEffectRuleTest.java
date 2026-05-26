@@ -35,8 +35,8 @@ class BodyContactEffectRuleTest {
 		me.setY(100);
 		you.setX(100);
 		you.setY(100);
-		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(me.getUniqueID(), me);
-		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(you.getUniqueID(), you);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(me.getUniqueId(), me);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(you.getUniqueId(), you);
 		me.setAgeState(AgeState.ADULT);
 		you.setAgeState(AgeState.ADULT);
 		me.setPublicRank(PublicRank.NONE);
@@ -63,14 +63,14 @@ class BodyContactEffectRuleTest {
 		me.setY(100);
 		you.setX(100);
 		you.setY(100);
-		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(me.getUniqueID(), me);
-		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(you.getUniqueID(), you);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(me.getUniqueId(), me);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(you.getUniqueId(), you);
 		me.setAgeState(AgeState.ADULT);
 		you.setAgeState(AgeState.BABY);
 		me.setPublicRank(PublicRank.NONE);
 		you.setPublicRank(PublicRank.NONE);
 		me.setIntelligence(org.simyukkuri.enums.Intelligence.FOOL);
-		WorldTestHelper.setParents(you, -1, me.getUniqueID());
+		WorldTestHelper.setParents(you, -1, me.getUniqueId());
 		you.takeOkazari(false);
 		you.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE_NEAR);
 		ConstState rnd = new ConstState(0);

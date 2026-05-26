@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Map;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
@@ -17,56 +15,49 @@ import org.simyukkuri.enums.Attitude;
 import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.YukkuriRelationType;
-import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.WorldTestHelper;
 
 public class EmotionLogicTest {
 
     private Yukkuri dummyParent;
 
-    @SuppressWarnings("unchecked")
     @BeforeEach
     public void setUp() {
         WorldTestHelper.initializeMinimalWorld();
         dummyParent = WorldTestHelper.createBody();
-        dummyParent.setUniqueID(999);
-        try {
-            java.lang.reflect.Field mapBodyField = WorldState.class.getDeclaredField("body");
-            mapBodyField.setAccessible(true);
-            ((Map<Integer, Yukkuri>) mapBodyField.get(SimYukkuri.world.getCurrentWorldState())).put(
-                    dummyParent.getUniqueID(),
-                    dummyParent);
-        } catch (Exception e) {
-        }
+        dummyParent.setUniqueId(999);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry()
+                .put(dummyParent.getUniqueId(), dummyParent);
     }
 
-    private void mockRelation(Yukkuri me, Yukkuri you, YukkuriRelationType relation) throws Exception {
+    private void mockRelation(Yukkuri me, Yukkuri you, YukkuriRelationType relation)
+            throws Exception {
         switch (relation) {
             case FATHER:
-                you.setParents(new int[] { me.getUniqueID(), -1 });
+                you.setParents(new int[] {me.getUniqueId(), -1});
                 break;
             case MOTHER:
-                you.setParents(new int[] { -1, me.getUniqueID() });
+                you.setParents(new int[] {-1, me.getUniqueId()});
                 break;
             case PARTNER:
-                me.setPartner(you.getUniqueID());
-                you.setPartner(me.getUniqueID());
+                me.setPartner(you.getUniqueId());
+                you.setPartner(me.getUniqueId());
                 break;
             case CHILD_OF_FATHER:
-                me.setParents(new int[] { you.getUniqueID(), -1 });
+                me.setParents(new int[] {you.getUniqueId(), -1});
                 break;
             case CHILD_OF_MOTHER:
-                me.setParents(new int[] { -1, you.getUniqueID() });
+                me.setParents(new int[] {-1, you.getUniqueId()});
                 break;
             case ELDER_SISTER:
-                me.setParents(new int[] { 999, -1 });
-                you.setParents(new int[] { 999, -1 });
+                me.setParents(new int[] {999, -1});
+                you.setParents(new int[] {999, -1});
                 me.setAge(100);
                 you.setAge(50);
                 break;
             case YOUNGER_SISTER:
-                me.setParents(new int[] { 999, -1 });
-                you.setParents(new int[] { 999, -1 });
+                me.setParents(new int[] {999, -1});
+                you.setParents(new int[] {999, -1});
                 me.setAge(50);
                 you.setAge(100);
                 break;
@@ -86,8 +77,8 @@ public class EmotionLogicTest {
     public void testCheckEmotionForOther() throws Exception {
         Yukkuri me = WorldTestHelper.createBody();
         Yukkuri you = WorldTestHelper.createBody();
-        me.setUniqueID(1);
-        you.setUniqueID(2);
+        me.setUniqueId(1);
+        you.setUniqueId(2);
 
         for (Happiness hTarget : Happiness.values()) {
             you.setHappiness(hTarget);
@@ -97,12 +88,12 @@ public class EmotionLogicTest {
                     resetRelation(me, you);
                     mockRelation(me, you, rel);
 
-                    for (boolean rude : new boolean[] { false, true }) {
+                    for (boolean rude : new boolean[] {false, true}) {
                         me.setAttitude(rude ? Attitude.SHITHEAD : Attitude.AVERAGE);
 
-                        for (boolean p : new boolean[] { false, true }) {
-                            for (boolean d : new boolean[] { false, true }) {
-                                for (boolean c : new boolean[] { false, true }) {
+                        for (boolean p : new boolean[] {false, true}) {
+                            for (boolean d : new boolean[] {false, true}) {
+                                for (boolean c : new boolean[] {false, true}) {
                                     setPainStates(you, p, d, c);
 
                                     boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
@@ -173,7 +164,9 @@ public class EmotionLogicTest {
         // Family in pain -> Worry + Fear
         mockRelation(me, you, YukkuriRelationType.MOTHER);
         you.setHappiness(Happiness.VERY_SAD);
-        setPainStates(you, false, false, true); // critical=true → getCriticalDamege()!=null → bIsPainOther=true
+        setPainStates(
+                you, false, false,
+                true); // critical=true → getCriticalDamege()!=null → bIsPainOther=true
 
         boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
         assertTrue(result[6], "Should worry about family in pain");
@@ -276,7 +269,7 @@ public class EmotionLogicTest {
 
         boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
 
-        assertArrayEquals(new boolean[] { false, false, true, false, true, false, true }, result);
+        assertArrayEquals(new boolean[] {false, false, true, false, true, false, true}, result);
     }
 
     @Test
@@ -293,7 +286,7 @@ public class EmotionLogicTest {
 
         boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
 
-        assertArrayEquals(new boolean[] { false, false, false, false, true, false, false }, result);
+        assertArrayEquals(new boolean[] {false, false, false, false, true, false, false}, result);
     }
 
     @Test
@@ -309,7 +302,7 @@ public class EmotionLogicTest {
 
         boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
 
-        assertArrayEquals(new boolean[] { false, true, false, false, false, true, false }, result);
+        assertArrayEquals(new boolean[] {false, true, false, false, false, true, false}, result);
     }
 
     @Test
@@ -325,7 +318,7 @@ public class EmotionLogicTest {
 
         boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
 
-        assertArrayEquals(new boolean[] { false, false, false, true, false, false, false }, result);
+        assertArrayEquals(new boolean[] {false, false, false, true, false, false, false}, result);
     }
 
     @Test
@@ -341,7 +334,7 @@ public class EmotionLogicTest {
 
         boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
 
-        assertArrayEquals(new boolean[] { false, false, false, false, false, true, false }, result);
+        assertArrayEquals(new boolean[] {false, false, false, false, false, true, false}, result);
     }
 
     @Test
@@ -357,7 +350,7 @@ public class EmotionLogicTest {
 
         boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
 
-        assertArrayEquals(new boolean[] { false, false, true, false, false, true, false }, result);
+        assertArrayEquals(new boolean[] {false, false, true, false, false, true, false}, result);
     }
 
     @Test
@@ -374,18 +367,21 @@ public class EmotionLogicTest {
 
         boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
 
-        assertArrayEquals(new boolean[] { true, false, false, true, false, false, false }, result);
+        assertArrayEquals(new boolean[] {true, false, false, true, false, false, false}, result);
     }
 
     private void registerBodies(Yukkuri... bodies) {
         for (Yukkuri b : bodies) {
-            org.simyukkuri.SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+            org.simyukkuri.SimYukkuri.world
+                    .getCurrentWorldState()
+                    .getYukkuriRegistry()
+                    .put(b.getUniqueId(), b);
         }
     }
 
     private void resetRelation(Yukkuri me, Yukkuri you) throws Exception {
-        me.setParents(new int[] { -1, -1 });
-        you.setParents(new int[] { -1, -1 });
+        me.setParents(new int[] {-1, -1});
+        you.setParents(new int[] {-1, -1});
         me.setPartner(-1);
         you.setPartner(-1);
     }

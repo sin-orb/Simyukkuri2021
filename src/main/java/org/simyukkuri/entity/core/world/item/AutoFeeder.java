@@ -8,15 +8,13 @@ import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
-
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-
 import org.simyukkuri.command.GadgetAction;
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.engine.birth.YukkuriBirthTypeResolver;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -33,7 +31,7 @@ import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * 自動給餌機
  */
 public class AutoFeeder extends WorldEntity {
@@ -145,14 +143,14 @@ public class AutoFeeder extends WorldEntity {
 		return hitCheckObjType;
 	}
 
-	@Override
 	/** アイテムの購入価格を返す。 */
+	@Override
 	public int getValue() {
 		return value;
 	}
 
-	@Override
 	/** アイテムの設置コストを返す。 */
+	@Override
 	public int getCost() {
 		return cost;
 	}
@@ -166,15 +164,17 @@ public class AutoFeeder extends WorldEntity {
 	/** 毎ティックの状態更新を行う。 */
 	@Override
 	public void upDate() {
-		if (!enabled)
+		if (!enabled) {
 			return;
+		}
 
-		if ((getAge() % 20) != 0)
+		if ((getAge() % 20) != 0) {
 			return;
+		}
 
 		// お持ち帰りされていたりしたら初期化
-		if (food != null && !GameWorld.get().getCurrentWorldState().getFoods().containsValue(food) &&
-				isTakenOut()) {
+		if (food != null && !GameWorld.get().getCurrentWorldState().getFoods().containsValue(food)
+				&& isTakenOut()) {
 			food = null;
 		}
 
@@ -241,8 +241,10 @@ public class AutoFeeder extends WorldEntity {
 					case 7:
 						f = FoodType.WASTE;
 						break;
+					default:
+						break;
 				}
-				food = GadgetAction.putObjEX(Food.class, getX(), getY(), f.ordinal());
+				food = GadgetAction.putObjEx(Food.class, getX(), getY(), f.ordinal());
 				GameWorld.get().getCurrentWorldState().getFoods().put(food.objId, (Food) food);
 				Cash.buyItem(food);
 				Cash.addCash(-getCost());
@@ -285,8 +287,9 @@ public class AutoFeeder extends WorldEntity {
 		if (setupFeederMode(this, false)) {
 			readIniFile();
 			ret = true;
-		} else
+		} else {
 			ret = false;
+		}
 		if (!ret) {
 			GameWorld.get().getCurrentWorldState().getAutoFeeders().remove(objId);
 		}
@@ -310,7 +313,6 @@ public class AutoFeeder extends WorldEntity {
 
 		JPanel mainPanel = new JPanel();
 		JRadioButton[] but = new JRadioButton[FeedType.values().length];
-		boolean ret = false;
 
 		mainPanel.setLayout(new GridLayout(5, 2));
 		mainPanel.setPreferredSize(new Dimension(250, 150));
@@ -334,9 +336,9 @@ public class AutoFeeder extends WorldEntity {
 					break;
 				}
 			}
-			ret = true;
+			return true;
 		}
-		return ret;
+		return false;
 	}
 
 	/**
@@ -350,7 +352,6 @@ public class AutoFeeder extends WorldEntity {
 
 		JPanel mainPanel = new JPanel();
 		JRadioButton[] but = new JRadioButton[FeedMode.values().length];
-		boolean ret = false;
 
 		mainPanel.setLayout(new GridLayout(5, 2));
 		mainPanel.setPreferredSize(new Dimension(250, 150));
@@ -374,9 +375,9 @@ public class AutoFeeder extends WorldEntity {
 					break;
 				}
 			}
-			ret = true;
+			return true;
 		}
-		return ret;
+		return false;
 	}
 
 	/**
@@ -388,13 +389,15 @@ public class AutoFeeder extends WorldEntity {
 		// 間隔
 		iniValue = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataItemIniDir(), "AutoFeeder",
 				"FeedingInterval");
-		if (iniValue != 0)
+		if (iniValue != 0) {
 			feedingInterval = iniValue;
+		}
 		// 確率
 		iniValue = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataItemIniDir(), "AutoFeeder",
 				"FeedingProbability");
-		if (iniValue != 0)
+		if (iniValue != 0) {
 			feedingP = iniValue;
+		}
 	}
 
 	/** 給餌する食べ物の種類インデックスを返す。 */

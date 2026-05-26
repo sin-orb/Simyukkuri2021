@@ -291,19 +291,26 @@ public class MarisaTest {
             java.lang.reflect.Field fp = Marisa.class.getDeclaredField("imagePack");
             fp.setAccessible(true);
             int ranks = org.simyukkuri.enums.YukkuriRank.values().length;
-            java.awt.image.BufferedImage[][][][] pack = new java.awt.image.BufferedImage[ranks][200][20][20];
-            java.awt.image.BufferedImage dummy = new java.awt.image.BufferedImage(1, 1,
-                    java.awt.image.BufferedImage.TYPE_INT_ARGB);
-            for (int i = 0; i < ranks; i++)
-                for (int j = 0; j < 200; j++)
-                    for (int k = 0; k < 20; k++)
-                        for (int l = 0; l < 20; l++)
+            java.awt.image.BufferedImage[][][][] pack =
+                    new java.awt.image.BufferedImage[ranks][200][20][20];
+            java.awt.image.BufferedImage dummy =
+                    new java.awt.image.BufferedImage(
+                            1, 1, java.awt.image.BufferedImage.TYPE_INT_ARGB);
+            for (int i = 0; i < ranks; i++) {
+                for (int j = 0; j < 200; j++) {
+                    for (int k = 0; k < 20; k++) {
+                        for (int l = 0; l < 20; l++) {
                             pack[i][j][k][l] = dummy;
+                        }
+                    }
+                }
+            }
             fp.set(null, pack);
             Marisa obj = new Marisa();
             org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
             obj.getImage(0, 0, layer, 0);
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -331,16 +338,20 @@ public class MarisaTest {
             Marisa marisa = new Marisa();
             marisa.setAge(100000);
             WorldTestHelper.makeTransformationReady(marisa);
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(marisa.getUniqueID(), marisa);
+            SimYukkuri.world
+                    .getCurrentWorldState()
+                    .getYukkuriRegistry()
+                    .put(marisa.getUniqueId(), marisa);
 
-            int originalId = marisa.getUniqueID();
+            int originalId = marisa.getUniqueId();
 
             marisa.execTransform();
 
-            Yukkuri transformed = SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().get(originalId);
+            Yukkuri transformed =
+                    SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().get(originalId);
             assertNotNull(transformed);
             assertInstanceOf(DosMarisa.class, transformed);
-            assertEquals(originalId, transformed.getUniqueID());
+            assertEquals(originalId, transformed.getUniqueId());
             assertTrue(marisa.isRemoved());
         } finally {
             WorldTestHelper.resetWorld();
@@ -361,22 +372,32 @@ public class MarisaTest {
             Reimu partner = new Reimu();
             Reimu child = new Reimu();
 
-            marisa.setPartner(partner.getUniqueID());
-            partner.setPartner(marisa.getUniqueID());
-            child.setParents(new int[] { marisa.getUniqueID(), -1 });
-            marisa.getChildren().add(child.getUniqueID());
+            marisa.setPartner(partner.getUniqueId());
+            partner.setPartner(marisa.getUniqueId());
+            child.setParents(new int[] {marisa.getUniqueId(), -1});
+            marisa.getChildren().add(child.getUniqueId());
 
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(marisa.getUniqueID(), marisa);
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueID(), partner);
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
+            SimYukkuri.world
+                    .getCurrentWorldState()
+                    .getYukkuriRegistry()
+                    .put(marisa.getUniqueId(), marisa);
+            SimYukkuri.world
+                    .getCurrentWorldState()
+                    .getYukkuriRegistry()
+                    .put(partner.getUniqueId(), partner);
+            SimYukkuri.world
+                    .getCurrentWorldState()
+                    .getYukkuriRegistry()
+                    .put(child.getUniqueId(), child);
 
-            int originalId = marisa.getUniqueID();
-            int partnerId = partner.getUniqueID();
-            int childId = child.getUniqueID();
+            int originalId = marisa.getUniqueId();
+            int partnerId = partner.getUniqueId();
+            int childId = child.getUniqueId();
 
             marisa.execTransform();
 
-            Yukkuri transformed = SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().get(originalId);
+            Yukkuri transformed =
+                    SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().get(originalId);
             assertNotNull(transformed);
             assertEquals(partnerId, transformed.getPartner());
             assertTrue(transformed.getChildren().contains(childId));
@@ -402,25 +423,35 @@ public class MarisaTest {
 
             Reimu partner = new Reimu();
             Reimu child = new Reimu();
-            marisa.setPartner(partner.getUniqueID());
-            partner.setPartner(marisa.getUniqueID());
-            child.setParents(new int[] { marisa.getUniqueID(), -1 });
-            marisa.getChildren().add(child.getUniqueID());
+            marisa.setPartner(partner.getUniqueId());
+            partner.setPartner(marisa.getUniqueId());
+            child.setParents(new int[] {marisa.getUniqueId(), -1});
+            marisa.getChildren().add(child.getUniqueId());
 
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(marisa.getUniqueID(), marisa);
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueID(), partner);
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
+            SimYukkuri.world
+                    .getCurrentWorldState()
+                    .getYukkuriRegistry()
+                    .put(marisa.getUniqueId(), marisa);
+            SimYukkuri.world
+                    .getCurrentWorldState()
+                    .getYukkuriRegistry()
+                    .put(partner.getUniqueId(), partner);
+            SimYukkuri.world
+                    .getCurrentWorldState()
+                    .getYukkuriRegistry()
+                    .put(child.getUniqueId(), child);
 
-            int originalId = marisa.getUniqueID();
-            int childId = child.getUniqueID();
+            int originalId = marisa.getUniqueId();
+            int childId = child.getUniqueId();
 
             marisa.execTransform();
 
-            Yukkuri transformed = SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().get(originalId);
+            Yukkuri transformed =
+                    SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().get(originalId);
             assertNotNull(transformed);
             assertTrue(transformed.isHasBaby());
             assertEquals(1, transformed.getBabyTypes().size());
-            assertEquals(partner.getUniqueID(), transformed.getPartner());
+            assertEquals(partner.getUniqueId(), transformed.getPartner());
             assertTrue(transformed.getChildren().contains(childId));
             assertEquals(originalId, partner.getPartner());
             assertEquals(originalId, child.getParents()[0]);
@@ -444,25 +475,35 @@ public class MarisaTest {
 
             Reimu partner = new Reimu();
             Reimu child = new Reimu();
-            marisa.setPartner(partner.getUniqueID());
-            partner.setPartner(marisa.getUniqueID());
-            child.setParents(new int[] { marisa.getUniqueID(), -1 });
-            marisa.getChildren().add(child.getUniqueID());
+            marisa.setPartner(partner.getUniqueId());
+            partner.setPartner(marisa.getUniqueId());
+            child.setParents(new int[] {marisa.getUniqueId(), -1});
+            marisa.getChildren().add(child.getUniqueId());
 
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(marisa.getUniqueID(), marisa);
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueID(), partner);
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
+            SimYukkuri.world
+                    .getCurrentWorldState()
+                    .getYukkuriRegistry()
+                    .put(marisa.getUniqueId(), marisa);
+            SimYukkuri.world
+                    .getCurrentWorldState()
+                    .getYukkuriRegistry()
+                    .put(partner.getUniqueId(), partner);
+            SimYukkuri.world
+                    .getCurrentWorldState()
+                    .getYukkuriRegistry()
+                    .put(child.getUniqueId(), child);
 
-            int originalId = marisa.getUniqueID();
-            int childId = child.getUniqueID();
+            int originalId = marisa.getUniqueId();
+            int childId = child.getUniqueId();
 
             marisa.execTransform();
 
-            Yukkuri transformed = SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().get(originalId);
+            Yukkuri transformed =
+                    SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().get(originalId);
             assertNotNull(transformed);
             assertTrue(transformed.isHasStalk());
             assertEquals(1, transformed.getStalkBabyTypes().size());
-            assertEquals(partner.getUniqueID(), transformed.getPartner());
+            assertEquals(partner.getUniqueId(), transformed.getPartner());
             assertTrue(transformed.getChildren().contains(childId));
             assertEquals(originalId, partner.getPartner());
             assertEquals(originalId, child.getParents()[0]);
@@ -493,6 +534,7 @@ public class MarisaTest {
             Marisa.loadImages(Marisa.class.getClassLoader(), null);
             fl.setBoolean(null, oldVal);
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -501,31 +543,40 @@ public class MarisaTest {
         try {
             Marisa.loadIniFile(Marisa.class.getClassLoader());
         } catch (Exception e) {
+            // ignore
         } finally {
             try {
                 java.lang.reflect.Field fa = Marisa.class.getDeclaredField("AttachOffset");
                 fa.setAccessible(true);
-                if (fa.get(null) == null)
+                if (fa.get(null) == null) {
                     fa.set(null, new java.util.HashMap<>());
+                }
             } catch (Exception e) {
+                // ignore
             }
         }
     }
 
     // --- getBodyBaseImage with imagePack set ---
 
-    private static java.awt.image.BufferedImage[][][][] setupImagePack(Class<?> cls) throws Exception {
+    private static java.awt.image.BufferedImage[][][][] setupImagePack(Class<?> cls)
+            throws Exception {
         java.lang.reflect.Field fp = cls.getDeclaredField("imagePack");
         fp.setAccessible(true);
         int ranks = org.simyukkuri.enums.YukkuriRank.values().length;
-        java.awt.image.BufferedImage[][][][] pack = new java.awt.image.BufferedImage[ranks][300][20][20];
-        java.awt.image.BufferedImage dummy = new java.awt.image.BufferedImage(1, 1,
-                java.awt.image.BufferedImage.TYPE_INT_ARGB);
-        for (int i = 0; i < ranks; i++)
-            for (int j = 0; j < 300; j++)
-                for (int k = 0; k < 20; k++)
-                    for (int l = 0; l < 20; l++)
+        java.awt.image.BufferedImage[][][][] pack =
+                new java.awt.image.BufferedImage[ranks][300][20][20];
+        java.awt.image.BufferedImage dummy =
+                new java.awt.image.BufferedImage(1, 1, java.awt.image.BufferedImage.TYPE_INT_ARGB);
+        for (int i = 0; i < ranks; i++) {
+            for (int j = 0; j < 300; j++) {
+                for (int k = 0; k < 20; k++) {
+                    for (int l = 0; l < 20; l++) {
                         pack[i][j][k][l] = dummy;
+                    }
+                }
+            }
+        }
         fp.set(null, pack);
         return pack;
     }
@@ -538,6 +589,7 @@ public class MarisaTest {
             org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
             assertDoesNotThrow(() -> marisa.getImageIndex(layer));
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -551,6 +603,7 @@ public class MarisaTest {
             org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
             assertDoesNotThrow(() -> marisa.getImageIndex(layer));
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -563,6 +616,7 @@ public class MarisaTest {
             org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
             assertDoesNotThrow(() -> marisa.getImageIndex(layer));
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -576,6 +630,7 @@ public class MarisaTest {
             org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
             assertDoesNotThrow(() -> marisa.getImageIndex(layer));
         } catch (Exception e) {
+            // ignore
         }
     }
 }

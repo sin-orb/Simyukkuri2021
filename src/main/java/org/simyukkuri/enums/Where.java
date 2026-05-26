@@ -1,4 +1,5 @@
 package org.simyukkuri.enums;
+
 /**どこにあるか*/
 public enum Where {
 	/** 床に落ちてる */ON_FLOOR,	// 

@@ -8,15 +8,13 @@ import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.world.WorldEntity;
 import org.simyukkuri.enums.Type;
@@ -26,7 +24,7 @@ import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * トイレ
  */
 public class Toilet extends WorldEntity {
@@ -89,22 +87,25 @@ public class Toilet extends WorldEntity {
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (itemRank == ItemRank.HOUSE) {
-			if (autoClean)
+			if (autoClean) {
 				layer[0] = images[1];
-			else if (forSlave)
+			} else if (forSlave) {
 				layer[0] = images[4];
-			else
+			} else {
 				layer[0] = images[0];
+			}
 		} else if (itemRank == ItemRank.NORA) {
-			if (autoClean)
+			if (autoClean) {
 				layer[0] = images[3];
-			else
+			} else {
 				layer[0] = images[2];
+			}
 		} else {
-			if (autoClean)
+			if (autoClean) {
 				layer[0] = images[5];
-			else
+			} else {
 				layer[0] = images[4];
+			}
 		}
 		return 1;
 	}
@@ -125,8 +126,9 @@ public class Toilet extends WorldEntity {
 	@Override
 	@Transient
 	public int getHitCheckObjType() {
-		if (autoClean)
+		if (autoClean) {
 			return hitCheckObjType;
+		}
 		return 0;
 	}
 
@@ -247,7 +249,6 @@ public class Toilet extends WorldEntity {
 
 		JPanel mainPanel = new JPanel();
 		JRadioButton[] buttons = new JRadioButton[ToiletType.values().length];
-		boolean setupSucceeded = false;
 
 		mainPanel.setLayout(new GridLayout(3, 1));
 		mainPanel.setPreferredSize(new Dimension(150, 100));
@@ -267,17 +268,19 @@ public class Toilet extends WorldEntity {
 				JOptionPane.PLAIN_MESSAGE);
 
 		if (dialogResult == JOptionPane.OK_OPTION) {
-			if (buttons[0].isSelected())
+			if (buttons[0].isSelected()) {
 				toilet.autoClean = false;
-			if (buttons[1].isSelected())
+			}
+			if (buttons[1].isSelected()) {
 				toilet.autoClean = true;
+			}
 			if (buttons[2].isSelected()) {
 				toilet.forSlave = true;
 				toilet.autoClean = false;
 			}
-			setupSucceeded = true;
+			return true;
 		}
-		return setupSucceeded;
+		return false;
 	}
 
 	/** アイテムのランク（品質）を返す。 */

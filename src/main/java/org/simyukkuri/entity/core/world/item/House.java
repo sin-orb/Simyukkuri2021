@@ -5,15 +5,14 @@ import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.world.WorldEntity;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.WorldEntityKind;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * おうち
  */
 public class House extends WorldEntity {
@@ -116,8 +115,8 @@ public class House extends WorldEntity {
 		GameWorld.get().getCurrentWorldState().getHouses().remove(objId);
 	}
 
-	@Override
 	/** アイテムの購入価格を返す。 */
+	@Override
 	public int getValue() {
 		return value;
 	}

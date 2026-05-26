@@ -1,4 +1,5 @@
 package org.simyukkuri.enums;
+
 /** パニック状態のタイプ */
 public enum PanicType {
 	/** 恐怖(死骸を見るなど) */FEAR, 

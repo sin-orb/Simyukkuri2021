@@ -13,16 +13,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.system.IniFileReader;
 import org.simyukkuri.ui.WorldSelectionWindow;
 import org.simyukkuri.visual.TerrainBillboard;
-import org.simyukkuri.engine.ModLoader;
 
-/***********************************************************
- * 
+/**
  * 背景データクラス
- * 
  */
 public class TerrainField implements Serializable {
 
@@ -164,8 +161,9 @@ public class TerrainField implements Serializable {
 		float[] frac = { 0.0f, 1.0f };
 		Color[] col = new Color[2];
 		for (int i = 0; i < 4; i++) {
-			if (skyColor[i] != null)
+			if (skyColor[i] != null) {
 				continue;
+			}
 
 			if (defaultDayColor[i][0] == null) {
 				skyColor[i] = null;
@@ -204,6 +202,14 @@ public class TerrainField implements Serializable {
 	 */
 	public static List<TerrainBillboard> getBillboards() {
 		return structList;
+	}
+
+	public static List<TerrainBillboard> getFloorList() {
+		return floorList;
+	}
+
+	public static List<TerrainBillboard> getCeilingList() {
+		return ceilingList;
 	}
 
 	/**
@@ -345,6 +351,8 @@ public class TerrainField implements Serializable {
 							break;
 					}
 					break;
+				default:
+					break;
 			}
 		}
 		ini.close();
@@ -378,12 +386,10 @@ public class TerrainField implements Serializable {
 	 */
 	private static void setSkyColor(Color[] col, int i, String value) {
 		String[] strCol = value.split(",");
-		int r, g, b, a;
-
-		r = Integer.valueOf(strCol[0]);
-		g = Integer.valueOf(strCol[1]);
-		b = Integer.valueOf(strCol[2]);
-		a = Integer.valueOf(strCol[3]);
+		final int r = Integer.valueOf(strCol[0]);
+		final int g = Integer.valueOf(strCol[1]);
+		final int b = Integer.valueOf(strCol[2]);
+		final int a = Integer.valueOf(strCol[3]);
 		col[i] = new Color(r, g, b, a);
 	}
 
@@ -398,17 +404,15 @@ public class TerrainField implements Serializable {
 	 */
 	private static TerrainBillboard createBillboard(int type, String key, String value, ImageObserver io) {
 
-		TerrainBillboard ret = null;
-
 		String[] pos = value.split(",");
-		double x, y, z;
-		double pivX, pivY;
-		int w, h;
-
-		x = Double.valueOf(pos[0]);
-		y = Double.valueOf(pos[1]);
-		z = Double.valueOf(pos[2]);
-
+		final double x = Double.valueOf(pos[0]);
+		final double y = Double.valueOf(pos[1]);
+		final double z = Double.valueOf(pos[2]);
+		double pivX;
+		double pivY;
+		int w;
+		int h;
+		TerrainBillboard ret = null;
 		switch (type) {
 			case 0:
 				// ストラクチャは表示ソートがあるのでobjの座標も計算

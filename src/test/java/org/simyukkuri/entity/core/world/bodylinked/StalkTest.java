@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.UUID;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -108,10 +107,10 @@ class StalkTest {
         Yukkuri body = WorldTestHelper.createBody();
         body.setX(100);
         body.setY(100);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
 
         stalk.setPlantYukkuri(body);
-        assertEquals(body.getUniqueID(), stalk.getPlantYukkuri());
+        assertEquals(body.getUniqueId(), stalk.getPlantYukkuri());
     }
 
     @Test
@@ -126,7 +125,10 @@ class StalkTest {
         parent.setX(100);
         parent.setY(100);
         parent.setAgeState(org.simyukkuri.enums.AgeState.ADULT);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
+        SimYukkuri.world
+                .getCurrentWorldState()
+                .getYukkuriRegistry()
+                .put(parent.getUniqueId(), parent);
 
         Yukkuri child = WorldTestHelper.createBody();
         child.setX(120);
@@ -134,11 +136,14 @@ class StalkTest {
         child.setAgeState(org.simyukkuri.enums.AgeState.BABY);
         child.setUnBirth(true);
         child.setBindStalk(stalk);
-        child.setParentLinkId(parent.getUniqueID());
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
+        child.setParentLinkId(parent.getUniqueId());
+        SimYukkuri.world
+                .getCurrentWorldState()
+                .getYukkuriRegistry()
+                .put(child.getUniqueId(), child);
 
         stalk.setPlantYukkuri(parent);
-        stalk.getAttachedBabyIds().add(child.getUniqueID());
+        stalk.getAttachedBabyIds().add(child.getUniqueId());
 
         child.detachFromStalk();
 
@@ -159,7 +164,10 @@ class StalkTest {
         parent.setX(100);
         parent.setY(100);
         parent.setAgeState(org.simyukkuri.enums.AgeState.ADULT);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
+        SimYukkuri.world
+                .getCurrentWorldState()
+                .getYukkuriRegistry()
+                .put(parent.getUniqueId(), parent);
 
         Yukkuri child = WorldTestHelper.createBody();
         child.setX(120);
@@ -168,11 +176,14 @@ class StalkTest {
         child.setAgeState(org.simyukkuri.enums.AgeState.BABY);
         child.setUnBirth(true);
         child.setBindStalk(stalk);
-        child.setParentLinkId(parent.getUniqueID());
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
+        child.setParentLinkId(parent.getUniqueId());
+        SimYukkuri.world
+                .getCurrentWorldState()
+                .getYukkuriRegistry()
+                .put(child.getUniqueId(), child);
 
         stalk.setPlantYukkuri(parent);
-        stalk.getAttachedBabyIds().add(child.getUniqueID());
+        stalk.getAttachedBabyIds().add(child.getUniqueId());
 
         child.detachFromStalk();
         child.release();
@@ -189,7 +200,7 @@ class StalkTest {
         Yukkuri baby = WorldTestHelper.createBody();
         baby.setX(50);
         baby.setY(50);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(baby.getUniqueID(), baby);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(baby.getUniqueId(), baby);
 
         stalk.addAttachedBaby(baby);
         assertEquals(1, stalk.getAttachedBabyIds().size());
@@ -338,9 +349,10 @@ class StalkTest {
     @Test
     void testLoadImages_headless_executesCode() {
         try {
-            org.simyukkuri.entity.core.world.bodylinked.Stalk
-                    .loadImages(org.simyukkuri.entity.core.world.bodylinked.Stalk.class.getClassLoader(), null);
+            org.simyukkuri.entity.core.world.bodylinked.Stalk.loadImages(
+                    org.simyukkuri.entity.core.world.bodylinked.Stalk.class.getClassLoader(), null);
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -351,8 +363,14 @@ class StalkTest {
         void testScenario_UpdateLinksUnbornBabyToParentAndAppliesRightFacingOffsets() {
             Yukkuri parent = WorldTestHelper.createBody();
             Yukkuri baby = WorldTestHelper.createBody();
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(baby.getUniqueID(), baby);
+            SimYukkuri.world
+                    .getCurrentWorldState()
+                    .getYukkuriRegistry()
+                    .put(parent.getUniqueId(), parent);
+            SimYukkuri.world
+                    .getCurrentWorldState()
+                    .getYukkuriRegistry()
+                    .put(baby.getUniqueId(), baby);
             baby.setUnBirth(true);
 
             Stalk planted = new Stalk(100, 120, 0);
@@ -375,8 +393,14 @@ class StalkTest {
         void testScenario_UpdateWithLeftFacingStalkMirrorsBabyPlacement() {
             Yukkuri parent = WorldTestHelper.createBody();
             Yukkuri baby = WorldTestHelper.createBody();
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(baby.getUniqueID(), baby);
+            SimYukkuri.world
+                    .getCurrentWorldState()
+                    .getYukkuriRegistry()
+                    .put(parent.getUniqueId(), parent);
+            SimYukkuri.world
+                    .getCurrentWorldState()
+                    .getYukkuriRegistry()
+                    .put(baby.getUniqueId(), baby);
             baby.setUnBirth(true);
 
             Stalk planted = new Stalk(100, 120, 0);
@@ -396,7 +420,10 @@ class StalkTest {
         @Test
         void testScenario_EatStalkToZeroUnbindsBabyAndRemovesStalkFromWorld() {
             Yukkuri baby = WorldTestHelper.createBody();
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(baby.getUniqueID(), baby);
+            SimYukkuri.world
+                    .getCurrentWorldState()
+                    .getYukkuriRegistry()
+                    .put(baby.getUniqueId(), baby);
 
             Stalk planted = new Stalk(60, 70, 0);
             planted.addAttachedBaby(baby);
@@ -408,7 +435,11 @@ class StalkTest {
 
             assertEquals(0, planted.getAmount());
             assertTrue(planted.isRemoved());
-            assertFalse(SimYukkuri.world.getCurrentWorldState().getStalks().containsKey(planted.getObjId()));
+            assertFalse(
+                    SimYukkuri.world
+                            .getCurrentWorldState()
+                            .getStalks()
+                            .containsKey(planted.getObjId()));
             assertNull(baby.getBindStalk());
             assertEquals(-1, baby.getBindObj());
             assertTrue(planted.getAttachedBabyIds().isEmpty());
@@ -417,7 +448,10 @@ class StalkTest {
         @Test
         void testScenario_GrabDetachesFromParentStalkListAndClearsPlantOwner() {
             Yukkuri parent = WorldTestHelper.createBody();
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
+            SimYukkuri.world
+                    .getCurrentWorldState()
+                    .getYukkuriRegistry()
+                    .put(parent.getUniqueId(), parent);
             parent.setHasStalk(true);
             parent.setStalks(new java.util.LinkedList<>());
 

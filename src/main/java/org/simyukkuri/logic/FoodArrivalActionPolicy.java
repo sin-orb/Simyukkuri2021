@@ -1,7 +1,6 @@
 package org.simyukkuri.logic;
 
 import java.util.Map;
-
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.bodylinked.Stalk;
@@ -181,8 +180,8 @@ public final class FoodArrivalActionPolicy {
 				if (plantBody != null) {
 					plantBody.removeStalk(stalk);
 					stalk.setPlantYukkuri(null);
-					if (plantBody.getBurialState() == BurialState.ALL ||
-							(plantBody.getBurialState() == BurialState.NEARLY_ALL && !plantBody.hasOkazari())) {
+					if (plantBody.getBurialState() == BurialState.ALL
+							|| (plantBody.getBurialState() == BurialState.NEARLY_ALL && !plantBody.hasOkazari())) {
 						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.FindVegetable), fullmessage);
 						body.setHappiness(Happiness.VERY_HAPPY);
 					}
@@ -206,7 +205,7 @@ public final class FoodArrivalActionPolicy {
 		}
 
 		if (body.isFull()) {
-			if (body.isNotNYD()) {
+			if (body.isNotNyd()) {
 				if (sweets) {
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.EatingAmaama), false);
 					body.setEating(true);

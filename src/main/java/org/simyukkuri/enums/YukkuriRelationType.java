@@ -1,4 +1,5 @@
 package org.simyukkuri.enums;
+
 /** ゆっくりの関係性 */
 public enum YukkuriRelationType {
 	/** 他ゆん */OTHER,

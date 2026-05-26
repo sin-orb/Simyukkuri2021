@@ -1,6 +1,6 @@
 package org.simyukkuri.entity.core.living.yukkuri;
 
-import org.simyukkuri.entity.core.attachment.impl.ANYDAmpoule;
+import org.simyukkuri.entity.core.attachment.impl.AnydAmpoule;
 import org.simyukkuri.enums.CoreAnkoState;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
@@ -66,7 +66,7 @@ public final class YukkuriNydDelegate {
 	 * @return その後の処理をキャンセルするかどうか
 	 */
 	public boolean hasNonYukkuriDisease() {
-		if (GameEnvironment.isAntiNonYukkuriDiseaseSteam() || body.getAttachmentSize(ANYDAmpoule.class) != 0) {
+		if (GameEnvironment.isAntiNonYukkuriDiseaseSteam() || body.getAttachmentSize(AnydAmpoule.class) != 0) {
 			body.setCoreAnkoState(CoreAnkoState.NORMAL);
 			return false;
 		}
@@ -74,7 +74,7 @@ public final class YukkuriNydDelegate {
 		int stressLimit = body.getStressLimitBase()[body.getAgeState().ordinal()];
 		int tolerance = body.getNonYukkuriDiseaseTolerance();
 		if (stressLimit * tolerance / 100 < body.getStress()) {
-			if (body.isNotNYD()) {
+			if (body.isNotNyd()) {
 				body.setCalm();
 				body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE_NEAR);
 				body.setNonYukkuriDiseasePeriod(0);
@@ -88,13 +88,13 @@ public final class YukkuriNydDelegate {
 				}
 			}
 		} else {
-			if (body.isNYD()) {
+			if (body.isNyd()) {
 				body.setSpeed(body.getSpeed() * 2);
 			}
 			body.setCoreAnkoState(CoreAnkoState.NORMAL);
 		}
 
-		if (body.isNotNYD()) {
+		if (body.isNotNyd()) {
 			body.setNonYukkuriDiseasePeriod(0);
 			return false;
 		}
@@ -105,7 +105,7 @@ public final class YukkuriNydDelegate {
 		body.wakeup();
 		body.setBirth(false);
 
-		if (body.isNYD() && body.isSleeping()) {
+		if (body.isNyd() && body.isSleeping()) {
 			body.wakeup();
 		}
 		final int nearDiseaseThreshold = 40;

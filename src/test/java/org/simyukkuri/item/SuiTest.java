@@ -20,7 +20,7 @@ class SuiTest extends ItemTestBase {
         Yukkuri b = WorldTestHelper.createBody();
         b.setX(100);
         b.setY(100);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 
@@ -376,6 +376,7 @@ class SuiTest extends ItemTestBase {
         try {
             Sui.loadImages(Sui.class.getClassLoader(), null);
         } catch (Exception e) {
+            // ignore
         }
     }
 }

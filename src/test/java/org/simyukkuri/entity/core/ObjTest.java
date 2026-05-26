@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -240,7 +239,8 @@ public class ObjTest {
         Entity obj = new Entity();
         obj.setX(100);
         obj.setY(200);
-        obj.setOfsXY(5, 10);
+        obj.setOfsX(5);
+        obj.setOfsY(10);
 
         assertEquals(105, obj.getDrawOfsX());
         assertEquals(210, obj.getDrawOfsY());
@@ -805,7 +805,7 @@ public class ObjTest {
         Entity obj = new Entity();
         StubBody body = new StubBody();
         body.objId = 2222;
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
 
         assertEquals(body, obj.takeMappedObj(2222));
     }

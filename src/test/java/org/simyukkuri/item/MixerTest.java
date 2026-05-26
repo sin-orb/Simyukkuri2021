@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
-
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.ConstState;
@@ -30,7 +29,8 @@ class MixerTest extends ItemTestBase {
         item.setObjId(1);
         SimYukkuri.world.getCurrentWorldState().getMixers().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentWorldState().getMixers().containsKey(item.getObjId()));
+        assertTrue(
+                SimYukkuri.world.getCurrentWorldState().getMixers().containsKey(item.getObjId()));
     }
 
     @Test
@@ -108,7 +108,8 @@ class MixerTest extends ItemTestBase {
         SimYukkuri.world.getCurrentWorldState().getMixers().put(item.getObjId(), item);
         item.setBind(-1);
         item.removeFromWorld();
-        assertFalse(SimYukkuri.world.getCurrentWorldState().getMixers().containsKey(item.getObjId()));
+        assertFalse(
+                SimYukkuri.world.getCurrentWorldState().getMixers().containsKey(item.getObjId()));
     }
 
     @Test
@@ -118,8 +119,8 @@ class MixerTest extends ItemTestBase {
         SimYukkuri.world.getCurrentWorldState().getMixers().put(item.getObjId(), item);
         Yukkuri body = WorldTestHelper.createBody();
         body.setLockmove(true);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
-        item.setBind(body.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
+        item.setBind(body.getUniqueId());
         item.removeFromWorld();
         assertFalse(body.isLockmove());
         assertEquals(-1, item.getBind());
@@ -140,9 +141,9 @@ class MixerTest extends ItemTestBase {
         item.setX(100);
         item.setY(100);
         Yukkuri body = WorldTestHelper.createBody();
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
         assertEquals(1, item.objHitProcess(body));
-        assertEquals(body.getUniqueID(), item.getBind());
+        assertEquals(body.getUniqueId(), item.getBind());
         assertTrue(body.isLockmove());
     }
 
@@ -160,8 +161,8 @@ class MixerTest extends ItemTestBase {
         Mixer item = new Mixer();
         Yukkuri body = WorldTestHelper.createBody();
         body.setLockmove(true);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
-        item.setBind(body.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
+        item.setBind(body.getUniqueId());
         item.setEnabled(false);
         // enabled=false → mix=null branch
         assertDoesNotThrow(() -> item.upDate());
@@ -178,8 +179,8 @@ class MixerTest extends ItemTestBase {
         body.setX(100);
         body.setY(100);
         body.setLockmove(true);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
-        item.setBind(body.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
+        item.setBind(body.getUniqueId());
         assertDoesNotThrow(() -> item.upDate());
     }
 
@@ -195,8 +196,8 @@ class MixerTest extends ItemTestBase {
         body.setX(200);
         body.setY(200);
         body.setLockmove(true);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
-        item.setBind(body.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
+        item.setBind(body.getUniqueId());
         item.upDate();
         // bind should be reset to -1
         assertEquals(-1, item.getBind());
@@ -207,6 +208,7 @@ class MixerTest extends ItemTestBase {
         try {
             Mixer.loadImages(Mixer.class.getClassLoader(), null);
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -248,8 +250,11 @@ class MixerTest extends ItemTestBase {
             body.setLockmove(true);
             body.setAnkoAmount(1000);
             int beforeDamage = body.getDamage();
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
-            item.setBind(body.getUniqueID());
+            SimYukkuri.world
+                    .getCurrentWorldState()
+                    .getYukkuriRegistry()
+                    .put(body.getUniqueId(), body);
+            item.setBind(body.getUniqueId());
             SimYukkuri.RND = new ConstState(1);
 
             item.upDate();
@@ -261,7 +266,7 @@ class MixerTest extends ItemTestBase {
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
             assertEquals(ImageCode.PAIN.ordinal(), body.getForceFace());
             assertFalse(body.isShadowVisible());
-            assertEquals(body.getUniqueID(), item.getBind());
+            assertEquals(body.getUniqueId(), item.getBind());
         }
 
         @Test
@@ -280,8 +285,11 @@ class MixerTest extends ItemTestBase {
             body.setLockmove(true);
             body.setShadowVisible(false);
             body.setForceFace(ImageCode.PAIN.ordinal());
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
-            item.setBind(body.getUniqueID());
+            SimYukkuri.world
+                    .getCurrentWorldState()
+                    .getYukkuriRegistry()
+                    .put(body.getUniqueId(), body);
+            item.setBind(body.getUniqueId());
 
             item.upDate();
 
@@ -305,7 +313,11 @@ class MixerTest extends ItemTestBase {
 
             assertTrue(effect.isRemoved());
             assertNull(item.getMix());
-            assertFalse(SimYukkuri.world.getCurrentWorldState().getMixers().containsKey(item.getObjId()));
+            assertFalse(
+                    SimYukkuri.world
+                            .getCurrentWorldState()
+                            .getMixers()
+                            .containsKey(item.getObjId()));
         }
     }
 }

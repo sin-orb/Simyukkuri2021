@@ -182,12 +182,12 @@ public class LoggerYukkuri {
 					} else if (b.isIdiot()) {
 						// 足りない
 						logData[NUM_OF_TARINAI]++;
-					} else if (b.getType().getTypeID() < 100 || b.getType() == Deibu.type
+					} else if (b.getType().getTypeId() < 100 || b.getType() == Deibu.type
 							|| b.getType() == MarisaTsumuri.type || b.getType() == MarisaKotatsumuri.type
 							|| b.getType() == WasaReimu.type) {
 						// 通常種
 						logData[NUM_OF_NORMAL]++;
-					} else if ((b.getType().getTypeID() >= 1000 && b.getType().getTypeID() < 2000)
+					} else if ((b.getType().getTypeId() >= 1000 && b.getType().getTypeId() < 2000)
 							|| b.getType() == Kimeemaru.type) {
 						// 希少種
 						logData[NUM_OF_RARE]++;
@@ -396,9 +396,9 @@ public class LoggerYukkuri {
 					g2.fillRect(legendOffsetX + 180, 30 * i + 130, 10, 10);
 					for (int k = 0; k < NUM_OF_GRAPH_DATA; k++) {
 						if (logData[NUM_OF_LOGDATA_TYPE * k + i] != 0) {
-							yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + i] * graphHeight / numOfMaxYukkuri;
+							yp[k] -= (int)(logData[NUM_OF_LOGDATA_TYPE * k + i] * graphHeight / numOfMaxYukkuri);
 						} else {
-							yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + i] * graphHeight / 1;
+							yp[k] -= (int)(logData[NUM_OF_LOGDATA_TYPE * k + i] * graphHeight / 1);
 						}
 					}
 					g2.fillPolygon(xp, yp, NUM_OF_GRAPH_DATA * 2);
@@ -444,10 +444,10 @@ public class LoggerYukkuri {
 					g2.fillRect(legendOffsetX + 180, 30 * i + 130, 10, 10);
 					for (int k = 0; k < NUM_OF_GRAPH_DATA; k++) {
 						if (logData[NUM_OF_LOGDATA_TYPE * k + i + NUM_OF_BABY] != 0) {
-							yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + i + NUM_OF_BABY] * graphHeight
-									/ numOfMaxYukkuri;
+							yp[k] -= (int)(logData[NUM_OF_LOGDATA_TYPE * k + i + NUM_OF_BABY] * graphHeight
+									/ numOfMaxYukkuri);
 						} else {
-							yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + i + NUM_OF_BABY] * graphHeight / 1;
+							yp[k] -= (int)(logData[NUM_OF_LOGDATA_TYPE * k + i + NUM_OF_BABY] * graphHeight / 1);
 						}
 					}
 					g2.fillPolygon(xp, yp, NUM_OF_GRAPH_DATA * 2);
@@ -501,15 +501,15 @@ public class LoggerYukkuri {
 								- logData[NUM_OF_LOGDATA_TYPE * k + NUM_OF_SICK];
 						if (numOfMaxYukkuri == 0) {
 							if (i == 0) {
-								yp[k] -= sickValue * graphHeight / 1;
+								yp[k] -= (int)(sickValue * graphHeight / 1);
 							} else {
-								yp[k] -= healthyValue * graphHeight / 1;
+								yp[k] -= (int)(healthyValue * graphHeight / 1);
 							}
 						} else {
 							if (i == 0) {
-								yp[k] -= sickValue * graphHeight / numOfMaxYukkuri;
+								yp[k] -= (int)(sickValue * graphHeight / numOfMaxYukkuri);
 							} else {
-								yp[k] -= healthyValue * graphHeight / numOfMaxYukkuri;
+								yp[k] -= (int)(healthyValue * graphHeight / numOfMaxYukkuri);
 							}
 						}
 					}
@@ -536,9 +536,9 @@ public class LoggerYukkuri {
 				g2.setColor(Color.GRAY);
 				for (int k = 0; k < NUM_OF_GRAPH_DATA; k++) {
 					if (logData[NUM_OF_LOGDATA_TYPE * k + NUM_OF_SHIT] != 0) {
-						yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + NUM_OF_SHIT] * graphHeight / numOfMaxUnun;
+						yp[k] -= (int)(logData[NUM_OF_LOGDATA_TYPE * k + NUM_OF_SHIT] * graphHeight / numOfMaxUnun);
 					} else {
-						yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + NUM_OF_SHIT] * graphHeight / 1;
+						yp[k] -= (int)(logData[NUM_OF_LOGDATA_TYPE * k + NUM_OF_SHIT] * graphHeight / 1);
 					}
 				}
 				g2.fillRect(legendOffsetX + 180, 130, 10, 10);

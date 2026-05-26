@@ -5,10 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.enums.HairState;
 import org.simyukkuri.engine.World;
+import org.simyukkuri.enums.HairState;
 
 class YukkuriAbuseDelegateTest {
 

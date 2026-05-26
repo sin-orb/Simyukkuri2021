@@ -2,8 +2,8 @@ package org.simyukkuri.logic;
 
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.item.Food.FoodType;
-import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.Happiness;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
@@ -114,8 +114,9 @@ public final class FoodConsumptionPolicy {
 					b.setHappiness(Happiness.SAD);
 					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingBitter));
 					b.setStrike(true);
-					if (b.getDiarrhea())
+					if (b.getDiarrhea()) {
 						b.rapidShit();
+					}
 					b.addStress(250);
 					b.addMemories(-5);
 					// なつき度設定
@@ -275,8 +276,9 @@ public final class FoodConsumptionPolicy {
 					b.setHappiness(Happiness.SAD);
 					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingBitter));
 					b.setStrike(true);
-					if (b.getDiarrhea())
+					if (b.getDiarrhea()) {
 						b.rapidShit();
+					}
 					b.addStress(300);
 					b.addMemories(-5);
 					// なつき度設定
@@ -440,8 +442,9 @@ public final class FoodConsumptionPolicy {
 					b.setHappiness(Happiness.VERY_SAD);
 					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingBitter));
 					b.setStrike(true);
-					if (b.getDiarrhea())
+					if (b.getDiarrhea()) {
 						b.rapidShit();
+					}
 					b.addStress(300);
 					b.addMemories(-5);
 					// なつき度設定

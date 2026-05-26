@@ -1,7 +1,6 @@
 package org.simyukkuri.event.impl;
 
 import java.util.Map;
-
 import org.simyukkuri.Const;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
@@ -22,7 +21,7 @@ import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * おかざりのないゆっくりへの攻撃イベント
  * protected Yukkuri from; // イベントを発した個体
  * protected Yukkuri to; // 攻撃対象
@@ -51,26 +50,29 @@ public class HateNoOkazariEvent extends EventPacket {
 	/** イベントへの参加可否を判定し、参加可能なら true を返す。 */
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
-		boolean accepted = false;
-
 		priority = EventPriority.MIDDLE;
 		// うんうん奴隷は参加しない
-		if (body.getPublicRank() == PublicRank.UNUN_SLAVE)
+		if (body.getPublicRank() == PublicRank.UNUN_SLAVE) {
 			return false;
+		}
 		// 善良は参加しない
-		if (body.isSmart())
+		if (body.isSmart()) {
 			return false;
+		}
 		// 足りないゆは参加しない
-		if (body.isIdiot())
+		if (body.isIdiot()) {
 			return false;
+		}
 		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
-		if (targetBody == null)
+		if (targetBody == null) {
 			return false;
+		}
 		// 自分が賢い場合はおかざりがなくても家族を認識して参加しない
 		if (body.getIntelligence() == Intelligence.WISE) {
 			if (targetBody.isParent(body) || targetBody.isPartner(body) || body.isParent(targetBody)
-					|| body.isPartner(targetBody))
+					|| body.isPartner(targetBody)) {
 				return false;
+			}
 		}
 		// 死体、睡眠、皮なし、目無し、非ゆっくり症は参加しない
 		if (!body.canEventResponse()) {
@@ -83,6 +85,7 @@ public class HateNoOkazariEvent extends EventPacket {
 		}
 
 		// 自分がお飾りあり、健康で動ける状況にあるなら参加チェック
+		boolean accepted = false;
 		if (body.hasOkazari() && !body.isDamaged() && !body.isDontMove()) {
 			// ドゲスは参加
 			if (body.isVeryRude()) {
@@ -90,8 +93,9 @@ public class HateNoOkazariEvent extends EventPacket {
 			} else {
 				// ゲス、普通は相手が瀕死じゃなければ参加
 				if (!targetBody.isDamaged()) {
-					if (body.isRude() || GameRandom.nextBoolean())
+					if (body.isRude() || GameRandom.nextBoolean()) {
 						accepted = true;
+					}
 				}
 			}
 		}
@@ -117,8 +121,9 @@ public class HateNoOkazariEvent extends EventPacket {
 	@Override
 	public void start(Yukkuri body) {
 		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
-		if (targetBody == null)
+		if (targetBody == null) {
 			return;
+		}
 		int collisionX = YukkuriLogic.calcCollisionX(body, targetBody);
 		body.moveToEvent(this, targetBody.getX() + collisionX, targetBody.getY());
 	}
@@ -130,8 +135,9 @@ public class HateNoOkazariEvent extends EventPacket {
 	public UpdateState update(Yukkuri body) {
 		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		// 相手が消えてしまったらイベント中断
-		if (targetBody == null || targetBody.isRemoved())
+		if (targetBody == null || targetBody.isRemoved()) {
 			return UpdateState.ABORT;
+		}
 		// 相手に追いつけないケースがあるため、一定距離まで近づいたら相手を呼び止める
 		if (Translate.distance(body.getX(), body.getY(), targetBody.getX(), targetBody.getY()) < 2500) {
 			targetBody.stay();

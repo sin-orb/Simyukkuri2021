@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Component;
 import java.awt.Panel;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.draw.MyPane;
@@ -51,8 +50,8 @@ public class GameViewTest {
 		RecordingViewSource source = new RecordingViewSource();
 		GameView.setOverride(source);
 
-		GameView.addYukkuri(1, 2, 3, YukkuriType.fromTypeID(4), AgeState.BABY, null, null);
-		GameView.makeYukkuri(1, 2, 3, YukkuriType.fromTypeID(4), null, AgeState.BABY, null, null, true);
+		GameView.addYukkuri(1, 2, 3, YukkuriType.fromTypeId(4), AgeState.BABY, null, null);
+		GameView.makeYukkuri(1, 2, 3, YukkuriType.fromTypeId(4), null, AgeState.BABY, null, null, true);
 		GameView.addVomit(1, 2, 3, null, YukkuriType.REIMU);
 		GameView.addCrushedVomit(1, 2, 3, null, YukkuriType.REIMU);
 		GameView.addCrushedShit(1, 2, 3, null, YukkuriType.REIMU);

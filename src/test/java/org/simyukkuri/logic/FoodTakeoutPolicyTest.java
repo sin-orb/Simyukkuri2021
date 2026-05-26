@@ -31,7 +31,7 @@ class FoodTakeoutPolicyTest {
         body = WorldTestHelper.createBody();
         body.setX(100);
         body.setY(100);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
     }
 
     @AfterEach
@@ -92,8 +92,8 @@ class FoodTakeoutPolicyTest {
         Yukkuri partner = WorldTestHelper.createBody();
         partner.setX(200);
         partner.setY(200);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueID(), partner);
-        body.setPartner(partner.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueId(), partner);
+        body.setPartner(partner.getUniqueId());
 
         Bed favBed = new Bed(300, 300, 0);
         SimYukkuri.world.getCurrentWorldState().getBeds().put(favBed.getObjId(), favBed);

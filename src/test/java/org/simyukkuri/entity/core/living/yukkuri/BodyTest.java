@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,8 +32,8 @@ import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.attachment.Attachment;
-import org.simyukkuri.entity.core.attachment.impl.ANYDAmpoule;
 import org.simyukkuri.entity.core.attachment.impl.Ants;
+import org.simyukkuri.entity.core.attachment.impl.AnydAmpoule;
 import org.simyukkuri.entity.core.attachment.impl.Fire;
 import org.simyukkuri.entity.core.attachment.impl.VeryShitAmpoule;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
@@ -82,7 +81,7 @@ import org.simyukkuri.event.impl.RaperReactionEvent;
 import org.simyukkuri.event.impl.SuperEatingTimeEvent;
 import org.simyukkuri.field.FieldShape;
 import org.simyukkuri.field.impl.Barrier;
-import org.simyukkuri.system.BasicStrokeEX;
+import org.simyukkuri.system.BasicStrokeEx;
 import org.simyukkuri.system.ItemMenu.GetMenuTarget;
 import org.simyukkuri.system.ItemMenu.UseMenuTarget;
 import org.simyukkuri.system.Sprite;
@@ -144,7 +143,7 @@ public class BodyTest {
         }
         b.setAgeState(age);
         b.setMsgType(YukkuriType.REIMU); // MessagePoolで使用
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 
@@ -159,7 +158,7 @@ public class BodyTest {
         }
         b.setAgeState(age);
         b.setMsgType(YukkuriType.REIMU);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 
@@ -224,7 +223,7 @@ public class BodyTest {
     }
 
     private static void initAnydaAmpouleImages() {
-        if (ANYDAmpoule.getImages() != null) {
+        if (AnydAmpoule.getImages() != null) {
             return;
         }
         BufferedImage[][] imgs = new BufferedImage[3][2];
@@ -233,11 +232,11 @@ public class BodyTest {
                 imgs[i][j] = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
             }
         }
-        ANYDAmpoule.setImages(imgs);
-        ANYDAmpoule.setImgW(new int[] { 1, 1, 1 });
-        ANYDAmpoule.setImgH(new int[] { 1, 1, 1 });
-        ANYDAmpoule.setPivX(new int[] { 0, 0, 0 });
-        ANYDAmpoule.setPivY(new int[] { 0, 0, 0 });
+        AnydAmpoule.setImages(imgs);
+        AnydAmpoule.setImgW(new int[] { 1, 1, 1 });
+        AnydAmpoule.setImgH(new int[] { 1, 1, 1 });
+        AnydAmpoule.setPivX(new int[] { 0, 0, 0 });
+        AnydAmpoule.setPivY(new int[] { 0, 0, 0 });
     }
 
     private static void initNeedleImages() {
@@ -394,7 +393,7 @@ public class BodyTest {
         b.setMsgType(YukkuriType.REIMU);
         // Yukkuri()コンストラクタがIntelligenceをランダム設定するのでリセット
         b.setIntelligence(Intelligence.AVERAGE);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 
@@ -420,9 +419,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // 家族関係判定
-    // ===========================================
 
     @Nested
     class FamilyRelationshipTests {
@@ -431,7 +428,7 @@ public class BodyTest {
         public void testIsParentTrue() {
             StubBody parent = createBody(AgeState.ADULT);
             StubBody child = createBody(AgeState.BABY);
-            child.setParents(new int[] { parent.getUniqueID(), -1 });
+            child.setParents(new int[] { parent.getUniqueId(), -1 });
             assertTrue(parent.isParent(child));
         }
 
@@ -452,7 +449,7 @@ public class BodyTest {
         public void testIsFatherTrue() {
             StubBody father = createBody(AgeState.ADULT);
             StubBody child = createBody(AgeState.BABY);
-            child.setParents(new int[] { father.getUniqueID(), -1 });
+            child.setParents(new int[] { father.getUniqueId(), -1 });
             assertTrue(father.isFather(child));
             assertFalse(father.isMother(child));
         }
@@ -461,7 +458,7 @@ public class BodyTest {
         public void testIsMotherTrue() {
             StubBody mother = createBody(AgeState.ADULT);
             StubBody child = createBody(AgeState.BABY);
-            child.setParents(new int[] { -1, mother.getUniqueID() });
+            child.setParents(new int[] { -1, mother.getUniqueId() });
             assertTrue(mother.isMother(child));
             assertFalse(mother.isFather(child));
         }
@@ -482,7 +479,7 @@ public class BodyTest {
             // child.isChild(parent) = parent.isParent(child) = true
             StubBody parent = createBody(AgeState.ADULT);
             StubBody child = createBody(AgeState.BABY);
-            child.setParents(new int[] { parent.getUniqueID(), -1 });
+            child.setParents(new int[] { parent.getUniqueId(), -1 });
             assertTrue(child.isChild(parent));
         }
 
@@ -503,7 +500,7 @@ public class BodyTest {
         public void testIsPartnerTrue() {
             StubBody a = createBody(AgeState.ADULT);
             StubBody b = createBody(AgeState.ADULT);
-            a.setPartner(b.getUniqueID());
+            a.setPartner(b.getUniqueId());
             assertTrue(a.isPartner(b));
         }
 
@@ -525,8 +522,8 @@ public class BodyTest {
             StubBody mother = createBody(AgeState.ADULT);
             StubBody a = createBody(AgeState.CHILD);
             StubBody b = createBody(AgeState.CHILD);
-            a.setParents(new int[] { -1, mother.getUniqueID() });
-            b.setParents(new int[] { -1, mother.getUniqueID() });
+            a.setParents(new int[] { -1, mother.getUniqueId() });
+            b.setParents(new int[] { -1, mother.getUniqueId() });
             assertTrue(a.isSister(b));
         }
 
@@ -536,8 +533,8 @@ public class BodyTest {
             StubBody a = createBody(AgeState.CHILD);
             StubBody b = createBody(AgeState.CHILD);
             // 母なし・父同じ
-            a.setParents(new int[] { father.getUniqueID(), -1 });
-            b.setParents(new int[] { father.getUniqueID(), -1 });
+            a.setParents(new int[] { father.getUniqueId(), -1 });
+            b.setParents(new int[] { father.getUniqueId(), -1 });
             assertTrue(a.isSister(b));
         }
 
@@ -555,8 +552,8 @@ public class BodyTest {
             StubBody mother = createBody(AgeState.ADULT);
             StubBody elder = createBody(AgeState.CHILD);
             StubBody younger = createBody(AgeState.CHILD);
-            elder.setParents(new int[] { -1, mother.getUniqueID() });
-            younger.setParents(new int[] { -1, mother.getUniqueID() });
+            elder.setParents(new int[] { -1, mother.getUniqueId() });
+            younger.setParents(new int[] { -1, mother.getUniqueId() });
             elder.setAge(200);
             younger.setAge(100);
             assertTrue(elder.isElderSister(younger));
@@ -567,7 +564,7 @@ public class BodyTest {
         public void testIsFamilyAsParent() {
             StubBody parent = createBody(AgeState.ADULT);
             StubBody child = createBody(AgeState.BABY);
-            child.setParents(new int[] { parent.getUniqueID(), -1 });
+            child.setParents(new int[] { parent.getUniqueId(), -1 });
             assertTrue(parent.isFamily(child));
             assertTrue(child.isFamily(parent));
         }
@@ -576,7 +573,7 @@ public class BodyTest {
         public void testIsFamilyAsPartner() {
             StubBody a = createBody(AgeState.ADULT);
             StubBody b = createBody(AgeState.ADULT);
-            a.setPartner(b.getUniqueID());
+            a.setPartner(b.getUniqueId());
             assertTrue(a.isFamily(b));
         }
 
@@ -585,8 +582,8 @@ public class BodyTest {
             StubBody mother = createBody(AgeState.ADULT);
             StubBody a = createBody(AgeState.CHILD);
             StubBody b = createBody(AgeState.CHILD);
-            a.setParents(new int[] { -1, mother.getUniqueID() });
-            b.setParents(new int[] { -1, mother.getUniqueID() });
+            a.setParents(new int[] { -1, mother.getUniqueId() });
+            b.setParents(new int[] { -1, mother.getUniqueId() });
             assertTrue(a.isFamily(b));
         }
 
@@ -602,9 +599,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // addDamage / strike
-    // ===========================================
 
     @Nested
     class DamageTests {
@@ -699,9 +694,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // 状態判定メソッド
-    // ===========================================
 
     @Nested
     class StateCheckTests {
@@ -986,9 +979,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // 空腹チェック (checkHungry)
-    // ===========================================
 
     @Nested
     class HungryTests {
@@ -1142,9 +1133,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // シナリオ駆動テスト（Yukkuri→BodyAttributesの連鎖）
-    // ===========================================
 
     @Nested
     class ScenarioDrivenTests {
@@ -1266,7 +1255,7 @@ public class BodyTest {
         public void testScenarioParentChildConsistency() {
             StubBody parent = createBody(AgeState.ADULT);
             StubBody child = createBody(AgeState.BABY);
-            child.setParents(new int[] { parent.getUniqueID(), -1 });
+            child.setParents(new int[] { parent.getUniqueId(), -1 });
 
             assertTrue(parent.isParent(child));
             assertTrue(child.isChild(parent));
@@ -1294,9 +1283,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // 時間経過（TICK）シナリオ
-    // ===========================================
 
     @Nested
     class TickProgressionScenarioTests {
@@ -1354,9 +1341,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // うんうん (wantToShit)
-    // ===========================================
 
     @Nested
     class WantToShitTests {
@@ -1375,9 +1360,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // ストレス / 濡れ
-    // ===========================================
 
     @Nested
     class StressAndWetTests {
@@ -1458,9 +1441,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // wakeup / stay
-    // ===========================================
 
     @Nested
     class WakeupAndStayTests {
@@ -1488,9 +1469,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // clearActions
-    // ===========================================
 
     @Nested
     class ClearActionsTests {
@@ -1529,9 +1508,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // grab
-    // ===========================================
 
     @Nested
     class GrabTests {
@@ -1544,9 +1521,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // 性格 / 態度ポイント
-    // ===========================================
 
     @Nested
     class AttitudePointTests {
@@ -1576,9 +1551,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // checkLovePlayerState
-    // ===========================================
 
     @Nested
     class LovePlayerStateTests {
@@ -1615,9 +1588,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // Dna
-    // ===========================================
 
     @Nested
     class DnaTests {
@@ -1645,13 +1616,11 @@ public class BodyTest {
         @Test
         public void testGetDnaSetsFather() {
             Dna dna = body.getDna();
-            assertEquals(body.getUniqueID(), dna.getFather());
+            assertEquals(body.getUniqueId(), dna.getFather());
         }
     }
 
-    // ===========================================
     // getStrength
-    // ===========================================
 
     @Nested
     class StrengthTests {
@@ -1675,9 +1644,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // revival
-    // ===========================================
 
     @Nested
     class RevivalTests {
@@ -1711,9 +1678,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // setAngry (Yukkuri version - no-arg)
-    // ===========================================
 
     @Nested
     class SetAngryTests {
@@ -1788,9 +1753,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // cutPenipeni (トグル)
-    // ===========================================
 
     @Nested
     class CutPenipeniTests {
@@ -1803,9 +1766,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // しつけ関連 (checkDiscipline / disclipline)
-    // ===========================================
 
     @Nested
     class DisciplineTests {
@@ -1942,9 +1903,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // makeDirty
-    // ===========================================
 
     @Nested
     class MakeDirtyTests {
@@ -2008,9 +1967,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // hold
-    // ===========================================
 
     @Nested
     class HoldTests {
@@ -2048,9 +2005,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // remove
-    // ===========================================
 
     @Nested
     class RemoveTests {
@@ -2063,7 +2018,7 @@ public class BodyTest {
 
         @Test
         public void testRemoveRemovesFromWorld() {
-            int id = body.getUniqueID();
+            int id = body.getUniqueId();
             assertTrue(SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().containsKey(id));
             body.remove();
             assertFalse(SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().containsKey(id));
@@ -2072,8 +2027,8 @@ public class BodyTest {
         @Test
         public void testRemoveClearsPartner() {
             StubBody partner = createBody(AgeState.ADULT);
-            body.setPartner(partner.getUniqueID());
-            partner.setPartner(body.getUniqueID());
+            body.setPartner(partner.getUniqueId());
+            partner.setPartner(body.getUniqueId());
 
             body.remove();
 
@@ -2094,9 +2049,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // clearRelation
-    // ===========================================
 
     @Nested
     class ClearRelationTests {
@@ -2105,7 +2058,7 @@ public class BodyTest {
         public void testClearRelationRemovesDeadParent() {
             StubBody parent = createBody(AgeState.ADULT);
             parent.setRemoved(true);
-            body.setParents(new int[] { parent.getUniqueID(), -1 });
+            body.setParents(new int[] { parent.getUniqueId(), -1 });
 
             body.clearRelation();
 
@@ -2116,18 +2069,18 @@ public class BodyTest {
         public void testClearRelationKeepsLivingParent() {
             StubBody parent = createBody(AgeState.ADULT);
             parent.setRemoved(false);
-            body.setParents(new int[] { parent.getUniqueID(), -1 });
+            body.setParents(new int[] { parent.getUniqueId(), -1 });
 
             body.clearRelation();
 
-            assertEquals(parent.getUniqueID(), body.getParents()[Parent.PAPA.ordinal()]);
+            assertEquals(parent.getUniqueId(), body.getParents()[Parent.PAPA.ordinal()]);
         }
 
         @Test
         public void testClearRelationRemovesRemovedPartner() {
             StubBody partner = createBody(AgeState.ADULT);
             partner.setRemoved(true);
-            body.setPartner(partner.getUniqueID());
+            body.setPartner(partner.getUniqueId());
 
             body.clearRelation();
 
@@ -2138,17 +2091,15 @@ public class BodyTest {
         public void testClearRelationKeepsLivingPartner() {
             StubBody partner = createBody(AgeState.ADULT);
             partner.setRemoved(false);
-            body.setPartner(partner.getUniqueID());
+            body.setPartner(partner.getUniqueId());
 
             body.clearRelation();
 
-            assertEquals(partner.getUniqueID(), body.getPartner());
+            assertEquals(partner.getUniqueId(), body.getPartner());
         }
     }
 
-    // ===========================================
     // peal / pack
-    // ===========================================
 
     @Nested
     class PealAndPackTests {
@@ -2205,9 +2156,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // giveJuice (回復)
-    // ===========================================
 
     @Nested
     class GiveJuiceTests {
@@ -2285,9 +2234,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // 年齢別テスト
-    // ===========================================
 
     @Nested
     class AgeVariantTests {
@@ -2326,9 +2273,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // canTransform (突然変異可能チェック)
-    // ===========================================
 
     @Nested
     class CanTransformTests {
@@ -2508,9 +2453,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // wakeup / checkCantDie
-    // ===========================================
 
     @Nested
     class WakeupAndCantDieTests {
@@ -2543,9 +2486,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // checkHungry (詳細分岐テスト)
-    // ===========================================
 
     @Nested
     class CheckHungryDetailedTests {
@@ -2637,9 +2578,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // checkAnts
-    // ===========================================
 
     @Nested
     class CheckAntsTests {
@@ -2662,9 +2601,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // doSurisuriByPlayer
-    // ===========================================
 
     @Nested
     class DoSurisuriByPlayerTests {
@@ -2678,9 +2615,7 @@ public class BodyTest {
         // which is complex. We test the early return case only.
     }
 
-    // ===========================================
     // checkSleep
-    // ===========================================
 
     @Nested
     class CheckSleepTests {
@@ -2702,9 +2637,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // 妊娠関連
-    // ===========================================
 
     @Nested
     class PregnantLimitTests {
@@ -2798,9 +2731,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // 強制睡眠・発情
-    // ===========================================
 
     @Nested
     class ForceToSleepTests {
@@ -2879,9 +2810,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // 感情チェック
-    // ===========================================
 
     @Nested
     class CheckEmotionTests {
@@ -2949,9 +2878,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // 打撃系
-    // ===========================================
 
     @Nested
     class StrikeTests {
@@ -3014,9 +2941,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // bodyBurst (破裂)
-    // ===========================================
 
     @Nested
     class BodyBurstTests {
@@ -3046,9 +2971,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // checkShit (うんうん判定)
-    // ===========================================
 
     @Nested
     class CheckShitTests {
@@ -3076,9 +2999,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // checkUnyo (うにょ判定)
-    // ===========================================
 
     @Nested
     class CheckUnyoTests {
@@ -3104,9 +3025,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // checkSick (病気判定)
-    // ===========================================
 
     @Nested
     class CheckSickTests {
@@ -3196,9 +3115,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // checkWet (濡れ判定)
-    // ===========================================
 
     @Nested
     class CheckWetTests {
@@ -3219,9 +3136,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // eatYukkuri (捕食)
-    // ===========================================
 
     @Nested
     class EatBodyTests {
@@ -3261,9 +3176,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // beEaten (食べられる)
-    // ===========================================
 
     @Nested
     class BeEatenTests {
@@ -3324,9 +3237,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // rapidPregnantPeriod / rapidShit
-    // ===========================================
 
     @Nested
     class RapidMethodsTests {
@@ -3356,9 +3267,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // disPlantStalks
-    // ===========================================
 
     @Nested
     class DisPlantStalksTests {
@@ -3383,9 +3292,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // castrateStalk / castrateYukkuri
-    // ===========================================
 
     @Nested
     class CastrationTests {
@@ -3444,9 +3351,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // giveFire / giveWater
-    // ===========================================
 
     @Nested
     class GiveFireWaterTests {
@@ -3521,9 +3426,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // raperToggle / moldToggle
-    // ===========================================
 
     @Nested
     class ToggleTests {
@@ -3557,9 +3460,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // clearActionsForEvent
-    // ===========================================
 
     @Nested
     class ClearActionsForEventTests {
@@ -3581,9 +3482,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // runAway
-    // ===========================================
 
     @Nested
     class RunAwayTests {
@@ -3606,9 +3505,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // setPanic
-    // ===========================================
 
     @Nested
     class SetPanicTests {
@@ -3633,9 +3530,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // baryInUnderGround
-    // ===========================================
 
     @Nested
     class BaryInUnderGroundTests {
@@ -3657,9 +3552,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // voiceReaction
-    // ===========================================
 
     @Nested
     class VoiceReactionTests {
@@ -3682,9 +3575,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // checkChildbirth
-    // ===========================================
 
     @Nested
     class CheckChildbirthTests {
@@ -3715,9 +3606,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // plusGodHand
-    // ===========================================
 
     @Nested
     class PlusGodHandTests {
@@ -3742,9 +3631,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // hold
-    // ===========================================
 
     @Nested
     class HoldMethodTests {
@@ -3765,9 +3652,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // breakeyes (目つぶし)
-    // ===========================================
 
     @Nested
     class BreakeyesTests {
@@ -3825,12 +3710,10 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // shutMouth (口封じ)
-    // ===========================================
 
     @Nested
-    class shutMouthTests {
+    class ShutMouthTests {
         @Test
         public void testshutMouthWhenDead() {
             body.setDead(true);
@@ -3885,9 +3768,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // pickHair (毛むしり)
-    // ===========================================
 
     @Nested
     class PickHairTests {
@@ -3963,9 +3844,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // isDontJump (ジャンプ不可判定)
-    // ===========================================
 
     @Nested
     class IsDontJumpTests {
@@ -4070,9 +3949,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // doSukkiri (すっきり)
-    // ===========================================
 
     @Nested
     class DoSukkiriTests {
@@ -4184,9 +4061,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // doSurisuri (すりすり)
-    // ===========================================
 
     @Nested
     class DoSurisuriTests {
@@ -4302,9 +4177,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // doPeropero (ぺろぺろ)
-    // ===========================================
 
     @Nested
     class DoPeroperoTests {
@@ -4384,9 +4257,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // doRape (れいぽぅ)
-    // ===========================================
 
     @Nested
     class DoRapeTests {
@@ -4469,9 +4340,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // doOnanism (オナニー)
-    // ===========================================
 
     @Nested
     class DoOnanismTests {
@@ -4500,9 +4369,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // rapidExcitingDiscipline
-    // ===========================================
 
     @Nested
     class RapidExcitingDisciplineTests {
@@ -4528,9 +4395,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // invStalkCastration
-    // ===========================================
 
     @Nested
     class InvStalkCastrationTests {
@@ -4549,9 +4414,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // setForceAnalClose
-    // ===========================================
 
     @Nested
     class SetForceAnalCloseTests {
@@ -4568,9 +4431,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // takeBraid (おさげ取り)
-    // ===========================================
 
     @Nested
     class TakeBraidTests {
@@ -4613,9 +4474,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // removeAllStalks
-    // ===========================================
 
     @Nested
     class RemoveAllStalksTests {
@@ -4637,9 +4496,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // 追加の状態判定テスト
-    // ===========================================
 
     @Nested
     class AdditionalStateTests {
@@ -4707,9 +4564,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // eatFood (食事)
-    // ===========================================
 
     @Nested
     class EatFoodTests {
@@ -4762,9 +4617,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // bodyCut (体切断)
-    // ===========================================
 
     @Nested
     class BodyCutTests {
@@ -4787,9 +4640,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // bodyInjure (体負傷)
-    // ===========================================
 
     @Nested
     class BodyInjureTests {
@@ -4837,9 +4688,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // kick (キック)
-    // ===========================================
 
     @Nested
     class KickTests {
@@ -4864,9 +4713,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // noticeNoOkazari (お飾り無し認識)
-    // ===========================================
 
     @Nested
     class NoticeNoOkazariTests {
@@ -4937,9 +4784,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // cleaningItself (自主洗浄)
-    // ===========================================
 
     @Nested
     class CleaningItselfTests {
@@ -5001,9 +4846,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // teachManner (マナー教育)
-    // ===========================================
 
     @Nested
     class TeachMannerTests {
@@ -5039,9 +4882,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // checkAttitude (態度チェック)
-    // ===========================================
 
     @Nested
     class CheckAttitudeTests {
@@ -5103,9 +4944,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // doSurisuri (すりすり詳細)
-    // ===========================================
 
     @Nested
     class DoSurisuriDetailedTests {
@@ -5197,9 +5036,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // doPeropero (ぺろぺろ詳細)
-    // ===========================================
 
     @Nested
     class DoPeroperoDetailedTests {
@@ -5234,9 +5071,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // doGuriguri (ぐりぐり)
-    // ===========================================
 
     @Nested
     class DoGuriguriTests {
@@ -5280,9 +5115,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // injectJuice (ジュース注射)
-    // ===========================================
 
     @Nested
     class InjectJuiceTests {
@@ -5350,9 +5183,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // setNeedle (針刺し)
-    // ===========================================
 
     @Nested
     class SetNeedleTests {
@@ -5418,9 +5249,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // inWater (水中処理)
-    // ===========================================
 
     @Nested
     class InWaterTests {
@@ -5429,7 +5258,7 @@ public class BodyTest {
             // isSleeping() returns (!dead && sleeping), so always false when dead
             body.setDead(true);
             body.setSleeping(true);
-            body.inWater(org.simyukkuri.field.impl.Pool.DEPTH.SHALLOW);
+            body.inWater(org.simyukkuri.field.impl.Pool.Depth.SHALLOW);
             assertFalse(body.isSleeping());
         }
 
@@ -5438,7 +5267,7 @@ public class BodyTest {
             body.setDead(false);
             body.setUnBirth(false);
             body.setSleeping(true);
-            body.inWater(org.simyukkuri.field.impl.Pool.DEPTH.SHALLOW);
+            body.inWater(org.simyukkuri.field.impl.Pool.Depth.SHALLOW);
             assertFalse(body.isSleeping());
         }
 
@@ -5449,7 +5278,7 @@ public class BodyTest {
             body.setLikeWater(true);
             body.setSleeping(false);
             body.setExciting(false);
-            body.inWater(org.simyukkuri.field.impl.Pool.DEPTH.SHALLOW);
+            body.inWater(org.simyukkuri.field.impl.Pool.Depth.SHALLOW);
             assertEquals(Happiness.HAPPY, body.getHappiness());
         }
 
@@ -5460,14 +5289,12 @@ public class BodyTest {
             body.setUnBirth(false);
             body.setLikeWater(false);
             body.setSleeping(false);
-            body.inWater(org.simyukkuri.field.impl.Pool.DEPTH.SHALLOW);
+            body.inWater(org.simyukkuri.field.impl.Pool.Depth.SHALLOW);
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
         }
     }
 
-    // ===========================================
     // checkDamage (ダメージチェック)
-    // ===========================================
 
     @Nested
     class CheckDamageTests {
@@ -5515,7 +5342,7 @@ public class BodyTest {
         public void testCheckDamageOrangeSteamHealsWhenUnbirthConnected() {
             StubBody parent = createBody(AgeState.ADULT);
             org.simyukkuri.entity.core.world.bodylinked.Stalk stalk = new org.simyukkuri.entity.core.world.bodylinked.Stalk();
-            stalk.setPlantYukkuri(parent.getUniqueID());
+            stalk.setPlantYukkuri(parent.getUniqueId());
 
             body.setUnBirth(true);
             body.setBindStalk(stalk);
@@ -5836,9 +5663,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // giveOkazari / takeOkazari / dropOkazari
-    // ===========================================
 
     @Nested
     class OkazariManagementTests {
@@ -5901,9 +5726,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // givePants (パンツ付与)
-    // ===========================================
 
     @Nested
     class GivePantsTests {
@@ -5935,9 +5758,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // checkMessage (メッセージチェック)
-    // ===========================================
 
     @Nested
     class CheckMessageTests {
@@ -6107,10 +5928,8 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // 追加カバレッジ: setBoundary / getExpandShape / setNegiMessage / checkWait /
     // isCutPeni / invNeedle
-    // ===========================================
 
     @Nested
     class BodyUtilityCoverageTests {
@@ -6248,9 +6067,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // BodyAttributes 追加カバレッジ
-    // ===========================================
 
     @Nested
     class BodyAttributesCoverageTests {
@@ -6472,9 +6289,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // Yukkuri: checkSleep / doSurisuri 追加
-    // ===========================================
 
     @Nested
     class CheckSleepAndSurisuriTests {
@@ -6599,9 +6414,10 @@ public class BodyTest {
         }
 
         @Test
-        public void testDoSurisuriDamagedPartnerSetsSad() {
+        public void testDoSurisuriSickPartnerSetsSad() {
             StubBody partner = createBody(AgeState.ADULT);
-            partner.setDamage(partner.getDamageLimit() / 2 + 1);
+            body.setIntelligence(Intelligence.WISE);
+            partner.setSickPeriod(partner.getIncubationPeriodBase() + 1);
             int stressBefore = body.getStress();
             body.doSurisuri(partner);
             assertEquals(Happiness.SAD, body.getHappiness());
@@ -6661,9 +6477,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // Yukkuri: checkEmotion / checkShit 追加
-    // ===========================================
 
     @Nested
     class CheckEmotionAdditionalTests {
@@ -6995,9 +6809,7 @@ public class BodyTest {
 
     }
 
-    // ===========================================
     // メッセージ設定系
-    // ===========================================
 
     @Nested
     class MessageSetterTests {
@@ -7014,9 +6826,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // GUI/ファイル依存ではない未カバー系メソッド
-    // ===========================================
 
     @Nested
     class NonGuiMethodTests {
@@ -7232,9 +7042,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // BodyAttributes 非GUI系の未カバーを順次追加
-    // ===========================================
 
     @Nested
     class BodyAttributesNonGuiTests {
@@ -7484,7 +7292,7 @@ public class BodyTest {
             body.setInOutTakeoutItem(true);
             assertTrue(body.isInOutTakeoutItem());
 
-            BasicStrokeEX stroke = new BasicStrokeEX(1.0f);
+            BasicStrokeEx stroke = new BasicStrokeEx(1.0f);
             body.setMessageWindowStroke(stroke);
             assertEquals(stroke, body.getMessageWindowStroke());
 
@@ -7629,9 +7437,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // 追加のエッジケーステスト
-    // ===========================================
 
     @Nested
     class EdgeCaseTests {
@@ -7688,9 +7494,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // moveTo メソッド群
-    // ===========================================
 
     @Nested
     class MoveToTests {
@@ -7776,9 +7580,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // moveToTarget メソッド群（目的地移動）
-    // ===========================================
 
     @Nested
     class MoveToTargetTests {
@@ -7909,9 +7711,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // feed（強制給餌）
-    // ===========================================
 
     @Nested
     class FeedTests {
@@ -7942,9 +7742,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // addLovePlayer（なつき度操作）
-    // ===========================================
 
     @Nested
     class AddLovePlayerTests {
@@ -7986,9 +7784,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // setPanic 詳細テスト
-    // ===========================================
 
     @Nested
     class SetPanicDetailedTests {
@@ -8067,9 +7863,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // hold 詳細テスト
-    // ===========================================
 
     @Nested
     class HoldDetailedTests {
@@ -8121,9 +7915,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // runAway 詳細テスト
-    // ===========================================
 
     @Nested
     class RunAwayDetailedTests {
@@ -8200,9 +7992,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // setCleaning テスト
-    // ===========================================
 
     @Nested
     class SetCleaningTests {
@@ -8229,9 +8019,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // pickHair 詳細テスト
-    // ===========================================
 
     @Nested
     class PickHairDetailedTests {
@@ -8277,9 +8065,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // doYunnyaa テスト
-    // ===========================================
 
     @Nested
     class DoYunnyaaTests {
@@ -8308,9 +8094,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // teachManner 詳細テスト
-    // ===========================================
 
     @Nested
     class TeachMannerDetailedTests {
@@ -8380,9 +8164,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // noticeNoOkazari 詳細テスト
-    // ===========================================
 
     @Nested
     class NoticeNoOkazariDetailedTests {
@@ -8442,9 +8224,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // rapid系 詳細テスト
-    // ===========================================
 
     @Nested
     class RapidMethodsDetailedTests {
@@ -8488,9 +8268,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // bodyCut 詳細テスト
-    // ===========================================
 
     @Nested
     class BodyCutDetailedTests {
@@ -8513,9 +8291,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // bodyInjure 詳細テスト
-    // ===========================================
 
     @Nested
     class BodyInjureDetailedTests {
@@ -8544,9 +8320,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // lockSetZ / releaseLockNobinobi テスト
-    // ===========================================
 
     @Nested
     class LockSetZTests {
@@ -8927,9 +8701,9 @@ public class BodyTest {
         @Test
         public void testRemoveStalkClearsParentTrackingButKeepsChildBoundToStalk() {
             Yukkuri child = new StubBody();
-            body.setUniqueID(100);
-            child.setUniqueID(200);
-            org.simyukkuri.util.GameWorld.get().getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(),
+            body.setUniqueId(100);
+            child.setUniqueId(200);
+            org.simyukkuri.util.GameWorld.get().getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueId(),
                     child);
 
             Stalk stalk = new Stalk();
@@ -8937,9 +8711,9 @@ public class BodyTest {
             stalks.add(stalk);
             body.setStalks(stalks);
 
-            stalk.getAttachedBabyIds().add(child.getUniqueID());
+            stalk.getAttachedBabyIds().add(child.getUniqueId());
             child.setBindStalk(stalk);
-            child.setParentLinkId(body.getUniqueID());
+            child.setParentLinkId(body.getUniqueId());
 
             body.removeStalk(stalk);
 
@@ -9116,7 +8890,7 @@ public class BodyTest {
     class SetNYDForceFaceTests {
         @Test
         public void testSetNYDForceFaceWhenNotNYD() {
-            // DEFAULT = isNotNYD() → returnで何もしない
+            // DEFAULT = isNotNyd() → returnで何もしない
             body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setForceFace(-1);
             body.setNydForceFace(5);
@@ -9368,7 +9142,8 @@ public class BodyTest {
 
         @Test
         public void testEqualsNonBody() {
-            assertFalse(body.equals("not a body"));
+            Object wrongType = "not a body";
+            assertFalse(body.equals(wrongType));
         }
 
         @Test
@@ -9392,7 +9167,7 @@ public class BodyTest {
             StubBody other = createBody(AgeState.ADULT);
             int result = body.compareTo(other);
             // uniqueIDの差分
-            assertEquals(body.getUniqueID() - other.getUniqueID(), result);
+            assertEquals(body.getUniqueId() - other.getUniqueId(), result);
         }
     }
 
@@ -9454,7 +9229,7 @@ public class BodyTest {
             StubBody child = createBody(AgeState.BABY);
             body.addChild(child);
             assertNotNull(body.getChildren());
-            assertTrue(body.getChildren().contains(child.getUniqueID()));
+            assertTrue(body.getChildren().contains(child.getUniqueId()));
         }
 
         @Test
@@ -9467,7 +9242,7 @@ public class BodyTest {
         public void testAddElderSisterList() {
             StubBody sister = createBody(AgeState.ADULT);
             body.addElderSister(sister);
-            assertTrue(body.getElderSisters().contains(sister.getUniqueID()));
+            assertTrue(body.getElderSisters().contains(sister.getUniqueId()));
         }
 
         @Test
@@ -9481,7 +9256,7 @@ public class BodyTest {
         public void testAddSisterList() {
             StubBody sister = createBody(AgeState.BABY);
             body.addSister(sister);
-            assertTrue(body.getSisters().contains(sister.getUniqueID()));
+            assertTrue(body.getSisters().contains(sister.getUniqueId()));
         }
 
         @Test
@@ -9605,10 +9380,8 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // getNonYukkuriDiseaseTolerance 詳細テスト
     // (StubBodyはoverrideして0返すのでReimu実体を使う)
-    // ===========================================
     @Nested
     class CheckNonYukkuriDiseaseToleranceDetailedTests {
 
@@ -9781,7 +9554,7 @@ public class BodyTest {
         public void testChildAliveBonus() {
             Yukkuri child = createReimuBody(AgeState.BABY);
             LinkedList<Integer> children = new LinkedList<>();
-            children.add(child.getUniqueID());
+            children.add(child.getUniqueId());
             reimu.setChildren(children);
             // 子供が生きていて健康、かつ reimuにhasDisorder=false → +10
             int result = reimu.getNonYukkuriDiseaseTolerance();
@@ -9793,7 +9566,7 @@ public class BodyTest {
             Yukkuri child = createReimuBody(AgeState.BABY);
             child.setDead(true);
             LinkedList<Integer> children = new LinkedList<>();
-            children.add(child.getUniqueID());
+            children.add(child.getUniqueId());
             reimu.setChildren(children);
             // 子供がdead → -10
             int result = reimu.getNonYukkuriDiseaseTolerance();
@@ -9801,9 +9574,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // voiceReaction 詳細テスト
-    // ===========================================
     @Nested
     class VoiceReactionDetailedTests {
 
@@ -9883,9 +9654,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // checkEmotionLockmove テスト
-    // ===========================================
     @Nested
     class CheckEmotionLockmoveTests {
 
@@ -10766,7 +10535,7 @@ public class BodyTest {
             partner.setHasBaby(false);
             partner.setHasStalk(false);
 
-            body.setPartner(partner.getUniqueID());
+            body.setPartner(partner.getUniqueId());
             body.setNoHungryPeriod(body.getRelaxPeriodBase() + 1);
             body.setNoDamagePeriod(body.getRelaxPeriodBase() + 1);
             body.setSleeping(false);
@@ -10795,7 +10564,7 @@ public class BodyTest {
             partner.setHasBaby(false);
             partner.setHasStalk(false);
 
-            body.setPartner(partner.getUniqueID());
+            body.setPartner(partner.getUniqueId());
             body.setIntelligence(Intelligence.WISE);
             prepareRelaxBase(body);
             addActiveChildren(body, 4);
@@ -10814,7 +10583,7 @@ public class BodyTest {
             partner.setHasBaby(false);
             partner.setHasStalk(false);
 
-            body.setPartner(partner.getUniqueID());
+            body.setPartner(partner.getUniqueId());
             body.setIntelligence(Intelligence.WISE);
             prepareRelaxBase(body);
             addActiveChildren(body, 3);
@@ -10832,7 +10601,7 @@ public class BodyTest {
             partner.setHasBaby(false);
             partner.setHasStalk(false);
 
-            body.setPartner(partner.getUniqueID());
+            body.setPartner(partner.getUniqueId());
             body.setIntelligence(Intelligence.AVERAGE);
             prepareRelaxBase(body);
             addActiveChildren(body, 11);
@@ -10851,7 +10620,7 @@ public class BodyTest {
             partner.setHasBaby(false);
             partner.setHasStalk(false);
 
-            body.setPartner(partner.getUniqueID());
+            body.setPartner(partner.getUniqueId());
             body.setIntelligence(Intelligence.AVERAGE);
             prepareRelaxBase(body);
             addActiveChildren(body, 10);
@@ -10869,7 +10638,7 @@ public class BodyTest {
             partner.setHasBaby(false);
             partner.setHasStalk(false);
 
-            body.setPartner(partner.getUniqueID());
+            body.setPartner(partner.getUniqueId());
             body.setIntelligence(Intelligence.FOOL);
             prepareRelaxBase(body);
             addActiveChildren(body, 12);
@@ -12113,7 +11882,7 @@ public class BodyTest {
             onBed.setAgeState(AgeState.BABY);
             onBed.setMsgType(YukkuriType.REIMU);
             onBed.setIntelligence(Intelligence.AVERAGE);
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(onBed.getUniqueID(), onBed);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(onBed.getUniqueId(), onBed);
 
             onBed.setGrabbed(false);
             onBed.setZ(1);
@@ -12260,7 +12029,7 @@ public class BodyTest {
             falling.setAgeState(AgeState.ADULT);
             falling.setMsgType(YukkuriType.REIMU);
             falling.setIntelligence(Intelligence.AVERAGE);
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(falling.getUniqueID(), falling);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(falling.getUniqueId(), falling);
 
             Trampoline tramp = new Trampoline() {
                 @Override
@@ -13183,7 +12952,7 @@ public class BodyTest {
                 }
                 falling.setAgeState(AgeState.ADULT);
                 falling.setMsgType(YukkuriType.REIMU);
-                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(falling.getUniqueID(), falling);
+                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(falling.getUniqueId(), falling);
 
                 Trampoline tramp = new Trampoline() {
                     @Override
@@ -13233,7 +13002,7 @@ public class BodyTest {
                 }
                 falling.setAgeState(AgeState.ADULT);
                 falling.setMsgType(YukkuriType.REIMU);
-                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(falling.getUniqueID(), falling);
+                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(falling.getUniqueId(), falling);
 
                 Trampoline tramp = new Trampoline() {
                     @Override
@@ -13422,7 +13191,7 @@ public class BodyTest {
                 }
                 falling.setAgeState(AgeState.ADULT);
                 falling.setMsgType(YukkuriType.REIMU);
-                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(falling.getUniqueID(), falling);
+                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(falling.getUniqueId(), falling);
 
                 falling.setGrabbed(false);
                 falling.setZ(1);
@@ -13689,7 +13458,7 @@ public class BodyTest {
                 }
                 falling.setAgeState(AgeState.BABY);
                 falling.setMsgType(YukkuriType.REIMU);
-                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(falling.getUniqueID(), falling);
+                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(falling.getUniqueId(), falling);
 
                 falling.setGrabbed(false);
                 falling.setZ(1);
@@ -14041,7 +13810,7 @@ public class BodyTest {
             faller.setAgeState(AgeState.ADULT);
             faller.setMsgType(YukkuriType.REIMU);
             faller.setIntelligence(Intelligence.AVERAGE);
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(faller.getUniqueID(), faller);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(faller.getUniqueId(), faller);
 
             faller.setGrabbed(false);
             faller.setZ(1);
@@ -14595,7 +14364,7 @@ public class BodyTest {
             }
             onBed.setAgeState(AgeState.BABY);
             onBed.setMsgType(YukkuriType.REIMU);
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(onBed.getUniqueID(), onBed);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(onBed.getUniqueId(), onBed);
 
             onBed.setGrabbed(false);
             onBed.setZ(1);
@@ -14788,7 +14557,7 @@ public class BodyTest {
             }
             onBed.setAgeState(AgeState.ADULT);
             onBed.setMsgType(YukkuriType.REIMU);
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(onBed.getUniqueID(), onBed);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(onBed.getUniqueId(), onBed);
 
             onBed.setGrabbed(false);
             onBed.setZ(1);
@@ -14918,9 +14687,7 @@ public class BodyTest {
 
     }
 
-    // ===========================================
     // checkEmotionBlind RND分岐テスト
-    // ===========================================
     @Nested
     class CheckEmotionBlindRndTests {
         @Test
@@ -14952,9 +14719,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // checkEmotionCantSpeak RND分岐テスト
-    // ===========================================
     @Nested
     class CheckEmotionCantSpeakRndTests {
         @Test
@@ -14990,9 +14755,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // checkEmotionLockmove RND分岐テスト
-    // ===========================================
     @Nested
     class CheckEmotionLockmoveRndTests {
         private void setupLockmove() {
@@ -15093,9 +14856,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // checkEmotionFootbake RND分岐テスト
-    // ===========================================
     @Nested
     class CheckEmotionFootbakeRndTests {
         private void setupFootbake(FootBake level) {
@@ -15206,9 +14967,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // checkEmotionNoOkazariPikopiko RND分岐テスト
-    // ===========================================
     @Nested
     class CheckEmotionNoOkazariPikopikoRndTests {
         @Test
@@ -15244,9 +15003,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // getInVain RND分岐テスト
-    // ===========================================
     @Nested
     class GetInVainRndTests {
         @Test
@@ -15400,7 +15157,7 @@ public class BodyTest {
         public void testInjectIntoCreatesBaby() {
             StubBody father = createBody(AgeState.ADULT);
             Dna dna = new Dna();
-            dna.setFather(father.getUniqueID());
+            dna.setFather(father.getUniqueId());
             SimYukkuri.RND = new ConstState(1);
 
             int before = body.getBabyTypes().size();
@@ -15414,7 +15171,7 @@ public class BodyTest {
         public void testInjectIntoBodyCastrationNoBaby() {
             StubBody father = createBody(AgeState.ADULT);
             Dna dna = new Dna();
-            dna.setFather(father.getUniqueID());
+            dna.setFather(father.getUniqueId());
             body.setCastrated(true);
             int before = body.getBabyTypes().size();
             body.injectInto(dna);
@@ -15432,7 +15189,7 @@ public class BodyTest {
         public void testDripSpermCreatesStalkBabies() {
             StubBody father = createBody(AgeState.ADULT);
             Dna dna = new Dna();
-            dna.setFather(father.getUniqueID());
+            dna.setFather(father.getUniqueId());
             ConstState rnd = new ConstState(1);
             rnd.setFixedBoolean(true);
             SimYukkuri.RND = rnd;
@@ -15450,7 +15207,7 @@ public class BodyTest {
         public void testDripSpermCreatesNullEntriesWhenRndFalse() {
             StubBody father = createBody(AgeState.ADULT);
             Dna dna = new Dna();
-            dna.setFather(father.getUniqueID());
+            dna.setFather(father.getUniqueId());
             ConstState rnd = new ConstState(1);
             rnd.setFixedBoolean(false);
             SimYukkuri.RND = rnd;
@@ -16160,7 +15917,7 @@ public class BodyTest {
             initAnydaAmpouleImages();
             FixedToleranceBody b = new FixedToleranceBody();
             b.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
-            b.getAttach().add(new ANYDAmpoule(b));
+            b.getAttach().add(new AnydAmpoule(b));
 
             assertFalse(invokeCheckNonYukkuriDisease(b));
             assertEquals(CoreAnkoState.NORMAL, b.getCoreAnkoState());
@@ -16348,9 +16105,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // checkDamage RND分岐テスト
-    // ===========================================
     @Nested
     class CheckDamageRndTests {
         @Test
@@ -16397,9 +16152,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // bodyInjure RND分岐テスト (bodyCut)
-    // ===========================================
     @Nested
     class BodyInjureRndTests {
         @Test
@@ -16443,9 +16196,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // checkDamage: CUT時の死亡メッセージ RND分岐テスト
-    // ===========================================
     @Nested
     class CheckDamageCutRndTests {
         @Test
@@ -16479,9 +16230,7 @@ public class BodyTest {
         }
     }
 
-    // ===========================================
     // clockTick 分岐テスト
-    // ===========================================
     @Nested
     class ClockTickTests {
         @Test

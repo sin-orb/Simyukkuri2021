@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
 import java.security.SecureRandom;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -47,10 +46,10 @@ public class AntsTest {
         System.setProperty("java.awt.headless", "true");
         SimYukkuri.world = new World();
         Ants.setImages(buildImages());
-        Ants.setImgW(new int[] { 10, 20, 30 });
-        Ants.setImgH(new int[] { 11, 21, 31 });
-        Ants.setPivX(new int[] { 1, 2, 3 });
-        Ants.setPivY(new int[] { 4, 5, 6 });
+        Ants.setImgW(new int[] {10, 20, 30});
+        Ants.setImgH(new int[] {11, 21, 31});
+        Ants.setPivX(new int[] {1, 2, 3});
+        Ants.setPivY(new int[] {4, 5, 6});
 
         testRnd = new PresetRandom();
         SimYukkuri.RND = testRnd;
@@ -73,7 +72,8 @@ public class AntsTest {
             pivYField.set(null, new int[numTypes][numAgeStates]);
             imgWField.set(null, new int[numTypes][numAgeStates]);
             imgHField.set(null, new int[numTypes][numAgeStates]);
-            imagesField.set(null, new BufferedImage[numTypes][Vomit.NUM_OF_VOMIT_STATE][numAgeStates]);
+            imagesField.set(
+                    null, new BufferedImage[numTypes][Vomit.NUM_OF_VOMIT_STATE][numAgeStates]);
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize Vomit statics", e);
         }
@@ -93,7 +93,7 @@ public class AntsTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         Ants ants = new Ants(parent);
 
-        assertEquals(parent.getUniqueID(), ants.getParent());
+        assertEquals(parent.getUniqueId(), ants.getParent());
         assertEquals(0, ants.getValue());
         assertEquals(0, ants.getCost());
         assertEquals(100, ants.getProcessInterval());
@@ -128,7 +128,7 @@ public class AntsTest {
         parent.setDamage(0);
         parent.setHungry(0); // hungry<=0 triggers addDamage in eatYukkuri
         parent.initAmount(AgeState.ADULT); // ankoAmount = DAMAGELIMIT[ADULT] so body is alive
-        // Ensure coreAnkoState is DEFAULT so isNotNYD() is true -> happiness set to
+        // Ensure coreAnkoState is DEFAULT so isNotNyd() is true -> happiness set to
         // VERY_SAD
         parent.setCoreAnkoState(CoreAnkoState.NORMAL);
         // Ensure parent has a valid Shit type to avoid NPE in Vomit
@@ -143,10 +143,15 @@ public class AntsTest {
         // pa.beEaten(60/3=20, 0, false) -> eatYukkuri reduces ankoAmount; makeDirty
         // sets
         // flag
-        assertTrue(parent.getAnkoAmount() < bodyAmountBefore, "ankoAmount should decrease after eatYukkuri");
+        assertTrue(
+                parent.getAnkoAmount() < bodyAmountBefore,
+                "ankoAmount should decrease after eatYukkuri");
         assertTrue(parent.isDirty(), "body should be marked dirty by beEaten");
         // With coreAnkoState=DEFAULT, P=0 -> setHappiness(VERY_SAD)
-        assertEquals(Happiness.VERY_SAD, parent.getHappiness(), "happiness should be set to VERY_SAD by beEaten");
+        assertEquals(
+                Happiness.VERY_SAD,
+                parent.getHappiness(),
+                "happiness should be set to VERY_SAD by beEaten");
     }
 
     @Test
@@ -225,7 +230,7 @@ public class AntsTest {
         int origPivotY = ants.getPivotY();
 
         // Remove parent from world map so getBodyMap returns null
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueId());
         ants.resetBoundary();
 
         // Boundary should remain unchanged since parent is null
@@ -236,7 +241,10 @@ public class AntsTest {
     private static Yukkuri createParent(AgeState ageState) {
         Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
+        SimYukkuri.world
+                .getCurrentWorldState()
+                .getYukkuriRegistry()
+                .put(parent.getUniqueId(), parent);
         return parent;
     }
 
@@ -244,7 +252,9 @@ public class AntsTest {
         BufferedImage[][] images = new BufferedImage[3][3];
         for (int age = 0; age < 3; age++) {
             for (int level = 0; level < 3; level++) {
-                images[age][level] = new BufferedImage(10 + age * 10, 10 + age * 10, BufferedImage.TYPE_INT_ARGB);
+                images[age][level] =
+                        new BufferedImage(
+                                10 + age * 10, 10 + age * 10, BufferedImage.TYPE_INT_ARGB);
             }
         }
         return images;
@@ -255,6 +265,7 @@ public class AntsTest {
         try {
             Ants.loadImages(Ants.class.getClassLoader(), null);
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -282,7 +293,8 @@ public class AntsTest {
         }
 
         @Test
-        void testScenario_LockmoveYukkuriHitByAntsEntersPainPurupuruBranchWithoutReducingAntCount() {
+        void
+                testScenario_LockmoveYukkuriHitByAntsEntersPainPurupuruBranchWithoutReducingAntCount() {
             Yukkuri parent = createParent(AgeState.ADULT);
             parent.initAmount(AgeState.ADULT);
             parent.setAntCount(12);

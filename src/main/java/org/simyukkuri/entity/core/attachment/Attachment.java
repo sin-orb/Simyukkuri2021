@@ -1,11 +1,9 @@
 package org.simyukkuri.entity.core.attachment;
 
-import java.awt.image.BufferedImage;
-import java.beans.Transient;
-
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
-
+import java.awt.image.BufferedImage;
+import java.beans.Transient;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -13,7 +11,7 @@ import org.simyukkuri.enums.AttachProperty;
 import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Type;
 
-/****************************************
+/**
  * ゆっくりの体に付くアタッチメントのベースクラス
  */
 @JsonTypeInfo(use = Id.CLASS)
@@ -50,8 +48,9 @@ public abstract class Attachment extends Entity {
 	@Transient
 	public int getOfsX() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
-		if (pa == null)
+		if (pa == null) {
 			return -1;
+		}
 		return posOfs[pa.getAgeState().ordinal()].getX();
 	}
 
@@ -59,8 +58,9 @@ public abstract class Attachment extends Entity {
 	@Transient
 	public int getOfsY() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
-		if (pa == null)
+		if (pa == null) {
 			return -1;
+		}
 		return posOfs[pa.getAgeState().ordinal()].getY();
 	}
 
@@ -70,19 +70,30 @@ public abstract class Attachment extends Entity {
 		return attachProperty[AttachProperty.OFS_ORIGIN.ordinal()];
 	}
 
+	/**
+	 * アタッチメントの描画プロパティ配列を設定する。
+	 *
+	 * @param attachProperty {@link org.simyukkuri.enums.AttachProperty} に対応した設定値の配列
+	 */
+	public void setAttachProperty(int[] attachProperty) {
+		this.attachProperty = attachProperty;
+	}
+
 	/** アタッチメントの詳細設定 */
 	protected void setAttachProperty(int[] property, String ofsKey) {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
-		if (pa == null)
+		if (pa == null) {
 			return;
+		}
 		posOfs = pa.getMountPoint(ofsKey);
 		attachProperty = property;
 		animeInterval = 0;
 		animeLoop = attachProperty[AttachProperty.ANIME_LOOP.ordinal()];
-		if (attachProperty[AttachProperty.ANIME_INTERVAL.ordinal()] == 0)
+		if (attachProperty[AttachProperty.ANIME_INTERVAL.ordinal()] == 0) {
 			animate = false;
-		else
+		} else {
 			animate = true;
+		}
 	}
 
 	/**
@@ -92,7 +103,7 @@ public abstract class Attachment extends Entity {
 	 */
 	public Attachment(Yukkuri body) {
 		objType = Type.ATTACHMENT;
-		parent = body.getUniqueID();
+		parent = body.getUniqueId();
 	}
 
 	/**
@@ -104,16 +115,16 @@ public abstract class Attachment extends Entity {
 	}
 
 	/** 毎ティックごとの処理 */
-	abstract protected TickResult update();
+	protected abstract TickResult update();
 
 	/** 描画用の境界線のリセット */
-	abstract public void resetBoundary();
+	public abstract void resetBoundary();
 
-	@Override
 	/**
 	 * 毎ティックごとに呼び出される処理
 	 * アニメ処理をする
 	 */
+	@Override
 	public TickResult clockTick() {
 		TickResult ret = TickResult.NONE;
 		setAge(getAge() + TICK);
@@ -131,8 +142,9 @@ public abstract class Attachment extends Entity {
 					animeFrame = 0;
 					if (animeLoop > 0) {
 						animeLoop--;
-						if (animeLoop == 0)
+						if (animeLoop == 0) {
 							animate = false;
+						}
 					}
 				}
 			}
@@ -237,15 +249,6 @@ public abstract class Attachment extends Entity {
 	 */
 	public int[] getAttachProperty() {
 		return attachProperty;
-	}
-
-	/**
-	 * アタッチメントの描画プロパティ配列を設定する。
-	 *
-	 * @param attachProperty {@link org.simyukkuri.enums.AttachProperty} に対応した設定値の配列
-	 */
-	public void setAttachProperty(int[] attachProperty) {
-		this.attachProperty = attachProperty;
 	}
 
 	/**

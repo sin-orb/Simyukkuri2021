@@ -1,7 +1,6 @@
 package org.simyukkuri.event.impl;
 
 import java.util.Map;
-
 import org.simyukkuri.Const;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -52,11 +51,13 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 	public boolean checkEventResponse(Yukkuri body) {
 		setHighPriority();
 		// 死体、睡眠、皮なし、目無しはスキップ
-		if (!body.canEventResponse())
+		if (!body.canEventResponse()) {
 			return true;
+		}
 		// 非ゆっくり症、針刺し状態はスキップ
-		if (body.isNYD() || body.isNeedled())
+		if (body.isNyd() || body.isNeedled()) {
 			return false;
+		}
 		boolean isNearPredator = false;
 		// 全ゆっくりに対してチェック
 		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
@@ -116,15 +117,16 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 		if (from.isRemoved() || from.isDead() || !from.isPredatorType()) {
 			setFrom(searchNextTarget());
 			from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
-			if (from == null)
+			if (from == null) {
 				return UpdateState.ABORT;
+			}
 		}
 
 		body.setForceFace(ImageCode.PUFF.ordinal());
 		int colX = YukkuriLogic.calcCollisionX(body, from);
 		body.moveToEvent(this, from.getX() + colX, from.getY());
-		if (body.getType() == YukkuriType.DOSMARISA ||
-				(body.isAdult() && body.getPublicRank() != PublicRank.UNUN_SLAVE)) {
+		if (body.getType() == YukkuriType.DOSMARISA
+				|| (body.isAdult() && body.getPublicRank() != PublicRank.UNUN_SLAVE)) {
 			Yukkuri target = searchNextTarget();
 			setFrom(target);
 			body.setWorldEventResMessage(GameMessages.getMessage(body, MessagePool.Action.RevengeForChild),
@@ -136,7 +138,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 	/** イベントの開始処理を実行する。 */
 	@Override
 	public void start(Yukkuri body) {
-		if (body.isNYD()) {
+		if (body.isNyd()) {
 			return;
 		}
 		body.setAngry();
@@ -154,8 +156,9 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 			setFrom(searchNextTarget());
 			from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 			// 捕食種全滅でイベント終了
-			if (from == null)
+			if (from == null) {
 				return true;
+			}
 			return false;
 		}
 		if (from.getZ() < 5) {

@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.simyukkuri.ConstState;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.engine.World;
+import org.simyukkuri.entity.core.living.yukkuri.StubBody;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
@@ -65,7 +65,7 @@ public class GadgetToolTest {
         b.setAgeState(age);
         b.setMsgType(YukkuriType.REIMU);
         b.setIntelligence(Intelligence.AVERAGE);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 
@@ -88,29 +88,17 @@ public class GadgetToolTest {
 
         @Test
         public void testCase0RapistToggleWhenCannotTransform() {
-            // StubBody(getType()=0) は Yukkuri.judgeCanTransForGodHand()=false を返す
-            // Reimuは judgeCanTransForGodHand()=true でexecTransformはmypaneが必要
-            // → Reimu + BurialState で isUnBirth=false なのでtrue → execTransformでNPE
-            // → Body基底クラスのjudgeCanTransForGodHandはfalseを返す
-            // → StubBodyと同等の別手段が必要
-            // → 代わりにReimuで、rapistトグル前後の値を確認
-            // Reimuの場合 judgeCanTransForGodHand()=true → execTransform→NPE
-            // なので、ここではisUnBirth=trueにしてfalseを返させる方法を取る
-            // → bodyBurst()でもNPEリスク...
+            StubBody b = new StubBody();
+            b.setBurialState(BurialState.NONE);
+            b.setRapist(false);
+            b.setBegging(false);
+            ConstState cs = new ConstState(0);
+            SimYukkuri.RND = cs;
 
-            // 安全な方法: ConstState(0)で、body基底のjudgeCanTransForGodHand=falseを使う
-            // → StubBodyを使う代わりに、Body基底を直接newする方法は抽象メソッドのため不可
-            // → 判定としてReimuを使うが、unBirthにしてfalseを返す or
-            // 別のアプローチ: rapistの初期値を記録し、case0でrapist toggleされることを確認
+            GadgetTool.doGodHand(b);
 
-            // 実はReimuのjudgeCanTransForGodHandはunBirthでなければtrueを返すので
-            // execTransformが呼ばれる → SimYukkuri.mypane=nullでNPE
-            // → case0のテストはexecTransformのNPEリスクが高い
-            // → rapist toggle側はjudgeCanTransForGodHand=falseの時のみ
-            // → isUnBirth=trueにして bodyBurst()でもNPEになる可能性...
-
-            // ここでは case0のrapist toggle部分をテストするのは困難なのでスキップ
-            // 代わりにcase2以降の安全なケースに集中する
+            assertTrue(b.isRapist(), "変身できない場合はレイパー状態が切り替わるべき");
+            assertEquals(YukkuriType.TARINAI, b.getType(), "変身できない場合でも型は変わらない");
         }
 
         @Test
@@ -120,6 +108,7 @@ public class GadgetToolTest {
             SimYukkuri.RND = cs;
             // BurialState.ALL にしてaddVomitをスキップ
             b.setBurialState(BurialState.ALL);
+            b.setBegging(false);
 
             assertNull(b.getCriticalDamageType());
 
@@ -127,6 +116,7 @@ public class GadgetToolTest {
 
             // bodyCut() sets CriticalDamageType.CUT
             assertEquals(CriticalDamageType.CUT, b.getCriticalDamageType());
+            assertEquals(YukkuriType.REIMU, b.getType(), "切断だけでは型は変わらない");
         }
 
         @Test
@@ -233,10 +223,12 @@ public class GadgetToolTest {
             SimYukkuri.RND = cs;
 
             assertFalse(b.getAbFlagGodHand()[0], "初期状態で膨張フラグはOFF");
+            assertFalse(b.isAnalClose(), "初期状態で肛門閉鎖はOFF");
 
             GadgetTool.doGodHand(b);
 
             assertTrue(b.getAbFlagGodHand()[0], "膨張フラグがONになるべき");
+            assertFalse(b.isAnalClose(), "初回の膨張では肛門は閉じられない");
         }
 
         @Test
@@ -247,12 +239,15 @@ public class GadgetToolTest {
 
             // 1回目の膨張済み状態
             b.getAbFlagGodHand()[0] = true;
+            b.setBegging(false);
 
             GadgetTool.doGodHand(b);
 
             // 2回目は爆発的拡大: shit設定 + analClose
             assertTrue(b.isAnalClose(), "肛門が閉じられるべき");
             assertTrue(b.getAbFlagGodHand()[0], "膨張フラグは維持される");
+            assertEquals(b.getShitLimitBase()[b.getAgeState().ordinal()] * 10, b.getShit(),
+                    "爆発的拡大ではうんうん量が増えるべき");
         }
     }
 }

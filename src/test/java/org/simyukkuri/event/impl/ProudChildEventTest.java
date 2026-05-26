@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -67,8 +66,8 @@ public class ProudChildEventTest {
         Yukkuri to = createBody();
         ProudChildEvent event = new ProudChildEvent(from, to, null, 10);
         assertEquals(EventPriority.MIDDLE, event.getPriority());
-        assertEquals(from.getUniqueID(), event.getFrom());
-        assertEquals(to.getUniqueID(), event.getTo());
+        assertEquals(from.getUniqueId(), event.getFrom());
+        assertEquals(to.getUniqueId(), event.getTo());
         assertEquals(10, event.getCount());
     }
 
@@ -116,7 +115,7 @@ public class ProudChildEventTest {
         Yukkuri baby = createBody();
         baby.setAgeState(AgeState.BABY);
         baby.setBirthMessageForced(true);
-        WorldTestHelper.setParents(baby, -1, from.getUniqueID());
+        WorldTestHelper.setParents(baby, -1, from.getUniqueId());
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         assertFalse(event.checkEventResponse(baby));
     }
@@ -133,7 +132,7 @@ public class ProudChildEventTest {
     public void testCheckEventResponse_returnsFalseForNewbornBaby() {
         Yukkuri from = createBody();
         Yukkuri baby = createBody();
-        WorldTestHelper.setParents(baby, -1, from.getUniqueID());
+        WorldTestHelper.setParents(baby, -1, from.getUniqueId());
         baby.setAgeState(AgeState.BABY);
         baby.setBirthAge(baby.getAge());
         baby.setFirstGround(false);
@@ -145,7 +144,7 @@ public class ProudChildEventTest {
     public void testCheckEventResponse_returnsFalseWhileFalling() {
         Yukkuri from = createBody();
         Yukkuri baby = createBody();
-        WorldTestHelper.setParents(baby, -1, from.getUniqueID());
+        WorldTestHelper.setParents(baby, -1, from.getUniqueId());
         baby.setAgeState(AgeState.BABY);
         baby.setBirthAge(0);
         baby.setFirstGround(false);
@@ -241,7 +240,7 @@ public class ProudChildEventTest {
     public void testUpdate_newbornBaby_returnsAbort() {
         Yukkuri from = createBody();
         Yukkuri baby = createBody();
-        WorldTestHelper.setParents(baby, -1, from.getUniqueID());
+        WorldTestHelper.setParents(baby, -1, from.getUniqueId());
         baby.setAgeState(AgeState.BABY);
         baby.setBirthAge(baby.getAge());
         baby.setFirstGround(false);
@@ -254,7 +253,7 @@ public class ProudChildEventTest {
     public void testCheckEventResponse_birthEventBlockedBaby_returnsFalse() {
         Yukkuri from = createBody();
         Yukkuri baby = createBody();
-        WorldTestHelper.setParents(baby, -1, from.getUniqueID());
+        WorldTestHelper.setParents(baby, -1, from.getUniqueId());
         baby.setAgeState(AgeState.BABY);
         baby.setFirstGround(false);
         baby.setBirthMessageForced(false);
@@ -366,9 +365,9 @@ public class ProudChildEventTest {
     public void testUpdate_parentBody_stateEND_returnsAbort() {
         Yukkuri from = createBody();
         Yukkuri child = createBody();
-        child.setParents(new int[] { from.getUniqueID(), -1 });
+        child.setParents(new int[] { from.getUniqueId(), -1 });
         child.setAgeState(AgeState.BABY);
-        from.getChildren().add(child.getUniqueID());
+        from.getChildren().add(child.getUniqueId());
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         event.setState(ProudChildEvent.State.END);
         event.setActionFlag(false);
@@ -381,10 +380,10 @@ public class ProudChildEventTest {
     public void testUpdate_parentBody_allSleepingChildren_returnsAbort() {
         Yukkuri from = createBody();
         Yukkuri child = createBody();
-        child.setParents(new int[] { from.getUniqueID(), -1 });
+        child.setParents(new int[] { from.getUniqueId(), -1 });
         child.setAgeState(AgeState.BABY);
         child.setSleeping(true);
-        from.getChildren().add(child.getUniqueID());
+        from.getChildren().add(child.getUniqueId());
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
@@ -398,8 +397,8 @@ public class ProudChildEventTest {
     public void testUpdate_partnerOfFrom_stateGO_doesNotThrow() {
         Yukkuri from = createBody();
         Yukkuri partner = createBody();
-        from.setPartner(partner.getUniqueID());
-        partner.setPartner(from.getUniqueID());
+        from.setPartner(partner.getUniqueId());
+        partner.setPartner(from.getUniqueId());
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         partner.setCurrentEvent(event);
@@ -411,8 +410,8 @@ public class ProudChildEventTest {
     public void testUpdate_partnerOfFrom_stateNotGO_stays() {
         Yukkuri from = createBody();
         Yukkuri partner = createBody();
-        from.setPartner(partner.getUniqueID());
-        partner.setPartner(from.getUniqueID());
+        from.setPartner(partner.getUniqueId());
+        partner.setPartner(from.getUniqueId());
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         partner.setCurrentEvent(event);
@@ -448,7 +447,7 @@ public class ProudChildEventTest {
     public void testUpdate_childDamaged_returnsAbort() {
         Yukkuri from = createBody();
         Yukkuri baby = createBody();
-        WorldTestHelper.setParents(baby, -1, from.getUniqueID());
+        WorldTestHelper.setParents(baby, -1, from.getUniqueId());
         baby.setAgeState(AgeState.BABY);
         baby.setBirthAge(0);
         baby.setFirstGround(false);
@@ -502,7 +501,7 @@ public class ProudChildEventTest {
         Yukkuri from = createBody();
         Yukkuri child = createBody();
         // Set child's parents so that from is parent of child
-        child.setParents(new int[] { from.getUniqueID(), -1 });
+        child.setParents(new int[] { from.getUniqueId(), -1 });
         // Make child BABY (not adult)
         child.setAgeState(AgeState.BABY);
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
@@ -517,7 +516,7 @@ public class ProudChildEventTest {
         void testScenario_ChildParticipationBecomesHappy() {
             Yukkuri from = createBody();
             Yukkuri child = createBody();
-            child.setParents(new int[] { from.getUniqueID(), -1 });
+            child.setParents(new int[] { from.getUniqueId(), -1 });
             child.setAgeState(AgeState.BABY);
             child.setHappiness(Happiness.SAD);
 
@@ -559,10 +558,10 @@ public class ProudChildEventTest {
         void testScenario_FromProudStateBecomesVeryHappyAndAddsMemories() {
             Yukkuri from = createBody();
             Yukkuri child = createBody();
-            child.setParents(new int[] { from.getUniqueID(), -1 });
+            child.setParents(new int[] { from.getUniqueId(), -1 });
             child.setAgeState(AgeState.BABY);
             from.setIntelligence(Intelligence.FOOL);
-            from.getChildren().add(child.getUniqueID());
+            from.getChildren().add(child.getUniqueId());
 
             ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
             from.setCurrentEvent(event);
@@ -623,7 +622,7 @@ public class ProudChildEventTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 }

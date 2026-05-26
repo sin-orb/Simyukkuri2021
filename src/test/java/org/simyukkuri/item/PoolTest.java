@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -20,7 +19,7 @@ import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.world.item.Food;
 import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.field.impl.Pool;
-import org.simyukkuri.field.impl.Pool.DEPTH;
+import org.simyukkuri.field.impl.Pool.Depth;
 import org.simyukkuri.system.ItemMenu.ShapeMenu;
 import org.simyukkuri.system.ItemMenu.ShapeMenuTarget;
 import org.simyukkuri.util.WorldTestHelper;
@@ -49,21 +48,21 @@ class PoolTest {
         assertTrue(SimYukkuri.world.getCurrentWorldState().getPools().contains(item));
     }
 
-    // --- DEPTH enum ---
+    // --- Depth enum ---
 
     @Test
-    void testDEPTH_enum_count() {
-        assertEquals(4, DEPTH.values().length);
+    void testDepth_enum_count() {
+        assertEquals(4, Depth.values().length);
     }
 
     @Test
-    void testDEPTH_enum_values() {
-        assertNotNull(DEPTH.NONE);
-        assertNotNull(DEPTH.EDGE);
-        assertNotNull(DEPTH.SHALLOW);
-        assertNotNull(DEPTH.DEEP);
-        assertEquals(DEPTH.NONE, DEPTH.valueOf("NONE"));
-        assertEquals(DEPTH.DEEP, DEPTH.valueOf("DEEP"));
+    void testDepth_enum_values() {
+        assertNotNull(Depth.NONE);
+        assertNotNull(Depth.EDGE);
+        assertNotNull(Depth.SHALLOW);
+        assertNotNull(Depth.DEEP);
+        assertEquals(Depth.NONE, Depth.valueOf("NONE"));
+        assertEquals(Depth.DEEP, Depth.valueOf("DEEP"));
     }
 
     // --- Inherited FieldShape methods ---
@@ -178,10 +177,10 @@ class PoolTest {
     void testGetSetFieldPos_Getters() {
         Pool item = new Pool();
         item.setFieldPos(50, 60, 500, 600);
-        assertEquals(50, item.getFieldSX());
-        assertEquals(60, item.getFieldSY());
-        assertEquals(500, item.getFieldEX());
-        assertEquals(600, item.getFieldEY());
+        assertEquals(50, item.getFieldSx());
+        assertEquals(60, item.getFieldSy());
+        assertEquals(500, item.getFieldEx());
+        assertEquals(600, item.getFieldEy());
     }
 
     // --- Pool-specific getters/setters ---
@@ -233,7 +232,7 @@ class PoolTest {
     void testCheckArea_OutsidePool_ReturnsNONE() {
         Pool item = new Pool();
         item.setBounds(100, 100, 300, 300);
-        assertEquals(DEPTH.NONE, item.checkArea(50, 200));
+        assertEquals(Depth.NONE, item.checkArea(50, 200));
     }
 
     @Test
@@ -242,7 +241,7 @@ class PoolTest {
         item.setBounds(100, 100, 300, 300);
         // x=105 is in EDGE zone (mapSX <= 105 < mapSX+10)
         // y=200 is in DEEP zone
-        assertEquals(DEPTH.EDGE, item.checkArea(105, 200));
+        assertEquals(Depth.EDGE, item.checkArea(105, 200));
     }
 
     @Test
@@ -251,7 +250,7 @@ class PoolTest {
         item.setBounds(100, 100, 300, 300);
         // x=115 is in SHALLOW zone (mapSX+10 <= 115 < mapSX+20)
         // y=200 is in DEEP
-        assertEquals(DEPTH.SHALLOW, item.checkArea(115, 200));
+        assertEquals(Depth.SHALLOW, item.checkArea(115, 200));
     }
 
     @Test
@@ -259,7 +258,7 @@ class PoolTest {
         Pool item = new Pool();
         item.setBounds(100, 100, 300, 300);
         // x=200, y=200 both in DEEP
-        assertEquals(DEPTH.DEEP, item.checkArea(200, 200));
+        assertEquals(Depth.DEEP, item.checkArea(200, 200));
     }
 
     // --- getPool static ---

@@ -33,10 +33,12 @@ class PredatorsGameEventTest {
         b.setAgeState(AgeState.ADULT);
         org.simyukkuri.system.Sprite[] spr = new org.simyukkuri.system.Sprite[3];
         for (int i = 0; i < 3; i++) {
-            spr[i] = new org.simyukkuri.system.Sprite(10, 10, org.simyukkuri.system.Sprite.PIVOT_CENTER_BOTTOM);
+            spr[i] =
+                    new org.simyukkuri.system.Sprite(
+                            10, 10, org.simyukkuri.system.Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 
@@ -54,8 +56,8 @@ class PredatorsGameEventTest {
         Yukkuri to = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent(from, to, null, 1);
         assertNotNull(event);
-        assertEquals(from.getUniqueID(), event.getFrom());
-        assertEquals(to.getUniqueID(), event.getTo());
+        assertEquals(from.getUniqueId(), event.getFrom());
+        assertEquals(to.getUniqueId(), event.getTo());
         assertEquals(1, event.getCount());
     }
 
@@ -111,9 +113,10 @@ class PredatorsGameEventTest {
         try {
             java.lang.reflect.Field f = PredatorsGameEvent.class.getDeclaredField("toy");
             f.setAccessible(true);
-            f.setInt(event, toy.getUniqueID());
+            f.setInt(event, toy.getUniqueId());
         } catch (Exception e) {
-            /* ignore */ }
+            /* ignore */
+        }
         // b != from → return null
         assertDoesNotThrow(() -> event.update(b));
     }
@@ -132,7 +135,7 @@ class PredatorsGameEventTest {
         Yukkuri from = createBody();
         Yukkuri toy = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
-        event.toy = toy.getUniqueID();
+        event.toy = toy.getUniqueId();
         toy.setGrabbed(true);
         assertEquals(org.simyukkuri.event.EventPacket.UpdateState.ABORT, event.update(from));
     }
@@ -143,7 +146,7 @@ class PredatorsGameEventTest {
         Yukkuri from = createBody();
         Yukkuri toy = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
-        event.toy = toy.getUniqueID();
+        event.toy = toy.getUniqueId();
         toy.setDead(true);
         assertEquals(org.simyukkuri.event.EventPacket.UpdateState.ABORT, event.update(from));
     }
@@ -154,7 +157,7 @@ class PredatorsGameEventTest {
         Yukkuri from = createBody();
         Yukkuri toy = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
-        event.toy = toy.getUniqueID();
+        event.toy = toy.getUniqueId();
         event.snack = true;
         assertEquals(org.simyukkuri.event.EventPacket.UpdateState.FORCE_EXEC, event.update(from));
     }
@@ -165,7 +168,7 @@ class PredatorsGameEventTest {
         Yukkuri from = createBody();
         Yukkuri toy = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
-        event.toy = toy.getUniqueID();
+        event.toy = toy.getUniqueId();
         assertDoesNotThrow(() -> event.update(from));
     }
 
@@ -175,7 +178,7 @@ class PredatorsGameEventTest {
         Yukkuri from = createBody();
         Yukkuri toy = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
-        event.toy = toy.getUniqueID();
+        event.toy = toy.getUniqueId();
         toy.setRemoved(true);
         assertEquals(org.simyukkuri.event.EventPacket.UpdateState.ABORT, event.update(from));
     }
@@ -221,7 +224,7 @@ class PredatorsGameEventTest {
         Yukkuri from = createBody();
         Yukkuri toy = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
-        event.toy = toy.getUniqueID();
+        event.toy = toy.getUniqueId();
         event.tick = -1; // skip the tick>=0 block
         // from.hungry = 0 (default) → isVeryHungry() = true → ABORT
         assertEquals(org.simyukkuri.event.EventPacket.UpdateState.ABORT, event.update(from));
@@ -238,7 +241,7 @@ class PredatorsGameEventTest {
         toy.setX(500);
         toy.setY(500); // far away → non-contact
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
-        event.toy = toy.getUniqueID();
+        event.toy = toy.getUniqueId();
         event.tick = -1;
         // Use ConstState to avoid RND.nextInt(1000)==0 → ABORT
         SimYukkuri.RND = new org.simyukkuri.ConstState(1);
@@ -256,7 +259,7 @@ class PredatorsGameEventTest {
         Yukkuri toy = createBody();
         toy.setRemoved(true);
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
-        event.toy = toy.getUniqueID();
+        event.toy = toy.getUniqueId();
         assertTrue(event.execute(from));
     }
 
@@ -266,7 +269,7 @@ class PredatorsGameEventTest {
         Yukkuri from = createBody();
         Yukkuri toy = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
-        event.toy = toy.getUniqueID();
+        event.toy = toy.getUniqueId();
         // tick2=0 → becomes 1, != 20 → returns false
         assertFalse(event.execute(from));
     }
@@ -278,7 +281,7 @@ class PredatorsGameEventTest {
         Yukkuri toy = createBody();
         toy.setGrabbed(true);
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
-        event.toy = toy.getUniqueID();
+        event.toy = toy.getUniqueId();
         assertTrue(event.execute(from));
     }
 
@@ -289,7 +292,7 @@ class PredatorsGameEventTest {
         Yukkuri toy = createBody();
         toy.setDead(true);
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
-        event.toy = toy.getUniqueID();
+        event.toy = toy.getUniqueId();
         assertTrue(event.execute(from));
     }
 
@@ -327,7 +330,7 @@ class PredatorsGameEventTest {
             Yukkuri toy = createBody();
             toy.setDead(true);
             PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
-            event.toy = toy.getUniqueID();
+            event.toy = toy.getUniqueId();
 
             assertEquals(org.simyukkuri.event.EventPacket.UpdateState.ABORT, event.update(from));
             assertEquals(ImageCode.PUFF.ordinal(), from.getForceFace());

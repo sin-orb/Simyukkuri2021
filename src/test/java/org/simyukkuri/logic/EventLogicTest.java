@@ -258,7 +258,7 @@ public class EventLogicTest {
     @Test
     public void testCheckSimpleWorldEvent_FromCheck() {
         Reimu yukkuri = new Reimu();
-        yukkuri.setUniqueID(100);
+        yukkuri.setUniqueId(100);
         MockSimpleEventTruePacket event = new MockSimpleEventTruePacket();
         event.setFrom(yukkuri); // TickResult is from this yukkuri
         org.simyukkuri.SimYukkuri.world.getCurrentWorldState().getEvents().add(event);

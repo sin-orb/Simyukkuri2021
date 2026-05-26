@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
@@ -43,7 +42,7 @@ public class NonYukkuriDiseaseEstrusTest {
         }
         b.setAgeState(age);
         b.setMsgType(YukkuriType.REIMU);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 
@@ -72,7 +71,7 @@ public class NonYukkuriDiseaseEstrusTest {
 
         // 非ゆっくり症を設定
         body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
-        assertTrue(body.isNYD());
+        assertTrue(body.isNyd());
 
         // 感情チェック実行
         body.checkEmotion();
@@ -94,7 +93,7 @@ public class NonYukkuriDiseaseEstrusTest {
         invokeCheckNonYukkuriDisease(body);
 
         // 非ゆっくり症になり、かつ発情が解除されていることを確認
-        assertTrue(body.isNYD());
+        assertTrue(body.isNyd());
         assertFalse(body.isExciting(), "非ゆっくり症を発症した際に発情状態が解除されるべきです");
     }
 

@@ -37,7 +37,7 @@ class FuneralEventTest {
             spr[i] = new org.simyukkuri.system.Sprite(10, 10, org.simyukkuri.system.Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 
@@ -55,8 +55,8 @@ class FuneralEventTest {
         Yukkuri to = createBody();
         FuneralEvent event = new FuneralEvent(from, to, null, 10);
         assertNotNull(event);
-        assertEquals(from.getUniqueID(), event.getFrom());
-        assertEquals(to.getUniqueID(), event.getTo());
+        assertEquals(from.getUniqueId(), event.getFrom());
+        assertEquals(to.getUniqueId(), event.getTo());
         assertEquals(EventPriority.HIGH, event.getPriority());
     }
 
@@ -90,7 +90,7 @@ class FuneralEventTest {
     void testCheckEventResponse_returnsTrueWhenFromUniqueIdEqualsB() {
         Yukkuri from = createBody();
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
-        // from.getUniqueID() == b.getUniqueID() -> returns true
+        // from.getUniqueId() == b.getUniqueId() -> returns true
         assertTrue(event.checkEventResponse(from));
     }
 
@@ -107,7 +107,7 @@ class FuneralEventTest {
     void testCheckEventResponse_returnsFalseWhenSourceBodyIsAlreadyInAnotherEvent() {
         Yukkuri from = createBody();
         Yukkuri child = createBody();
-        WorldTestHelper.setParents(child, -1, from.getUniqueID());
+        WorldTestHelper.setParents(child, -1, from.getUniqueId());
         from.setCurrentEvent(new ShitExercisesEvent(from, null, null, 10));
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
         assertFalse(event.checkEventResponse(child));
@@ -133,25 +133,25 @@ class FuneralEventTest {
     @Test
     void testGetState_defaultIsGO() {
         FuneralEvent event = new FuneralEvent();
-        assertEquals(FuneralEvent.STATE.GO, event.getState());
+        assertEquals(FuneralEvent.State.GO, event.getState());
     }
 
     @Test
     void testSetState() {
         FuneralEvent event = new FuneralEvent();
-        event.setState(FuneralEvent.STATE.SING);
-        assertEquals(FuneralEvent.STATE.SING, event.getState());
+        event.setState(FuneralEvent.State.SING);
+        assertEquals(FuneralEvent.State.SING, event.getState());
 
-        event.setState(FuneralEvent.STATE.END);
-        assertEquals(FuneralEvent.STATE.END, event.getState());
+        event.setState(FuneralEvent.State.END);
+        assertEquals(FuneralEvent.State.END, event.getState());
     }
 
-    // --- STATE enum ---
+    // --- State enum ---
     @Test
     void testStateEnum_allValues() {
-        FuneralEvent.STATE[] states = FuneralEvent.STATE.values();
+        FuneralEvent.State[] states = FuneralEvent.State.values();
         assertEquals(8, states.length);
-        for (FuneralEvent.STATE s : states) {
+        for (FuneralEvent.State s : states) {
             assertNotNull(s.name());
         }
     }
@@ -221,11 +221,11 @@ class FuneralEventTest {
     void testUpdate_partnerOfFrom_stateNotGO_returnsNull() {
         Yukkuri from = createBody();
         Yukkuri partner = createBody();
-        from.setPartner(partner.getUniqueID());
-        partner.setPartner(from.getUniqueID());
+        from.setPartner(partner.getUniqueId());
+        partner.setPartner(from.getUniqueId());
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
         from.setCurrentEvent(event);
-        event.setState(FuneralEvent.STATE.FIND); // not GO → b.stay()
+        event.setState(FuneralEvent.State.FIND); // not GO → b.stay()
         assertDoesNotThrow(() -> event.update(partner));
     }
 
@@ -243,8 +243,8 @@ class FuneralEventTest {
     void testUpdate_bIsPartnerOfFrom_stateGO_doesNotThrow() {
         Yukkuri from = createBody();
         Yukkuri partner = createBody();
-        from.setPartner(partner.getUniqueID());
-        partner.setPartner(from.getUniqueID());
+        from.setPartner(partner.getUniqueId());
+        partner.setPartner(from.getUniqueId());
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         // state=GO → calcCollisionX (needs rateX initialized)
@@ -280,7 +280,7 @@ class FuneralEventTest {
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
-        event.setState(FuneralEvent.STATE.FIND);
+        event.setState(FuneralEvent.State.FIND);
         assertDoesNotThrow(() -> event.update(child));
     }
 
@@ -292,7 +292,7 @@ class FuneralEventTest {
         event.actionFlag = true;
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
-        event.setState(FuneralEvent.STATE.START);
+        event.setState(FuneralEvent.State.START);
         assertDoesNotThrow(() -> event.update(child));
     }
 
@@ -304,7 +304,7 @@ class FuneralEventTest {
         event.actionFlag = true;
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
-        event.setState(FuneralEvent.STATE.INTRODUCE);
+        event.setState(FuneralEvent.State.INTRODUCE);
         assertDoesNotThrow(() -> event.update(child));
     }
 
@@ -316,7 +316,7 @@ class FuneralEventTest {
         event.actionFlag = false; // !actionFlag in child SING case
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
-        event.setState(FuneralEvent.STATE.SING);
+        event.setState(FuneralEvent.State.SING);
         assertDoesNotThrow(() -> event.update(child));
     }
 
@@ -328,7 +328,7 @@ class FuneralEventTest {
         event.actionFlag = true;
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
-        event.setState(FuneralEvent.STATE.TALK);
+        event.setState(FuneralEvent.State.TALK);
         assertDoesNotThrow(() -> event.update(child));
     }
 
@@ -340,7 +340,7 @@ class FuneralEventTest {
         event.actionFlag = true;
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
-        event.setState(FuneralEvent.STATE.GOODBYE);
+        event.setState(FuneralEvent.State.GOODBYE);
         assertDoesNotThrow(() -> event.update(child));
     }
 
@@ -351,7 +351,7 @@ class FuneralEventTest {
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
-        event.setState(FuneralEvent.STATE.END);
+        event.setState(FuneralEvent.State.END);
         assertDoesNotThrow(() -> event.update(child));
     }
 
@@ -360,12 +360,12 @@ class FuneralEventTest {
     void testUpdate_partnerOfFrom_stateNotGO_stays() {
         Yukkuri from = createBody();
         Yukkuri partner = createBody();
-        from.setPartner(partner.getUniqueID());
-        partner.setPartner(from.getUniqueID());
+        from.setPartner(partner.getUniqueId());
+        partner.setPartner(from.getUniqueId());
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         partner.setCurrentEvent(event);
-        event.setState(FuneralEvent.STATE.FIND);
+        event.setState(FuneralEvent.State.FIND);
         assertNull(event.update(partner));
     }
 
@@ -375,9 +375,9 @@ class FuneralEventTest {
         Yukkuri from = createBody();
         Yukkuri partner = createBody();
         Yukkuri grandparent = createBody(); // give partner a parent so line 85 passes
-        from.setPartner(partner.getUniqueID());
-        partner.setPartner(from.getUniqueID());
-        partner.setParents(new int[] { grandparent.getUniqueID(), -1 });
+        from.setPartner(partner.getUniqueId());
+        partner.setPartner(from.getUniqueId());
+        partner.setParents(new int[] { grandparent.getUniqueId(), -1 });
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
         assertTrue(event.checkEventResponse(partner));
     }
@@ -388,7 +388,7 @@ class FuneralEventTest {
         Yukkuri from = createBody();
         Yukkuri grandparent = createBody();
         Yukkuri other = createBody();
-        other.setParents(new int[] { grandparent.getUniqueID(), -1 }); // has parents but NOT from's child
+        other.setParents(new int[] { grandparent.getUniqueId(), -1 }); // has parents but NOT from's child
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
         assertFalse(event.checkEventResponse(other));
     }
@@ -398,7 +398,7 @@ class FuneralEventTest {
     void testCheckEventResponse_isChildOfFrom_adult_returnsFalse() {
         Yukkuri from = createBody();
         Yukkuri child = createBody(); // ADULT by default
-        child.setParents(new int[] { from.getUniqueID(), -1 });
+        child.setParents(new int[] { from.getUniqueId(), -1 });
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
         assertFalse(event.checkEventResponse(child));
     }
@@ -408,7 +408,7 @@ class FuneralEventTest {
     void testCheckEventResponse_isChildOfFrom_baby_returnsTrue() {
         Yukkuri from = createBody();
         Yukkuri child = createBody();
-        child.setParents(new int[] { from.getUniqueID(), -1 });
+        child.setParents(new int[] { from.getUniqueId(), -1 });
         child.setAgeState(AgeState.BABY);
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
         assertTrue(event.checkEventResponse(child));
@@ -421,7 +421,7 @@ class FuneralEventTest {
         void testScenario_ChildParticipationMarksHappyAndClearsActions() {
             Yukkuri from = createBody();
             Yukkuri child = createBody();
-            child.setParents(new int[] { from.getUniqueID(), -1 });
+            child.setParents(new int[] { from.getUniqueId(), -1 });
             child.setAgeState(AgeState.BABY);
             child.setHappiness(Happiness.SAD);
             child.setToFood(true);
@@ -439,15 +439,15 @@ class FuneralEventTest {
             Yukkuri from = createBody();
             Yukkuri elderSister = createBody();
             Yukkuri child = createBody();
-            elderSister.setParents(new int[] { from.getUniqueID(), -1 });
-            child.setParents(new int[] { from.getUniqueID(), -1 });
+            elderSister.setParents(new int[] { from.getUniqueId(), -1 });
+            child.setParents(new int[] { from.getUniqueId(), -1 });
             elderSister.setAge(200);
             child.setAge(100);
 
             FuneralEvent event = new FuneralEvent(from, elderSister, null, 10);
             from.setCurrentEvent(event);
             child.setCurrentEvent(event);
-            event.setState(FuneralEvent.STATE.FIND);
+            event.setState(FuneralEvent.State.FIND);
             child.setLastActionTime(0);
             int memoriesBefore = child.getMemories();
 
@@ -463,14 +463,14 @@ class FuneralEventTest {
             Yukkuri from = createBody();
             Yukkuri deceased = createBody();
             Yukkuri child = createBody();
-            child.setParents(new int[] { from.getUniqueID(), -1 });
+            child.setParents(new int[] { from.getUniqueId(), -1 });
             child.setAgeState(AgeState.BABY);
-            from.getChildren().add(child.getUniqueID());
+            from.getChildren().add(child.getUniqueId());
 
             FuneralEvent event = new FuneralEvent(from, deceased, null, 10);
             from.setCurrentEvent(event);
             child.setCurrentEvent(event);
-            event.setState(FuneralEvent.STATE.GOODBYE);
+            event.setState(FuneralEvent.State.GOODBYE);
             event.actionFlag = false;
             from.setLastActionTime(0);
             int memoriesBefore = from.getMemories();
@@ -492,7 +492,7 @@ class FuneralEventTest {
             FuneralEvent event = new FuneralEvent(from, null, null, 10);
             from.setCurrentEvent(event);
             child.setCurrentEvent(event);
-            event.setState(FuneralEvent.STATE.GOODBYE);
+            event.setState(FuneralEvent.State.GOODBYE);
             event.actionFlag = true;
             child.setLastActionTime(0);
             int memoriesBefore = child.getMemories();
@@ -533,7 +533,7 @@ class FuneralEventTest {
     void testUpdate_bEqualsFrom_withBabyChild_stateGO_doesNotThrow() {
         Yukkuri from = createBody();
         Yukkuri child = createBody();
-        child.setParents(new int[] { from.getUniqueID(), -1 });
+        child.setParents(new int[] { from.getUniqueId(), -1 });
         child.setAgeState(AgeState.BABY);
         child.setSpriteSet(from.getSpriteSet()); // ensure sprites set
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
@@ -570,7 +570,7 @@ class FuneralEventTest {
     void testUpdate_fromHighZ_bEqualsFrom_withChild_doesNotThrow() {
         Yukkuri from = createBody();
         Yukkuri child = createBody();
-        child.setParents(new int[] { from.getUniqueID(), -1 });
+        child.setParents(new int[] { from.getUniqueId(), -1 });
         child.setAgeState(AgeState.BABY);
         from.setZ(10); // elevated
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
@@ -593,7 +593,7 @@ class FuneralEventTest {
         FuneralEvent event = new FuneralEvent(from, to, null, 10);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
-        event.setState(FuneralEvent.STATE.FIND);
+        event.setState(FuneralEvent.State.FIND);
         assertDoesNotThrow(() -> event.update(child));
     }
 
@@ -607,7 +607,7 @@ class FuneralEventTest {
         event.actionFlag = true;
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
-        event.setState(FuneralEvent.STATE.GOODBYE);
+        event.setState(FuneralEvent.State.GOODBYE);
         SimYukkuri.RND = new org.simyukkuri.ConstState(1);
         try {
             assertDoesNotThrow(() -> event.update(child));
@@ -625,7 +625,7 @@ class FuneralEventTest {
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
-        event.setState(FuneralEvent.STATE.END);
+        event.setState(FuneralEvent.State.END);
         assertDoesNotThrow(() -> event.update(child));
     }
 }

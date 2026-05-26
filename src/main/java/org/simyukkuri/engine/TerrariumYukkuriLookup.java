@@ -16,7 +16,7 @@ public final class TerrariumYukkuriLookup {
 	 * @param body 登録する body
 	 */
 	public static void register(Yukkuri body) {
-		GameWorld.get().getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
-		GameWorld.get().getCurrentWorldState().registerEntity(body.getUniqueID(), body);
+		GameWorld.get().getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
+		GameWorld.get().getCurrentWorldState().registerEntity(body.getUniqueId(), body);
 	}
 }

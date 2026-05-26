@@ -59,7 +59,7 @@ public final class FoodFoundReaction {
 				destinationZ = targetObject.getZ();
 			}
 			if (targetObject instanceof Food) {
-				if (body.isNotNYD()) {
+				if (body.isNotNyd()) {
 					if (((Food) targetObject).getFoodType() == FoodType.SWEETS1
 							|| ((Food) targetObject).getFoodType() == FoodType.SWEETS2
 							|| ((Food) targetObject).getFoodType() == FoodType.SWEETS_NORA1

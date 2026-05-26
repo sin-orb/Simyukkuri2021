@@ -23,7 +23,11 @@ class StickyPlateTest extends ItemTestBase {
         item.setObjId(1);
         SimYukkuri.world.getCurrentWorldState().getStickyPlates().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentWorldState().getStickyPlates().containsKey(item.getObjId()));
+        assertTrue(
+                SimYukkuri.world
+                        .getCurrentWorldState()
+                        .getStickyPlates()
+                        .containsKey(item.getObjId()));
     }
 
     @Test
@@ -199,6 +203,7 @@ class StickyPlateTest extends ItemTestBase {
         try {
             StickyPlate.loadImages(StickyPlate.class.getClassLoader(), null);
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -215,6 +220,7 @@ class StickyPlateTest extends ItemTestBase {
         try {
             StickyPlate.setupStickyPlate(item);
         } catch (Exception e) {
+            // ignore
         }
     }
 
@@ -224,6 +230,7 @@ class StickyPlateTest extends ItemTestBase {
             StickyPlate s = new StickyPlate(100, 100, 0);
             org.junit.jupiter.api.Assertions.assertNotNull(s);
         } catch (Exception e) {
+            // ignore
         }
     }
 }

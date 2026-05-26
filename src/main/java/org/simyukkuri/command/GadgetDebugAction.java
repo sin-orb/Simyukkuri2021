@@ -2,19 +2,18 @@ package org.simyukkuri.command;
 
 import java.awt.event.MouseEvent;
 import java.util.List;
-
 import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.attachment.impl.Ants;
 import org.simyukkuri.entity.core.attachment.impl.Badge;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.PublicRank;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.event.impl.PredatorsGameEvent;
 import org.simyukkuri.logic.BadgeLogic;
-import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.logic.EventLogic;
 import org.simyukkuri.logic.FamilyActionLogic;
+import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 
@@ -123,9 +122,10 @@ public class GadgetDebugAction {
 			case PREDATORSGAME:
 				if (targetObject instanceof Yukkuri) {
 					Yukkuri body = (Yukkuri) targetObject;
-					if (body.isPredatorType())
+					if (body.isPredatorType()) {
 						EventLogic.addWorldEvent(new PredatorsGameEvent(body, null, null, 1), body,
 								GameMessages.getMessage(body, MessagePool.Action.GameStart));
+					}
 				}
 				break;
 			case INVITEANTS:
@@ -148,8 +148,9 @@ public class GadgetDebugAction {
 				} else {
 					if (targetObject instanceof Yukkuri) {
 						Yukkuri body = (Yukkuri) targetObject;
-						if (body.isDead())
+						if (body.isDead()) {
 							break;
+						}
 						body.feed();
 					}
 				}

@@ -2,7 +2,6 @@ package org.simyukkuri.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.mobile.Shit;
@@ -37,7 +36,7 @@ public final class ItemGetMenuAction implements ActionListener {
 						}
 						b.removeAllStalks();
 						b.setTaken(true);
-						curMap.getYukkuriRegistry().remove(b.getUniqueID());
+						curMap.getYukkuriRegistry().remove(b.getUniqueId());
 					} else if (ItemMenu.getGetTarget() instanceof Shit) {
 						curMap.getShit().remove(ItemMenu.getGetTarget().objId);
 					} else if (ItemMenu.getGetTarget() instanceof Vomit) {
@@ -54,6 +53,8 @@ public final class ItemGetMenuAction implements ActionListener {
 				ShowStatusFrame instance = ShowStatusFrame.getInstance();
 				instance.giveYukkuriInfo(b);
 				instance.setVisible(true);
+				break;
+			default:
 				break;
 		}
 	}

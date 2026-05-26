@@ -25,7 +25,7 @@ import javax.swing.event.ListDataListener;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.ui.MainCommandUI.ToolButtonLabel;
+import org.simyukkuri.ui.MainCommandUi.ToolButtonLabel;
 import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameWorld;
 
@@ -101,7 +101,7 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 	 */
 	@Override
 	public void windowClosing(WindowEvent e) {
-		MainCommandUI.getPlayerButton()[ToolButtonLabel.BAG.ordinal()].setSelected(false);
+		MainCommandUi.getPlayerButton()[ToolButtonLabel.BAG.ordinal()].setSelected(false);
 		GameWorld.get().getPlayer().setHoldItem(null);
 	}
 

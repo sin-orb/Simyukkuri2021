@@ -7,7 +7,7 @@ import org.simyukkuri.field.impl.Barrier;
 import org.simyukkuri.logic.EventLogic;
 import org.simyukkuri.util.GameText;
 
-/***************************************************
+/**
  * レイパー発情通知イベント
  * protected Yukkuri from; // レイパー
  * protected Yukkuri to; // 未使用
@@ -35,14 +35,16 @@ public class RaperWakeupEvent extends EventPacket {
 	public boolean simpleEventAction(Yukkuri body) {
 		// 自分自身はスキップ、またはレイパーが既に消えていればスキップ
 		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
-		if (sourceBody == null || body == sourceBody)
+		if (sourceBody == null || body == sourceBody) {
 			return false;
+		}
 		// 死体、睡眠、皮なし、目無しはスキップ
-		if (!body.canEventResponse())
+		if (!body.canEventResponse()) {
 			return true;
+		}
 
 		// 非ゆっくり症、針刺し状態のはスキップ
-		if (body.isNYD() || body.isNeedled()) {
+		if (body.isNyd() || body.isNeedled()) {
 			return false;
 		}
 

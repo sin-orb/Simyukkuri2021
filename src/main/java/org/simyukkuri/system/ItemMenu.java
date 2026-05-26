@@ -2,10 +2,8 @@ package org.simyukkuri.system;
 
 import java.awt.event.MouseEvent;
 import java.util.Locale;
-
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
@@ -20,8 +18,8 @@ import org.simyukkuri.ui.ItemShapeMenuAction;
 import org.simyukkuri.ui.ItemUseMenuAction;
 import org.simyukkuri.util.GameWorld;
 
-/**********************************************
- * オブジェクトコンテキストメニューのまとめ
+/**
+ * オブジェクトコンテキストメニューのまとめ。
  */
 public class ItemMenu {
 
@@ -228,8 +226,8 @@ public class ItemMenu {
 	 */
 	public static final void createPopupMenu() {
 
-		ItemGetMenuAction getact = new ItemGetMenuAction();
-		ItemPopupSpeedAction getpop = new ItemPopupSpeedAction();
+		final ItemGetMenuAction getact = new ItemGetMenuAction();
+		final ItemPopupSpeedAction getpop = new ItemPopupSpeedAction();
 		getPopup = new JPopupMenu();
 		getPopup.addPopupMenuListener(getpop);
 		getMenu = new JMenuItem[GetMenu.values().length];
@@ -241,8 +239,8 @@ public class ItemMenu {
 		}
 		getTarget = null;
 
-		ItemUseMenuAction useact = new ItemUseMenuAction();
-		ItemPopupSpeedAction usepop = new ItemPopupSpeedAction();
+		final ItemUseMenuAction useact = new ItemUseMenuAction();
+		final ItemPopupSpeedAction usepop = new ItemPopupSpeedAction();
 		usePopup = new JPopupMenu();
 		usePopup.addPopupMenuListener(usepop);
 		useMenu = new JMenuItem[UseMenu.values().length];
@@ -254,8 +252,8 @@ public class ItemMenu {
 		}
 		useTarget = null;
 
-		ItemShapeMenuAction shpact = new ItemShapeMenuAction();
-		ItemPopupNoopAction shppop = new ItemPopupNoopAction();
+		final ItemShapeMenuAction shpact = new ItemShapeMenuAction();
+		final ItemPopupNoopAction shppop = new ItemPopupNoopAction();
 		shapePopup = new JPopupMenu();
 		shapePopup.addPopupMenuListener(shppop);
 		shapeMenu = new JMenuItem[ShapeMenu.values().length];
@@ -426,7 +424,7 @@ public class ItemMenu {
 		if (item instanceof Yukkuri) {
 			Yukkuri b = (Yukkuri) item;
 			b.setTaken(false);
-			curMap.getYukkuriRegistry().put(b.getUniqueID(), b);
+			curMap.getYukkuriRegistry().put(b.getUniqueId(), b);
 		} else if (item instanceof Shit) {
 			curMap.getShit().put(item.objId, (Shit) item);
 		} else if (item instanceof Vomit) {

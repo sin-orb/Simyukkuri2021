@@ -21,9 +21,7 @@ import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.system.Sprite;
 import org.simyukkuri.util.WorldTestHelper;
 
-/**
- * Test class for StoneLogic.
- */
+/** Test class for StoneLogic. */
 public class StoneLogicTest {
 
     @BeforeEach
@@ -43,7 +41,7 @@ public class StoneLogicTest {
         b.setX(x);
         b.setY(y);
         b.setZ(0);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         return b;
     }
 
@@ -123,17 +121,20 @@ public class StoneLogicTest {
         Reimu baby = new Reimu();
         baby.setAgeState(AgeState.BABY);
         Sprite[] spr = new Sprite[3];
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++) {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
+        }
         baby.setSpriteSet(spr);
         baby.setX(100);
         baby.setY(100);
         baby.setZ(0);
         baby.setBurialState(BurialState.HALF); // NONE だと addVomit で mypane NPE になる
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(baby.getUniqueID(), baby);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(baby.getUniqueId(), baby);
         new Stone(100, 100, 0); // auto-registers; distance=0 → stepDist(1)>0 → bodyCut
         assertDoesNotThrow(() -> StoneLogic.checkPubble(baby));
-        assertEquals(CriticalDamageType.CUT, baby.getCriticalDamege(),
+        assertEquals(
+                CriticalDamageType.CUT,
+                baby.getCriticalDamege(),
                 "Baby body close to stone should get CUT damage");
     }
 
@@ -162,7 +163,8 @@ public class StoneLogicTest {
         new Stone(104, 100, 0); // auto-registers
         assertDoesNotThrow(() -> StoneLogic.checkPubble(b));
         // No damage should be applied
-        assertNull(b.getCriticalDamege(), "Non-WISE body at moderate distance should not be damaged");
+        assertNull(
+                b.getCriticalDamege(), "Non-WISE body at moderate distance should not be damaged");
     }
 
     @Test

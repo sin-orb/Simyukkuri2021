@@ -29,16 +29,16 @@ public class TransformationServiceTest {
 			Reimu reimu = new Reimu();
 			reimu.setAge(100000);
 			WorldTestHelper.makeTransformationReady(reimu);
-			SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(reimu.getUniqueID(), reimu);
+			SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(reimu.getUniqueId(), reimu);
 
-			int originalId = reimu.getUniqueID();
+			int originalId = reimu.getUniqueId();
 
 			TransformationService.transform(reimu, YukkuriType.DEIBU);
 
 			Yukkuri transformed = SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().get(originalId);
 			assertNotNull(transformed);
 			assertInstanceOf(Deibu.class, transformed);
-			assertEquals(originalId, transformed.getUniqueID());
+			assertEquals(originalId, transformed.getUniqueId());
 			assertTrue(reimu.isRemoved());
 		} finally {
 			WorldTestHelper.resetWorld();

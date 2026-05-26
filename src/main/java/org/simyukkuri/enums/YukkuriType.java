@@ -2,7 +2,6 @@ package org.simyukkuri.enums;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.simyukkuri.util.GameLocale;
 
 /** ゆっくりのタイプ */
@@ -47,7 +46,7 @@ public enum YukkuriType {
 	static {
 		for (YukkuriType type : values()) {
 			BY_CLASS_NAME.put(type.className, type);
-			BY_TYPE_ID.put(Integer.valueOf(type.typeID), type);
+			BY_TYPE_ID.put(Integer.valueOf(type.typeId), type);
 		}
 	}
 
@@ -56,7 +55,7 @@ public enum YukkuriType {
 	private final String imageDirName;
 	private final String nameJ;
 	private final String nameE;
-	private final int typeID;
+	private final int typeId;
 
 	YukkuriType(String clsName, String msgFile, String imgDir, String nameJ, String nameE, int id) {
 		this.className = clsName;
@@ -64,7 +63,7 @@ public enum YukkuriType {
 		this.imageDirName = imgDir;
 		this.nameJ = nameJ;
 		this.nameE = nameE;
-		this.typeID = id;
+		this.typeId = id;
 	}
 
 	/** ゆっくり実装クラスの簡易名を返す。 */
@@ -98,8 +97,8 @@ public enum YukkuriType {
 	}
 
 	/** ゆっくり種別の数値 ID を返す。 */
-	public int getTypeID() {
-		return typeID;
+	public int getTypeId() {
+		return typeId;
 	}
 
 	/**
@@ -119,29 +118,29 @@ public enum YukkuriType {
 	/**
 	 * From type id.
 	 *
-	 * @param typeID the type id
+	 * @param typeId the type id
 	 *
 	 * @return From type id
 	 */
-	public static YukkuriType fromTypeID(int typeID) {
-		return BY_TYPE_ID.get(Integer.valueOf(typeID));
+	public static YukkuriType fromTypeId(int typeId) {
+		return BY_TYPE_ID.get(Integer.valueOf(typeId));
 	}
 
 	/**
 	 * Normalize offspring type.
 	 *
-	 * @param typeID the type id
+	 * @param typeId the type id
 	 *
 	 * @return Normalize offspring type
 	 */
-	public static YukkuriType normalizeOffspringType(YukkuriType typeID) {
-		switch (typeID) {
+	public static YukkuriType normalizeOffspringType(YukkuriType typeId) {
+		switch (typeId) {
 			case DOSMARISA:
 				return MARISA;
 			case DEIBU:
 				return REIMU;
 			default:
-				return typeID;
+				return typeId;
 		}
 	}
 }

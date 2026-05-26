@@ -17,7 +17,6 @@ import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -25,10 +24,9 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Translate;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.bodylinked.Stalk;
@@ -42,7 +40,7 @@ import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
 
-/***************************************************
+/**
  * ベルコン
  * <br>
  * これはほかのアイテムと違い、ObjEXを継承していないので注意。
@@ -214,9 +212,7 @@ public class Beltconveyor extends FieldShape {
 	private static transient BufferedImage[] images = new BufferedImage[4];
 	private static transient TexturePaint[] texture = new TexturePaint[4];
 
-	private boolean[][] setting = new boolean[SetupMenu.values().length][3];// = WorldEntity.YUKKURI | WorldEntity.SHIT
-																			// | WorldEntity.FOOD
-																			// | WorldEntity.VOMIT | WorldEntity.STALK;
+	private boolean[][] setting = new boolean[SetupMenu.values().length][3];
 	private DirectCombo direction;
 	private SpeedCombo beltSpeed;
 
@@ -311,7 +307,7 @@ public class Beltconveyor extends FieldShape {
 	public void drawShape(Graphics2D g2) {
 		int[] polygonX = new int[4];
 		int[] polygonY = new int[4];
-		Translate.getPolygonPoint(fieldSX, fieldSY, fieldEX, fieldEY, polygonX, polygonY);
+		Translate.getPolygonPoint(fieldSx, fieldSy, fieldEx, fieldEy, polygonX, polygonY);
 
 		g2.setPaint(texture[direction.getDirect()]);
 		g2.fillPolygon(polygonX, polygonY, 4);
@@ -328,52 +324,54 @@ public class Beltconveyor extends FieldShape {
 	 */
 	public Beltconveyor(int fsx, int fsy, int fex, int fey) {
 		objId = Numbering.INSTANCE.numberingObjId();
-		Point4y pS = Translate.getFieldLimitForWorld(fsx, fsy);
-		Point4y pE = Translate.getFieldLimitForWorld(fex, fey);
-		fieldSX = pS.getX();
-		fieldSY = pS.getY();
-		fieldEX = pE.getX();
-		fieldEY = pE.getY();
+		Point4y ps = Translate.getFieldLimitForWorld(fsx, fsy);
+		Point4y pe = Translate.getFieldLimitForWorld(fex, fey);
+		fieldSx = ps.getX();
+		fieldSy = ps.getY();
+		fieldEx = pe.getX();
+		fieldEy = pe.getY();
 
 		int[] basePolygonX = new int[2];
 		int[] basePolygonY = new int[2];
-		Translate.getMovedPoint(fieldSX, fieldSY, fieldEX, fieldEY, 0, 0, 0, 0, basePolygonX, basePolygonY);
+		Translate.getMovedPoint(fieldSx, fieldSy, fieldEx, fieldEy, 0, 0, 0, 0, basePolygonX, basePolygonY);
 
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
 		Point4y pos = Translate.invertLimit(basePolygonX[0], basePolygonY[0]);
-		mapSX = Math.max(0, Math.min(pos.getX(), Translate.getWorldWidth()));
-		mapSY = Math.max(0, Math.min(pos.getY(), Translate.getWorldHeight()));
+		mapSx = Math.max(0, Math.min(pos.getX(), Translate.getWorldWidth()));
+		mapSy = Math.max(0, Math.min(pos.getY(), Translate.getWorldHeight()));
 
 		pos = Translate.invertLimit(basePolygonX[1], basePolygonY[1]);
-		mapEX = Math.max(0, Math.min(pos.getX(), Translate.getWorldWidth()));
-		mapEY = Math.max(0, Math.min(pos.getY(), Translate.getWorldHeight()));
+		mapEx = Math.max(0, Math.min(pos.getX(), Translate.getWorldWidth()));
+		mapEy = Math.max(0, Math.min(pos.getY(), Translate.getWorldHeight()));
 
 		// 規定サイズと位置へ合わせる
-		if ((mapEX - mapSX) < MIN_SIZE)
-			mapEX = mapSX + MIN_SIZE;
-		if ((mapEY - mapSY) < MIN_SIZE)
-			mapEY = mapSY + MIN_SIZE;
-		if (mapEX > Translate.getWorldWidth()) {
-			mapSX -= (mapEX - Translate.getWorldWidth());
-			mapEX -= (mapEX - Translate.getWorldWidth());
+		if ((mapEx - mapSx) < MIN_SIZE) {
+			mapEx = mapSx + MIN_SIZE;
 		}
-		if (mapEY > Translate.getWorldHeight()) {
-			mapSY -= (mapEY - Translate.getWorldHeight());
-			mapEY -= (mapEY - Translate.getWorldHeight());
+		if ((mapEy - mapSy) < MIN_SIZE) {
+			mapEy = mapSy + MIN_SIZE;
+		}
+		if (mapEx > Translate.getWorldWidth()) {
+			mapSx -= (mapEx - Translate.getWorldWidth());
+			mapEx -= (mapEx - Translate.getWorldWidth());
+		}
+		if (mapEy > Translate.getWorldHeight()) {
+			mapSy -= (mapEy - Translate.getWorldHeight());
+			mapEy -= (mapEy - Translate.getWorldHeight());
 		}
 
 		Point4y f = new Point4y();
-		Translate.translate(mapSX, mapSY, f);
-		fieldSX = f.getX();
-		fieldSY = f.getY();
-		Translate.translate(mapEX, mapEY, f);
-		fieldEX = f.getX();
-		fieldEY = f.getY();
+		Translate.translate(mapSx, mapSy, f);
+		fieldSx = f.getX();
+		fieldSy = f.getY();
+		Translate.translate(mapEx, mapEy, f);
+		fieldEx = f.getX();
+		fieldEy = f.getY();
 
-		fieldW = fieldEX - fieldSX + 1;
-		fieldH = fieldEY - fieldSY + 1;
-		mapW = mapEX - mapSX + 1;
-		mapH = mapEY - mapSY + 1;
+		fieldW = fieldEx - fieldSx + 1;
+		fieldH = fieldEy - fieldSy + 1;
+		mapW = mapEx - mapSx + 1;
+		mapH = mapEy - mapSy + 1;
 
 		setting[2][0] = true;
 		setting[2][1] = true;
@@ -384,7 +382,7 @@ public class Beltconveyor extends FieldShape {
 		boolean success = setupBelt(this);
 		if (success) {
 			GameWorld.get().getCurrentWorldState().getBeltconveyors().add(this);
-			WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), mapSX, mapSY, mapW, mapH, true,
+			WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), mapSx, mapSy, mapW, mapH, true,
 					FIELD_BELT);
 		}
 	}
@@ -422,25 +420,30 @@ public class Beltconveyor extends FieldShape {
 					// 通常種
 					bodyIdx = SetupButton.NORMAL.ordinal() + SetupMenu.NORMAL_BABY.ordinal();
 				}
-				if (setting[bodyIdx][ageIdx])
+				if (setting[bodyIdx][ageIdx]) {
 					matches = true;
+				}
 				break;
 			case SHIT:
-				if (setting[SetupMenu.SHIT.ordinal()][0])
+				if (setting[SetupMenu.SHIT.ordinal()][0]) {
 					matches = true;
+				}
 				break;
 			case OBJECT:
 				if (o instanceof Food) {
-					if (setting[SetupMenu.FOOD.ordinal()][0])
+					if (setting[SetupMenu.FOOD.ordinal()][0]) {
 						matches = true;
+					}
 				} else if (o instanceof Stalk) {
-					if (setting[SetupMenu.STALK.ordinal()][0])
+					if (setting[SetupMenu.STALK.ordinal()][0]) {
 						matches = true;
+					}
 				}
 				break;
 			case VOMIT:
-				if (setting[SetupMenu.VOMIT.ordinal()][0])
+				if (setting[SetupMenu.VOMIT.ordinal()][0]) {
 					matches = true;
+				}
 				break;
 			default:
 				break;
@@ -464,6 +467,8 @@ public class Beltconveyor extends FieldShape {
 			case BOTTOM:
 				o.addMotion(0, beltSpeed.getSpeed(), 0);
 				break;
+			default:
+				break;
 		}
 	}
 
@@ -471,8 +476,8 @@ public class Beltconveyor extends FieldShape {
 	public static Beltconveyor getBeltconveyor(int fx, int fy) {
 
 		for (Beltconveyor bc : GameWorld.get().getCurrentWorldState().getBeltconveyors()) {
-			if (bc.fieldSX <= fx && fx <= bc.fieldEX
-					&& bc.fieldSY <= fy && fy <= bc.fieldEY) {
+			if (bc.fieldSx <= fx && fx <= bc.fieldEx
+					&& bc.fieldSy <= fy && fy <= bc.fieldEy) {
 				return bc;
 			}
 		}
@@ -481,13 +486,13 @@ public class Beltconveyor extends FieldShape {
 
 	/** 削除 */
 	public static void deleteBelt(Beltconveyor b) {
-		WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), b.mapSX, b.mapSY, b.mapW, b.mapH,
+		WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), b.mapSx, b.mapSy, b.mapW, b.mapH,
 				false,
 				FIELD_BELT);
 		GameWorld.get().getCurrentWorldState().getBeltconveyors().remove(b);
 		// 重なってた部分の復元
 		for (Beltconveyor bc : GameWorld.get().getCurrentWorldState().getBeltconveyors()) {
-			WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), bc.mapSX, bc.mapSY, bc.mapW,
+			WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), bc.mapSx, bc.mapSy, bc.mapW,
 					bc.mapH,
 					true,
 					FIELD_BELT);
@@ -499,10 +504,6 @@ public class Beltconveyor extends FieldShape {
 
 		JPanel mainPanel = new JPanel();
 		JPanel northPanel = new JPanel();
-		JPanel westPanel = new JPanel();
-		JPanel centerPanel = new JPanel();
-		JPanel southPanel = new JPanel();
-		boolean ret = false;
 
 		// パネル全体
 		mainPanel.setLayout(new BorderLayout());
@@ -510,14 +511,17 @@ public class Beltconveyor extends FieldShape {
 		// 上部ラベル
 		northPanel.setLayout(new GridLayout(1, 3));
 		// 左側ボタン列
+		final JPanel westPanel = new JPanel();
 		westPanel.setLayout(new GridLayout(6, 1));
 		westPanel.setPreferredSize(new Dimension(120, 300));
 		// 中央チェックボックス
+		final JPanel centerPanel = new JPanel();
 		centerPanel.setLayout(new GridLayout(6, 3));
 		// 下部その他設定
+		final JPanel southPanel = new JPanel();
 		southPanel.setLayout(new GridLayout(2, 2));
 
-		ButtonListener butAction = new ButtonListener();
+		final ButtonListener butAction = new ButtonListener();
 
 		// 上
 		JPanel panel = new JPanel();
@@ -587,6 +591,7 @@ public class Beltconveyor extends FieldShape {
 		mainPanel.add(BorderLayout.CENTER, centerPanel);
 		mainPanel.add(BorderLayout.SOUTH, southPanel);
 
+		boolean ret = false;
 		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel,
 				GameText.read("item_coveyersettings"), JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
@@ -619,12 +624,12 @@ public class Beltconveyor extends FieldShape {
 	/** ボタン操作の反映作業 */
 	public static class ButtonListener implements ActionListener {
 
-		@Override
 		/**
 		 * Action performed.
 		 *
 		 * @param e イベント
 		 */
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			String command = e.getActionCommand();
 

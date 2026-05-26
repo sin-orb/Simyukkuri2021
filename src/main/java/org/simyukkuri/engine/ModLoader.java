@@ -15,7 +15,6 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
-
 import org.simyukkuri.Const;
 import org.simyukkuri.draw.Dimension4y;
 import org.simyukkuri.draw.MyPane;
@@ -25,7 +24,7 @@ import org.simyukkuri.system.IniFileReader;
 import org.simyukkuri.util.GameImages;
 import org.simyukkuri.util.GameText;
 
-/*****************************************************
+/**
  * データの読み込み拡張
  * ゲーム開始時に指定したフォルダからの読み込みとエラー処理を行う
  */
@@ -482,7 +481,7 @@ public class ModLoader {
 				br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 				jarTry = false;
 			} catch (IOException e) {
-
+				// ignored — fall through to jar loading
 			}
 		}
 		if (jarTry) {
@@ -514,7 +513,6 @@ public class ModLoader {
 	 */
 	public static Map<String, Point4y[]> loadYukkuriIniOffsets(ClassLoader loader, String path, String name) {
 
-		Map<String, Point4y[]> ret = null;
 		IniFileReader iniFile = null;
 		boolean jarTry = true;
 
@@ -532,12 +530,14 @@ public class ModLoader {
 		}
 
 		boolean err = iniFile.open(loader);
-		if (!err)
+		if (!err) {
 			return null;
+		}
 
-		ret = new HashMap<String, Point4y[]>();
+		Map<String, Point4y[]> ret = new HashMap<String, Point4y[]>();
 		HashMap<String, String> map = null;
-		int x, y;
+		int x;
+		int y;
 		Point4y[] pnt = null;
 		String[] keyArr = null;
 		String[] valArr = null;
@@ -607,8 +607,9 @@ public class ModLoader {
 		}
 
 		boolean err = iniFile.open(loader);
-		if (!err)
+		if (!err) {
 			return result;
+		}
 
 		HashMap<String, String> map = null;
 		while ((map = iniFile.readNext()) != null) {
@@ -651,8 +652,9 @@ public class ModLoader {
 		}
 
 		boolean err = iniFile.open(loader);
-		if (!err)
+		if (!err) {
 			return null;
+		}
 
 		String strTemp = new String();
 		HashMap<String, String> map = null;
@@ -688,16 +690,17 @@ public class ModLoader {
 		// 既存のデータをクリア
 		for (BufferedImage[][] a2 : images) {
 			for (BufferedImage[] a1 : a2) {
-				for (int j = 0; j < a1.length; j++)
+				for (int j = 0; j < a1.length; j++) {
 					a1[j] = null;
+				}
 			}
 		}
 		for (int i = 0; i < dirOfs.length; i++) {
 			dirOfs[i][0] = 0;
 			dirOfs[i][1] = 0;
 		}
-		int babyIndex = Const.BABY_INDEX;
-		int childIndex = Const.CHILD_INDEX;
+		final int babyIndex = Const.BABY_INDEX;
+		final int childIndex = Const.CHILD_INDEX;
 		int adultIndex = Const.ADULT_INDEX;
 
 		MediaTracker mt = new MediaTracker((MyPane) io);
@@ -739,7 +742,8 @@ public class ModLoader {
 			e.printStackTrace();
 		}
 
-		int sx, sy;
+		int sx;
+		int sy;
 
 		// 子、赤ゆサイズの画像作成
 		for (BufferedImage[][] array2d : images) {
@@ -783,8 +787,9 @@ public class ModLoader {
 		for (BufferedImage[][][] a3 : images) {
 			for (BufferedImage[][] a2 : a3) {
 				for (BufferedImage[] a1 : a2) {
-					for (int j = 0; j < a1.length; j++)
+					for (int j = 0; j < a1.length; j++) {
 						a1[j] = null;
+					}
 				}
 			}
 		}
@@ -792,8 +797,8 @@ public class ModLoader {
 			dirOfs[i][0] = 0;
 			dirOfs[i][1] = 0;
 		}
-		int babyIndex = Const.BABY_INDEX;
-		int childIndex = Const.CHILD_INDEX;
+		final int babyIndex = Const.BABY_INDEX;
+		final int childIndex = Const.CHILD_INDEX;
 		int adultIndex = Const.ADULT_INDEX;
 
 		MediaTracker mt = new MediaTracker((MyPane) io);
@@ -845,7 +850,8 @@ public class ModLoader {
 			e.printStackTrace();
 		}
 
-		int sx, sy;
+		int sx;
+		int sy;
 
 		// 子、赤ゆサイズの画像作成
 		for (BufferedImage[][][] array3d : images) {
@@ -893,17 +899,17 @@ public class ModLoader {
 	 * @param bodyImg   イメージ
 	 * @param bodyRect  ゆっくり胴体の矩形
 	 * @param braidRect ゆっくりのおさげの矩形
-	 * @param BB        おさげが胴体の後ろかどうか
+	 * @param bb        おさげが胴体の後ろかどうか
 	 * @param io        イメージオブザーバ
 	 */
 	public static void setImageSize(BufferedImage[][][] bodyImg, Dimension4y[] bodyRect, Dimension4y[] braidRect,
-			boolean BB, ImageObserver io) {
+			boolean bb, ImageObserver io) {
 		for (int i = 0; i < 3; i++) {
 			bodyRect[i] = new Dimension4y();
 			bodyRect[i].setWidth(bodyImg[0][0][i].getWidth(io));
 			bodyRect[i].setHeight(bodyImg[0][0][i].getHeight(io));
 
-			if (BB) {
+			if (bb) {
 				if (bodyImg[ImageCode.BRAID_BACK.ordinal()][0][i] != null) {
 					braidRect[i] = new Dimension4y(bodyImg[ImageCode.BRAID_BACK.ordinal()][0][i].getWidth(io),
 							bodyImg[ImageCode.BRAID_BACK.ordinal()][0][i].getHeight(io));
@@ -936,8 +942,9 @@ public class ModLoader {
 		for (int i = 0; i < 2; i++) {
 			jarTry = false;
 			// 片方しかない画像はスキップ
-			if (i == 1 && !parts.hasSecondary())
+			if (i == 1 && !parts.hasSecondary()) {
 				break;
+			}
 			// MOD指定あり
 			if (root != null) {
 				String path;
@@ -1032,7 +1039,7 @@ public class ModLoader {
 
 						// ver違いの画像があった場合の採用チェック
 						for (int j = 0; j < ModLoader.maxImageVariantCount; j++) {
-							int variantIndex = j + 2;// v2スタート
+							int variantIndex = j + 2; // v2スタート
 							// v2,v3などが存在するか
 							String strTempPath = strBeforeTemp + "_v" + variantIndex + ".png";
 
@@ -1096,62 +1103,5 @@ public class ModLoader {
 		g2.drawImage(img, 0, 0, w, h, null);
 
 		return ret;
-	}
-}
-
-/**
- * ゆっくり画像のテンポラリクラス
- */
-final class BodyImage {
-	private BufferedImage[] img; // 画像(左右)
-	private boolean[] isDummy; // ダミーファイルあり
-	private boolean isFlip; // 反転あり
-	private BufferedImage[][] imgOtherVer; // 別バージョン画像(左右)
-
-	/**
-	 * コンストラクタ.
-	 */
-	public BodyImage() {
-		img = new BufferedImage[2];
-		isDummy = new boolean[2];
-		isFlip = false;
-		imgOtherVer = new BufferedImage[2][ModLoader.getMaxImgOtherVer()];
-	}
-
-	/**
-	 * 左右の画像配列を返す。
-	 *
-	 * @return 画像配列（[0]左 [1]右）
-	 */
-	public BufferedImage[] getImg() {
-		return img;
-	}
-
-	/**
-	 * 左右のダミーフラグ配列を返す。
-	 *
-	 * @return ダミーフラグ配列（[0]左 [1]右）
-	 */
-	public boolean[] getIsDummy() {
-		return isDummy;
-	}
-
-	/** @return 右画像を左の反転で描画する場合 true */
-	public boolean isFlip() {
-		return isFlip;
-	}
-
-	/** @param flip 右画像を左の反転で描画するか */
-	public void setFlip(boolean flip) {
-		isFlip = flip;
-	}
-
-	/**
-	 * 左右の別バージョン画像配列を返す。
-	 *
-	 * @return 別バージョン画像配列（[左右][バージョン]）
-	 */
-	public BufferedImage[][] getImgOtherVer() {
-		return imgOtherVer;
 	}
 }

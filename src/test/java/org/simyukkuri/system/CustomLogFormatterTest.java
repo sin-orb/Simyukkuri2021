@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
-
 import org.junit.jupiter.api.Test;
 
 class CustomLogFormatterTest {

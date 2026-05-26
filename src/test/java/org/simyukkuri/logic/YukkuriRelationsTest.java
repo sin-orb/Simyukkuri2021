@@ -41,7 +41,7 @@ class YukkuriRelationsTest {
 
 	@Test
 	void detectsParentChildRelations() {
-		WorldTestHelper.setParents(child, parent.getUniqueID(), -1);
+		WorldTestHelper.setParents(child, parent.getUniqueId(), -1);
 
 		assertTrue(YukkuriRelations.isParent(parent, child));
 		assertTrue(YukkuriRelations.isFather(parent, child));
@@ -53,7 +53,7 @@ class YukkuriRelationsTest {
 
 	@Test
 	void detectsPartnerRelations() {
-		parent.setPartner(partner.getUniqueID());
+		parent.setPartner(partner.getUniqueId());
 
 		assertTrue(YukkuriRelations.isPartner(parent, partner));
 		assertTrue(YukkuriRelations.isFamily(parent, partner));
@@ -62,8 +62,8 @@ class YukkuriRelationsTest {
 
 	@Test
 	void detectsSiblingRelationsByKnownParent() {
-		WorldTestHelper.setParents(child, -1, parent.getUniqueID());
-		WorldTestHelper.setParents(sibling, -1, parent.getUniqueID());
+		WorldTestHelper.setParents(child, -1, parent.getUniqueId());
+		WorldTestHelper.setParents(sibling, -1, parent.getUniqueId());
 		child.setAge(10);
 		sibling.setAge(5);
 
@@ -74,11 +74,11 @@ class YukkuriRelationsTest {
 
 	@Test
 	void resolvesFamilyMembersByIndex() {
-		WorldTestHelper.setParents(child, -1, parent.getUniqueID());
-		WorldTestHelper.setParents(sibling, -1, parent.getUniqueID());
-		child.getChildren().add(unrelated.getUniqueID());
-		child.getSisters().add(sibling.getUniqueID());
-		child.getElderSisters().add(partner.getUniqueID());
+		WorldTestHelper.setParents(child, -1, parent.getUniqueId());
+		WorldTestHelper.setParents(sibling, -1, parent.getUniqueId());
+		child.getChildren().add(unrelated.getUniqueId());
+		child.getSisters().add(sibling.getUniqueId());
+		child.getElderSisters().add(partner.getUniqueId());
 
 		assertSame(sibling, YukkuriRelations.getSister(child, 0));
 		assertSame(partner, YukkuriRelations.getElderSister(child, 0));
@@ -87,10 +87,10 @@ class YukkuriRelationsTest {
 
 	@Test
 	void removesFamilyMembersByIndexTarget() {
-		WorldTestHelper.setParents(child, -1, parent.getUniqueID());
-		child.getChildren().add(unrelated.getUniqueID());
-		child.getElderSisters().add(partner.getUniqueID());
-		child.getSisters().add(sibling.getUniqueID());
+		WorldTestHelper.setParents(child, -1, parent.getUniqueId());
+		child.getChildren().add(unrelated.getUniqueId());
+		child.getElderSisters().add(partner.getUniqueId());
+		child.getSisters().add(sibling.getUniqueId());
 
 		YukkuriRelations.removeChild(child, unrelated);
 		YukkuriRelations.removeElderSister(child, partner);
@@ -103,8 +103,8 @@ class YukkuriRelationsTest {
 
 	@Test
 	void detectsRelationMineClassification() {
-		WorldTestHelper.setParents(child, parent.getUniqueID(), -1);
-		parent.setPartner(partner.getUniqueID());
+		WorldTestHelper.setParents(child, parent.getUniqueId(), -1);
+		parent.setPartner(partner.getUniqueId());
 		child.setAge(10);
 
 		assertEquals(YukkuriRelationType.FATHER, YukkuriRelations.checkMyRelation(parent, child));
@@ -135,14 +135,14 @@ class YukkuriRelationsTest {
 		assertFalse(YukkuriRelations.isChild(parent, null));
 		assertFalse(YukkuriRelations.isPartner(parent, null));
 
-		WorldTestHelper.setParents(parent, -1, child.getUniqueID());
+		WorldTestHelper.setParents(parent, -1, child.getUniqueId());
 		assertThrows(NullPointerException.class, () -> YukkuriRelations.isSister(parent, null));
 		assertThrows(NullPointerException.class, () -> YukkuriRelations.isFamily(parent, null));
 	}
 
 	private Yukkuri createRegisteredBody() {
 		Yukkuri body = WorldTestHelper.createBody();
-		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
 		return body;
 	}
 }

@@ -41,7 +41,7 @@ public final class YukkuriSexualDelegate {
 		if (body.isDead()) {
 			return;
 		}
-		if (body.isNYD()) {
+		if (body.isNyd()) {
 			return;
 		}
 		// change own state
@@ -73,7 +73,7 @@ public final class YukkuriSexualDelegate {
 		if (p.isDead()) {
 			return;
 		}
-		if (p.isNotNYD()) {
+		if (p.isNotNyd()) {
 			p.setStress(0);
 			p.addMemories(20);
 			// 相手の妊娠判定
@@ -183,7 +183,7 @@ public final class YukkuriSexualDelegate {
 
 		// 相手の妊娠判定
 		p.wakeup();
-		if (p.isNotNYD()) {
+		if (p.isNotNyd()) {
 			p.setMessage(GameMessages.getMessage(p, MessagePool.Action.RaperSukkiri), 60, true, false);
 			p.setSukkiri(true);
 			body.setCalm();
@@ -305,7 +305,7 @@ public final class YukkuriSexualDelegate {
 			return;
 		}
 
-		if (body.isNYD() || body.isMelt()) {
+		if (body.isNyd() || body.isMelt()) {
 			body.stayPurupuru(20);
 			return;
 		}

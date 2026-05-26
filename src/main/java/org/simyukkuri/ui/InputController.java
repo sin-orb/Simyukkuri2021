@@ -22,13 +22,13 @@ public final class InputController {
 		switch (e.getKeyCode()) {
 			case KeyEvent.VK_ESCAPE:
 				synchronized (SimYukkuri.lock) {
-					if (MainCommandUI.getSelectedGameSpeed() != 0) {
-						savedGameSpeed = MainCommandUI.getSelectedGameSpeed();
-						MainCommandUI.setSelectedGameSpeed(0);
+					if (MainCommandUi.getSelectedGameSpeed() != 0) {
+						savedGameSpeed = MainCommandUi.getSelectedGameSpeed();
+						MainCommandUi.setSelectedGameSpeed(0);
 					} else {
-						MainCommandUI.setSelectedGameSpeed(savedGameSpeed);
+						MainCommandUi.setSelectedGameSpeed(savedGameSpeed);
 					}
-					MainCommandUI.getGameSpeedCombo().setSelectedIndex(MainCommandUI.getSelectedGameSpeed());
+					MainCommandUi.getGameSpeedCombo().setSelectedIndex(MainCommandUi.getSelectedGameSpeed());
 				}
 				break;
 			case KeyEvent.VK_DELETE:

@@ -313,7 +313,7 @@ public class MyPane extends JPanel implements Runnable {
 		backBufferG2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
 	}
 
-	BufferedImage getBackBuffer() {
+	BufferedImage getBackBufferImage() {
 		return backBuffer;
 	}
 
@@ -485,22 +485,22 @@ public class MyPane extends JPanel implements Runnable {
 					switch (randomTypeIndex) {
 						case 0:
 						default:
-							selectType = YukkuriType.fromTypeID(baseTypeIndex);
+							selectType = YukkuriType.fromTypeId(baseTypeIndex);
 							if (rareTypeIndex == 1) {
-								int type = selectType.getTypeID() + 1000;
-								selectType = YukkuriType.fromTypeID(type);
+								int type = selectType.getTypeId() + 1000;
+								selectType = YukkuriType.fromTypeId(type);
 							} else if (rareTypeIndex == 2) {
-								int type = selectType.getTypeID() + 3000;
-								selectType = YukkuriType.fromTypeID(type);
+								int type = selectType.getTypeId() + 3000;
+								selectType = YukkuriType.fromTypeId(type);
 							}
 							selectAge = ageTypeIndex;
 							break;
 						case 1:
-							selectType = YukkuriType.fromTypeID(GameRandom.nextInt(namesCommonJ.length));
+							selectType = YukkuriType.fromTypeId(GameRandom.nextInt(namesCommonJ.length));
 							selectAge = GameRandom.nextInt(3);
 							break;
 						case 2:
-							selectType = YukkuriType.fromTypeID(GameRandom.nextInt(namesRareJ.length) + 1000);
+							selectType = YukkuriType.fromTypeId(GameRandom.nextInt(namesRareJ.length) + 1000);
 							selectAge = GameRandom.nextInt(3);
 							break;
 						case 3:
@@ -508,10 +508,10 @@ public class MyPane extends JPanel implements Runnable {
 							switch (selectRare) {
 								case 0:
 								default:
-									selectType = YukkuriType.fromTypeID(GameRandom.nextInt(namesCommonJ.length));
+									selectType = YukkuriType.fromTypeId(GameRandom.nextInt(namesCommonJ.length));
 									break;
 								case 1:
-									selectType = YukkuriType.fromTypeID(
+									selectType = YukkuriType.fromTypeId(
 											GameRandom.nextInt(namesRareJ.length) + 1000);
 									break;
 							}

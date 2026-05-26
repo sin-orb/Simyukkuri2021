@@ -2,7 +2,6 @@ package org.simyukkuri.logic;
 
 import java.util.List;
 import java.util.Map;
-
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -136,8 +135,8 @@ public final class FoodPredatorFoodPolicy {
 				if (plantBody == body) {
 					continue;
 				}
-				if (plantBody.getBurialState() != BurialState.ALL &&
-						!(plantBody.getBurialState() == BurialState.NEARLY_ALL && !plantBody.hasOkazari())) {
+				if (plantBody.getBurialState() != BurialState.ALL
+						&& !(plantBody.getBurialState() == BurialState.NEARLY_ALL && !plantBody.hasOkazari())) {
 					continue;
 				}
 				List<Integer> babyList = stalk.getAttachedBabyIds();

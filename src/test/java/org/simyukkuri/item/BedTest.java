@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Rectangle;
-
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Translate;
@@ -673,7 +672,8 @@ class BedTest extends ItemTestBase {
     @Test
     void testSetOfsXY() {
         Bed bed = new Bed(100, 100, 0);
-        bed.setOfsXY(7, 8);
+        bed.setOfsX(7);
+        bed.setOfsY(8);
         assertEquals(7, bed.getOfsX());
         assertEquals(8, bed.getOfsY());
     }

@@ -47,9 +47,10 @@ public class IniFileUtilTest {
             assertNotNull(reimu);
         } catch (Exception e) {
             // File not found is expected in test environment
-            assertTrue(e.getMessage() == null ||
-                    e.getMessage().contains("file") ||
-                    e.getMessage().contains("File"));
+            assertTrue(
+                    e.getMessage() == null
+                            || e.getMessage().contains("file")
+                            || e.getMessage().contains("File"));
         }
     }
 
@@ -64,14 +65,16 @@ public class IniFileUtilTest {
             assertNotNull(reimu);
         } catch (Exception e) {
             // File not found is expected in test environment
-            assertTrue(e.getMessage() == null ||
-                    e.getMessage().contains("file") ||
-                    e.getMessage().contains("File"));
+            assertTrue(
+                    e.getMessage() == null
+                            || e.getMessage().contains("file")
+                            || e.getMessage().contains("File"));
         }
     }
 
     @Test
     void testConstructor_doesNotThrow() {
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> new org.simyukkuri.util.IniFileUtil());
+        org.junit.jupiter.api.Assertions.assertDoesNotThrow(
+                () -> new org.simyukkuri.util.IniFileUtil());
     }
 }
