@@ -188,6 +188,11 @@ public class DosMarisa extends Marisa {
 
 	}
 
+	@Override
+	public void reinitializeBoundary() {
+		setBoundary(boundary, braidBoundary);
+	}
+
 	/**
 	 * Tune parameters.
 	 */

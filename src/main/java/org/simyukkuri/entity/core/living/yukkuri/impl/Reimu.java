@@ -605,6 +605,11 @@ public class Reimu extends Yukkuri {
 
 	}
 
+	@Override
+	public void reinitializeBoundary() {
+		setBoundary(boundary, braidBoundary);
+	}
+
 	/** Tune parameters. */
 	@Override
 	public void tuneParameters() {

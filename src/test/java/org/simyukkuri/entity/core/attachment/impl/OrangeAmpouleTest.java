@@ -28,6 +28,7 @@ public class OrangeAmpouleTest {
     public void setUp() throws Exception {
         SimYukkuri.world = new World();
         WorldTestHelper.initializeEmptyMessagePool();
+        WorldTestHelper.initializeStandardAttachmentMountPoints();
         OrangeAmpoule.setImages(buildImages());
         OrangeAmpoule.setImgW(new int[] {10, 20, 30});
         OrangeAmpoule.setImgH(new int[] {11, 21, 31});
@@ -212,9 +213,8 @@ public class OrangeAmpouleTest {
     }
 
     @Test
-    public void testConstructorWithParentNotInWorld() {
-        Yukkuri parent = new Reimu();
-        parent.setAgeState(AgeState.CHILD);
+    public void testConstructorWithParentInWorld() {
+        Yukkuri parent = createParent(AgeState.CHILD);
         OrangeAmpoule ampoule = new OrangeAmpoule(parent);
         assertEquals(500, ampoule.getValue());
         assertEquals(0, ampoule.getCost());

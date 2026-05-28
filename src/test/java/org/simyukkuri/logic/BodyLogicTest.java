@@ -8,8 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.awt.image.BufferedImage;
+import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,8 +21,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.ConstState;
 import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.entity.core.attachment.impl.Ants;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Marisa;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Remirya;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Sakuya;
 import org.simyukkuri.entity.core.living.yukkuri.impl.TarinaiReimu;
@@ -60,6 +66,8 @@ class BodyLogicTest {
         SimYukkuri.RND = new Random(0);
         WorldTestHelper.initializeMinimalWorld();
         WorldTestHelper.initializeStandardTranslate200();
+        setAntStatics();
+        setMarisaAntMountPoint();
 
         me = WorldTestHelper.createBody();
         you = WorldTestHelper.createBody();
@@ -72,6 +80,45 @@ class BodyLogicTest {
         // Register bodies in the map so they can be found by ID
         SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(me.getUniqueId(), me);
         SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(you.getUniqueId(), you);
+    }
+
+    private static void setMarisaAntMountPoint() {
+        try {
+            Field field = Marisa.class.getDeclaredField("AttachOffset");
+            field.setAccessible(true);
+            @SuppressWarnings("unchecked")
+            Map<String, Point4y[]> attachOffset =
+                    (Map<String, Point4y[]>) field.get(null);
+            if (attachOffset == null) {
+                attachOffset = new HashMap<>();
+            }
+            attachOffset.put(
+                    "Ants",
+                    new Point4y[] {
+                        new Point4y(1, 2),
+                        new Point4y(3, 4),
+                        new Point4y(5, 6)
+                    });
+            field.set(null, attachOffset);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to initialize Marisa Ants mount point", e);
+        }
+    }
+
+    private static void setAntStatics() {
+        BufferedImage[][] images = new BufferedImage[3][3];
+        for (int age = 0; age < 3; age++) {
+            for (int frame = 0; frame < 3; frame++) {
+                images[age][frame] =
+                        new BufferedImage(
+                                10 + age * 10, 10 + age * 10, BufferedImage.TYPE_INT_ARGB);
+            }
+        }
+        Ants.setImages(images);
+        Ants.setImgW(new int[] {10, 20, 30});
+        Ants.setImgH(new int[] {11, 21, 31});
+        Ants.setPivX(new int[] {1, 2, 3});
+        Ants.setPivY(new int[] {4, 5, 6});
     }
 
     @AfterEach
@@ -1218,15 +1265,8 @@ class BodyLogicTest {
             you.setPublicRank(PublicRank.NONE);
             you.setStress(200);
             me.setStress(200);
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(me.getUniqueId());
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(you.getUniqueId());
             me.addAttachment(new Ants(me));
             you.addAttachment(new Ants(you));
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(me.getUniqueId(), me);
-            SimYukkuri.world
-                    .getCurrentWorldState()
-                    .getYukkuriRegistry()
-                    .put(you.getUniqueId(), you);
             SimYukkuri.RND = new ConstState(1);
 
             assertTrue(YukkuriLogic.doActionOther(you, me));
@@ -1256,12 +1296,7 @@ class BodyLogicTest {
             you.setPublicRank(PublicRank.NONE);
             you.setStress(200);
             you.addDamage(20);
-            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(you.getUniqueId());
             you.addAttachment(new Ants(you));
-            SimYukkuri.world
-                    .getCurrentWorldState()
-                    .getYukkuriRegistry()
-                    .put(you.getUniqueId(), you);
             SimYukkuri.RND = new ConstState(1);
 
             assertTrue(YukkuriLogic.doActionOther(you, me));
@@ -7473,7 +7508,6 @@ class BodyLogicTest {
     @Test
     void testDoActionOther_AntsOnPartner_L839() {
         // L837: p(you)にアリ → L839: b(me)にアリなし → b.doPeropero(p) 実行
-        // you を一時的に map から外して Ants を作成 (pivX=null の場合に setBoundary が呼ばれないようにする)
         me.setSpriteSet(makeSprites(1, 1));
         you.setSpriteSet(makeSprites(1, 1));
         me.setX(100);
@@ -7482,10 +7516,7 @@ class BodyLogicTest {
         you.setY(100); // 隣接
         me.setPublicRank(PublicRank.NONE);
         you.setPublicRank(PublicRank.NONE);
-        // you を map から外してから Ants を装着 (YukkuriLookup で見つからないので setBoundary をスキップ)
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(you.getUniqueId());
         you.addAttachment(new Ants(you));
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(you.getUniqueId(), you);
         SimYukkuri.RND = new ConstState(0);
         assertDoesNotThrow(() -> YukkuriLogic.doActionOther(you, me));
     }

@@ -4,7 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.simyukkuri.draw.MyPane;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Marisa;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
@@ -14,6 +17,16 @@ import org.simyukkuri.enums.YukkuriType;
  * Transformation policy のテスト.
  */
 public class TransformationPolicyTest {
+
+	@BeforeEach
+	public void setUp() {
+		MyPane.setSelectedYukkuri(null);
+	}
+
+	@AfterEach
+	public void tearDown() {
+		MyPane.setSelectedYukkuri(null);
+	}
 
 	@Test
 	public void testNeedsDosReservation() {
@@ -25,6 +38,18 @@ public class TransformationPolicyTest {
 	public void testResolveBaseBodyFileName() {
 		assertEquals("marisa", TransformationPolicy.resolveBaseYukkuriFileName(YukkuriType.MARISA));
 		assertEquals("deibu", TransformationPolicy.resolveBaseYukkuriFileName(YukkuriType.DEIBU));
+	}
+
+	@Test
+	public void testIsSelectedYukkuri() {
+		Reimu selected = new Reimu();
+		Marisa other = new Marisa();
+
+		MyPane.setSelectedYukkuri(selected);
+
+		assertTrue(TransformationPolicy.isSelectedYukkuri(selected));
+		assertFalse(TransformationPolicy.isSelectedYukkuri(other));
+		assertFalse(TransformationPolicy.isSelectedYukkuri(null));
 	}
 
 	@Test

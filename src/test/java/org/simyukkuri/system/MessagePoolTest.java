@@ -201,6 +201,9 @@ public class MessagePoolTest {
         }
 
         @Override
+        public void reinitializeBoundary() {}
+
+        @Override
         public String getNameJ() {
             return customName;
         }

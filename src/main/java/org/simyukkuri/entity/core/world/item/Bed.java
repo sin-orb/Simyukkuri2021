@@ -92,8 +92,10 @@ public class Bed extends WorldEntity {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentWorldState().getBeds().put(objId, this);
-		GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
+		if (GameWorld.get() != null) {
+			GameWorld.get().getCurrentWorldState().getBeds().put(objId, this);
+			GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
+		}
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.BED;
 		itemRank = ItemRank.values()[initOption];

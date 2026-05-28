@@ -104,6 +104,7 @@ public class BodyTest {
     @BeforeEach
     public void setUp() {
         WorldTestHelper.resetStates();
+        WorldTestHelper.initializeStandardAttachmentMountPoints();
         SimYukkuri.RND = new Random();
         originalRnd = SimYukkuri.RND;
         SimYukkuri.world = new World();
@@ -15916,6 +15917,7 @@ public class BodyTest {
         public void testCheckNonYukkuriDiseaseAnydAmpouleResetsState() {
             initAnydaAmpouleImages();
             FixedToleranceBody b = new FixedToleranceBody();
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
             b.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             b.getAttach().add(new AnydAmpoule(b));
 

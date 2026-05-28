@@ -223,6 +223,11 @@ public class ReimuMarisa extends Marisa {
 
 	}
 
+	@Override
+	public void reinitializeBoundary() {
+		setBoundary(boundary, braidBoundary);
+	}
+
 	/**
 	 * Tune parameters.
 	 */

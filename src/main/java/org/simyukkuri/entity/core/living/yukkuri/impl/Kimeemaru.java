@@ -179,6 +179,11 @@ public class Kimeemaru extends Yukkuri {
 
 	}
 
+	@Override
+	public void reinitializeBoundary() {
+		setBoundary(boundary, braidBoundary);
+	}
+
 	/**
 	 * Tune parameters.
 	 */

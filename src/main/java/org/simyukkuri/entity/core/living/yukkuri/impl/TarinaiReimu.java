@@ -141,6 +141,11 @@ public class TarinaiReimu extends Tarinai {
 
 	}
 
+	@Override
+	public void reinitializeBoundary() {
+		setBoundary(boundary, braidBoundary);
+	}
+
 	/**
 	 * たりないゆかどうかを判定する.
 	 * たりないゆ、たりないれいむクラスでオーバーライドする.

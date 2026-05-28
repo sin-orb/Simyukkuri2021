@@ -317,6 +317,7 @@ public abstract class Yukkuri extends SocialEntity {
 	@Override
 	public String toString() {
 		String name = GameLocale.isJapanese() ? getNameJ() : getNameE();
+		if (name == null) name = getType() != null ? getType().toString() : "?";
 		StringBuilder ret = new StringBuilder(name);
 		if (isUnBirth()) {
 			ret.append("(" + GameText.read("base_fruit") + ")");
@@ -3204,21 +3205,11 @@ public abstract class Yukkuri extends SocialEntity {
 				if (isHasPants() || (isFixBack() && isNeedled())) {
 					birthAllowed = false;
 				}
-				if ((isLockmove() && (!isFixBack() || getCoreAnkoState() != CoreAnkoState.NON_YUKKURI_DISEASE))
-						&& !isShitting()) {
-					birthAllowed = false;
-				}
 				if (!birthAllowed) {
 					getBabyTypes().clear();
 					makeDirty(true);
 					if (isNotNyd()) {
-						if (isLockmove() && !isHasPants()) {
-							setHasPants(true);
-							setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed2), true);
-							setHasPants(false);
-						} else {
-							setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed2), true);
-						}
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed2), true);
 					}
 					setBirth(false);
 					pregnantPeriod = 0;
@@ -3234,6 +3225,15 @@ public abstract class Yukkuri extends SocialEntity {
 
 	/** ゆっくりのタイプ。まりさなら0、れいむなら1、等々ユニークなタイプを表す。 */
 	public abstract YukkuriType getType();
+
+	/** JSON ロード後にスプライトサイズを再初期化する. */
+	public abstract void reinitializeBoundary();
+
+	@Override
+	public YukkuriType getShitType() {
+		YukkuriType t = super.getShitType();
+		return t != null ? t : getType();
+	}
 
 	/** ゆっくりの日本語名称を返却する */
 	public abstract String getNameJ();
@@ -3368,7 +3368,7 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	/** おさげのスプライト定義（年齢別） */
-	protected Sprite[] braidSpr = new Sprite[3];
+	protected Sprite[] braidSpr = defaultBraidSpriteArray();
 
 	/** おさげのスプライト定義（年齢別） を取得する. @return おさげのスプライト定義（年齢別） */
 	public Sprite[] getBraidSpr() {
@@ -3377,7 +3377,27 @@ public abstract class Yukkuri extends SocialEntity {
 
 	/** おさげのスプライト定義（年齢別） を設定する. @param braidSpr おさげのスプライト定義（年齢別） */
 	public void setBraidSpr(Sprite[] braidSpr) {
-		this.braidSpr = braidSpr;
+		this.braidSpr = fillBraidNulls(braidSpr);
+	}
+
+	private static Sprite[] defaultBraidSpriteArray() {
+		return new Sprite[] {
+			new Sprite(0, 0, Sprite.PIVOT_CENTER_BOTTOM),
+			new Sprite(0, 0, Sprite.PIVOT_CENTER_BOTTOM),
+			new Sprite(0, 0, Sprite.PIVOT_CENTER_BOTTOM)
+		};
+	}
+
+	private static Sprite[] fillBraidNulls(Sprite[] arr) {
+		if (arr == null) {
+			return defaultBraidSpriteArray();
+		}
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i] == null) {
+				arr[i] = new Sprite(0, 0, Sprite.PIVOT_CENTER_BOTTOM);
+			}
+		}
+		return arr;
 	}
 
 	/**

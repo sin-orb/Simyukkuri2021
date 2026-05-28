@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.attachment.impl.Badge.BadgeRank;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -16,12 +17,14 @@ import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.system.ResourceUtil;
+import org.simyukkuri.util.WorldTestHelper;
 
 public class BadgeTest {
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws Exception {
         SimYukkuri.world = new World();
+        WorldTestHelper.initializeStandardAttachmentMountPoints();
         Badge.setImages(buildImages());
         Badge.setImgW(new int[] {10, 20, 30});
         Badge.setImgH(new int[] {11, 21, 31});
@@ -156,11 +159,10 @@ public class BadgeTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         Badge badge = new Badge(parent, BadgeRank.BRONZE);
 
-        int origPivotX = badge.getPivotX();
-        int origPivotY = badge.getPivotY();
-
         SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueId());
 
+        int origPivotX = badge.getPivotX();
+        int origPivotY = badge.getPivotY();
         badge.resetBoundary();
 
         assertEquals(origPivotX, badge.getPivotX());
@@ -183,9 +185,8 @@ public class BadgeTest {
     }
 
     @Test
-    public void testConstructorWithParentNotInWorld() {
-        Yukkuri parent = new Reimu();
-        parent.setAgeState(AgeState.CHILD);
+    public void testConstructorWithParentInWorld() {
+        Yukkuri parent = createParent(AgeState.CHILD);
         Badge badge = new Badge(parent, BadgeRank.BRONZE);
         assertEquals(0, badge.getValue());
         assertEquals(0, badge.getCost());
@@ -193,7 +194,21 @@ public class BadgeTest {
     }
 
     private static Yukkuri createParent(AgeState ageState) {
-        Yukkuri parent = new Reimu();
+        Yukkuri parent = new Reimu() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Point4y[] getMountPoint(String key) {
+                if ("Badge".equals(key)) {
+                    return new Point4y[] {
+                            new Point4y(1, 2),
+                            new Point4y(3, 4),
+                            new Point4y(5, 6)
+                    };
+                }
+                return null;
+            }
+        };
         parent.setAgeState(ageState);
         SimYukkuri.world
                 .getCurrentWorldState()

@@ -59,8 +59,8 @@ public class YukkuriRideEvent extends EventPacket {
 	}
 
 	/** 移動ターゲット ID フラグをセットする。 */
-	public void setMoveTargetId(boolean moveTargetId) {
-		this.hasRideTarget = moveTargetId;
+	public void setMoveTarget(boolean moveTarget) {
+		this.hasRideTarget = moveTarget;
 	}
 
 	// 参加チェック

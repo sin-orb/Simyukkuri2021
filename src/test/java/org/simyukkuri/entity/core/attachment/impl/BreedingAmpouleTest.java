@@ -19,12 +19,14 @@ import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Direction;
 import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.system.ResourceUtil;
+import org.simyukkuri.util.WorldTestHelper;
 
 public class BreedingAmpouleTest {
 
     @BeforeEach
     public void setUp() {
         SimYukkuri.world = new World();
+        WorldTestHelper.initializeStandardAttachmentMountPoints();
         BreedingAmpoule.setImages(buildImages());
         BreedingAmpoule.setImgW(new int[] {10, 20, 30});
         BreedingAmpoule.setImgH(new int[] {11, 21, 31});
@@ -34,8 +36,7 @@ public class BreedingAmpouleTest {
 
     @Test
     public void testStaticAccessors() {
-        // 注: POS_KEYは"AccelAmpoule"になっている（おそらくコピペミス）
-        assertEquals("AccelAmpoule", BreedingAmpoule.getPosKey());
+        assertEquals("BreedingAmpoule", BreedingAmpoule.getPosKey());
         assertEquals(7, BreedingAmpoule.getProperty().length);
         assertEquals(2, BreedingAmpoule.getProperty()[0]); // 赤ゆ用画像サイズ
         assertEquals(2, BreedingAmpoule.getProperty()[1]); // 子ゆ用画像サイズ
@@ -179,9 +180,8 @@ public class BreedingAmpouleTest {
     }
 
     @Test
-    public void testConstructorWithParentNotInWorld() {
-        Yukkuri parent = new Reimu();
-        parent.setAgeState(AgeState.CHILD);
+    public void testConstructorWithParentInWorld() {
+        Yukkuri parent = createParent(AgeState.CHILD);
         BreedingAmpoule ampoule = new BreedingAmpoule(parent);
         assertEquals(1000, ampoule.getValue());
         assertEquals(0, ampoule.getCost());

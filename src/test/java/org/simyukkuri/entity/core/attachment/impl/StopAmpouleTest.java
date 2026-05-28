@@ -17,12 +17,14 @@ import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Direction;
 import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.system.ResourceUtil;
+import org.simyukkuri.util.WorldTestHelper;
 
 public class StopAmpouleTest {
 
     @BeforeEach
     public void setUp() {
         SimYukkuri.world = new World();
+        WorldTestHelper.initializeStandardAttachmentMountPoints();
         StopAmpoule.setImages(buildImages());
         StopAmpoule.setImgW(new int[] {10, 20, 30});
         StopAmpoule.setImgH(new int[] {11, 21, 31});
@@ -211,9 +213,8 @@ public class StopAmpouleTest {
     }
 
     @Test
-    public void testConstructorWithParentNotInWorld() {
-        Yukkuri parent = new Reimu();
-        parent.setAgeState(AgeState.CHILD);
+    public void testConstructorWithParentInWorld() {
+        Yukkuri parent = createParent(AgeState.CHILD);
         StopAmpoule ampoule = new StopAmpoule(parent);
         assertEquals(1000, ampoule.getValue());
         assertEquals(0, ampoule.getCost());

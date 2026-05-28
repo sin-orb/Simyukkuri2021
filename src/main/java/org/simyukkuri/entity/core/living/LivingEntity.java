@@ -3876,7 +3876,7 @@ public abstract class LivingEntity extends Entity {
 
 	// --- BodySpriteSet fields ---
 	/** 本体のスプライト定義（年齢別） */
-	protected Sprite[] bodySpr = new Sprite[3];
+	protected Sprite[] bodySpr = defaultSpriteArray();
 
 	/** 本体のスプライト定義（年齢別） を取得する. @return 本体のスプライト定義（年齢別） */
 	public Sprite[] getSpriteSet() {
@@ -3885,11 +3885,11 @@ public abstract class LivingEntity extends Entity {
 
 	/** 本体のスプライト定義（年齢別） を設定する. @param bodySpr 本体のスプライト定義（年齢別） */
 	public void setSpriteSet(Sprite[] bodySpr) {
-		this.bodySpr = bodySpr;
+		this.bodySpr = fillNulls(bodySpr);
 	}
 
 	/** 拡幅分のスプライト定義（年齢別） */
-	protected Sprite[] expandSpr = new Sprite[3];
+	protected Sprite[] expandSpr = defaultSpriteArray();
 
 	/** 拡幅分のスプライト定義（年齢別） を取得する. @return 拡幅分のスプライト定義（年齢別） */
 	public Sprite[] getExpandSpr() {
@@ -3898,7 +3898,27 @@ public abstract class LivingEntity extends Entity {
 
 	/** 拡幅分のスプライト定義（年齢別） を設定する. @param expandSpr 拡幅分のスプライト定義（年齢別） */
 	public void setExpandSpr(Sprite[] expandSpr) {
-		this.expandSpr = expandSpr;
+		this.expandSpr = fillNulls(expandSpr);
+	}
+
+	private static Sprite[] defaultSpriteArray() {
+		return new Sprite[] {
+			new Sprite(0, 0, Sprite.PIVOT_CENTER_BOTTOM),
+			new Sprite(0, 0, Sprite.PIVOT_CENTER_BOTTOM),
+			new Sprite(0, 0, Sprite.PIVOT_CENTER_BOTTOM)
+		};
+	}
+
+	private static Sprite[] fillNulls(Sprite[] arr) {
+		if (arr == null) {
+			return defaultSpriteArray();
+		}
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i] == null) {
+				arr[i] = new Sprite(0, 0, Sprite.PIVOT_CENTER_BOTTOM);
+			}
+		}
+		return arr;
 	}
 
 	// ===== Step6-1: BodyAttributes から移動したメソッド群 =====

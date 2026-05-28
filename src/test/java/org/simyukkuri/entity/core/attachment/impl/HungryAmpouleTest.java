@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
@@ -16,12 +17,14 @@ import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Direction;
 import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.system.ResourceUtil;
+import org.simyukkuri.util.WorldTestHelper;
 
 public class HungryAmpouleTest {
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws Exception {
         SimYukkuri.world = new World();
+        WorldTestHelper.initializeStandardAttachmentMountPoints();
         HungryAmpoule.setImages(buildImages());
         HungryAmpoule.setImgW(new int[] {10, 20, 30});
         HungryAmpoule.setImgH(new int[] {11, 21, 31});
@@ -160,11 +163,10 @@ public class HungryAmpouleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         HungryAmpoule ampoule = new HungryAmpoule(parent);
 
-        int origPivotX = ampoule.getPivotX();
-        int origPivotY = ampoule.getPivotY();
-
         SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueId());
 
+        int origPivotX = ampoule.getPivotX();
+        int origPivotY = ampoule.getPivotY();
         ampoule.resetBoundary();
 
         assertEquals(origPivotX, ampoule.getPivotX());
@@ -186,16 +188,29 @@ public class HungryAmpouleTest {
     }
 
     @Test
-    public void testConstructorWithParentNotInWorld() {
-        Yukkuri parent = new Reimu();
-        parent.setAgeState(AgeState.CHILD);
+    public void testConstructorWithParentInWorld() {
+        Yukkuri parent = createParent(AgeState.CHILD);
         HungryAmpoule ampoule = new HungryAmpoule(parent);
         assertEquals(500, ampoule.getValue());
         assertEquals(0, ampoule.getCost());
     }
 
     private static Yukkuri createParent(AgeState ageState) {
-        Yukkuri parent = new Reimu();
+        Yukkuri parent = new Reimu() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Point4y[] getMountPoint(String key) {
+                if ("HungryAmpoule".equals(key)) {
+                    return new Point4y[] {
+                            new Point4y(1, 2),
+                            new Point4y(3, 4),
+                            new Point4y(5, 6)
+                    };
+                }
+                return null;
+            }
+        };
         parent.setAgeState(ageState);
         SimYukkuri.world
                 .getCurrentWorldState()

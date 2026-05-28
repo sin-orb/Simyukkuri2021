@@ -279,8 +279,10 @@ public class Food extends WorldEntity {
 			setBoundary(0, 0, 0, 0); // Default for test environment
 		}
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentWorldState().getFoods().put(objId, this);
-		GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
+		if (GameWorld.get() != null) {
+			GameWorld.get().getCurrentWorldState().getFoods().put(objId, this);
+			GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
+		}
 		objType = Type.OBJECT;
 		worldEntityType = WorldEntityKind.FOOD;
 		setRemoved(false);

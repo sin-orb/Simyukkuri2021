@@ -259,6 +259,11 @@ public class Fran extends Yukkuri {
 
 	}
 
+	@Override
+	public void reinitializeBoundary() {
+		setBoundary(boundary, braidBoundary);
+	}
+
 	/**
 	 * Tune parameters.
 	 */

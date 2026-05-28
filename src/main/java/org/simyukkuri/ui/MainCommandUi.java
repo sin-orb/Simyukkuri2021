@@ -1,0 +1,724 @@
+package org.simyukkuri.ui;
+
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Insets;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JToggleButton;
+import javax.swing.border.EmptyBorder;
+import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.command.GadgetMenu;
+import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
+import org.simyukkuri.enums.PublicRank;
+import org.simyukkuri.enums.YukkuriRank;
+import org.simyukkuri.system.IconPool;
+import org.simyukkuri.util.GameLocale;
+import org.simyukkuri.util.GameText;
+import org.simyukkuri.util.GameWorld;
+
+/**
+ * メインコマンドUI（右ペイン）
+ */
+public class MainCommandUi {
+
+	/** システムボタンテキスト */
+	static enum SystemButtonLabel {
+		ADDBODY(GameText.read("system_addyukkuri")),
+		SAVE(GameText.read("save")),
+		LOAD(GameText.read("load")),
+		PREV("<<"),
+		LOG(GameText.read("log")),
+		NEXT(">>"),
+		LOGCLEAR(GameText.read("logclear")),
+		;
+
+		private final String label;
+
+		SystemButtonLabel(String str) {
+			this.label = str;
+		}
+
+		/** @return ボタンのラベル文字列 */
+		public String getLabel() {
+			return label;
+		}
+	}
+
+	/** ツールボタン */
+	static enum ToolButtonLabel {
+		MOVE(GameText.read("system_move")),
+		BAG(GameText.read("system_belongings")),
+		;
+
+		private final String label;
+
+		ToolButtonLabel(String str) {
+			this.label = str;
+		}
+
+		/** @return ボタンのラベル文字列 */
+		public String getLabel() {
+			return label;
+		}
+	}
+
+	/** ステータスのラベル */
+	static enum StatusLabel {
+		MONEY(GameText.read("system_money")),
+		LABEL(GameText.read("system_statusofyukkuri")),
+		NAME(""),
+		RANK(GameText.read("system_rank")),
+		PERSONALITY(GameText.read("system_attitude")),
+		INTEL(GameText.read("system_intelligence")),
+		DAMAGE(GameText.read("system_damage")),
+		STRESS(GameText.read("system_stress")),
+		HUNGER(GameText.read("system_satis")),
+		TANG(GameText.read("system_taste")),
+		SHIT(GameText.read("system_unun")),
+		LOVEPLAYER(GameText.read("system_familiality")),
+		;
+
+		private final String label;
+
+		StatusLabel(String str) {
+			this.label = str;
+		}
+
+		/** @return ボタンのラベル文字列 */
+		public String getLabel() {
+			return label;
+		}
+	}
+
+	/** オプションポップアップ */
+	static enum OptionPopup {
+		INI_RELOAD(GameText.read("system_inireload"));
+
+		private final String label;
+
+		OptionPopup(String str) {
+			this.label = str;
+		}
+
+		/** @return ボタンのラベル文字列 */
+		public String getLabel() {
+			return label;
+		}
+	}
+
+	private static final String[] ATTITUDE_LEVEL_J = { "超善良", "善良", "普通", "ゲス", "ドゲス" };
+	private static final String[] ATTITUDE_LEVEL_E = { "Very Nice", "Nice", "Normal", "Shithead", "Very Shithead" };
+	private static final String[] INTEL_LEVEL_J = { "バッジ級", "普通", "餡子脳" };
+	private static final String[] INTEL_LEVEL_E = { "Badge Class", "Normal", "Fool" };
+	private static final String[] TANG_LEVEL_J = { "バカ舌", "普通", "肥えてる" };
+	private static final String[] TANG_LEVEL_E = { "Paralyzed", "Normal", "Destroyed" };
+	/** ゲームスピード */
+	private static int selectedGameSpeed = 1;
+	/** ズームスケール */
+	private static int selectedZoomScale = 0;
+	/** ゲームスピードコンボボックス */
+	@SuppressWarnings("rawtypes")
+	private static JComboBox gameSpeedCombo;
+	/** メインアイテムコンボボックス */
+	@SuppressWarnings("rawtypes")
+	private static JComboBox mainItemCombo;
+	/** サブアイテムコンボボックス */
+	@SuppressWarnings("rawtypes")
+	private static JComboBox subItemCombo;
+	/** ゆっくりステータスラベル */
+	private static JLabel[] yuStatusLabel = new JLabel[StatusLabel.values().length];
+	/** ステータスアイコンラベル */
+	private static JLabel[] statIconLabel = new JLabel[8];
+	/** アイテムアイコンラベル */
+	private static JLabel[] itemIconLabel = new JLabel[1];
+	/** システムボタン */
+	private static JButton[] systemButton = new JButton[SystemButtonLabel.values().length];
+	/** その他ボタン */
+	private static JToggleButton scriptButton;
+	private static JToggleButton targetButton;
+	private static JToggleButton pinButton;
+	private static JToggleButton helpButton;
+	private static JToggleButton optionButton;
+	/** プレイヤーボタン */
+	private static JToggleButton[] playerButton = new JToggleButton[ToolButtonLabel.values().length];
+	/** オプションポップアップ */
+	private static JPopupMenu optionPopup = new JPopupMenu();
+	/** マップウィンドウ */
+	private static WorldSelectionWindow mapWindow;
+	/** アイテムウィンドウ */
+	private static ItemWindow itemWindow;
+
+	/** メニューエリアの幅 */
+	public static final int MENU_PANE_X = 124;
+
+	/**
+	 * インターフェイス作成
+	 * 
+	 * @param windowHeight ウィンドウの高さ
+	 * @return パネルインスタンス
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static JPanel createInterface(int windowHeight) {
+
+		JPanel retpanel = new JPanel();
+		retpanel.setLayout(new GridLayout(0, 1, 0, 0));
+		retpanel.setBorder(new EmptyBorder(0, 0, 0, 0));
+		retpanel.setPreferredSize(new Dimension(MENU_PANE_X, windowHeight));
+		retpanel.setMinimumSize(new Dimension(MENU_PANE_X, windowHeight));
+
+		// コンボボックス
+		GameSpeedComboBoxListener gsl = new GameSpeedComboBoxListener();
+		gameSpeedCombo = new JComboBox();
+		gameSpeedCombo.setFocusable(false);
+		gameSpeedCombo.addItemListener(gsl);
+		gameSpeedCombo.setModel(new DefaultComboBoxModel(GadgetMenu.GameSpeed.values()));
+		gameSpeedCombo.setSelectedIndex(1);
+		retpanel.add(gameSpeedCombo);
+		// 選択コマンド
+		MainItemComboBoxListener mil = new MainItemComboBoxListener();
+		mainItemCombo = new JComboBox();
+		mainItemCombo.setFocusable(false);
+		mainItemCombo.addItemListener(mil);
+		mainItemCombo.setModel(GadgetMenu.getMainModel());
+		retpanel.add(mainItemCombo);
+
+		SubItemComboBoxListener sil = new SubItemComboBoxListener();
+		subItemCombo = new JComboBox();
+		subItemCombo.setFocusable(false);
+		subItemCombo.addItemListener(sil);
+		subItemCombo.setModel(GadgetMenu.getToolModel());
+		retpanel.add(subItemCombo);
+
+		ButtonListener buttonListener = new ButtonListener();
+		int butId;
+
+		// ゆっくり追加ボタン
+		butId = SystemButtonLabel.ADDBODY.ordinal();
+		systemButton[butId] = new JButton(SystemButtonLabel.ADDBODY.getLabel());
+		systemButton[butId].addActionListener(buttonListener);
+		systemButton[butId].setFocusable(false);
+		retpanel.add(systemButton[butId]);
+
+		// セーブ・ロード
+		JPanel saveLoad = new JPanel();
+		butId = SystemButtonLabel.SAVE.ordinal();
+		saveLoad.setLayout(new GridLayout(1, 2, 0, 0));
+		saveLoad.setBorder(new EmptyBorder(0, 0, 0, 0));
+		systemButton[butId] = new JButton(SystemButtonLabel.SAVE.getLabel());
+		systemButton[butId].addActionListener(buttonListener);
+		systemButton[butId].setMargin(new Insets(0, 0, 0, 0));
+		systemButton[butId].setFocusable(false);
+		saveLoad.add(systemButton[butId]);
+
+		butId = SystemButtonLabel.LOAD.ordinal();
+		systemButton[butId] = new JButton(SystemButtonLabel.LOAD.getLabel());
+		systemButton[butId].addActionListener(buttonListener);
+		systemButton[butId].setMargin(new Insets(0, 0, 0, 0));
+		systemButton[butId].setFocusable(false);
+		saveLoad.add(systemButton[butId]);
+		retpanel.add(saveLoad);
+
+		// ログ
+		JPanel log = new JPanel();
+		butId = SystemButtonLabel.PREV.ordinal();
+		log.setLayout(new GridLayout(1, 3, 0, 0));
+		log.setBorder(new EmptyBorder(0, 0, 0, 0));
+		systemButton[butId] = new JButton(SystemButtonLabel.PREV.getLabel());
+		systemButton[butId].addActionListener(buttonListener);
+		systemButton[butId].setMargin(new Insets(0, 0, 0, 0));
+		systemButton[butId].setFocusable(false);
+		log.add(systemButton[butId]);
+
+		butId = SystemButtonLabel.LOG.ordinal();
+		systemButton[butId] = new JButton(SystemButtonLabel.LOG.getLabel());
+		systemButton[butId].addActionListener(buttonListener);
+		systemButton[butId].setMargin(new Insets(0, 0, 0, 0));
+		systemButton[butId].setFocusable(false);
+		log.add(systemButton[butId]);
+
+		butId = SystemButtonLabel.NEXT.ordinal();
+		systemButton[butId] = new JButton(SystemButtonLabel.NEXT.getLabel());
+		systemButton[butId].addActionListener(buttonListener);
+		systemButton[butId].setMargin(new Insets(0, 0, 0, 0));
+		systemButton[butId].setFocusable(false);
+		log.add(systemButton[butId]);
+		retpanel.add(log);
+
+		// ログクリアボタン
+		butId = SystemButtonLabel.LOGCLEAR.ordinal();
+		systemButton[butId] = new JButton(SystemButtonLabel.LOGCLEAR.getLabel());
+		systemButton[butId].addActionListener(buttonListener);
+		systemButton[butId].setFocusable(false);
+		retpanel.add(systemButton[butId]);
+
+		// セリフ、カーソル表示切替ボタン
+		Image[] icon = IconPool.getButtonIconImageArray();
+		JPanel buttonPane = new JPanel();
+		buttonPane.setLayout(new GridLayout(1, 0, 0, 0));
+		buttonPane.setBorder(new EmptyBorder(0, 0, 0, 0));
+		scriptButton = new JToggleButton(new ImageIcon(icon[IconPool.ButtonIcon.POPUP_OFF.ordinal()]));
+		scriptButton.addActionListener(buttonListener);
+		scriptButton.setMargin(new Insets(0, 0, 0, 0));
+		scriptButton.setFocusable(false);
+		buttonPane.add(scriptButton);
+
+		targetButton = new JToggleButton(new ImageIcon(icon[IconPool.ButtonIcon.TARGET.ordinal()]));
+		targetButton.addActionListener(buttonListener);
+		targetButton.setMargin(new Insets(0, 0, 0, 0));
+		targetButton.setFocusable(false);
+		buttonPane.add(targetButton);
+
+		helpButton = new JToggleButton(new ImageIcon(icon[IconPool.ButtonIcon.HELP_OFF.ordinal()]));
+		helpButton.addActionListener(buttonListener);
+		helpButton.setMargin(new Insets(0, 0, 0, 0));
+		helpButton.setFocusable(false);
+		buttonPane.add(helpButton);
+
+		optionButton = new JToggleButton(new ImageIcon(icon[IconPool.ButtonIcon.OPTION.ordinal()]));
+		optionButton.addActionListener(buttonListener);
+		optionButton.setMargin(new Insets(0, 0, 0, 0));
+		optionButton.setFocusable(false);
+		buttonPane.add(optionButton);
+		retpanel.add(buttonPane);
+
+		// オプションポップアップ
+		OptionMenuListener oml = new OptionMenuListener();
+		OptionPopupListener opl = new OptionPopupListener();
+		optionPopup.addPopupMenuListener(opl);
+		int size = OptionPopup.values().length;
+		for (int i = 0; i < size; i++) {
+			JMenuItem menu = new JMenuItem(OptionPopup.values()[i].getLabel());
+			menu.addActionListener(oml);
+			menu.setActionCommand(OptionPopup.values()[i].name());
+			optionPopup.add(menu);
+		}
+
+		// プレイヤー情報
+		JPanel action = new JPanel();
+		butId = ToolButtonLabel.MOVE.ordinal();
+		action.setLayout(new GridLayout(1, 2, 0, 0));
+		action.setBorder(new EmptyBorder(0, 0, 0, 0));
+		playerButton[butId] = new JToggleButton(ToolButtonLabel.MOVE.getLabel());
+		playerButton[butId].addActionListener(buttonListener);
+		playerButton[butId].setMargin(new Insets(0, 0, 0, 0));
+		playerButton[butId].setFocusable(false);
+		action.add(playerButton[butId]);
+
+		butId = ToolButtonLabel.BAG.ordinal();
+		playerButton[butId] = new JToggleButton(ToolButtonLabel.BAG.getLabel());
+		playerButton[butId].addActionListener(buttonListener);
+		playerButton[butId].setMargin(new Insets(0, 0, 0, 0));
+		playerButton[butId].setFocusable(false);
+		action.add(playerButton[butId]);
+		retpanel.add(action);
+
+		// アイテムアイコン
+		JPanel itemPane = new JPanel();
+		itemPane.setLayout(new GridLayout(1, 6, 0, 0));
+		for (int i = 0; i < itemIconLabel.length; i++) {
+			itemIconLabel[i] = new JLabel();
+			itemPane.add(itemIconLabel[i]);
+		}
+		retpanel.add(itemPane);
+
+		// ステータス
+		StatusLabel[] enums = StatusLabel.values();
+		JPanel item = new JPanel();
+		item.setLayout(new GridLayout(1, 11, 0, 0));
+		item.setBorder(new EmptyBorder(0, 0, 0, 0));
+		for (int i = 0; i < yuStatusLabel.length; i++) {
+			if (i == 1) {
+				yuStatusLabel[i] = new JLabel(enums[i].getLabel());
+			} else {
+				yuStatusLabel[i] = new JLabel(enums[i].getLabel() + " - ");
+			}
+			item.add(yuStatusLabel[i]);
+		}
+
+		retpanel.add(yuStatusLabel[StatusLabel.MONEY.ordinal()]);
+		retpanel.add(yuStatusLabel[StatusLabel.LABEL.ordinal()]);
+		JPanel namePane = new JPanel();
+		namePane.setLayout(new BoxLayout(namePane, BoxLayout.X_AXIS));
+		pinButton = new JToggleButton(new ImageIcon(icon[IconPool.ButtonIcon.PIN.ordinal()]));
+		pinButton.addActionListener(buttonListener);
+		pinButton.setMargin(new Insets(0, 0, 0, 0));
+		pinButton.setFocusable(false);
+		namePane.add(pinButton);
+		namePane.add(yuStatusLabel[StatusLabel.NAME.ordinal()]);
+		retpanel.add(namePane);
+
+		retpanel.add(yuStatusLabel[StatusLabel.RANK.ordinal()]);
+		retpanel.add(yuStatusLabel[StatusLabel.PERSONALITY.ordinal()]);
+		retpanel.add(yuStatusLabel[StatusLabel.INTEL.ordinal()]);
+		retpanel.add(yuStatusLabel[StatusLabel.DAMAGE.ordinal()]);
+		retpanel.add(yuStatusLabel[StatusLabel.STRESS.ordinal()]);
+		retpanel.add(yuStatusLabel[StatusLabel.HUNGER.ordinal()]);
+		retpanel.add(yuStatusLabel[StatusLabel.TANG.ordinal()]);
+		retpanel.add(yuStatusLabel[StatusLabel.SHIT.ordinal()]);
+		retpanel.add(item);
+
+		// 状態異常アイコン
+		JPanel statPane = new JPanel();
+		statPane.setLayout(new GridLayout(1, 6, 0, 0));
+		for (int i = 0; i < statIconLabel.length; i++) {
+			statIconLabel[i] = new JLabel();
+			statPane.add(statIconLabel[i]);
+		}
+		retpanel.add(statPane);
+
+		// このペインから呼ばれるサブウィンドウ作成
+		mapWindow = new WorldSelectionWindow(SimYukkuri.simYukkuri);
+		itemWindow = new ItemWindow(SimYukkuri.simYukkuri);
+
+		// プレイヤー情報は表示
+		showPlayerStatus();
+
+		return retpanel;
+	}
+
+	/**
+	 * ステータスをクリアする.
+	 */
+	public static void clearStatus() {
+		yuStatusLabel[StatusLabel.MONEY.ordinal()]
+				.setText(StatusLabel.MONEY.getLabel() + GameWorld.get().getPlayer().getCash());
+		yuStatusLabel[StatusLabel.NAME.ordinal()].setText("");
+		yuStatusLabel[StatusLabel.RANK.ordinal()].setText(StatusLabel.RANK.getLabel());
+		yuStatusLabel[StatusLabel.PERSONALITY.ordinal()].setText(StatusLabel.PERSONALITY.getLabel());
+		yuStatusLabel[StatusLabel.INTEL.ordinal()].setText(StatusLabel.INTEL.getLabel());
+		yuStatusLabel[StatusLabel.DAMAGE.ordinal()].setText(StatusLabel.DAMAGE.getLabel());
+		yuStatusLabel[StatusLabel.STRESS.ordinal()].setText(StatusLabel.STRESS.getLabel());
+		yuStatusLabel[StatusLabel.HUNGER.ordinal()].setText(StatusLabel.HUNGER.getLabel());
+		yuStatusLabel[StatusLabel.TANG.ordinal()].setText(StatusLabel.TANG.getLabel());
+		yuStatusLabel[StatusLabel.SHIT.ordinal()].setText(StatusLabel.SHIT.getLabel());
+
+		pinButton.setSelected(false);
+
+		statIconLabel[0].setIcon(null);
+		statIconLabel[0].setToolTipText(null);
+		statIconLabel[1].setIcon(null);
+		statIconLabel[1].setToolTipText(null);
+		statIconLabel[2].setIcon(null);
+		statIconLabel[2].setToolTipText(null);
+		statIconLabel[3].setIcon(null);
+		statIconLabel[3].setToolTipText(null);
+		statIconLabel[4].setIcon(null);
+		statIconLabel[4].setToolTipText(null);
+	}
+
+	/**
+	 * プレイヤーのステータスを表示する.
+	 */
+	public static void showPlayerStatus() {
+		if (GameWorld.get() == null) {
+			return;
+		}
+		// 現金更新
+		yuStatusLabel[StatusLabel.MONEY.ordinal()]
+				.setText(StatusLabel.MONEY.getLabel() + GameWorld.get().getPlayer().getCash());
+
+		IconPool.StatusIcon[] stat = IconPool.StatusIcon.values();
+		ImageIcon[] img = IconPool.getStatusIconImageArray();
+		// 精子餡保持状態更新
+		if (SimYukkuri.sperm != null) {
+			itemIconLabel[0].setIcon(img[IconPool.StatusIcon.SPERM.ordinal()]);
+			itemIconLabel[0].setToolTipText(stat[IconPool.StatusIcon.SPERM.ordinal()].getHelp());
+		} else {
+			itemIconLabel[0].setIcon(null);
+			itemIconLabel[0].setToolTipText(null);
+		}
+
+	}
+
+	/**
+	 * ゆっくりのステータスを表示する.
+	 * 
+	 * @param b ゆっくり
+	 */
+	public static void showStatus(Yukkuri b) {
+		int damage = 100 * b.getDamage() / b.getDamageLimit();
+		int hungry = 100 * b.getHungry() / b.getHungryLimit();
+		int shit = 100 * b.getShit() / b.getShitLimit();
+		int stress = 100 * b.getStress() / b.getStressLimit();
+		int lovePlayerPercent = 100 * b.getLovePlayer() / b.getLovePlayerLimitBase();
+
+		yuStatusLabel[StatusLabel.MONEY.ordinal()]
+				.setText(StatusLabel.MONEY.getLabel() + GameWorld.get().getPlayer().getCash());
+		yuStatusLabel[StatusLabel.NAME.ordinal()]
+				.setText(" " + (GameLocale.isJapanese() ? b.getNameJ() : b.getNameE()));
+		yuStatusLabel[StatusLabel.RANK.ordinal()]
+				.setText(StatusLabel.RANK.getLabel() + YukkuriRank.values()[b.getRank().ordinal()].getDisplayName());
+		yuStatusLabel[StatusLabel.PERSONALITY.ordinal()].setText(StatusLabel.PERSONALITY.getLabel()
+				+ (GameLocale.isJapanese() ? ATTITUDE_LEVEL_J[b.getAttitude().ordinal()]
+						: ATTITUDE_LEVEL_E[b.getAttitude().ordinal()]));
+		yuStatusLabel[StatusLabel.INTEL.ordinal()].setText(StatusLabel.INTEL.getLabel()
+				+ (GameLocale.isJapanese() ? INTEL_LEVEL_J[b.getIntelligence().ordinal()]
+						: INTEL_LEVEL_E[b.getIntelligence().ordinal()]));
+		yuStatusLabel[StatusLabel.DAMAGE.ordinal()].setText(StatusLabel.DAMAGE.getLabel() + damage + "%");
+		yuStatusLabel[StatusLabel.STRESS.ordinal()].setText(StatusLabel.STRESS.getLabel() + stress + "%");
+		yuStatusLabel[StatusLabel.HUNGER.ordinal()].setText(StatusLabel.HUNGER.getLabel() + hungry + "%");
+		yuStatusLabel[StatusLabel.TANG.ordinal()].setText(StatusLabel.TANG.getLabel()
+				+ (GameLocale.isJapanese() ? TANG_LEVEL_J[b.getTangType().ordinal()]
+						: TANG_LEVEL_E[b.getTangType().ordinal()]));
+		yuStatusLabel[StatusLabel.SHIT.ordinal()].setText(StatusLabel.SHIT.getLabel() + shit + "%");
+		yuStatusLabel[StatusLabel.LOVEPLAYER.ordinal()]
+				.setText(StatusLabel.LOVEPLAYER.getLabel() + lovePlayerPercent + "%");
+
+		pinButton.setSelected(b.isPinned());
+
+		IconPool.StatusIcon[] stat = IconPool.StatusIcon.values();
+		ImageIcon[] img = IconPool.getStatusIconImageArray();
+
+		if (b.isAnalClose()) {
+			statIconLabel[0].setIcon(img[IconPool.StatusIcon.UNSHIT.ordinal()]);
+			statIconLabel[0].setToolTipText(stat[IconPool.StatusIcon.UNSHIT.ordinal()].getHelp());
+		} else {
+			statIconLabel[0].setIcon(null);
+			statIconLabel[0].setToolTipText(null);
+		}
+		if (b.isStalkCastration()) {
+			statIconLabel[1].setIcon(img[IconPool.StatusIcon.UNSTALK.ordinal()]);
+			statIconLabel[1].setToolTipText(stat[IconPool.StatusIcon.UNSTALK.ordinal()].getHelp());
+		} else {
+			statIconLabel[1].setIcon(null);
+			statIconLabel[1].setToolTipText(null);
+		}
+		if (b.isCastrated()) {
+			statIconLabel[2].setIcon(img[IconPool.StatusIcon.UNBABY.ordinal()]);
+			statIconLabel[2].setToolTipText(stat[IconPool.StatusIcon.UNBABY.ordinal()].getHelp());
+		} else {
+			statIconLabel[2].setIcon(null);
+			statIconLabel[2].setToolTipText(null);
+		}
+		if (b.isPredatorType()) {
+			statIconLabel[3].setIcon(img[IconPool.StatusIcon.PREDATOR.ordinal()]);
+			statIconLabel[3].setToolTipText(stat[IconPool.StatusIcon.PREDATOR.ordinal()].getHelp());
+		} else {
+			statIconLabel[3].setIcon(null);
+			statIconLabel[3].setToolTipText(null);
+		}
+		if (b.isRaper()) {
+			statIconLabel[4].setIcon(img[IconPool.StatusIcon.RAPER.ordinal()]);
+			statIconLabel[4].setToolTipText(stat[IconPool.StatusIcon.RAPER.ordinal()].getHelp());
+		} else {
+			statIconLabel[4].setIcon(null);
+			statIconLabel[4].setToolTipText(null);
+		}
+		if (b.isPenipeniCutted()) {
+			statIconLabel[5].setIcon(img[IconPool.StatusIcon.PENIPENICUT.ordinal()]);
+			statIconLabel[5].setToolTipText(stat[IconPool.StatusIcon.PENIPENICUT.ordinal()].getHelp());
+		} else {
+			statIconLabel[5].setIcon(null);
+			statIconLabel[5].setToolTipText(null);
+		}
+		if (b.isPheromone()) {
+			statIconLabel[6].setIcon(img[IconPool.StatusIcon.PHEROMONE.ordinal()]);
+			statIconLabel[6].setToolTipText(stat[IconPool.StatusIcon.PHEROMONE.ordinal()].getHelp());
+		} else {
+			statIconLabel[6].setIcon(null);
+			statIconLabel[6].setToolTipText(null);
+		}
+		if (b.getPublicRank() == PublicRank.UNUN_SLAVE) {
+			statIconLabel[7].setIcon(img[IconPool.StatusIcon.UNUNSLAVE.ordinal()]);
+			statIconLabel[7].setToolTipText(stat[IconPool.StatusIcon.UNUNSLAVE.ordinal()].getHelp());
+		} else {
+			statIconLabel[7].setIcon(null);
+			statIconLabel[7].setToolTipText(null);
+		}
+	}
+
+	/** @return 現在選択中のゲームスピードインデックス */
+	public static int getSelectedGameSpeed() {
+		return selectedGameSpeed;
+	}
+
+	/** @param selectedGameSpeed ゲームスピードインデックス */
+	public static void setSelectedGameSpeed(int selectedGameSpeed) {
+		MainCommandUi.selectedGameSpeed = selectedGameSpeed;
+	}
+
+	/** @return 現在選択中のズームスケール */
+	public static int getSelectedZoomScale() {
+		return selectedZoomScale;
+	}
+
+	/** @param selectedZoomScale ズームスケール */
+	public static void setSelectedZoomScale(int selectedZoomScale) {
+		MainCommandUi.selectedZoomScale = selectedZoomScale;
+	}
+
+	/** @return ゲームスピードのコンボボックス */
+	@SuppressWarnings("rawtypes")
+	public static JComboBox getGameSpeedCombo() {
+		return gameSpeedCombo;
+	}
+
+	/** @param gameSpeedCombo ゲームスピードのコンボボックス */
+	@SuppressWarnings("rawtypes")
+	public static void setGameSpeedCombo(JComboBox gameSpeedCombo) {
+		MainCommandUi.gameSpeedCombo = gameSpeedCombo;
+	}
+
+	/** @return メインカテゴリのコンボボックス */
+	@SuppressWarnings("rawtypes")
+	public static JComboBox getMainItemCombo() {
+		return mainItemCombo;
+	}
+
+	/** @param mainItemCombo メインカテゴリのコンボボックス */
+	@SuppressWarnings("rawtypes")
+	public static void setMainItemCombo(JComboBox mainItemCombo) {
+		MainCommandUi.mainItemCombo = mainItemCombo;
+	}
+
+	/** @return サブカテゴリのコンボボックス */
+	@SuppressWarnings("rawtypes")
+	public static JComboBox getSubItemCombo() {
+		return subItemCombo;
+	}
+
+	/** @param subItemCombo サブカテゴリのコンボボックス */
+	@SuppressWarnings("rawtypes")
+	public static void setSubItemCombo(JComboBox subItemCombo) {
+		MainCommandUi.subItemCombo = subItemCombo;
+	}
+
+	/** @return ゆっくりステータス表示ラベル配列 */
+	public static JLabel[] getYuStatusLabel() {
+		return yuStatusLabel;
+	}
+
+	/** @param yuStatusLabel ゆっくりステータス表示ラベル配列 */
+	public static void setYuStatusLabel(JLabel[] yuStatusLabel) {
+		MainCommandUi.yuStatusLabel = yuStatusLabel;
+	}
+
+	/** @return ステータスアイコンラベル配列 */
+	public static JLabel[] getStatIconLabel() {
+		return statIconLabel;
+	}
+
+	/** @param statIconLabel ステータスアイコンラベル配列 */
+	public static void setStatIconLabel(JLabel[] statIconLabel) {
+		MainCommandUi.statIconLabel = statIconLabel;
+	}
+
+	/** @return アイテムアイコンラベル配列 */
+	public static JLabel[] getItemIconLabel() {
+		return itemIconLabel;
+	}
+
+	/** @param itemIconLabel アイテムアイコンラベル配列 */
+	public static void setItemIconLabel(JLabel[] itemIconLabel) {
+		MainCommandUi.itemIconLabel = itemIconLabel;
+	}
+
+	/** @return システムボタン配列 */
+	public static JButton[] getSystemButton() {
+		return systemButton;
+	}
+
+	/** @param systemButton システムボタン配列 */
+	public static void setSystemButton(JButton[] systemButton) {
+		MainCommandUi.systemButton = systemButton;
+	}
+
+	/** @return スクリプト無効化ボタン */
+	public static JToggleButton getScriptButton() {
+		return scriptButton;
+	}
+
+	/** @param scriptButton スクリプト無効化ボタン */
+	public static void setScriptButton(JToggleButton scriptButton) {
+		MainCommandUi.scriptButton = scriptButton;
+	}
+
+	/** @return ターゲット表示ボタン */
+	public static JToggleButton getTargetButton() {
+		return targetButton;
+	}
+
+	/** @param targetButton ターゲット表示ボタン */
+	public static void setTargetButton(JToggleButton targetButton) {
+		MainCommandUi.targetButton = targetButton;
+	}
+
+	/** @return ピン留めボタン */
+	public static JToggleButton getPinButton() {
+		return pinButton;
+	}
+
+	/** @param pinButton ピン留めボタン */
+	public static void setPinButton(JToggleButton pinButton) {
+		MainCommandUi.pinButton = pinButton;
+	}
+
+	/** @return ヘルプ表示無効化ボタン */
+	public static JToggleButton getHelpButton() {
+		return helpButton;
+	}
+
+	/** @param helpButton ヘルプ表示無効化ボタン */
+	public static void setHelpButton(JToggleButton helpButton) {
+		MainCommandUi.helpButton = helpButton;
+	}
+
+	/** @return オプションポップアップボタン */
+	public static JToggleButton getOptionButton() {
+		return optionButton;
+	}
+
+	/** @param optionButton オプションポップアップボタン */
+	public static void setOptionButton(JToggleButton optionButton) {
+		MainCommandUi.optionButton = optionButton;
+	}
+
+	/** @return プレイヤーツールボタン配列 */
+	public static JToggleButton[] getPlayerButton() {
+		return playerButton;
+	}
+
+	/** @param playerButton プレイヤーツールボタン配列 */
+	public static void setPlayerButton(JToggleButton[] playerButton) {
+		MainCommandUi.playerButton = playerButton;
+	}
+
+	/** @return オプションポップアップメニュー */
+	public static JPopupMenu getOptionPopup() {
+		return optionPopup;
+	}
+
+	/** @param optionPopup オプションポップアップメニュー */
+	public static void setOptionPopup(JPopupMenu optionPopup) {
+		MainCommandUi.optionPopup = optionPopup;
+	}
+
+	/** @return ワールド選択ウィンドウ */
+	public static WorldSelectionWindow getWorldWindow() {
+		return mapWindow;
+	}
+
+	/** @param mapWindow ワールド選択ウィンドウ */
+	public static void setWorldWindow(WorldSelectionWindow mapWindow) {
+		MainCommandUi.mapWindow = mapWindow;
+	}
+
+	/** @return アイテムウィンドウ */
+	public static ItemWindow getItemWindow() {
+		return itemWindow;
+	}
+
+	/** @param itemWindow アイテムウィンドウ */
+	public static void setItemWindow(ItemWindow itemWindow) {
+		MainCommandUi.itemWindow = itemWindow;
+	}
+}

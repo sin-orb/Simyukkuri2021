@@ -232,6 +232,11 @@ public class MarisaTsumuri extends Marisa {
 
 	}
 
+	@Override
+	public void reinitializeBoundary() {
+		setBoundary(boundary, braidBoundary);
+	}
+
 	/**
 	 * Tune parameters.
 	 */

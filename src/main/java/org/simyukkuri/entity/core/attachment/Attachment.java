@@ -83,9 +83,14 @@ public abstract class Attachment extends Entity {
 	protected void setAttachProperty(int[] property, String ofsKey) {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa == null) {
-			return;
+			throw new IllegalStateException("Parent yukkuri not found: id=" + parent);
 		}
-		posOfs = pa.getMountPoint(ofsKey);
+		Point4y[] ofs = pa.getMountPoint(ofsKey);
+		if (ofs == null) {
+			throw new IllegalStateException(
+					"Mount point not defined: key=" + ofsKey + ", yukkuri=" + pa.getType());
+		}
+		posOfs = ofs;
 		attachProperty = property;
 		animeInterval = 0;
 		animeLoop = attachProperty[AttachProperty.ANIME_LOOP.ordinal()];
@@ -106,12 +111,8 @@ public abstract class Attachment extends Entity {
 		parent = body.getUniqueId();
 	}
 
-	/**
-	 * デシリアライズ用のデフォルトコンストラクタ。
-	 * 年齢ごとの描画オフセット配列を初期化する。
-	 */
+	/** デシリアライズ用のデフォルトコンストラクタ。 */
 	public Attachment() {
-		posOfs = new Point4y[3];
 	}
 
 	/** 毎ティックごとの処理 */

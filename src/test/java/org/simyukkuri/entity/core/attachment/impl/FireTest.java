@@ -7,6 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,6 +46,7 @@ public class FireTest {
         Fire.setImgH(new int[] {11, 21, 31});
         Fire.setPivX(new int[] {1, 2, 3});
         Fire.setPivY(new int[] {4, 5, 6});
+        setReimuFireMountPoint();
         WorldTestHelper.initializeEmptyMessagePool();
     }
 
@@ -203,9 +207,8 @@ public class FireTest {
     }
 
     @Test
-    public void testConstructorWithParentNotInWorld() {
-        Yukkuri parent = new Reimu();
-        parent.setAgeState(AgeState.CHILD);
+    public void testConstructorWithParentInWorld() {
+        Yukkuri parent = createParent(AgeState.CHILD);
         Fire fire = new Fire(parent);
         assertEquals(0, fire.getValue());
         assertEquals(0, fire.getCost());
@@ -476,6 +479,23 @@ public class FireTest {
             }
         }
         return images;
+    }
+
+    private static void setReimuFireMountPoint() throws Exception {
+        Field field = Reimu.class.getDeclaredField("AttachOffset");
+        field.setAccessible(true);
+        @SuppressWarnings("unchecked")
+        Map<String, org.simyukkuri.draw.Point4y[]> attachOffset =
+                (Map<String, org.simyukkuri.draw.Point4y[]>) field.get(null);
+        if (attachOffset == null) {
+            attachOffset = new HashMap<>();
+        }
+        attachOffset.put("Fire", new org.simyukkuri.draw.Point4y[] {
+                new org.simyukkuri.draw.Point4y(1, 2),
+                new org.simyukkuri.draw.Point4y(3, 4),
+                new org.simyukkuri.draw.Point4y(5, 6)
+        });
+        field.set(null, attachOffset);
     }
 
     @Nested

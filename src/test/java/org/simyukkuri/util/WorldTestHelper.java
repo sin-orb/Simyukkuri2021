@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.Random;
 import javax.swing.JComboBox;
 import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Marisa;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Tarinai;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.system.LoggerYukkuri;
 import org.simyukkuri.system.MessagePool;
@@ -298,6 +301,43 @@ public class WorldTestHelper {
     }
 
     /**
+     * Initialize standard attachment mount points used by attachment tests.
+     */
+    public static void initializeStandardAttachmentMountPoints() {
+        initializeAttachmentMountPoints(
+                Reimu.class,
+                "AccelAmpoule",
+                "AnydAmpoule",
+                "Ants",
+                "Badge",
+                "BreedingAmpoule",
+                "Fire",
+                "HungryAmpoule",
+                "Needle",
+                "Needle_In_Anal",
+                "OrangeAmpoule",
+                "PoisonAmpoule",
+                "StopAmpoule",
+                "VeryShitAmpoule");
+        initializeAttachmentMountPoints(
+                Tarinai.class,
+                "AccelAmpoule",
+                "AnydAmpoule",
+                "Ants",
+                "Badge",
+                "BreedingAmpoule",
+                "Fire",
+                "HungryAmpoule",
+                "Needle",
+                "Needle_In_Anal",
+                "OrangeAmpoule",
+                "PoisonAmpoule",
+                "StopAmpoule",
+                "VeryShitAmpoule");
+        initializeAttachmentMountPoints(Marisa.class, "Ants");
+    }
+
+    /**
      * Set a deterministic RNG seed for testing
      */
     public static void setDeterministicRNG(long seed) {
@@ -344,6 +384,32 @@ public class WorldTestHelper {
         Object value = field.get(null);
         if (value instanceof List<?>) {
             ((List<?>) value).clear();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void initializeAttachmentMountPoints(Class<? extends Yukkuri> clazz,
+            String... keys) {
+        try {
+            Field field = clazz.getDeclaredField("AttachOffset");
+            field.setAccessible(true);
+            HashMap<String, Point4y[]> map = (HashMap<String, Point4y[]>) field.get(null);
+            if (map == null) {
+                map = new HashMap<String, Point4y[]>();
+                field.set(null, map);
+            }
+            Point4y[] points = new Point4y[] {
+                    new Point4y(1, 4),
+                    new Point4y(2, 5),
+                    new Point4y(3, 6)
+            };
+            for (String key : keys) {
+                map.put(key, points);
+            }
+        } catch (Exception e) {
+            System.err.println(
+                    "Failed to initialize attachment mount points: " + clazz.getSimpleName()
+                            + ": " + e.getMessage());
         }
     }
 }

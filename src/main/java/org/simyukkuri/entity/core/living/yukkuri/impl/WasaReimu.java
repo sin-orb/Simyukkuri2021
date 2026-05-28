@@ -175,6 +175,11 @@ public class WasaReimu extends Reimu {
 
 	}
 
+	@Override
+	public void reinitializeBoundary() {
+		setBoundary(boundary, braidBoundary);
+	}
+
 	/** 流し絵モード用の画像バリアント状態を返す。 */
 	public int[][] getImageVariantState() {
 		return imageVariantState;

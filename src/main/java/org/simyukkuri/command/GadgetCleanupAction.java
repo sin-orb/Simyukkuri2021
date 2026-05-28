@@ -5,6 +5,7 @@ import java.util.List;
 import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.bodylinked.Stalk;
+import org.simyukkuri.entity.core.world.item.BeltconveyorObj;
 import org.simyukkuri.entity.core.world.item.Food;
 import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.entity.core.world.mobile.Vomit;
@@ -100,6 +101,14 @@ final class GadgetCleanupAction {
 		if (isWall) {
 			wallList.clear();
 			WorldState.clearGrid(GameWorld.get().getCurrentWorldState().getWallGrid());
+			GameWorld.get().getCurrentWorldState().getPools().clear();
+			GameWorld.get().getCurrentWorldState().getFarms().clear();
+			for (BeltconveyorObj bo : new LinkedList<BeltconveyorObj>(
+					GameWorld.get().getCurrentWorldState().getBeltconveyorObjects().values())) {
+				bo.removeFromWorld();
+			}
+			GameWorld.get().getCurrentWorldState().getBeltconveyors().clear();
+			WorldState.clearGrid(GameWorld.get().getCurrentWorldState().getFieldGrid());
 		}
 		if (isRemoveAll) {
 			for (Yukkuri body : bodyList) {
@@ -128,7 +137,16 @@ final class GadgetCleanupAction {
 					s.remove();
 				}
 			}
+			wallList.clear();
 			WorldState.clearGrid(GameWorld.get().getCurrentWorldState().getWallGrid());
+			GameWorld.get().getCurrentWorldState().getPools().clear();
+			GameWorld.get().getCurrentWorldState().getFarms().clear();
+			for (BeltconveyorObj bo : new LinkedList<BeltconveyorObj>(
+					GameWorld.get().getCurrentWorldState().getBeltconveyorObjects().values())) {
+				bo.removeFromWorld();
+			}
+			GameWorld.get().getCurrentWorldState().getBeltconveyors().clear();
+			WorldState.clearGrid(GameWorld.get().getCurrentWorldState().getFieldGrid());
 		}
 	}
 

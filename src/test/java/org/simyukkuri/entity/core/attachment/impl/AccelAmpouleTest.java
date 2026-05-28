@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -17,12 +18,14 @@ import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Direction;
 import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.system.ResourceUtil;
+import org.simyukkuri.util.WorldTestHelper;
 
 public class AccelAmpouleTest {
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws Exception {
         SimYukkuri.world = new World();
+        WorldTestHelper.initializeStandardAttachmentMountPoints();
         AccelAmpoule.setImages(buildImages());
         AccelAmpoule.setImgW(new int[] {10, 20, 30});
         AccelAmpoule.setImgH(new int[] {11, 21, 31});
@@ -109,10 +112,8 @@ public class AccelAmpouleTest {
     }
 
     @Test
-    public void testConstructorWithParentNotInWorld() {
-        Yukkuri parent = new Reimu();
-        parent.setAgeState(AgeState.CHILD);
-        // parentをworldに登録しないのでYukkuriLookupでは見つからない
+    public void testConstructorWithParentInWorld() {
+        Yukkuri parent = createParent(AgeState.CHILD);
         AccelAmpoule ampoule = new AccelAmpoule(parent);
         assertEquals(1000, ampoule.getValue());
         assertEquals(0, ampoule.getCost());
@@ -120,9 +121,9 @@ public class AccelAmpouleTest {
 
     @Test
     public void testUpdateReturnsNullWhenParentNotInWorld() {
-        Yukkuri parent = new Reimu();
-        parent.setAgeState(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         AccelAmpoule ampoule = new AccelAmpoule(parent);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueId());
         ampoule.setProcessInterval(1);
         assertNull(ampoule.clockTick());
     }
@@ -154,9 +155,9 @@ public class AccelAmpouleTest {
 
     @Test
     public void testGetImageReturnsNullWhenParentNotInWorld() {
-        Yukkuri parent = new Reimu();
-        parent.setAgeState(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         AccelAmpoule ampoule = new AccelAmpoule(parent);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueId());
 
         Yukkuri holder = new Reimu();
         holder.setDirection(Direction.LEFT);
@@ -165,18 +166,33 @@ public class AccelAmpouleTest {
 
     @Test
     public void testResetBoundaryDoesNothingWhenParentNotInWorld() {
-        Yukkuri parent = new Reimu();
-        parent.setAgeState(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         AccelAmpoule ampoule = new AccelAmpoule(parent);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueId());
 
-        // setBoundaryはコンストラクタでもスキップされてるのでデフォルト値のまま
+        int origPivotX = ampoule.getPivotX();
+        int origPivotY = ampoule.getPivotY();
         ampoule.resetBoundary();
-        assertEquals(0, ampoule.getPivotX());
-        assertEquals(0, ampoule.getPivotY());
+        assertEquals(origPivotX, ampoule.getPivotX());
+        assertEquals(origPivotY, ampoule.getPivotY());
     }
 
     private static Yukkuri createParent(AgeState ageState) {
-        Yukkuri parent = new Reimu();
+        Yukkuri parent = new Reimu() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Point4y[] getMountPoint(String key) {
+                if ("AccelAmpoule".equals(key)) {
+                    return new Point4y[] {
+                            new Point4y(1, 2),
+                            new Point4y(3, 4),
+                            new Point4y(5, 6)
+                    };
+                }
+                return null;
+            }
+        };
         parent.setAgeState(ageState);
         SimYukkuri.world
                 .getCurrentWorldState()

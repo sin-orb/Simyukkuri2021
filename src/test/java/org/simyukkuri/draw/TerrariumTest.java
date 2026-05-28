@@ -1489,10 +1489,10 @@ class TerrariumTest {
             File tempFile = Files.createTempFile("simyukkuri_test_save_burning_body", ".sav").toFile();
             try {
                 Reimu body = new Reimu();
+                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
                 Fire fire = new Fire(body);
                 fire.setBurnPeriod(450);
                 body.addAttachment(fire);
-                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
 
                 int bodyId = body.getUniqueId();
 
@@ -1541,9 +1541,9 @@ class TerrariumTest {
             try {
                 Reimu body = new Reimu();
                 body.setAntCount(120);
+                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
                 body.addAttachment(new Ants(body));
                 body.setAntCount(120);
-                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
 
                 int bodyId = body.getUniqueId();
 
@@ -1564,8 +1564,8 @@ class TerrariumTest {
             File tempFile = Files.createTempFile("simyukkuri_test_save_badge_attachment", ".sav").toFile();
             try {
                 Reimu body = new Reimu();
-                body.addAttachment(new Badge(body, Badge.BadgeRank.GOLD));
                 SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
+                body.addAttachment(new Badge(body, Badge.BadgeRank.GOLD));
 
                 int bodyId = body.getUniqueId();
 
@@ -1587,13 +1587,13 @@ class TerrariumTest {
             File tempFile = Files.createTempFile("simyukkuri_test_save_ampoule_attachments", ".sav").toFile();
             try {
                 Reimu poisonBody = new Reimu();
-                poisonBody.addAttachment(new PoisonAmpoule(poisonBody));
                 SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(poisonBody.getUniqueId(), poisonBody);
+                poisonBody.addAttachment(new PoisonAmpoule(poisonBody));
 
                 Marisa breedingBody = new Marisa();
-                breedingBody.addAttachment(new BreedingAmpoule(breedingBody));
                 SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(breedingBody.getUniqueId(),
                         breedingBody);
+                breedingBody.addAttachment(new BreedingAmpoule(breedingBody));
 
                 int poisonBodyId = poisonBody.getUniqueId();
                 int breedingBodyId = breedingBody.getUniqueId();

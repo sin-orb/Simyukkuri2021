@@ -22,7 +22,7 @@ import org.simyukkuri.util.GameText;
 public class BreedingAmpoule extends Attachment {
 
 	private static final long serialVersionUID = 5344418800988304456L;
-	private static final String POS_KEY = "AccelAmpoule";
+	private static final String POS_KEY = "BreedingAmpoule";
 	/**
 	 * 画像の入れ物
 	 * <br>
@@ -85,7 +85,7 @@ public class BreedingAmpoule extends Attachment {
 		}
 	}
 
-	/** 精子アンプルのティック処理。空腹を回復させ、ランダムな種類の赤ゆを胎内に追加する。 */
+	/** 精子アンプルのティック処理。空腹を回復させ、赤ゆを胎内に追加する。 */
 	@Override
 	protected TickResult update() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);

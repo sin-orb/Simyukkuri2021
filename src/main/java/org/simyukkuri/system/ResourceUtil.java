@@ -157,7 +157,7 @@ public class ResourceUtil {
 	 * @return ローカライズされた文字列
 	 */
 	public String read(String property) {
-		String lang = thisLocale.getLanguage();
+		String lang = GameLocale.getLocale().getLanguage();
 		Map<String, String> props = strings.get(lang);
 		Map<String, String> en = strings.get(enLocale.getLanguage());
 		Map<String, String> ja = strings.get(jaLocale.getLanguage());

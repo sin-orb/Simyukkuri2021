@@ -23,6 +23,7 @@ import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.system.ResourceUtil;
+import org.simyukkuri.util.WorldTestHelper;
 
 public class AntsTest {
 
@@ -45,6 +46,7 @@ public class AntsTest {
     public void setUp() {
         System.setProperty("java.awt.headless", "true");
         SimYukkuri.world = new World();
+        WorldTestHelper.initializeStandardAttachmentMountPoints();
         Ants.setImages(buildImages());
         Ants.setImgW(new int[] {10, 20, 30});
         Ants.setImgH(new int[] {11, 21, 31});
@@ -213,9 +215,8 @@ public class AntsTest {
     }
 
     @Test
-    public void testConstructorWithParentNotInWorld() {
-        Yukkuri parent = new Reimu();
-        parent.setAgeState(AgeState.CHILD);
+    public void testConstructorWithParentInWorld() {
+        Yukkuri parent = createParent(AgeState.CHILD);
         Ants ants = new Ants(parent);
         assertEquals(0, ants.getValue());
         assertEquals(0, ants.getCost());

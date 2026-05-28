@@ -4,16 +4,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.attachment.Attachment;
 import org.simyukkuri.entity.core.attachment.impl.Badge;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
+import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Attitude;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.YukkuriRank;
@@ -26,10 +29,15 @@ import org.simyukkuri.util.WorldTestHelper;
 public class BadgeLogicTest {
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws Exception {
         WorldTestHelper.resetWorld();
         SimYukkuri.world = new World();
         WorldTestHelper.initializeStandardTranslate500();
+        Badge.setImages(buildImages());
+        Badge.setImgW(new int[] {10, 20, 30});
+        Badge.setImgH(new int[] {11, 21, 31});
+        Badge.setPivX(new int[] {1, 2, 3});
+        Badge.setPivY(new int[] {4, 5, 6});
     }
 
     // Null/Invalid Input Tests
@@ -135,8 +143,7 @@ public class BadgeLogicTest {
 
     @Test
     public void testIdiotGetsFake() {
-        org.simyukkuri.entity.core.living.yukkuri.impl.Tarinai yukkuri =
-                new org.simyukkuri.entity.core.living.yukkuri.impl.Tarinai();
+        org.simyukkuri.entity.core.living.yukkuri.impl.Tarinai yukkuri = createKaiyuTarinai();
         yukkuri.setRank(YukkuriRank.KAIYU);
         assertTrue(BadgeLogic.badgeTest(yukkuri));
         assertEquals(Badge.BadgeRank.FAKE, getBadgeRank(yukkuri));
@@ -167,11 +174,65 @@ public class BadgeLogicTest {
      * setRank/setIdiot setters, so we just set what we can.
      */
     private Reimu createKaiyuYukkuri(Attitude attitude, Intelligence intelligence) {
-        Reimu yukkuri = new Reimu();
+        Reimu yukkuri = new Reimu() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Point4y[] getMountPoint(String key) {
+                if ("Badge".equals(key)) {
+                    return new Point4y[] {
+                            new Point4y(1, 2),
+                            new Point4y(3, 4),
+                            new Point4y(5, 6)
+                    };
+                }
+                return null;
+            }
+        };
         yukkuri.setAttitude(attitude);
         yukkuri.setIntelligence(intelligence);
         yukkuri.setRank(YukkuriRank.KAIYU);
+        SimYukkuri.world
+                .getCurrentWorldState()
+                .getYukkuriRegistry()
+                .put(yukkuri.getUniqueId(), yukkuri);
         return yukkuri;
+    }
+
+    private org.simyukkuri.entity.core.living.yukkuri.impl.Tarinai createKaiyuTarinai() {
+        org.simyukkuri.entity.core.living.yukkuri.impl.Tarinai yukkuri =
+                new org.simyukkuri.entity.core.living.yukkuri.impl.Tarinai() {
+                    private static final long serialVersionUID = 1L;
+
+                    @Override
+                    public Point4y[] getMountPoint(String key) {
+                        if ("Badge".equals(key)) {
+                            return new Point4y[] {
+                                    new Point4y(1, 2),
+                                    new Point4y(3, 4),
+                                    new Point4y(5, 6)
+                            };
+                        }
+                        return null;
+                    }
+                };
+        SimYukkuri.world
+                .getCurrentWorldState()
+                .getYukkuriRegistry()
+                .put(yukkuri.getUniqueId(), yukkuri);
+        return yukkuri;
+    }
+
+    private static BufferedImage[][] buildImages() {
+        BufferedImage[][] images = new BufferedImage[3][3];
+        for (int age = 0; age < 3; age++) {
+            for (int rank = 0; rank < 3; rank++) {
+                images[age][rank] =
+                        new BufferedImage(
+                                10 + age * 10, 10 + age * 10, BufferedImage.TYPE_INT_ARGB);
+            }
+        }
+        return images;
     }
 
     private Badge.BadgeRank getBadgeRank(Yukkuri b) {

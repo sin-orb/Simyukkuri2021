@@ -3,7 +3,8 @@ package org.simyukkuri.entity.core.attachment;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
@@ -88,13 +89,12 @@ public class AttachmentTest {
 	}
 
 	@Test
-	public void testDefaultConstructor() {
-		StubAttachment att = new StubAttachment();
-		Point4y[] posOfs = att.getPosOfs();
+    public void testDefaultConstructor() {
+        StubAttachment att = new StubAttachment();
+        Point4y[] posOfs = att.getPosOfs();
 
-		assertNotNull(posOfs);
-		assertEquals(3, posOfs.length);
-	}
+        assertNull(posOfs);
+    }
 
 	// --- getters/setters のテスト ---
 
@@ -171,14 +171,13 @@ public class AttachmentTest {
 	// --- setAttachProperty のテスト ---
 
 	@Test
-	public void testSetAttachPropertyWithNullParent() {
-		StubAttachment att = new StubAttachment();
-		att.setParent(-1); // nullになるID
-		int[] prop = { 2, 2, 1, 0, 0, 0, 1 };
+    public void testSetAttachPropertyWithNullParent() {
+        StubAttachment att = new StubAttachment();
+        att.setParent(-1); // nullになるID
+        int[] prop = { 2, 2, 1, 0, 0, 0, 1 };
 
-		// parentがnullのとき何もせず終了する（例外が出ない）
-		att.callSetAttachProperty(prop, "test");
-	}
+        assertThrows(IllegalStateException.class, () -> att.callSetAttachProperty(prop, "test"));
+    }
 
 	@Test
 	public void testSetAttachPropertySetsAnimateTrue() {

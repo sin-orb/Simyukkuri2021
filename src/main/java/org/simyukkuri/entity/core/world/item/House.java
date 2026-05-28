@@ -133,8 +133,10 @@ public class House extends WorldEntity {
 		houseType = HouseTable.values()[initOption];
 		setBoundary(boundary[houseType.ordinal()]);
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentWorldState().getHouses().put(objId, this);
-		GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
+		if (GameWorld.get() != null) {
+			GameWorld.get().getCurrentWorldState().getHouses().put(objId, this);
+			GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
+		}
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.HOUSE;
 		itemRank = ItemRank.values()[houseType.getRank()];

@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.simyukkuri.ConstState;
 import org.simyukkuri.SequenceRandom;
 import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
@@ -38,6 +39,7 @@ public class NeedleTest {
     public void setUp() throws Exception {
         SimYukkuri.world = new World();
         originalRnd = SimYukkuri.RND;
+        WorldTestHelper.initializeStandardAttachmentMountPoints();
         Needle.setImages(buildImages());
         Needle.setImgW(new int[] {10, 20, 30});
         Needle.setImgH(new int[] {11, 21, 31});
@@ -200,11 +202,10 @@ public class NeedleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         Needle needle = new Needle(parent);
 
-        int origPivotX = needle.getPivotX();
-        int origPivotY = needle.getPivotY();
-
         SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueId());
 
+        int origPivotX = needle.getPivotX();
+        int origPivotY = needle.getPivotY();
         needle.resetBoundary();
 
         assertEquals(origPivotX, needle.getPivotX());
@@ -226,9 +227,8 @@ public class NeedleTest {
     }
 
     @Test
-    public void testConstructorWithParentNotInWorld() {
-        Yukkuri parent = new Reimu();
-        parent.setAgeState(AgeState.CHILD);
+    public void testConstructorWithParentInWorld() {
+        Yukkuri parent = createParent(AgeState.CHILD);
         Needle needle = new Needle(parent);
         assertEquals(0, needle.getValue());
         assertEquals(0, needle.getCost());
@@ -361,7 +361,21 @@ public class NeedleTest {
     }
 
     private static Yukkuri createParent(AgeState ageState) {
-        Yukkuri parent = new Reimu();
+        Yukkuri parent = new Reimu() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Point4y[] getMountPoint(String key) {
+                if ("Needle".equals(key) || "Needle_In_Anal".equals(key)) {
+                    return new Point4y[] {
+                            new Point4y(1, 2),
+                            new Point4y(3, 4),
+                            new Point4y(5, 6)
+                    };
+                }
+                return null;
+            }
+        };
         parent.setAgeState(ageState);
         Sprite[] spr = new Sprite[3];
         for (int i = 0; i < 3; i++) {

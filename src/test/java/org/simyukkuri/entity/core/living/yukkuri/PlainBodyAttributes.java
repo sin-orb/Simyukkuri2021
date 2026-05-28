@@ -1,5 +1,7 @@
 package org.simyukkuri.entity.core.living.yukkuri;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.YukkuriType;
@@ -7,11 +9,38 @@ import org.simyukkuri.system.YukkuriLayer;
 
 public class PlainBodyAttributes extends Yukkuri {
     private static final long serialVersionUID = 1L;
+    private static final Map<String, Point4y[]> MOUNT_POINTS = createMountPoints();
+
+    private static Map<String, Point4y[]> createMountPoints() {
+        Map<String, Point4y[]> map = new HashMap<>();
+        Point4y[] points = new Point4y[] {
+                new Point4y(1, 4),
+                new Point4y(2, 5),
+                new Point4y(3, 6),
+        };
+        map.put("AccelAmpoule", points);
+        map.put("AnydAmpoule", points);
+        map.put("Ants", points);
+        map.put("Badge", points);
+        map.put("BreedingAmpoule", points);
+        map.put("Fire", points);
+        map.put("HungryAmpoule", points);
+        map.put("Needle", points);
+        map.put("Needle_In_Anal", points);
+        map.put("OrangeAmpoule", points);
+        map.put("PoisonAmpoule", points);
+        map.put("StopAmpoule", points);
+        map.put("VeryShitAmpoule", points);
+        return map;
+    }
 
     @Override
     public YukkuriType getType() {
         return YukkuriType.TARINAI;
     }
+
+    @Override
+    public void reinitializeBoundary() {}
 
     public void forceSetHappiness(Happiness h) {
         happiness = h;
@@ -63,7 +92,7 @@ public class PlainBodyAttributes extends Yukkuri {
 
     @Override
     public Point4y[] getMountPoint(String key) {
-        return null;
+        return MOUNT_POINTS.get(key);
     }
 
     @Override

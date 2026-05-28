@@ -184,6 +184,11 @@ public class Tarinai extends Yukkuri {
 
 	}
 
+	@Override
+	public void reinitializeBoundary() {
+		setBoundary(boundary, braidBoundary);
+	}
+
 	/**
 	 * たりないゆかどうかを判定する.
 	 * 

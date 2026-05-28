@@ -156,7 +156,6 @@ public class GadgetMenuTest {
                 GadgetMenuChoice.BREED_POOL,
                 GadgetMenuChoice.GARBAGE_CHUTE,
                 GadgetMenuChoice.MACHINE_PRESS,
-                GadgetMenuChoice.GENERATOR,
                 GadgetMenuChoice.PRODUCT_CHUTE,
         }, GadgetMenu.getFloorCategory());
         assertArrayEquals(new GadgetMenuChoice[] {

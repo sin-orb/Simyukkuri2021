@@ -3,6 +3,7 @@ package org.simyukkuri.engine.transform;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,7 @@ public class TransformationServiceTest {
 			reimu.setAge(100000);
 			WorldTestHelper.makeTransformationReady(reimu);
 			SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(reimu.getUniqueId(), reimu);
+			MyPane.setSelectedYukkuri(reimu);
 
 			int originalId = reimu.getUniqueId();
 
@@ -39,6 +41,7 @@ public class TransformationServiceTest {
 			assertNotNull(transformed);
 			assertInstanceOf(Deibu.class, transformed);
 			assertEquals(originalId, transformed.getUniqueId());
+			assertSame(transformed, MyPane.getSelectedYukkuri());
 			assertTrue(reimu.isRemoved());
 		} finally {
 			WorldTestHelper.resetWorld();

@@ -36,6 +36,8 @@ public class World implements Serializable {
 	private int windowType;
 	/** マップサイズ情報 */
 	private int terrariumSizeIndex;
+	/** うにょ有効フラグ */
+	private boolean unyo = true;
 
 	private int maxObjId = 0;
 	private int maxUniqueId = 0;
@@ -97,6 +99,16 @@ public class World implements Serializable {
 	 */
 	public void setTerrariumSizeIndex(int terrariumSizeIndex) {
 		this.terrariumSizeIndex = terrariumSizeIndex;
+	}
+
+	/** うにょ有効フラグを返す。 */
+	public boolean isUnyo() {
+		return unyo;
+	}
+
+	/** うにょ有効フラグをセットする。 */
+	public void setUnyo(boolean unyo) {
+		this.unyo = unyo;
 	}
 
 	/**
@@ -243,21 +255,39 @@ public class World implements Serializable {
 		// 遅延読み込みの復元
 		for (WorldState m : mapList) {
 			for (Map.Entry<Integer, Yukkuri> entry : m.getYukkuriRegistry().entrySet()) {
-				Yukkuri b = entry.getValue();
-				if (b.getType() == HybridYukkuri.type) {
-					HybridYukkuri hb = (HybridYukkuri) b;
-					GameView.loadYukkuriImage(org.simyukkuri.enums.YukkuriType
-							.fromClassName(hb.getBaseYukkuri(0).getClass().getSimpleName()));
-					GameView.loadYukkuriImage(org.simyukkuri.enums.YukkuriType
-							.fromClassName(hb.getBaseYukkuri(1).getClass().getSimpleName()));
-					GameView.loadYukkuriImage(org.simyukkuri.enums.YukkuriType
-							.fromClassName(hb.getBaseYukkuri(2).getClass().getSimpleName()));
-					GameView.loadYukkuriImage(org.simyukkuri.enums.YukkuriType
-							.fromClassName(hb.getBaseYukkuri(3).getClass().getSimpleName()));
-				} else {
-					GameView.loadYukkuriImage(org.simyukkuri.enums.YukkuriType.fromClassName(b.getClass().getSimpleName()));
+				reinitYukkuri(entry.getValue());
+			}
+		}
+		// プレイヤーインベントリ内の Yukkuri も再初期化
+		Player player = getPlayer();
+		if (player != null && player.getItemForSave() != null) {
+			for (Entity item : player.getItemForSave()) {
+				if (item instanceof Yukkuri) {
+					reinitYukkuri((Yukkuri) item);
 				}
 			}
+		}
+	}
+
+	private void reinitYukkuri(Yukkuri b) {
+		if (b.getType() == HybridYukkuri.type) {
+			HybridYukkuri hb = (HybridYukkuri) b;
+			GameView.loadYukkuriImage(org.simyukkuri.enums.YukkuriType
+					.fromClassName(hb.getBaseYukkuri(0).getClass().getSimpleName()));
+			GameView.loadYukkuriImage(org.simyukkuri.enums.YukkuriType
+					.fromClassName(hb.getBaseYukkuri(1).getClass().getSimpleName()));
+			GameView.loadYukkuriImage(org.simyukkuri.enums.YukkuriType
+					.fromClassName(hb.getBaseYukkuri(2).getClass().getSimpleName()));
+			GameView.loadYukkuriImage(org.simyukkuri.enums.YukkuriType
+					.fromClassName(hb.getBaseYukkuri(3).getClass().getSimpleName()));
+			try {
+				hb.reinitializeAfterLoad();
+			} catch (java.io.IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			GameView.loadYukkuriImage(org.simyukkuri.enums.YukkuriType.fromClassName(b.getClass().getSimpleName()));
+			b.reinitializeBoundary();
 		}
 	}
 

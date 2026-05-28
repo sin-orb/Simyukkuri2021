@@ -15,7 +15,6 @@ import org.simyukkuri.entity.core.world.item.Food;
 import org.simyukkuri.entity.core.world.item.FoodMaker;
 import org.simyukkuri.entity.core.world.item.GarbageChute;
 import org.simyukkuri.entity.core.world.item.GarbageStation;
-import org.simyukkuri.entity.core.world.item.Generator;
 import org.simyukkuri.entity.core.world.item.HotPlate;
 import org.simyukkuri.entity.core.world.item.House;
 import org.simyukkuri.entity.core.world.item.MachinePress;
@@ -328,8 +327,6 @@ public class GadgetMenu {
 		GARBAGE_CHUTE(MainCategoryName.FLOOR, GameText.read("command_floor_dustchute"), GarbageChute.class, 0,
 				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
 		MACHINE_PRESS(MainCategoryName.FLOOR, GameText.read("command_floor_press"), MachinePress.class, 0,
-				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
-		GENERATOR(MainCategoryName.FLOOR, GameText.read("command_floor_generator"), Generator.class, 0,
 				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
 		PRODUCT_CHUTE(MainCategoryName.FLOOR, GameText.read("command_floor_product"), ProductChute.class, 0,
 				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
@@ -645,7 +642,6 @@ public class GadgetMenu {
 			GadgetMenuChoice.BREED_POOL,
 			GadgetMenuChoice.GARBAGE_CHUTE,
 			GadgetMenuChoice.MACHINE_PRESS,
-			GadgetMenuChoice.GENERATOR,
 			GadgetMenuChoice.PRODUCT_CHUTE
 	};
 	/** 床設置カテゴリ用コンボボックス定義 */

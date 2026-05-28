@@ -32,6 +32,7 @@ import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.EffectType;
 import org.simyukkuri.enums.Numbering;
 import org.simyukkuri.enums.YukkuriType;
+import org.simyukkuri.logic.EventLogic;
 import org.simyukkuri.system.WorldState;
 import org.simyukkuri.ui.MainCommandUi;
 import org.simyukkuri.util.GameView;
@@ -302,6 +303,7 @@ public class Terrarium implements Serializable {
 				}
 			}
 			tmpWorld.recalcWorldSize();
+			SimYukkuri.UNYO = tmpWorld.isUnyo();
 			GameWorld.set(tmpWorld);
 
 			if (SimYukkuri.simYukkuri != null) {
@@ -843,6 +845,7 @@ public class Terrarium implements Serializable {
 		if (transBodyNow != null) {
 			transBodyNow.execTransform();
 		}
+		EventLogic.clockWorldEvent();
 		advanceOperationTime();
 	}
 

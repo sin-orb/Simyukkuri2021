@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.ConstState;
-import org.simyukkuri.SequenceRandom;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.entity.core.living.yukkuri.Dna;
@@ -29,6 +28,7 @@ import org.simyukkuri.enums.Attitude;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.Numbering;
 import org.simyukkuri.enums.YukkuriType;
+import org.simyukkuri.util.GameRandom;
 
 public class BabyDnaFactoryTest {
 
@@ -91,6 +91,7 @@ public class BabyDnaFactoryTest {
 
     @Test
     public void testCreateBabyDnaWithNullMother() {
+        SimYukkuri.RND = new ConstState(1);
         Dna dna = BabyDnaFactory.createBabyDna(null, null, YukkuriType.fromTypeId(0), Attitude.AVERAGE,
                 Intelligence.AVERAGE,
                 false, false, true);
@@ -99,45 +100,72 @@ public class BabyDnaFactoryTest {
 
     @Test
     public void testCreateBabyDnaWithNullFatherDoesNotThrow() {
+        ConstState rng = new ConstState(1);
+        rng.setFixedBoolean(false);
+        SimYukkuri.RND = rng;
         Reimu mother = new Reimu();
+        mother.setUniqueId(1);
         Dna dna = BabyDnaFactory.createBabyDna(mother, null, mother.getType(), Attitude.AVERAGE,
                 Intelligence.AVERAGE, false, false, true);
         assertNotNull(dna);
         assertEquals(-1, dna.getFather());
         assertEquals(mother.getUniqueId(), dna.getMother());
+        assertEquals(Reimu.type, dna.getType());
+        assertEquals(Attitude.AVERAGE, dna.getAttitude());
+        assertEquals(Intelligence.AVERAGE, dna.getIntelligence());
+        assertFalse(dna.isRaperChild());
     }
 
     @Test
     public void testCreateBabyDnaForceCreate() {
-        SimYukkuri.RND = new SequenceRandom(1, 1, 1, 1, 1, 1, 1);
+        ConstState rng = new ConstState(1);
+        rng.setFixedBoolean(true);
+        SimYukkuri.RND = rng;
 
         Reimu mother = new Reimu();
         Marisa father = new Marisa();
+        mother.setUniqueId(1);
+        father.setUniqueId(2);
 
         Dna dna = BabyDnaFactory.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
                 Intelligence.AVERAGE, false, false, true);
 
         assertNotNull(dna);
-        assertTrue(dna.getType().getTypeId() >= 0);
+        assertEquals(Marisa.type, dna.getType());
+        assertEquals(mother.getUniqueId(), dna.getMother());
+        assertEquals(father.getUniqueId(), dna.getFather());
+        assertEquals(Attitude.AVERAGE, dna.getAttitude());
+        assertEquals(Intelligence.AVERAGE, dna.getIntelligence());
+        assertFalse(dna.isRaperChild());
     }
 
     @Test
     public void testCreateBabyDnaNoHybridWhenDosMarisaParent() {
-        SimYukkuri.RND = new SequenceRandom(0, 0, 0, 0, 0, 0, 0);
+        ConstState rng = new ConstState(1);
+        rng.setFixedBoolean(false);
+        SimYukkuri.RND = rng;
 
         DosMarisa mother = new DosMarisa();
         Reimu father = new Reimu();
+        mother.setUniqueId(1);
+        father.setUniqueId(2);
 
         Dna dna = BabyDnaFactory.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
                 Intelligence.AVERAGE, false, false, true);
 
         assertNotNull(dna);
+        assertEquals(Marisa.type, dna.getType());
+        assertEquals(mother.getUniqueId(), dna.getMother());
+        assertEquals(father.getUniqueId(), dna.getFather());
+        assertEquals(Attitude.AVERAGE, dna.getAttitude());
+        assertEquals(Intelligence.AVERAGE, dna.getIntelligence());
+        assertFalse(dna.isRaperChild());
         assertNotEquals(HybridYukkuri.type, dna.getType());
     }
 
     @Test
     public void testCreateBabyDnaFailsWhenRandomZeroAndForceDisabled() {
-        SimYukkuri.RND = new SequenceRandom(100, 100, 100);
+        SimYukkuri.RND = new ConstState(0);
 
         Reimu mother = new Reimu();
         Reimu father = new Reimu();
@@ -310,35 +338,34 @@ public class BabyDnaFactoryTest {
         }
 
         @Test
-        void testScenario_AttitudeBaseZeroRareRollCanProduceShithead() {
-            class BoundCheckedRandom extends java.util.Random {
-                private final int[] expectedBounds = { 2, 100, 20, 100, 20, 2, 10, 3 };
-                private final int[] values = { 1, 1, 1, 1, 0, 1, 1, 1 };
-                private int index = 0;
-
+        void testResolveAttitudeBaseZeroRareRollCanProduceShithead() {
+            GameRandom.setOverride(new org.simyukkuri.util.RandomSource() {
                 @Override
                 public int nextInt(int bound) {
-                    assertTrue(index < expectedBounds.length, "Unexpected nextInt call");
-                    assertEquals(expectedBounds[index], bound, "Unexpected bound order");
-                    return values[index++];
+                    if (bound == 20) {
+                        return 0;
+                    }
+                    if (bound == 2) {
+                        return 1;
+                    }
+                    return 0;
                 }
 
                 @Override
                 public boolean nextBoolean() {
-                    return true;
+                    return false;
                 }
+            });
+            try {
+                Reimu mother = new Reimu();
+                mother.setAttitude(Attitude.VERY_NICE);
+
+                Attitude attitude = YukkuriBirthTypeResolver.resolveAttitude(mother, Attitude.VERY_NICE);
+
+                assertEquals(Attitude.SHITHEAD, attitude);
+            } finally {
+                GameRandom.clearOverride();
             }
-
-            Reimu mother = new Reimu();
-            Reimu father = new Reimu();
-            mother.setAttitude(Attitude.VERY_NICE);
-            SimYukkuri.RND = new BoundCheckedRandom();
-
-            Dna dna = BabyDnaFactory.createBabyDna(mother, father, Reimu.type, Attitude.VERY_NICE,
-                    Intelligence.AVERAGE, false, false, true);
-
-            assertNotNull(dna);
-            assertEquals(Attitude.SHITHEAD, dna.getAttitude());
         }
 
         @Test

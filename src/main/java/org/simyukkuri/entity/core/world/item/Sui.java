@@ -504,8 +504,10 @@ public class Sui extends WorldEntity {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentWorldState().getSuis().put(objId, this);
-		GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
+		if (GameWorld.get() != null) {
+			GameWorld.get().getCurrentWorldState().getSuis().put(objId, this);
+			GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
+		}
 		objType = Type.OBJECT;
 		worldEntityType = WorldEntityKind.SUI;
 

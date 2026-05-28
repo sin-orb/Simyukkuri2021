@@ -6,17 +6,22 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.security.SecureRandom;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.MyPane;
+import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.engine.TerrariumWorldLogic;
 import org.simyukkuri.engine.World;
 import org.simyukkuri.engine.YukkuriTickProcessor;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.Attitude;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.Intelligence;
@@ -67,7 +72,7 @@ public class BodyBehaviorTest {
         SimYukkuri.RND = testRnd;
 
         WorldTestHelper.initializeLoadedMessagePool(getClass().getClassLoader());
-
+        setReimuFireMountPoint();
         body = new StubBody();
         body.setUniqueId(1);
         body.setAge(100000); // Adult
@@ -141,18 +146,18 @@ public class BodyBehaviorTest {
 
     @Test
     public void testCheckFire_Propagation() throws Exception {
-        body.giveFire();
+        Yukkuri fireBody = createFireBody(3);
+        fireBody.giveFire();
 
-        StubBody neighbor = new StubBody();
-        neighbor.setUniqueId(2);
-        neighbor.setX(body.getX() + 1);
-        neighbor.setY(body.getY());
-        world.getCurrentWorldState().getYukkuriRegistry().put(2, neighbor);
+        Yukkuri neighbor = createFireBody(2);
+        neighbor.setX(fireBody.getX() + 1);
+        neighbor.setY(fireBody.getY());
+        world.getCurrentWorldState().getYukkuriRegistry().remove(body.getUniqueId());
 
         Method m = YukkuriTickProcessor.class.getDeclaredMethod("checkFire",
                 Yukkuri.class, org.simyukkuri.system.WorldState.class);
         m.setAccessible(true);
-        m.invoke(null, body, world.getCurrentWorldState());
+        m.invoke(null, fireBody, world.getCurrentWorldState());
 
         assertTrue(neighbor.getAttachmentSize(org.simyukkuri.entity.core.attachment.impl.Fire.class) > 0);
     }
@@ -189,19 +194,19 @@ public class BodyBehaviorTest {
         }
 
         @Test
-        void testScenario_FireDoesNotPropagateToDistantBody() throws Exception {
-            body.giveFire();
+    void testScenario_FireDoesNotPropagateToDistantBody() throws Exception {
+            Yukkuri fireBody = createFireBody(3);
+            fireBody.giveFire();
 
-            StubBody distant = new StubBody();
-            distant.setUniqueId(2);
-            distant.setX(body.getX() + 1000);
-            distant.setY(body.getY() + 1000);
-            world.getCurrentWorldState().getYukkuriRegistry().put(2, distant);
+            Yukkuri distant = createFireBody(2);
+            distant.setX(fireBody.getX() + 1000);
+            distant.setY(fireBody.getY() + 1000);
+            world.getCurrentWorldState().getYukkuriRegistry().remove(body.getUniqueId());
 
             Method m = YukkuriTickProcessor.class.getDeclaredMethod("checkFire",
                     Yukkuri.class, org.simyukkuri.system.WorldState.class);
             m.setAccessible(true);
-            m.invoke(null, body, world.getCurrentWorldState());
+            m.invoke(null, fireBody, world.getCurrentWorldState());
 
             assertEquals(0, distant.getAttachmentSize(org.simyukkuri.entity.core.attachment.impl.Fire.class));
         }
@@ -230,5 +235,31 @@ public class BodyBehaviorTest {
 
             assertTrue(body.getEvents().isEmpty());
         }
+    }
+
+    private Yukkuri createFireBody(int uniqueId) {
+        Yukkuri fireBody = new Reimu();
+        fireBody.setUniqueId(uniqueId);
+        fireBody.setAge(100000);
+        fireBody.setRank(YukkuriRank.KAIYU);
+        fireBody.setMsgType(YukkuriType.TARINAI);
+        world.getCurrentWorldState().getYukkuriRegistry().put(fireBody.getUniqueId(), fireBody);
+        return fireBody;
+    }
+
+    private static void setReimuFireMountPoint() throws Exception {
+        Field field = Reimu.class.getDeclaredField("AttachOffset");
+        field.setAccessible(true);
+        @SuppressWarnings("unchecked")
+        Map<String, Point4y[]> attachOffset = (Map<String, Point4y[]>) field.get(null);
+        if (attachOffset == null) {
+            attachOffset = new HashMap<>();
+        }
+        attachOffset.put("Fire", new Point4y[] {
+                new Point4y(1, 2),
+                new Point4y(3, 4),
+                new Point4y(5, 6)
+        });
+        field.set(null, attachOffset);
     }
 }

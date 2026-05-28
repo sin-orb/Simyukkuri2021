@@ -431,6 +431,15 @@ public class HybridYukkuri extends Yukkuri {
 
 	}
 
+	@Override
+	public void reinitializeBoundary() {
+		try {
+			reinitializeAfterLoad();
+		} catch (java.io.IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * Tune parameters.
 	 */
@@ -477,6 +486,21 @@ public class HybridYukkuri extends Yukkuri {
 		} catch (IOException e1) {
 			System.out.println("File I/O error");
 		}
+	}
+
+	/**
+	 * JSON ロード後にスプライトを再初期化する。
+	 * Jackson はコンストラクタを呼ばないため images[] と bodySpr[] が未構築になる。
+	 * loadInterYukkuriImage() から呼ぶ。
+	 *
+	 * @throws IOException 画像読み込み失敗時
+	 */
+	public void reinitializeAfterLoad() throws IOException {
+		if (images == null) {
+			images = new Yukkuri[ImageCode.values().length];
+		}
+		loadImagesHybrid();
+		setBoundary(boundary, braidBoundary);
 	}
 
 	/** ワールドからこのゆっくりを除去する追加処理。 */

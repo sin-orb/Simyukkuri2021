@@ -18,12 +18,14 @@ import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Direction;
 import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.system.ResourceUtil;
+import org.simyukkuri.util.WorldTestHelper;
 
 public class VeryShitAmpouleTest {
 
     @BeforeEach
     public void setUp() {
         SimYukkuri.world = new World();
+        WorldTestHelper.initializeStandardAttachmentMountPoints();
         VeryShitAmpoule.setImages(buildImages());
         VeryShitAmpoule.setImgW(new int[] {10, 20, 30});
         VeryShitAmpoule.setImgH(new int[] {11, 21, 31});
@@ -208,9 +210,8 @@ public class VeryShitAmpouleTest {
     }
 
     @Test
-    public void testConstructorWithParentNotInWorld() {
-        Yukkuri parent = new Reimu();
-        parent.setAgeState(AgeState.CHILD);
+    public void testConstructorWithParentInWorld() {
+        Yukkuri parent = createParent(AgeState.CHILD);
         VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
         assertEquals(500, ampoule.getValue());
         assertEquals(0, ampoule.getCost());

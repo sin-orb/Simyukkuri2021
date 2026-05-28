@@ -37,6 +37,7 @@ public class PoisonAmpouleTest {
         SimYukkuri.world = new World();
         originalRnd = SimYukkuri.RND;
         WorldTestHelper.initializeEmptyMessagePool();
+        WorldTestHelper.initializeStandardAttachmentMountPoints();
         PoisonAmpoule.setImages(buildImages());
         PoisonAmpoule.setImgW(new int[] {10, 20, 30});
         PoisonAmpoule.setImgH(new int[] {11, 21, 31});
@@ -225,9 +226,8 @@ public class PoisonAmpouleTest {
     }
 
     @Test
-    public void testConstructorWithParentNotInWorld() {
-        Yukkuri parent = new Reimu();
-        parent.setAgeState(AgeState.CHILD);
+    public void testConstructorWithParentInWorld() {
+        Yukkuri parent = createParent(AgeState.CHILD);
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
         assertEquals(500, ampoule.getValue());
         assertEquals(0, ampoule.getCost());

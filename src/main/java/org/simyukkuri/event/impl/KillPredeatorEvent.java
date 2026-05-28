@@ -114,7 +114,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 		}
 		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		// 相手が消えてしまったら他の捕食種を捜索
-		if (from.isRemoved() || from.isDead() || !from.isPredatorType()) {
+		if (from == null || from.isRemoved() || from.isDead() || !from.isPredatorType()) {
 			setFrom(searchNextTarget());
 			from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 			if (from == null) {

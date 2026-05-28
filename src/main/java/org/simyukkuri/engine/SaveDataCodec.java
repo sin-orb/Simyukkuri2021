@@ -1,5 +1,6 @@
 package org.simyukkuri.engine;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -65,6 +66,7 @@ public final class SaveDataCodec {
 		byte[] gzBytes = decryptSaveBytes(payload);
 		String json = decompressGzipToString(gzBytes);
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		return mapper.readValue(json, World.class);
 	}
 

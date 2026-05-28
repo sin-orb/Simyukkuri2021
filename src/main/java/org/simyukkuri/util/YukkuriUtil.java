@@ -429,7 +429,9 @@ public class YukkuriUtil {
 		int imageWidth = img.getWidth();
 		int imageHeight = img.getHeight();
 		int sourceX2 = imageWidth;
-		int sourceY2 = imageHeight + tz * imageHeight / expandHeight;
+		int sourceY2 = expandHeight != 0
+				? imageHeight + tz * imageHeight / expandHeight
+				: imageHeight;
 		g2.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sourceX2, sourceY2, io);
 	}
 }
