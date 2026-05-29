@@ -14,6 +14,7 @@ import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.WorldEntityKind;
 import org.simyukkuri.field.impl.Barrier;
+import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameWorld;
 
 /**
@@ -46,7 +47,21 @@ public abstract class WorldEntity extends Entity {
 
 	/** アイテムのランク */
 	public enum ItemRank {
-		HOUSE, NORA, YASEI
+		HOUSE(GameText.read("editor_item_rank_house")),
+		NORA(GameText.read("editor_item_rank_nora")),
+		YASEI(GameText.read("editor_item_rank_yasei")),
+		;
+
+		private final String displayName;
+
+		ItemRank(String name) {
+			this.displayName = name;
+		}
+
+		/** ランク名の文字列表現を返す。 */
+		public String toString() {
+			return displayName;
+		}
 	}
 
 	/** 標準用長方形型境界線 */

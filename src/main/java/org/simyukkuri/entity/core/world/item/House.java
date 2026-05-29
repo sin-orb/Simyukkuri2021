@@ -10,6 +10,7 @@ import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.world.WorldEntity;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.WorldEntityKind;
+import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameWorld;
 
 /**
@@ -20,8 +21,10 @@ public class House extends WorldEntity {
 
 	/** おうちの種類テーブル */
 	public static enum HouseTable {
-		HOUSE_NORA1("floor_nora1.png", "wall_nora1.png", "ceil_nora1.png", "door_nora1.png", 1),
-		HOUSE_NORA2("floor_nora2.png", "wall_nora2.png", "ceil_nora2.png", "door_nora2.png", 1),
+		HOUSE_NORA1("floor_nora1.png", "wall_nora1.png", "ceil_nora1.png", "door_nora1.png", 1,
+				GameText.read("editor_house_nora1")),
+		HOUSE_NORA2("floor_nora2.png", "wall_nora2.png", "ceil_nora2.png", "door_nora2.png", 1,
+				GameText.read("editor_house_nora2")),
 		;
 
 		private final String floorName;
@@ -29,13 +32,20 @@ public class House extends WorldEntity {
 		private final String ceilName;
 		private final String doorName;
 		private final int rank;
+		private final String displayName;
 
-		HouseTable(String f, String w, String c, String d, int r) {
+		HouseTable(String f, String w, String c, String d, int r, String name) {
 			floorName = f;
 			wallName = w;
 			ceilName = c;
 			doorName = d;
 			rank = r;
+			displayName = name;
+		}
+
+		/** 家種類名の文字列表現を返す。 */
+		public String toString() {
+			return displayName;
 		}
 
 		/** 床画像のファイル名を返す。 */

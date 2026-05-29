@@ -23,7 +23,7 @@ jobs:
       shell: powershell
       run: |
         New-Item -ItemType Directory -Force -Path tools | Out-Null
-        Invoke-WebRequest -Uri "https://repo1.maven.org/maven2/com/puppycrawl/tools/checkstyle/10.20.1/checkstyle-10.20.1-all.jar" -OutFile "tools\checkstyle.jar"
+        Invoke-WebRequest -Uri "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-13.4.2/checkstyle-13.4.2-all.jar" -OutFile "tools\checkstyle.jar"
 
     - name: Run Checkstyle
       shell: cmd

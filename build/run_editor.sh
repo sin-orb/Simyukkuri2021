@@ -8,7 +8,7 @@ cd "$(dirname "$0")/.."
 mkdir -p bin
 
 find src/main/java -name '*.java' | sort > /tmp/simyukkuri_editor_sources.txt
-javac -source 8 -target 8 -d bin -cp "lib/*" -encoding UTF-8 @/tmp/simyukkuri_editor_sources.txt
+javac --release 8 -Xlint:-options -d bin -cp "lib/*" -encoding UTF-8 @/tmp/simyukkuri_editor_sources.txt
 
 # ── クラスパス構築 ─────────────────────────────────────────────
 CP="bin:."

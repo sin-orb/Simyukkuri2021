@@ -1502,4 +1502,31 @@ public class Yunba extends WorldEntity {
 		this.defaultY = defaultY;
 	}
 
+	/** カラー名リスト（インデックス順）を返す。 */
+	public static String[] getColorList() {
+		return COL_LIST;
+	}
+
+	/** actionFlags から drawLayer を再計算する。 */
+	public void recalcDrawLayer() {
+		if (actionFlags == null) return;
+		boolean brush = actionFlags[Action.CLEAN.ordinal()][0] || actionFlags[Action.CLEAN.ordinal()][1] || actionFlags[Action.CLEAN.ordinal()][2]
+				|| actionFlags[Action.OKAZARI.ordinal()][0] || actionFlags[Action.OKAZARI.ordinal()][1] || actionFlags[Action.OKAZARI.ordinal()][2]
+				|| actionFlags[Action.BODY_REMOVE.ordinal()][0] || actionFlags[Action.BODY_REMOVE.ordinal()][1] || actionFlags[Action.BODY_REMOVE.ordinal()][2]
+				|| actionFlags[Action.BODY_OKAZARI.ordinal()][0] || actionFlags[Action.BODY_OKAZARI.ordinal()][1] || actionFlags[Action.BODY_OKAZARI.ordinal()][2]
+				|| actionFlags[Action.SHIT.ordinal()][0] || actionFlags[Action.SHIT.ordinal()][1] || actionFlags[Action.SHIT.ordinal()][2];
+		boolean spike = actionFlags[Action.KABI.ordinal()][0] || actionFlags[Action.KABI.ordinal()][1] || actionFlags[Action.KABI.ordinal()][2]
+				|| actionFlags[Action.RUDE.ordinal()][0] || actionFlags[Action.RUDE.ordinal()][1] || actionFlags[Action.RUDE.ordinal()][2]
+				|| actionFlags[Action.DESTROY.ordinal()][0] || actionFlags[Action.DESTROY.ordinal()][1] || actionFlags[Action.DESTROY.ordinal()][2]
+				|| actionFlags[Action.ANTIRAPER.ordinal()][0] || actionFlags[Action.ANTIRAPER.ordinal()][1] || actionFlags[Action.ANTIRAPER.ordinal()][2];
+		layerCount = 1;
+		if (brush) layerCount++;
+		if (spike) layerCount++;
+		drawLayer = new int[layerCount];
+		int idx = 0;
+		if (brush) { drawLayer[idx] = 1; idx++; }
+		drawLayer[idx] = 0; idx++;
+		if (spike) { drawLayer[idx] = 2; }
+	}
+
 }

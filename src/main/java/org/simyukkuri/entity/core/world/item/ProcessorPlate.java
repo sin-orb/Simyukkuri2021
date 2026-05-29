@@ -94,6 +94,11 @@ public class ProcessorPlate extends WorldEntity {
 			this.mode = mode;
 			this.parameter = parameter;
 		}
+
+		/** プロセスタイプ名の文字列表現を返す。 */
+		public String toString() {
+			return name;
+		}
 	}
 
 	/** 画像ロード */

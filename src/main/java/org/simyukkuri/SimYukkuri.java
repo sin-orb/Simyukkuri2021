@@ -363,6 +363,9 @@ public class SimYukkuri extends JFrame {
 		mypane.setPreferredSize(new java.awt.Dimension(Translate.getCanvasW(), Translate.getCanvasH()));
 		mypane.setMinimumSize(new java.awt.Dimension(Translate.getCanvasW(), Translate.getCanvasH()));
 		mypane.setMaximumSize(new java.awt.Dimension(Translate.getCanvasW(), Translate.getCanvasH()));
+		mypane.createBackBuffer();
+		revalidate();
+		repaint();
 	}
 
 	/**
@@ -387,6 +390,9 @@ public class SimYukkuri extends JFrame {
 		mypane.setPreferredSize(new java.awt.Dimension(Translate.getCanvasW(), Translate.getCanvasH()));
 		mypane.setMinimumSize(new java.awt.Dimension(Translate.getCanvasW(), Translate.getCanvasH()));
 		mypane.setMaximumSize(new java.awt.Dimension(Translate.getCanvasW(), Translate.getCanvasH()));
+		mypane.createBackBuffer();
+		revalidate();
+		repaint();
 	}
 
 	/** 最初に出てくるウィンドウの作成 */

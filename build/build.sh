@@ -8,7 +8,7 @@ mkdir -p classes classes_lib
 CP="../lib/jackson-annotations-2.9.9.jar:../lib/jackson-core-2.9.9.jar:../lib/jackson-databind-2.9.9.jar"
 
 echo "Start compiling..."
-javac -source 8 -target 8 -encoding UTF-8 -cp "$CP" -sourcepath ../src/main/java -d classes ../src/main/java/org/simyukkuri/SimYukkuri.java
+javac --release 8 -Xlint:-options -encoding UTF-8 -cp "$CP" -sourcepath ../src/main/java -d classes ../src/main/java/org/simyukkuri/SimYukkuri.java
 
 echo "Extracting libraries..."
 (

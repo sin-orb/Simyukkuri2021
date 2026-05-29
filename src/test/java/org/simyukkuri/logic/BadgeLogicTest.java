@@ -16,7 +16,6 @@ import org.simyukkuri.entity.core.attachment.Attachment;
 import org.simyukkuri.entity.core.attachment.impl.Badge;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
-import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Attitude;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.YukkuriRank;

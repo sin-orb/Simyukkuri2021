@@ -825,7 +825,9 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		if (body.getPainState() != Pain.NONE) {
 			emo += GameText.read("command_status_hurt");
 		}
-		if (body.isSad()) {
+		if (body.isVerySad()) {
+			emo += GameText.read("command_status_very_sad");
+		} else if (body.isSad()) {
 			emo += GameText.read("command_status_sad");
 		}
 		if (body.isBlind()) {
