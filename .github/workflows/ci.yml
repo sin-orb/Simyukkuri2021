@@ -13,17 +13,17 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up JDK 8
+    - name: Set up JDK 11 for Checkstyle
       uses: actions/setup-java@v4
       with:
-        java-version: '8'
+        java-version: '11'
         distribution: 'temurin'
 
     - name: Download Checkstyle
       shell: powershell
       run: |
         New-Item -ItemType Directory -Force -Path tools | Out-Null
-        Invoke-WebRequest -Uri "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.45.1/checkstyle-8.45.1-all.jar" -OutFile "tools\checkstyle.jar"
+        Invoke-WebRequest -Uri "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-10.21.4/checkstyle-10.21.4-all.jar" -OutFile "tools\checkstyle.jar"
 
     - name: Run Checkstyle
       shell: cmd
@@ -59,13 +59,13 @@ jobs:
       shell: cmd
       run: |
         dir /s /b src\main\java\*.java > sources.txt
-        javac -source 8 -target 8 -d bin -cp "lib\*" -encoding UTF-8 @sources.txt
+        javac --release 8 -Xlint:-options -d bin -cp "lib\*" -encoding UTF-8 @sources.txt
 
     - name: Compile Test Code
       shell: cmd
       run: |
         dir /s /b src\test\java\*.java > test_sources.txt
-        javac -source 8 -target 8 -d bin -cp "bin;lib\*" -encoding UTF-8 @test_sources.txt
+        javac --release 8 -Xlint:-options -d bin -cp "bin;lib\*" -encoding UTF-8 @test_sources.txt
 
     - name: Run Tests
       shell: cmd
