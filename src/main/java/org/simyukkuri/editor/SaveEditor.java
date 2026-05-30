@@ -6,8 +6,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
-import java.awt.GridLayout;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.io.File;
 import java.lang.reflect.Field;
@@ -55,13 +55,22 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Translate;
-import org.simyukkuri.field.FieldShape;
-import org.simyukkuri.field.impl.Barrier;
-import org.simyukkuri.field.impl.Farm;
-import org.simyukkuri.field.impl.Pool;
 import org.simyukkuri.engine.SaveDataCodec;
 import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.Entity;
+import org.simyukkuri.entity.core.attachment.Attachment;
+import org.simyukkuri.entity.core.attachment.impl.AccelAmpoule;
+import org.simyukkuri.entity.core.attachment.impl.Ants;
+import org.simyukkuri.entity.core.attachment.impl.AnydAmpoule;
+import org.simyukkuri.entity.core.attachment.impl.Badge;
+import org.simyukkuri.entity.core.attachment.impl.BreedingAmpoule;
+import org.simyukkuri.entity.core.attachment.impl.Fire;
+import org.simyukkuri.entity.core.attachment.impl.HungryAmpoule;
+import org.simyukkuri.entity.core.attachment.impl.Needle;
+import org.simyukkuri.entity.core.attachment.impl.OrangeAmpoule;
+import org.simyukkuri.entity.core.attachment.impl.PoisonAmpoule;
+import org.simyukkuri.entity.core.attachment.impl.StopAmpoule;
+import org.simyukkuri.entity.core.attachment.impl.VeryShitAmpoule;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.HybridYukkuri;
 import org.simyukkuri.entity.core.meta.Player;
@@ -96,6 +105,10 @@ import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.enums.TakeoutItemType;
 import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.YukkuriType;
+import org.simyukkuri.field.FieldShape;
+import org.simyukkuri.field.impl.Barrier;
+import org.simyukkuri.field.impl.Farm;
+import org.simyukkuri.field.impl.Pool;
 import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameLocale;
 import org.simyukkuri.util.GameText;
@@ -157,14 +170,12 @@ public class SaveEditor {
         final List sourceList;
         final WorldState worldState;
 
-        @SuppressWarnings("rawtypes")
         FieldEntry(FieldShape s, List src, WorldState ws) {
             shape = s;
             sourceList = src;
             worldState = ws;
         }
 
-        @SuppressWarnings("unchecked")
         void remove() {
             if (shape instanceof Barrier) {
                 Barrier b = (Barrier) shape;
@@ -284,7 +295,7 @@ public class SaveEditor {
             new LabeledItem("SWEETS_YASEI2", getString("command_food_sweet2") + getString("editor_suffix_yasei")),
             new LabeledItem("FOOD_YASEI",    getString("command_food_normal") + getString("editor_suffix_yasei")),
             new LabeledItem("BITTER_YASEI",  getString("command_food_bitter") + getString("editor_suffix_yasei")),
-            new LabeledItem("LEMONPOP_YASEI",getString("command_food_ramune") + getString("editor_suffix_yasei")),
+            new LabeledItem("LEMONPOP_YASEI", getString("command_food_ramune") + getString("editor_suffix_yasei")),
             new LabeledItem("HOT_YASEI",     getString("command_food_hot")    + getString("editor_suffix_yasei")),
             new LabeledItem("VIYUGRA_YASEI", getString("command_food_viagra") + getString("editor_suffix_yasei")),
             new LabeledItem("WASTE_YASEI",   getString("command_food_garbage") + getString("editor_suffix_yasei")),
@@ -296,8 +307,10 @@ public class SaveEditor {
 
     static String[] makeYunbaColorItems() {
         String[] src = Yunba.getColorList();
-        if (src != null) return src;
-        return new String[]{"0","1","2","3","4","5","6","7","8"};
+        if (src != null) {
+            return src;
+        }
+        return new String[] { "0", "1", "2", "3", "4", "5", "6", "7", "8" };
     }
 
     static LabeledItem[] makeLiquidTypeItems() {
@@ -1076,7 +1089,8 @@ public class SaveEditor {
             refreshTables();
             if (toDelete.size() == 1) {
                 Yukkuri y = toDelete.get(0);
-                statusBar.setText("  " + String.format(getString("editor_status_deleted"), yukkuriLabel(y.getClass().getSimpleName()), y.getUniqueId()));
+                String dname = yukkuriLabel(y.getClass().getSimpleName());
+                statusBar.setText("  " + String.format(getString("editor_status_deleted"), dname, y.getUniqueId()));
             } else {
                 statusBar.setText("  " + String.format(getString("editor_status_deleted_multi"), toDelete.size()));
             }
@@ -1608,6 +1622,16 @@ public class SaveEditor {
         private final JLabel favBedLabel  = new JLabel(getString("editor_dash"));
         private final JLabel favSuiLabel  = new JLabel(getString("editor_dash"));
 
+        // アタッチメント
+        private static final Class<?>[] ATTACH_CLASSES = {
+            OrangeAmpoule.class, AccelAmpoule.class, StopAmpoule.class,
+            HungryAmpoule.class, VeryShitAmpoule.class, PoisonAmpoule.class,
+            BreedingAmpoule.class, AnydAmpoule.class,
+            Needle.class, Ants.class, Badge.class, Fire.class,
+        };
+        private final DefaultListModel<Attachment> attachModel = new DefaultListModel<>();
+        private final JList<Attachment> attachList = new JList<>(attachModel);
+
         YukkuriEditPanel() {
             // static initializer より後に実行されるのでL()が安全に使える
             ageStateBox     = new JComboBox<>(makeAgeStateItems());
@@ -1710,6 +1734,35 @@ public class SaveEditor {
             row = addFavRow(form, c, row, getString("editor_lbl_fav_ball"), favBallLabel, FavItemType.BALL);
             row = addFavRow(form, c, row, getString("editor_lbl_fav_bed"),  favBedLabel,  FavItemType.BED);
             row = addFavRow(form, c, row, getString("editor_lbl_fav_sui"),  favSuiLabel,  FavItemType.SUI);
+
+            row = addSectionHeader(form, c, row, getString("editor_sec_attach"));
+            attachList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+            JScrollPane attachScroll = new JScrollPane(attachList);
+            attachScroll.setPreferredSize(new Dimension(300, 100));
+            c.gridx = 0;
+            c.gridy = row;
+            c.gridwidth = 2;
+            c.fill = GridBagConstraints.BOTH;
+            c.weightx = 1.0;
+            c.weighty = 0.2;
+            form.add(attachScroll, c);
+            c.weighty = 0;
+            c.fill = GridBagConstraints.NONE;
+            c.weightx = 0;
+            row++;
+            JButton addAttachBtn = new JButton(getString("editor_btn_add"));
+            addAttachBtn.addActionListener(e -> onAddAttachment());
+            JButton delAttachBtn = new JButton(getString("editor_btn_delete"));
+            delAttachBtn.addActionListener(e -> onRemoveAttachment());
+            JPanel attachBtnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 0));
+            attachBtnPanel.add(addAttachBtn);
+            attachBtnPanel.add(delAttachBtn);
+            c.gridx = 0;
+            c.gridy = row;
+            c.gridwidth = 2;
+            c.anchor = GridBagConstraints.WEST;
+            form.add(attachBtnPanel, c);
+            row++;
 
             JButton applyBtn = new JButton(getString("editor_btn_apply"));
             applyBtn.addActionListener(e -> apply());
@@ -1851,6 +1904,7 @@ public class SaveEditor {
                 ununSlaveCheck.setSelected(y.getPublicRank() == PublicRank.UNUN_SLAVE);
 
                 refreshReadOnly();
+                refreshAttach();
             } else {
                 nameLabel.setText(getString("editor_unselected"));
                 idDisplay.setText(getString("editor_dash"));
@@ -1892,6 +1946,7 @@ public class SaveEditor {
                 favBallLabel.setText(getString("editor_dash"));
                 favBedLabel.setText(getString("editor_dash"));
                 favSuiLabel.setText(getString("editor_dash"));
+                attachModel.clear();
             }
         }
 
@@ -1963,6 +2018,72 @@ public class SaveEditor {
             }
             Integer id = favs.get(t);
             return (id == null || id == -1) ? getString("editor_none") : "ID=" + id;
+        }
+
+        private void refreshAttach() {
+            attachModel.clear();
+            if (current == null || current.getAttach() == null) {
+                return;
+            }
+            for (Attachment at : current.getAttach()) {
+                attachModel.addElement(at);
+            }
+        }
+
+        private void onAddAttachment() {
+            if (current == null) {
+                return;
+            }
+            String[] names = new String[ATTACH_CLASSES.length];
+            for (int i = 0; i < ATTACH_CLASSES.length; i++) {
+                try {
+                    names[i] = ATTACH_CLASSES[i].newInstance().toString();
+                } catch (Exception ex) {
+                    names[i] = ATTACH_CLASSES[i].getSimpleName();
+                }
+            }
+            JComboBox<String> typeBox = new JComboBox<>(names);
+            if (JOptionPane.showConfirmDialog(this, typeBox,
+                    getString("editor_dlg_add_attach"),
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) != JOptionPane.OK_OPTION) {
+                return;
+            }
+            try {
+                Attachment at = (Attachment) ATTACH_CLASSES[typeBox.getSelectedIndex()].newInstance();
+                at.setParent(current.getUniqueId());
+                current.getAttach().add(at);
+                refreshAttach();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this,
+                        getString("editor_err_add") + "\n" + ex.getMessage(),
+                        getString("editor_err_title"), JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        private void onRemoveAttachment() {
+            if (current == null) {
+                return;
+            }
+            int[] indices = attachList.getSelectedIndices();
+            if (indices.length == 0) {
+                JOptionPane.showMessageDialog(this, getString("editor_err_select_item"));
+                return;
+            }
+            List<Attachment> toRemove = new ArrayList<>();
+            for (int i : indices) {
+                toRemove.add(attachModel.getElementAt(i));
+            }
+            String msg = toRemove.size() == 1
+                    ? String.format(getString("editor_dlg_del_confirm"), toRemove.get(0).toString(), toRemove.get(0).getObjId())
+                    : String.format(getString("editor_dlg_del_multi_confirm"), toRemove.size());
+            if (JOptionPane.showConfirmDialog(this, msg, getString("editor_dlg_del_title"),
+                    JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+                return;
+            }
+            for (Attachment at : toRemove) {
+                current.getAttach().remove(at);
+            }
+            refreshAttach();
         }
 
         private static String safeGetMyName(Yukkuri y) {
@@ -2407,7 +2528,10 @@ public class SaveEditor {
                 String curLqtStr = String.valueOf(curLqt);
                 final JComboBox<LabeledItem> lqtBox = new JComboBox<LabeledItem>(lqtItems);
                 for (int i = 0; i < lqtItems.length; i++) {
-                    if (lqtItems[i].enumName.equals(curLqtStr)) { lqtBox.setSelectedIndex(i); break; }
+                    if (lqtItems[i].enumName.equals(curLqtStr)) {
+                        lqtBox.setSelectedIndex(i);
+                        break;
+                    }
                 }
                 addPropRow(getString("editor_prop_liquidtype"), lqtBox);
                 propAppliers.add(new Runnable() {
@@ -2564,11 +2688,20 @@ public class SaveEditor {
                 // actionFlags の null ガード
                 Yunba.Action[] acts = Yunba.Action.values();
                 boolean[][] af = yn.getActionFlags();
-                if (af == null) { af = new boolean[acts.length][3]; yn.setActionFlags(af); }
+                if (af == null) {
+                    af = new boolean[acts.length][3];
+                    yn.setActionFlags(af);
+                }
                 boolean[][] af2 = yn.getActionFlags2();
-                if (af2 == null) { af2 = new boolean[1][5]; yn.setActionFlags2(af2); }
+                if (af2 == null) {
+                    af2 = new boolean[1][5];
+                    yn.setActionFlags2(af2);
+                }
                 boolean[][] af3 = yn.getActionFlags3();
-                if (af3 == null) { af3 = new boolean[1][3]; yn.setActionFlags3(af3); }
+                if (af3 == null) {
+                    af3 = new boolean[1][3];
+                    yn.setActionFlags3(af3);
+                }
                 final boolean[][] finalAf  = af;
                 final boolean[][] finalAf2 = af2;
                 final boolean[][] finalAf3 = af3;
@@ -2645,31 +2778,55 @@ public class SaveEditor {
                         for (int i = 0; i < extraCbs.length; i++) {
                             finalAf[6 + i][0] = extraCbs[i].isSelected();
                         }
-                        for (int i = 0; i < 5; i++) finalAf2[0][i] = attCbs[i].isSelected();
-                        for (int i = 0; i < 3; i++) finalAf3[0][i] = intelCbs[i].isSelected();
+                        for (int i = 0; i < 5; i++) {
+                            finalAf2[0][i] = attCbs[i].isSelected();
+                        }
+                        for (int i = 0; i < 3; i++) {
+                            finalAf3[0][i] = intelCbs[i].isSelected();
+                        }
                         // check フラグ再導出
-                        yn.setYukkuriCheck(false); yn.setShitCheck(false);
-                        yn.setStalkCheck(false);   yn.setNorndCheck(false);
-                        yn.setKillCheck(false);    yn.setMineutiCheck(false);
-                        yn.setNoDamageFallCheck(false); yn.setFoodCheck(false);
+                        yn.setYukkuriCheck(false);
+                        yn.setShitCheck(false);
+                        yn.setStalkCheck(false);
+                        yn.setNorndCheck(false);
+                        yn.setKillCheck(false);
+                        yn.setMineutiCheck(false);
+                        yn.setNoDamageFallCheck(false);
+                        yn.setFoodCheck(false);
                         for (int i = 0; i < finalAf.length; i++) {
                             for (int j = 0; j < 3; j++) {
                                 if (i == Yunba.Action.SHIT.ordinal()) {
-                                    if (finalAf[i][0]) yn.setShitCheck(true);
+                                    if (finalAf[i][0]) {
+                                        yn.setShitCheck(true);
+                                    }
                                 } else if (i == Yunba.Action.STALK.ordinal()) {
-                                    if (finalAf[i][0]) yn.setStalkCheck(true);
+                                    if (finalAf[i][0]) {
+                                        yn.setStalkCheck(true);
+                                    }
                                 } else if (i == Yunba.Action.NORND.ordinal()) {
-                                    if (finalAf[i][0]) yn.setNorndCheck(true);
+                                    if (finalAf[i][0]) {
+                                        yn.setNorndCheck(true);
+                                    }
                                 } else if (i == Yunba.Action.KILL.ordinal()) {
-                                    if (finalAf[i][0]) yn.setKillCheck(true);
+                                    if (finalAf[i][0]) {
+                                        yn.setKillCheck(true);
+                                    }
                                 } else if (i == Yunba.Action.MINEUTI.ordinal()) {
-                                    if (finalAf[i][0]) yn.setMineutiCheck(true);
+                                    if (finalAf[i][0]) {
+                                        yn.setMineutiCheck(true);
+                                    }
                                 } else if (i == Yunba.Action.NODAMAGE_FALL.ordinal()) {
-                                    if (finalAf[i][0]) yn.setNoDamageFallCheck(true);
+                                    if (finalAf[i][0]) {
+                                        yn.setNoDamageFallCheck(true);
+                                    }
                                 } else if (i == Yunba.Action.EMPFOOD.ordinal()) {
-                                    if (finalAf[i][0]) yn.setFoodCheck(true);
+                                    if (finalAf[i][0]) {
+                                        yn.setFoodCheck(true);
+                                    }
                                 } else {
-                                    if (finalAf[i][j]) yn.setYukkuriCheck(true);
+                                    if (finalAf[i][j]) {
+                                        yn.setYukkuriCheck(true);
+                                    }
                                 }
                             }
                         }
@@ -2770,13 +2927,16 @@ public class SaveEditor {
 
         private void addRow(String lbl, JComponent field) {
             GridBagConstraints cl = new GridBagConstraints();
-            cl.gridx = 0; cl.gridy = GridBagConstraints.RELATIVE;
+            cl.gridx = 0;
+            cl.gridy = GridBagConstraints.RELATIVE;
             cl.anchor = GridBagConstraints.WEST;
             cl.insets = new Insets(2, 2, 2, 6);
             propPanel.add(new JLabel(lbl), cl);
             GridBagConstraints cf = new GridBagConstraints();
-            cf.gridx = 1; cf.gridy = GridBagConstraints.RELATIVE;
-            cf.fill = GridBagConstraints.HORIZONTAL; cf.weightx = 1.0;
+            cf.gridx = 1;
+            cf.gridy = GridBagConstraints.RELATIVE;
+            cf.fill = GridBagConstraints.HORIZONTAL;
+            cf.weightx = 1.0;
             cf.insets = new Insets(2, 0, 2, 2);
             propPanel.add(field, cf);
         }
@@ -2795,8 +2955,10 @@ public class SaveEditor {
             final JTextField sy = new JTextField(String.valueOf(s.getStartY()), 8);
             final JTextField ex = new JTextField(String.valueOf(s.getEndX()), 8);
             final JTextField ey = new JTextField(String.valueOf(s.getEndY()), 8);
-            sx.setEditable(false); sy.setEditable(false);
-            ex.setEditable(false); ey.setEditable(false);
+            sx.setEditable(false);
+            sy.setEditable(false);
+            ex.setEditable(false);
+            ey.setEditable(false);
             addRow(getString("editor_field_startx"), sx);
             addRow(getString("editor_field_starty"), sy);
             addRow(getString("editor_field_endx"),   ex);
@@ -2823,18 +2985,29 @@ public class SaveEditor {
 
             // spacer
             GridBagConstraints cs = new GridBagConstraints();
-            cs.gridx = 0; cs.gridy = GridBagConstraints.RELATIVE;
-            cs.gridwidth = 2; cs.weighty = 1.0; cs.fill = GridBagConstraints.VERTICAL;
+            cs.gridx = 0;
+            cs.gridy = GridBagConstraints.RELATIVE;
+            cs.gridwidth = 2;
+            cs.weighty = 1.0;
+            cs.fill = GridBagConstraints.VERTICAL;
             propPanel.add(new JPanel(), cs);
         }
 
         private int parseInt(NumericField f, int fallback) {
-            try { return Integer.parseInt(f.getText().trim()); } catch (NumberFormatException e) { return fallback; }
+            try {
+                return Integer.parseInt(f.getText().trim());
+            } catch (NumberFormatException e) {
+                return fallback;
+            }
         }
 
         private void onApply() {
-            if (current == null) return;
-            for (Runnable r : propAppliers) r.run();
+            if (current == null) {
+                return;
+            }
+            for (Runnable r : propAppliers) {
+                r.run();
+            }
             if (statusLabel != null) {
                 statusLabel.setText("  " + getString("editor_status_field_applied"));
             }
@@ -3111,11 +3284,11 @@ public class SaveEditor {
                     String fullPkg = "org.simyukkuri.entity.core.living.yukkuri.impl.";
                     Yukkuri donor1 = ((Class<? extends Yukkuri>) Class.forName(
                             fullPkg + type1.getClassName())).newInstance();
-                    Yukkuri donor2 = ((Class<? extends Yukkuri>) Class.forName(
-                            fullPkg + type2.getClassName())).newInstance();
                     Field doreiField1 = hybrid.getClass().getDeclaredField("dorei");
                     doreiField1.setAccessible(true);
                     doreiField1.set(hybrid, donor1);
+                    Yukkuri donor2 = ((Class<? extends Yukkuri>) Class.forName(
+                            fullPkg + type2.getClassName())).newInstance();
                     Field doreiField2 = hybrid.getClass().getDeclaredField("dorei2");
                     doreiField2.setAccessible(true);
                     doreiField2.set(hybrid, donor2);
