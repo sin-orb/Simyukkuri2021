@@ -166,7 +166,7 @@ class OrangePoolTest extends ItemTestBase {
         try {
             OrangePool.loadImages(OrangePool.class.getClassLoader(), null);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -183,7 +183,7 @@ class OrangePoolTest extends ItemTestBase {
         try {
             OrangePool.setupOrange(item, true);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -193,7 +193,7 @@ class OrangePoolTest extends ItemTestBase {
             OrangePool o = new OrangePool(100, 100, 0);
             org.junit.jupiter.api.Assertions.assertNotNull(o);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 

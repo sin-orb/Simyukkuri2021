@@ -367,7 +367,7 @@ class ToiletLogicTest {
             zf.setAccessible(true);
             zf.setInt(toilet, 10); // toilet.getZ()=10
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
         SimYukkuri.world.getCurrentWorldState().getToilets().put(toilet.getObjId(), toilet);
         body.setMoveTargetId(toilet.getObjId());
@@ -950,7 +950,7 @@ class ToiletLogicTest {
             zf.setAccessible(true);
             zf.setInt(shit, 1); // z=1 != body.z=0 → continue
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
         SimYukkuri.world.getCurrentWorldState().getShit().put(shit.getObjId(), shit);
         body.setAge(0);

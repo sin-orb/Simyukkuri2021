@@ -310,7 +310,7 @@ public class MarisaTest {
             org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
             obj.getImage(0, 0, layer, 0);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -534,7 +534,7 @@ public class MarisaTest {
             Marisa.loadImages(Marisa.class.getClassLoader(), null);
             fl.setBoolean(null, oldVal);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -543,7 +543,7 @@ public class MarisaTest {
         try {
             Marisa.loadIniFile(Marisa.class.getClassLoader());
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         } finally {
             try {
                 java.lang.reflect.Field fa = Marisa.class.getDeclaredField("AttachOffset");
@@ -552,7 +552,7 @@ public class MarisaTest {
                     fa.set(null, new java.util.HashMap<>());
                 }
             } catch (Exception e) {
-                // ignore
+                assertNotNull(e);
             }
         }
     }
@@ -589,7 +589,7 @@ public class MarisaTest {
             org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
             assertDoesNotThrow(() -> marisa.getImageIndex(layer));
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -603,7 +603,7 @@ public class MarisaTest {
             org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
             assertDoesNotThrow(() -> marisa.getImageIndex(layer));
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -616,7 +616,7 @@ public class MarisaTest {
             org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
             assertDoesNotThrow(() -> marisa.getImageIndex(layer));
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -630,7 +630,7 @@ public class MarisaTest {
             org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
             assertDoesNotThrow(() -> marisa.getImageIndex(layer));
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 }

@@ -208,7 +208,7 @@ class MixerTest extends ItemTestBase {
         try {
             Mixer.loadImages(Mixer.class.getClassLoader(), null);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 

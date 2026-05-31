@@ -3392,7 +3392,7 @@ class BodyLogicTest {
             f.setAccessible(true);
             f.set(evt, org.simyukkuri.event.EventPacket.EventPriority.HIGH);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
         me.setCurrentEvent(evt);
         assertFalse(YukkuriLogic.checkPartner(me));
@@ -3753,7 +3753,7 @@ class BodyLogicTest {
         try {
             YukkuriLogic.gatheringYukkuriFront(me, list);
         } catch (ArrayIndexOutOfBoundsException e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 

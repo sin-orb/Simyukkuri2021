@@ -110,7 +110,7 @@ class TrampolineTest extends ItemTestBase {
         try {
             Trampoline.loadImages(Trampoline.class.getClassLoader(), null);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -141,7 +141,7 @@ class TrampolineTest extends ItemTestBase {
         try {
             Trampoline.setupTrampoline(item);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -151,7 +151,7 @@ class TrampolineTest extends ItemTestBase {
             Trampoline t = new Trampoline(100, 100, 0);
             org.junit.jupiter.api.Assertions.assertNotNull(t);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 }

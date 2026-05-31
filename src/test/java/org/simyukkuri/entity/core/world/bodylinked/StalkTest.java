@@ -352,7 +352,7 @@ class StalkTest {
             org.simyukkuri.entity.core.world.bodylinked.Stalk.loadImages(
                     org.simyukkuri.entity.core.world.bodylinked.Stalk.class.getClassLoader(), null);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 

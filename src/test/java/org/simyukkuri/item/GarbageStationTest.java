@@ -250,7 +250,7 @@ class GarbageStationTest extends ItemTestBase {
         try {
             GarbageStation.loadImages(GarbageStation.class.getClassLoader(), null);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -267,7 +267,7 @@ class GarbageStationTest extends ItemTestBase {
         try {
             GarbageStation.setupGarbageSt(item);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -277,7 +277,7 @@ class GarbageStationTest extends ItemTestBase {
             GarbageStation g = new GarbageStation(100, 100, 0);
             org.junit.jupiter.api.Assertions.assertNotNull(g);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 

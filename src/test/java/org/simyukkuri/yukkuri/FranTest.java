@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
@@ -80,6 +81,8 @@ public class FranTest {
         // Without proper World setup, will likely return null
         obj.checkTransform();
         // Just verify the method executes without crashing
+        // Just verify the method executes without crashing
+        assertNull(obj.checkTransform());
     }
 
     @Test
@@ -213,7 +216,7 @@ public class FranTest {
             Fran.loadImages(Fran.class.getClassLoader(), null);
             fl.setBoolean(null, oldVal);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -243,7 +246,7 @@ public class FranTest {
             org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
             obj.getImage(0, 0, layer, 0);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -252,7 +255,7 @@ public class FranTest {
         try {
             Fran.loadIniFile(Fran.class.getClassLoader());
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         } finally {
             try {
                 java.lang.reflect.Field fa = Fran.class.getDeclaredField("AttachOffset");
@@ -261,7 +264,7 @@ public class FranTest {
                     fa.set(null, new java.util.HashMap<>());
                 }
             } catch (Exception e) {
-                // ignore
+                assertNotNull(e);
             }
         }
     }

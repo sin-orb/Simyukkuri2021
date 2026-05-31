@@ -182,7 +182,7 @@ class ToiletTest extends ItemTestBase {
         try {
             Toilet.loadImages(Toilet.class.getClassLoader(), null);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -213,7 +213,7 @@ class ToiletTest extends ItemTestBase {
         try {
             Toilet.setupToilet(toilet);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -223,7 +223,7 @@ class ToiletTest extends ItemTestBase {
             Toilet t = new Toilet(100, 100, 0);
             org.junit.jupiter.api.Assertions.assertNotNull(t);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 

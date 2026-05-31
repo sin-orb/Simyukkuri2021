@@ -306,8 +306,9 @@ class VomitTest {
         try {
             org.simyukkuri.entity.core.world.mobile.Vomit.loadImages(
                     org.simyukkuri.entity.core.world.mobile.Vomit.class.getClassLoader(), null);
+            assertNotNull(org.simyukkuri.entity.core.world.mobile.Vomit.class);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -316,10 +317,13 @@ class VomitTest {
         try {
             org.simyukkuri.entity.core.living.yukkuri.Yukkuri body =
                     org.simyukkuri.util.WorldTestHelper.createBody();
-            new org.simyukkuri.entity.core.world.mobile.Vomit(
+            org.simyukkuri.entity.core.world.mobile.Vomit v =
+                    new org.simyukkuri.entity.core.world.mobile.Vomit(
                     100, 100, 0, body, org.simyukkuri.enums.YukkuriType.REIMU);
+            assertEquals(100, v.getX());
+            assertEquals(100, v.getY());
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 

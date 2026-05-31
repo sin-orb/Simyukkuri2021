@@ -3,6 +3,7 @@ package org.simyukkuri.yukkuri;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -65,6 +66,8 @@ public class MarisaKotatsumuriTest {
         // Without proper World setup, will likely return null
         obj.checkTransform();
         // Just verify the method executes without crashing
+        // Just verify the method executes without crashing
+        assertNull(obj.checkTransform());
     }
 
     @Test
@@ -199,7 +202,7 @@ public class MarisaKotatsumuriTest {
             MarisaKotatsumuri.loadImages(MarisaKotatsumuri.class.getClassLoader(), null);
             fl.setBoolean(null, oldVal);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -229,7 +232,7 @@ public class MarisaKotatsumuriTest {
             org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
             obj.getImage(0, 0, layer, 0);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -250,7 +253,7 @@ public class MarisaKotatsumuriTest {
         try {
             MarisaKotatsumuri.loadIniFile(MarisaKotatsumuri.class.getClassLoader());
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         } finally {
             try {
                 java.lang.reflect.Field fa =
@@ -260,7 +263,7 @@ public class MarisaKotatsumuriTest {
                     fa.set(null, new java.util.HashMap<>());
                 }
             } catch (Exception e) {
-                // ignore
+                assertNotNull(e);
             }
         }
     }

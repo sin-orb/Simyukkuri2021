@@ -316,7 +316,7 @@ class BreedingPoolTest extends ItemTestBase {
         try {
             BreedingPool.loadImages(BreedingPool.class.getClassLoader(), null);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 

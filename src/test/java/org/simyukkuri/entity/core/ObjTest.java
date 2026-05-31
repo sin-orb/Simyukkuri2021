@@ -463,7 +463,11 @@ public class ObjTest {
     @Test
     public void testKickNoArgs() {
         Entity obj = new Entity();
-        obj.kick(); // does nothing, should not throw
+        obj.kick(5, 10, 15);
+        obj.kick(); // no-op: velocity unchanged
+        assertEquals(5, obj.getVx());
+        assertEquals(10, obj.getVy());
+        assertEquals(15, obj.getVz());
     }
 
     // --- calcPos ---

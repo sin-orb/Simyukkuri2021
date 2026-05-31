@@ -443,18 +443,9 @@ public class BodyAttributesTest {
         @Test
         public void testBurstStateBurst() {
             body.setAgeState(AgeState.ADULT);
-            // getSize() * 4 / getOriginSize() >= 8 → BURST
-            // originSize = 100, size needs to be >= 200
             body.getSpriteSet()[AgeState.ADULT.ordinal()].setImageW(100);
-            // expandSprのサイズで膨らませる代わりに直接sizeに影響するbodySprを変更
-            // getSize = bodySpr.imageW + expandSizeW, originSize = bodySpr.imageW
-            // 比を8にする: size = originSize * 2 → ratio = 8
-            // expandSizeWが無いので、bodySprのサイズは変えずunyoOffsetWで調整は不可
-            // 別のアプローチ: originSizeを小さくする
-            body.getSpriteSet()[AgeState.ADULT.ordinal()].setImageW(10);
-            // size = 10 + 0 = 10, originSize = 10, ratio = 10*4/10 = 4 → NONE
-            // 拡幅スプライトを使う必要がある。expandSizeWはgetExpandSizeW()で0を返す。
-            // テスト用にunyoOffsetWを使う
+            body.setExpandSizeW(100); // size=200, originSize=100, ratio=8
+            assertEquals(Burst.BURST, body.getBurstState());
         }
 
         @Test
@@ -2467,8 +2458,8 @@ public class BodyAttributesTest {
     class AttachmentBoundaryTests {
         @Test
         public void testResetAttachmentBoundaryEmpty() {
-            // Should not throw when no attachments
             body.resetAttachmentBoundary();
+            assertEquals(0, body.getAttachmentSize(Object.class));
         }
 
         @Test
@@ -2485,7 +2476,8 @@ public class BodyAttributesTest {
             SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
             TestAttachment a = new TestAttachment(b);
             b.addAttachment(a);
-            b.resetAttachmentBoundary(); // should not throw
+            b.resetAttachmentBoundary();
+            assertEquals(1, b.getAttachmentSize(TestAttachment.class));
         }
     }
 
@@ -2524,8 +2516,9 @@ public class BodyAttributesTest {
 
         @Test
         public void testRemoveChildrenListNull() {
-            // Should not throw
+            int before = body.getChildrenCount();
             body.removeChild(null);
+            assertEquals(before, body.getChildrenCount());
         }
 
         @Test
@@ -2564,8 +2557,9 @@ public class BodyAttributesTest {
 
         @Test
         public void testRemoveElderSisterListNull() {
-            // Should not throw
+            int before = body.getElderSistersCount();
             body.removeElderSister(null);
+            assertEquals(before, body.getElderSistersCount());
         }
 
         @Test
@@ -2594,8 +2588,9 @@ public class BodyAttributesTest {
 
         @Test
         public void testRemoveSisterListNull() {
-            // Should not throw
+            int before = body.getSistersCount();
             body.removeSister(null);
+            assertEquals(before, body.getSistersCount());
         }
 
         @Test
@@ -2624,11 +2619,9 @@ public class BodyAttributesTest {
             body.setRank(YukkuriRank.NORAYU);
             body.setAgeState(AgeState.ADULT);
             body.setSickPeriod(body.getIncubationPeriodBase() + 1); // isSick = true
-
-            // With sick, P is halved, increasing chance of diarrhea
-            // We can't assert the result deterministically without RND control
-            // but we can at least verify it doesn't throw
-            body.getDiarrhea();
+            body.setDiarrheaProb(2); // sick で /2 → 1 → nextInt(1)==0 → true
+            SimYukkuri.RND = new ConstState(0);
+            assertTrue(body.getDiarrhea());
         }
 
         @Test
@@ -2637,8 +2630,9 @@ public class BodyAttributesTest {
             body.setAgeState(AgeState.ADULT);
             int limit = body.getDamageLimitBase()[AgeState.ADULT.ordinal()];
             body.setDamage(limit / 2); // isDamaged = true
-
-            body.getDiarrhea();
+            body.setDiarrheaProb(2); // damaged で /2 → 1 → nextInt(1)==0 → true
+            SimYukkuri.RND = new ConstState(0);
+            assertTrue(body.getDiarrhea());
         }
 
         @Test

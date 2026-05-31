@@ -328,7 +328,7 @@ public class AliceTest {
             Alice.loadImages(Alice.class.getClassLoader(), null);
             fl.setBoolean(null, oldVal);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -357,7 +357,7 @@ public class AliceTest {
             org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
             obj.getImage(0, 0, layer, 0);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -366,7 +366,7 @@ public class AliceTest {
         try {
             Alice.loadIniFile(Alice.class.getClassLoader());
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         } finally {
             try {
                 java.lang.reflect.Field fa = Alice.class.getDeclaredField("AttachOffset");
@@ -375,7 +375,7 @@ public class AliceTest {
                     fa.set(null, new java.util.HashMap<>());
                 }
             } catch (Exception e) {
-                // ignore
+                assertNotNull(e);
             }
         }
     }

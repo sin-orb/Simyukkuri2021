@@ -376,7 +376,7 @@ class SuiTest extends ItemTestBase {
         try {
             Sui.loadImages(Sui.class.getClassLoader(), null);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 }

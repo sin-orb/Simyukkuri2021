@@ -340,8 +340,9 @@ class ShitTest {
         try {
             org.simyukkuri.entity.core.world.mobile.Shit.loadImages(
                     org.simyukkuri.entity.core.world.mobile.Shit.class.getClassLoader(), null);
+            assertNotNull(org.simyukkuri.entity.core.world.mobile.Shit.class);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -350,10 +351,13 @@ class ShitTest {
         try {
             org.simyukkuri.entity.core.living.yukkuri.Yukkuri body =
                     org.simyukkuri.util.WorldTestHelper.createBody();
-            new org.simyukkuri.entity.core.world.mobile.Shit(
+            org.simyukkuri.entity.core.world.mobile.Shit s =
+                    new org.simyukkuri.entity.core.world.mobile.Shit(
                     100, 100, 0, body, org.simyukkuri.enums.YukkuriType.REIMU);
+            assertEquals(100, s.getX());
+            assertEquals(100, s.getY());
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 

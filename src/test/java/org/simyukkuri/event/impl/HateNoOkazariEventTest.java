@@ -101,14 +101,20 @@ class HateNoOkazariEventTest {
 
     @Test
     void testCheckEventResponse_returnsFalseForIdiot() {
-        // isIdiot() is overridden in specific subclasses (e.g. TarinaiReimu).
-        // For a normal Reimu, isIdiot() returns false, so we verify the logic path.
-        createBody();
-        createBody();
-        Yukkuri responder = createBody();
-        assertFalse(responder.isIdiot());
-        // Non-idiot body passes the idiot check (may still return false for other
-        // reasons)
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
+        HateNoOkazariEvent event = new HateNoOkazariEvent(from, to, null, 10);
+        org.simyukkuri.entity.core.living.yukkuri.impl.TarinaiReimu idiot =
+                new org.simyukkuri.entity.core.living.yukkuri.impl.TarinaiReimu();
+        idiot.setAgeState(AgeState.ADULT);
+        org.simyukkuri.system.Sprite[] spr = new org.simyukkuri.system.Sprite[3];
+        for (int i = 0; i < 3; i++) {
+            spr[i] = new org.simyukkuri.system.Sprite(10, 10, org.simyukkuri.system.Sprite.PIVOT_CENTER_BOTTOM);
+        }
+        idiot.setSpriteSet(spr);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(idiot.getUniqueId(), idiot);
+        assertTrue(idiot.isIdiot());
+        assertFalse(event.checkEventResponse(idiot));
     }
 
     @Test

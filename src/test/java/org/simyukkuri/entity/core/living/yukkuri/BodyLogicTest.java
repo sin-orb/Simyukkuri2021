@@ -1,6 +1,7 @@
 package org.simyukkuri.entity.core.living.yukkuri;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -32,7 +33,7 @@ public class BodyLogicTest {
         try {
             SimYukkuri.mypane = new MyPane();
         } catch (Throwable t) {
-            // ignore
+            assertNotNull(t);
         }
 
         // Manually initialize Vomit static arrays to avoid NPE in constructor

@@ -3,6 +3,7 @@ package org.simyukkuri.util;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Map;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
@@ -169,7 +170,7 @@ public class BodyUtilTest {
             ((Map<Integer, Yukkuri>) mapBodyField.get(SimYukkuri.world.getCurrentWorldState()))
                     .put(parent.getUniqueId(), parent);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
         body.setParentLinkId(parent.getUniqueId());
         parent.setExciting(true);
@@ -237,7 +238,7 @@ public class BodyUtilTest {
             fieldH.setInt(null, 500);
             YukkuriUtil.drawYukkuri(g2, 0, 0, img, 0, 600, 100, 100, 100, 100, null);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 

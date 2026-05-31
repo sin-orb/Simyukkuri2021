@@ -1702,7 +1702,7 @@ public class BodyTest {
         public void testSetAngryIgnoredWhenDead() {
             body.setDead(true);
             body.setAngry();
-            // dead なので変更されない
+            assertFalse(body.isAngry());
         }
 
         @Test
@@ -1710,7 +1710,7 @@ public class BodyTest {
             body.setDead(false);
             body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             body.setAngry();
-            // NYD なので変更されない
+            assertFalse(body.isAngry());
         }
 
         @Test
@@ -1719,7 +1719,7 @@ public class BodyTest {
             body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setSleeping(true);
             body.setAngry();
-            // sleeping なので変更されない
+            assertFalse(body.isAngry());
         }
 
         @Test
@@ -4205,8 +4205,9 @@ public class BodyTest {
             StubBody partner = createBody(AgeState.ADULT);
             body.setDead(false);
             body.setNobinobi(true);
+            int stressBefore = partner.getStress();
             body.doPeropero(partner);
-            // Early return when nobinobi
+            assertEquals(stressBefore, partner.getStress());
         }
 
         @Test
@@ -4215,8 +4216,9 @@ public class BodyTest {
             body.setDead(false);
             body.setNobinobi(false);
             body.setShutmouth(true);
+            int stressBefore = partner.getStress();
             body.doPeropero(partner);
-            // Early return when shutmouth
+            assertEquals(stressBefore, partner.getStress());
         }
 
         @Test
@@ -4226,8 +4228,9 @@ public class BodyTest {
             body.setNobinobi(false);
             body.setShutmouth(false);
             body.setSleeping(true);
+            int stressBefore = partner.getStress();
             body.doPeropero(partner);
-            // Early return when sleeping
+            assertEquals(stressBefore, partner.getStress());
         }
 
         @Test
@@ -4277,7 +4280,7 @@ public class BodyTest {
             body.setDead(false);
             body.setSukkiri(true);
             body.doRape(partner);
-            // Early return when already sukkiri
+            assertTrue(body.isSukkiri());
         }
 
         @Test
@@ -4356,8 +4359,9 @@ public class BodyTest {
         public void testDoOnanismWhenNYD() {
             body.setDead(false);
             body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
+            int stressBefore = body.getStress();
             body.doOnanism();
-            // Early return
+            assertEquals(stressBefore, body.getStress());
         }
 
         @Test
@@ -8339,7 +8343,8 @@ public class BodyTest {
         public void testLockSetZDeadOnlySetsForce() {
             body.setDead(true);
             body.lockSetZ(10);
-            // deadなので即return
+            assertEquals(10, body.getExternalPressure());
+            assertFalse(body.isAngry());
         }
 
         @Test
@@ -8957,7 +8962,7 @@ public class BodyTest {
         public void testCalcMoveTargetNullTarget() {
             body.setMoveTargetId(-1);
             body.calcMoveTarget();
-            // NPEにならないことを確認
+            assertEquals(-1, body.getMoveTargetId());
         }
     }
 
@@ -9235,8 +9240,9 @@ public class BodyTest {
 
         @Test
         public void testAddChildrenListNull() {
+            int before = body.getChildrenCount();
             body.addChild(null);
-            // nullの場合はIDが追加されない
+            assertEquals(before, body.getChildrenCount());
         }
 
         @Test
@@ -9371,13 +9377,13 @@ public class BodyTest {
         @Test
         public void testRemoveTakeoutItem() {
             body.removeCarryItem(TakeoutItemType.FOOD);
-            // NPEが出ないことを確認
+            assertTrue(body.getCarryItems().isEmpty());
         }
 
         @Test
         public void testRemoveFavItem() {
             body.removeFavoriteItem(FavItemType.BALL);
-            // NPEが出ないことを確認
+            assertTrue(body.getFavoriteItems().isEmpty());
         }
     }
 
@@ -15575,10 +15581,12 @@ public class BodyTest {
         public void testKillTimeReturnsWhenEventOrPlaying() {
             body.setCurrentEvent(new SuperEatingTimeEvent());
             body.killTime();
+            assertNotNull(body.getCurrentEvent());
             body.setCurrentEvent(null);
 
             body.setPlaying(PlayStyle.BALL);
             body.killTime();
+            assertEquals(PlayStyle.BALL, body.getPlaying());
         }
 
         @Test
@@ -16224,11 +16232,13 @@ public class BodyTest {
 
         @Test
         public void testCutDyingMessageNYDNear() {
-            // CUT, nextInt(50)==0, NYDNear → setNydMessage分岐
+            // CUT + NYDNear → applyCriticalDamage で damage += TICK * 100
             body.setCriticalDamageType(CriticalDamageType.CUT);
             body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE_NEAR);
             SimYukkuri.RND = new ConstState(0);
+            int damageBefore = body.getDamage();
             body.checkDamage();
+            assertTrue(body.getDamage() > damageBefore);
         }
     }
 

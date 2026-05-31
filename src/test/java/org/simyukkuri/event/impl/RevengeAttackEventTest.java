@@ -17,6 +17,7 @@ import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.event.EventPacket.EventPriority;
 import org.simyukkuri.event.EventPacket.UpdateState;
 import org.simyukkuri.system.Sprite;
+import org.simyukkuri.ConstState;
 import org.simyukkuri.util.WorldTestHelper;
 
 public class RevengeAttackEventTest {
@@ -112,10 +113,8 @@ public class RevengeAttackEventTest {
     public void testExecute_toNull_returnsTrue() {
         Yukkuri b = createBody();
         RevengeAttackEvent event = new RevengeAttackEvent(b, null, null, 1);
-        // isDontMove=false, random might or might not be 0
-        // but to=null → returns true (no mypane needed)
-        // If random==0 → also true. Either way returns true.
-        assertDoesNotThrow(() -> assertTrue(event.execute(b) || !event.execute(b)));
+        SimYukkuri.RND = new ConstState(1); // nextInt(50)=1≠0 → early return しない
+        assertTrue(event.execute(b)); // to=null → targetBody=null → return true
     }
 
     @Test

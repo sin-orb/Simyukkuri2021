@@ -147,7 +147,7 @@ class StickyPlateTest extends ItemTestBase {
                 deadField.set(body, true);
             }
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
 
         int result = item.objHitProcess(body);
@@ -203,7 +203,7 @@ class StickyPlateTest extends ItemTestBase {
         try {
             StickyPlate.loadImages(StickyPlate.class.getClassLoader(), null);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -220,7 +220,7 @@ class StickyPlateTest extends ItemTestBase {
         try {
             StickyPlate.setupStickyPlate(item);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -230,7 +230,7 @@ class StickyPlateTest extends ItemTestBase {
             StickyPlate s = new StickyPlate(100, 100, 0);
             org.junit.jupiter.api.Assertions.assertNotNull(s);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 }

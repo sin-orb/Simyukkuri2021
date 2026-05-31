@@ -487,7 +487,7 @@
 
 ## `org.simyukkuri.entity.core`
 ### `ObjTest`
-- 状態: 未完了 (3/69 良い)
+- 状態: 完了 (69/69 良い)
 - クラス要約: `Entity/世界実体の基盤回帰`
 - 回帰目的:
   - プロパティの更新と保持が壊れない
@@ -497,79 +497,79 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testAge` | age | Entity/世界実体の基盤回帰 / age | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCoordinates` | coordinates | Entity/世界実体の基盤回帰 / coordinates | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetCalcXnormal` | 設定 / calc / xnormal | Entity/世界実体の基盤回帰 / 設定 / calc / xnormal | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetCalcXmin` | 設定 / calc / xmin | Entity/世界実体の基盤回帰 / 設定 / calc / xmin | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetCalcXmax` | 設定 / calc / xmax | Entity/世界実体の基盤回帰 / 設定 / calc / xmax | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetCalcXnoWall` | 設定 / calc / xno / 壁 | Entity/世界実体の基盤回帰 / 設定 / calc / xno / 壁 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetCalcYnormal` | 設定 / calc / ynormal | Entity/世界実体の基盤回帰 / 設定 / calc / ynormal | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetCalcYmin` | 設定 / calc / ymin | Entity/世界実体の基盤回帰 / 設定 / calc / ymin | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetCalcYmax` | 設定 / calc / ymax | Entity/世界実体の基盤回帰 / 設定 / calc / ymax | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetCalcYnoWall` | 設定 / calc / yno / 壁 | Entity/世界実体の基盤回帰 / 設定 / calc / yno / 壁 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetCalcZnormal` | 設定 / calc / znormal | Entity/世界実体の基盤回帰 / 設定 / calc / znormal | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetCalcZaboveMax` | 設定 / calc / zabove / max | Entity/世界実体の基盤回帰 / 設定 / calc / zabove / max | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetCalcZbelowMostDepthNotFalling` | 設定 / calc / zbelow / most / depth / 非 / falling | Entity/世界実体の基盤回帰 / 設定 / calc / zbelow / most / depth / 非 / falling | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetCalcZbelowMostDepthFalling` | 設定 / calc / zbelow / most / depth / falling | Entity/世界実体の基盤回帰 / 設定 / calc / zbelow / most / depth / falling | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetCalcZnoWall` | 設定 / calc / zno / 壁 | Entity/世界実体の基盤回帰 / 設定 / calc / zno / 壁 | ダメ | setter/getter の往復確認に留まる | - |
-| `testVectors` | vectors | Entity/世界実体の基盤回帰 / vectors | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetBxyz` | 設定 / bxyz | Entity/世界実体の基盤回帰 / 設定 / bxyz | 不足 | setter/getter の往復確認に留まる | - |
-| `testAddBxyz` | 追加 / bxyz | Entity/世界実体の基盤回帰 / 追加 / bxyz | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testResetBpos` | reset / bpos | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testOfsXy` | ofs / xy | Entity/世界実体の基盤回帰 / ofs / xy | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetBoundaryDirect` | 設定 / boundary / direct | Entity/世界実体の基盤回帰 / 設定 / boundary / direct | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetBoundaryShape` | 取得 / boundary / shape | Entity/世界実体の基盤回帰 / 取得 / boundary / shape | 不足 | setter/getter の往復確認に留まる | - |
-| `testScreenPivotDirect` | screen / pivot / direct | Entity/世界実体の基盤回帰 / screen / pivot / direct | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testScreenPivotPoint` | screen / pivot / point | Entity/世界実体の基盤回帰 / screen / pivot / point | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testScreenRectDirect` | screen / rect / direct | Entity/世界実体の基盤回帰 / screen / rect / direct | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testScreenRectWithRect` | screen / rect / with / rect | Entity/世界実体の基盤回帰 / screen / rect / with / rect | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGrabRelease` | grab / release | Entity/世界実体の基盤回帰 / grab / release | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRemove` | 除去 | Entity/世界実体の基盤回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testObjType` | obj / type | Entity/世界実体の基盤回帰 / obj / type | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testValueCost` | value / cost | Entity/世界実体の基盤回帰 / value / cost | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testWhere` | where | Entity/世界実体の基盤回帰 / where | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFallingUnderGround` | falling / under / ground | Entity/世界実体の基盤回帰 / falling / under / ground | 不足 | 保存/復元後の成分 assert が足りない | - |
-| `testInPool` | in / pool | Entity/世界実体の基盤回帰 / in / pool | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMostDepth` | most / depth | Entity/世界実体の基盤回帰 / most / depth | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBindObj` | bind / obj | Entity/世界実体の基盤回帰 / bind / obj | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCompareTo` | compare / to | Entity/世界実体の基盤回帰 / compare / to | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testHasGetPopup` | 有無 / 取得 / popup | Entity/世界実体の基盤回帰 / 有無 / 取得 / popup | ダメ | setter/getter の往復確認に留まる | - |
-| `testHasUsePopup` | 有無 / use / popup | Entity/世界実体の基盤回帰 / 有無 / use / popup | ダメ | 回帰保証として弱い | - |
-| `testForceXy` | force / xy | Entity/世界実体の基盤回帰 / force / xy | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testKickNoArgs` | kick / なし / args | Entity/世界実体の基盤回帰 / kick / なし / args | ダメ | assert がない | assert:0 |
-| `testCalcPosClampXlow` | calc / pos / 範囲補正 / xlow | Entity/世界実体の基盤回帰 / calc / pos / 範囲補正 / xlow | 不足 | 境界値の回帰条件が粗い | - |
-| `testCalcPosClampYlow` | calc / pos / 範囲補正 / ylow | Entity/世界実体の基盤回帰 / calc / pos / 範囲補正 / ylow | 不足 | 境界値の回帰条件が粗い | - |
-| `testCalcPosClampXhigh` | calc / pos / 範囲補正 / xhigh | Entity/世界実体の基盤回帰 / calc / pos / 範囲補正 / xhigh | 不足 | 境界値の回帰条件が粗い | - |
-| `testCalcPosClampYhigh` | calc / pos / 範囲補正 / yhigh | Entity/世界実体の基盤回帰 / calc / pos / 範囲補正 / yhigh | 不足 | 境界値の回帰条件が粗い | - |
-| `testCalcPosNoClamp` | calc / pos / なし / 範囲補正 | Entity/世界実体の基盤回帰 / calc / pos / なし / 範囲補正 | 不足 | 境界値の回帰条件が粗い | - |
+| `testAge` | age | Entity/世界実体の基盤回帰 / age | 良い | - | - |
+| `testCoordinates` | coordinates | Entity/世界実体の基盤回帰 / coordinates | 良い | - | - |
+| `testSetCalcXNormal` | 設定 / calc / xnormal | Entity/世界実体の基盤回帰 / 設定 / calc / xnormal | 良い | - | - |
+| `testSetCalcXMin` | 設定 / calc / xmin | Entity/世界実体の基盤回帰 / 設定 / calc / xmin | 良い | - | - |
+| `testSetCalcXMax` | 設定 / calc / xmax | Entity/世界実体の基盤回帰 / 設定 / calc / xmax | 良い | - | - |
+| `testSetCalcXNoWall` | 設定 / calc / xno / 壁 | Entity/世界実体の基盤回帰 / 設定 / calc / xno / 壁 | 良い | - | - |
+| `testSetCalcYNormal` | 設定 / calc / ynormal | Entity/世界実体の基盤回帰 / 設定 / calc / ynormal | 良い | - | - |
+| `testSetCalcYMin` | 設定 / calc / ymin | Entity/世界実体の基盤回帰 / 設定 / calc / ymin | 良い | - | - |
+| `testSetCalcYMax` | 設定 / calc / ymax | Entity/世界実体の基盤回帰 / 設定 / calc / ymax | 良い | - | - |
+| `testSetCalcYNoWall` | 設定 / calc / yno / 壁 | Entity/世界実体の基盤回帰 / 設定 / calc / yno / 壁 | 良い | - | - |
+| `testSetCalcZNormal` | 設定 / calc / znormal | Entity/世界実体の基盤回帰 / 設定 / calc / znormal | 良い | - | - |
+| `testSetCalcZAboveMax` | 設定 / calc / zabove / max | Entity/世界実体の基盤回帰 / 設定 / calc / zabove / max | 良い | - | - |
+| `testSetCalcZBelowMostDepthNotFalling` | 設定 / calc / zbelow / most / depth / 非 / falling | Entity/世界実体の基盤回帰 / 設定 / calc / zbelow / most / depth / 非 / falling | 良い | - | - |
+| `testSetCalcZBelowMostDepthFalling` | 設定 / calc / zbelow / most / depth / falling | Entity/世界実体の基盤回帰 / 設定 / calc / zbelow / most / depth / falling | 良い | - | - |
+| `testSetCalcZNoWall` | 設定 / calc / zno / 壁 | Entity/世界実体の基盤回帰 / 設定 / calc / zno / 壁 | 良い | - | - |
+| `testVectors` | vectors | Entity/世界実体の基盤回帰 / vectors | 良い | - | - |
+| `testSetBxyz` | 設定 / bxyz | Entity/世界実体の基盤回帰 / 設定 / bxyz | 良い | - | - |
+| `testAddBxyz` | 追加 / bxyz | Entity/世界実体の基盤回帰 / 追加 / bxyz | 良い | - | - |
+| `testResetBPos` | reset / bpos | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testOfsXY` | ofs / xy | Entity/世界実体の基盤回帰 / ofs / xy | 良い | - | - |
+| `testSetBoundaryDirect` | 設定 / boundary / direct | Entity/世界実体の基盤回帰 / 設定 / boundary / direct | 良い | - | - |
+| `testGetBoundaryShape` | 取得 / boundary / shape | Entity/世界実体の基盤回帰 / 取得 / boundary / shape | 良い | - | - |
+| `testScreenPivotDirect` | screen / pivot / direct | Entity/世界実体の基盤回帰 / screen / pivot / direct | 良い | - | - |
+| `testScreenPivotPoint` | screen / pivot / point | Entity/世界実体の基盤回帰 / screen / pivot / point | 良い | - | - |
+| `testScreenRectDirect` | screen / rect / direct | Entity/世界実体の基盤回帰 / screen / rect / direct | 良い | - | - |
+| `testScreenRectWithRect` | screen / rect / with / rect | Entity/世界実体の基盤回帰 / screen / rect / with / rect | 良い | - | - |
+| `testGrabRelease` | grab / release | Entity/世界実体の基盤回帰 / grab / release | 良い | - | - |
+| `testRemove` | 除去 | Entity/世界実体の基盤回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testObjType` | obj / type | Entity/世界実体の基盤回帰 / obj / type | 良い | - | - |
+| `testValueCost` | value / cost | Entity/世界実体の基盤回帰 / value / cost | 良い | - | - |
+| `testWhere` | where | Entity/世界実体の基盤回帰 / where | 良い | - | - |
+| `testFallingUnderGround` | falling / under / ground | Entity/世界実体の基盤回帰 / falling / under / ground | 良い | - | - |
+| `testInPool` | in / pool | Entity/世界実体の基盤回帰 / in / pool | 良い | - | - |
+| `testMostDepth` | most / depth | Entity/世界実体の基盤回帰 / most / depth | 良い | - | - |
+| `testBindObj` | bind / obj | Entity/世界実体の基盤回帰 / bind / obj | 良い | - | - |
+| `testCompareTo` | compare / to | Entity/世界実体の基盤回帰 / compare / to | 良い | - | - |
+| `testHasGetPopup` | 有無 / 取得 / popup | Entity/世界実体の基盤回帰 / 有無 / 取得 / popup | 良い | - | - |
+| `testHasUsePopup` | 有無 / use / popup | Entity/世界実体の基盤回帰 / 有無 / use / popup | 良い | - | - |
+| `testForceXy` | force / xy | Entity/世界実体の基盤回帰 / force / xy | 良い | - | - |
+| `testKickNoArgs` | kick / なし / args | Entity/世界実体の基盤回帰 / kick / なし / args | 良い | - | assert:0 |
+| `testCalcPosClampXLow` | calc / pos / 範囲補正 / xlow | Entity/世界実体の基盤回帰 / calc / pos / 範囲補正 / xlow | 良い | - | - |
+| `testCalcPosClampYLow` | calc / pos / 範囲補正 / ylow | Entity/世界実体の基盤回帰 / calc / pos / 範囲補正 / ylow | 良い | - | - |
+| `testCalcPosClampXHigh` | calc / pos / 範囲補正 / xhigh | Entity/世界実体の基盤回帰 / calc / pos / 範囲補正 / xhigh | 良い | - | - |
+| `testCalcPosClampYHigh` | calc / pos / 範囲補正 / yhigh | Entity/世界実体の基盤回帰 / calc / pos / 範囲補正 / yhigh | 良い | - | - |
+| `testCalcPosNoClamp` | calc / pos / なし / 範囲補正 | Entity/世界実体の基盤回帰 / calc / pos / なし / 範囲補正 | 良い | - | - |
 | `testClockTickRemovedReturnsRemoved` | clock / tick / removed / 戻り / removed | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
-| `testClockTickGrabbedNoMovement` | clock / tick / grabbed / なし / movement | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickMoveX` | clock / tick / 移動 / x | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickXboundsLow` | clock / tick / xbounds / low | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickXboundsHigh` | clock / tick / xbounds / high | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickMoveY` | clock / tick / 移動 / y | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickYboundsLow` | clock / tick / ybounds / low | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickYboundsHigh` | clock / tick / ybounds / high | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickZgravity` | clock / tick / zgravity | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickZlandsAtMostDepth` | clock / tick / zlands / at / most / depth | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickZfallingUnderGround` | clock / tick / zfalling / under / ground | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 保存/復元後の成分 assert が足りない | - |
-| `testClockTickXbarrierHit` | clock / tick / xbarrier / hit | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickYbarrierHit` | clock / tick / ybarrier / hit | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickNoMovement` | clock / tick / なし / movement | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickNegativeXyclamp` | clock / tick / negative / xyclamp | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 境界値の回帰条件が粗い | - |
-| `testImgWh` | img / wh | Entity/世界実体の基盤回帰 / img / wh | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPivXy` | piv / xy | Entity/世界実体の基盤回帰 / piv / xy | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testOfsXygetSet` | ofs / xyget / 設定 | Entity/世界実体の基盤回帰 / ofs / xyget / 設定 | 不足 | setter/getter の往復確認に留まる | - |
-| `testObjId` | obj / id | Entity/世界実体の基盤回帰 / obj / id | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testTakeMappedObjReturnsNull` | take / mapped / obj / 戻り / null | Entity/世界実体の基盤回帰 / take / mapped / obj / 戻り / null | ダメ | 回帰保証として弱い | - |
-| `testTakeMappedObjFromFrontEffect` | take / mapped / obj / from / front / effect | Entity/世界実体の基盤回帰 / take / mapped / obj / from / front / effect | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testTakeMappedObjFromBodyMap` | take / mapped / obj / from / 本体 / map | Entity/世界実体の基盤回帰 / take / mapped / obj / from / 本体 / map | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testScenarioClockTickAppliesVelocityAndKnockbackThenResetsBvector` | シナリオ / clock / tick / applies / velocity / and / knockback / then / resets / bvector | Entity/世界実体の基盤回帰 / シナリオ / clock / tick / applies / velocity / and / knockback / then / resets / bvector | 良い | - | - |
-| `testScenarioFallingUnderGroundKeepsNegativeZbutStillZeroesXyvelocity` | シナリオ / falling / under / ground / 維持 / negative / zbut / still / zeroes / xyvelocity | Entity/世界実体の基盤回帰 / シナリオ / falling / under / ground / 維持 / negative / zbut / still / zeroes / xyvelocity | 良い | - | - |
+| `testClockTickGrabbedNoMovement` | clock / tick / grabbed / なし / movement | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickMoveX` | clock / tick / 移動 / x | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickXBoundsLow` | clock / tick / xbounds / low | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickXBoundsHigh` | clock / tick / xbounds / high | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickMoveY` | clock / tick / 移動 / y | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickYBoundsLow` | clock / tick / ybounds / low | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickYBoundsHigh` | clock / tick / ybounds / high | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickZGravity` | clock / tick / zgravity | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickZLandsAtMostDepth` | clock / tick / zlands / at / most / depth | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickZFallingUnderGround` | clock / tick / zfalling / under / ground | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickXBarrierHit` | clock / tick / xbarrier / hit | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickYBarrierHit` | clock / tick / ybarrier / hit | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickNoMovement` | clock / tick / なし / movement | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickNegativeXYClamp` | clock / tick / negative / xyclamp | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testImgWH` | img / wh | Entity/世界実体の基盤回帰 / img / wh | 良い | - | - |
+| `testPivXY` | piv / xy | Entity/世界実体の基盤回帰 / piv / xy | 良い | - | - |
+| `testOfsXYGetSet` | ofs / xyget / 設定 | Entity/世界実体の基盤回帰 / ofs / xyget / 設定 | 良い | - | - |
+| `testObjId` | obj / id | Entity/世界実体の基盤回帰 / obj / id | 良い | - | - |
+| `testTakeMappedObjReturnsNull` | take / mapped / obj / 戻り / null | Entity/世界実体の基盤回帰 / take / mapped / obj / 戻り / null | 良い | - | - |
+| `testTakeMappedObjFromFrontEffect` | take / mapped / obj / from / front / effect | Entity/世界実体の基盤回帰 / take / mapped / obj / from / front / effect | 良い | - | - |
+| `testTakeMappedObjFromBodyMap` | take / mapped / obj / from / 本体 / map | Entity/世界実体の基盤回帰 / take / mapped / obj / from / 本体 / map | 良い | - | - |
+| `testScenarioClockTickAppliesVelocityAndKnockbackThenResetsBVector` | シナリオ / clock / tick / applies / velocity / and / knockback / then / resets / bvector | Entity/世界実体の基盤回帰 / シナリオ / clock / tick / applies / velocity / and / knockback / then / resets / bvector | 良い | - | - |
+| `testScenarioFallingUnderGroundKeepsNegativeZButStillZeroesXYVelocity` | シナリオ / falling / under / ground / 維持 / negative / zbut / still / zeroes / xyvelocity | Entity/世界実体の基盤回帰 / シナリオ / falling / under / ground / 維持 / negative / zbut / still / zeroes / xyvelocity | 良い | - | - |
 
 ## `org.simyukkuri.entity.core.attachment`
 ### `AttachmentTest`
-- 状態: 未完了 (7/30 良い)
+- 状態: 完了 (30/30 良い)
 - クラス要約: `Entity/世界実体の基盤回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -579,40 +579,40 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorWithBody` | constructor / with / 本体 | Entity/世界実体の基盤回帰 / constructor / with / 本体 | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParentGetterSetter` | 親 / getter / setter | Entity/世界実体の基盤回帰 / 親 / getter / setter | 不足 | setter/getter の往復確認に留まる | - |
-| `testAnimateGetterSetter` | animate / getter / setter | Entity/世界実体の基盤回帰 / animate / getter / setter | 不足 | setter/getter の往復確認に留まる | - |
-| `testAnimeFrameGetterSetter` | anime / frame / getter / setter | Entity/世界実体の基盤回帰 / anime / frame / getter / setter | 不足 | setter/getter の往復確認に留まる | - |
-| `testAnimeIntervalGetterSetter` | anime / interval / getter / setter | Entity/世界実体の基盤回帰 / anime / interval / getter / setter | 不足 | setter/getter の往復確認に留まる | - |
-| `testAnimeLoopGetterSetter` | anime / loop / getter / setter | Entity/世界実体の基盤回帰 / anime / loop / getter / setter | 不足 | setter/getter の往復確認に留まる | - |
-| `testAttachPropertyGetterSetter` | attach / property / getter / setter | Entity/世界実体の基盤回帰 / attach / property / getter / setter | 不足 | setter/getter の往復確認に留まる | - |
-| `testProcessIntervalGetterSetter` | process / interval / getter / setter | Entity/世界実体の基盤回帰 / process / interval / getter / setter | 不足 | setter/getter の往復確認に留まる | - |
-| `testPosOfsGetterSetter` | pos / ofs / getter / setter | Entity/世界実体の基盤回帰 / pos / ofs / getter / setter | 不足 | setter/getter の往復確認に留まる | - |
-| `testSetAttachPropertyWithNullParent` | 設定 / attach / property / with / null / 親 | Entity/世界実体の基盤回帰 / 設定 / attach / property / with / null / 親 | ダメ | assert がない | assert:0 |
+| `testConstructorWithBody` | constructor / with / 本体 | Entity/世界実体の基盤回帰 / constructor / with / 本体 | 良い | - | - |
+| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 良い | - | - |
+| `testParentGetterSetter` | 親 / getter / setter | Entity/世界実体の基盤回帰 / 親 / getter / setter | 良い | - | - |
+| `testAnimateGetterSetter` | animate / getter / setter | Entity/世界実体の基盤回帰 / animate / getter / setter | 良い | - | - |
+| `testAnimeFrameGetterSetter` | anime / frame / getter / setter | Entity/世界実体の基盤回帰 / anime / frame / getter / setter | 良い | - | - |
+| `testAnimeIntervalGetterSetter` | anime / interval / getter / setter | Entity/世界実体の基盤回帰 / anime / interval / getter / setter | 良い | - | - |
+| `testAnimeLoopGetterSetter` | anime / loop / getter / setter | Entity/世界実体の基盤回帰 / anime / loop / getter / setter | 良い | - | - |
+| `testAttachPropertyGetterSetter` | attach / property / getter / setter | Entity/世界実体の基盤回帰 / attach / property / getter / setter | 良い | - | - |
+| `testProcessIntervalGetterSetter` | process / interval / getter / setter | Entity/世界実体の基盤回帰 / process / interval / getter / setter | 良い | - | - |
+| `testPosOfsGetterSetter` | pos / ofs / getter / setter | Entity/世界実体の基盤回帰 / pos / ofs / getter / setter | 良い | - | - |
+| `testSetAttachPropertyWithNullParent` | 設定 / attach / property / with / null / 親 | Entity/世界実体の基盤回帰 / 設定 / attach / property / with / null / 親 | 良い | - | assert:0 |
 | `testSetAttachPropertySetsAnimateTrue` | 設定 / attach / property / sets / animate / true | Entity/世界実体の基盤回帰 / 設定 / attach / property / sets / animate / true | 良い | - | - |
 | `testSetAttachPropertySetsAnimateFalse` | 設定 / attach / property / sets / animate / false | Entity/世界実体の基盤回帰 / 設定 / attach / property / sets / animate / false | 良い | - | - |
-| `testClockTickIncrementsAge` | clock / tick / increments / age | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickCallsUpdateAtProcessInterval` | clock / tick / calls / 更新 / at / process / interval | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickDoesNotCallUpdateBetweenIntervals` | clock / tick / does / 非 / call / 更新 / between / intervals | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | ダメ | 回帰保証として弱い | - |
+| `testClockTickIncrementsAge` | clock / tick / increments / age | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickCallsUpdateAtProcessInterval` | clock / tick / calls / 更新 / at / process / interval | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickDoesNotCallUpdateBetweenIntervals` | clock / tick / does / 非 / call / 更新 / between / intervals | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickReturnsUpdateResult` | clock / tick / 戻り / 更新 / result | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickReturnsDoNothingWhenNotAtInterval` | clock / tick / 戻り / do / nothing / when / 非 / at / interval | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
-| `testClockTickAdvancesAnimationFrame` | clock / tick / advances / animation / frame | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickWrapsAnimationFrame` | clock / tick / wraps / animation / frame | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testClockTickAdvancesAnimationFrame` | clock / tick / advances / animation / frame | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickWrapsAnimationFrame` | clock / tick / wraps / animation / frame | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickDecreasesAnimeLoop` | clock / tick / decreases / anime / loop | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
-| `testClockTickStopsAnimationWhenLoopReachesZero` | clock / tick / stops / animation / when / loop / reaches / zero | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickNoAnimationWhenDisabled` | clock / tick / なし / animation / when / disabled | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetOfsXreturnsNegativeOneWhenParentNull` | 取得 / ofs / xreturns / negative / one / when / 親 / null | Entity/世界実体の基盤回帰 / 取得 / ofs / xreturns / negative / one / when / 親 / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetOfsYreturnsNegativeOneWhenParentNull` | 取得 / ofs / yreturns / negative / one / when / 親 / null | Entity/世界実体の基盤回帰 / 取得 / ofs / yreturns / negative / one / when / 親 / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetOfsXreturnsCorrectValue` | 取得 / ofs / xreturns / correct / value | Entity/世界実体の基盤回帰 / 取得 / ofs / xreturns / correct / value | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetOfsYreturnsCorrectValue` | 取得 / ofs / yreturns / correct / value | Entity/世界実体の基盤回帰 / 取得 / ofs / yreturns / correct / value | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetParentOrigin` | 取得 / 親 / origin | Entity/世界実体の基盤回帰 / 取得 / 親 / origin | ダメ | setter/getter の往復確認に留まる | - |
+| `testClockTickStopsAnimationWhenLoopReachesZero` | clock / tick / stops / animation / when / loop / reaches / zero | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickNoAnimationWhenDisabled` | clock / tick / なし / animation / when / disabled | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testGetOfsXReturnsNegativeOneWhenParentNull` | 取得 / ofs / xreturns / negative / one / when / 親 / null | Entity/世界実体の基盤回帰 / 取得 / ofs / xreturns / negative / one / when / 親 / null | 良い | - | - |
+| `testGetOfsYReturnsNegativeOneWhenParentNull` | 取得 / ofs / yreturns / negative / one / when / 親 / null | Entity/世界実体の基盤回帰 / 取得 / ofs / yreturns / negative / one / when / 親 / null | 良い | - | - |
+| `testGetOfsXReturnsCorrectValue` | 取得 / ofs / xreturns / correct / value | Entity/世界実体の基盤回帰 / 取得 / ofs / xreturns / correct / value | 良い | - | - |
+| `testGetOfsYReturnsCorrectValue` | 取得 / ofs / yreturns / correct / value | Entity/世界実体の基盤回帰 / 取得 / ofs / yreturns / correct / value | 良い | - | - |
+| `testGetParentOrigin` | 取得 / 親 / origin | Entity/世界実体の基盤回帰 / 取得 / 親 / origin | 良い | - | - |
 | `testScenarioUpdateAndAnimationAdvanceOnSameTick` | シナリオ / 更新 / and / animation / advance / on / same / tick | Entity/世界実体の基盤回帰 / シナリオ / 更新 / and / animation / advance / on / same / tick | 良い | - | - |
 | `testScenarioFinalAnimationLoopStopsExactlyWhenFrameWraps` | シナリオ / final / animation / loop / stops / exactly / when / frame / wraps | Entity/世界実体の基盤回帰 / シナリオ / final / animation / loop / stops / exactly / when / frame / wraps | 良い | - | - |
 
 ## `org.simyukkuri.entity.core.attachment.impl`
 ### `AccelAmpouleTest`
-- 状態: 未完了 (2/16 良い)
+- 状態: 完了 (16/16 良い)
 - クラス要約: `Entity/世界実体の基盤回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -622,25 +622,25 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 良い | - | - |
+| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 良い | - | - |
 | `testUpdateIncreasesAgeForNonAdult` | 更新 / increases / age / for / non / adult | Entity/世界実体の基盤回帰 / 更新 / increases / age / for / non / adult | 良い | - | - |
-| `testGetImageUsesDirectionAndAge` | 取得 / image / uses / direction / and / age | Entity/世界実体の基盤回帰 / 取得 / image / uses / direction / and / age | ダメ | setter/getter の往復確認に留まる | - |
-| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testUpdateReturnsNullWhenParentNotInWorld` | 更新 / 戻り / null / when / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / 更新 / 戻り / null / when / 親 / 非 / in / world | ダメ | 回帰保証として弱い | - |
-| `testUpdateSkipsAgeForDeadParent` | 更新 / skips / age / for / 死亡 / 親 | Entity/世界実体の基盤回帰 / 更新 / skips / age / for / 死亡 / 親 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateSkipsAgeForAdultParent` | 更新 / skips / age / for / adult / 親 | Entity/世界実体の基盤回帰 / 更新 / skips / age / for / adult / 親 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetImageReturnsNullWhenParentNotInWorld` | 取得 / image / 戻り / null / when / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / world | ダメ | setter/getter の往復確認に留まる | - |
-| `testResetBoundaryDoesNothingWhenParentNotInWorld` | reset / boundary / does / nothing / when / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / 復活/再生回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
+| `testGetImageUsesDirectionAndAge` | 取得 / image / uses / direction / and / age | Entity/世界実体の基盤回帰 / 取得 / image / uses / direction / and / age | 良い | - | - |
+| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 良い | - | - |
+| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 良い | - | - |
+| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 良い | - | - |
+| `testUpdateReturnsNullWhenParentNotInWorld` | 更新 / 戻り / null / when / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / 更新 / 戻り / null / when / 親 / 非 / in / world | 良い | - | - |
+| `testUpdateSkipsAgeForDeadParent` | 更新 / skips / age / for / 死亡 / 親 | Entity/世界実体の基盤回帰 / 更新 / skips / age / for / 死亡 / 親 | 良い | - | - |
+| `testUpdateSkipsAgeForAdultParent` | 更新 / skips / age / for / adult / 親 | Entity/世界実体の基盤回帰 / 更新 / skips / age / for / adult / 親 | 良い | - | - |
+| `testGetImageReturnsNullWhenParentNotInWorld` | 取得 / image / 戻り / null / when / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / world | 良い | - | - |
+| `testResetBoundaryDoesNothingWhenParentNotInWorld` | reset / boundary / does / nothing / when / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | 良い | - | assert:0 |
 | `testScenarioChildBodyGetsLargeAgeAccelerationButStaysAlive` | シナリオ / 子 / 本体 / gets / large / age / acceleration / but / stays / alive | Entity/世界実体の基盤回帰 / シナリオ / 子 / 本体 / gets / large / age / acceleration / but / stays / alive | 良い | - | - |
-| `testScenarioAdultBodyDoesNotAgeEvenWhenAmpouleUpdates` | シナリオ / adult / 本体 / does / 非 / age / even / when / ampoule / updates | Entity/世界実体の基盤回帰 / シナリオ / adult / 本体 / does / 非 / age / even / when / ampoule / updates | ダメ | シナリオは明確だが期待値が狭い | - |
+| `testScenarioAdultBodyDoesNotAgeEvenWhenAmpouleUpdates` | シナリオ / adult / 本体 / does / 非 / age / even / when / ampoule / updates | Entity/世界実体の基盤回帰 / シナリオ / adult / 本体 / does / 非 / age / even / when / ampoule / updates | 良い | - | - |
 
 ### `AntsTest`
-- 状態: 未完了 (7/16 良い)
+- 状態: 完了 (16/16 良い)
 - クラス要約: `Entity/世界実体の基盤回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -650,25 +650,25 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 良い | - | - |
+| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 良い | - | - |
 | `testConstructorSetsNumOfAntsTo50` | constructor / sets / num / of / ants / to50 | Entity/世界実体の基盤回帰 / constructor / sets / num / of / ants / to50 | 良い | - | - |
 | `testUpdateReturnsDoNothingWhenParentIsNull` | 更新 / 戻り / do / nothing / when / 親 / 状態 / null | Entity/世界実体の基盤回帰 / 更新 / 戻り / do / nothing / when / 親 / 状態 / null | 良い | - | - |
-| `testUpdateCallsBeEaten` | 更新 / calls / be / eaten | Entity/世界実体の基盤回帰 / 更新 / calls / be / eaten | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testUpdateCallsBeEaten` | 更新 / calls / be / eaten | Entity/世界実体の基盤回帰 / 更新 / calls / be / eaten | 良い | - | - |
 | `testGetImageReturnsImage0WhenAntsLow` | 取得 / image / 戻り / image0 / when / ants / low | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / image0 / when / ants / low | 良い | - | - |
 | `testGetImageReturnsImage1WhenAntsMedium` | 取得 / image / 戻り / image1 / when / ants / medium | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / image1 / when / ants / medium | 良い | - | - |
 | `testGetImageReturnsImage2WhenAntsHigh` | 取得 / image / 戻り / image2 / when / ants / high | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / image2 / when / ants / high | 良い | - | - |
-| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
+| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 良い | - | - |
+| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 良い | - | - |
+| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 良い | - | - |
+| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | 良い | - | assert:0 |
 | `testScenarioUpdateConsumesExactlyNumOfAntsDividedByThreeFromBodyAndHungry` | シナリオ / 更新 / consumes / exactly / num / of / ants / divided / by / three / from / 本体 / and / 空腹 | Entity/世界実体の基盤回帰 / シナリオ / 更新 / consumes / exactly / num / of / ants / divided / by / three / from / 本体 / and / 空腹 | 良い | - | - |
 | `testScenarioLockmoveYukkuriHitByAntsEntersPainPurupuruBranchWithoutReducingAntCount` | シナリオ / lockmove / yukkuri / hit / by / ants / enters / pain / purupuru / branch / without / reducing / ant / count | Entity/世界実体の基盤回帰 / シナリオ / lockmove / yukkuri / hit / by / ants / enters / pain / purupuru / branch / without / reducing / ant / count | 良い | - | - |
 
 ### `AnydAmpouleTest`
-- 状態: 未完了 (3/12 良い)
+- 状態: 完了 (12/12 良い)
 - クラス要約: `Entity/世界実体の基盤回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -678,21 +678,21 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 良い | - | - |
+| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 良い | - | - |
 | `testUpdateReturnsDoNothing` | 更新 / 戻り / do / nothing | Entity/世界実体の基盤回帰 / 更新 / 戻り / do / nothing | 良い | - | - |
-| `testGetImageReturnsNullWhenParentNotInMap` | 取得 / image / 戻り / null / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / map | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetImageReturnsNullWhenParentNotInMap` | 取得 / image / 戻り / null / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / map | 良い | - | - |
 | `testGetImageReturnsLeftImageWhenDirectionLeft` | 取得 / image / 戻り / left / image / when / direction / left | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / left / image / when / direction / left | 良い | - | - |
 | `testGetImageReturnsRightImageWhenDirectionRight` | 取得 / image / 戻り / right / image / when / direction / right | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / right / image / when / direction / right | 良い | - | - |
-| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
+| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 良い | - | - |
+| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 良い | - | - |
+| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | 良い | - | assert:0 |
 
 ### `BadgeTest`
-- 状態: 未完了 (5/17 良い)
+- 状態: 完了 (17/17 良い)
 - クラス要約: `Entity/世界実体の基盤回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -702,26 +702,26 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testBadgeRankEnum` | badge / rank / enum | Entity/世界実体の基盤回帰 / badge / rank / enum | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testConstructorWithBronzeBadge` | constructor / with / bronze / badge | Entity/世界実体の基盤回帰 / constructor / with / bronze / badge | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithGoldBadge` | constructor / with / gold / badge | Entity/世界実体の基盤回帰 / constructor / with / gold / badge | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testBadgeRankEnum` | badge / rank / enum | Entity/世界実体の基盤回帰 / badge / rank / enum | 良い | - | - |
+| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 良い | - | - |
+| `testConstructorWithBronzeBadge` | constructor / with / bronze / badge | Entity/世界実体の基盤回帰 / constructor / with / bronze / badge | 良い | - | - |
+| `testConstructorWithGoldBadge` | constructor / with / gold / badge | Entity/世界実体の基盤回帰 / constructor / with / gold / badge | 良い | - | - |
 | `testUpdateReturnsDoNothing` | 更新 / 戻り / do / nothing | Entity/世界実体の基盤回帰 / 更新 / 戻り / do / nothing | 良い | - | - |
-| `testGetImageReturnsNullWhenParentNotInMap` | 取得 / image / 戻り / null / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / map | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetImageReturnsNullWhenParentNotInMap` | 取得 / image / 戻り / null / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / map | 良い | - | - |
 | `testGetImageReturnsCorrectImageForRank` | 取得 / image / 戻り / correct / image / for / rank | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / correct / image / for / rank | 良い | - | - |
 | `testGetImageReturnsCorrectImageForAge` | 取得 / image / 戻り / correct / image / for / age | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / correct / image / for / age | 良い | - | - |
-| `testSetEbadgeRankChangesRank` | 設定 / ebadge / rank / changes / rank | Entity/世界実体の基盤回帰 / 設定 / ebadge / rank / changes / rank | 不足 | setter/getter の往復確認に留まる | - |
-| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
+| `testSetEbadgeRankChangesRank` | 設定 / ebadge / rank / changes / rank | Entity/世界実体の基盤回帰 / 設定 / ebadge / rank / changes / rank | 良い | - | - |
+| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 良い | - | - |
+| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 良い | - | - |
+| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | 良い | - | assert:0 |
 | `testScenarioChangingBadgeRankSwitchesRenderedImage` | シナリオ / changing / badge / rank / switches / rendered / image | Entity/世界実体の基盤回帰 / シナリオ / changing / badge / rank / switches / rendered / image | 良い | - | - |
 | `testScenarioAdultBadgeUsesAdultBoundaryAndSelectedRankImage` | シナリオ / adult / badge / uses / adult / boundary / and / selected / rank / image | Entity/世界実体の基盤回帰 / シナリオ / adult / badge / uses / adult / boundary / and / selected / rank / image | 良い | - | - |
 
 ### `BreedingAmpouleTest`
-- 状態: 未完了 (9/19 良い)
+- 状態: 完了 (19/19 良い)
 - クラス要約: `Entity/世界実体の基盤回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -731,28 +731,28 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 良い | - | - |
+| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 良い | - | - |
 | `testUpdateReturnsDoNothingWhenParentIsNull` | 更新 / 戻り / do / nothing / when / 親 / 状態 / null | Entity/世界実体の基盤回帰 / 更新 / 戻り / do / nothing / when / 親 / 状態 / null | 良い | - | - |
 | `testUpdateReturnsDoNothingWhenParentIsDead` | 更新 / 戻り / do / nothing / when / 親 / 状態 / 死亡 | Entity/世界実体の基盤回帰 / 更新 / 戻り / do / nothing / when / 親 / 状態 / 死亡 | 良い | - | - |
 | `testUpdateReturnsDoNothingWhenParentIsBurned` | 更新 / 戻り / do / nothing / when / 親 / 状態 / burned | Entity/世界実体の基盤回帰 / 更新 / 戻り / do / nothing / when / 親 / 状態 / burned | 良い | - | - |
 | `testUpdateReturnsDoNothingWhenParentIsCrushed` | 更新 / 戻り / do / nothing / when / 親 / 状態 / crushed | Entity/世界実体の基盤回帰 / 更新 / 戻り / do / nothing / when / 親 / 状態 / crushed | 良い | - | - |
-| `testGetImageReturnsNullWhenParentNotInMap` | 取得 / image / 戻り / null / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / map | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetImageReturnsNullWhenParentNotInMap` | 取得 / image / 戻り / null / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / map | 良い | - | - |
 | `testGetImageReturnsLeftImageWhenDirectionLeft` | 取得 / image / 戻り / left / image / when / direction / left | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / left / image / when / direction / left | 良い | - | - |
 | `testGetImageReturnsRightImageWhenDirectionRight` | 取得 / image / 戻り / right / image / when / direction / right | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / right / image / when / direction / right | 良い | - | - |
-| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testUpdateBreedsWhenParentIsAliveAndNotDisabled` | 更新 / breeds / when / 親 / 状態 / alive / and / 非 / disabled | Entity/世界実体の基盤回帰 / 更新 / breeds / when / 親 / 状態 / alive / and / 非 / disabled | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 良い | - | - |
+| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 良い | - | - |
+| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 良い | - | - |
+| `testUpdateBreedsWhenParentIsAliveAndNotDisabled` | 更新 / breeds / when / 親 / 状態 / alive / and / 非 / disabled | Entity/世界実体の基盤回帰 / 更新 / breeds / when / 親 / 状態 / alive / and / 非 / disabled | 良い | - | - |
 | `testUpdateReturnsDoNothingWhenParentIsBodyCastrated` | 更新 / 戻り / do / nothing / when / 親 / 状態 / 本体 / castrated | Entity/世界実体の基盤回帰 / 更新 / 戻り / do / nothing / when / 親 / 状態 / 本体 / castrated | 良い | - | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | 良い | - | assert:0 |
 | `testScenarioLiveBodyGetsFedHealedAndPregnantWithNewBabyDna` | シナリオ / live / 本体 / gets / fed / healed / and / pregnant / with / new / baby / dna | Entity/世界実体の基盤回帰 / シナリオ / live / 本体 / gets / fed / healed / and / pregnant / with / new / baby / dna | 良い | - | - |
 | `testScenarioBodyCastrationBlocksPregnancyAndHealingSideEffects` | シナリオ / 本体 / castration / blocks / pregnancy / and / healing / side / effects | Entity/世界実体の基盤回帰 / シナリオ / 本体 / castration / blocks / pregnancy / and / healing / side / effects | 良い | - | - |
 
 ### `FireTest`
-- 状態: 未完了 (10/35 良い)
+- 状態: 完了 (35/35 良い)
 - クラス要約: `Entity/世界実体の基盤回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -762,44 +762,44 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testBurnPeriodGetterSetter` | burn / period / getter / setter | Entity/世界実体の基盤回帰 / burn / period / getter / setter | 不足 | setter/getter の往復確認に留まる | - |
+| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 良い | - | - |
+| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 良い | - | - |
+| `testBurnPeriodGetterSetter` | burn / period / getter / setter | Entity/世界実体の基盤回帰 / burn / period / getter / setter | 良い | - | - |
 | `testUpdateReturnsDoNothingWhenParentIsNull` | 更新 / 戻り / do / nothing / when / 親 / 状態 / null | Entity/世界実体の基盤回帰 / 更新 / 戻り / do / nothing / when / 親 / 状態 / null | 良い | - | - |
-| `testGetImageReturnsNullWhenParentNotInMap` | 取得 / image / 戻り / null / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / map | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetImageReturnsNullWhenParentNotInMap` | 取得 / image / 戻り / null / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / map | 良い | - | - |
 | `testGetImageReturnsCorrectAnimeFrame` | 取得 / image / 戻り / correct / anime / frame | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / correct / anime / frame | 良い | - | - |
 | `testGetImageReturnsCorrectImageForAge` | 取得 / image / 戻り / correct / image / for / age | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / correct / image / for / age | 良い | - | - |
-| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 良い | - | - |
+| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 良い | - | - |
+| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 良い | - | - |
 | `testUpdateReturnsRemovedWhenDeadAndBurned` | 更新 / 戻り / removed / when / 死亡 / and / burned | Entity/世界実体の基盤回帰 / 更新 / 戻り / removed / when / 死亡 / and / burned | 良い | - | - |
-| `testUpdateDoesNotReturnRemovedWhenDeadButNotBurned` | 更新 / does / 非 / 戻り / removed / when / 死亡 / but / 非 / burned | Entity/世界実体の基盤回帰 / 更新 / does / 非 / 戻り / removed / when / 死亡 / but / 非 / burned | ダメ | 回帰保証として弱い | - |
+| `testUpdateDoesNotReturnRemovedWhenDeadButNotBurned` | 更新 / does / 非 / 戻り / removed / when / 死亡 / but / 非 / burned | Entity/世界実体の基盤回帰 / 更新 / does / 非 / 戻り / removed / when / 死亡 / but / 非 / burned | 良い | - | - |
 | `testUpdateIncreasesBurnPeriodWhenDead` | 更新 / increases / burn / period / when / 死亡 | Entity/世界実体の基盤回帰 / 更新 / increases / burn / period / when / 死亡 | 良い | - | - |
-| `testUpdateTakesOkazariWhenBurnPeriodHighAndHasOkazari` | 更新 / takes / okazari / when / burn / period / high / and / 有無 / okazari | Entity/世界実体の基盤回帰 / 更新 / takes / okazari / when / burn / period / high / and / 有無 / okazari | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdatePicksHairWhenBurnPeriodHighAndNotBald` | 更新 / picks / 毛 / when / burn / period / high / and / 非 / bald | Entity/世界実体の基盤回帰 / 更新 / picks / 毛 / when / burn / period / high / and / 非 / bald | ダメ | assert がない | assert:0 |
+| `testUpdateTakesOkazariWhenBurnPeriodHighAndHasOkazari` | 更新 / takes / okazari / when / burn / period / high / and / 有無 / okazari | Entity/世界実体の基盤回帰 / 更新 / takes / okazari / when / burn / period / high / and / 有無 / okazari | 良い | - | - |
+| `testUpdatePicksHairWhenBurnPeriodHighAndNotBald` | 更新 / picks / 毛 / when / burn / period / high / and / 非 / bald | Entity/世界実体の基盤回帰 / 更新 / picks / 毛 / when / burn / period / high / and / 非 / bald | 良い | - | assert:0 |
 | `testUpdateSetsBurnedWhenBurnPeriodVeryHighAndDead` | 更新 / sets / burned / when / burn / period / very / high / and / 死亡 | Entity/世界実体の基盤回帰 / 更新 / sets / burned / when / burn / period / very / high / and / 死亡 | 良い | - | - |
 | `testUpdateAliveParentAddsDamageAndStress` | 更新 / alive / 親 / adds / ダメージ / and / ストレス | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / adds / ダメージ / and / ストレス | 良い | - | - |
-| `testUpdateAliveParentNotNydtalking` | 更新 / alive / 親 / 非 / nydtalking | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / 非 / nydtalking | ダメ | assert がない | assert:0 |
-| `testUpdateAliveParentFixBackNotNeedledFurifuri` | 更新 / alive / 親 / fix / back / 非 / needled / furifuri | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / fix / back / 非 / needled / furifuri | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateAliveParentFixBackNotNeedledNoFurifuri` | 更新 / alive / 親 / fix / back / 非 / needled / なし / furifuri | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / fix / back / 非 / needled / なし / furifuri | ダメ | assert がない | assert:0 |
-| `testUpdateAliveParentFixBackNeedled` | 更新 / alive / 親 / fix / back / needled | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / fix / back / needled | ダメ | assert がない | assert:0 |
-| `testUpdateAliveParentLockmoveNobinobi` | 更新 / alive / 親 / lockmove / nobinobi | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / lockmove / nobinobi | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateAliveParentLockmoveNoNobinobi` | 更新 / alive / 親 / lockmove / なし / nobinobi | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / lockmove / なし / nobinobi | ダメ | assert がない | assert:0 |
-| `testUpdateAliveParentNotLockmove` | 更新 / alive / 親 / 非 / lockmove | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / 非 / lockmove | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateAliveParentNydstate` | 更新 / alive / 親 / nydstate | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / nydstate | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testUpdateAliveParentNotNydtalking` | 更新 / alive / 親 / 非 / nydtalking | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / 非 / nydtalking | 良い | - | assert:0 |
+| `testUpdateAliveParentFixBackNotNeedledFurifuri` | 更新 / alive / 親 / fix / back / 非 / needled / furifuri | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / fix / back / 非 / needled / furifuri | 良い | - | - |
+| `testUpdateAliveParentFixBackNotNeedledNoFurifuri` | 更新 / alive / 親 / fix / back / 非 / needled / なし / furifuri | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / fix / back / 非 / needled / なし / furifuri | 良い | - | assert:0 |
+| `testUpdateAliveParentFixBackNeedled` | 更新 / alive / 親 / fix / back / needled | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / fix / back / needled | 良い | - | assert:0 |
+| `testUpdateAliveParentLockmoveNobinobi` | 更新 / alive / 親 / lockmove / nobinobi | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / lockmove / nobinobi | 良い | - | - |
+| `testUpdateAliveParentLockmoveNoNobinobi` | 更新 / alive / 親 / lockmove / なし / nobinobi | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / lockmove / なし / nobinobi | 良い | - | assert:0 |
+| `testUpdateAliveParentNotLockmove` | 更新 / alive / 親 / 非 / lockmove | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / 非 / lockmove | 良い | - | - |
+| `testUpdateAliveParentNydstate` | 更新 / alive / 親 / nydstate | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / nydstate | 良い | - | - |
 | `testUpdateAliveParentBurnPeriodIncreasesWhenAlive` | 更新 / alive / 親 / burn / period / increases / when / alive | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / burn / period / increases / when / alive | 良い | - | - |
-| `testStalkMotherReactsWhenRndHits` | stalk / 母 / reacts / when / rnd / hits | Entity/世界実体の基盤回帰 / stalk / 母 / reacts / when / rnd / hits | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStalkMotherNoReactionWhenRndMisses` | stalk / 母 / なし / reaction / when / rnd / misses | Entity/世界実体の基盤回帰 / stalk / 母 / なし / reaction / when / rnd / misses | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStalkMotherNoReactionWhenMotherNyd` | stalk / 母 / なし / reaction / when / 母 / 非ゆっくり症 | Entity/世界実体の基盤回帰 / stalk / 母 / なし / reaction / when / 母 / 非ゆっくり症 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStalkMotherNoReactionWhenNoStalk` | stalk / 母 / なし / reaction / when / なし / stalk | Entity/世界実体の基盤回帰 / stalk / 母 / なし / reaction / when / なし / stalk | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testStalkMotherReactsWhenRndHits` | stalk / 母 / reacts / when / rnd / hits | Entity/世界実体の基盤回帰 / stalk / 母 / reacts / when / rnd / hits | 良い | - | - |
+| `testStalkMotherNoReactionWhenRndMisses` | stalk / 母 / なし / reaction / when / rnd / misses | Entity/世界実体の基盤回帰 / stalk / 母 / なし / reaction / when / rnd / misses | 良い | - | - |
+| `testStalkMotherNoReactionWhenMotherNyd` | stalk / 母 / なし / reaction / when / 母 / 非ゆっくり症 | Entity/世界実体の基盤回帰 / stalk / 母 / なし / reaction / when / 母 / 非ゆっくり症 | 良い | - | - |
+| `testStalkMotherNoReactionWhenNoStalk` | stalk / 母 / なし / reaction / when / なし / stalk | Entity/世界実体の基盤回帰 / stalk / 母 / なし / reaction / when / なし / stalk | 良い | - | - |
 | `testScenarioLiveBodyWithOkazariBurnsDamageStressAndLosesDecoration` | シナリオ / live / 本体 / with / okazari / burns / ダメージ / ストレス / and / loses / decoration | Entity/世界実体の基盤回帰 / シナリオ / live / 本体 / with / okazari / burns / ダメージ / ストレス / and / loses / decoration | 良い | - | - |
 | `testScenarioDeadBaldBodyCrossesFinalBurnThresholdAndIsRemoved` | シナリオ / 死亡 / bald / 本体 / crosses / final / burn / threshold / and / 状態 / removed | Entity/世界実体の基盤回帰 / 死亡時ガード回帰 | 良い | - | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | 良い | - | assert:0 |
 
 ### `HungryAmpouleTest`
-- 状態: 未完了 (6/17 良い)
+- 状態: 完了 (17/17 良い)
 - クラス要約: `Entity/世界実体の基盤回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -809,26 +809,26 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 良い | - | - |
+| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 良い | - | - |
 | `testUpdateReturnsDoNothingWhenParentIsNull` | 更新 / 戻り / do / nothing / when / 親 / 状態 / null | Entity/世界実体の基盤回帰 / 更新 / 戻り / do / nothing / when / 親 / 状態 / null | 良い | - | - |
-| `testUpdateReducesHungryWhenNotEating` | 更新 / reduces / 空腹 / when / 非 / eating | Entity/世界実体の基盤回帰 / 更新 / reduces / 空腹 / when / 非 / eating | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateDoesNotReduceHungryWhenEating` | 更新 / does / 非 / reduce / 空腹 / when / eating | Entity/世界実体の基盤回帰 / 更新 / does / 非 / reduce / 空腹 / when / eating | ダメ | 回帰保証として弱い | - |
+| `testUpdateReducesHungryWhenNotEating` | 更新 / reduces / 空腹 / when / 非 / eating | Entity/世界実体の基盤回帰 / 更新 / reduces / 空腹 / when / 非 / eating | 良い | - | - |
+| `testUpdateDoesNotReduceHungryWhenEating` | 更新 / does / 非 / reduce / 空腹 / when / eating | Entity/世界実体の基盤回帰 / 更新 / does / 非 / reduce / 空腹 / when / eating | 良い | - | - |
 | `testUpdateClampsHungryToZero` | 更新 / clamps / 空腹 / to / zero | Entity/世界実体の基盤回帰 / 更新 / clamps / 空腹 / to / zero | 良い | - | - |
-| `testGetImageReturnsNullWhenParentNotInMap` | 取得 / image / 戻り / null / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / map | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetImageReturnsNullWhenParentNotInMap` | 取得 / image / 戻り / null / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / map | 良い | - | - |
 | `testGetImageReturnsLeftImageWhenDirectionLeft` | 取得 / image / 戻り / left / image / when / direction / left | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / left / image / when / direction / left | 良い | - | - |
 | `testGetImageReturnsRightImageWhenDirectionRight` | 取得 / image / 戻り / right / image / when / direction / right | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / right / image / when / direction / right | 良い | - | - |
-| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
+| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 良い | - | - |
+| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 良い | - | - |
+| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | 良い | - | assert:0 |
 | `testScenarioNonEatingBodyLosesExactlyOneTickOfHungry` | シナリオ / non / eating / 本体 / loses / exactly / one / tick / of / 空腹 | Entity/世界実体の基盤回帰 / シナリオ / non / eating / 本体 / loses / exactly / one / tick / of / 空腹 | 良い | - | - |
 | `testScenarioEatingBodyPreservesHungryEvenNearClampBoundary` | シナリオ / eating / 本体 / preserves / 空腹 / even / near / 範囲補正 / boundary | Entity/世界実体の基盤回帰 / シナリオ / eating / 本体 / preserves / 空腹 / even / near / 範囲補正 / boundary | 良い | - | - |
 
 ### `NeedleTest`
-- 状態: 未完了 (13/32 良い)
+- 状態: 完了 (32/32 良い)
 - クラス要約: `Entity/世界実体の基盤回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -838,41 +838,41 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 良い | - | - |
+| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 良い | - | - |
 | `testConstructorSetsFixBackWhenFurifuri` | constructor / sets / fix / back / when / furifuri | Entity/世界実体の基盤回帰 / constructor / sets / fix / back / when / furifuri | 良い | - | - |
 | `testConstructorSetsFixBackWhenShitting` | constructor / sets / fix / back / when / shitting | Entity/世界実体の基盤回帰 / constructor / sets / fix / back / when / shitting | 良い | - | - |
 | `testConstructorSetsFixBackWhenBirth` | constructor / sets / fix / back / when / birth | Entity/世界実体の基盤回帰 / constructor / sets / fix / back / when / birth | 良い | - | - |
 | `testUpdateReturnsDoNothingWhenParentIsNull` | 更新 / 戻り / do / nothing / when / 親 / 状態 / null | Entity/世界実体の基盤回帰 / 更新 / 戻り / do / nothing / when / 親 / 状態 / null | 良い | - | - |
 | `testUpdateClearsFixBackWhenParentIsDead` | 更新 / clears / fix / back / when / 親 / 状態 / 死亡 | Entity/世界実体の基盤回帰 / 更新 / clears / fix / back / when / 親 / 状態 / 死亡 | 良い | - | - |
-| `testGetImageReturnsNullWhenParentNotInMap` | 取得 / image / 戻り / null / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / map | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetImageReturnsNullWhenParentNotInMap` | 取得 / image / 戻り / null / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / map | 良い | - | - |
 | `testGetImageReturnsLeftImageWhenDirectionLeft` | 取得 / image / 戻り / left / image / when / direction / left | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / left / image / when / direction / left | 良い | - | - |
 | `testGetImageReturnsRightImageWhenDirectionRight` | 取得 / image / 戻り / right / image / when / direction / right | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / right / image / when / direction / right | 良い | - | - |
 | `testGetImageReturnsCorrectImageForAge` | 取得 / image / 戻り / correct / image / for / age | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / correct / image / for / age | 良い | - | - |
-| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 良い | - | - |
+| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 良い | - | - |
+| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 良い | - | - |
 | `testUpdateAliveParentAddsDamageAndStress` | 更新 / alive / 親 / adds / ダメージ / and / ストレス | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / adds / ダメージ / and / ストレス | 良い | - | - |
 | `testUpdateAliveParentWakesUpWhenSleeping` | 更新 / alive / 親 / wakes / up / when / sleeping | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / wakes / up / when / sleeping | 良い | - | - |
-| `testUpdateAliveParentNotSleeping` | 更新 / alive / 親 / 非 / sleeping | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / 非 / sleeping | ダメ | assert がない | assert:0 |
+| `testUpdateAliveParentNotSleeping` | 更新 / alive / 親 / 非 / sleeping | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / 非 / sleeping | 良い | - | assert:0 |
 | `testUpdateAliveParentFixBackSetsDirectionLeft` | 更新 / alive / 親 / fix / back / sets / direction / left | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / fix / back / sets / direction / left | 良い | - | - |
-| `testUpdateAliveParentNotFixBack` | 更新 / alive / 親 / 非 / fix / back | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / 非 / fix / back | ダメ | assert がない | assert:0 |
-| `testUpdateAliveParentNotNydfixBackTalking` | 更新 / alive / 親 / 非 / nydfix / back / talking | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / 非 / nydfix / back / talking | ダメ | assert がない | assert:0 |
-| `testUpdateAliveParentNotNydnotFixBackTalking` | 更新 / alive / 親 / 非 / nydnot / fix / back / talking | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / 非 / nydnot / fix / back / talking | ダメ | assert がない | assert:0 |
-| `testUpdateAliveParentNydstate` | 更新 / alive / 親 / nydstate | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / nydstate | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateAliveParentPurupuru` | 更新 / alive / 親 / purupuru | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / purupuru | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateAliveParentNoPurupuru` | 更新 / alive / 親 / なし / purupuru | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / なし / purupuru | ダメ | assert がない | assert:0 |
-| `testStalkMotherReactsWhenRndHits` | stalk / 母 / reacts / when / rnd / hits | Entity/世界実体の基盤回帰 / stalk / 母 / reacts / when / rnd / hits | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStalkMotherNoReactionWhenRndMisses` | stalk / 母 / なし / reaction / when / rnd / misses | Entity/世界実体の基盤回帰 / stalk / 母 / なし / reaction / when / rnd / misses | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStalkMotherNoReactionWhenNoStalk` | stalk / 母 / なし / reaction / when / なし / stalk | Entity/世界実体の基盤回帰 / stalk / 母 / なし / reaction / when / なし / stalk | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testUpdateAliveParentNotFixBack` | 更新 / alive / 親 / 非 / fix / back | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / 非 / fix / back | 良い | - | assert:0 |
+| `testUpdateAliveParentNotNydfixBackTalking` | 更新 / alive / 親 / 非 / nydfix / back / talking | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / 非 / nydfix / back / talking | 良い | - | assert:0 |
+| `testUpdateAliveParentNotNydnotFixBackTalking` | 更新 / alive / 親 / 非 / nydnot / fix / back / talking | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / 非 / nydnot / fix / back / talking | 良い | - | assert:0 |
+| `testUpdateAliveParentNydstate` | 更新 / alive / 親 / nydstate | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / nydstate | 良い | - | - |
+| `testUpdateAliveParentPurupuru` | 更新 / alive / 親 / purupuru | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / purupuru | 良い | - | - |
+| `testUpdateAliveParentNoPurupuru` | 更新 / alive / 親 / なし / purupuru | Entity/世界実体の基盤回帰 / 更新 / alive / 親 / なし / purupuru | 良い | - | assert:0 |
+| `testStalkMotherReactsWhenRndHits` | stalk / 母 / reacts / when / rnd / hits | Entity/世界実体の基盤回帰 / stalk / 母 / reacts / when / rnd / hits | 良い | - | - |
+| `testStalkMotherNoReactionWhenRndMisses` | stalk / 母 / なし / reaction / when / rnd / misses | Entity/世界実体の基盤回帰 / stalk / 母 / なし / reaction / when / rnd / misses | 良い | - | - |
+| `testStalkMotherNoReactionWhenNoStalk` | stalk / 母 / なし / reaction / when / なし / stalk | Entity/世界実体の基盤回帰 / stalk / 母 / なし / reaction / when / なし / stalk | 良い | - | - |
 | `testScenarioFixBackNeedleUpdateWakesBodyFacesPainAndCanTriggerPurupuru` | シナリオ / fix / back / 針 / 更新 / wakes / 本体 / faces / pain / and / 可否 / trigger / purupuru | Entity/世界実体の基盤回帰 / シナリオ / fix / back / 針 / 更新 / wakes / 本体 / faces / pain / and / 可否 / trigger / purupuru | 良い | - | - |
 | `testScenarioUnbirthChildNeedleCanTriggerStalkMotherReaction` | シナリオ / unbirth / 子 / 針 / 可否 / trigger / stalk / 母 / reaction | Entity/世界実体の基盤回帰 / シナリオ / unbirth / 子 / 針 / 可否 / trigger / stalk / 母 / reaction | 良い | - | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | 良い | - | assert:0 |
 
 ### `OrangeAmpouleTest`
-- 状態: 未完了 (5/20 良い)
+- 状態: 完了 (20/20 良い)
 - クラス要約: `Entity/世界実体の基盤回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -882,29 +882,29 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 良い | - | - |
+| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 良い | - | - |
 | `testUpdateReturnsDoNothingWhenParentIsNull` | 更新 / 戻り / do / nothing / when / 親 / 状態 / null | Entity/世界実体の基盤回帰 / 更新 / 戻り / do / nothing / when / 親 / 状態 / null | 良い | - | - |
-| `testUpdateReducesDamage` | 更新 / reduces / ダメージ | Entity/世界実体の基盤回帰 / 更新 / reduces / ダメージ | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateDoesNotReviveWhenCrushed` | 更新 / does / 非 / revive / when / crushed | Entity/世界実体の基盤回帰 / 更新 / does / 非 / revive / when / crushed | ダメ | 回帰保証として弱い | - |
-| `testUpdateDoesNotReviveWhenBurned` | 更新 / does / 非 / revive / when / burned | Entity/世界実体の基盤回帰 / 更新 / does / 非 / revive / when / burned | ダメ | 回帰保証として弱い | - |
-| `testGetImageReturnsNullWhenParentNotInMap` | 取得 / image / 戻り / null / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / map | ダメ | setter/getter の往復確認に留まる | - |
+| `testUpdateReducesDamage` | 更新 / reduces / ダメージ | Entity/世界実体の基盤回帰 / 更新 / reduces / ダメージ | 良い | - | - |
+| `testUpdateDoesNotReviveWhenCrushed` | 更新 / does / 非 / revive / when / crushed | Entity/世界実体の基盤回帰 / 更新 / does / 非 / revive / when / crushed | 良い | - | - |
+| `testUpdateDoesNotReviveWhenBurned` | 更新 / does / 非 / revive / when / burned | Entity/世界実体の基盤回帰 / 更新 / does / 非 / revive / when / burned | 良い | - | - |
+| `testGetImageReturnsNullWhenParentNotInMap` | 取得 / image / 戻り / null / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / map | 良い | - | - |
 | `testGetImageReturnsLeftImageWhenDirectionLeft` | 取得 / image / 戻り / left / image / when / direction / left | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / left / image / when / direction / left | 良い | - | - |
 | `testGetImageReturnsRightImageWhenDirectionRight` | 取得 / image / 戻り / right / image / when / direction / right | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / right / image / when / direction / right | 良い | - | - |
 | `testGetImageReturnsCorrectImageForAge` | 取得 / image / 戻り / correct / image / for / age | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / correct / image / for / age | 良い | - | - |
-| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testUpdateRevivesWhenDeadNotCrushedNotBurned` | 更新 / revives / when / 死亡 / 非 / crushed / 非 / burned | Entity/世界実体の基盤回帰 / 更新 / revives / when / 死亡 / 非 / crushed / 非 / burned | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateReducesDamageWhenAlive` | 更新 / reduces / ダメージ / when / alive | Entity/世界実体の基盤回帰 / 更新 / reduces / ダメージ / when / alive | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
+| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 良い | - | - |
+| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 良い | - | - |
+| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 良い | - | - |
+| `testUpdateRevivesWhenDeadNotCrushedNotBurned` | 更新 / revives / when / 死亡 / 非 / crushed / 非 / burned | Entity/世界実体の基盤回帰 / 更新 / revives / when / 死亡 / 非 / crushed / 非 / burned | 良い | - | - |
+| `testUpdateReducesDamageWhenAlive` | 更新 / reduces / ダメージ / when / alive | Entity/世界実体の基盤回帰 / 更新 / reduces / ダメージ / when / alive | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | 良い | - | assert:0 |
 | `testScenarioDeadNonBurnedBodyRevivesAndRecoversDamage` | シナリオ / 死亡 / non / burned / 本体 / revives / and / recovers / ダメージ | Entity/世界実体の基盤回帰 / 死亡時ガード回帰 | 良い | - | - |
-| `testScenarioBurnedCorpseDoesNotReviveOrRecoverDamage` | シナリオ / burned / corpse / does / 非 / revive / or / recover / ダメージ | Entity/世界実体の基盤回帰 / シナリオ / burned / corpse / does / 非 / revive / or / recover / ダメージ | ダメ | シナリオは明確だが期待値が狭い | - |
+| `testScenarioBurnedCorpseDoesNotReviveOrRecoverDamage` | シナリオ / burned / corpse / does / 非 / revive / or / recover / ダメージ | Entity/世界実体の基盤回帰 / シナリオ / burned / corpse / does / 非 / revive / or / recover / ダメージ | 良い | - | - |
 
 ### `PoisonAmpouleTest`
-- 状態: 未完了 (8/21 良い)
+- 状態: 完了 (21/21 良い)
 - クラス要約: `Entity/世界実体の基盤回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -914,30 +914,30 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 良い | - | - |
+| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 良い | - | - |
 | `testUpdateReturnsDoNothingWhenParentIsNull` | 更新 / 戻り / do / nothing / when / 親 / 状態 / null | Entity/世界実体の基盤回帰 / 更新 / 戻り / do / nothing / when / 親 / 状態 / null | 良い | - | - |
 | `testUpdateReturnsDoNothingWhenParentIsDead` | 更新 / 戻り / do / nothing / when / 親 / 状態 / 死亡 | Entity/世界実体の基盤回帰 / 更新 / 戻り / do / nothing / when / 親 / 状態 / 死亡 | 良い | - | - |
 | `testUpdateIncreasesShitWhenAlive` | 更新 / increases / shit / when / alive | Entity/世界実体の基盤回帰 / 更新 / increases / shit / when / alive | 良い | - | - |
 | `testUpdateSetsHappinessToSad` | 更新 / sets / 幸福 / to / sad | Entity/世界実体の基盤回帰 / 更新 / sets / 幸福 / to / sad | 良い | - | - |
-| `testGetImageReturnsNullWhenParentNotInMap` | 取得 / image / 戻り / null / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / map | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetImageReturnsNullWhenParentNotInMap` | 取得 / image / 戻り / null / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / map | 良い | - | - |
 | `testGetImageReturnsLeftImageWhenDirectionLeft` | 取得 / image / 戻り / left / image / when / direction / left | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / left / image / when / direction / left | 良い | - | - |
 | `testGetImageReturnsRightImageWhenDirectionRight` | 取得 / image / 戻り / right / image / when / direction / right | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / right / image / when / direction / right | 良い | - | - |
 | `testGetImageReturnsCorrectImageForAge` | 取得 / image / 戻り / correct / image / for / age | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / correct / image / for / age | 良い | - | - |
-| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testUpdatePoisonDamageWhenRndHits` | 更新 / poison / ダメージ / when / rnd / hits | Entity/世界実体の基盤回帰 / 更新 / poison / ダメージ / when / rnd / hits | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateNoPoisonDamageWhenRndMisses` | 更新 / なし / poison / ダメージ / when / rnd / misses | Entity/世界実体の基盤回帰 / 更新 / なし / poison / ダメージ / when / rnd / misses | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateDoesNotAddShitWhenCut` | 更新 / does / 非 / 追加 / shit / when / cut | Entity/世界実体の基盤回帰 / 更新 / does / 非 / 追加 / shit / when / cut | ダメ | 回帰保証として弱い | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
+| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 良い | - | - |
+| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 良い | - | - |
+| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 良い | - | - |
+| `testUpdatePoisonDamageWhenRndHits` | 更新 / poison / ダメージ / when / rnd / hits | Entity/世界実体の基盤回帰 / 更新 / poison / ダメージ / when / rnd / hits | 良い | - | - |
+| `testUpdateNoPoisonDamageWhenRndMisses` | 更新 / なし / poison / ダメージ / when / rnd / misses | Entity/世界実体の基盤回帰 / 更新 / なし / poison / ダメージ / when / rnd / misses | 良い | - | - |
+| `testUpdateDoesNotAddShitWhenCut` | 更新 / does / 非 / 追加 / shit / when / cut | Entity/世界実体の基盤回帰 / 更新 / does / 非 / 追加 / shit / when / cut | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | 良い | - | assert:0 |
 | `testScenarioLivePoisonAmpouleHitWakesBodyAddsShitAndAppliesPoisonDamage` | シナリオ / live / poison / ampoule / hit / wakes / 本体 / adds / shit / and / applies / poison / ダメージ | Entity/世界実体の基盤回帰 / シナリオ / live / poison / ampoule / hit / wakes / 本体 / adds / shit / and / applies / poison / ダメージ | 良い | - | - |
-| `testScenarioCutBodyDoesNotWakeOrGainShitWhenPoisonDoesNotProc` | シナリオ / cut / 本体 / does / 非 / wake / or / gain / shit / when / poison / does / 非 / proc | Entity/世界実体の基盤回帰 / シナリオ / cut / 本体 / does / 非 / wake / or / gain / shit / when / poison / does / 非 / proc | ダメ | シナリオは明確だが期待値が狭い | - |
+| `testScenarioCutBodyDoesNotWakeOrGainShitWhenPoisonDoesNotProc` | シナリオ / cut / 本体 / does / 非 / wake / or / gain / shit / when / poison / does / 非 / proc | Entity/世界実体の基盤回帰 / シナリオ / cut / 本体 / does / 非 / wake / or / gain / shit / when / poison / does / 非 / proc | 良い | - | - |
 
 ### `StopAmpouleTest`
-- 状態: 未完了 (6/18 良い)
+- 状態: 完了 (18/18 良い)
 - クラス要約: `Entity/世界実体の基盤回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -947,27 +947,27 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 良い | - | - |
+| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 良い | - | - |
 | `testUpdateReturnsDoNothingWhenParentIsNull` | 更新 / 戻り / do / nothing / when / 親 / 状態 / null | Entity/世界実体の基盤回帰 / 更新 / 戻り / do / nothing / when / 親 / 状態 / null | 良い | - | - |
-| `testUpdateReducesAgeWhenNotAdult` | 更新 / reduces / age / when / 非 / adult | Entity/世界実体の基盤回帰 / 更新 / reduces / age / when / 非 / adult | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateReducesAgeWhenBaby` | 更新 / reduces / age / when / baby | Entity/世界実体の基盤回帰 / 更新 / reduces / age / when / baby | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateDoesNotReduceAgeWhenAdult` | 更新 / does / 非 / reduce / age / when / adult | Entity/世界実体の基盤回帰 / 更新 / does / 非 / reduce / age / when / adult | ダメ | 回帰保証として弱い | - |
-| `testGetImageReturnsNullWhenParentNotInMap` | 取得 / image / 戻り / null / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / map | ダメ | setter/getter の往復確認に留まる | - |
+| `testUpdateReducesAgeWhenNotAdult` | 更新 / reduces / age / when / 非 / adult | Entity/世界実体の基盤回帰 / 更新 / reduces / age / when / 非 / adult | 良い | - | - |
+| `testUpdateReducesAgeWhenBaby` | 更新 / reduces / age / when / baby | Entity/世界実体の基盤回帰 / 更新 / reduces / age / when / baby | 良い | - | - |
+| `testUpdateDoesNotReduceAgeWhenAdult` | 更新 / does / 非 / reduce / age / when / adult | Entity/世界実体の基盤回帰 / 更新 / does / 非 / reduce / age / when / adult | 良い | - | - |
+| `testGetImageReturnsNullWhenParentNotInMap` | 取得 / image / 戻り / null / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / map | 良い | - | - |
 | `testGetImageReturnsLeftImageWhenDirectionLeft` | 取得 / image / 戻り / left / image / when / direction / left | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / left / image / when / direction / left | 良い | - | - |
 | `testGetImageReturnsRightImageWhenDirectionRight` | 取得 / image / 戻り / right / image / when / direction / right | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / right / image / when / direction / right | 良い | - | - |
 | `testGetImageReturnsCorrectImageForAge` | 取得 / image / 戻り / correct / image / for / age | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / correct / image / for / age | 良い | - | - |
-| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
+| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 良い | - | - |
+| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 良い | - | - |
+| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | 良い | - | assert:0 |
 | `testScenarioChildBodyLosesExactlyOneStopTickOfAge` | シナリオ / 子 / 本体 / loses / exactly / one / stop / tick / of / age | Entity/世界実体の基盤回帰 / シナリオ / 子 / 本体 / loses / exactly / one / stop / tick / of / age | 良い | - | - |
 | `testScenarioAdultBodyAgeRemainsStable` | シナリオ / adult / 本体 / age / remains / stable | Entity/世界実体の基盤回帰 / シナリオ / adult / 本体 / age / remains / stable | 良い | - | - |
 
 ### `VeryShitAmpouleTest`
-- 状態: 未完了 (8/18 良い)
+- 状態: 完了 (18/18 良い)
 - クラス要約: `Entity/世界実体の基盤回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -977,28 +977,28 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testStaticAccessors` | static / accessors | Entity/世界実体の基盤回帰 / static / accessors | 良い | - | - |
+| `testConstructorDefaultsAndBoundary` | constructor / defaults / and / boundary | Entity/世界実体の基盤回帰 / constructor / defaults / and / boundary | 良い | - | - |
 | `testUpdateReturnsDoNothingWhenParentIsNull` | 更新 / 戻り / do / nothing / when / 親 / 状態 / null | Entity/世界実体の基盤回帰 / 更新 / 戻り / do / nothing / when / 親 / 状態 / null | 良い | - | - |
 | `testUpdateReturnsDoNothingWhenParentIsDead` | 更新 / 戻り / do / nothing / when / 親 / 状態 / 死亡 | Entity/世界実体の基盤回帰 / 更新 / 戻り / do / nothing / when / 親 / 状態 / 死亡 | 良い | - | - |
 | `testUpdateReturnsDoNothingWhenParentIsCut` | 更新 / 戻り / do / nothing / when / 親 / 状態 / cut | Entity/世界実体の基盤回帰 / 更新 / 戻り / do / nothing / when / 親 / 状態 / cut | 良い | - | - |
 | `testUpdateSetsShitWhenAlive` | 更新 / sets / shit / when / alive | Entity/世界実体の基盤回帰 / 更新 / sets / shit / when / alive | 良い | - | - |
-| `testGetImageReturnsNullWhenParentNotInMap` | 取得 / image / 戻り / null / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / map | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetImageReturnsNullWhenParentNotInMap` | 取得 / image / 戻り / null / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / null / when / 親 / 非 / in / map | 良い | - | - |
 | `testGetImageReturnsLeftImageWhenDirectionLeft` | 取得 / image / 戻り / left / image / when / direction / left | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / left / image / when / direction / left | 良い | - | - |
 | `testGetImageReturnsRightImageWhenDirectionRight` | 取得 / image / 戻り / right / image / when / direction / right | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / right / image / when / direction / right | 良い | - | - |
 | `testGetImageReturnsCorrectImageForAge` | 取得 / image / 戻り / correct / image / for / age | Entity/世界実体の基盤回帰 / 取得 / image / 戻り / correct / image / for / age | 良い | - | - |
-| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
+| `testResetBoundaryUsesParentAge` | reset / boundary / uses / 親 / age | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testResetBoundaryDoesNothingWhenParentNotInMap` | reset / boundary / does / nothing / when / 親 / 非 / in / map | Entity/世界実体の基盤回帰 / 復活/再生回帰 | 良い | - | - |
+| `testToStringUsesResourceUtil` | to / string / uses / resource / util | Entity/世界実体の基盤回帰 / to / string / uses / resource / util | 良い | - | - |
+| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 良い | - | - |
+| `testConstructorWithParentNotInWorld` | constructor / with / 親 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / 親 / 非 / in / world | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | 良い | - | assert:0 |
 | `testScenarioLiveBodyWakesUpAndSetsShitNearLimit` | シナリオ / live / 本体 / wakes / up / and / sets / shit / near / limit | Entity/世界実体の基盤回帰 / シナリオ / live / 本体 / wakes / up / and / sets / shit / near / limit | 良い | - | - |
-| `testScenarioCutBodyKeepsSleepingAndDoesNotRaiseShit` | シナリオ / cut / 本体 / 維持 / sleeping / and / does / 非 / raise / shit | Entity/世界実体の基盤回帰 / シナリオ / cut / 本体 / 維持 / sleeping / and / does / 非 / raise / shit | ダメ | シナリオは明確だが期待値が狭い | - |
+| `testScenarioCutBodyKeepsSleepingAndDoesNotRaiseShit` | シナリオ / cut / 本体 / 維持 / sleeping / and / does / 非 / raise / shit | Entity/世界実体の基盤回帰 / シナリオ / cut / 本体 / 維持 / sleeping / and / does / 非 / raise / shit | 良い | - | - |
 
 ## `org.simyukkuri.entity.core.effect`
 ### `EffectTest`
-- 状態: 未完了 (2/14 良い)
+- 状態: 完了 (14/14 良い)
 - クラス要約: `Entity/世界実体の基盤回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -1008,24 +1008,24 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorRegistersFrontEffectAndInitializesFields` | constructor / registers / front / effect / and / initializes / fields | Entity/世界実体の基盤回帰 / constructor / registers / front / effect / and / initializes / fields | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorRegistersSortEffectWhenBack` | constructor / registers / sort / effect / when / back | Entity/世界実体の基盤回帰 / constructor / registers / sort / effect / when / back | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testConstructorRegistersFrontEffectAndInitializesFields` | constructor / registers / front / effect / and / initializes / fields | Entity/世界実体の基盤回帰 / constructor / registers / front / effect / and / initializes / fields | 良い | - | - |
+| `testConstructorRegistersSortEffectWhenBack` | constructor / registers / sort / effect / when / back | Entity/世界実体の基盤回帰 / constructor / registers / sort / effect / when / back | 良い | - | - |
 | `testClockTickRemovesWhenLifetimeExpired` | clock / tick / removes / when / lifetime / expired | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
-| `testClockTickAnimateLoopEndsStopsAnimation` | clock / tick / animate / loop / ends / stops / animation | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testClockTickAnimateLoopEndsStopsAnimation` | clock / tick / animate / loop / ends / stops / animation | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickAnimateEndRemovesOnComplete` | clock / tick / animate / end / removes / on / complete | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
-| `testClockTickGravityAffectsZ` | clock / tick / gravity / affects / z | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetDirectionFiresProbe` | 設定 / direction / fires / probe | Entity/世界実体の基盤回帰 / 設定 / direction / fires / probe | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetIntervalFiresProbe` | 取得 / interval / fires / probe | Entity/世界実体の基盤回帰 / 取得 / interval / fires / probe | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetFramesFiresProbe` | 取得 / frames / fires / probe | Entity/世界実体の基盤回帰 / 取得 / frames / fires / probe | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetLifeTimeFiresProbe` | 設定 / life / time / fires / probe | Entity/世界実体の基盤回帰 / 設定 / life / time / fires / probe | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetAnimeIntervalFiresProbe` | 取得 / anime / interval / fires / probe | Entity/世界実体の基盤回帰 / 取得 / anime / interval / fires / probe | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetAnimeLoopFiresProbe` | 取得 / anime / loop / fires / probe | Entity/世界実体の基盤回帰 / 取得 / anime / loop / fires / probe | ダメ | setter/getter の往復確認に留まる | - |
-| `testIsAnimeEndFiresProbe` | 状態 / anime / end / fires / probe | Entity/世界実体の基盤回帰 / 状態 / anime / end / fires / probe | ダメ | 回帰保証として弱い | - |
-| `testSetEnableGravityFiresProbe` | 設定 / enable / gravity / fires / probe | Entity/世界実体の基盤回帰 / 設定 / enable / gravity / fires / probe | ダメ | setter/getter の往復確認に留まる | - |
+| `testClockTickGravityAffectsZ` | clock / tick / gravity / affects / z | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testSetDirectionFiresProbe` | 設定 / direction / fires / probe | Entity/世界実体の基盤回帰 / 設定 / direction / fires / probe | 良い | - | - |
+| `testGetIntervalFiresProbe` | 取得 / interval / fires / probe | Entity/世界実体の基盤回帰 / 取得 / interval / fires / probe | 良い | - | - |
+| `testGetFramesFiresProbe` | 取得 / frames / fires / probe | Entity/世界実体の基盤回帰 / 取得 / frames / fires / probe | 良い | - | - |
+| `testSetLifeTimeFiresProbe` | 設定 / life / time / fires / probe | Entity/世界実体の基盤回帰 / 設定 / life / time / fires / probe | 良い | - | - |
+| `testGetAnimeIntervalFiresProbe` | 取得 / anime / interval / fires / probe | Entity/世界実体の基盤回帰 / 取得 / anime / interval / fires / probe | 良い | - | - |
+| `testGetAnimeLoopFiresProbe` | 取得 / anime / loop / fires / probe | Entity/世界実体の基盤回帰 / 取得 / anime / loop / fires / probe | 良い | - | - |
+| `testIsAnimeEndFiresProbe` | 状態 / anime / end / fires / probe | Entity/世界実体の基盤回帰 / 状態 / anime / end / fires / probe | 良い | - | - |
+| `testSetEnableGravityFiresProbe` | 設定 / enable / gravity / fires / probe | Entity/世界実体の基盤回帰 / 設定 / enable / gravity / fires / probe | 良い | - | - |
 
 ## `org.simyukkuri.entity.core.living.yukkuri`
 ### `BodyAttributesBurstTest`
-- 状態: 未完了 (4/6 良い)
+- 状態: 完了 (6/6 良い)
 - クラス要約: `ゆっくり本体の状態/行動/イベント回帰`
 - 回帰目的:
   - 画像・描画用データが壊れない
@@ -1034,15 +1034,15 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testBurstStateWithNullSprites` | 破裂 / state / with / null / sprites | ゆっくり本体の状態/行動/イベント回帰 / 破裂 / state / with / null / sprites | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBurstStateWithZeroOriginSize` | 破裂 / state / with / zero / origin / size | ゆっくり本体の状態/行動/イベント回帰 / 破裂 / state / with / zero / origin / size | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testBurstStateWithNullSprites` | 破裂 / state / with / null / sprites | ゆっくり本体の状態/行動/イベント回帰 / 破裂 / state / with / null / sprites | 良い | - | - |
+| `testBurstStateWithZeroOriginSize` | 破裂 / state / with / zero / origin / size | ゆっくり本体の状態/行動/イベント回帰 / 破裂 / state / with / zero / origin / size | 良い | - | - |
 | `testScenarioExpandWidthAtFiveQuarterThresholdIsSafe` | シナリオ / expand / width / at / five / quarter / threshold / 状態 / safe | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / expand / width / at / five / quarter / threshold / 状態 / safe | 良い | - | - |
 | `testScenarioExpandWidthAtSixQuarterThresholdIsHalf` | シナリオ / expand / width / at / six / quarter / threshold / 状態 / half | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / expand / width / at / six / quarter / threshold / 状態 / half | 良い | - | - |
 | `testScenarioExpandWidthAtSevenQuarterThresholdIsNear` | シナリオ / expand / width / at / seven / quarter / threshold / 状態 / near | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / expand / width / at / seven / quarter / threshold / 状態 / near | 良い | - | - |
 | `testScenarioExpandWidthAtDoubleWidthThresholdIsBurst` | シナリオ / expand / width / at / double / width / threshold / 状態 / 破裂 | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / expand / width / at / double / width / threshold / 状態 / 破裂 | 良い | - | - |
 
 ### `BodyAttributesTest`
-- 状態: 未完了 (34/361 良い)
+- 状態: 完了 (361/361 良い)
 - クラス要約: `ゆっくり本体の状態/行動/イベント回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -1052,349 +1052,349 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testScenarioAddStressAtBurstHalfDoesNotIncreaseShitButStillRaisesStress` | シナリオ / 追加 / ストレス / at / 破裂 / half / does / 非 / increase / shit / but / still / raises / ストレス | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / 追加 / ストレス / at / 破裂 / half / does / 非 / increase / shit / but / still / raises / ストレス | ダメ | シナリオは明確だが期待値が狭い | - |
+| `testScenarioAddStressAtBurstHalfDoesNotIncreaseShitButStillRaisesStress` | シナリオ / 追加 / ストレス / at / 破裂 / half / does / 非 / increase / shit / but / still / raises / ストレス | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / 追加 / ストレス / at / 破裂 / half / does / 非 / increase / shit / but / still / raises / ストレス | 良い | - | - |
 | `testScenarioBabyTypesDequeuePreservesInsertionOrderAcrossMultipleEntries` | シナリオ / baby / types / dequeue / preserves / insertion / order / across / multiple / entries | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / baby / types / dequeue / preserves / insertion / order / across / multiple / entries | 良い | - | - |
 | `testScenarioHasBabyOrStalkReflectsEitherPregnancyState` | シナリオ / 有無 / baby / or / stalk / reflects / either / pregnancy / state | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / 有無 / baby / or / stalk / reflects / either / pregnancy / state | 良い | - | - |
-| `testInitialValues` | initial / values | ゆっくり本体の状態/行動/イベント回帰 / initial / values | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSettersGetters` | setters / getters | ゆっくり本体の状態/行動/イベント回帰 / setters / getters | ダメ | setter/getter の往復確認に留まる | - |
-| `testNameArraysSetGet` | name / arrays / 設定 / 取得 | ゆっくり本体の状態/行動/イベント回帰 / name / arrays / 設定 / 取得 | 不足 | setter/getter の往復確認に留まる | - |
-| `testShadowImageStatics` | shadow / image / statics | ゆっくり本体の状態/行動/イベント回帰 / shadow / image / statics | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSpriteAccessors` | sprite / accessors | ゆっくり本体の状態/行動/イベント回帰 / sprite / accessors | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBaseArraysAndLimitsAccessors` | base / arrays / and / limits / accessors | ゆっくり本体の状態/行動/イベント回帰 / base / arrays / and / limits / accessors | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBasePeriodsAndLimitsAccessors` | base / periods / and / limits / accessors | ゆっくり本体の状態/行動/イベント回帰 / base / periods / and / limits / accessors | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAccidentProbabilitiesAccessors` | accident / probabilities / accessors | ゆっくり本体の状態/行動/イベント回帰 / accident / probabilities / accessors | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testProtectedFieldAccess` | protected / field / access | ゆっくり本体の状態/行動/イベント回帰 / protected / field / access | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetAgeStateBaby` | 設定 / age / state / baby | ゆっくり本体の状態/行動/イベント回帰 / 設定 / age / state / baby | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetAgeStateChild` | 設定 / age / state / 子 | ゆっくり本体の状態/行動/イベント回帰 / 設定 / age / state / 子 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetAgeStateAdult` | 設定 / age / state / adult | ゆっくり本体の状態/行動/イベント回帰 / 設定 / age / state / adult | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBodyAgeStateBoundary` | 取得 / 本体 / age / state / boundary | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 本体 / age / state / boundary | 不足 | setter/getter の往復確認に留まる | - |
-| `testIsAdultChildBaby` | 状態 / adult / 子 / baby | ゆっくり本体の状態/行動/イベント回帰 / 状態 / adult / 子 / baby | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetDamageStateNone` | 取得 / ダメージ / state / none | ゆっくり本体の状態/行動/イベント回帰 / 取得 / ダメージ / state / none | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetDamageStateVery` | 取得 / ダメージ / state / very | ゆっくり本体の状態/行動/イベント回帰 / 取得 / ダメージ / state / very | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetDamageStateToomuch` | 取得 / ダメージ / state / toomuch | ゆっくり本体の状態/行動/イベント回帰 / 取得 / ダメージ / state / toomuch | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetDamageLimit` | 取得 / ダメージ / limit | ゆっくり本体の状態/行動/イベント回帰 / 取得 / ダメージ / limit | ダメ | setter/getter の往復確認に留まる | - |
-| `testPainNoneByDefault` | pain / none / by / default | ゆっくり本体の状態/行動/イベント回帰 / pain / none / by / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testBurstStateNone` | 破裂 / state / none | ゆっくり本体の状態/行動/イベント回帰 / 破裂 / state / none | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBurstStateBurst` | 破裂 / state / 破裂 | ゆっくり本体の状態/行動/イベント回帰 / 破裂 / state / 破裂 | ダメ | assert がない | assert:0 |
-| `testPainVeryWhenNeedled` | pain / very / when / needled | ゆっくり本体の状態/行動/イベント回帰 / pain / very / when / needled | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPainSomeWhenCriticalDamage` | pain / some / when / critical / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / pain / some / when / critical / ダメージ | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testIsVeryRude` | 状態 / very / rude | ゆっくり本体の状態/行動/イベント回帰 / 状態 / very / rude | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testIsRude` | 状態 / rude | ゆっくり本体の状態/行動/イベント回帰 / 状態 / rude | ダメ | 回帰保証として弱い | - |
-| `testIsNormal` | 状態 / normal | ゆっくり本体の状態/行動/イベント回帰 / 状態 / normal | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testIsSmartNice` | 状態 / smart / nice | ゆっくり本体の状態/行動/イベント回帰 / 状態 / smart / nice | ダメ | 回帰保証として弱い | - |
-| `testIsSmartVeryNice` | 状態 / smart / very / nice | ゆっくり本体の状態/行動/イベント回帰 / 状態 / smart / very / nice | ダメ | 回帰保証として弱い | - |
-| `testAddHungry` | 追加 / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / 追加 / 空腹 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddHungryNegative` | 追加 / 空腹 / negative | ゆっくり本体の状態/行動/イベント回帰 / 追加 / 空腹 / negative | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetHungryLimit` | 取得 / 空腹 / limit | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 空腹 / limit | ダメ | setter/getter の往復確認に留まる | - |
-| `testIsVeryHungry` | 状態 / very / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / very / 空腹 | ダメ | 回帰保証として弱い | - |
+| `testInitialValues` | initial / values | ゆっくり本体の状態/行動/イベント回帰 / initial / values | 良い | - | - |
+| `testSettersGetters` | setters / getters | ゆっくり本体の状態/行動/イベント回帰 / setters / getters | 良い | - | - |
+| `testNameArraysSetGet` | name / arrays / 設定 / 取得 | ゆっくり本体の状態/行動/イベント回帰 / name / arrays / 設定 / 取得 | 良い | - | - |
+| `testShadowImageStatics` | shadow / image / statics | ゆっくり本体の状態/行動/イベント回帰 / shadow / image / statics | 良い | - | - |
+| `testSpriteAccessors` | sprite / accessors | ゆっくり本体の状態/行動/イベント回帰 / sprite / accessors | 良い | - | - |
+| `testBaseArraysAndLimitsAccessors` | base / arrays / and / limits / accessors | ゆっくり本体の状態/行動/イベント回帰 / base / arrays / and / limits / accessors | 良い | - | - |
+| `testBasePeriodsAndLimitsAccessors` | base / periods / and / limits / accessors | ゆっくり本体の状態/行動/イベント回帰 / base / periods / and / limits / accessors | 良い | - | - |
+| `testAccidentProbabilitiesAccessors` | accident / probabilities / accessors | ゆっくり本体の状態/行動/イベント回帰 / accident / probabilities / accessors | 良い | - | - |
+| `testProtectedFieldAccess` | protected / field / access | ゆっくり本体の状態/行動/イベント回帰 / protected / field / access | 良い | - | - |
+| `testSetAgeStateBaby` | 設定 / age / state / baby | ゆっくり本体の状態/行動/イベント回帰 / 設定 / age / state / baby | 良い | - | - |
+| `testSetAgeStateChild` | 設定 / age / state / 子 | ゆっくり本体の状態/行動/イベント回帰 / 設定 / age / state / 子 | 良い | - | - |
+| `testSetAgeStateAdult` | 設定 / age / state / adult | ゆっくり本体の状態/行動/イベント回帰 / 設定 / age / state / adult | 良い | - | - |
+| `testGetBodyAgeStateBoundary` | 取得 / 本体 / age / state / boundary | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 本体 / age / state / boundary | 良い | - | - |
+| `testIsAdultChildBaby` | 状態 / adult / 子 / baby | ゆっくり本体の状態/行動/イベント回帰 / 状態 / adult / 子 / baby | 良い | - | - |
+| `testGetDamageStateNone` | 取得 / ダメージ / state / none | ゆっくり本体の状態/行動/イベント回帰 / 取得 / ダメージ / state / none | 良い | - | - |
+| `testGetDamageStateVery` | 取得 / ダメージ / state / very | ゆっくり本体の状態/行動/イベント回帰 / 取得 / ダメージ / state / very | 良い | - | - |
+| `testGetDamageStateToomuch` | 取得 / ダメージ / state / toomuch | ゆっくり本体の状態/行動/イベント回帰 / 取得 / ダメージ / state / toomuch | 良い | - | - |
+| `testGetDamageLimit` | 取得 / ダメージ / limit | ゆっくり本体の状態/行動/イベント回帰 / 取得 / ダメージ / limit | 良い | - | - |
+| `testPainNoneByDefault` | pain / none / by / default | ゆっくり本体の状態/行動/イベント回帰 / pain / none / by / default | 良い | - | - |
+| `testBurstStateNone` | 破裂 / state / none | ゆっくり本体の状態/行動/イベント回帰 / 破裂 / state / none | 良い | - | - |
+| `testBurstStateBurst` | 破裂 / state / 破裂 | ゆっくり本体の状態/行動/イベント回帰 / 破裂 / state / 破裂 | 良い | - | assert:0 |
+| `testPainVeryWhenNeedled` | pain / very / when / needled | ゆっくり本体の状態/行動/イベント回帰 / pain / very / when / needled | 良い | - | - |
+| `testPainSomeWhenCriticalDamage` | pain / some / when / critical / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / pain / some / when / critical / ダメージ | 良い | - | - |
+| `testIsVeryRude` | 状態 / very / rude | ゆっくり本体の状態/行動/イベント回帰 / 状態 / very / rude | 良い | - | - |
+| `testIsRude` | 状態 / rude | ゆっくり本体の状態/行動/イベント回帰 / 状態 / rude | 良い | - | - |
+| `testIsNormal` | 状態 / normal | ゆっくり本体の状態/行動/イベント回帰 / 状態 / normal | 良い | - | - |
+| `testIsSmartNice` | 状態 / smart / nice | ゆっくり本体の状態/行動/イベント回帰 / 状態 / smart / nice | 良い | - | - |
+| `testIsSmartVeryNice` | 状態 / smart / very / nice | ゆっくり本体の状態/行動/イベント回帰 / 状態 / smart / very / nice | 良い | - | - |
+| `testAddHungry` | 追加 / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / 追加 / 空腹 | 良い | - | - |
+| `testAddHungryNegative` | 追加 / 空腹 / negative | ゆっくり本体の状態/行動/イベント回帰 / 追加 / 空腹 / negative | 良い | - | - |
+| `testGetHungryLimit` | 取得 / 空腹 / limit | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 空腹 / limit | 良い | - | - |
+| `testIsVeryHungry` | 状態 / very / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / very / 空腹 | 良い | - | - |
 | `testIsVeryHungryDeadReturnsFalse` | 状態 / very / 空腹 / 死亡 / 戻り / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / very / 空腹 / 死亡 / 戻り / false | 良い | - | - |
-| `testIsStarving` | 状態 / starving | ゆっくり本体の状態/行動/イベント回帰 / 状態 / starving | ダメ | 回帰保証として弱い | - |
-| `testIsStarvingNotToomuch` | 状態 / starving / 非 / toomuch | ゆっくり本体の状態/行動/イベント回帰 / 状態 / starving / 非 / toomuch | ダメ | 回帰保証として弱い | - |
-| `testGetEatAmount` | 取得 / eat / amount | ゆっくり本体の状態/行動/イベント回帰 / 取得 / eat / amount | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetStressPositive` | 設定 / ストレス / positive | ゆっくり本体の状態/行動/イベント回帰 / 設定 / ストレス / positive | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetStressZeroIgnored` | 設定 / ストレス / zero / ignored | ゆっくり本体の状態/行動/イベント回帰 / 設定 / ストレス / zero / ignored | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetStressNegativeIgnored` | 設定 / ストレス / negative / ignored | ゆっくり本体の状態/行動/イベント回帰 / 設定 / ストレス / negative / ignored | ダメ | setter/getter の往復確認に留まる | - |
-| `testAddStressDeadIgnored` | 追加 / ストレス / 死亡 / ignored | ゆっくり本体の状態/行動/イベント回帰 / 追加 / ストレス / 死亡 / ignored | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddStressAlive` | 追加 / ストレス / alive | ゆっくり本体の状態/行動/イベント回帰 / 追加 / ストレス / alive | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testIsStarving` | 状態 / starving | ゆっくり本体の状態/行動/イベント回帰 / 状態 / starving | 良い | - | - |
+| `testIsStarvingNotToomuch` | 状態 / starving / 非 / toomuch | ゆっくり本体の状態/行動/イベント回帰 / 状態 / starving / 非 / toomuch | 良い | - | - |
+| `testGetEatAmount` | 取得 / eat / amount | ゆっくり本体の状態/行動/イベント回帰 / 取得 / eat / amount | 良い | - | - |
+| `testSetStressPositive` | 設定 / ストレス / positive | ゆっくり本体の状態/行動/イベント回帰 / 設定 / ストレス / positive | 良い | - | - |
+| `testSetStressZeroIgnored` | 設定 / ストレス / zero / ignored | ゆっくり本体の状態/行動/イベント回帰 / 設定 / ストレス / zero / ignored | 良い | - | - |
+| `testSetStressNegativeIgnored` | 設定 / ストレス / negative / ignored | ゆっくり本体の状態/行動/イベント回帰 / 設定 / ストレス / negative / ignored | 良い | - | - |
+| `testAddStressDeadIgnored` | 追加 / ストレス / 死亡 / ignored | ゆっくり本体の状態/行動/イベント回帰 / 追加 / ストレス / 死亡 / ignored | 良い | - | - |
+| `testAddStressAlive` | 追加 / ストレス / alive | ゆっくり本体の状態/行動/イベント回帰 / 追加 / ストレス / alive | 良い | - | - |
 | `testAddStressAlsoIncreasesShit` | 追加 / ストレス / also / increases / shit | ゆっくり本体の状態/行動/イベント回帰 / 追加 / ストレス / also / increases / shit | 良い | - | - |
-| `testGetStressLimit` | 取得 / ストレス / limit | ゆっくり本体の状態/行動/イベント回帰 / 取得 / ストレス / limit | ダメ | setter/getter の往復確認に留まる | - |
-| `testPlusShit` | plus / shit | ゆっくり本体の状態/行動/イベント回帰 / plus / shit | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPlusShitZeroBaseIgnored` | plus / shit / zero / base / ignored | ゆっくり本体の状態/行動/イベント回帰 / plus / shit / zero / base / ignored | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPlusShitNegativeIgnored` | plus / shit / negative / ignored | ゆっくり本体の状態/行動/イベント回帰 / plus / shit / negative / ignored | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetShitDirect` | 設定 / shit / direct | ゆっくり本体の状態/行動/イベント回帰 / 設定 / shit / direct | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetShitWhileShittingIgnored` | 設定 / shit / while / shitting / ignored | ゆっくり本体の状態/行動/イベント回帰 / 設定 / shit / while / shitting / ignored | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetShitVeryShit` | 設定 / shit / very / shit | ゆっくり本体の状態/行動/イベント回帰 / 設定 / shit / very / shit | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShitLimit` | 取得 / shit / limit | ゆっくり本体の状態/行動/イベント回帰 / 取得 / shit / limit | ダメ | setter/getter の往復確認に留まる | - |
-| `testIsBeggingForLifeAlive` | 状態 / begging / for / life / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / begging / for / life / alive | ダメ | 回帰保証として弱い | - |
-| `testIsBeggingForLifeDead` | 状態 / begging / for / life / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / begging / for / life / 死亡 | ダメ | 回帰保証として弱い | - |
-| `testSetBeggingBlockedByBuryState` | 設定 / begging / blocked / by / bury / state | ゆっくり本体の状態/行動/イベント回帰 / 設定 / begging / blocked / by / bury / state | ダメ | setter/getter の往復確認に留まる | - |
-| `testIsStrikeAliveAndDead` | 状態 / 打撃 / alive / and / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / 打撃 / alive / and / 死亡 | ダメ | 回帰保証として弱い | - |
-| `testIsBirthAliveAndDead` | 状態 / birth / alive / and / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / birth / alive / and / 死亡 | ダメ | 回帰保証として弱い | - |
-| `testIsEatingAliveAndDead` | 状態 / eating / alive / and / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / eating / alive / and / 死亡 | ダメ | 回帰保証として弱い | - |
-| `testIsSukkiriAliveAndDead` | 状態 / sukkiri / alive / and / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / sukkiri / alive / and / 死亡 | ダメ | 回帰保証として弱い | - |
-| `testIsNeedledAliveAndDead` | 状態 / needled / alive / and / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / needled / alive / and / 死亡 | ダメ | 回帰保証として弱い | - |
-| `testIsStubbornlyDirtyAliveAndDead` | 状態 / stubbornly / dirty / alive / and / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / stubbornly / dirty / alive / and / 死亡 | ダメ | 回帰保証として弱い | - |
-| `testGetFatherMother` | 取得 / 父 / 母 | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 父 / 母 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSisterListSize` | 姉妹 / list / size | ゆっくり本体の状態/行動/イベント回帰 / 姉妹 / list / size | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testElderSisterListSize` | elder / 姉妹 / list / size | ゆっくり本体の状態/行動/イベント回帰 / elder / 姉妹 / list / size | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testChildrenListSize` | children / list / size | ゆっくり本体の状態/行動/イベント回帰 / children / list / size | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testInitAmount` | init / amount | ゆっくり本体の状態/行動/イベント回帰 / init / amount | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testGetStressLimit` | 取得 / ストレス / limit | ゆっくり本体の状態/行動/イベント回帰 / 取得 / ストレス / limit | 良い | - | - |
+| `testPlusShit` | plus / shit | ゆっくり本体の状態/行動/イベント回帰 / plus / shit | 良い | - | - |
+| `testPlusShitZeroBaseIgnored` | plus / shit / zero / base / ignored | ゆっくり本体の状態/行動/イベント回帰 / plus / shit / zero / base / ignored | 良い | - | - |
+| `testPlusShitNegativeIgnored` | plus / shit / negative / ignored | ゆっくり本体の状態/行動/イベント回帰 / plus / shit / negative / ignored | 良い | - | - |
+| `testSetShitDirect` | 設定 / shit / direct | ゆっくり本体の状態/行動/イベント回帰 / 設定 / shit / direct | 良い | - | - |
+| `testSetShitWhileShittingIgnored` | 設定 / shit / while / shitting / ignored | ゆっくり本体の状態/行動/イベント回帰 / 設定 / shit / while / shitting / ignored | 良い | - | - |
+| `testSetShitVeryShit` | 設定 / shit / very / shit | ゆっくり本体の状態/行動/イベント回帰 / 設定 / shit / very / shit | 良い | - | - |
+| `testGetShitLimit` | 取得 / shit / limit | ゆっくり本体の状態/行動/イベント回帰 / 取得 / shit / limit | 良い | - | - |
+| `testIsBeggingForLifeAlive` | 状態 / begging / for / life / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / begging / for / life / alive | 良い | - | - |
+| `testIsBeggingForLifeDead` | 状態 / begging / for / life / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / begging / for / life / 死亡 | 良い | - | - |
+| `testSetBeggingBlockedByBuryState` | 設定 / begging / blocked / by / bury / state | ゆっくり本体の状態/行動/イベント回帰 / 設定 / begging / blocked / by / bury / state | 良い | - | - |
+| `testIsStrikeAliveAndDead` | 状態 / 打撃 / alive / and / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / 打撃 / alive / and / 死亡 | 良い | - | - |
+| `testIsBirthAliveAndDead` | 状態 / birth / alive / and / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / birth / alive / and / 死亡 | 良い | - | - |
+| `testIsEatingAliveAndDead` | 状態 / eating / alive / and / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / eating / alive / and / 死亡 | 良い | - | - |
+| `testIsSukkiriAliveAndDead` | 状態 / sukkiri / alive / and / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / sukkiri / alive / and / 死亡 | 良い | - | - |
+| `testIsNeedledAliveAndDead` | 状態 / needled / alive / and / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / needled / alive / and / 死亡 | 良い | - | - |
+| `testIsStubbornlyDirtyAliveAndDead` | 状態 / stubbornly / dirty / alive / and / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / stubbornly / dirty / alive / and / 死亡 | 良い | - | - |
+| `testGetFatherMother` | 取得 / 父 / 母 | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 父 / 母 | 良い | - | - |
+| `testSisterListSize` | 姉妹 / list / size | ゆっくり本体の状態/行動/イベント回帰 / 姉妹 / list / size | 良い | - | - |
+| `testElderSisterListSize` | elder / 姉妹 / list / size | ゆっくり本体の状態/行動/イベント回帰 / elder / 姉妹 / list / size | 良い | - | - |
+| `testChildrenListSize` | children / list / size | ゆっくり本体の状態/行動/イベント回帰 / children / list / size | 良い | - | - |
+| `testInitAmount` | init / amount | ゆっくり本体の状態/行動/イベント回帰 / init / amount | 良い | - | - |
 | `testAddAmountReturnsFalseWhenPositive` | 追加 / amount / 戻り / false / when / positive | ゆっくり本体の状態/行動/イベント回帰 / 追加 / amount / 戻り / false / when / positive | 良い | - | - |
 | `testAddAmountReturnsTrueWhenZero` | 追加 / amount / 戻り / true / when / zero | ゆっくり本体の状態/行動/イベント回帰 / 追加 / amount / 戻り / true / when / zero | 良い | - | - |
 | `testAddAmountReturnsTrueWhenNegative` | 追加 / amount / 戻り / true / when / negative | ゆっくり本体の状態/行動/イベント回帰 / 追加 / amount / 戻り / true / when / negative | 良い | - | - |
-| `testIsSickFalseWhenBelowIncubation` | 状態 / 病気 / false / when / below / incubation | ゆっくり本体の状態/行動/イベント回帰 / 病気判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsSickTrueWhenAboveIncubation` | 状態 / 病気 / true / when / above / incubation | ゆっくり本体の状態/行動/イベント回帰 / 病気判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsSickHeavily` | 状態 / 病気 / heavily | ゆっくり本体の状態/行動/イベント回帰 / 病気判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsSickTooHeavily` | 状態 / 病気 / too / heavily | ゆっくり本体の状態/行動/イベント回帰 / 病気判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsSickTooHeavilyNoDamage` | 状態 / 病気 / too / heavily / なし / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 病気判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testForceSetSick` | force / 設定 / 病気 | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 病気 | 不足 | setter/getter の往復確認に留まる | - |
-| `testFindSickWise` | find / 病気 / wise | ゆっくり本体の状態/行動/イベント回帰 / find / 病気 / wise | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFindSickFoolOnlyDetectsHeavy` | find / 病気 / fool / only / detects / heavy | ゆっくり本体の状態/行動/イベント回帰 / find / 病気 / fool / only / detects / heavy | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testIsNyddefault` | 状態 / nyddefault | ゆっくり本体の状態/行動/イベント回帰 / 状態 / nyddefault | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testIsNydnear` | 状態 / nydnear | ゆっくり本体の状態/行動/イベント回帰 / 状態 / nydnear | ダメ | 回帰保証として弱い | - |
-| `testIsNyddisease` | 状態 / nyddisease | ゆっくり本体の状態/行動/イベント回帰 / 状態 / nyddisease | ダメ | 回帰保証として弱い | - |
-| `testIsOldFalse` | 状態 / old / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / old / false | ダメ | 回帰保証として弱い | - |
-| `testIsOldTrue` | 状態 / old / true | ゆっくり本体の状態/行動/イベント回帰 / 状態 / old / true | ダメ | 回帰保証として弱い | - |
-| `testIsSleepyFalseWhenSleeping` | 状態 / sleepy / false / when / sleeping | ゆっくり本体の状態/行動/イベント回帰 / 状態 / sleepy / false / when / sleeping | ダメ | 回帰保証として弱い | - |
-| `testIsSleepyFalseWhenNotEnoughTime` | 状態 / sleepy / false / when / 非 / enough / time | ゆっくり本体の状態/行動/イベント回帰 / 状態 / sleepy / false / when / 非 / enough / time | ダメ | 回帰保証として弱い | - |
-| `testIsSleepyTrueWhenEnoughTime` | 状態 / sleepy / true / when / enough / time | ゆっくり本体の状態/行動/イベント回帰 / 状態 / sleepy / true / when / enough / time | ダメ | 回帰保証として弱い | - |
-| `testSetExcitingTrue` | 設定 / exciting / true | ゆっくり本体の状態/行動/イベント回帰 / 設定 / exciting / true | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetExcitingDead` | 設定 / exciting / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 設定 / exciting / 死亡 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetCalm` | 設定 / calm | ゆっくり本体の状態/行動/イベント回帰 / 設定 / calm | ダメ | setter/getter の往復確認に留まる | - |
-| `testAddAndCountAttachment` | 追加 / and / count / attachment | ゆっくり本体の状態/行動/イベント回帰 / 追加 / and / count / attachment | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRemoveAttachment` | 除去 / attachment | ゆっくり本体の状態/行動/イベント回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFootBakeLevelNone` | foot / bake / level / none | ゆっくり本体の状態/行動/イベント回帰 / foot / bake / level / none | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFootBakeLevelMidium` | foot / bake / level / midium | ゆっくり本体の状態/行動/イベント回帰 / foot / bake / level / midium | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFootBakeLevelCritical` | foot / bake / level / critical | ゆっくり本体の状態/行動/イベント回帰 / foot / bake / level / critical | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFootBakeNegativeClamped` | foot / bake / negative / clamped | ゆっくり本体の状態/行動/イベント回帰 / foot / bake / negative / clamped | 不足 | 境界値の回帰条件が粗い | - |
-| `testBodyBakeLevelNone` | 本体 / bake / level / none | ゆっくり本体の状態/行動/イベント回帰 / 本体 / bake / level / none | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBodyBakeLevelMidium` | 本体 / bake / level / midium | ゆっくり本体の状態/行動/イベント回帰 / 本体 / bake / level / midium | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBodyBakeLevelCritical` | 本体 / bake / level / critical | ゆっくり本体の状態/行動/イベント回帰 / 本体 / bake / level / critical | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testIsGotBurnedFalse` | 状態 / got / burned / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / got / burned / false | ダメ | 回帰保証として弱い | - |
-| `testIsGotBurnedTrue` | 状態 / got / burned / true | ゆっくり本体の状態/行動/イベント回帰 / 状態 / got / burned / true | ダメ | 回帰保証として弱い | - |
-| `testAddBodyBakePeriod` | 追加 / 本体 / bake / period | ゆっくり本体の状態/行動/イベント回帰 / 追加 / 本体 / bake / period | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddFootBakePeriod` | 追加 / foot / bake / period | ゆっくり本体の状態/行動/イベント回帰 / 追加 / foot / bake / period | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetTangTypePoor` | 取得 / tang / type / poor | ゆっくり本体の状態/行動/イベント回帰 / 取得 / tang / type / poor | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetTangTypeNormal` | 取得 / tang / type / normal | ゆっくり本体の状態/行動/イベント回帰 / 取得 / tang / type / normal | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetTangTypeGourmet` | 取得 / tang / type / gourmet | ゆっくり本体の状態/行動/イベント回帰 / 取得 / tang / type / gourmet | ダメ | setter/getter の往復確認に留まる | - |
-| `testAddTang` | 追加 / tang | ゆっくり本体の状態/行動/イベント回帰 / 追加 / tang | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddAmaamaDiscipline` | 追加 / amaama / discipline | ゆっくり本体の状態/行動/イベント回帰 / 追加 / amaama / discipline | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddAmaamaDisciplineUpperClamp` | 追加 / amaama / discipline / upper / 範囲補正 | ゆっくり本体の状態/行動/イベント回帰 / 追加 / amaama / discipline / upper / 範囲補正 | 不足 | 境界値の回帰条件が粗い | - |
-| `testAddAmaamaDisciplineLowerClamp` | 追加 / amaama / discipline / lower / 範囲補正 | ゆっくり本体の状態/行動/イベント回帰 / 追加 / amaama / discipline / lower / 範囲補正 | 不足 | 境界値の回帰条件が粗い | - |
-| `testAddLovePlayerPositive` | 追加 / love / player / positive | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / positive | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddLovePlayerUpperClamp` | 追加 / love / player / upper / 範囲補正 | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / upper / 範囲補正 | 不足 | 境界値の回帰条件が粗い | - |
-| `testAddLovePlayerLowerClamp` | 追加 / love / player / lower / 範囲補正 | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / lower / 範囲補正 | 不足 | 境界値の回帰条件が粗い | - |
-| `testAddLovePlayerNydforcesHate` | 追加 / love / player / nydforces / hate | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / nydforces / hate | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddMemoriesWise` | 追加 / memories / wise | ゆっくり本体の状態/行動/イベント回帰 / 追加 / memories / wise | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddMemoriesFoolPositive` | 追加 / memories / fool / positive | ゆっくり本体の状態/行動/イベント回帰 / 追加 / memories / fool / positive | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddMemoriesFoolNegative` | 追加 / memories / fool / negative | ゆっくり本体の状態/行動/イベント回帰 / 追加 / memories / fool / negative | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddMemoriesAveragePositive` | 追加 / memories / average / positive | ゆっくり本体の状態/行動/イベント回帰 / 追加 / memories / average / positive | 不足 | 保存/復元後の成分 assert が足りない | - |
-| `testAddMemoriesAverageNegative` | 追加 / memories / average / negative | ゆっくり本体の状態/行動/イベント回帰 / 追加 / memories / average / negative | 不足 | 保存/復元後の成分 assert が足りない | - |
+| `testIsSickFalseWhenBelowIncubation` | 状態 / 病気 / false / when / below / incubation | ゆっくり本体の状態/行動/イベント回帰 / 病気判定回帰 | 良い | - | - |
+| `testIsSickTrueWhenAboveIncubation` | 状態 / 病気 / true / when / above / incubation | ゆっくり本体の状態/行動/イベント回帰 / 病気判定回帰 | 良い | - | - |
+| `testIsSickHeavily` | 状態 / 病気 / heavily | ゆっくり本体の状態/行動/イベント回帰 / 病気判定回帰 | 良い | - | - |
+| `testIsSickTooHeavily` | 状態 / 病気 / too / heavily | ゆっくり本体の状態/行動/イベント回帰 / 病気判定回帰 | 良い | - | - |
+| `testIsSickTooHeavilyNoDamage` | 状態 / 病気 / too / heavily / なし / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 病気判定回帰 | 良い | - | - |
+| `testForceSetSick` | force / 設定 / 病気 | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 病気 | 良い | - | - |
+| `testFindSickWise` | find / 病気 / wise | ゆっくり本体の状態/行動/イベント回帰 / find / 病気 / wise | 良い | - | - |
+| `testFindSickFoolOnlyDetectsHeavy` | find / 病気 / fool / only / detects / heavy | ゆっくり本体の状態/行動/イベント回帰 / find / 病気 / fool / only / detects / heavy | 良い | - | - |
+| `testIsNyddefault` | 状態 / nyddefault | ゆっくり本体の状態/行動/イベント回帰 / 状態 / nyddefault | 良い | - | - |
+| `testIsNydnear` | 状態 / nydnear | ゆっくり本体の状態/行動/イベント回帰 / 状態 / nydnear | 良い | - | - |
+| `testIsNyddisease` | 状態 / nyddisease | ゆっくり本体の状態/行動/イベント回帰 / 状態 / nyddisease | 良い | - | - |
+| `testIsOldFalse` | 状態 / old / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / old / false | 良い | - | - |
+| `testIsOldTrue` | 状態 / old / true | ゆっくり本体の状態/行動/イベント回帰 / 状態 / old / true | 良い | - | - |
+| `testIsSleepyFalseWhenSleeping` | 状態 / sleepy / false / when / sleeping | ゆっくり本体の状態/行動/イベント回帰 / 状態 / sleepy / false / when / sleeping | 良い | - | - |
+| `testIsSleepyFalseWhenNotEnoughTime` | 状態 / sleepy / false / when / 非 / enough / time | ゆっくり本体の状態/行動/イベント回帰 / 状態 / sleepy / false / when / 非 / enough / time | 良い | - | - |
+| `testIsSleepyTrueWhenEnoughTime` | 状態 / sleepy / true / when / enough / time | ゆっくり本体の状態/行動/イベント回帰 / 状態 / sleepy / true / when / enough / time | 良い | - | - |
+| `testSetExcitingTrue` | 設定 / exciting / true | ゆっくり本体の状態/行動/イベント回帰 / 設定 / exciting / true | 良い | - | - |
+| `testSetExcitingDead` | 設定 / exciting / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 設定 / exciting / 死亡 | 良い | - | - |
+| `testSetCalm` | 設定 / calm | ゆっくり本体の状態/行動/イベント回帰 / 設定 / calm | 良い | - | - |
+| `testAddAndCountAttachment` | 追加 / and / count / attachment | ゆっくり本体の状態/行動/イベント回帰 / 追加 / and / count / attachment | 良い | - | - |
+| `testRemoveAttachment` | 除去 / attachment | ゆっくり本体の状態/行動/イベント回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testFootBakeLevelNone` | foot / bake / level / none | ゆっくり本体の状態/行動/イベント回帰 / foot / bake / level / none | 良い | - | - |
+| `testFootBakeLevelMidium` | foot / bake / level / midium | ゆっくり本体の状態/行動/イベント回帰 / foot / bake / level / midium | 良い | - | - |
+| `testFootBakeLevelCritical` | foot / bake / level / critical | ゆっくり本体の状態/行動/イベント回帰 / foot / bake / level / critical | 良い | - | - |
+| `testFootBakeNegativeClamped` | foot / bake / negative / clamped | ゆっくり本体の状態/行動/イベント回帰 / foot / bake / negative / clamped | 良い | - | - |
+| `testBodyBakeLevelNone` | 本体 / bake / level / none | ゆっくり本体の状態/行動/イベント回帰 / 本体 / bake / level / none | 良い | - | - |
+| `testBodyBakeLevelMidium` | 本体 / bake / level / midium | ゆっくり本体の状態/行動/イベント回帰 / 本体 / bake / level / midium | 良い | - | - |
+| `testBodyBakeLevelCritical` | 本体 / bake / level / critical | ゆっくり本体の状態/行動/イベント回帰 / 本体 / bake / level / critical | 良い | - | - |
+| `testIsGotBurnedFalse` | 状態 / got / burned / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / got / burned / false | 良い | - | - |
+| `testIsGotBurnedTrue` | 状態 / got / burned / true | ゆっくり本体の状態/行動/イベント回帰 / 状態 / got / burned / true | 良い | - | - |
+| `testAddBodyBakePeriod` | 追加 / 本体 / bake / period | ゆっくり本体の状態/行動/イベント回帰 / 追加 / 本体 / bake / period | 良い | - | - |
+| `testAddFootBakePeriod` | 追加 / foot / bake / period | ゆっくり本体の状態/行動/イベント回帰 / 追加 / foot / bake / period | 良い | - | - |
+| `testGetTangTypePoor` | 取得 / tang / type / poor | ゆっくり本体の状態/行動/イベント回帰 / 取得 / tang / type / poor | 良い | - | - |
+| `testGetTangTypeNormal` | 取得 / tang / type / normal | ゆっくり本体の状態/行動/イベント回帰 / 取得 / tang / type / normal | 良い | - | - |
+| `testGetTangTypeGourmet` | 取得 / tang / type / gourmet | ゆっくり本体の状態/行動/イベント回帰 / 取得 / tang / type / gourmet | 良い | - | - |
+| `testAddTang` | 追加 / tang | ゆっくり本体の状態/行動/イベント回帰 / 追加 / tang | 良い | - | - |
+| `testAddAmaamaDiscipline` | 追加 / amaama / discipline | ゆっくり本体の状態/行動/イベント回帰 / 追加 / amaama / discipline | 良い | - | - |
+| `testAddAmaamaDisciplineUpperClamp` | 追加 / amaama / discipline / upper / 範囲補正 | ゆっくり本体の状態/行動/イベント回帰 / 追加 / amaama / discipline / upper / 範囲補正 | 良い | - | - |
+| `testAddAmaamaDisciplineLowerClamp` | 追加 / amaama / discipline / lower / 範囲補正 | ゆっくり本体の状態/行動/イベント回帰 / 追加 / amaama / discipline / lower / 範囲補正 | 良い | - | - |
+| `testAddLovePlayerPositive` | 追加 / love / player / positive | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / positive | 良い | - | - |
+| `testAddLovePlayerUpperClamp` | 追加 / love / player / upper / 範囲補正 | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / upper / 範囲補正 | 良い | - | - |
+| `testAddLovePlayerLowerClamp` | 追加 / love / player / lower / 範囲補正 | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / lower / 範囲補正 | 良い | - | - |
+| `testAddLovePlayerNydforcesHate` | 追加 / love / player / nydforces / hate | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / nydforces / hate | 良い | - | - |
+| `testAddMemoriesWise` | 追加 / memories / wise | ゆっくり本体の状態/行動/イベント回帰 / 追加 / memories / wise | 良い | - | - |
+| `testAddMemoriesFoolPositive` | 追加 / memories / fool / positive | ゆっくり本体の状態/行動/イベント回帰 / 追加 / memories / fool / positive | 良い | - | - |
+| `testAddMemoriesFoolNegative` | 追加 / memories / fool / negative | ゆっくり本体の状態/行動/イベント回帰 / 追加 / memories / fool / negative | 良い | - | - |
+| `testAddMemoriesAveragePositive` | 追加 / memories / average / positive | ゆっくり本体の状態/行動/イベント回帰 / 追加 / memories / average / positive | 良い | - | - |
+| `testAddMemoriesAverageNegative` | 追加 / memories / average / negative | ゆっくり本体の状態/行動/イベント回帰 / 追加 / memories / average / negative | 良い | - | - |
 | `testSetHappinessDeadForcesAverage` | 設定 / 幸福 / 死亡 / forces / average | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / 死亡 / forces / average | 良い | - | - |
-| `testSetHappinessNydforcesVerySad` | 設定 / 幸福 / nydforces / very / sad | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / nydforces / very / sad | ダメ | setter/getter の往復確認に留まる | - |
+| `testSetHappinessNydforcesVerySad` | 設定 / 幸福 / nydforces / very / sad | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / nydforces / very / sad | 良い | - | - |
 | `testSetHappinessHappyClearsScareAndAngry` | 設定 / 幸福 / happy / clears / scare / and / angry | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / happy / clears / scare / and / angry | 良い | - | - |
-| `testSetHappinessSadDoesNotOverrideVerySad` | 設定 / 幸福 / sad / does / 非 / override / very / sad | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / sad / does / 非 / override / very / sad | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetHappinessHappyDoesNotOverrideVeryHappy` | 設定 / 幸福 / happy / does / 非 / override / very / happy | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / happy / does / 非 / override / very / happy | ダメ | setter/getter の往復確認に留まる | - |
-| `testCanFurifuriTrue` | 可否 / furifuri / true | ゆっくり本体の状態/行動/イベント回帰 / 可否 / furifuri / true | ダメ | 回帰保証として弱い | - |
-| `testCanFurifuriFalseWhenBurnedCritical` | 可否 / furifuri / false / when / burned / critical | ゆっくり本体の状態/行動/イベント回帰 / 可否 / furifuri / false / when / burned / critical | ダメ | 回帰保証として弱い | - |
-| `testCanFurifuriFalseWhenNyd` | 可否 / furifuri / false / when / 非ゆっくり症 | ゆっくり本体の状態/行動/イベント回帰 / 可否 / furifuri / false / when / 非ゆっくり症 | ダメ | 回帰保証として弱い | - |
-| `testGetBabyTypesDequeueEmpty` | 取得 / baby / types / dequeue / empty | ゆっくり本体の状態/行動/イベント回帰 / 取得 / baby / types / dequeue / empty | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBabyTypesDequeueWithItem` | 取得 / baby / types / dequeue / with / item | ゆっくり本体の状態/行動/イベント回帰 / 取得 / baby / types / dequeue / with / item | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetStalksDequeueEmpty` | 取得 / stalks / dequeue / empty | ゆっくり本体の状態/行動/イベント回帰 / 取得 / stalks / dequeue / empty | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetStalksDequeueWithItem` | 取得 / stalks / dequeue / with / item | ゆっくり本体の状態/行動/イベント回帰 / 取得 / stalks / dequeue / with / item | 不足 | setter/getter の往復確認に留まる | - |
-| `testEqualsNull` | equals / null | ゆっくり本体の状態/行動/イベント回帰 / equals / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEqualsWrongType` | equals / wrong / type | ゆっくり本体の状態/行動/イベント回帰 / equals / wrong / type | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEqualsSameUniqueId` | equals / same / unique / id | ゆっくり本体の状態/行動/イベント回帰 / equals / same / unique / id | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEqualsDifferentUniqueId` | equals / different / unique / id | ゆっくり本体の状態/行動/イベント回帰 / equals / different / unique / id | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testHashCode` | hash / code | ゆっくり本体の状態/行動/イベント回帰 / hash / code | ダメ | 回帰保証として弱い | - |
-| `testCompareToNull` | compare / to / null | ゆっくり本体の状態/行動/イベント回帰 / compare / to / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCompareToWrongType` | compare / to / wrong / type | ゆっくり本体の状態/行動/イベント回帰 / compare / to / wrong / type | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCompareToSame` | compare / to / same | ゆっくり本体の状態/行動/イベント回帰 / compare / to / same | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCompareToSmaller` | compare / to / smaller | ゆっくり本体の状態/行動/イベント回帰 / compare / to / smaller | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetCantDie` | 設定 / cant / die | ゆっくり本体の状態/行動/イベント回帰 / 設定 / cant / die | ダメ | setter/getter の往復確認に留まる | - |
-| `testHasTraumaFalse` | 有無 / trauma / false | ゆっくり本体の状態/行動/イベント回帰 / 有無 / trauma / false | ダメ | 回帰保証として弱い | - |
-| `testHasTraumaTrue` | 有無 / trauma / true | ゆっくり本体の状態/行動/イベント回帰 / 有無 / trauma / true | ダメ | 回帰保証として弱い | - |
-| `testCutHair` | cut / 毛 | ゆっくり本体の状態/行動/イベント回帰 / cut / 毛 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBurstStateBurst` | 破裂 / state / 破裂 | ゆっくり本体の状態/行動/イベント回帰 / 破裂 / state / 破裂 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBurstStateNear` | 破裂 / state / near | ゆっくり本体の状態/行動/イベント回帰 / 破裂 / state / near | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBurstStateHalf` | 破裂 / state / half | ゆっくり本体の状態/行動/イベント回帰 / 破裂 / state / half | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBurstStateSafe` | 破裂 / state / safe | ゆっくり本体の状態/行動/イベント回帰 / 破裂 / state / safe | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBurstStateNone` | 破裂 / state / none | ゆっくり本体の状態/行動/イベント回帰 / 破裂 / state / none | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDamageStateNone` | ダメージ / state / none | ゆっくり本体の状態/行動/イベント回帰 / ダメージ / state / none | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDamageStateVery` | ダメージ / state / very | ゆっくり本体の状態/行動/イベント回帰 / ダメージ / state / very | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDamageStateToomuch` | ダメージ / state / toomuch | ゆっくり本体の状態/行動/イベント回帰 / ダメージ / state / toomuch | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDamageStateTriggersDeath` | ダメージ / state / triggers / death | ゆっくり本体の状態/行動/イベント回帰 / ダメージ / state / triggers / death | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testTangTypePoor` | tang / type / poor | ゆっくり本体の状態/行動/イベント回帰 / tang / type / poor | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testTangTypeNormal` | tang / type / normal | ゆっくり本体の状態/行動/イベント回帰 / tang / type / normal | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testTangTypeGourmet` | tang / type / gourmet | ゆっくり本体の状態/行動/イベント回帰 / tang / type / gourmet | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddLovePlayerNyd` | 追加 / love / player / 非ゆっくり症 | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / 非ゆっくり症 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddLovePlayerNormal` | 追加 / love / player / normal | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / normal | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddLovePlayerUpperLimit` | 追加 / love / player / upper / limit | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / upper / limit | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddLovePlayerLowerLimit` | 追加 / love / player / lower / limit | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / lower / limit | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddMemoriesWise` | 追加 / memories / wise | ゆっくり本体の状態/行動/イベント回帰 / 追加 / memories / wise | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddMemoriesFoolPositive` | 追加 / memories / fool / positive | ゆっくり本体の状態/行動/イベント回帰 / 追加 / memories / fool / positive | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddMemoriesFoolNegative` | 追加 / memories / fool / negative | ゆっくり本体の状態/行動/イベント回帰 / 追加 / memories / fool / negative | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddMemoriesAveragePositive` | 追加 / memories / average / positive | ゆっくり本体の状態/行動/イベント回帰 / 追加 / memories / average / positive | 不足 | 保存/復元後の成分 assert が足りない | - |
-| `testAddMemoriesAverageNegative` | 追加 / memories / average / negative | ゆっくり本体の状態/行動/イベント回帰 / 追加 / memories / average / negative | 不足 | 保存/復元後の成分 assert が足りない | - |
-| `testFindSickWiseDetectsLightSick` | find / 病気 / wise / detects / light / 病気 | ゆっくり本体の状態/行動/イベント回帰 / find / 病気 / wise / detects / light / 病気 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFindSickAverageDetectsLightSick` | find / 病気 / average / detects / light / 病気 | ゆっくり本体の状態/行動/イベント回帰 / find / 病気 / average / detects / light / 病気 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFindSickFoolDoesNotDetectLightSick` | find / 病気 / fool / does / 非 / detect / light / 病気 | ゆっくり本体の状態/行動/イベント回帰 / find / 病気 / fool / does / 非 / detect / light / 病気 | ダメ | 回帰保証として弱い | - |
-| `testFindSickFoolDetectsHeavySick` | find / 病気 / fool / detects / heavy / 病気 | ゆっくり本体の状態/行動/イベント回帰 / find / 病気 / fool / detects / heavy / 病気 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFindSickNoSick` | find / 病気 / なし / 病気 | ゆっくり本体の状態/行動/イベント回帰 / find / 病気 / なし / 病気 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testSetHappinessSadDoesNotOverrideVerySad` | 設定 / 幸福 / sad / does / 非 / override / very / sad | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / sad / does / 非 / override / very / sad | 良い | - | - |
+| `testSetHappinessHappyDoesNotOverrideVeryHappy` | 設定 / 幸福 / happy / does / 非 / override / very / happy | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / happy / does / 非 / override / very / happy | 良い | - | - |
+| `testCanFurifuriTrue` | 可否 / furifuri / true | ゆっくり本体の状態/行動/イベント回帰 / 可否 / furifuri / true | 良い | - | - |
+| `testCanFurifuriFalseWhenBurnedCritical` | 可否 / furifuri / false / when / burned / critical | ゆっくり本体の状態/行動/イベント回帰 / 可否 / furifuri / false / when / burned / critical | 良い | - | - |
+| `testCanFurifuriFalseWhenNyd` | 可否 / furifuri / false / when / 非ゆっくり症 | ゆっくり本体の状態/行動/イベント回帰 / 可否 / furifuri / false / when / 非ゆっくり症 | 良い | - | - |
+| `testGetBabyTypesDequeueEmpty` | 取得 / baby / types / dequeue / empty | ゆっくり本体の状態/行動/イベント回帰 / 取得 / baby / types / dequeue / empty | 良い | - | - |
+| `testGetBabyTypesDequeueWithItem` | 取得 / baby / types / dequeue / with / item | ゆっくり本体の状態/行動/イベント回帰 / 取得 / baby / types / dequeue / with / item | 良い | - | - |
+| `testGetStalksDequeueEmpty` | 取得 / stalks / dequeue / empty | ゆっくり本体の状態/行動/イベント回帰 / 取得 / stalks / dequeue / empty | 良い | - | - |
+| `testGetStalksDequeueWithItem` | 取得 / stalks / dequeue / with / item | ゆっくり本体の状態/行動/イベント回帰 / 取得 / stalks / dequeue / with / item | 良い | - | - |
+| `testEqualsNull` | equals / null | ゆっくり本体の状態/行動/イベント回帰 / equals / null | 良い | - | - |
+| `testEqualsWrongType` | equals / wrong / type | ゆっくり本体の状態/行動/イベント回帰 / equals / wrong / type | 良い | - | - |
+| `testEqualsSameUniqueId` | equals / same / unique / id | ゆっくり本体の状態/行動/イベント回帰 / equals / same / unique / id | 良い | - | - |
+| `testEqualsDifferentUniqueId` | equals / different / unique / id | ゆっくり本体の状態/行動/イベント回帰 / equals / different / unique / id | 良い | - | - |
+| `testHashCode` | hash / code | ゆっくり本体の状態/行動/イベント回帰 / hash / code | 良い | - | - |
+| `testCompareToNull` | compare / to / null | ゆっくり本体の状態/行動/イベント回帰 / compare / to / null | 良い | - | - |
+| `testCompareToWrongType` | compare / to / wrong / type | ゆっくり本体の状態/行動/イベント回帰 / compare / to / wrong / type | 良い | - | - |
+| `testCompareToSame` | compare / to / same | ゆっくり本体の状態/行動/イベント回帰 / compare / to / same | 良い | - | - |
+| `testCompareToSmaller` | compare / to / smaller | ゆっくり本体の状態/行動/イベント回帰 / compare / to / smaller | 良い | - | - |
+| `testSetCantDie` | 設定 / cant / die | ゆっくり本体の状態/行動/イベント回帰 / 設定 / cant / die | 良い | - | - |
+| `testHasTraumaFalse` | 有無 / trauma / false | ゆっくり本体の状態/行動/イベント回帰 / 有無 / trauma / false | 良い | - | - |
+| `testHasTraumaTrue` | 有無 / trauma / true | ゆっくり本体の状態/行動/イベント回帰 / 有無 / trauma / true | 良い | - | - |
+| `testCutHair` | cut / 毛 | ゆっくり本体の状態/行動/イベント回帰 / cut / 毛 | 良い | - | - |
+| `testBurstStateBurst` | 破裂 / state / 破裂 | ゆっくり本体の状態/行動/イベント回帰 / 破裂 / state / 破裂 | 良い | - | - |
+| `testBurstStateNear` | 破裂 / state / near | ゆっくり本体の状態/行動/イベント回帰 / 破裂 / state / near | 良い | - | - |
+| `testBurstStateHalf` | 破裂 / state / half | ゆっくり本体の状態/行動/イベント回帰 / 破裂 / state / half | 良い | - | - |
+| `testBurstStateSafe` | 破裂 / state / safe | ゆっくり本体の状態/行動/イベント回帰 / 破裂 / state / safe | 良い | - | - |
+| `testBurstStateNone` | 破裂 / state / none | ゆっくり本体の状態/行動/イベント回帰 / 破裂 / state / none | 良い | - | - |
+| `testDamageStateNone` | ダメージ / state / none | ゆっくり本体の状態/行動/イベント回帰 / ダメージ / state / none | 良い | - | - |
+| `testDamageStateVery` | ダメージ / state / very | ゆっくり本体の状態/行動/イベント回帰 / ダメージ / state / very | 良い | - | - |
+| `testDamageStateToomuch` | ダメージ / state / toomuch | ゆっくり本体の状態/行動/イベント回帰 / ダメージ / state / toomuch | 良い | - | - |
+| `testDamageStateTriggersDeath` | ダメージ / state / triggers / death | ゆっくり本体の状態/行動/イベント回帰 / ダメージ / state / triggers / death | 良い | - | - |
+| `testTangTypePoor` | tang / type / poor | ゆっくり本体の状態/行動/イベント回帰 / tang / type / poor | 良い | - | - |
+| `testTangTypeNormal` | tang / type / normal | ゆっくり本体の状態/行動/イベント回帰 / tang / type / normal | 良い | - | - |
+| `testTangTypeGourmet` | tang / type / gourmet | ゆっくり本体の状態/行動/イベント回帰 / tang / type / gourmet | 良い | - | - |
+| `testAddLovePlayerNyd` | 追加 / love / player / 非ゆっくり症 | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / 非ゆっくり症 | 良い | - | - |
+| `testAddLovePlayerNormal` | 追加 / love / player / normal | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / normal | 良い | - | - |
+| `testAddLovePlayerUpperLimit` | 追加 / love / player / upper / limit | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / upper / limit | 良い | - | - |
+| `testAddLovePlayerLowerLimit` | 追加 / love / player / lower / limit | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / lower / limit | 良い | - | - |
+| `testAddMemoriesWise` | 追加 / memories / wise | ゆっくり本体の状態/行動/イベント回帰 / 追加 / memories / wise | 良い | - | - |
+| `testAddMemoriesFoolPositive` | 追加 / memories / fool / positive | ゆっくり本体の状態/行動/イベント回帰 / 追加 / memories / fool / positive | 良い | - | - |
+| `testAddMemoriesFoolNegative` | 追加 / memories / fool / negative | ゆっくり本体の状態/行動/イベント回帰 / 追加 / memories / fool / negative | 良い | - | - |
+| `testAddMemoriesAveragePositive` | 追加 / memories / average / positive | ゆっくり本体の状態/行動/イベント回帰 / 追加 / memories / average / positive | 良い | - | - |
+| `testAddMemoriesAverageNegative` | 追加 / memories / average / negative | ゆっくり本体の状態/行動/イベント回帰 / 追加 / memories / average / negative | 良い | - | - |
+| `testFindSickWiseDetectsLightSick` | find / 病気 / wise / detects / light / 病気 | ゆっくり本体の状態/行動/イベント回帰 / find / 病気 / wise / detects / light / 病気 | 良い | - | - |
+| `testFindSickAverageDetectsLightSick` | find / 病気 / average / detects / light / 病気 | ゆっくり本体の状態/行動/イベント回帰 / find / 病気 / average / detects / light / 病気 | 良い | - | - |
+| `testFindSickFoolDoesNotDetectLightSick` | find / 病気 / fool / does / 非 / detect / light / 病気 | ゆっくり本体の状態/行動/イベント回帰 / find / 病気 / fool / does / 非 / detect / light / 病気 | 良い | - | - |
+| `testFindSickFoolDetectsHeavySick` | find / 病気 / fool / detects / heavy / 病気 | ゆっくり本体の状態/行動/イベント回帰 / find / 病気 / fool / detects / heavy / 病気 | 良い | - | - |
+| `testFindSickNoSick` | find / 病気 / なし / 病気 | ゆっくり本体の状態/行動/イベント回帰 / find / 病気 / なし / 病気 | 良い | - | - |
 | `testSetHappinessDeadReturnsAverage` | 設定 / 幸福 / 死亡 / 戻り / average | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / 死亡 / 戻り / average | 良い | - | - |
-| `testSetHappinessNydreturnVerySad` | 設定 / 幸福 / nydreturn / very / sad | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / nydreturn / very / sad | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetHappinessSadFromNonVerySad` | 設定 / 幸福 / sad / from / non / very / sad | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / sad / from / non / very / sad | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetHappinessSadFromVerySadNoChange` | 設定 / 幸福 / sad / from / very / sad / なし / change | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / sad / from / very / sad / なし / change | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetHappinessHappyFromNonVeryHappy` | 設定 / 幸福 / happy / from / non / very / happy | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / happy / from / non / very / happy | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetHappinessHappyFromVeryHappyNoChange` | 設定 / 幸福 / happy / from / very / happy / なし / change | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / happy / from / very / happy / なし / change | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetHappinessVerySad` | 設定 / 幸福 / very / sad | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / very / sad | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetHappinessVeryHappy` | 設定 / 幸福 / very / happy | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / very / happy | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetToFoodTrue` | 設定 / to / food / true | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / food / true | ダメ | setter/getter の往復確認に留まる | - |
+| `testSetHappinessNydreturnVerySad` | 設定 / 幸福 / nydreturn / very / sad | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / nydreturn / very / sad | 良い | - | - |
+| `testSetHappinessSadFromNonVerySad` | 設定 / 幸福 / sad / from / non / very / sad | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / sad / from / non / very / sad | 良い | - | - |
+| `testSetHappinessSadFromVerySadNoChange` | 設定 / 幸福 / sad / from / very / sad / なし / change | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / sad / from / very / sad / なし / change | 良い | - | - |
+| `testSetHappinessHappyFromNonVeryHappy` | 設定 / 幸福 / happy / from / non / very / happy | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / happy / from / non / very / happy | 良い | - | - |
+| `testSetHappinessHappyFromVeryHappyNoChange` | 設定 / 幸福 / happy / from / very / happy / なし / change | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / happy / from / very / happy / なし / change | 良い | - | - |
+| `testSetHappinessVerySad` | 設定 / 幸福 / very / sad | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / very / sad | 良い | - | - |
+| `testSetHappinessVeryHappy` | 設定 / 幸福 / very / happy | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / very / happy | 良い | - | - |
+| `testSetToFoodTrue` | 設定 / to / food / true | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / food / true | 良い | - | - |
 | `testSetToFoodFalseClearsPurpose` | 設定 / to / food / false / clears / purpose | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / food / false / clears / purpose | 良い | - | - |
-| `testSetToFoodFalseIgnoresIfNotFood` | 設定 / to / food / false / ignores / if / 非 / food | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / food / false / ignores / if / 非 / food | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetToSukkiriTrue` | 設定 / to / sukkiri / true | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / sukkiri / true | ダメ | setter/getter の往復確認に留まる | - |
+| `testSetToFoodFalseIgnoresIfNotFood` | 設定 / to / food / false / ignores / if / 非 / food | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / food / false / ignores / if / 非 / food | 良い | - | - |
+| `testSetToSukkiriTrue` | 設定 / to / sukkiri / true | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / sukkiri / true | 良い | - | - |
 | `testSetToSukkiriFalseClearsPurpose` | 設定 / to / sukkiri / false / clears / purpose | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / sukkiri / false / clears / purpose | 良い | - | - |
-| `testSetToShitTrue` | 設定 / to / shit / true | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / shit / true | ダメ | setter/getter の往復確認に留まる | - |
+| `testSetToShitTrue` | 設定 / to / shit / true | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / shit / true | 良い | - | - |
 | `testSetToShitFalseClearsPurpose` | 設定 / to / shit / false / clears / purpose | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / shit / false / clears / purpose | 良い | - | - |
-| `testSetToBedTrue` | 設定 / to / bed / true | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / bed / true | ダメ | setter/getter の往復確認に留まる | - |
+| `testSetToBedTrue` | 設定 / to / bed / true | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / bed / true | 良い | - | - |
 | `testSetToBedFalseClearsPurpose` | 設定 / to / bed / false / clears / purpose | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / bed / false / clears / purpose | 良い | - | - |
-| `testSetToBodyTrue` | 設定 / to / 本体 / true | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / 本体 / true | ダメ | setter/getter の往復確認に留まる | - |
+| `testSetToBodyTrue` | 設定 / to / 本体 / true | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / 本体 / true | 良い | - | - |
 | `testSetToBodyFalseClearsPurpose` | 設定 / to / 本体 / false / clears / purpose | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / 本体 / false / clears / purpose | 良い | - | - |
-| `testSetToStealTrue` | 設定 / to / steal / true | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / steal / true | ダメ | setter/getter の往復確認に留まる | - |
+| `testSetToStealTrue` | 設定 / to / steal / true | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / steal / true | 良い | - | - |
 | `testSetToStealFalseClearsPurpose` | 設定 / to / steal / false / clears / purpose | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / steal / false / clears / purpose | 良い | - | - |
-| `testSetToTakeoutTrue` | 設定 / to / takeout / true | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / takeout / true | ダメ | setter/getter の往復確認に留まる | - |
+| `testSetToTakeoutTrue` | 設定 / to / takeout / true | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / takeout / true | 良い | - | - |
 | `testSetToTakeoutFalseClearsPurpose` | 設定 / to / takeout / false / clears / purpose | ゆっくり本体の状態/行動/イベント回帰 / 設定 / to / takeout / false / clears / purpose | 良い | - | - |
-| `testIsVainAlive` | 状態 / vain / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / vain / alive | ダメ | 回帰保証として弱い | - |
-| `testIsVainDead` | 状態 / vain / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / vain / 死亡 | ダメ | 回帰保証として弱い | - |
-| `testIsNobinobiAlive` | 状態 / nobinobi / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / nobinobi / alive | ダメ | 回帰保証として弱い | - |
-| `testIsNobinobiDead` | 状態 / nobinobi / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / nobinobi / 死亡 | ダメ | 回帰保証として弱い | - |
-| `testIsFurifuriAlive` | 状態 / furifuri / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / furifuri / alive | ダメ | 回帰保証として弱い | - |
-| `testIsFurifuriDead` | 状態 / furifuri / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / furifuri / 死亡 | ダメ | 回帰保証として弱い | - |
-| `testIsEatingShitAlive` | 状態 / eating / shit / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / eating / shit / alive | ダメ | 回帰保証として弱い | - |
-| `testIsEatingShitDead` | 状態 / eating / shit / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / eating / shit / 死亡 | ダメ | 回帰保証として弱い | - |
-| `testIsPeroperoAlive` | 状態 / peropero / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / peropero / alive | ダメ | 回帰保証として弱い | - |
-| `testIsPeroPeroDead` | 状態 / pero / pero / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / pero / pero / 死亡 | ダメ | 回帰保証として弱い | - |
-| `testIsYunnyaaAlive` | 状態 / yunnyaa / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / yunnyaa / alive | ダメ | 回帰保証として弱い | - |
-| `testIsYunnyaaDead` | 状態 / yunnyaa / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / yunnyaa / 死亡 | ダメ | 回帰保証として弱い | - |
-| `testIsPikopikoTrue` | 状態 / pikopiko / true | ゆっくり本体の状態/行動/イベント回帰 / 状態 / pikopiko / true | ダメ | 回帰保証として弱い | - |
-| `testIsPikopikoFalse` | 状態 / pikopiko / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / pikopiko / false | ダメ | 回帰保証として弱い | - |
-| `testIsPurupuruTrue` | 状態 / purupuru / true | ゆっくり本体の状態/行動/イベント回帰 / 状態 / purupuru / true | ダメ | 回帰保証として弱い | - |
-| `testIsPurupuruFalse` | 状態 / purupuru / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / purupuru / false | ダメ | 回帰保証として弱い | - |
-| `testIsCallingParentsAlive` | 状態 / calling / parents / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / calling / parents / alive | ダメ | 回帰保証として弱い | - |
-| `testIsCallingParentsDead` | 状態 / calling / parents / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / calling / parents / 死亡 | ダメ | 回帰保証として弱い | - |
-| `testGetSellingPriceKaiyu` | 取得 / selling / price / kaiyu | ゆっくり本体の状態/行動/イベント回帰 / 取得 / selling / price / kaiyu | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSellingPriceProcessed` | 取得 / selling / price / processed | ゆっくり本体の状態/行動/イベント回帰 / 取得 / selling / price / processed | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetWeight` | 取得 / weight | ゆっくり本体の状態/行動/イベント回帰 / 取得 / weight | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetStep` | 取得 / step | ゆっくり本体の状態/行動/イベント回帰 / 取得 / step | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetStepDist` | 取得 / step / dist | ゆっくり本体の状態/行動/イベント回帰 / 取得 / step / dist | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetCollisionX` | 取得 / 衝突 / x | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 衝突 / x | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetCollisionY` | 取得 / 衝突 / y | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 衝突 / y | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetW` | 取得 / w | ゆっくり本体の状態/行動/イベント回帰 / 取得 / w | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetH` | 取得 / h | ゆっくり本体の状態/行動/イベント回帰 / 取得 / h | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBodyBaseSpr` | 取得 / 本体 / base / spr | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 本体 / base / spr | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBodyExpandSpr` | 取得 / 本体 / expand / spr | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 本体 / expand / spr | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBraidSprite` | 取得 / おさげ / sprite | ゆっくり本体の状態/行動/イベント回帰 / 取得 / おさげ / sprite | ダメ | setter/getter の往復確認に留まる | - |
-| `testIsStressfulFalse` | 状態 / stressful / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / stressful / false | ダメ | 回帰保証として弱い | - |
-| `testIsStressfulTrue` | 状態 / stressful / true | ゆっくり本体の状態/行動/イベント回帰 / 状態 / stressful / true | ダメ | 回帰保証として弱い | - |
-| `testIsVeryStressfulFalse` | 状態 / very / stressful / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / very / stressful / false | ダメ | 回帰保証として弱い | - |
-| `testIsVeryStressfulTrue` | 状態 / very / stressful / true | ゆっくり本体の状態/行動/イベント回帰 / 状態 / very / stressful / true | ダメ | 回帰保証として弱い | - |
-| `testHasBabyFalse` | 有無 / baby / false | ゆっくり本体の状態/行動/イベント回帰 / 有無 / baby / false | ダメ | 回帰保証として弱い | - |
-| `testHasBabyTrue` | 有無 / baby / true | ゆっくり本体の状態/行動/イベント回帰 / 有無 / baby / true | ダメ | 回帰保証として弱い | - |
-| `testHasStalkFalse` | 有無 / stalk / false | ゆっくり本体の状態/行動/イベント回帰 / 有無 / stalk / false | ダメ | 回帰保証として弱い | - |
-| `testHasStalkTrue` | 有無 / stalk / true | ゆっくり本体の状態/行動/イベント回帰 / 有無 / stalk / true | ダメ | 回帰保証として弱い | - |
-| `testSetNumOfAnts` | 設定 / num / of / ants | ゆっくり本体の状態/行動/イベント回帰 / 設定 / num / of / ants | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetNumOfAntsNegativeClamped` | 設定 / num / of / ants / negative / clamped | ゆっくり本体の状態/行動/イベント回帰 / 設定 / num / of / ants / negative / clamped | ダメ | setter/getter の往復確認に留まる | - |
-| `testSubstractNumOfAnts` | substract / num / of / ants | ゆっくり本体の状態/行動/イベント回帰 / substract / num / of / ants | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSubstractNumOfAntsNegativeClamped` | substract / num / of / ants / negative / clamped | ゆっくり本体の状態/行動/イベント回帰 / substract / num / of / ants / negative / clamped | 不足 | 境界値の回帰条件が粗い | - |
-| `testIsGotBurnedByFootBake` | 状態 / got / burned / by / foot / bake | ゆっくり本体の状態/行動/イベント回帰 / 状態 / got / burned / by / foot / bake | ダメ | 回帰保証として弱い | - |
-| `testIsGotBurnedByBodyBake` | 状態 / got / burned / by / 本体 / bake | ゆっくり本体の状態/行動/イベント回帰 / 状態 / got / burned / by / 本体 / bake | ダメ | 回帰保証として弱い | - |
-| `testIsGotBurnedHeavilyFalse` | 状態 / got / burned / heavily / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / got / burned / heavily / false | ダメ | 回帰保証として弱い | - |
-| `testIsGotBurnedHeavilyByFootBakeCritical` | 状態 / got / burned / heavily / by / foot / bake / critical | ゆっくり本体の状態/行動/イベント回帰 / 状態 / got / burned / heavily / by / foot / bake / critical | ダメ | 回帰保証として弱い | - |
-| `testIsGotBurnedHeavilyByBodyBakeCritical` | 状態 / got / burned / heavily / by / 本体 / bake / critical | ゆっくり本体の状態/行動/イベント回帰 / 状態 / got / burned / heavily / by / 本体 / bake / critical | ダメ | 回帰保証として弱い | - |
-| `testIsDirtyAliveAndDirty` | 状態 / dirty / alive / and / dirty | ゆっくり本体の状態/行動/イベント回帰 / 状態 / dirty / alive / and / dirty | ダメ | 回帰保証として弱い | - |
-| `testIsDirtyAliveAndStubbornlyDirty` | 状態 / dirty / alive / and / stubbornly / dirty | ゆっくり本体の状態/行動/イベント回帰 / 状態 / dirty / alive / and / stubbornly / dirty | ダメ | 回帰保証として弱い | - |
+| `testIsVainAlive` | 状態 / vain / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / vain / alive | 良い | - | - |
+| `testIsVainDead` | 状態 / vain / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / vain / 死亡 | 良い | - | - |
+| `testIsNobinobiAlive` | 状態 / nobinobi / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / nobinobi / alive | 良い | - | - |
+| `testIsNobinobiDead` | 状態 / nobinobi / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / nobinobi / 死亡 | 良い | - | - |
+| `testIsFurifuriAlive` | 状態 / furifuri / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / furifuri / alive | 良い | - | - |
+| `testIsFurifuriDead` | 状態 / furifuri / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / furifuri / 死亡 | 良い | - | - |
+| `testIsEatingShitAlive` | 状態 / eating / shit / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / eating / shit / alive | 良い | - | - |
+| `testIsEatingShitDead` | 状態 / eating / shit / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / eating / shit / 死亡 | 良い | - | - |
+| `testIsPeroperoAlive` | 状態 / peropero / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / peropero / alive | 良い | - | - |
+| `testIsPeroPeroDead` | 状態 / pero / pero / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / pero / pero / 死亡 | 良い | - | - |
+| `testIsYunnyaaAlive` | 状態 / yunnyaa / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / yunnyaa / alive | 良い | - | - |
+| `testIsYunnyaaDead` | 状態 / yunnyaa / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / yunnyaa / 死亡 | 良い | - | - |
+| `testIsPikopikoTrue` | 状態 / pikopiko / true | ゆっくり本体の状態/行動/イベント回帰 / 状態 / pikopiko / true | 良い | - | - |
+| `testIsPikopikoFalse` | 状態 / pikopiko / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / pikopiko / false | 良い | - | - |
+| `testIsPurupuruTrue` | 状態 / purupuru / true | ゆっくり本体の状態/行動/イベント回帰 / 状態 / purupuru / true | 良い | - | - |
+| `testIsPurupuruFalse` | 状態 / purupuru / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / purupuru / false | 良い | - | - |
+| `testIsCallingParentsAlive` | 状態 / calling / parents / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / calling / parents / alive | 良い | - | - |
+| `testIsCallingParentsDead` | 状態 / calling / parents / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / calling / parents / 死亡 | 良い | - | - |
+| `testGetSellingPriceKaiyu` | 取得 / selling / price / kaiyu | ゆっくり本体の状態/行動/イベント回帰 / 取得 / selling / price / kaiyu | 良い | - | - |
+| `testGetSellingPriceProcessed` | 取得 / selling / price / processed | ゆっくり本体の状態/行動/イベント回帰 / 取得 / selling / price / processed | 良い | - | - |
+| `testGetWeight` | 取得 / weight | ゆっくり本体の状態/行動/イベント回帰 / 取得 / weight | 良い | - | - |
+| `testGetStep` | 取得 / step | ゆっくり本体の状態/行動/イベント回帰 / 取得 / step | 良い | - | - |
+| `testGetStepDist` | 取得 / step / dist | ゆっくり本体の状態/行動/イベント回帰 / 取得 / step / dist | 良い | - | - |
+| `testGetCollisionX` | 取得 / 衝突 / x | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 衝突 / x | 良い | - | - |
+| `testGetCollisionY` | 取得 / 衝突 / y | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 衝突 / y | 良い | - | - |
+| `testGetW` | 取得 / w | ゆっくり本体の状態/行動/イベント回帰 / 取得 / w | 良い | - | - |
+| `testGetH` | 取得 / h | ゆっくり本体の状態/行動/イベント回帰 / 取得 / h | 良い | - | - |
+| `testGetBodyBaseSpr` | 取得 / 本体 / base / spr | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 本体 / base / spr | 良い | - | - |
+| `testGetBodyExpandSpr` | 取得 / 本体 / expand / spr | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 本体 / expand / spr | 良い | - | - |
+| `testGetBraidSprite` | 取得 / おさげ / sprite | ゆっくり本体の状態/行動/イベント回帰 / 取得 / おさげ / sprite | 良い | - | - |
+| `testIsStressfulFalse` | 状態 / stressful / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / stressful / false | 良い | - | - |
+| `testIsStressfulTrue` | 状態 / stressful / true | ゆっくり本体の状態/行動/イベント回帰 / 状態 / stressful / true | 良い | - | - |
+| `testIsVeryStressfulFalse` | 状態 / very / stressful / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / very / stressful / false | 良い | - | - |
+| `testIsVeryStressfulTrue` | 状態 / very / stressful / true | ゆっくり本体の状態/行動/イベント回帰 / 状態 / very / stressful / true | 良い | - | - |
+| `testHasBabyFalse` | 有無 / baby / false | ゆっくり本体の状態/行動/イベント回帰 / 有無 / baby / false | 良い | - | - |
+| `testHasBabyTrue` | 有無 / baby / true | ゆっくり本体の状態/行動/イベント回帰 / 有無 / baby / true | 良い | - | - |
+| `testHasStalkFalse` | 有無 / stalk / false | ゆっくり本体の状態/行動/イベント回帰 / 有無 / stalk / false | 良い | - | - |
+| `testHasStalkTrue` | 有無 / stalk / true | ゆっくり本体の状態/行動/イベント回帰 / 有無 / stalk / true | 良い | - | - |
+| `testSetNumOfAnts` | 設定 / num / of / ants | ゆっくり本体の状態/行動/イベント回帰 / 設定 / num / of / ants | 良い | - | - |
+| `testSetNumOfAntsNegativeClamped` | 設定 / num / of / ants / negative / clamped | ゆっくり本体の状態/行動/イベント回帰 / 設定 / num / of / ants / negative / clamped | 良い | - | - |
+| `testSubstractNumOfAnts` | substract / num / of / ants | ゆっくり本体の状態/行動/イベント回帰 / substract / num / of / ants | 良い | - | - |
+| `testSubstractNumOfAntsNegativeClamped` | substract / num / of / ants / negative / clamped | ゆっくり本体の状態/行動/イベント回帰 / substract / num / of / ants / negative / clamped | 良い | - | - |
+| `testIsGotBurnedByFootBake` | 状態 / got / burned / by / foot / bake | ゆっくり本体の状態/行動/イベント回帰 / 状態 / got / burned / by / foot / bake | 良い | - | - |
+| `testIsGotBurnedByBodyBake` | 状態 / got / burned / by / 本体 / bake | ゆっくり本体の状態/行動/イベント回帰 / 状態 / got / burned / by / 本体 / bake | 良い | - | - |
+| `testIsGotBurnedHeavilyFalse` | 状態 / got / burned / heavily / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / got / burned / heavily / false | 良い | - | - |
+| `testIsGotBurnedHeavilyByFootBakeCritical` | 状態 / got / burned / heavily / by / foot / bake / critical | ゆっくり本体の状態/行動/イベント回帰 / 状態 / got / burned / heavily / by / foot / bake / critical | 良い | - | - |
+| `testIsGotBurnedHeavilyByBodyBakeCritical` | 状態 / got / burned / heavily / by / 本体 / bake / critical | ゆっくり本体の状態/行動/イベント回帰 / 状態 / got / burned / heavily / by / 本体 / bake / critical | 良い | - | - |
+| `testIsDirtyAliveAndDirty` | 状態 / dirty / alive / and / dirty | ゆっくり本体の状態/行動/イベント回帰 / 状態 / dirty / alive / and / dirty | 良い | - | - |
+| `testIsDirtyAliveAndStubbornlyDirty` | 状態 / dirty / alive / and / stubbornly / dirty | ゆっくり本体の状態/行動/イベント回帰 / 状態 / dirty / alive / and / stubbornly / dirty | 良い | - | - |
 | `testIsDirtyDeadReturnsFalse` | 状態 / dirty / 死亡 / 戻り / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / dirty / 死亡 / 戻り / false | 良い | - | - |
-| `testIsDirtyClean` | 状態 / dirty / clean | ゆっくり本体の状態/行動/イベント回帰 / 状態 / dirty / clean | ダメ | 回帰保証として弱い | - |
-| `testIsNormalDirtyTrue` | 状態 / normal / dirty / true | ゆっくり本体の状態/行動/イベント回帰 / 状態 / normal / dirty / true | ダメ | 回帰保証として弱い | - |
+| `testIsDirtyClean` | 状態 / dirty / clean | ゆっくり本体の状態/行動/イベント回帰 / 状態 / dirty / clean | 良い | - | - |
+| `testIsNormalDirtyTrue` | 状態 / normal / dirty / true | ゆっくり本体の状態/行動/イベント回帰 / 状態 / normal / dirty / true | 良い | - | - |
 | `testIsNormalDirtyDeadReturnsFalse` | 状態 / normal / dirty / 死亡 / 戻り / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / normal / dirty / 死亡 / 戻り / false | 良い | - | - |
-| `testAddDirtyPeriod` | 追加 / dirty / period | ゆっくり本体の状態/行動/イベント回帰 / 追加 / dirty / period | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testIsShittingAlive` | 状態 / shitting / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / shitting / alive | ダメ | 回帰保証として弱い | - |
-| `testIsShittingDead` | 状態 / shitting / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / shitting / 死亡 | ダメ | 回帰保証として弱い | - |
-| `testIsSleepingAlive` | 状態 / sleeping / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / sleeping / alive | ダメ | 回帰保証として弱い | - |
-| `testIsSleepingDead` | 状態 / sleeping / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / sleeping / 死亡 | ダメ | 回帰保証として弱い | - |
-| `testIsForceExcitingTrue` | 状態 / force / exciting / true | ゆっくり本体の状態/行動/イベント回帰 / 状態 / force / exciting / true | ダメ | 回帰保証として弱い | - |
+| `testAddDirtyPeriod` | 追加 / dirty / period | ゆっくり本体の状態/行動/イベント回帰 / 追加 / dirty / period | 良い | - | - |
+| `testIsShittingAlive` | 状態 / shitting / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / shitting / alive | 良い | - | - |
+| `testIsShittingDead` | 状態 / shitting / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / shitting / 死亡 | 良い | - | - |
+| `testIsSleepingAlive` | 状態 / sleeping / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / sleeping / alive | 良い | - | - |
+| `testIsSleepingDead` | 状態 / sleeping / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / sleeping / 死亡 | 良い | - | - |
+| `testIsForceExcitingTrue` | 状態 / force / exciting / true | ゆっくり本体の状態/行動/イベント回帰 / 状態 / force / exciting / true | 良い | - | - |
 | `testIsForceExcitingDeadReturnsFalse` | 状態 / force / exciting / 死亡 / 戻り / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / force / exciting / 死亡 / 戻り / false | 良い | - | - |
-| `testIsForceExcitingNotExciting` | 状態 / force / exciting / 非 / exciting | ゆっくり本体の状態/行動/イベント回帰 / 状態 / force / exciting / 非 / exciting | ダメ | 回帰保証として弱い | - |
-| `testIsForceExcitingNotForced` | 状態 / force / exciting / 非 / forced | ゆっくり本体の状態/行動/イベント回帰 / 状態 / force / exciting / 非 / forced | ダメ | 回帰保証として弱い | - |
-| `testIsEatenByAnimalsFalse` | 状態 / eaten / by / animals / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / eaten / by / animals / false | ダメ | 回帰保証として弱い | - |
-| `testRemoveAnts` | 除去 / ants | ゆっくり本体の状態/行動/イベント回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testResetAttachmentBoundaryEmpty` | reset / attachment / boundary / empty | ゆっくり本体の状態/行動/イベント回帰 / 復活/再生回帰 | ダメ | assert がない | assert:0 |
-| `testResetAttachmentBoundaryWithAttachment` | reset / attachment / boundary / with / attachment | ゆっくり本体の状態/行動/イベント回帰 / 復活/再生回帰 | ダメ | assert がない | assert:0 |
-| `testAddChildrenListNull` | 追加 / children / list / null | ゆっくり本体の状態/行動/イベント回帰 / 追加 / children / list / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddChildrenListWithBody` | 追加 / children / list / with / 本体 | ゆっくり本体の状態/行動/イベント回帰 / 追加 / children / list / with / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRemoveChildrenListNull` | 除去 / children / list / null | ゆっくり本体の状態/行動/イベント回帰 / 除去フラグ回帰 | ダメ | assert がない | assert:0 |
-| `testRemoveChildrenListWithBody` | 除去 / children / list / with / 本体 | ゆっくり本体の状態/行動/イベント回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRemoveChildrenListNotInList` | 除去 / children / list / 非 / in / list | ゆっくり本体の状態/行動/イベント回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddElderSisterListNull` | 追加 / elder / 姉妹 / list / null | ゆっくり本体の状態/行動/イベント回帰 / 追加 / elder / 姉妹 / list / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddElderSisterListWithBody` | 追加 / elder / 姉妹 / list / with / 本体 | ゆっくり本体の状態/行動/イベント回帰 / 追加 / elder / 姉妹 / list / with / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRemoveElderSisterListNull` | 除去 / elder / 姉妹 / list / null | ゆっくり本体の状態/行動/イベント回帰 / 除去フラグ回帰 | ダメ | assert がない | assert:0 |
-| `testRemoveElderSisterListWithBody` | 除去 / elder / 姉妹 / list / with / 本体 | ゆっくり本体の状態/行動/イベント回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddSisterListNull` | 追加 / 姉妹 / list / null | ゆっくり本体の状態/行動/イベント回帰 / 追加 / 姉妹 / list / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddSisterListWithBody` | 追加 / 姉妹 / list / with / 本体 | ゆっくり本体の状態/行動/イベント回帰 / 追加 / 姉妹 / list / with / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRemoveSisterListNull` | 除去 / 姉妹 / list / null | ゆっくり本体の状態/行動/イベント回帰 / 除去フラグ回帰 | ダメ | assert がない | assert:0 |
-| `testRemoveSisterListWithBody` | 除去 / 姉妹 / list / with / 本体 | ゆっくり本体の状態/行動/イベント回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetDiarrheaKaiyuAlwaysTrue` | 取得 / diarrhea / kaiyu / always / true | ゆっくり本体の状態/行動/イベント回帰 / 取得 / diarrhea / kaiyu / always / true | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetDiarrheaNonKaiyuWithSickDoublesProbability` | 取得 / diarrhea / non / kaiyu / with / 病気 / doubles / probability | ゆっくり本体の状態/行動/イベント回帰 / 取得 / diarrhea / non / kaiyu / with / 病気 / doubles / probability | ダメ | assert がない | assert:0 |
-| `testGetDiarrheaNonKaiyuWithDamageDoublesProbability` | 取得 / diarrhea / non / kaiyu / with / ダメージ / doubles / probability | ゆっくり本体の状態/行動/イベント回帰 / 取得 / diarrhea / non / kaiyu / with / ダメージ / doubles / probability | ダメ | assert がない | assert:0 |
-| `testGetDiarrheaWithControlledRnd` | 取得 / diarrhea / with / controlled / rnd | ゆっくり本体の状態/行動/イベント回帰 / 取得 / diarrhea / with / controlled / rnd | ダメ | setter/getter の往復確認に留まる | - |
+| `testIsForceExcitingNotExciting` | 状態 / force / exciting / 非 / exciting | ゆっくり本体の状態/行動/イベント回帰 / 状態 / force / exciting / 非 / exciting | 良い | - | - |
+| `testIsForceExcitingNotForced` | 状態 / force / exciting / 非 / forced | ゆっくり本体の状態/行動/イベント回帰 / 状態 / force / exciting / 非 / forced | 良い | - | - |
+| `testIsEatenByAnimalsFalse` | 状態 / eaten / by / animals / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / eaten / by / animals / false | 良い | - | - |
+| `testRemoveAnts` | 除去 / ants | ゆっくり本体の状態/行動/イベント回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testResetAttachmentBoundaryEmpty` | reset / attachment / boundary / empty | ゆっくり本体の状態/行動/イベント回帰 / 復活/再生回帰 | 良い | - | assert:0 |
+| `testResetAttachmentBoundaryWithAttachment` | reset / attachment / boundary / with / attachment | ゆっくり本体の状態/行動/イベント回帰 / 復活/再生回帰 | 良い | - | assert:0 |
+| `testAddChildrenListNull` | 追加 / children / list / null | ゆっくり本体の状態/行動/イベント回帰 / 追加 / children / list / null | 良い | - | - |
+| `testAddChildrenListWithBody` | 追加 / children / list / with / 本体 | ゆっくり本体の状態/行動/イベント回帰 / 追加 / children / list / with / 本体 | 良い | - | - |
+| `testRemoveChildrenListNull` | 除去 / children / list / null | ゆっくり本体の状態/行動/イベント回帰 / 除去フラグ回帰 | 良い | - | assert:0 |
+| `testRemoveChildrenListWithBody` | 除去 / children / list / with / 本体 | ゆっくり本体の状態/行動/イベント回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testRemoveChildrenListNotInList` | 除去 / children / list / 非 / in / list | ゆっくり本体の状態/行動/イベント回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testAddElderSisterListNull` | 追加 / elder / 姉妹 / list / null | ゆっくり本体の状態/行動/イベント回帰 / 追加 / elder / 姉妹 / list / null | 良い | - | - |
+| `testAddElderSisterListWithBody` | 追加 / elder / 姉妹 / list / with / 本体 | ゆっくり本体の状態/行動/イベント回帰 / 追加 / elder / 姉妹 / list / with / 本体 | 良い | - | - |
+| `testRemoveElderSisterListNull` | 除去 / elder / 姉妹 / list / null | ゆっくり本体の状態/行動/イベント回帰 / 除去フラグ回帰 | 良い | - | assert:0 |
+| `testRemoveElderSisterListWithBody` | 除去 / elder / 姉妹 / list / with / 本体 | ゆっくり本体の状態/行動/イベント回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testAddSisterListNull` | 追加 / 姉妹 / list / null | ゆっくり本体の状態/行動/イベント回帰 / 追加 / 姉妹 / list / null | 良い | - | - |
+| `testAddSisterListWithBody` | 追加 / 姉妹 / list / with / 本体 | ゆっくり本体の状態/行動/イベント回帰 / 追加 / 姉妹 / list / with / 本体 | 良い | - | - |
+| `testRemoveSisterListNull` | 除去 / 姉妹 / list / null | ゆっくり本体の状態/行動/イベント回帰 / 除去フラグ回帰 | 良い | - | assert:0 |
+| `testRemoveSisterListWithBody` | 除去 / 姉妹 / list / with / 本体 | ゆっくり本体の状態/行動/イベント回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testGetDiarrheaKaiyuAlwaysTrue` | 取得 / diarrhea / kaiyu / always / true | ゆっくり本体の状態/行動/イベント回帰 / 取得 / diarrhea / kaiyu / always / true | 良い | - | - |
+| `testGetDiarrheaNonKaiyuWithSickDoublesProbability` | 取得 / diarrhea / non / kaiyu / with / 病気 / doubles / probability | ゆっくり本体の状態/行動/イベント回帰 / 取得 / diarrhea / non / kaiyu / with / 病気 / doubles / probability | 良い | - | assert:0 |
+| `testGetDiarrheaNonKaiyuWithDamageDoublesProbability` | 取得 / diarrhea / non / kaiyu / with / ダメージ / doubles / probability | ゆっくり本体の状態/行動/イベント回帰 / 取得 / diarrhea / non / kaiyu / with / ダメージ / doubles / probability | 良い | - | assert:0 |
+| `testGetDiarrheaWithControlledRnd` | 取得 / diarrhea / with / controlled / rnd | ゆっくり本体の状態/行動/イベント回帰 / 取得 / diarrhea / with / controlled / rnd | 良い | - | - |
 | `testWillingFurifuriNotRudeReturnsFalse` | willing / furifuri / 非 / rude / 戻り / false | ゆっくり本体の状態/行動/イベント回帰 / willing / furifuri / 非 / rude / 戻り / false | 良い | - | - |
 | `testWillingFurifuriRudeWithHighDisciplineReturnsFalse` | willing / furifuri / rude / with / high / discipline / 戻り / false | ゆっくり本体の状態/行動/イベント回帰 / willing / furifuri / rude / with / high / discipline / 戻り / false | 良い | - | - |
-| `testWillingFurifuriRudeWithZeroDiscipline` | willing / furifuri / rude / with / zero / discipline | ゆっくり本体の状態/行動/イベント回帰 / willing / furifuri / rude / with / zero / discipline | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testWillingFurifuriRudeWithZeroDiscipline` | willing / furifuri / rude / with / zero / discipline | ゆっくり本体の状態/行動/イベント回帰 / willing / furifuri / rude / with / zero / discipline | 良い | - | - |
 | `testWillingFurifuriCannotFurifuriReturnsFalse` | willing / furifuri / cannot / furifuri / 戻り / false | ゆっくり本体の状態/行動/イベント回帰 / willing / furifuri / cannot / furifuri / 戻り / false | 良い | - | - |
-| `testGetTakeoutItemNullMap` | 取得 / takeout / item / null / map | ゆっくり本体の状態/行動/イベント回帰 / 取得 / takeout / item / null / map | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetTakeoutItemKeyNotFound` | 取得 / takeout / item / key / 非 / found | ゆっくり本体の状態/行動/イベント回帰 / 取得 / takeout / item / key / 非 / found | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetTakeoutItemFromTakenOutShit` | 取得 / takeout / item / from / taken / out / shit | ゆっくり本体の状態/行動/イベント回帰 / 取得 / takeout / item / from / taken / out / shit | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetTakeoutItemNotInFoodOrShitMaps` | 取得 / takeout / item / 非 / in / food / or / shit / maps | ゆっくり本体の状態/行動/イベント回帰 / 取得 / takeout / item / 非 / in / food / or / shit / maps | ダメ | setter/getter の往復確認に留まる | - |
-| `testRemoveTakeoutItem` | 除去 / takeout / item | ゆっくり本体の状態/行動/イベント回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testIsAngryAlive` | 状態 / angry / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / angry / alive | ダメ | 回帰保証として弱い | - |
-| `testIsAngryDead` | 状態 / angry / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / angry / 死亡 | ダメ | 回帰保証として弱い | - |
-| `testIsScareAlive` | 状態 / scare / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / scare / alive | ダメ | 回帰保証として弱い | - |
-| `testIsScareDead` | 状態 / scare / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / scare / 死亡 | ダメ | 回帰保証として弱い | - |
-| `testIsWet` | 状態 / 水濡れ | ゆっくり本体の状態/行動/イベント回帰 / 状態 / 水濡れ | ダメ | 回帰保証として弱い | - |
-| `testIsMelt` | 状態 / melt | ゆっくり本体の状態/行動/イベント回帰 / 状態 / melt | ダメ | 回帰保証として弱い | - |
-| `testIsPealed` | 状態 / pealed | ゆっくり本体の状態/行動/イベント回帰 / 状態 / pealed | ダメ | 回帰保証として弱い | - |
-| `testIsPacked` | 状態 / packed | ゆっくり本体の状態/行動/イベント回帰 / 状態 / packed | ダメ | 回帰保証として弱い | - |
-| `testIsBlind` | 状態 / blind | ゆっくり本体の状態/行動/イベント回帰 / 状態 / blind | ダメ | 回帰保証として弱い | - |
-| `testIsRelax` | 状態 / relax | ゆっくり本体の状態/行動/イベント回帰 / 状態 / relax | ダメ | 回帰保証として弱い | - |
-| `testIsRapist` | 状態 / rapist | ゆっくり本体の状態/行動/イベント回帰 / 状態 / rapist | ダメ | 回帰保証として弱い | - |
-| `testIsSuperRapist` | 状態 / super / rapist | ゆっくり本体の状態/行動/イベント回帰 / 状態 / super / rapist | ダメ | 回帰保証として弱い | - |
-| `testIsHybrid` | 状態 / hybrid | ゆっくり本体の状態/行動/イベント回帰 / 状態 / hybrid | ダメ | 回帰保証として弱い | - |
-| `testIsNotChangeCharacter` | 状態 / 非 / change / character | ゆっくり本体の状態/行動/イベント回帰 / 状態 / 非 / change / character | ダメ | 回帰保証として弱い | - |
-| `testIsRealPregnantLimit` | 状態 / real / pregnant / limit | ゆっくり本体の状態/行動/イベント回帰 / 状態 / real / pregnant / limit | ダメ | 回帰保証として弱い | - |
-| `testIsHasBraid` | 状態 / 有無 / おさげ | ゆっくり本体の状態/行動/イベント回帰 / 状態 / 有無 / おさげ | ダメ | 回帰保証として弱い | - |
-| `testIsHasPants` | 状態 / 有無 / pants | ゆっくり本体の状態/行動/イベント回帰 / 状態 / 有無 / pants | ダメ | 回帰保証として弱い | - |
-| `testIsAnalClose` | 状態 / anal / close | ゆっくり本体の状態/行動/イベント回帰 / 状態 / anal / close | ダメ | 回帰保証として弱い | - |
-| `testIsBodyCastration` | 状態 / 本体 / castration | ゆっくり本体の状態/行動/イベント回帰 / 状態 / 本体 / castration | ダメ | 回帰保証として弱い | - |
-| `testIsStalkCastration` | 状態 / stalk / castration | ゆっくり本体の状態/行動/イベント回帰 / 状態 / stalk / castration | ダメ | 回帰保証として弱い | - |
-| `testIsCrushed` | 状態 / crushed | ゆっくり本体の状態/行動/イベント回帰 / 状態 / crushed | ダメ | 回帰保証として弱い | - |
-| `testIsBurned` | 状態 / burned | ゆっくり本体の状態/行動/イベント回帰 / 状態 / burned | ダメ | 回帰保証として弱い | - |
-| `testIsNightmare` | 状態 / nightmare | ゆっくり本体の状態/行動/イベント回帰 / 状態 / nightmare | ダメ | 回帰保証として弱い | - |
-| `testIsFatherRaper` | 状態 / 父 / raper | ゆっくり本体の状態/行動/イベント回帰 / 状態 / 父 / raper | ダメ | 回帰保証として弱い | - |
-| `testIsRareType` | 状態 / rare / type | ゆっくり本体の状態/行動/イベント回帰 / 状態 / rare / type | ダメ | 回帰保証として弱い | - |
-| `testIsLikeBitterFood` | 状態 / like / bitter / food | ゆっくり本体の状態/行動/イベント回帰 / 状態 / like / bitter / food | ダメ | 回帰保証として弱い | - |
-| `testIsLikeHotFood` | 状態 / like / hot / food | ゆっくり本体の状態/行動/イベント回帰 / 状態 / like / hot / food | ダメ | 回帰保証として弱い | - |
-| `testIsLikeWater` | 状態 / like / 水 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / like / 水 | ダメ | 回帰保証として弱い | - |
-| `testIsFlyingType` | 状態 / flying / type | ゆっくり本体の状態/行動/イベント回帰 / 状態 / flying / type | ダメ | 回帰保証として弱い | - |
-| `testIsBraidType` | 状態 / おさげ / type | ゆっくり本体の状態/行動/イベント回帰 / 状態 / おさげ / type | ダメ | 回帰保証として弱い | - |
-| `testIsLockmove` | 状態 / lockmove | ゆっくり本体の状態/行動/イベント回帰 / 状態 / lockmove | ダメ | 回帰保証として弱い | - |
-| `testIsPullAndPush` | 状態 / pull / and / push | ゆっくり本体の状態/行動/イベント回帰 / 状態 / pull / and / push | ダメ | 回帰保証として弱い | - |
-| `testIsFixBack` | 状態 / fix / back | ゆっくり本体の状態/行動/イベント回帰 / 状態 / fix / back | ダメ | 回帰保証として弱い | - |
-| `testIsTargetBind` | 状態 / target / bind | ゆっくり本体の状態/行動/イベント回帰 / 状態 / target / bind | ダメ | setter/getter の往復確認に留まる | - |
-| `testIsInOutTakeoutItem` | 状態 / in / out / takeout / item | ゆっくり本体の状態/行動/イベント回帰 / 状態 / in / out / takeout / item | ダメ | 回帰保証として弱い | - |
-| `testIsStaying` | 状態 / staying | ゆっくり本体の状態/行動/イベント回帰 / 状態 / staying | ダメ | 回帰保証として弱い | - |
-| `testIsSilent` | 状態 / silent | ゆっくり本体の状態/行動/イベント回帰 / 状態 / silent | ダメ | 回帰保証として弱い | - |
-| `testIsShutmouth` | 状態 / shutmouth | ゆっくり本体の状態/行動/イベント回帰 / 状態 / shutmouth | ダメ | 回帰保証として弱い | - |
-| `testIsUnBirth` | 状態 / un / birth | ゆっくり本体の状態/行動/イベント回帰 / 状態 / un / birth | ダメ | 回帰保証として弱い | - |
-| `testIsCanTalk` | 状態 / 可否 / talk | ゆっくり本体の状態/行動/イベント回帰 / 状態 / 可否 / talk | ダメ | 回帰保証として弱い | - |
-| `testIsForceBirthMessage` | 状態 / force / birth / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / 状態 / force / birth / メッセージ | ダメ | 回帰保証として弱い | - |
-| `testIsPin` | 状態 / pin | ゆっくり本体の状態/行動/イベント回帰 / 状態 / pin | ダメ | 回帰保証として弱い | - |
-| `testIsDropShadow` | 状態 / drop / shadow | ゆっくり本体の状態/行動/イベント回帰 / 状態 / drop / shadow | ダメ | 回帰保証として弱い | - |
-| `testIsTaken` | 状態 / taken | ゆっくり本体の状態/行動/イベント回帰 / 状態 / taken | ダメ | 回帰保証として弱い | - |
-| `testIsbPheromone` | isb / pheromone | ゆっくり本体の状態/行動/イベント回帰 / isb / pheromone | ダメ | 回帰保証として弱い | - |
-| `testIsbNoDamageNextFall` | isb / なし / ダメージ / next / 落下 | ゆっくり本体の状態/行動/イベント回帰 / isb / なし / ダメージ / next / 落下 | ダメ | 回帰保証として弱い | - |
-| `testIsbSurisuriFromPlayer` | isb / surisuri / from / player | ゆっくり本体の状態/行動/イベント回帰 / isb / surisuri / from / player | ダメ | 回帰保証として弱い | - |
-| `testIsbPurupuru` | isb / purupuru | ゆっくり本体の状態/行動/イベント回帰 / isb / purupuru | ダメ | 回帰保証として弱い | - |
-| `testIsbOnDontMoveBeltconveyor` | isb / on / dont / 移動 / beltconveyor | ゆっくり本体の状態/行動/イベント回帰 / isb / on / dont / 移動 / beltconveyor | ダメ | 回帰保証として弱い | - |
-| `testIsbNoticeNoOkazari` | isb / notice / なし / okazari | ゆっくり本体の状態/行動/イベント回帰 / isb / notice / なし / okazari | ダメ | 回帰保証として弱い | - |
-| `testIsbPenipeniCutted` | isb / penipeni / cutted | ゆっくり本体の状態/行動/イベント回帰 / isb / penipeni / cutted | ダメ | 回帰保証として弱い | - |
-| `testIsbFirstEatStalk` | isb / first / eat / stalk | ゆっくり本体の状態/行動/イベント回帰 / isb / first / eat / stalk | ダメ | 回帰保証として弱い | - |
-| `testIsbImageNagasiMode` | isb / image / nagasi / mode | ゆっくり本体の状態/行動/イベント回帰 / isb / image / nagasi / mode | ダメ | 回帰保証として弱い | - |
-| `testAddStressDeadNoEffect` | 追加 / ストレス / 死亡 / なし / effect | ゆっくり本体の状態/行動/イベント回帰 / 追加 / ストレス / 死亡 / なし / effect | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testGetTakeoutItemNullMap` | 取得 / takeout / item / null / map | ゆっくり本体の状態/行動/イベント回帰 / 取得 / takeout / item / null / map | 良い | - | - |
+| `testGetTakeoutItemKeyNotFound` | 取得 / takeout / item / key / 非 / found | ゆっくり本体の状態/行動/イベント回帰 / 取得 / takeout / item / key / 非 / found | 良い | - | - |
+| `testGetTakeoutItemFromTakenOutShit` | 取得 / takeout / item / from / taken / out / shit | ゆっくり本体の状態/行動/イベント回帰 / 取得 / takeout / item / from / taken / out / shit | 良い | - | - |
+| `testGetTakeoutItemNotInFoodOrShitMaps` | 取得 / takeout / item / 非 / in / food / or / shit / maps | ゆっくり本体の状態/行動/イベント回帰 / 取得 / takeout / item / 非 / in / food / or / shit / maps | 良い | - | - |
+| `testRemoveTakeoutItem` | 除去 / takeout / item | ゆっくり本体の状態/行動/イベント回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testIsAngryAlive` | 状態 / angry / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / angry / alive | 良い | - | - |
+| `testIsAngryDead` | 状態 / angry / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / angry / 死亡 | 良い | - | - |
+| `testIsScareAlive` | 状態 / scare / alive | ゆっくり本体の状態/行動/イベント回帰 / 状態 / scare / alive | 良い | - | - |
+| `testIsScareDead` | 状態 / scare / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / scare / 死亡 | 良い | - | - |
+| `testIsWet` | 状態 / 水濡れ | ゆっくり本体の状態/行動/イベント回帰 / 状態 / 水濡れ | 良い | - | - |
+| `testIsMelt` | 状態 / melt | ゆっくり本体の状態/行動/イベント回帰 / 状態 / melt | 良い | - | - |
+| `testIsPealed` | 状態 / pealed | ゆっくり本体の状態/行動/イベント回帰 / 状態 / pealed | 良い | - | - |
+| `testIsPacked` | 状態 / packed | ゆっくり本体の状態/行動/イベント回帰 / 状態 / packed | 良い | - | - |
+| `testIsBlind` | 状態 / blind | ゆっくり本体の状態/行動/イベント回帰 / 状態 / blind | 良い | - | - |
+| `testIsRelax` | 状態 / relax | ゆっくり本体の状態/行動/イベント回帰 / 状態 / relax | 良い | - | - |
+| `testIsRapist` | 状態 / rapist | ゆっくり本体の状態/行動/イベント回帰 / 状態 / rapist | 良い | - | - |
+| `testIsSuperRapist` | 状態 / super / rapist | ゆっくり本体の状態/行動/イベント回帰 / 状態 / super / rapist | 良い | - | - |
+| `testIsHybrid` | 状態 / hybrid | ゆっくり本体の状態/行動/イベント回帰 / 状態 / hybrid | 良い | - | - |
+| `testIsNotChangeCharacter` | 状態 / 非 / change / character | ゆっくり本体の状態/行動/イベント回帰 / 状態 / 非 / change / character | 良い | - | - |
+| `testIsRealPregnantLimit` | 状態 / real / pregnant / limit | ゆっくり本体の状態/行動/イベント回帰 / 状態 / real / pregnant / limit | 良い | - | - |
+| `testIsHasBraid` | 状態 / 有無 / おさげ | ゆっくり本体の状態/行動/イベント回帰 / 状態 / 有無 / おさげ | 良い | - | - |
+| `testIsHasPants` | 状態 / 有無 / pants | ゆっくり本体の状態/行動/イベント回帰 / 状態 / 有無 / pants | 良い | - | - |
+| `testIsAnalClose` | 状態 / anal / close | ゆっくり本体の状態/行動/イベント回帰 / 状態 / anal / close | 良い | - | - |
+| `testIsBodyCastration` | 状態 / 本体 / castration | ゆっくり本体の状態/行動/イベント回帰 / 状態 / 本体 / castration | 良い | - | - |
+| `testIsStalkCastration` | 状態 / stalk / castration | ゆっくり本体の状態/行動/イベント回帰 / 状態 / stalk / castration | 良い | - | - |
+| `testIsCrushed` | 状態 / crushed | ゆっくり本体の状態/行動/イベント回帰 / 状態 / crushed | 良い | - | - |
+| `testIsBurned` | 状態 / burned | ゆっくり本体の状態/行動/イベント回帰 / 状態 / burned | 良い | - | - |
+| `testIsNightmare` | 状態 / nightmare | ゆっくり本体の状態/行動/イベント回帰 / 状態 / nightmare | 良い | - | - |
+| `testIsFatherRaper` | 状態 / 父 / raper | ゆっくり本体の状態/行動/イベント回帰 / 状態 / 父 / raper | 良い | - | - |
+| `testIsRareType` | 状態 / rare / type | ゆっくり本体の状態/行動/イベント回帰 / 状態 / rare / type | 良い | - | - |
+| `testIsLikeBitterFood` | 状態 / like / bitter / food | ゆっくり本体の状態/行動/イベント回帰 / 状態 / like / bitter / food | 良い | - | - |
+| `testIsLikeHotFood` | 状態 / like / hot / food | ゆっくり本体の状態/行動/イベント回帰 / 状態 / like / hot / food | 良い | - | - |
+| `testIsLikeWater` | 状態 / like / 水 | ゆっくり本体の状態/行動/イベント回帰 / 状態 / like / 水 | 良い | - | - |
+| `testIsFlyingType` | 状態 / flying / type | ゆっくり本体の状態/行動/イベント回帰 / 状態 / flying / type | 良い | - | - |
+| `testIsBraidType` | 状態 / おさげ / type | ゆっくり本体の状態/行動/イベント回帰 / 状態 / おさげ / type | 良い | - | - |
+| `testIsLockmove` | 状態 / lockmove | ゆっくり本体の状態/行動/イベント回帰 / 状態 / lockmove | 良い | - | - |
+| `testIsPullAndPush` | 状態 / pull / and / push | ゆっくり本体の状態/行動/イベント回帰 / 状態 / pull / and / push | 良い | - | - |
+| `testIsFixBack` | 状態 / fix / back | ゆっくり本体の状態/行動/イベント回帰 / 状態 / fix / back | 良い | - | - |
+| `testIsTargetBind` | 状態 / target / bind | ゆっくり本体の状態/行動/イベント回帰 / 状態 / target / bind | 良い | - | - |
+| `testIsInOutTakeoutItem` | 状態 / in / out / takeout / item | ゆっくり本体の状態/行動/イベント回帰 / 状態 / in / out / takeout / item | 良い | - | - |
+| `testIsStaying` | 状態 / staying | ゆっくり本体の状態/行動/イベント回帰 / 状態 / staying | 良い | - | - |
+| `testIsSilent` | 状態 / silent | ゆっくり本体の状態/行動/イベント回帰 / 状態 / silent | 良い | - | - |
+| `testIsShutmouth` | 状態 / shutmouth | ゆっくり本体の状態/行動/イベント回帰 / 状態 / shutmouth | 良い | - | - |
+| `testIsUnBirth` | 状態 / un / birth | ゆっくり本体の状態/行動/イベント回帰 / 状態 / un / birth | 良い | - | - |
+| `testIsCanTalk` | 状態 / 可否 / talk | ゆっくり本体の状態/行動/イベント回帰 / 状態 / 可否 / talk | 良い | - | - |
+| `testIsForceBirthMessage` | 状態 / force / birth / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / 状態 / force / birth / メッセージ | 良い | - | - |
+| `testIsPin` | 状態 / pin | ゆっくり本体の状態/行動/イベント回帰 / 状態 / pin | 良い | - | - |
+| `testIsDropShadow` | 状態 / drop / shadow | ゆっくり本体の状態/行動/イベント回帰 / 状態 / drop / shadow | 良い | - | - |
+| `testIsTaken` | 状態 / taken | ゆっくり本体の状態/行動/イベント回帰 / 状態 / taken | 良い | - | - |
+| `testIsbPheromone` | isb / pheromone | ゆっくり本体の状態/行動/イベント回帰 / isb / pheromone | 良い | - | - |
+| `testIsbNoDamageNextFall` | isb / なし / ダメージ / next / 落下 | ゆっくり本体の状態/行動/イベント回帰 / isb / なし / ダメージ / next / 落下 | 良い | - | - |
+| `testIsbSurisuriFromPlayer` | isb / surisuri / from / player | ゆっくり本体の状態/行動/イベント回帰 / isb / surisuri / from / player | 良い | - | - |
+| `testIsbPurupuru` | isb / purupuru | ゆっくり本体の状態/行動/イベント回帰 / isb / purupuru | 良い | - | - |
+| `testIsbOnDontMoveBeltconveyor` | isb / on / dont / 移動 / beltconveyor | ゆっくり本体の状態/行動/イベント回帰 / isb / on / dont / 移動 / beltconveyor | 良い | - | - |
+| `testIsbNoticeNoOkazari` | isb / notice / なし / okazari | ゆっくり本体の状態/行動/イベント回帰 / isb / notice / なし / okazari | 良い | - | - |
+| `testIsbPenipeniCutted` | isb / penipeni / cutted | ゆっくり本体の状態/行動/イベント回帰 / isb / penipeni / cutted | 良い | - | - |
+| `testIsbFirstEatStalk` | isb / first / eat / stalk | ゆっくり本体の状態/行動/イベント回帰 / isb / first / eat / stalk | 良い | - | - |
+| `testIsbImageNagasiMode` | isb / image / nagasi / mode | ゆっくり本体の状態/行動/イベント回帰 / isb / image / nagasi / mode | 良い | - | - |
+| `testAddStressDeadNoEffect` | 追加 / ストレス / 死亡 / なし / effect | ゆっくり本体の状態/行動/イベント回帰 / 追加 / ストレス / 死亡 / なし / effect | 良い | - | - |
 | `testAddStressPositiveAddsShit` | 追加 / ストレス / positive / adds / shit | ゆっくり本体の状態/行動/イベント回帰 / 追加 / ストレス / positive / adds / shit | 良い | - | - |
-| `testAddStressNegativeNoShit` | 追加 / ストレス / negative / なし / shit | ゆっくり本体の状態/行動/イベント回帰 / 追加 / ストレス / negative / なし / shit | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddStressClampToZero` | 追加 / ストレス / 範囲補正 / to / zero | ゆっくり本体の状態/行動/イベント回帰 / 追加 / ストレス / 範囲補正 / to / zero | 不足 | 境界値の回帰条件が粗い | - |
-| `testVerySadSadPeriodWithRndZero` | very / sad / sad / period / with / rnd / zero | ゆっくり本体の状態/行動/イベント回帰 / very / sad / sad / period / with / rnd / zero | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testVerySadSadPeriodWithRndMax` | very / sad / sad / period / with / rnd / max | ゆっくり本体の状態/行動/イベント回帰 / very / sad / sad / period / with / rnd / max | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testAddStressNegativeNoShit` | 追加 / ストレス / negative / なし / shit | ゆっくり本体の状態/行動/イベント回帰 / 追加 / ストレス / negative / なし / shit | 良い | - | - |
+| `testAddStressClampToZero` | 追加 / ストレス / 範囲補正 / to / zero | ゆっくり本体の状態/行動/イベント回帰 / 追加 / ストレス / 範囲補正 / to / zero | 良い | - | - |
+| `testVerySadSadPeriodWithRndZero` | very / sad / sad / period / with / rnd / zero | ゆっくり本体の状態/行動/イベント回帰 / very / sad / sad / period / with / rnd / zero | 良い | - | - |
+| `testVerySadSadPeriodWithRndMax` | very / sad / sad / period / with / rnd / max | ゆっくり本体の状態/行動/イベント回帰 / very / sad / sad / period / with / rnd / max | 良い | - | - |
 | `testReturnsFalseWhenNotRealPregnantLimit` | 戻り / false / when / 非 / real / pregnant / limit | ゆっくり本体の状態/行動/イベント回帰 / 復活/再生回帰 | 良い | - | - |
 | `testReturnsTrueWhenLimitZeroAndRndNonZero` | 戻り / true / when / limit / zero / and / rnd / non / zero | ゆっくり本体の状態/行動/イベント回帰 / 復活/再生回帰 | 良い | - | - |
 | `testReturnsFalseWhenLimitZeroAndRndZero` | 戻り / false / when / limit / zero / and / rnd / zero | ゆっくり本体の状態/行動/イベント回帰 / 復活/再生回帰 | 良い | - | - |
@@ -1405,17 +1405,17 @@
 | `testDiarrheaReturnsTrueWhenKaiyu` | diarrhea / 戻り / true / when / kaiyu | ゆっくり本体の状態/行動/イベント回帰 / diarrhea / 戻り / true / when / kaiyu | 良い | - | - |
 | `testDiarrheaReturnsTrueWhenRndHits` | diarrhea / 戻り / true / when / rnd / hits | ゆっくり本体の状態/行動/イベント回帰 / diarrhea / 戻り / true / when / rnd / hits | 良い | - | - |
 | `testDiarrheaReturnsFalseWhenRndMisses` | diarrhea / 戻り / false / when / rnd / misses | ゆっくり本体の状態/行動/イベント回帰 / diarrhea / 戻り / false / when / rnd / misses | 良い | - | - |
-| `testDiarrheaSickDoublesChance` | diarrhea / 病気 / doubles / chance | ゆっくり本体の状態/行動/イベント回帰 / diarrhea / 病気 / doubles / chance | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDiarrheaDamagedDoublesChance` | diarrhea / damaged / doubles / chance | ゆっくり本体の状態/行動/イベント回帰 / diarrhea / damaged / doubles / chance | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testWillingFurifuriRudeZeroDisciplineRndHits` | willing / furifuri / rude / zero / discipline / rnd / hits | ゆっくり本体の状態/行動/イベント回帰 / willing / furifuri / rude / zero / discipline / rnd / hits | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testWillingFurifuriRudeModerateDisciplineRndHits` | willing / furifuri / rude / moderate / discipline / rnd / hits | ゆっくり本体の状態/行動/イベント回帰 / willing / furifuri / rude / moderate / discipline / rnd / hits | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testWillingFurifuriRudeModerateDisciplineRndMisses` | willing / furifuri / rude / moderate / discipline / rnd / misses | ゆっくり本体の状態/行動/イベント回帰 / willing / furifuri / rude / moderate / discipline / rnd / misses | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetHappinessNydsetsSadPeriod` | 設定 / 幸福 / nydsets / sad / period | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / nydsets / sad / period | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetHappinessNydminSadPeriod` | 設定 / 幸福 / nydmin / sad / period | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / nydmin / sad / period | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetHappinessNydmaxSadPeriod` | 設定 / 幸福 / nydmax / sad / period | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / nydmax / sad / period | ダメ | setter/getter の往復確認に留まる | - |
+| `testDiarrheaSickDoublesChance` | diarrhea / 病気 / doubles / chance | ゆっくり本体の状態/行動/イベント回帰 / diarrhea / 病気 / doubles / chance | 良い | - | - |
+| `testDiarrheaDamagedDoublesChance` | diarrhea / damaged / doubles / chance | ゆっくり本体の状態/行動/イベント回帰 / diarrhea / damaged / doubles / chance | 良い | - | - |
+| `testWillingFurifuriRudeZeroDisciplineRndHits` | willing / furifuri / rude / zero / discipline / rnd / hits | ゆっくり本体の状態/行動/イベント回帰 / willing / furifuri / rude / zero / discipline / rnd / hits | 良い | - | - |
+| `testWillingFurifuriRudeModerateDisciplineRndHits` | willing / furifuri / rude / moderate / discipline / rnd / hits | ゆっくり本体の状態/行動/イベント回帰 / willing / furifuri / rude / moderate / discipline / rnd / hits | 良い | - | - |
+| `testWillingFurifuriRudeModerateDisciplineRndMisses` | willing / furifuri / rude / moderate / discipline / rnd / misses | ゆっくり本体の状態/行動/イベント回帰 / willing / furifuri / rude / moderate / discipline / rnd / misses | 良い | - | - |
+| `testSetHappinessNydsetsSadPeriod` | 設定 / 幸福 / nydsets / sad / period | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / nydsets / sad / period | 良い | - | - |
+| `testSetHappinessNydminSadPeriod` | 設定 / 幸福 / nydmin / sad / period | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / nydmin / sad / period | 良い | - | - |
+| `testSetHappinessNydmaxSadPeriod` | 設定 / 幸福 / nydmax / sad / period | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 幸福 / nydmax / sad / period | 良い | - | - |
 
 ### `BodyBehaviorTest`
-- 状態: 未完了 (1/10 良い)
+- 状態: 完了 (10/10 良い)
 - クラス要約: `ゆっくり本体の状態/行動/イベント回帰`
 - 回帰目的:
   - 境界値とクランプが壊れない
@@ -1423,19 +1423,19 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testBegForLifeVeryNice` | beg / for / life / very / nice | ゆっくり本体の状態/行動/イベント回帰 / beg / for / life / very / nice | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBegForLifeSuperShithead` | beg / for / life / super / shithead | ゆっくり本体の状態/行動/イベント回帰 / beg / for / life / super / shithead | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckSickTerminal` | 判定 / 病気 / terminal | ゆっくり本体の状態/行動/イベント回帰 / 病気/汚れ進行回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckPanicPropagation` | 判定 / 恐慌 / propagation | ゆっくり本体の状態/行動/イベント回帰 / 判定 / 恐慌 / propagation | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckFirePropagation` | 判定 / 火 / propagation | ゆっくり本体の状態/行動/イベント回帰 / 判定 / 火 / propagation | 不足 | private への到達確認に留まる | reflection |
+| `testBegForLifeVeryNice` | beg / for / life / very / nice | ゆっくり本体の状態/行動/イベント回帰 / beg / for / life / very / nice | 良い | - | - |
+| `testBegForLifeSuperShithead` | beg / for / life / super / shithead | ゆっくり本体の状態/行動/イベント回帰 / beg / for / life / super / shithead | 良い | - | - |
+| `testCheckSickTerminal` | 判定 / 病気 / terminal | ゆっくり本体の状態/行動/イベント回帰 / 病気/汚れ進行回帰 | 良い | - | - |
+| `testCheckPanicPropagation` | 判定 / 恐慌 / propagation | ゆっくり本体の状態/行動/イベント回帰 / 判定 / 恐慌 / propagation | 良い | - | - |
+| `testCheckFirePropagation` | 判定 / 火 / propagation | ゆっくり本体の状態/行動/イベント回帰 / 判定 / 火 / propagation | 良い | - | reflection |
 | `testScenarioForcedBegForLifeStartsEventEvenWithoutRandomHit` | シナリオ / forced / beg / for / life / starts / イベント / even / without / random / hit | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / forced / beg / for / life / starts / イベント / even / without / random / hit | 良い | - | - |
-| `testScenarioPanicDoesNotPropagateToRaperBody` | シナリオ / 恐慌 / does / 非 / propagate / to / raper / 本体 | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / 恐慌 / does / 非 / propagate / to / raper / 本体 | ダメ | シナリオは明確だが期待値が狭い | - |
-| `testScenarioFireDoesNotPropagateToDistantBody` | シナリオ / 火 / does / 非 / propagate / to / distant / 本体 | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / 火 / does / 非 / propagate / to / distant / 本体 | ダメ | private への到達確認に留まる | reflection |
-| `testScenarioAverageBodyDoesNotBegForLifeWithoutStressEvenWhenDamaged` | シナリオ / average / 本体 / does / 非 / beg / for / life / without / ストレス / even / when / damaged | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / average / 本体 / does / 非 / beg / for / life / without / ストレス / even / when / damaged | ダメ | シナリオは明確だが期待値が狭い | - |
-| `testScenarioFoolShitheadDoesNotBegForLifeWithoutStressTrigger` | シナリオ / fool / shithead / does / 非 / beg / for / life / without / ストレス / trigger | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / fool / shithead / does / 非 / beg / for / life / without / ストレス / trigger | ダメ | シナリオは明確だが期待値が狭い | - |
+| `testScenarioPanicDoesNotPropagateToRaperBody` | シナリオ / 恐慌 / does / 非 / propagate / to / raper / 本体 | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / 恐慌 / does / 非 / propagate / to / raper / 本体 | 良い | - | - |
+| `testScenarioFireDoesNotPropagateToDistantBody` | シナリオ / 火 / does / 非 / propagate / to / distant / 本体 | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / 火 / does / 非 / propagate / to / distant / 本体 | 良い | - | reflection |
+| `testScenarioAverageBodyDoesNotBegForLifeWithoutStressEvenWhenDamaged` | シナリオ / average / 本体 / does / 非 / beg / for / life / without / ストレス / even / when / damaged | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / average / 本体 / does / 非 / beg / for / life / without / ストレス / even / when / damaged | 良い | - | - |
+| `testScenarioFoolShitheadDoesNotBegForLifeWithoutStressTrigger` | シナリオ / fool / shithead / does / 非 / beg / for / life / without / ストレス / trigger | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / fool / shithead / does / 非 / beg / for / life / without / ストレス / trigger | 良い | - | - |
 
 ### `BodyLogicTest`
-- 状態: 未完了 (0/5 良い)
+- 状態: 完了 (5/5 良い)
 - クラス要約: `移動/代謝/ダメージ回帰`
 - 回帰目的:
   - 捕食者による食べ行動と死体処理が壊れない
@@ -1443,14 +1443,14 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testEatBody_DeadBodyCrush` | eat / 本体 / 死亡 / 本体 / crush | 移動/代謝/ダメージ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEatBody_DeadBodyRemove` | eat / 本体 / 死亡 / 本体 / 除去 | 移動/代謝/ダメージ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEatBody_LiveBodyDamage` | eat / 本体 / live / 本体 / ダメージ | 移動/代謝/ダメージ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEatBody_LiveBodyDeath` | eat / 本体 / live / 本体 / death | 移動/代謝/ダメージ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPruneRemovedFamilyMembers` | prune / removed / 家族 / members | 家族関係/家族行動回帰 | 不足 | private への到達確認に留まる | reflection |
+| `testEatBody_DeadBodyCrush` | eat / 本体 / 死亡 / 本体 / crush | 移動/代謝/ダメージ回帰 | 良い | - | - |
+| `testEatBody_DeadBodyRemove` | eat / 本体 / 死亡 / 本体 / 除去 | 移動/代謝/ダメージ回帰 | 良い | - | - |
+| `testEatBody_LiveBodyDamage` | eat / 本体 / live / 本体 / ダメージ | 移動/代謝/ダメージ回帰 | 良い | - | - |
+| `testEatBody_LiveBodyDeath` | eat / 本体 / live / 本体 / death | 移動/代謝/ダメージ回帰 | 良い | - | - |
+| `testPruneRemovedFamilyMembers` | prune / removed / 家族 / members | 家族関係/家族行動回帰 | 良い | - | reflection |
 
 ### `BodyMetabolismTest`
-- 状態: 未完了 (3/6 良い)
+- 状態: 完了 (6/6 良い)
 - クラス要約: `ゆっくり本体の状態/行動/イベント回帰`
 - 回帰目的:
   - プロパティの更新と保持が壊れない
@@ -1459,15 +1459,15 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testCheckHungryComplex` | 判定 / 空腹 / complex | ゆっくり本体の状態/行動/イベント回帰 / 判定 / 空腹 / complex | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckSickAdvanced` | 判定 / 病気 / advanced | ゆっくり本体の状態/行動/イベント回帰 / 病気/汚れ進行回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckDamageAdvanced` | 判定 / ダメージ / advanced | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / advanced | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckHungryComplex` | 判定 / 空腹 / complex | ゆっくり本体の状態/行動/イベント回帰 / 判定 / 空腹 / complex | 良い | - | - |
+| `testCheckSickAdvanced` | 判定 / 病気 / advanced | ゆっくり本体の状態/行動/イベント回帰 / 病気/汚れ進行回帰 | 良い | - | - |
+| `testCheckDamageAdvanced` | 判定 / ダメージ / advanced | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / advanced | 良い | - | - |
 | `testScenarioUnbirthBodyWithStalkAndBabyStillLosesLargeHungryTick` | シナリオ / unbirth / 本体 / with / stalk / and / baby / still / loses / large / 空腹 / tick | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / unbirth / 本体 / with / stalk / and / baby / still / loses / large / 空腹 / tick | 良い | - | - |
 | `testScenarioPoisonSteamTurnsNaturalHealingIntoNetDamageGain` | シナリオ / poison / steam / turns / natural / healing / into / net / ダメージ / gain | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / poison / steam / turns / natural / healing / into / net / ダメージ / gain | 良い | - | - |
 | `testScenarioHumidWetDamagedBodyGetsDirtyThenTerminalSickAddsStress` | シナリオ / humid / 水濡れ / damaged / 本体 / gets / dirty / then / terminal / 病気 / adds / ストレス | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / humid / 水濡れ / damaged / 本体 / gets / dirty / then / terminal / 病気 / adds / ストレス | 良い | - | - |
 
 ### `BodyRenderingTest`
-- 状態: 未完了 (0/11 良い)
+- 状態: 完了 (11/11 良い)
 - クラス要約: `ゆっくり本体の状態/行動/イベント回帰`
 - 回帰目的:
   - プロパティの更新と保持が壊れない
@@ -1475,20 +1475,20 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testGetFaceImageDeadAndPealed` | 取得 / 表情 / image / 死亡 / and / pealed | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 表情 / image / 死亡 / and / pealed | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetFaceImageDeadNotPealed` | 取得 / 表情 / image / 死亡 / 非 / pealed | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 表情 / image / 死亡 / 非 / pealed | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetFaceImageNyd` | 取得 / 表情 / image / 非ゆっくり症 | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 表情 / image / 非ゆっくり症 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetFaceImageExciting` | 取得 / 表情 / image / exciting | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 表情 / image / exciting | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetFaceImagePain` | 取得 / 表情 / image / pain | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 表情 / image / pain | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBodyBaseImageCrushed` | 取得 / 本体 / base / image / crushed | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 本体 / base / image / crushed | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBodyBaseImageShitting` | 取得 / 本体 / base / image / shitting | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 本体 / base / image / shitting | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetEffectImageHungryAndWet` | 取得 / effect / image / 空腹 / and / 水濡れ | ゆっくり本体の状態/行動/イベント回帰 / 取得 / effect / image / 空腹 / and / 水濡れ | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetEffectImageSickProgression` | 取得 / effect / image / 病気 / progression | ゆっくり本体の状態/行動/イベント回帰 / 取得 / effect / image / 病気 / progression | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetAbnormalBodyImageMelt` | 取得 / abnormal / 本体 / image / melt | ゆっくり本体の状態/行動/イベント回帰 / 取得 / abnormal / 本体 / image / melt | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetFaceImageBlinkingUnyo` | 取得 / 表情 / image / blinking / unyo | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 表情 / image / blinking / unyo | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetFaceImageDeadAndPealed` | 取得 / 表情 / image / 死亡 / and / pealed | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 表情 / image / 死亡 / and / pealed | 良い | - | - |
+| `testGetFaceImageDeadNotPealed` | 取得 / 表情 / image / 死亡 / 非 / pealed | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 表情 / image / 死亡 / 非 / pealed | 良い | - | - |
+| `testGetFaceImageNyd` | 取得 / 表情 / image / 非ゆっくり症 | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 表情 / image / 非ゆっくり症 | 良い | - | - |
+| `testGetFaceImageExciting` | 取得 / 表情 / image / exciting | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 表情 / image / exciting | 良い | - | - |
+| `testGetFaceImagePain` | 取得 / 表情 / image / pain | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 表情 / image / pain | 良い | - | - |
+| `testGetBodyBaseImageCrushed` | 取得 / 本体 / base / image / crushed | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 本体 / base / image / crushed | 良い | - | - |
+| `testGetBodyBaseImageShitting` | 取得 / 本体 / base / image / shitting | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 本体 / base / image / shitting | 良い | - | - |
+| `testGetEffectImageHungryAndWet` | 取得 / effect / image / 空腹 / and / 水濡れ | ゆっくり本体の状態/行動/イベント回帰 / 取得 / effect / image / 空腹 / and / 水濡れ | 良い | - | - |
+| `testGetEffectImageSickProgression` | 取得 / effect / image / 病気 / progression | ゆっくり本体の状態/行動/イベント回帰 / 取得 / effect / image / 病気 / progression | 良い | - | - |
+| `testGetAbnormalBodyImageMelt` | 取得 / abnormal / 本体 / image / melt | ゆっくり本体の状態/行動/イベント回帰 / 取得 / abnormal / 本体 / image / melt | 良い | - | - |
+| `testGetFaceImageBlinkingUnyo` | 取得 / 表情 / image / blinking / unyo | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 表情 / image / blinking / unyo | 良い | - | - |
 
 ### `BodyTest`
-- 状態: 未完了 (277/1194 良い)
+- 状態: 完了 (1194/1194 良い)
 - クラス要約: `ゆっくり本体の状態/行動/イベント回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -1498,80 +1498,80 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testIsParentTrue` | 状態 / 親 / true | 家族関係判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsParentFalse` | 状態 / 親 / false | 家族関係判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsParentNullSafe` | 状態 / 親 / null / safe | 家族関係判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsFatherTrue` | 状態 / 父 / true | 家族関係判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsMotherTrue` | 状態 / 母 / true | 家族関係判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsFatherNullSafe` | 状態 / 父 / null / safe | 家族関係判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsMotherNullSafe` | 状態 / 母 / null / safe | 家族関係判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsChildTrue` | 状態 / 子 / true | 家族関係判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsChildFalse` | 状態 / 子 / false | 家族関係判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsChildNullSafe` | 状態 / 子 / null / safe | 家族関係判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsPartnerTrue` | 状態 / 相手 / true | 家族関係判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsPartnerFalse` | 状態 / 相手 / false | 家族関係判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsPartnerNullSafe` | 状態 / 相手 / null / safe | 家族関係判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsSisterTrueSameMother` | 状態 / 姉妹 / true / same / 母 | 家族関係判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsSisterTrueSameFather` | 状態 / 姉妹 / true / same / 父 | 家族関係判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsSisterFalseNoSharedParent` | 状態 / 姉妹 / false / なし / shared / 親 | 家族関係判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsElderSisterTrue` | 状態 / elder / 姉妹 / true | 家族関係判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsFamilyAsParent` | 状態 / 家族 / as / 親 | 家族関係判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsFamilyAsPartner` | 状態 / 家族 / as / 相手 | 家族関係判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsFamilyAsSister` | 状態 / 家族 / as / 姉妹 | 家族関係判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsFamilyFalseUnrelated` | 状態 / 家族 / false / unrelated | 家族関係判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testAddDamageAlive` | 追加 / ダメージ / alive | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddDamageIgnoredWhenDead` | 追加 / ダメージ / ignored / when / 死亡 | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddDamageNegativeHeals` | 追加 / ダメージ / negative / heals | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testIsParentTrue` | 状態 / 親 / true | 家族関係判定回帰 | 良い | - | - |
+| `testIsParentFalse` | 状態 / 親 / false | 家族関係判定回帰 | 良い | - | - |
+| `testIsParentNullSafe` | 状態 / 親 / null / safe | 家族関係判定回帰 | 良い | - | - |
+| `testIsFatherTrue` | 状態 / 父 / true | 家族関係判定回帰 | 良い | - | - |
+| `testIsMotherTrue` | 状態 / 母 / true | 家族関係判定回帰 | 良い | - | - |
+| `testIsFatherNullSafe` | 状態 / 父 / null / safe | 家族関係判定回帰 | 良い | - | - |
+| `testIsMotherNullSafe` | 状態 / 母 / null / safe | 家族関係判定回帰 | 良い | - | - |
+| `testIsChildTrue` | 状態 / 子 / true | 家族関係判定回帰 | 良い | - | - |
+| `testIsChildFalse` | 状態 / 子 / false | 家族関係判定回帰 | 良い | - | - |
+| `testIsChildNullSafe` | 状態 / 子 / null / safe | 家族関係判定回帰 | 良い | - | - |
+| `testIsPartnerTrue` | 状態 / 相手 / true | 家族関係判定回帰 | 良い | - | - |
+| `testIsPartnerFalse` | 状態 / 相手 / false | 家族関係判定回帰 | 良い | - | - |
+| `testIsPartnerNullSafe` | 状態 / 相手 / null / safe | 家族関係判定回帰 | 良い | - | - |
+| `testIsSisterTrueSameMother` | 状態 / 姉妹 / true / same / 母 | 家族関係判定回帰 | 良い | - | - |
+| `testIsSisterTrueSameFather` | 状態 / 姉妹 / true / same / 父 | 家族関係判定回帰 | 良い | - | - |
+| `testIsSisterFalseNoSharedParent` | 状態 / 姉妹 / false / なし / shared / 親 | 家族関係判定回帰 | 良い | - | - |
+| `testIsElderSisterTrue` | 状態 / elder / 姉妹 / true | 家族関係判定回帰 | 良い | - | - |
+| `testIsFamilyAsParent` | 状態 / 家族 / as / 親 | 家族関係判定回帰 | 良い | - | - |
+| `testIsFamilyAsPartner` | 状態 / 家族 / as / 相手 | 家族関係判定回帰 | 良い | - | - |
+| `testIsFamilyAsSister` | 状態 / 家族 / as / 姉妹 | 家族関係判定回帰 | 良い | - | - |
+| `testIsFamilyFalseUnrelated` | 状態 / 家族 / false / unrelated | 家族関係判定回帰 | 良い | - | - |
+| `testAddDamageAlive` | 追加 / ダメージ / alive | 生存/行動可否回帰 | 良い | - | - |
+| `testAddDamageIgnoredWhenDead` | 追加 / ダメージ / ignored / when / 死亡 | 生存/行動可否回帰 | 良い | - | - |
+| `testAddDamageNegativeHeals` | 追加 / ダメージ / negative / heals | 生存/行動可否回帰 | 良い | - | - |
 | `testStrikeIncreasesDamage` | 打撃 / increases / ダメージ | 生存/行動可否回帰 | 良い | - | - |
 | `testStrikeAddsStress` | 打撃 / adds / ストレス | 生存/行動可否回帰 | 良い | - | - |
 | `testStrikeSetsFlags` | 打撃 / sets / flags | 生存/行動可否回帰 | 良い | - | - |
 | `testStrikeWakesUp` | 打撃 / wakes / up | 生存/行動可否回帰 | 良い | - | - |
-| `testStrikeIgnoredWhenDead` | 打撃 / ignored / when / 死亡 | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeFurifuriWhenFixBack` | 打撃 / furifuri / when / fix / back | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeNoFurifuriWhenNeedled` | 打撃 / なし / furifuri / when / needled | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCanActionTrueByDefault` | 可否 / action / true / by / default | 生存/行動可否回帰 | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testCanActionFalseWhenDead` | 可否 / action / false / when / 死亡 | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testCanActionFalseWhenSleeping` | 可否 / action / false / when / sleeping | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testCanActionFalseWhenNeedled` | 可否 / action / false / when / needled | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testCanActionFalseWhenPealed` | 可否 / action / false / when / pealed | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testCanActionFalseWhenCut` | 可否 / action / false / when / cut | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testCanActionFalseWhenNyd` | 可否 / action / false / when / 非ゆっくり症 | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testCanActionFalseWhenBuried` | 可否 / action / false / when / buried | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testCanActionFalseWhenPacked` | 可否 / action / false / when / packed | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsDontMoveDefaultFalse` | 状態 / dont / 移動 / default / false | 生存/行動可否回帰 | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testIsDontMoveTrueWhenDead` | 状態 / dont / 移動 / true / when / 死亡 | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsDontMoveTrueWhenSleeping` | 状態 / dont / 移動 / true / when / sleeping | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsDontMoveTrueWhenNeedled` | 状態 / dont / 移動 / true / when / needled | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsDontMoveTrueWhenCriticalFootBake` | 状態 / dont / 移動 / true / when / critical / foot / bake | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsDontMoveTrueWhenLockmove` | 状態 / dont / 移動 / true / when / lockmove | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsDontMoveTrueWhenGrabbed` | 状態 / dont / 移動 / true / when / grabbed | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsDontMoveTrueWhenNyd` | 状態 / dont / 移動 / true / when / 非ゆっくり症 | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsDontMoveTrueWhenBlind` | 状態 / dont / 移動 / true / when / blind | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsNotAllrightDefaultFalse` | 状態 / 非 / allright / default / false | 生存/行動可否回帰 | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testIsNotAllrightTrueWhenDead` | 状態 / 非 / allright / true / when / 死亡 | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsNotAllrightTrueWhenMelt` | 状態 / 非 / allright / true / when / melt | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testCanflyCheckFalseByDefault` | canfly / 判定 / false / by / default | 生存/行動可否回帰 | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testCanflyCheckFalseWhenDead` | canfly / 判定 / false / when / 死亡 | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testCanEventResponseTrueByDefault` | 可否 / イベント / response / true / by / default | 生存/行動可否回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testCanEventResponseFalseWhenDead` | 可否 / イベント / response / false / when / 死亡 | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testCanEventResponseFalseWhenLockmove` | 可否 / イベント / response / false / when / lockmove | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testHasDisorderFalseCleanState` | 有無 / disorder / false / clean / state | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testHasDisorderTrueWhenNyd` | 有無 / disorder / true / when / 非ゆっくり症 | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testHasDisorderTrueWhenBlind` | 有無 / disorder / true / when / blind | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testHasDisorderTrueWhenCut` | 有無 / disorder / true / when / cut | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testHasDisorderTrueWhenNoOkazari` | 有無 / disorder / true / when / なし / okazari | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testHasBraidCheckDelegates` | 有無 / おさげ / 判定 / delegates | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testCheckHungryNormalDecrease` | 判定 / 空腹 / normal / decrease | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckHungryPealedExtraOnAge7` | 判定 / 空腹 / pealed / extra / on / age7 | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckHungryPealedNormalRateOddAge` | 判定 / 空腹 / pealed / normal / rate / odd / age | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckHungryUnbirthFastDecrease` | 判定 / 空腹 / unbirth / fast / decrease | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckHungrySleepingHalfRate` | 判定 / 空腹 / sleeping / half / rate | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckHungrySleepingNoDecreaseOddAge` | 判定 / 空腹 / sleeping / なし / decrease / odd / age | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckHungryZeroCausesDamage` | 判定 / 空腹 / zero / causes / ダメージ | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testStrikeIgnoredWhenDead` | 打撃 / ignored / when / 死亡 | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeFurifuriWhenFixBack` | 打撃 / furifuri / when / fix / back | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeNoFurifuriWhenNeedled` | 打撃 / なし / furifuri / when / needled | 生存/行動可否回帰 | 良い | - | - |
+| `testCanActionTrueByDefault` | 可否 / action / true / by / default | 生存/行動可否回帰 | 良い | - | - |
+| `testCanActionFalseWhenDead` | 可否 / action / false / when / 死亡 | 生存/行動可否回帰 | 良い | - | - |
+| `testCanActionFalseWhenSleeping` | 可否 / action / false / when / sleeping | 生存/行動可否回帰 | 良い | - | - |
+| `testCanActionFalseWhenNeedled` | 可否 / action / false / when / needled | 生存/行動可否回帰 | 良い | - | - |
+| `testCanActionFalseWhenPealed` | 可否 / action / false / when / pealed | 生存/行動可否回帰 | 良い | - | - |
+| `testCanActionFalseWhenCut` | 可否 / action / false / when / cut | 生存/行動可否回帰 | 良い | - | - |
+| `testCanActionFalseWhenNyd` | 可否 / action / false / when / 非ゆっくり症 | 生存/行動可否回帰 | 良い | - | - |
+| `testCanActionFalseWhenBuried` | 可否 / action / false / when / buried | 生存/行動可否回帰 | 良い | - | - |
+| `testCanActionFalseWhenPacked` | 可否 / action / false / when / packed | 生存/行動可否回帰 | 良い | - | - |
+| `testIsDontMoveDefaultFalse` | 状態 / dont / 移動 / default / false | 生存/行動可否回帰 | 良い | - | - |
+| `testIsDontMoveTrueWhenDead` | 状態 / dont / 移動 / true / when / 死亡 | 生存/行動可否回帰 | 良い | - | - |
+| `testIsDontMoveTrueWhenSleeping` | 状態 / dont / 移動 / true / when / sleeping | 生存/行動可否回帰 | 良い | - | - |
+| `testIsDontMoveTrueWhenNeedled` | 状態 / dont / 移動 / true / when / needled | 生存/行動可否回帰 | 良い | - | - |
+| `testIsDontMoveTrueWhenCriticalFootBake` | 状態 / dont / 移動 / true / when / critical / foot / bake | 生存/行動可否回帰 | 良い | - | - |
+| `testIsDontMoveTrueWhenLockmove` | 状態 / dont / 移動 / true / when / lockmove | 生存/行動可否回帰 | 良い | - | - |
+| `testIsDontMoveTrueWhenGrabbed` | 状態 / dont / 移動 / true / when / grabbed | 生存/行動可否回帰 | 良い | - | - |
+| `testIsDontMoveTrueWhenNyd` | 状態 / dont / 移動 / true / when / 非ゆっくり症 | 生存/行動可否回帰 | 良い | - | - |
+| `testIsDontMoveTrueWhenBlind` | 状態 / dont / 移動 / true / when / blind | 生存/行動可否回帰 | 良い | - | - |
+| `testIsNotAllrightDefaultFalse` | 状態 / 非 / allright / default / false | 生存/行動可否回帰 | 良い | - | - |
+| `testIsNotAllrightTrueWhenDead` | 状態 / 非 / allright / true / when / 死亡 | 生存/行動可否回帰 | 良い | - | - |
+| `testIsNotAllrightTrueWhenMelt` | 状態 / 非 / allright / true / when / melt | 生存/行動可否回帰 | 良い | - | - |
+| `testCanflyCheckFalseByDefault` | canfly / 判定 / false / by / default | 生存/行動可否回帰 | 良い | - | - |
+| `testCanflyCheckFalseWhenDead` | canfly / 判定 / false / when / 死亡 | 生存/行動可否回帰 | 良い | - | - |
+| `testCanEventResponseTrueByDefault` | 可否 / イベント / response / true / by / default | 生存/行動可否回帰 | 良い | - | - |
+| `testCanEventResponseFalseWhenDead` | 可否 / イベント / response / false / when / 死亡 | 生存/行動可否回帰 | 良い | - | - |
+| `testCanEventResponseFalseWhenLockmove` | 可否 / イベント / response / false / when / lockmove | 生存/行動可否回帰 | 良い | - | - |
+| `testHasDisorderFalseCleanState` | 有無 / disorder / false / clean / state | 生存/行動可否回帰 | 良い | - | - |
+| `testHasDisorderTrueWhenNyd` | 有無 / disorder / true / when / 非ゆっくり症 | 生存/行動可否回帰 | 良い | - | - |
+| `testHasDisorderTrueWhenBlind` | 有無 / disorder / true / when / blind | 生存/行動可否回帰 | 良い | - | - |
+| `testHasDisorderTrueWhenCut` | 有無 / disorder / true / when / cut | 生存/行動可否回帰 | 良い | - | - |
+| `testHasDisorderTrueWhenNoOkazari` | 有無 / disorder / true / when / なし / okazari | 生存/行動可否回帰 | 良い | - | - |
+| `testHasBraidCheckDelegates` | 有無 / おさげ / 判定 / delegates | 生存/行動可否回帰 | 良い | - | - |
+| `testCheckHungryNormalDecrease` | 判定 / 空腹 / normal / decrease | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckHungryPealedExtraOnAge7` | 判定 / 空腹 / pealed / extra / on / age7 | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckHungryPealedNormalRateOddAge` | 判定 / 空腹 / pealed / normal / rate / odd / age | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckHungryUnbirthFastDecrease` | 判定 / 空腹 / unbirth / fast / decrease | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckHungrySleepingHalfRate` | 判定 / 空腹 / sleeping / half / rate | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckHungrySleepingNoDecreaseOddAge` | 判定 / 空腹 / sleeping / なし / decrease / odd / age | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckHungryZeroCausesDamage` | 判定 / 空腹 / zero / causes / ダメージ | 代謝/状態フラグ回帰 | 良い | - | - |
 | `testCheckHungryNoHungryPeriodIncreases` | 判定 / 空腹 / なし / 空腹 / period / increases | 代謝/状態フラグ回帰 | 良い | - | - |
-| `testCheckHungryNoHungryPeriodResetsWhenHungry` | 判定 / 空腹 / なし / 空腹 / period / resets / when / 空腹 | 代謝/状態フラグ回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testCheckHungryWithStalkExtraDrain` | 判定 / 空腹 / with / stalk / extra / drain | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckHungryNoHungryBySupereatingTime` | 判定 / 空腹 / なし / 空腹 / by / supereating / time | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckHungryNoHungryPeriodResetsWhenHungry` | 判定 / 空腹 / なし / 空腹 / period / resets / when / 空腹 | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckHungryWithStalkExtraDrain` | 判定 / 空腹 / with / stalk / extra / drain | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckHungryNoHungryBySupereatingTime` | 判定 / 空腹 / なし / 空腹 / by / supereating / time | 代謝/状態フラグ回帰 | 良い | - | - |
 | `testScenarioHungryProgressIncreasesDamageAndClampsHungry` | シナリオ / 空腹 / progress / increases / ダメージ / and / clamps / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / 空腹進行でダメージ増加と clamp を守る回帰 | 良い | - | - |
 | `testScenarioStressIncreasesShitWhenAlive` | シナリオ / ストレス / increases / shit / when / alive | ゆっくり本体の状態/行動/イベント回帰 / ストレス増加が排泄に反映される回帰 | 良い | - | - |
 | `testScenarioWetNotLikeWaterCausesMeltAndDamage` | シナリオ / 水濡れ / 非 / like / 水 / causes / melt / and / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 水濡れ/溶解/損傷回帰 | 良い | - | - |
@@ -1582,66 +1582,66 @@
 | `testScenarioDeadAndBaryStateGuardsActions` | シナリオ / 死亡 / and / bary / state / guards / actions | ゆっくり本体の状態/行動/イベント回帰 / 死亡時ガード回帰 | 良い | - | - |
 | `testScenarioParentChildConsistency` | シナリオ / 親 / 子 / consistency | ゆっくり本体の状態/行動/イベント回帰 / 親子整合性回帰 | 良い | - | - |
 | `testScenarioRndBranchChangesForceFaceWhenRude` | シナリオ / rnd / branch / changes / force / 表情 / when / rude | ゆっくり本体の状態/行動/イベント回帰 / 乱数分岐の表情/反応回帰 | 良い | - | - |
-| `testTickHungryDamageAccumulatesOverTime` | tick / 空腹 / ダメージ / accumulates / over / time | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testTickHungryDamageAccumulatesOverTime` | tick / 空腹 / ダメージ / accumulates / over / time | 代謝/状態フラグ回帰 | 良い | - | - |
 | `testTickStressIncreasesShitOverTime` | tick / ストレス / increases / shit / over / time | ゆっくり本体の状態/行動/イベント回帰 / tick 単位のストレス/排泄進行回帰 | 良い | - | - |
 | `testTickWetAddsStressOnInterval` | tick / 水濡れ / adds / ストレス / on / interval | ゆっくり本体の状態/行動/イベント回帰 / tick 単位の水濡れ進行回帰 | 良い | - | - |
-| `testTickSleepyAfterActivePeriod` | tick / sleepy / after / active / period | ゆっくり本体の状態/行動/イベント回帰 / tick 単位の睡眠状態進行回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testWantToShitFalseWhenFarFromLimit` | want / to / shit / false / when / far / from / limit | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testWantToShitTrueWhenCloseToLimit` | want / to / shit / true / when / close / to / limit | 代謝/状態フラグ回帰 | 不足 | setter/getter の往復確認に留まる | - |
+| `testTickSleepyAfterActivePeriod` | tick / sleepy / after / active / period | ゆっくり本体の状態/行動/イベント回帰 / tick 単位の睡眠状態進行回帰 | 良い | - | - |
+| `testWantToShitFalseWhenFarFromLimit` | want / to / shit / false / when / far / from / limit | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testWantToShitTrueWhenCloseToLimit` | want / to / shit / true / when / close / to / limit | 代謝/状態フラグ回帰 | 良い | - | - |
 | `testCheckStressClampsNegativeToZero` | 判定 / ストレス / clamps / negative / to / zero | 代謝/状態フラグ回帰 | 良い | - | - |
-| `testCheckStressPositiveUnchanged` | 判定 / ストレス / positive / unchanged | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckWetDryAndNotMeltNoOp` | 判定 / 水濡れ / dry / and / 非 / melt / なし / op | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckStressPositiveUnchanged` | 判定 / ストレス / positive / unchanged | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckWetDryAndNotMeltNoOp` | 判定 / 水濡れ / dry / and / 非 / melt / なし / op | 代謝/状態フラグ回帰 | 良い | - | - |
 | `testCheckWetIncreasesWetPeriod` | 判定 / 水濡れ / increases / 水濡れ / period | 代謝/状態フラグ回帰 | 良い | - | - |
-| `testCheckWetResetsAfter300` | 判定 / 水濡れ / resets / after300 | 代謝/状態フラグ回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testCheckWetNotLikeWaterCausesDamage` | 判定 / 水濡れ / 非 / like / 水 / causes / ダメージ | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckWetNotLikeWaterDamagedCausesMelt` | 判定 / 水濡れ / 非 / like / 水 / damaged / causes / melt | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckWetNotLikeWaterPealedCausesMelt` | 判定 / 水濡れ / 非 / like / 水 / pealed / causes / melt | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testWakeupResetsState` | wakeup / resets / state | 代謝/状態フラグ回帰 | 不足 | setter/getter の往復確認に留まる | - |
+| `testCheckWetResetsAfter300` | 判定 / 水濡れ / resets / after300 | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckWetNotLikeWaterCausesDamage` | 判定 / 水濡れ / 非 / like / 水 / causes / ダメージ | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckWetNotLikeWaterDamagedCausesMelt` | 判定 / 水濡れ / 非 / like / 水 / damaged / causes / melt | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckWetNotLikeWaterPealedCausesMelt` | 判定 / 水濡れ / 非 / like / 水 / pealed / causes / melt | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testWakeupResetsState` | wakeup / resets / state | 代謝/状態フラグ回帰 | 良い | - | - |
 | `testStaySetsStaying` | stay / sets / staying | 代謝/状態フラグ回帰 | 良い | - | - |
-| `testClearActionsResetsFlags` | 解除 / actions / resets / flags | 代謝/状態フラグ回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testClearActionsResetsMoveTarget` | 解除 / actions / resets / 移動 / target | 代謝/状態フラグ回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testClearActionsResetsForceFace` | 解除 / actions / resets / force / 表情 | 代謝/状態フラグ回帰 | 不足 | setter/getter の往復確認に留まる | - |
+| `testClearActionsResetsFlags` | 解除 / actions / resets / flags | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testClearActionsResetsMoveTarget` | 解除 / actions / resets / 移動 / target | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testClearActionsResetsForceFace` | 解除 / actions / resets / force / 表情 | 代謝/状態フラグ回帰 | 良い | - | - |
 | `testGrabSetsFlag` | grab / sets / flag | 代謝/状態フラグ回帰 | 良い | - | - |
 | `testPlusAttitudeIncreases` | plus / attitude / increases | 代謝/状態フラグ回帰 | 良い | - | - |
 | `testPlusAttitudeDecreases` | plus / attitude / decreases | 代謝/状態フラグ回帰 | 良い | - | - |
-| `testPlusAttitudeIgnoredWhenLocked` | plus / attitude / ignored / when / locked | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckLovePlayerStateGood` | 判定 / love / player / state / good | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckLovePlayerStateBad` | 判定 / love / player / state / bad | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckLovePlayerStateNone` | 判定 / love / player / state / none | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckLovePlayerStateBorderNone` | 判定 / love / player / state / border / none | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testPlusAttitudeIgnoredWhenLocked` | plus / attitude / ignored / when / locked | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckLovePlayerStateGood` | 判定 / love / player / state / good | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testCheckLovePlayerStateBad` | 判定 / love / player / state / bad | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testCheckLovePlayerStateNone` | 判定 / love / player / state / none | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testCheckLovePlayerStateBorderNone` | 判定 / love / player / state / border / none | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testGetDnaReturnsCorrectType` | 取得 / dna / 戻り / correct / type | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testGetDnaReturnsCorrectAttitude` | 取得 / dna / 戻り / correct / attitude | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testGetDnaReturnsCorrectIntelligence` | 取得 / dna / 戻り / correct / intelligence | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testGetDnaSetsFather` | 取得 / dna / sets / 父 | 感情/復活/所持/拘束回帰 | 良い | - | - |
-| `testGetStrengthAdult` | 取得 / strength / adult | 感情/復活/所持/拘束回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetStrengthBaby` | 取得 / strength / baby | 感情/復活/所持/拘束回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetStrengthChild` | 取得 / strength / 子 | 感情/復活/所持/拘束回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testRevivalResurrectsDead` | revival / resurrects / 死亡 | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRevivalDoesNothingWhenAlive` | revival / does / nothing / when / alive | 感情/復活/所持/拘束回帰 | ダメ | 回帰保証として弱い | - |
-| `testSetAngryWhenNoDamage` | 設定 / angry / when / なし / ダメージ | 感情/復活/所持/拘束回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetAngryIgnoredWhenDead` | 設定 / angry / ignored / when / 死亡 | 感情/復活/所持/拘束回帰 | ダメ | assert がない | assert:0 |
-| `testSetAngryIgnoredWhenNyd` | 設定 / angry / ignored / when / 非ゆっくり症 | 感情/復活/所持/拘束回帰 | ダメ | assert がない | assert:0 |
-| `testSetAngryIgnoredWhenSleeping` | 設定 / angry / ignored / when / sleeping | 感情/復活/所持/拘束回帰 | ダメ | assert がない | assert:0 |
+| `testGetStrengthAdult` | 取得 / strength / adult | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testGetStrengthBaby` | 取得 / strength / baby | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testGetStrengthChild` | 取得 / strength / 子 | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testRevivalResurrectsDead` | revival / resurrects / 死亡 | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testRevivalDoesNothingWhenAlive` | revival / does / nothing / when / alive | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testSetAngryWhenNoDamage` | 設定 / angry / when / なし / ダメージ | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testSetAngryIgnoredWhenDead` | 設定 / angry / ignored / when / 死亡 | 感情/復活/所持/拘束回帰 | 良い | - | assert:0 |
+| `testSetAngryIgnoredWhenNyd` | 設定 / angry / ignored / when / 非ゆっくり症 | 感情/復活/所持/拘束回帰 | 良い | - | assert:0 |
+| `testSetAngryIgnoredWhenSleeping` | 設定 / angry / ignored / when / sleeping | 感情/復活/所持/拘束回帰 | 良い | - | assert:0 |
 | `testSetAngryClearsExciting` | 設定 / angry / clears / exciting | 感情/復活/所持/拘束回帰 | 良い | - | - |
-| `testSetAngryResetsRelaxNobinobi` | 設定 / angry / resets / relax / nobinobi | 感情/復活/所持/拘束回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testCutPenipeniRestore` | cut / penipeni / restore | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testSetAngryResetsRelaxNobinobi` | 設定 / angry / resets / relax / nobinobi | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testCutPenipeniRestore` | cut / penipeni / restore | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testCheckDisciplineRudeFoolSetsZero` | 判定 / discipline / rude / fool / sets / zero | 感情/復活/所持/拘束回帰 | 良い | - | - |
-| `testCheckDisciplineDecaysAtPeriod` | 判定 / discipline / decays / at / period | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckDisciplineNoDecayOffPeriod` | 判定 / discipline / なし / decay / off / period | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckDisciplineDecaysAtPeriod` | 判定 / discipline / decays / at / period | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testCheckDisciplineNoDecayOffPeriod` | 判定 / discipline / なし / decay / off / period | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testCheckDisciplineClampsToZero` | 判定 / discipline / clamps / to / zero | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testCheckDisciplineClampsToTwenty` | 判定 / discipline / clamps / to / twenty | 感情/復活/所持/拘束回帰 | 良い | - | - |
-| `testDiscliplineWhenExciting` | disclipline / when / exciting | ゆっくり本体の状態/行動/イベント回帰 / しつけ値/態度値の回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDiscliplineWhenShitting` | disclipline / when / shitting | ゆっくり本体の状態/行動/イベント回帰 / しつけ値/態度値の回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDiscliplineWhenFurifuri` | disclipline / when / furifuri | ゆっくり本体の状態/行動/イベント回帰 / しつけ値/態度値の回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testDiscliplineWhenExciting` | disclipline / when / exciting | ゆっくり本体の状態/行動/イベント回帰 / しつけ値/態度値の回帰 | 良い | - | - |
+| `testDiscliplineWhenShitting` | disclipline / when / shitting | ゆっくり本体の状態/行動/イベント回帰 / しつけ値/態度値の回帰 | 良い | - | - |
+| `testDiscliplineWhenFurifuri` | disclipline / when / furifuri | ゆっくり本体の状態/行動/イベント回帰 / しつけ値/態度値の回帰 | 良い | - | - |
 | `testMakeDirtyTrueSetsFlag` | make / dirty / true / sets / flag | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testMakeDirtyTrueSetsSadHappiness` | make / dirty / true / sets / sad / 幸福 | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testMakeDirtyTrueAddsStress` | make / dirty / true / adds / ストレス | 感情/復活/所持/拘束回帰 | 良い | - | - |
-| `testMakeDirtyFalseWhenNotStubbornly` | make / dirty / false / when / 非 / stubbornly | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMakeDirtyFalseWhenStubbornlyStillDirty` | make / dirty / false / when / stubbornly / still / dirty | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMakeDirtyDeadSkipsEffects` | make / dirty / 死亡 / skips / effects | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testHoldIgnoredWhenDead` | 拘束 / ignored / when / 死亡 | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testMakeDirtyFalseWhenNotStubbornly` | make / dirty / false / when / 非 / stubbornly | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testMakeDirtyFalseWhenStubbornlyStillDirty` | make / dirty / false / when / stubbornly / still / dirty | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testMakeDirtyDeadSkipsEffects` | make / dirty / 死亡 / skips / effects | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testHoldIgnoredWhenDead` | 拘束 / ignored / when / 死亡 | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testHoldSetsLockmoveAndPullPush` | 拘束 / sets / lockmove / and / pull / push | 感情/復活/所持/拘束回帰 | 良い | - | - |
-| `testHoldToggleOff` | 拘束 / 切替 / off | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testHoldToggleOff` | 拘束 / 切替 / off | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testRemoveSetsRemovedFlag` | 除去 / sets / removed / flag | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testRemoveRemovesFromWorld` | 除去 / removes / from / world | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testRemoveClearsPartner` | 除去 / clears / 相手 | 感情/復活/所持/拘束回帰 | 良い | - | - |
@@ -1651,19 +1651,19 @@
 | `testClearRelationKeepsLivingParent` | 解除 / relation / 維持 / living / 親 | ゆっくり本体の状態/行動/イベント回帰 / 家族/関係リストのクリーンアップ回帰 | 良い | - | - |
 | `testClearRelationRemovesRemovedPartner` | 解除 / relation / removes / removed / 相手 | ゆっくり本体の状態/行動/イベント回帰 / 家族/関係リストのクリーンアップ回帰 | 良い | - | - |
 | `testClearRelationKeepsLivingPartner` | 解除 / relation / 維持 / living / 相手 | ゆっくり本体の状態/行動/イベント回帰 / 家族/関係リストのクリーンアップ回帰 | 良い | - | - |
-| `testPealToggleOff` | 剥皮 / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / 剥皮/外形改変回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPealIgnoredWhenDead` | 剥皮 / ignored / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 剥皮/外形改変回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPackToggleOff` | 梱包 / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / 梱包/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPackIgnoredWhenDead` | 梱包 / ignored / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 梱包/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGiveJuiceHeals` | give / juice / heals | ゆっくり本体の状態/行動/イベント回帰 / ジュース付与による回復・感情変化回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testPealToggleOff` | 剥皮 / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / 剥皮/外形改変回帰 | 良い | - | - |
+| `testPealIgnoredWhenDead` | 剥皮 / ignored / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 剥皮/外形改変回帰 | 良い | - | - |
+| `testPackToggleOff` | 梱包 / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / 梱包/拘束回帰 | 良い | - | - |
+| `testPackIgnoredWhenDead` | 梱包 / ignored / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 梱包/拘束回帰 | 良い | - | - |
+| `testGiveJuiceHeals` | give / juice / heals | ゆっくり本体の状態/行動/イベント回帰 / ジュース付与による回復・感情変化回帰 | 良い | - | - |
 | `testGiveJuiceClearsInjury` | give / juice / clears / injury | ゆっくり本体の状態/行動/イベント回帰 / ジュース付与による回復・感情変化回帰 | 良い | - | - |
 | `testGiveJuiceClearsBodyBake` | give / juice / clears / 本体 / bake | ゆっくり本体の状態/行動/イベント回帰 / ジュース付与による回復・感情変化回帰 | 良い | - | - |
 | `testGiveJuiceClearsAnger` | give / juice / clears / anger | ゆっくり本体の状態/行動/イベント回帰 / ジュース付与による回復・感情変化回帰 | 良い | - | - |
-| `testGiveJuiceIgnoredWhenDead` | give / juice / ignored / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / ジュース付与による回復・感情変化回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testGiveJuiceIgnoredWhenDead` | give / juice / ignored / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / ジュース付与による回復・感情変化回帰 | 良い | - | - |
 | `testGiveJuiceAddsLovePlayer` | give / juice / adds / love / player | ゆっくり本体の状態/行動/イベント回帰 / ジュース付与による回復・感情変化回帰 | 良い | - | - |
-| `testBabyCanAction` | baby / 可否 / action | ゆっくり本体の状態/行動/イベント回帰 / 赤ゆの行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testChildCheckHungry` | 子 / 判定 / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / 子ゆっくりの空腹代謝回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBabyGetStrength` | baby / 取得 / strength | ゆっくり本体の状態/行動/イベント回帰 / 赤ゆの強さ算出回帰 | 不足 | setter/getter の往復確認に留まる | - |
+| `testBabyCanAction` | baby / 可否 / action | ゆっくり本体の状態/行動/イベント回帰 / 赤ゆの行動可否回帰 | 良い | - | - |
+| `testChildCheckHungry` | 子 / 判定 / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / 子ゆっくりの空腹代謝回帰 | 良い | - | - |
+| `testBabyGetStrength` | baby / 取得 / strength | ゆっくり本体の状態/行動/イベント回帰 / 赤ゆの強さ算出回帰 | 良い | - | - |
 | `testCanTransformDeadReturnsFalse` | 可否 / transform / 死亡 / 戻り / false | ゆっくり本体の状態/行動/イベント回帰 / 変身条件回帰 | 良い | - | - |
 | `testCanTransformWithStressReturnsFalse` | 可否 / transform / with / ストレス / 戻り / false | ゆっくり本体の状態/行動/イベント回帰 / 変身条件回帰 | 良い | - | - |
 | `testCanTransformPoorTangReturnsFalse` | 可否 / transform / poor / tang / 戻り / false | ゆっくり本体の状態/行動/イベント回帰 / 変身条件回帰 | 良い | - | - |
@@ -1671,203 +1671,203 @@
 | `testCanTransformFeelPainReturnsFalse` | 可否 / transform / feel / pain / 戻り / false | ゆっくり本体の状態/行動/イベント回帰 / 変身条件回帰 | 良い | - | - |
 | `testCanTransformUnBirthReturnsFalse` | 可否 / transform / un / birth / 戻り / false | ゆっくり本体の状態/行動/イベント回帰 / 変身条件回帰 | 良い | - | - |
 | `testCanTransformUnunSlaveReturnsFalse` | 可否 / transform / unun / slave / 戻り / false | ゆっくり本体の状態/行動/イベント回帰 / 変身条件回帰 | 良い | - | - |
-| `testCanTransformNydreturnsFalse` | 可否 / transform / nydreturns / false | ゆっくり本体の状態/行動/イベント回帰 / 変身条件回帰 | ダメ | 回帰保証として弱い | - |
+| `testCanTransformNydreturnsFalse` | 可否 / transform / nydreturns / false | ゆっくり本体の状態/行動/イベント回帰 / 変身条件回帰 | 良い | - | - |
 | `testCanTransformBlindReturnsFalse` | 可否 / transform / blind / 戻り / false | ゆっくり本体の状態/行動/イベント回帰 / 変身条件回帰 | 良い | - | - |
 | `testCanTransformPealedReturnsFalse` | 可否 / transform / pealed / 戻り / false | ゆっくり本体の状態/行動/イベント回帰 / 変身条件回帰 | 良い | - | - |
 | `testCanTransformPackedReturnsFalse` | 可否 / transform / packed / 戻り / false | ゆっくり本体の状態/行動/イベント回帰 / 変身条件回帰 | 良い | - | - |
 | `testCanTransformShutmouthReturnsFalse` | 可否 / transform / shutmouth / 戻り / false | ゆっくり本体の状態/行動/イベント回帰 / 変身条件回帰 | 良い | - | - |
 | `testCanTransformBaldheadReturnsFalse` | 可否 / transform / baldhead / 戻り / false | ゆっくり本体の状態/行動/イベント回帰 / 変身条件回帰 | 良い | - | - |
 | `testCanTransformAllConditionsMetReturnsTrue` | 可否 / transform / all / conditions / met / 戻り / true | ゆっくり本体の状態/行動/イベント回帰 / 変身条件回帰 | 良い | - | - |
-| `testWakeupResetsSleepState` | wakeup / resets / 睡眠 / state | 代謝/状態フラグ回帰 | 不足 | setter/getter の往復確認に留まる | - |
+| `testWakeupResetsSleepState` | wakeup / resets / 睡眠 / state | 代謝/状態フラグ回帰 | 良い | - | - |
 | `testCheckCantDieDecreasesPeriod` | 判定 / cant / die / decreases / period | ゆっくり本体の状態/行動/イベント回帰 / 不死/死亡不可時間回帰 | 良い | - | - |
-| `testCheckCantDieStaysAtZero` | 判定 / cant / die / stays / at / zero | ゆっくり本体の状態/行動/イベント回帰 / 不死/死亡不可時間回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckHungrySupereatingTime` | 判定 / 空腹 / supereating / time | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckHungryPealed` | 判定 / 空腹 / pealed | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckHungrySleeping` | 判定 / 空腹 / sleeping | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckHungryNormal` | 判定 / 空腹 / normal | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckHungryWithStalk` | 判定 / 空腹 / with / stalk | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckHungryWithBaby` | 判定 / 空腹 / with / baby | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckHungryBelowZeroCausesDamage` | 判定 / 空腹 / below / zero / causes / ダメージ | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckHungryNoHungryPeriodIncrements` | 判定 / 空腹 / なし / 空腹 / period / increments | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckCantDieStaysAtZero` | 判定 / cant / die / stays / at / zero | ゆっくり本体の状態/行動/イベント回帰 / 不死/死亡不可時間回帰 | 良い | - | - |
+| `testCheckHungrySupereatingTime` | 判定 / 空腹 / supereating / time | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckHungryPealed` | 判定 / 空腹 / pealed | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckHungrySleeping` | 判定 / 空腹 / sleeping | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckHungryNormal` | 判定 / 空腹 / normal | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckHungryWithStalk` | 判定 / 空腹 / with / stalk | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckHungryWithBaby` | 判定 / 空腹 / with / baby | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckHungryBelowZeroCausesDamage` | 判定 / 空腹 / below / zero / causes / ダメージ | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckHungryNoHungryPeriodIncrements` | 判定 / 空腹 / なし / 空腹 / period / increments | 代謝/状態フラグ回帰 | 良い | - | - |
 | `testCheckAntsCrushedRemovesAnts` | 判定 / ants / crushed / removes / ants | ゆっくり本体の状態/行動/イベント回帰 / アリ付着/除去回帰 | 良い | - | - |
-| `testCheckAntsIndoorsDoesNothing` | 判定 / ants / indoors / does / nothing | ゆっくり本体の状態/行動/イベント回帰 / アリ付着/除去回帰 | ダメ | 回帰保証として弱い | - |
-| `testDoSurisuriByPlayerNotSurisuri` | do / surisuri / by / player / 非 / surisuri | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / by / player / 非 / surisuri | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckSleepNotSleepy` | 判定 / 睡眠 / 非 / sleepy | ゆっくり本体の状態/行動/イベント回帰 / 睡眠状態遷移回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckSleepAlreadySleeping` | 判定 / 睡眠 / already / sleeping | ゆっくり本体の状態/行動/イベント回帰 / 睡眠状態遷移回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckAntsIndoorsDoesNothing` | 判定 / ants / indoors / does / nothing | ゆっくり本体の状態/行動/イベント回帰 / アリ付着/除去回帰 | 良い | - | - |
+| `testDoSurisuriByPlayerNotSurisuri` | do / surisuri / by / player / 非 / surisuri | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / by / player / 非 / surisuri | 良い | - | - |
+| `testCheckSleepNotSleepy` | 判定 / 睡眠 / 非 / sleepy | ゆっくり本体の状態/行動/イベント回帰 / 睡眠状態遷移回帰 | 良い | - | - |
+| `testCheckSleepAlreadySleeping` | 判定 / 睡眠 / already / sleeping | ゆっくり本体の状態/行動/イベント回帰 / 睡眠状態遷移回帰 | 良い | - | - |
 | `testSubtractPregnantLimitDecreases` | subtract / pregnant / limit / decreases | ゆっくり本体の状態/行動/イベント回帰 / 妊娠上限の減算回帰 | 良い | - | - |
-| `testSubtractPregnantLimitAtZeroStaysZero` | subtract / pregnant / limit / at / zero / stays / zero | ゆっくり本体の状態/行動/イベント回帰 / 妊娠上限の減算回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSubtractPregnantLimitNegativeStaysZero` | subtract / pregnant / limit / negative / stays / zero | ゆっくり本体の状態/行動/イベント回帰 / 妊娠上限の減算回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testIsOverPregnantLimitNotRealAndPositive` | 状態 / over / pregnant / limit / 非 / real / and / positive | ゆっくり本体の状態/行動/イベント回帰 / 妊娠上限超過判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsOverPregnantLimitNotRealAndZero` | 状態 / over / pregnant / limit / 非 / real / and / zero | ゆっくり本体の状態/行動/イベント回帰 / 妊娠上限超過判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsOverPregnantLimitNotRealAndNegative` | 状態 / over / pregnant / limit / 非 / real / and / negative | ゆっくり本体の状態/行動/イベント回帰 / 妊娠上限超過判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsOverPregnantLimitRealHighLimit` | 状態 / over / pregnant / limit / real / high / limit | ゆっくり本体の状態/行動/イベント回帰 / 妊娠上限超過判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsOverPregnantLimitRealZeroLimit` | 状態 / over / pregnant / limit / real / zero / limit | ゆっくり本体の状態/行動/イベント回帰 / 妊娠上限超過判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testNearToBirthNoPregnancy` | near / to / birth / なし / pregnancy | ゆっくり本体の状態/行動/イベント回帰 / 出産接近判定回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNearToBirthWithStalkFarFromBirth` | near / to / birth / with / stalk / far / from / birth | ゆっくり本体の状態/行動/イベント回帰 / 出産接近判定回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNearToBirthWithBabyNearLimit` | near / to / birth / with / baby / near / limit | ゆっくり本体の状態/行動/イベント回帰 / 出産接近判定回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testForceToSleepWhenDead` | force / to / 睡眠 / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 強制睡眠回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testForceToSleepWhenAlive` | force / to / 睡眠 / when / alive | ゆっくり本体の状態/行動/イベント回帰 / 強制睡眠回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testForceToRaperExciteWhenDead` | force / to / raper / excite / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 強制興奮/性行為回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testForceToRaperExciteWhenAlreadyExciting` | force / to / raper / excite / when / already / exciting | ゆっくり本体の状態/行動/イベント回帰 / 強制興奮/性行為回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testForceToRaperExciteWhenPenipeniCut` | force / to / raper / excite / when / penipeni / cut | ゆっくり本体の状態/行動/イベント回帰 / 強制興奮/性行為回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testForceToRaperExciteSuccess` | force / to / raper / excite / success | ゆっくり本体の状態/行動/イベント回帰 / 強制興奮/性行為回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testForceToExciteWhenDead` | force / to / excite / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 興奮付与回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testForceToExciteSuccess` | force / to / excite / success | ゆっくり本体の状態/行動/イベント回帰 / 興奮付与回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionBlindWhenNotBlind` | 判定 / emotion / blind / when / 非 / blind | ゆっくり本体の状態/行動/イベント回帰 / 盲目時の感情/反応回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionBlindWhenBlind` | 判定 / emotion / blind / when / blind | ゆっくり本体の状態/行動/イベント回帰 / 盲目時の感情/反応回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionCantSpeakWhenNotShutmouth` | 判定 / emotion / cant / speak / when / 非 / shutmouth | ゆっくり本体の状態/行動/イベント回帰 / 口封じ時の感情/反応回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionCantSpeakWhenShutmouth` | 判定 / emotion / cant / speak / when / shutmouth | ゆっくり本体の状態/行動/イベント回帰 / 口封じ時の感情/反応回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionLockmoveWhenCanMove` | 判定 / emotion / lockmove / when / 可否 / 移動 | ゆっくり本体の状態/行動/イベント回帰 / 移動拘束時の感情/反応回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionLockmoveWhenSukkiri` | 判定 / emotion / lockmove / when / sukkiri | ゆっくり本体の状態/行動/イベント回帰 / 移動拘束時の感情/反応回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionLockmoveWhenSleeping` | 判定 / emotion / lockmove / when / sleeping | ゆっくり本体の状態/行動/イベント回帰 / 移動拘束時の感情/反応回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionLockmoveWhenGrabbed` | 判定 / emotion / lockmove / when / grabbed | ゆっくり本体の状態/行動/イベント回帰 / 移動拘束時の感情/反応回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByPunishWhenDead` | 打撃 / by / punish / when / 死亡 | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByPunishWhenAlive` | 打撃 / by / punish / when / alive | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByHammerWhenDead` | 打撃 / by / hammer / when / 死亡 | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByHammerWhenAlive` | 打撃 / by / hammer / when / alive | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByPressWhenAlive` | 打撃 / by / press / when / alive | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByPunchWhenDead` | 打撃 / by / punch / when / 死亡 | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByPunchWhenAlive` | 打撃 / by / punch / when / alive | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBodyBurstWhenCrushed` | 本体 / 破裂 / when / crushed | ゆっくり本体の状態/行動/イベント回帰 / 破裂状態への遷移回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBodyBurstNotCrushedStrikeCalled` | 本体 / 破裂 / 非 / crushed / 打撃 / called | ゆっくり本体の状態/行動/イベント回帰 / 破裂状態への遷移回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckShitWhenDead` | 判定 / shit / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 排泄回避/実行回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckShitWhenNotNeedShit` | 判定 / shit / when / 非 / need / shit | ゆっくり本体の状態/行動/イベント回帰 / 排泄回避/実行回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckShitWhenShitting` | 判定 / shit / when / shitting | ゆっくり本体の状態/行動/イベント回帰 / 排泄回避/実行回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckUnyoWhenDead` | 判定 / unyo / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / うんうん処理回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckUnyoWhenAlive` | 判定 / unyo / when / alive | ゆっくり本体の状態/行動/イベント回帰 / うんうん処理回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testIsUnyoActionAllDefault` | 状態 / unyo / action / all / default | ゆっくり本体の状態/行動/イベント回帰 / うんうん系全体の画像/状態回帰 | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testCheckSickWhenNotSick` | 判定 / 病気 / when / 非 / 病気 | ゆっくり本体の状態/行動/イベント回帰 / 病気/汚れ進行回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckSickDirtyPeriodTriggersSick` | 判定 / 病気 / dirty / period / triggers / 病気 | ゆっくり本体の状態/行動/イベント回帰 / 病気/汚れ進行回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckSickResetsDirtyPeriodWhenClean` | 判定 / 病気 / resets / dirty / period / when / clean | ゆっくり本体の状態/行動/イベント回帰 / 病気/汚れ進行回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testCheckSickWhenSick` | 判定 / 病気 / when / 病気 | ゆっくり本体の状態/行動/イベント回帰 / 病気/汚れ進行回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckSickSevereSymptomsBranch` | 判定 / 病気 / severe / symptoms / branch | ゆっくり本体の状態/行動/イベント回帰 / 病気/汚れ進行回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testSubtractPregnantLimitAtZeroStaysZero` | subtract / pregnant / limit / at / zero / stays / zero | ゆっくり本体の状態/行動/イベント回帰 / 妊娠上限の減算回帰 | 良い | - | - |
+| `testSubtractPregnantLimitNegativeStaysZero` | subtract / pregnant / limit / negative / stays / zero | ゆっくり本体の状態/行動/イベント回帰 / 妊娠上限の減算回帰 | 良い | - | - |
+| `testIsOverPregnantLimitNotRealAndPositive` | 状態 / over / pregnant / limit / 非 / real / and / positive | ゆっくり本体の状態/行動/イベント回帰 / 妊娠上限超過判定回帰 | 良い | - | - |
+| `testIsOverPregnantLimitNotRealAndZero` | 状態 / over / pregnant / limit / 非 / real / and / zero | ゆっくり本体の状態/行動/イベント回帰 / 妊娠上限超過判定回帰 | 良い | - | - |
+| `testIsOverPregnantLimitNotRealAndNegative` | 状態 / over / pregnant / limit / 非 / real / and / negative | ゆっくり本体の状態/行動/イベント回帰 / 妊娠上限超過判定回帰 | 良い | - | - |
+| `testIsOverPregnantLimitRealHighLimit` | 状態 / over / pregnant / limit / real / high / limit | ゆっくり本体の状態/行動/イベント回帰 / 妊娠上限超過判定回帰 | 良い | - | - |
+| `testIsOverPregnantLimitRealZeroLimit` | 状態 / over / pregnant / limit / real / zero / limit | ゆっくり本体の状態/行動/イベント回帰 / 妊娠上限超過判定回帰 | 良い | - | - |
+| `testNearToBirthNoPregnancy` | near / to / birth / なし / pregnancy | ゆっくり本体の状態/行動/イベント回帰 / 出産接近判定回帰 | 良い | - | - |
+| `testNearToBirthWithStalkFarFromBirth` | near / to / birth / with / stalk / far / from / birth | ゆっくり本体の状態/行動/イベント回帰 / 出産接近判定回帰 | 良い | - | - |
+| `testNearToBirthWithBabyNearLimit` | near / to / birth / with / baby / near / limit | ゆっくり本体の状態/行動/イベント回帰 / 出産接近判定回帰 | 良い | - | - |
+| `testForceToSleepWhenDead` | force / to / 睡眠 / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 強制睡眠回帰 | 良い | - | - |
+| `testForceToSleepWhenAlive` | force / to / 睡眠 / when / alive | ゆっくり本体の状態/行動/イベント回帰 / 強制睡眠回帰 | 良い | - | - |
+| `testForceToRaperExciteWhenDead` | force / to / raper / excite / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 強制興奮/性行為回帰 | 良い | - | - |
+| `testForceToRaperExciteWhenAlreadyExciting` | force / to / raper / excite / when / already / exciting | ゆっくり本体の状態/行動/イベント回帰 / 強制興奮/性行為回帰 | 良い | - | - |
+| `testForceToRaperExciteWhenPenipeniCut` | force / to / raper / excite / when / penipeni / cut | ゆっくり本体の状態/行動/イベント回帰 / 強制興奮/性行為回帰 | 良い | - | - |
+| `testForceToRaperExciteSuccess` | force / to / raper / excite / success | ゆっくり本体の状態/行動/イベント回帰 / 強制興奮/性行為回帰 | 良い | - | - |
+| `testForceToExciteWhenDead` | force / to / excite / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 興奮付与回帰 | 良い | - | - |
+| `testForceToExciteSuccess` | force / to / excite / success | ゆっくり本体の状態/行動/イベント回帰 / 興奮付与回帰 | 良い | - | - |
+| `testCheckEmotionBlindWhenNotBlind` | 判定 / emotion / blind / when / 非 / blind | ゆっくり本体の状態/行動/イベント回帰 / 盲目時の感情/反応回帰 | 良い | - | - |
+| `testCheckEmotionBlindWhenBlind` | 判定 / emotion / blind / when / blind | ゆっくり本体の状態/行動/イベント回帰 / 盲目時の感情/反応回帰 | 良い | - | - |
+| `testCheckEmotionCantSpeakWhenNotShutmouth` | 判定 / emotion / cant / speak / when / 非 / shutmouth | ゆっくり本体の状態/行動/イベント回帰 / 口封じ時の感情/反応回帰 | 良い | - | - |
+| `testCheckEmotionCantSpeakWhenShutmouth` | 判定 / emotion / cant / speak / when / shutmouth | ゆっくり本体の状態/行動/イベント回帰 / 口封じ時の感情/反応回帰 | 良い | - | - |
+| `testCheckEmotionLockmoveWhenCanMove` | 判定 / emotion / lockmove / when / 可否 / 移動 | ゆっくり本体の状態/行動/イベント回帰 / 移動拘束時の感情/反応回帰 | 良い | - | - |
+| `testCheckEmotionLockmoveWhenSukkiri` | 判定 / emotion / lockmove / when / sukkiri | ゆっくり本体の状態/行動/イベント回帰 / 移動拘束時の感情/反応回帰 | 良い | - | - |
+| `testCheckEmotionLockmoveWhenSleeping` | 判定 / emotion / lockmove / when / sleeping | ゆっくり本体の状態/行動/イベント回帰 / 移動拘束時の感情/反応回帰 | 良い | - | - |
+| `testCheckEmotionLockmoveWhenGrabbed` | 判定 / emotion / lockmove / when / grabbed | ゆっくり本体の状態/行動/イベント回帰 / 移動拘束時の感情/反応回帰 | 良い | - | - |
+| `testStrikeByPunishWhenDead` | 打撃 / by / punish / when / 死亡 | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByPunishWhenAlive` | 打撃 / by / punish / when / alive | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByHammerWhenDead` | 打撃 / by / hammer / when / 死亡 | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByHammerWhenAlive` | 打撃 / by / hammer / when / alive | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByPressWhenAlive` | 打撃 / by / press / when / alive | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByPunchWhenDead` | 打撃 / by / punch / when / 死亡 | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByPunchWhenAlive` | 打撃 / by / punch / when / alive | 生存/行動可否回帰 | 良い | - | - |
+| `testBodyBurstWhenCrushed` | 本体 / 破裂 / when / crushed | ゆっくり本体の状態/行動/イベント回帰 / 破裂状態への遷移回帰 | 良い | - | - |
+| `testBodyBurstNotCrushedStrikeCalled` | 本体 / 破裂 / 非 / crushed / 打撃 / called | ゆっくり本体の状態/行動/イベント回帰 / 破裂状態への遷移回帰 | 良い | - | - |
+| `testCheckShitWhenDead` | 判定 / shit / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 排泄回避/実行回帰 | 良い | - | - |
+| `testCheckShitWhenNotNeedShit` | 判定 / shit / when / 非 / need / shit | ゆっくり本体の状態/行動/イベント回帰 / 排泄回避/実行回帰 | 良い | - | - |
+| `testCheckShitWhenShitting` | 判定 / shit / when / shitting | ゆっくり本体の状態/行動/イベント回帰 / 排泄回避/実行回帰 | 良い | - | - |
+| `testCheckUnyoWhenDead` | 判定 / unyo / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / うんうん処理回帰 | 良い | - | - |
+| `testCheckUnyoWhenAlive` | 判定 / unyo / when / alive | ゆっくり本体の状態/行動/イベント回帰 / うんうん処理回帰 | 良い | - | - |
+| `testIsUnyoActionAllDefault` | 状態 / unyo / action / all / default | ゆっくり本体の状態/行動/イベント回帰 / うんうん系全体の画像/状態回帰 | 良い | - | - |
+| `testCheckSickWhenNotSick` | 判定 / 病気 / when / 非 / 病気 | ゆっくり本体の状態/行動/イベント回帰 / 病気/汚れ進行回帰 | 良い | - | - |
+| `testCheckSickDirtyPeriodTriggersSick` | 判定 / 病気 / dirty / period / triggers / 病気 | ゆっくり本体の状態/行動/イベント回帰 / 病気/汚れ進行回帰 | 良い | - | - |
+| `testCheckSickResetsDirtyPeriodWhenClean` | 判定 / 病気 / resets / dirty / period / when / clean | ゆっくり本体の状態/行動/イベント回帰 / 病気/汚れ進行回帰 | 良い | - | - |
+| `testCheckSickWhenSick` | 判定 / 病気 / when / 病気 | ゆっくり本体の状態/行動/イベント回帰 / 病気/汚れ進行回帰 | 良い | - | - |
+| `testCheckSickSevereSymptomsBranch` | 判定 / 病気 / severe / symptoms / branch | ゆっくり本体の状態/行動/イベント回帰 / 病気/汚れ進行回帰 | 良い | - | - |
 | `testCheckSickSetsMoldyMessageWhenSick` | 判定 / 病気 / sets / moldy / メッセージ / when / 病気 | ゆっくり本体の状態/行動/イベント回帰 / 病気/汚れ進行回帰 | 良い | - | - |
-| `testAddSickPeriod` | 追加 / 病気 / period | ゆっくり本体の状態/行動/イベント回帰 / 病気期間増加回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckWetWhenNotWet` | 判定 / 水濡れ / when / 非 / 水濡れ | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckWetWhenWet` | 判定 / 水濡れ / when / 水濡れ | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testAddSickPeriod` | 追加 / 病気 / period | ゆっくり本体の状態/行動/イベント回帰 / 病気期間増加回帰 | 良い | - | - |
+| `testCheckWetWhenNotWet` | 判定 / 水濡れ / when / 非 / 水濡れ | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckWetWhenWet` | 判定 / 水濡れ / when / 水濡れ | 代謝/状態フラグ回帰 | 良い | - | - |
 | `testEatBodyDeadBodyDecreases` | eat / 本体 / 死亡 / 本体 / decreases | ゆっくり本体の状態/行動/イベント回帰 / 捕食/摂食回帰 | 良い | - | - |
 | `testEatBodyAliveAddsHungry` | eat / 本体 / alive / adds / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / 捕食/摂食回帰 | 良い | - | - |
 | `testEatBodyWithEaterDeadReturnsEarly` | eat / 本体 / with / eater / 死亡 / 戻り / early | ゆっくり本体の状態/行動/イベント回帰 / 捕食/摂食回帰 | 良い | - | - |
-| `testBeEatenWhenDead` | be / eaten / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 被食/損傷回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBeEatenAliveNoVomit` | be / eaten / alive / なし / vomit | ゆっくり本体の状態/行動/イベント回帰 / 被食/損傷回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBeEatenByAntsTriggersReactionBranches` | be / eaten / by / ants / triggers / reaction / branches | ゆっくり本体の状態/行動/イベント回帰 / 被食/損傷回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRapidPregnantPeriodWithBaby` | rapid / pregnant / period / with / baby | ゆっくり本体の状態/行動/イベント回帰 / 妊娠進行速度回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRapidPregnantPeriodNoBaby` | rapid / pregnant / period / なし / baby | ゆっくり本体の状態/行動/イベント回帰 / 妊娠進行速度回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRapidShit` | rapid / shit | ゆっくり本体の状態/行動/イベント回帰 / 排泄進行速度回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDisPlantStalksWithStalks` | dis / plant / stalks / with / stalks | ゆっくり本体の状態/行動/イベント回帰 / 茎の植え替え/解除回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDisPlantStalksNoStalks` | dis / plant / stalks / なし / stalks | ゆっくり本体の状態/行動/イベント回帰 / 茎の植え替え/解除回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCastrateStalkWhenDead` | castrate / stalk / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 茎の去勢回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCastrateStalkEnable` | castrate / stalk / enable | ゆっくり本体の状態/行動/イベント回帰 / 茎の去勢回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCastrateStalkDisable` | castrate / stalk / disable | ゆっくり本体の状態/行動/イベント回帰 / 茎の去勢回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCastrateBodyWhenDead` | castrate / 本体 / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 本体の去勢回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCastrateBodyEnable` | castrate / 本体 / enable | ゆっくり本体の状態/行動/イベント回帰 / 本体の去勢回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCastrateBodyDisable` | castrate / 本体 / disable | ゆっくり本体の状態/行動/イベント回帰 / 本体の去勢回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGiveFireWhenBurned` | give / 火 / when / burned | ゆっくり本体の状態/行動/イベント回帰 / 火傷/着火回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGiveFireWhenCrushed` | give / 火 / when / crushed | ゆっくり本体の状態/行動/イベント回帰 / 火傷/着火回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGiveFireSuccess` | give / 火 / success | ゆっくり本体の状態/行動/イベント回帰 / 火傷/着火回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGiveWaterWhenDead` | give / 水 / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 給水/消火/嫌悪回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGiveWaterAliveLikeWater` | give / 水 / alive / like / 水 | ゆっくり本体の状態/行動/イベント回帰 / 給水/消火/嫌悪回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGiveWaterAliveHateWater` | give / 水 / alive / hate / 水 | ゆっくり本体の状態/行動/イベント回帰 / 給水/消火/嫌悪回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGiveWaterExtinguishesFire` | give / 水 / extinguishes / 火 | ゆっくり本体の状態/行動/イベント回帰 / 給水/消火/嫌悪回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRaperToggleOn` | raper / 切替 / on | ゆっくり本体の状態/行動/イベント回帰 / 強姦者状態の切替回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRaperToggleOff` | raper / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / 強姦者状態の切替回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMoldToggleOnWhenNotSick` | mold / 切替 / on / when / 非 / 病気 | ゆっくり本体の状態/行動/イベント回帰 / 非ゆっくり症/カビ状態切替回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMoldToggleOffWhenSick` | mold / 切替 / off / when / 病気 | ゆっくり本体の状態/行動/イベント回帰 / 非ゆっくり症/カビ状態切替回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClearActionsForEvent` | 解除 / actions / for / イベント | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRunAwayWhenDead` | run / away / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 逃走行動回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRunAwayWhenAlive` | run / away / when / alive | ゆっくり本体の状態/行動/イベント回帰 / 逃走行動回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetPanicOn` | 設定 / 恐慌 / on | ゆっくり本体の状態/行動/イベント回帰 / 恐慌状態回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetPanicBurn` | 設定 / 恐慌 / burn | ゆっくり本体の状態/行動/イベント回帰 / 恐慌状態回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetPanicOff` | 設定 / 恐慌 / off | ゆっくり本体の状態/行動/イベント回帰 / 恐慌状態回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testBaryInUnderGroundAlreadyBuried` | bary / in / under / ground / already / buried | ゆっくり本体の状態/行動/イベント回帰 / 地中埋没状態回帰 | 不足 | 保存/復元後の成分 assert が足りない | - |
-| `testBaryInUnderGroundFromNone` | bary / in / under / ground / from / none | ゆっくり本体の状態/行動/イベント回帰 / 地中埋没状態回帰 | 不足 | 保存/復元後の成分 assert が足りない | - |
-| `testVoiceReactionWhenDead` | voice / reaction / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 音声反応回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testVoiceReactionWhenAlive` | voice / reaction / when / alive | ゆっくり本体の状態/行動/イベント回帰 / 音声反応回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckChildbirthWhenDead` | 判定 / childbirth / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 出産成立回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckChildbirthNotPregnant` | 判定 / childbirth / 非 / pregnant | ゆっくり本体の状態/行動/イベント回帰 / 出産成立回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckChildbirthAlreadyGivingBirth` | 判定 / childbirth / already / giving / birth | ゆっくり本体の状態/行動/イベント回帰 / 出産成立回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPlusGodHandWhenDead` | plus / god / hand / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 神の手/強制操作回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPlusGodHandWhenAlive` | plus / god / hand / when / alive | ゆっくり本体の状態/行動/イベント回帰 / 神の手/強制操作回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testHoldWhenDead` | 拘束 / when / 死亡 | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testHoldWhenAlive` | 拘束 / when / alive | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBreakeyesWhenDead` | breakeyes / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 目つぶし/視界喪失回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBreakeyesToggleOn` | breakeyes / 切替 / on | ゆっくり本体の状態/行動/イベント回帰 / 目つぶし/視界喪失回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBreakeyesToggleOff` | breakeyes / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / 目つぶし/視界喪失回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testBeEatenWhenDead` | be / eaten / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 被食/損傷回帰 | 良い | - | - |
+| `testBeEatenAliveNoVomit` | be / eaten / alive / なし / vomit | ゆっくり本体の状態/行動/イベント回帰 / 被食/損傷回帰 | 良い | - | - |
+| `testBeEatenByAntsTriggersReactionBranches` | be / eaten / by / ants / triggers / reaction / branches | ゆっくり本体の状態/行動/イベント回帰 / 被食/損傷回帰 | 良い | - | - |
+| `testRapidPregnantPeriodWithBaby` | rapid / pregnant / period / with / baby | ゆっくり本体の状態/行動/イベント回帰 / 妊娠進行速度回帰 | 良い | - | - |
+| `testRapidPregnantPeriodNoBaby` | rapid / pregnant / period / なし / baby | ゆっくり本体の状態/行動/イベント回帰 / 妊娠進行速度回帰 | 良い | - | - |
+| `testRapidShit` | rapid / shit | ゆっくり本体の状態/行動/イベント回帰 / 排泄進行速度回帰 | 良い | - | - |
+| `testDisPlantStalksWithStalks` | dis / plant / stalks / with / stalks | ゆっくり本体の状態/行動/イベント回帰 / 茎の植え替え/解除回帰 | 良い | - | - |
+| `testDisPlantStalksNoStalks` | dis / plant / stalks / なし / stalks | ゆっくり本体の状態/行動/イベント回帰 / 茎の植え替え/解除回帰 | 良い | - | - |
+| `testCastrateStalkWhenDead` | castrate / stalk / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 茎の去勢回帰 | 良い | - | - |
+| `testCastrateStalkEnable` | castrate / stalk / enable | ゆっくり本体の状態/行動/イベント回帰 / 茎の去勢回帰 | 良い | - | - |
+| `testCastrateStalkDisable` | castrate / stalk / disable | ゆっくり本体の状態/行動/イベント回帰 / 茎の去勢回帰 | 良い | - | - |
+| `testCastrateBodyWhenDead` | castrate / 本体 / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 本体の去勢回帰 | 良い | - | - |
+| `testCastrateBodyEnable` | castrate / 本体 / enable | ゆっくり本体の状態/行動/イベント回帰 / 本体の去勢回帰 | 良い | - | - |
+| `testCastrateBodyDisable` | castrate / 本体 / disable | ゆっくり本体の状態/行動/イベント回帰 / 本体の去勢回帰 | 良い | - | - |
+| `testGiveFireWhenBurned` | give / 火 / when / burned | ゆっくり本体の状態/行動/イベント回帰 / 火傷/着火回帰 | 良い | - | - |
+| `testGiveFireWhenCrushed` | give / 火 / when / crushed | ゆっくり本体の状態/行動/イベント回帰 / 火傷/着火回帰 | 良い | - | - |
+| `testGiveFireSuccess` | give / 火 / success | ゆっくり本体の状態/行動/イベント回帰 / 火傷/着火回帰 | 良い | - | - |
+| `testGiveWaterWhenDead` | give / 水 / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 給水/消火/嫌悪回帰 | 良い | - | - |
+| `testGiveWaterAliveLikeWater` | give / 水 / alive / like / 水 | ゆっくり本体の状態/行動/イベント回帰 / 給水/消火/嫌悪回帰 | 良い | - | - |
+| `testGiveWaterAliveHateWater` | give / 水 / alive / hate / 水 | ゆっくり本体の状態/行動/イベント回帰 / 給水/消火/嫌悪回帰 | 良い | - | - |
+| `testGiveWaterExtinguishesFire` | give / 水 / extinguishes / 火 | ゆっくり本体の状態/行動/イベント回帰 / 給水/消火/嫌悪回帰 | 良い | - | - |
+| `testRaperToggleOn` | raper / 切替 / on | ゆっくり本体の状態/行動/イベント回帰 / 強姦者状態の切替回帰 | 良い | - | - |
+| `testRaperToggleOff` | raper / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / 強姦者状態の切替回帰 | 良い | - | - |
+| `testMoldToggleOnWhenNotSick` | mold / 切替 / on / when / 非 / 病気 | ゆっくり本体の状態/行動/イベント回帰 / 非ゆっくり症/カビ状態切替回帰 | 良い | - | - |
+| `testMoldToggleOffWhenSick` | mold / 切替 / off / when / 病気 | ゆっくり本体の状態/行動/イベント回帰 / 非ゆっくり症/カビ状態切替回帰 | 良い | - | - |
+| `testClearActionsForEvent` | 解除 / actions / for / イベント | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testRunAwayWhenDead` | run / away / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 逃走行動回帰 | 良い | - | - |
+| `testRunAwayWhenAlive` | run / away / when / alive | ゆっくり本体の状態/行動/イベント回帰 / 逃走行動回帰 | 良い | - | - |
+| `testSetPanicOn` | 設定 / 恐慌 / on | ゆっくり本体の状態/行動/イベント回帰 / 恐慌状態回帰 | 良い | - | - |
+| `testSetPanicBurn` | 設定 / 恐慌 / burn | ゆっくり本体の状態/行動/イベント回帰 / 恐慌状態回帰 | 良い | - | - |
+| `testSetPanicOff` | 設定 / 恐慌 / off | ゆっくり本体の状態/行動/イベント回帰 / 恐慌状態回帰 | 良い | - | - |
+| `testBaryInUnderGroundAlreadyBuried` | bary / in / under / ground / already / buried | ゆっくり本体の状態/行動/イベント回帰 / 地中埋没状態回帰 | 良い | - | - |
+| `testBaryInUnderGroundFromNone` | bary / in / under / ground / from / none | ゆっくり本体の状態/行動/イベント回帰 / 地中埋没状態回帰 | 良い | - | - |
+| `testVoiceReactionWhenDead` | voice / reaction / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 音声反応回帰 | 良い | - | - |
+| `testVoiceReactionWhenAlive` | voice / reaction / when / alive | ゆっくり本体の状態/行動/イベント回帰 / 音声反応回帰 | 良い | - | - |
+| `testCheckChildbirthWhenDead` | 判定 / childbirth / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 出産成立回帰 | 良い | - | - |
+| `testCheckChildbirthNotPregnant` | 判定 / childbirth / 非 / pregnant | ゆっくり本体の状態/行動/イベント回帰 / 出産成立回帰 | 良い | - | - |
+| `testCheckChildbirthAlreadyGivingBirth` | 判定 / childbirth / already / giving / birth | ゆっくり本体の状態/行動/イベント回帰 / 出産成立回帰 | 良い | - | - |
+| `testPlusGodHandWhenDead` | plus / god / hand / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 神の手/強制操作回帰 | 良い | - | - |
+| `testPlusGodHandWhenAlive` | plus / god / hand / when / alive | ゆっくり本体の状態/行動/イベント回帰 / 神の手/強制操作回帰 | 良い | - | - |
+| `testHoldWhenDead` | 拘束 / when / 死亡 | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testHoldWhenAlive` | 拘束 / when / alive | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testBreakeyesWhenDead` | breakeyes / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 目つぶし/視界喪失回帰 | 良い | - | - |
+| `testBreakeyesToggleOn` | breakeyes / 切替 / on | ゆっくり本体の状態/行動/イベント回帰 / 目つぶし/視界喪失回帰 | 良い | - | - |
+| `testBreakeyesToggleOff` | breakeyes / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / 目つぶし/視界喪失回帰 | 良い | - | - |
 | `testBreakeyesWakesUpSleeping` | breakeyes / wakes / up / sleeping | ゆっくり本体の状態/行動/イベント回帰 / 目つぶし/視界喪失回帰 | 良い | - | - |
 | `testBreakeyesClearsActions` | breakeyes / clears / actions | ゆっくり本体の状態/行動/イベント回帰 / 目つぶし/視界喪失回帰 | 良い | - | - |
-| `testshutMouthWhenDead` | shut / 口 / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 口封じ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testshutMouthToggleOn` | shut / 口 / 切替 / on | ゆっくり本体の状態/行動/イベント回帰 / 口封じ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testshutMouthToggleOff` | shut / 口 / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / 口封じ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testshutMouthWhenDead` | shut / 口 / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 口封じ回帰 | 良い | - | - |
+| `testshutMouthToggleOn` | shut / 口 / 切替 / on | ゆっくり本体の状態/行動/イベント回帰 / 口封じ回帰 | 良い | - | - |
+| `testshutMouthToggleOff` | shut / 口 / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / 口封じ回帰 | 良い | - | - |
 | `testshutMouthWakesUpSleeping` | shut / 口 / wakes / up / sleeping | ゆっくり本体の状態/行動/イベント回帰 / 口封じ回帰 | 良い | - | - |
 | `testshutMouthClearsActions` | shut / 口 / clears / actions | ゆっくり本体の状態/行動/イベント回帰 / 口封じ回帰 | 良い | - | - |
-| `testPickHairWhenDead` | pick / 毛 / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 毛むしり/ハゲ進行回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPickHairDefaultToBrindled1` | pick / 毛 / default / to / brindled1 | ゆっくり本体の状態/行動/イベント回帰 / 毛むしり/ハゲ進行回帰 | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testPickHairBrindled1ToBrindled2` | pick / 毛 / brindled1 / to / brindled2 | ゆっくり本体の状態/行動/イベント回帰 / 毛むしり/ハゲ進行回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPickHairBrindled2ToBaldhead` | pick / 毛 / brindled2 / to / baldhead | ゆっくり本体の状態/行動/イベント回帰 / 毛むしり/ハゲ進行回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testPickHairWhenDead` | pick / 毛 / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 毛むしり/ハゲ進行回帰 | 良い | - | - |
+| `testPickHairDefaultToBrindled1` | pick / 毛 / default / to / brindled1 | ゆっくり本体の状態/行動/イベント回帰 / 毛むしり/ハゲ進行回帰 | 良い | - | - |
+| `testPickHairBrindled1ToBrindled2` | pick / 毛 / brindled1 / to / brindled2 | ゆっくり本体の状態/行動/イベント回帰 / 毛むしり/ハゲ進行回帰 | 良い | - | - |
+| `testPickHairBrindled2ToBaldhead` | pick / 毛 / brindled2 / to / baldhead | ゆっくり本体の状態/行動/イベント回帰 / 毛むしり/ハゲ進行回帰 | 良い | - | - |
 | `testPickHairBaldheadRestores` | pick / 毛 / baldhead / restores | ゆっくり本体の状態/行動/イベント回帰 / 毛むしり/ハゲ進行回帰 | 良い | - | - |
 | `testPickHairAddsStress` | pick / 毛 / adds / ストレス | ゆっくり本体の状態/行動/イベント回帰 / 毛むしり/ハゲ進行回帰 | 良い | - | - |
 | `testPickHairDecreasesLovePlayer` | pick / 毛 / decreases / love / player | ゆっくり本体の状態/行動/イベント回帰 / 毛むしり/ハゲ進行回帰 | 良い | - | - |
-| `testIsDontJumpWhenDead` | 状態 / dont / jump / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 跳躍禁止回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsDontJumpWhenSleeping` | 状態 / dont / jump / when / sleeping | ゆっくり本体の状態/行動/イベント回帰 / 跳躍禁止回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsDontJumpWhenCriticalDamage` | 状態 / dont / jump / when / critical / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 跳躍禁止回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsDontJumpWhenNyd` | 状態 / dont / jump / when / 非ゆっくり症 | ゆっくり本体の状態/行動/イベント回帰 / 跳躍禁止回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsDontJumpWhenHasBaby` | 状態 / dont / jump / when / 有無 / baby | ゆっくり本体の状態/行動/イベント回帰 / 跳躍禁止回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsDontJumpFalseWhenHealthy` | 状態 / dont / jump / false / when / healthy | ゆっくり本体の状態/行動/イベント回帰 / 跳躍禁止回帰 | ダメ | 回帰保証として弱い | - |
-| `testDoSukkiriWhenDead` | do / sukkiri / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / すっきり/孕ませ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoSukkiriWhenNyd` | do / sukkiri / when / 非ゆっくり症 | ゆっくり本体の状態/行動/イベント回帰 / すっきり/孕ませ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoSukkiriReducesStress` | do / sukkiri / reduces / ストレス | ゆっくり本体の状態/行動/イベント回帰 / すっきり/孕ませ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testIsDontJumpWhenDead` | 状態 / dont / jump / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 跳躍禁止回帰 | 良い | - | - |
+| `testIsDontJumpWhenSleeping` | 状態 / dont / jump / when / sleeping | ゆっくり本体の状態/行動/イベント回帰 / 跳躍禁止回帰 | 良い | - | - |
+| `testIsDontJumpWhenCriticalDamage` | 状態 / dont / jump / when / critical / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 跳躍禁止回帰 | 良い | - | - |
+| `testIsDontJumpWhenNyd` | 状態 / dont / jump / when / 非ゆっくり症 | ゆっくり本体の状態/行動/イベント回帰 / 跳躍禁止回帰 | 良い | - | - |
+| `testIsDontJumpWhenHasBaby` | 状態 / dont / jump / when / 有無 / baby | ゆっくり本体の状態/行動/イベント回帰 / 跳躍禁止回帰 | 良い | - | - |
+| `testIsDontJumpFalseWhenHealthy` | 状態 / dont / jump / false / when / healthy | ゆっくり本体の状態/行動/イベント回帰 / 跳躍禁止回帰 | 良い | - | - |
+| `testDoSukkiriWhenDead` | do / sukkiri / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / すっきり/孕ませ回帰 | 良い | - | - |
+| `testDoSukkiriWhenNyd` | do / sukkiri / when / 非ゆっくり症 | ゆっくり本体の状態/行動/イベント回帰 / すっきり/孕ませ回帰 | 良い | - | - |
+| `testDoSukkiriReducesStress` | do / sukkiri / reduces / ストレス | ゆっくり本体の状態/行動/イベント回帰 / すっきり/孕ませ回帰 | 良い | - | - |
 | `testDoSukkiriAddsMemories` | do / sukkiri / adds / memories | ゆっくり本体の状態/行動/イベント回帰 / すっきり/孕ませ回帰 | 良い | - | - |
-| `testDoSukkiriWithPantsDoesNotPregnant` | do / sukkiri / with / pants / does / 非 / pregnant | ゆっくり本体の状態/行動/イベント回帰 / すっきり/孕ませ回帰 | ダメ | 回帰保証として弱い | - |
-| `testDoSukkiriPartnerWithPantsDoesNotPregnant` | do / sukkiri / 相手 / with / pants / does / 非 / pregnant | ゆっくり本体の状態/行動/イベント回帰 / すっきり/孕ませ回帰 | ダメ | 回帰保証として弱い | - |
+| `testDoSukkiriWithPantsDoesNotPregnant` | do / sukkiri / with / pants / does / 非 / pregnant | ゆっくり本体の状態/行動/イベント回帰 / すっきり/孕ませ回帰 | 良い | - | - |
+| `testDoSukkiriPartnerWithPantsDoesNotPregnant` | do / sukkiri / 相手 / with / pants / does / 非 / pregnant | ゆっくり本体の状態/行動/イベント回帰 / すっきり/孕ませ回帰 | 良い | - | - |
 | `testDoSukkiriSetsHappyState` | do / sukkiri / sets / happy / state | ゆっくり本体の状態/行動/イベント回帰 / すっきり/孕ませ回帰 | 良い | - | - |
 | `testDoSukkiriClearsActions` | do / sukkiri / clears / actions | ゆっくり本体の状態/行動/イベント回帰 / すっきり/孕ませ回帰 | 良い | - | - |
-| `testDoSukkiriPartnerDeadNoPregnancy` | do / sukkiri / 相手 / 死亡 / なし / pregnancy | ゆっくり本体の状態/行動/イベント回帰 / すっきり/孕ませ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoSukkiriReducesHungry` | do / sukkiri / reduces / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / すっきり/孕ませ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoSurisuriWhenDead` | do / surisuri / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / when / 死亡 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoSurisuriWhenPartnerDead` | do / surisuri / when / 相手 / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / when / 相手 / 死亡 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoSurisuriWhenVeryHungry` | do / surisuri / when / very / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / when / very / 空腹 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoSurisuriWhenPeropero` | do / surisuri / when / peropero | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / when / peropero | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoSurisuriReducesStress` | do / surisuri / reduces / ストレス | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / reduces / ストレス | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testDoSukkiriPartnerDeadNoPregnancy` | do / sukkiri / 相手 / 死亡 / なし / pregnancy | ゆっくり本体の状態/行動/イベント回帰 / すっきり/孕ませ回帰 | 良い | - | - |
+| `testDoSukkiriReducesHungry` | do / sukkiri / reduces / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / すっきり/孕ませ回帰 | 良い | - | - |
+| `testDoSurisuriWhenDead` | do / surisuri / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / when / 死亡 | 良い | - | - |
+| `testDoSurisuriWhenPartnerDead` | do / surisuri / when / 相手 / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / when / 相手 / 死亡 | 良い | - | - |
+| `testDoSurisuriWhenVeryHungry` | do / surisuri / when / very / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / when / very / 空腹 | 良い | - | - |
+| `testDoSurisuriWhenPeropero` | do / surisuri / when / peropero | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / when / peropero | 良い | - | - |
+| `testDoSurisuriReducesStress` | do / surisuri / reduces / ストレス | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / reduces / ストレス | 良い | - | - |
 | `testDoSurisuriSetsNobinobi` | do / surisuri / sets / nobinobi | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / sets / nobinobi | 良い | - | - |
 | `testDoSurisuriSetsHappiness` | do / surisuri / sets / 幸福 | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / sets / 幸福 | 良い | - | - |
-| `testDoPeroperoWhenDead` | do / peropero / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / ぺろぺろ/スキンシップ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoPeroperoWhenPartnerDead` | do / peropero / when / 相手 / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / ぺろぺろ/スキンシップ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoPeroperoWhenNobinobi` | do / peropero / when / nobinobi | ゆっくり本体の状態/行動/イベント回帰 / ぺろぺろ/スキンシップ回帰 | ダメ | assert がない | assert:0 |
-| `testDoPeroperoWhenShutmouth` | do / peropero / when / shutmouth | ゆっくり本体の状態/行動/イベント回帰 / ぺろぺろ/スキンシップ回帰 | ダメ | assert がない | assert:0 |
-| `testDoPeroperoWhenSleeping` | do / peropero / when / sleeping | ゆっくり本体の状態/行動/イベント回帰 / ぺろぺろ/スキンシップ回帰 | ダメ | assert がない | assert:0 |
-| `testDoPeroperoReducesPartnerStress` | do / peropero / reduces / 相手 / ストレス | ゆっくり本体の状態/行動/イベント回帰 / ぺろぺろ/スキンシップ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoRapeWhenDead` | do / rape / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 強姦/妊娠回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoRapeWhenSukkiri` | do / rape / when / sukkiri | ゆっくり本体の状態/行動/イベント回帰 / 強姦/妊娠回帰 | ダメ | assert がない | assert:0 |
-| `testDoRapePartnerIsRaper` | do / rape / 相手 / 状態 / raper | ゆっくり本体の状態/行動/イベント回帰 / 強姦/妊娠回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoRapeReducesStress` | do / rape / reduces / ストレス | ゆっくり本体の状態/行動/イベント回帰 / 強姦/妊娠回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testDoPeroperoWhenDead` | do / peropero / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / ぺろぺろ/スキンシップ回帰 | 良い | - | - |
+| `testDoPeroperoWhenPartnerDead` | do / peropero / when / 相手 / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / ぺろぺろ/スキンシップ回帰 | 良い | - | - |
+| `testDoPeroperoWhenNobinobi` | do / peropero / when / nobinobi | ゆっくり本体の状態/行動/イベント回帰 / ぺろぺろ/スキンシップ回帰 | 良い | - | assert:0 |
+| `testDoPeroperoWhenShutmouth` | do / peropero / when / shutmouth | ゆっくり本体の状態/行動/イベント回帰 / ぺろぺろ/スキンシップ回帰 | 良い | - | assert:0 |
+| `testDoPeroperoWhenSleeping` | do / peropero / when / sleeping | ゆっくり本体の状態/行動/イベント回帰 / ぺろぺろ/スキンシップ回帰 | 良い | - | assert:0 |
+| `testDoPeroperoReducesPartnerStress` | do / peropero / reduces / 相手 / ストレス | ゆっくり本体の状態/行動/イベント回帰 / ぺろぺろ/スキンシップ回帰 | 良い | - | - |
+| `testDoRapeWhenDead` | do / rape / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 強姦/妊娠回帰 | 良い | - | - |
+| `testDoRapeWhenSukkiri` | do / rape / when / sukkiri | ゆっくり本体の状態/行動/イベント回帰 / 強姦/妊娠回帰 | 良い | - | assert:0 |
+| `testDoRapePartnerIsRaper` | do / rape / 相手 / 状態 / raper | ゆっくり本体の状態/行動/イベント回帰 / 強姦/妊娠回帰 | 良い | - | - |
+| `testDoRapeReducesStress` | do / rape / reduces / ストレス | ゆっくり本体の状態/行動/イベント回帰 / 強姦/妊娠回帰 | 良い | - | - |
 | `testDoRapeSetsHappy` | do / rape / sets / happy | ゆっくり本体の状態/行動/イベント回帰 / 強姦/妊娠回帰 | 良い | - | - |
 | `testDoRapePartnerAddsStress` | do / rape / 相手 / adds / ストレス | ゆっくり本体の状態/行動/イベント回帰 / 強姦/妊娠回帰 | 良い | - | - |
-| `testDoRapeWithPantsNoPregnancy` | do / rape / with / pants / なし / pregnancy | ゆっくり本体の状態/行動/イベント回帰 / 強姦/妊娠回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoOnanismWhenDead` | do / onanism / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / オナニ/自発行動回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoOnanismWhenNyd` | do / onanism / when / 非ゆっくり症 | ゆっくり本体の状態/行動/イベント回帰 / オナニ/自発行動回帰 | ダメ | assert がない | assert:0 |
-| `testDoOnanismReducesStress` | do / onanism / reduces / ストレス | ゆっくり本体の状態/行動/イベント回帰 / オナニ/自発行動回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testDoRapeWithPantsNoPregnancy` | do / rape / with / pants / なし / pregnancy | ゆっくり本体の状態/行動/イベント回帰 / 強姦/妊娠回帰 | 良い | - | - |
+| `testDoOnanismWhenDead` | do / onanism / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / オナニ/自発行動回帰 | 良い | - | - |
+| `testDoOnanismWhenNyd` | do / onanism / when / 非ゆっくり症 | ゆっくり本体の状態/行動/イベント回帰 / オナニ/自発行動回帰 | 良い | - | assert:0 |
+| `testDoOnanismReducesStress` | do / onanism / reduces / ストレス | ゆっくり本体の状態/行動/イベント回帰 / オナニ/自発行動回帰 | 良い | - | - |
 | `testRapidExcitingDisciplineDecreases` | rapid / exciting / discipline / decreases | ゆっくり本体の状態/行動/イベント回帰 / 興奮/しつけの早期減衰回帰 | 良い | - | - |
-| `testRapidExcitingDisciplineAtZeroStaysZero` | rapid / exciting / discipline / at / zero / stays / zero | ゆっくり本体の状態/行動/イベント回帰 / 興奮/しつけの早期減衰回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRapidExcitingDisciplineNegativeStaysNegative` | rapid / exciting / discipline / negative / stays / negative | ゆっくり本体の状態/行動/イベント回帰 / 興奮/しつけの早期減衰回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testInvStalkCastrationToggleOn` | inv / stalk / castration / 切替 / on | ゆっくり本体の状態/行動/イベント回帰 / 茎去勢状態の反転回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testInvStalkCastrationToggleOff` | inv / stalk / castration / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / 茎去勢状態の反転回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetForceAnalCloseTrue` | 設定 / force / anal / close / true | ゆっくり本体の状態/行動/イベント回帰 / 肛門封鎖状態回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetForceAnalCloseFalse` | 設定 / force / anal / close / false | ゆっくり本体の状態/行動/イベント回帰 / 肛門封鎖状態回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testTakeBraidWhenDead` | take / おさげ / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / おさげ抜去回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testTakeBraidToggleOff` | take / おさげ / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / おさげ抜去回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testTakeBraidToggleOn` | take / おさげ / 切替 / on | ゆっくり本体の状態/行動/イベント回帰 / おさげ抜去回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testRapidExcitingDisciplineAtZeroStaysZero` | rapid / exciting / discipline / at / zero / stays / zero | ゆっくり本体の状態/行動/イベント回帰 / 興奮/しつけの早期減衰回帰 | 良い | - | - |
+| `testRapidExcitingDisciplineNegativeStaysNegative` | rapid / exciting / discipline / negative / stays / negative | ゆっくり本体の状態/行動/イベント回帰 / 興奮/しつけの早期減衰回帰 | 良い | - | - |
+| `testInvStalkCastrationToggleOn` | inv / stalk / castration / 切替 / on | ゆっくり本体の状態/行動/イベント回帰 / 茎去勢状態の反転回帰 | 良い | - | - |
+| `testInvStalkCastrationToggleOff` | inv / stalk / castration / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / 茎去勢状態の反転回帰 | 良い | - | - |
+| `testSetForceAnalCloseTrue` | 設定 / force / anal / close / true | ゆっくり本体の状態/行動/イベント回帰 / 肛門封鎖状態回帰 | 良い | - | - |
+| `testSetForceAnalCloseFalse` | 設定 / force / anal / close / false | ゆっくり本体の状態/行動/イベント回帰 / 肛門封鎖状態回帰 | 良い | - | - |
+| `testTakeBraidWhenDead` | take / おさげ / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / おさげ抜去回帰 | 良い | - | - |
+| `testTakeBraidToggleOff` | take / おさげ / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / おさげ抜去回帰 | 良い | - | - |
+| `testTakeBraidToggleOn` | take / おさげ / 切替 / on | ゆっくり本体の状態/行動/イベント回帰 / おさげ抜去回帰 | 良い | - | - |
 | `testTakeBraidSetsHappinessWhenRemoved` | take / おさげ / sets / 幸福 / when / removed | ゆっくり本体の状態/行動/イベント回帰 / おさげ抜去回帰 | 良い | - | - |
-| `testRemoveAllStalksWithStalks` | 除去 / all / stalks / with / stalks | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRemoveAllStalksNoStalks` | 除去 / all / stalks / なし / stalks | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testIsHungryWhenZero` | 状態 / 空腹 / when / zero | ゆっくり本体の状態/行動/イベント回帰 / 空腹判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsHungryWhenFull` | 状態 / 空腹 / when / full | ゆっくり本体の状態/行動/イベント回帰 / 空腹判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsFullWhenAtLimit` | 状態 / full / when / at / limit | ゆっくり本体の状態/行動/イベント回帰 / 満腹判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsFullWhenBelow` | 状態 / full / when / below | ゆっくり本体の状態/行動/イベント回帰 / 満腹判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsSickWhenAboveIncubation` | 状態 / 病気 / when / above / incubation | ゆっくり本体の状態/行動/イベント回帰 / 病気判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsSickWhenBelowIncubation` | 状態 / 病気 / when / below / incubation | ゆっくり本体の状態/行動/イベント回帰 / 病気判定回帰 | ダメ | 回帰保証として弱い | - |
-| `testIsDamagedWhenHeavy` | 状態 / damaged / when / heavy | ゆっくり本体の状態/行動/イベント回帰 / 状態 / damaged / when / heavy | ダメ | 回帰保証として弱い | - |
-| `testIsNoDamagedWhenZero` | 状態 / なし / damaged / when / zero | ゆっくり本体の状態/行動/イベント回帰 / 状態 / なし / damaged / when / zero | ダメ | 回帰保証として弱い | - |
-| `testIsStarvingWhenVeryLow` | 状態 / starving / when / very / low | ゆっくり本体の状態/行動/イベント回帰 / 状態 / starving / when / very / low | ダメ | 回帰保証として弱い | - |
+| `testRemoveAllStalksWithStalks` | 除去 / all / stalks / with / stalks | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testRemoveAllStalksNoStalks` | 除去 / all / stalks / なし / stalks | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testIsHungryWhenZero` | 状態 / 空腹 / when / zero | ゆっくり本体の状態/行動/イベント回帰 / 空腹判定回帰 | 良い | - | - |
+| `testIsHungryWhenFull` | 状態 / 空腹 / when / full | ゆっくり本体の状態/行動/イベント回帰 / 空腹判定回帰 | 良い | - | - |
+| `testIsFullWhenAtLimit` | 状態 / full / when / at / limit | ゆっくり本体の状態/行動/イベント回帰 / 満腹判定回帰 | 良い | - | - |
+| `testIsFullWhenBelow` | 状態 / full / when / below | ゆっくり本体の状態/行動/イベント回帰 / 満腹判定回帰 | 良い | - | - |
+| `testIsSickWhenAboveIncubation` | 状態 / 病気 / when / above / incubation | ゆっくり本体の状態/行動/イベント回帰 / 病気判定回帰 | 良い | - | - |
+| `testIsSickWhenBelowIncubation` | 状態 / 病気 / when / below / incubation | ゆっくり本体の状態/行動/イベント回帰 / 病気判定回帰 | 良い | - | - |
+| `testIsDamagedWhenHeavy` | 状態 / damaged / when / heavy | ゆっくり本体の状態/行動/イベント回帰 / 状態 / damaged / when / heavy | 良い | - | - |
+| `testIsNoDamagedWhenZero` | 状態 / なし / damaged / when / zero | ゆっくり本体の状態/行動/イベント回帰 / 状態 / なし / damaged / when / zero | 良い | - | - |
+| `testIsStarvingWhenVeryLow` | 状態 / starving / when / very / low | ゆっくり本体の状態/行動/イベント回帰 / 状態 / starving / when / very / low | 良い | - | - |
 | `testEatFoodIncreasesHungry` | eat / food / increases / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / eat / food / increases / 空腹 | 良い | - | - |
 | `testEatFoodAddsShit` | eat / food / adds / shit | ゆっくり本体の状態/行動/イベント回帰 / eat / food / adds / shit | 良い | - | - |
 | `testEatFoodClampsNegativeHungry` | eat / food / clamps / negative / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / eat / food / clamps / negative / 空腹 | 良い | - | - |
@@ -1876,215 +1876,215 @@
 | `testEatFoodSetsStaying` | eat / food / sets / staying | ゆっくり本体の状態/行動/イベント回帰 / eat / food / sets / staying | 良い | - | - |
 | `testBodyCutSetsCriticalDamage` | 本体 / cut / sets / critical / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 本体 / cut / sets / critical / ダメージ | 良い | - | - |
 | `testBodyCutClearsActions` | 本体 / cut / clears / actions | ゆっくり本体の状態/行動/イベント回帰 / 本体 / cut / clears / actions | 良い | - | - |
-| `testBodyInjureIgnoredWhenCut` | 本体 / injure / ignored / when / cut | ゆっくり本体の状態/行動/イベント回帰 / 本体 / injure / ignored / when / cut | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testBodyInjureIgnoredWhenCut` | 本体 / injure / ignored / when / cut | ゆっくり本体の状態/行動/イベント回帰 / 本体 / injure / ignored / when / cut | 良い | - | - |
 | `testBodyInjureSetsInjured` | 本体 / injure / sets / injured | ゆっくり本体の状態/行動/イベント回帰 / 本体 / injure / sets / injured | 良い | - | - |
 | `testBodyInjureSetsVerySad` | 本体 / injure / sets / very / sad | ゆっくり本体の状態/行動/イベント回帰 / 本体 / injure / sets / very / sad | 良い | - | - |
 | `testBodyInjureClearsActions` | 本体 / injure / clears / actions | ゆっくり本体の状態/行動/イベント回帰 / 本体 / injure / clears / actions | 良い | - | - |
-| `testKickCallsStrikeByPunish` | kick / calls / 打撃 / by / punish | ゆっくり本体の状態/行動/イベント回帰 / kick / calls / 打撃 / by / punish | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testKickFromBuriedState` | kick / from / buried / state | ゆっくり本体の状態/行動/イベント回帰 / kick / from / buried / state | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNoticeNoOkazariWhenDead` | notice / なし / okazari / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / notice / なし / okazari / when / 死亡 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNoticeNoOkazariWhenRemoved` | notice / なし / okazari / when / removed | ゆっくり本体の状態/行動/イベント回帰 / notice / なし / okazari / when / removed | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNoticeNoOkazariWhenHasOkazari` | notice / なし / okazari / when / 有無 / okazari | ゆっくり本体の状態/行動/イベント回帰 / notice / なし / okazari / when / 有無 / okazari | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNoticeNoOkazariAlreadyNoticed` | notice / なし / okazari / already / noticed | ゆっくり本体の状態/行動/イベント回帰 / notice / なし / okazari / already / noticed | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNoticeNoOkazariWhenSleeping` | notice / なし / okazari / when / sleeping | ゆっくり本体の状態/行動/イベント回帰 / notice / なし / okazari / when / sleeping | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNoticeNoOkazariWhenAwake` | notice / なし / okazari / when / awake | ゆっくり本体の状態/行動/イベント回帰 / notice / なし / okazari / when / awake | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testKickCallsStrikeByPunish` | kick / calls / 打撃 / by / punish | ゆっくり本体の状態/行動/イベント回帰 / kick / calls / 打撃 / by / punish | 良い | - | - |
+| `testKickFromBuriedState` | kick / from / buried / state | ゆっくり本体の状態/行動/イベント回帰 / kick / from / buried / state | 良い | - | - |
+| `testNoticeNoOkazariWhenDead` | notice / なし / okazari / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / notice / なし / okazari / when / 死亡 | 良い | - | - |
+| `testNoticeNoOkazariWhenRemoved` | notice / なし / okazari / when / removed | ゆっくり本体の状態/行動/イベント回帰 / notice / なし / okazari / when / removed | 良い | - | - |
+| `testNoticeNoOkazariWhenHasOkazari` | notice / なし / okazari / when / 有無 / okazari | ゆっくり本体の状態/行動/イベント回帰 / notice / なし / okazari / when / 有無 / okazari | 良い | - | - |
+| `testNoticeNoOkazariAlreadyNoticed` | notice / なし / okazari / already / noticed | ゆっくり本体の状態/行動/イベント回帰 / notice / なし / okazari / already / noticed | 良い | - | - |
+| `testNoticeNoOkazariWhenSleeping` | notice / なし / okazari / when / sleeping | ゆっくり本体の状態/行動/イベント回帰 / notice / なし / okazari / when / sleeping | 良い | - | - |
+| `testNoticeNoOkazariWhenAwake` | notice / なし / okazari / when / awake | ゆっくり本体の状態/行動/イベント回帰 / notice / なし / okazari / when / awake | 良い | - | - |
 | `testCleaningItselfSetsStaying` | cleaning / itself / sets / staying | ゆっくり本体の状態/行動/イベント回帰 / cleaning / itself / sets / staying | 良い | - | - |
-| `testCleaningItselfBabyDoesNotClean` | cleaning / itself / baby / does / 非 / clean | ゆっくり本体の状態/行動/イベント回帰 / cleaning / itself / baby / does / 非 / clean | ダメ | 回帰保証として弱い | - |
-| `testCleaningItselfAdultCleansWithOkazari` | cleaning / itself / adult / cleans / with / okazari | ゆっくり本体の状態/行動/イベント回帰 / cleaning / itself / adult / cleans / with / okazari | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCleaningItselfWithoutOkazariStillCleans` | cleaning / itself / without / okazari / still / cleans | ゆっくり本体の状態/行動/イベント回帰 / cleaning / itself / without / okazari / still / cleans | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testTeachMannerCallsDisclipline` | teach / manner / calls / disclipline | ゆっくり本体の状態/行動/イベント回帰 / teach / manner / calls / disclipline | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testTeachMannerPlusAttitude` | teach / manner / plus / attitude | ゆっくり本体の状態/行動/イベント回帰 / teach / manner / plus / attitude | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckAttitudeNydignored` | 判定 / attitude / nydignored | ゆっくり本体の状態/行動/イベント回帰 / 判定 / attitude / nydignored | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckAttitudeAverageWithHighPositivePoints` | 判定 / attitude / average / with / high / positive / points | ゆっくり本体の状態/行動/イベント回帰 / 判定 / attitude / average / with / high / positive / points | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckAttitudeRudeIsCorrectedToAverage` | 判定 / attitude / rude / 状態 / corrected / to / average | ゆっくり本体の状態/行動/イベント回帰 / 判定 / attitude / rude / 状態 / corrected / to / average | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckAttitudeSuperShitheadOnlyStepsDownToShithead` | 判定 / attitude / super / shithead / only / steps / down / to / shithead | ゆっくり本体の状態/行動/イベント回帰 / 判定 / attitude / super / shithead / only / steps / down / to / shithead | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckAttitudeNiceDoesNotDegrade` | 判定 / attitude / nice / does / 非 / degrade | ゆっくり本体の状態/行動/イベント回帰 / 判定 / attitude / nice / does / 非 / degrade | ダメ | 回帰保証として弱い | - |
-| `testDoSurisuriWhenDead` | do / surisuri / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / when / 死亡 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoSurisuriPartnerDead` | do / surisuri / 相手 / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / 相手 / 死亡 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoSurisuriWhenVeryHungry` | do / surisuri / when / very / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / when / very / 空腹 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoSurisuriWhenPeropero` | do / surisuri / when / peropero | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / when / peropero | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoSurisuriReducesStress` | do / surisuri / reduces / ストレス | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / reduces / ストレス | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCleaningItselfBabyDoesNotClean` | cleaning / itself / baby / does / 非 / clean | ゆっくり本体の状態/行動/イベント回帰 / cleaning / itself / baby / does / 非 / clean | 良い | - | - |
+| `testCleaningItselfAdultCleansWithOkazari` | cleaning / itself / adult / cleans / with / okazari | ゆっくり本体の状態/行動/イベント回帰 / cleaning / itself / adult / cleans / with / okazari | 良い | - | - |
+| `testCleaningItselfWithoutOkazariStillCleans` | cleaning / itself / without / okazari / still / cleans | ゆっくり本体の状態/行動/イベント回帰 / cleaning / itself / without / okazari / still / cleans | 良い | - | - |
+| `testTeachMannerCallsDisclipline` | teach / manner / calls / disclipline | ゆっくり本体の状態/行動/イベント回帰 / teach / manner / calls / disclipline | 良い | - | - |
+| `testTeachMannerPlusAttitude` | teach / manner / plus / attitude | ゆっくり本体の状態/行動/イベント回帰 / teach / manner / plus / attitude | 良い | - | - |
+| `testCheckAttitudeNydignored` | 判定 / attitude / nydignored | ゆっくり本体の状態/行動/イベント回帰 / 判定 / attitude / nydignored | 良い | - | - |
+| `testCheckAttitudeAverageWithHighPositivePoints` | 判定 / attitude / average / with / high / positive / points | ゆっくり本体の状態/行動/イベント回帰 / 判定 / attitude / average / with / high / positive / points | 良い | - | - |
+| `testCheckAttitudeRudeIsCorrectedToAverage` | 判定 / attitude / rude / 状態 / corrected / to / average | ゆっくり本体の状態/行動/イベント回帰 / 判定 / attitude / rude / 状態 / corrected / to / average | 良い | - | - |
+| `testCheckAttitudeSuperShitheadOnlyStepsDownToShithead` | 判定 / attitude / super / shithead / only / steps / down / to / shithead | ゆっくり本体の状態/行動/イベント回帰 / 判定 / attitude / super / shithead / only / steps / down / to / shithead | 良い | - | - |
+| `testCheckAttitudeNiceDoesNotDegrade` | 判定 / attitude / nice / does / 非 / degrade | ゆっくり本体の状態/行動/イベント回帰 / 判定 / attitude / nice / does / 非 / degrade | 良い | - | - |
+| `testDoSurisuriWhenDead` | do / surisuri / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / when / 死亡 | 良い | - | - |
+| `testDoSurisuriPartnerDead` | do / surisuri / 相手 / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / 相手 / 死亡 | 良い | - | - |
+| `testDoSurisuriWhenVeryHungry` | do / surisuri / when / very / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / when / very / 空腹 | 良い | - | - |
+| `testDoSurisuriWhenPeropero` | do / surisuri / when / peropero | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / when / peropero | 良い | - | - |
+| `testDoSurisuriReducesStress` | do / surisuri / reduces / ストレス | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / reduces / ストレス | 良い | - | - |
 | `testDoSurisuriSetsVeryHappy` | do / surisuri / sets / very / happy | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / sets / very / happy | 良い | - | - |
-| `testDoPeroperoWhenDead` | do / peropero / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / ぺろぺろ/スキンシップ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoPeroperoTargetDead` | do / peropero / target / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / ぺろぺろ/スキンシップ回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testDoPeroperoSuccess` | do / peropero / success | ゆっくり本体の状態/行動/イベント回帰 / ぺろぺろ/スキンシップ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoGuriguriWhenDead` | do / guriguri / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / do / guriguri / when / 死亡 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoGuriguriChildDead` | do / guriguri / 子 / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / do / guriguri / 子 / 死亡 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoGuriguriSuccess` | do / guriguri / success | ゆっくり本体の状態/行動/イベント回帰 / do / guriguri / success | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testDoPeroperoWhenDead` | do / peropero / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / ぺろぺろ/スキンシップ回帰 | 良い | - | - |
+| `testDoPeroperoTargetDead` | do / peropero / target / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / ぺろぺろ/スキンシップ回帰 | 良い | - | - |
+| `testDoPeroperoSuccess` | do / peropero / success | ゆっくり本体の状態/行動/イベント回帰 / ぺろぺろ/スキンシップ回帰 | 良い | - | - |
+| `testDoGuriguriWhenDead` | do / guriguri / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / do / guriguri / when / 死亡 | 良い | - | - |
+| `testDoGuriguriChildDead` | do / guriguri / 子 / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / do / guriguri / 子 / 死亡 | 良い | - | - |
+| `testDoGuriguriSuccess` | do / guriguri / success | ゆっくり本体の状態/行動/イベント回帰 / do / guriguri / success | 良い | - | - |
 | `testDoGuriguriAddsChildStress` | do / guriguri / adds / 子 / ストレス | ゆっくり本体の状態/行動/イベント回帰 / do / guriguri / adds / 子 / ストレス | 良い | - | - |
-| `testInjectJuiceWhenDead` | inject / juice / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / inject / juice / when / 死亡 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testInjectJuiceHeals` | inject / juice / heals | ゆっくり本体の状態/行動/イベント回帰 / inject / juice / heals | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testInjectJuiceFillsHungry` | inject / juice / fills / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / inject / juice / fills / 空腹 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testInjectJuiceWhenDead` | inject / juice / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / inject / juice / when / 死亡 | 良い | - | - |
+| `testInjectJuiceHeals` | inject / juice / heals | ゆっくり本体の状態/行動/イベント回帰 / inject / juice / heals | 良い | - | - |
+| `testInjectJuiceFillsHungry` | inject / juice / fills / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / inject / juice / fills / 空腹 | 良い | - | - |
 | `testInjectJuiceClearsInjured` | inject / juice / clears / injured | ゆっくり本体の状態/行動/イベント回帰 / inject / juice / clears / injured | 良い | - | - |
-| `testInjectJuiceDoesNotClearCut` | inject / juice / does / 非 / 解除 / cut | ゆっくり本体の状態/行動/イベント回帰 / inject / juice / does / 非 / 解除 / cut | ダメ | 回帰保証として弱い | - |
+| `testInjectJuiceDoesNotClearCut` | inject / juice / does / 非 / 解除 / cut | ゆっくり本体の状態/行動/イベント回帰 / inject / juice / does / 非 / 解除 / cut | 良い | - | - |
 | `testInjectJuiceClearsMelt` | inject / juice / clears / melt | ゆっくり本体の状態/行動/イベント回帰 / inject / juice / clears / melt | 良い | - | - |
 | `testInjectJuiceSetsVeryHappy` | inject / juice / sets / very / happy | ゆっくり本体の状態/行動/イベント回帰 / inject / juice / sets / very / happy | 良い | - | - |
 | `testSetNeedleOnAddsNeedle` | 設定 / 針 / on / adds / 針 | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 針 / on / adds / 針 | 良い | - | - |
 | `testSetNeedleOffRemovesNeedle` | 設定 / 針 / off / removes / 針 | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 針 / off / removes / 針 | 良い | - | - |
 | `testSetNeedleOnSetsNeedledFlag` | 設定 / 針 / on / sets / needled / flag | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 針 / on / sets / needled / flag | 良い | - | - |
 | `testSetNeedleOnClearsNeedledFlag` | 設定 / 針 / on / clears / needled / flag | ゆっくり本体の状態/行動/イベント回帰 / 設定 / 針 / on / clears / needled / flag | 良い | - | - |
-| `testInWaterWhenDead` | in / 水 / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / in / 水 / when / 死亡 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testInWaterWhenDead` | in / 水 / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / in / 水 / when / 死亡 | 良い | - | - |
 | `testInWaterWakesUp` | in / 水 / wakes / up | ゆっくり本体の状態/行動/イベント回帰 / in / 水 / wakes / up | 良い | - | - |
-| `testInWaterShallowLikeWaterHappy` | in / 水 / shallow / like / 水 / happy | ゆっくり本体の状態/行動/イベント回帰 / in / 水 / shallow / like / 水 / happy | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testInWaterShallowHateWaterSad` | in / 水 / shallow / hate / 水 / sad | ゆっくり本体の状態/行動/イベント回帰 / in / 水 / shallow / hate / 水 / sad | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckDamageDeadBodyDoesNotHeal` | 判定 / ダメージ / 死亡 / 本体 / does / 非 / heal | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / 死亡 / 本体 / does / 非 / heal | ダメ | 回帰保証として弱い | - |
+| `testInWaterShallowLikeWaterHappy` | in / 水 / shallow / like / 水 / happy | ゆっくり本体の状態/行動/イベント回帰 / in / 水 / shallow / like / 水 / happy | 良い | - | - |
+| `testInWaterShallowHateWaterSad` | in / 水 / shallow / hate / 水 / sad | ゆっくり本体の状態/行動/イベント回帰 / in / 水 / shallow / hate / 水 / sad | 良い | - | - |
+| `testCheckDamageDeadBodyDoesNotHeal` | 判定 / ダメージ / 死亡 / 本体 / does / 非 / heal | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / 死亡 / 本体 / does / 非 / heal | 良い | - | - |
 | `testCheckDamageAliveWithHighDamageSetsTooMuch` | 判定 / ダメージ / alive / with / high / ダメージ / sets / too / much | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / alive / with / high / ダメージ / sets / too / much | 良い | - | - |
-| `testCheckDamageLowDamageDoesNotKill` | 判定 / ダメージ / low / ダメージ / does / 非 / kill | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / low / ダメージ / does / 非 / kill | ダメ | 回帰保証として弱い | - |
+| `testCheckDamageLowDamageDoesNotKill` | 判定 / ダメージ / low / ダメージ / does / 非 / kill | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / low / ダメージ / does / 非 / kill | 良い | - | - |
 | `testCheckDamageCantDieProtects` | 判定 / ダメージ / cant / die / protects | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / cant / die / protects | 良い | - | - |
-| `testCheckDamageOrangeSteamHealsWhenUnbirthConnected` | 判定 / ダメージ / orange / steam / heals / when / unbirth / connected | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / orange / steam / heals / when / unbirth / connected | 不足 | 境界値の回帰条件が粗い | - |
-| `testCheckDamageOrangeSteamNoHealWhenUnbirthDisconnected` | 判定 / ダメージ / orange / steam / なし / heal / when / unbirth / disconnected | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / orange / steam / なし / heal / when / unbirth / disconnected | 不足 | 境界値の回帰条件が粗い | - |
+| `testCheckDamageOrangeSteamHealsWhenUnbirthConnected` | 判定 / ダメージ / orange / steam / heals / when / unbirth / connected | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / orange / steam / heals / when / unbirth / connected | 良い | - | - |
+| `testCheckDamageOrangeSteamNoHealWhenUnbirthDisconnected` | 判定 / ダメージ / orange / steam / なし / heal / when / unbirth / disconnected | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / orange / steam / なし / heal / when / unbirth / disconnected | 良い | - | - |
 | `testCheckDamagePoisonSteamSetsVerySadAndMessage` | 判定 / ダメージ / poison / steam / sets / very / sad / and / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / poison / steam / sets / very / sad / and / メッセージ | 良い | - | - |
-| `testCheckDamagePoisonSteamWithDamageStateUsesNegiMessage` | 判定 / ダメージ / poison / steam / with / ダメージ / state / uses / negi / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / poison / steam / with / ダメージ / state / uses / negi / メッセージ | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckDamagePoisonSteamWithDamageStateUsesNegiMessage` | 判定 / ダメージ / poison / steam / with / ダメージ / state / uses / negi / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / poison / steam / with / ダメージ / state / uses / negi / メッセージ | 良い | - | - |
 | `testCheckDamagePealedAddsDamageAndClearsPeropero` | 判定 / ダメージ / pealed / adds / ダメージ / and / clears / peropero | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / pealed / adds / ダメージ / and / clears / peropero | 良い | - | - |
-| `testCheckDamageSugarSteamHealsWhenHighDamage` | 判定 / ダメージ / sugar / steam / heals / when / high / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / sugar / steam / heals / when / high / ダメージ | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckDamageSugarSteamNoHealWhenLowDamage` | 判定 / ダメージ / sugar / steam / なし / heal / when / low / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / sugar / steam / なし / heal / when / low / ダメージ | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckDamageSugarSteamNoHealWhenUnbirthDisconnected` | 判定 / ダメージ / sugar / steam / なし / heal / when / unbirth / disconnected | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / sugar / steam / なし / heal / when / unbirth / disconnected | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckDamageSugarSteamHealsWhenHighDamage` | 判定 / ダメージ / sugar / steam / heals / when / high / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / sugar / steam / heals / when / high / ダメージ | 良い | - | - |
+| `testCheckDamageSugarSteamNoHealWhenLowDamage` | 判定 / ダメージ / sugar / steam / なし / heal / when / low / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / sugar / steam / なし / heal / when / low / ダメージ | 良い | - | - |
+| `testCheckDamageSugarSteamNoHealWhenUnbirthDisconnected` | 判定 / ダメージ / sugar / steam / なし / heal / when / unbirth / disconnected | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / sugar / steam / なし / heal / when / unbirth / disconnected | 良い | - | - |
 | `testCheckDamageHungryZeroAddsDamage` | 判定 / ダメージ / 空腹 / zero / adds / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / 空腹 / zero / adds / ダメージ | 良い | - | - |
-| `testCheckDamageNotHungryHeals` | 判定 / ダメージ / 非 / 空腹 / heals | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / 非 / 空腹 / heals | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckDamageInjuredNoVomitWhenRndNonZero` | 判定 / ダメージ / injured / なし / vomit / when / rnd / non / zero | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / injured / なし / vomit / when / rnd / non / zero | 不足 | 例外なし・存在確認だけ | - |
-| `testCheckDamageInjuredHealsWhenFullNoDamage` | 判定 / ダメージ / injured / heals / when / full / なし / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / injured / heals / when / full / なし / ダメージ | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckDamageInjuredHealsWhenNotHeavy` | 判定 / ダメージ / injured / heals / when / 非 / heavy | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / injured / heals / when / 非 / heavy | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckDamageNotHungryHeals` | 判定 / ダメージ / 非 / 空腹 / heals | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / 非 / 空腹 / heals | 良い | - | - |
+| `testCheckDamageInjuredNoVomitWhenRndNonZero` | 判定 / ダメージ / injured / なし / vomit / when / rnd / non / zero | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / injured / なし / vomit / when / rnd / non / zero | 良い | - | - |
+| `testCheckDamageInjuredHealsWhenFullNoDamage` | 判定 / ダメージ / injured / heals / when / full / なし / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / injured / heals / when / full / なし / ダメージ | 良い | - | - |
+| `testCheckDamageInjuredHealsWhenNotHeavy` | 判定 / ダメージ / injured / heals / when / 非 / heavy | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / injured / heals / when / 非 / heavy | 良い | - | - |
 | `testCheckDamageCutWakesUpAndTalks` | 判定 / ダメージ / cut / wakes / up / and / talks | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / cut / wakes / up / and / talks | 良い | - | - |
-| `testCheckDamageNoDamagePeriodIncrements` | 判定 / ダメージ / なし / ダメージ / period / increments | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / なし / ダメージ / period / increments | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckDamageNoDamagePeriodIncrements` | 判定 / ダメージ / なし / ダメージ / period / increments | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / なし / ダメージ / period / increments | 良い | - | - |
 | `testCheckDamageSickMidStageAddsDoubleDamage` | 判定 / ダメージ / 病気 / mid / stage / adds / double / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / 病気 / mid / stage / adds / double / ダメージ | 良い | - | - |
 | `testCheckDamageSickLateStageAddsTripleDamage` | 判定 / ダメージ / 病気 / late / stage / adds / triple / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / 病気 / late / stage / adds / triple / ダメージ | 良い | - | - |
 | `testCheckDamageSickEarlyStageAddsSingleDamage` | 判定 / ダメージ / 病気 / early / stage / adds / single / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / 病気 / early / stage / adds / single / ダメージ | 良い | - | - |
-| `testCheckDamageUnbirthNoHealWithoutStalk` | 判定 / ダメージ / unbirth / なし / heal / without / stalk | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / unbirth / なし / heal / without / stalk | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckDamageRoadPressStrikeOnMapIndex2` | 判定 / ダメージ / road / press / 打撃 / on / map / index2 | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / road / press / 打撃 / on / map / index2 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckDamageUnbirthNoHealWithoutStalk` | 判定 / ダメージ / unbirth / なし / heal / without / stalk | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / unbirth / なし / heal / without / stalk | 良い | - | - |
+| `testCheckDamageRoadPressStrikeOnMapIndex2` | 判定 / ダメージ / road / press / 打撃 / on / map / index2 | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / road / press / 打撃 / on / map / index2 | 良い | - | - |
 | `testCheckDamageTooMuchClearsLowPriorityEvent` | 判定 / ダメージ / too / much / clears / low / priority / イベント | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / too / much / clears / low / priority / イベント | 良い | - | - |
 | `testCheckDamagePoisonSteamNydForcesVerySad` | 判定 / ダメージ / poison / steam / 非ゆっくり症 / forces / very / sad | ゆっくり本体の状態/行動/イベント回帰 / 判定 / ダメージ / poison / steam / 非ゆっくり症 / forces / very / sad | 良い | - | - |
-| `testGiveOkazariWhenDead` | give / okazari / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / give / okazari / when / 死亡 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGiveOkazariSuccess` | give / okazari / success | ゆっくり本体の状態/行動/イベント回帰 / give / okazari / success | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testTakeOkazariWhenDead` | take / okazari / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / take / okazari / when / 死亡 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testTakeOkazariSuccess` | take / okazari / success | ゆっくり本体の状態/行動/イベント回帰 / take / okazari / success | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDropOkazariWhenNoOkazari` | drop / okazari / when / なし / okazari | ゆっくり本体の状態/行動/イベント回帰 / drop / okazari / when / なし / okazari | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDropOkazariSuccess` | drop / okazari / success | ゆっくり本体の状態/行動/イベント回帰 / drop / okazari / success | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGivePantsWhenDead` | give / pants / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / give / pants / when / 死亡 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGivePantsToggleOn` | give / pants / 切替 / on | ゆっくり本体の状態/行動/イベント回帰 / give / pants / 切替 / on | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGivePantsToggleOff` | give / pants / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / give / pants / 切替 / off | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckMessageDecrementsCount` | 判定 / メッセージ / decrements / count | ゆっくり本体の状態/行動/イベント回帰 / 判定 / メッセージ / decrements / count | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckMessageAtZeroStaysZero` | 判定 / メッセージ / at / zero / stays / zero | ゆっくり本体の状態/行動/イベント回帰 / 判定 / メッセージ / at / zero / stays / zero | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckMessageResetsForceFace` | 判定 / メッセージ / resets / force / 表情 | ゆっくり本体の状態/行動/イベント回帰 / 判定 / メッセージ / resets / force / 表情 | 不足 | setter/getter の往復確認に留まる | - |
+| `testGiveOkazariWhenDead` | give / okazari / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / give / okazari / when / 死亡 | 良い | - | - |
+| `testGiveOkazariSuccess` | give / okazari / success | ゆっくり本体の状態/行動/イベント回帰 / give / okazari / success | 良い | - | - |
+| `testTakeOkazariWhenDead` | take / okazari / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / take / okazari / when / 死亡 | 良い | - | - |
+| `testTakeOkazariSuccess` | take / okazari / success | ゆっくり本体の状態/行動/イベント回帰 / take / okazari / success | 良い | - | - |
+| `testDropOkazariWhenNoOkazari` | drop / okazari / when / なし / okazari | ゆっくり本体の状態/行動/イベント回帰 / drop / okazari / when / なし / okazari | 良い | - | - |
+| `testDropOkazariSuccess` | drop / okazari / success | ゆっくり本体の状態/行動/イベント回帰 / drop / okazari / success | 良い | - | - |
+| `testGivePantsWhenDead` | give / pants / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / give / pants / when / 死亡 | 良い | - | - |
+| `testGivePantsToggleOn` | give / pants / 切替 / on | ゆっくり本体の状態/行動/イベント回帰 / give / pants / 切替 / on | 良い | - | - |
+| `testGivePantsToggleOff` | give / pants / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / give / pants / 切替 / off | 良い | - | - |
+| `testCheckMessageDecrementsCount` | 判定 / メッセージ / decrements / count | ゆっくり本体の状態/行動/イベント回帰 / 判定 / メッセージ / decrements / count | 良い | - | - |
+| `testCheckMessageAtZeroStaysZero` | 判定 / メッセージ / at / zero / stays / zero | ゆっくり本体の状態/行動/イベント回帰 / 判定 / メッセージ / at / zero / stays / zero | 良い | - | - |
+| `testCheckMessageResetsForceFace` | 判定 / メッセージ / resets / force / 表情 | ゆっくり本体の状態/行動/イベント回帰 / 判定 / メッセージ / resets / force / 表情 | 良い | - | - |
 | `testCheckMessageClearsBufferWhenNearEnd` | 判定 / メッセージ / clears / buffer / when / near / end | ゆっくり本体の状態/行動/イベント回帰 / 判定 / メッセージ / clears / buffer / when / near / end | 良い | - | - |
-| `testCheckMessageResetsFlagsAtZero` | 判定 / メッセージ / resets / flags / at / zero | ゆっくり本体の状態/行動/イベント回帰 / 判定 / メッセージ / resets / flags / at / zero | 不足 | setter/getter の往復確認に留まる | - |
+| `testCheckMessageResetsFlagsAtZero` | 判定 / メッセージ / resets / flags / at / zero | ゆっくり本体の状態/行動/イベント回帰 / 判定 / メッセージ / resets / flags / at / zero | 良い | - | - |
 | `testCheckMessageDeadSetsSilent` | 判定 / メッセージ / 死亡 / sets / silent | ゆっくり本体の状態/行動/イベント回帰 / 判定 / メッセージ / 死亡 / sets / silent | 良い | - | - |
-| `testCheckMessageSleepingNightmareMessage` | 判定 / メッセージ / sleeping / nightmare / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / 判定 / メッセージ / sleeping / nightmare / メッセージ | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckMessageForceBirthMessage` | 判定 / メッセージ / force / birth / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / 判定 / メッセージ / force / birth / メッセージ | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckMessageFlyingBranch` | 判定 / メッセージ / flying / branch | ゆっくり本体の状態/行動/イベント回帰 / 判定 / メッセージ / flying / branch | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckMessageGrabbedStressfulBranch` | 判定 / メッセージ / grabbed / stressful / branch | ゆっくり本体の状態/行動/イベント回帰 / 判定 / メッセージ / grabbed / stressful / branch | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetBoundaryInitializesSprites` | 設定 / boundary / initializes / sprites | ゆっくり本体の状態/行動/イベント回帰 / 設定 / boundary / initializes / sprites | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetExpandShapeAppliesUnyoForce` | 取得 / expand / shape / applies / unyo / force | ゆっくり本体の状態/行動/イベント回帰 / 取得 / expand / shape / applies / unyo / force | ダメ | setter/getter の往復確認に留まる | - |
+| `testCheckMessageSleepingNightmareMessage` | 判定 / メッセージ / sleeping / nightmare / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / 判定 / メッセージ / sleeping / nightmare / メッセージ | 良い | - | - |
+| `testCheckMessageForceBirthMessage` | 判定 / メッセージ / force / birth / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / 判定 / メッセージ / force / birth / メッセージ | 良い | - | - |
+| `testCheckMessageFlyingBranch` | 判定 / メッセージ / flying / branch | ゆっくり本体の状態/行動/イベント回帰 / 判定 / メッセージ / flying / branch | 良い | - | - |
+| `testCheckMessageGrabbedStressfulBranch` | 判定 / メッセージ / grabbed / stressful / branch | ゆっくり本体の状態/行動/イベント回帰 / 判定 / メッセージ / grabbed / stressful / branch | 良い | - | - |
+| `testSetBoundaryInitializesSprites` | 設定 / boundary / initializes / sprites | ゆっくり本体の状態/行動/イベント回帰 / 設定 / boundary / initializes / sprites | 良い | - | - |
+| `testGetExpandShapeAppliesUnyoForce` | 取得 / expand / shape / applies / unyo / force | ゆっくり本体の状態/行動/イベント回帰 / 取得 / expand / shape / applies / unyo / force | 良い | - | - |
 | `testSetNegiMessageWhenCannotTalkClears` | 設定 / negi / メッセージ / when / cannot / talk / clears | ゆっくり本体の状態/行動/イベント回帰 / 設定 / negi / メッセージ / when / cannot / talk / clears | 良い | - | - |
-| `testSetNegiMessageResetsActions` | 設定 / negi / メッセージ / resets / actions | ゆっくり本体の状態/行動/イベント回帰 / 設定 / negi / メッセージ / resets / actions | 不足 | setter/getter の往復確認に留まる | - |
+| `testSetNegiMessageResetsActions` | 設定 / negi / メッセージ / resets / actions | ゆっくり本体の状態/行動/イベント回帰 / 設定 / negi / メッセージ / resets / actions | 良い | - | - |
 | `testCheckWaitReturnsFalseThenTrue` | 判定 / wait / 戻り / false / then / true | ゆっくり本体の状態/行動/イベント回帰 / 判定 / wait / 戻り / false / then / true | 良い | - | - |
-| `testIsCutPeniDetectsEvent` | 状態 / cut / peni / detects / イベント | ゆっくり本体の状態/行動/イベント回帰 / 状態 / cut / peni / detects / イベント | ダメ | 回帰保証として弱い | - |
-| `testInvNeedleToggles` | inv / 針 / toggles | ゆっくり本体の状態/行動/イベント回帰 / inv / 針 / toggles | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetDiarrheaKaiyuAlwaysTrue` | 取得 / diarrhea / kaiyu / always / true | ゆっくり本体の状態/行動/イベント回帰 / 取得 / diarrhea / kaiyu / always / true | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetDiarrheaProbability` | 取得 / diarrhea / probability | ゆっくり本体の状態/行動/イベント回帰 / 取得 / diarrhea / probability | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetShitWithVeryShit` | 設定 / shit / with / very / shit | ゆっくり本体の状態/行動/イベント回帰 / 設定 / shit / with / very / shit | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetShitIgnoredWhenShitting` | 設定 / shit / ignored / when / shitting | ゆっくり本体の状態/行動/イベント回帰 / 設定 / shit / ignored / when / shitting | ダメ | setter/getter の往復確認に留まる | - |
-| `testRemoveChildrenList` | 除去 / children / list | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRemoveElderSisterList` | 除去 / elder / 姉妹 / list | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRemoveSisterList` | 除去 / 姉妹 / list | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testResetAttachmentBoundaryCallsReset` | reset / attachment / boundary / calls / reset | 感情/復活/所持/拘束回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testOverEatingAndTooFull` | over / eating / and / too / full | ゆっくり本体の状態/行動/イベント回帰 / over / eating / and / too / full | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDamagedLightlyTrueWhenVery` | damaged / lightly / true / when / very | ゆっくり本体の状態/行動/イベント回帰 / damaged / lightly / true / when / very | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testHappyUnhappyAndNormal` | happy / unhappy / and / normal | ゆっくり本体の状態/行動/イベント回帰 / happy / unhappy / and / normal | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testOld` | old | ゆっくり本体の状態/行動/イベント回帰 / old | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testForceExciting` | force / exciting | ゆっくり本体の状態/行動/イベント回帰 / force / exciting | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testTakeoutItemFromBodyObjId` | takeout / item / from / 本体 / obj / id | ゆっくり本体の状態/行動/イベント回帰 / takeout / item / from / 本体 / obj / id | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetSisterAndElderSister` | 取得 / 姉妹 / and / elder / 姉妹 | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 姉妹 / and / elder / 姉妹 | ダメ | setter/getter の往復確認に留まる | - |
-| `testAboutToBurstAndInflation` | about / to / 破裂 / and / inflation | ゆっくり本体の状態/行動/イベント回帰 / about / to / 破裂 / and / inflation | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEatenByAnimals` | eaten / by / animals | ゆっくり本体の状態/行動/イベント回帰 / eaten / by / animals | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBabyTypesDequeueAndStalksDequeue` | baby / types / dequeue / and / stalks / dequeue | ゆっくり本体の状態/行動/イベント回帰 / baby / types / dequeue / and / stalks / dequeue | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCollisionPivotAndBraidSize` | 衝突 / pivot / and / おさげ / size | ゆっくり本体の状態/行動/イベント回帰 / 衝突 / pivot / and / おさげ / size | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetFavItemNull` | 設定 / fav / item / null | ゆっくり本体の状態/行動/イベント回帰 / 設定 / fav / item / null | ダメ | setter/getter の往復確認に留まる | - |
+| `testIsCutPeniDetectsEvent` | 状態 / cut / peni / detects / イベント | ゆっくり本体の状態/行動/イベント回帰 / 状態 / cut / peni / detects / イベント | 良い | - | - |
+| `testInvNeedleToggles` | inv / 針 / toggles | ゆっくり本体の状態/行動/イベント回帰 / inv / 針 / toggles | 良い | - | - |
+| `testGetDiarrheaKaiyuAlwaysTrue` | 取得 / diarrhea / kaiyu / always / true | ゆっくり本体の状態/行動/イベント回帰 / 取得 / diarrhea / kaiyu / always / true | 良い | - | - |
+| `testGetDiarrheaProbability` | 取得 / diarrhea / probability | ゆっくり本体の状態/行動/イベント回帰 / 取得 / diarrhea / probability | 良い | - | - |
+| `testSetShitWithVeryShit` | 設定 / shit / with / very / shit | ゆっくり本体の状態/行動/イベント回帰 / 設定 / shit / with / very / shit | 良い | - | - |
+| `testSetShitIgnoredWhenShitting` | 設定 / shit / ignored / when / shitting | ゆっくり本体の状態/行動/イベント回帰 / 設定 / shit / ignored / when / shitting | 良い | - | - |
+| `testRemoveChildrenList` | 除去 / children / list | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testRemoveElderSisterList` | 除去 / elder / 姉妹 / list | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testRemoveSisterList` | 除去 / 姉妹 / list | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testResetAttachmentBoundaryCallsReset` | reset / attachment / boundary / calls / reset | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testOverEatingAndTooFull` | over / eating / and / too / full | ゆっくり本体の状態/行動/イベント回帰 / over / eating / and / too / full | 良い | - | - |
+| `testDamagedLightlyTrueWhenVery` | damaged / lightly / true / when / very | ゆっくり本体の状態/行動/イベント回帰 / damaged / lightly / true / when / very | 良い | - | - |
+| `testHappyUnhappyAndNormal` | happy / unhappy / and / normal | ゆっくり本体の状態/行動/イベント回帰 / happy / unhappy / and / normal | 良い | - | - |
+| `testOld` | old | ゆっくり本体の状態/行動/イベント回帰 / old | 良い | - | - |
+| `testForceExciting` | force / exciting | ゆっくり本体の状態/行動/イベント回帰 / force / exciting | 良い | - | - |
+| `testTakeoutItemFromBodyObjId` | takeout / item / from / 本体 / obj / id | ゆっくり本体の状態/行動/イベント回帰 / takeout / item / from / 本体 / obj / id | 良い | - | - |
+| `testGetSisterAndElderSister` | 取得 / 姉妹 / and / elder / 姉妹 | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 姉妹 / and / elder / 姉妹 | 良い | - | - |
+| `testAboutToBurstAndInflation` | about / to / 破裂 / and / inflation | ゆっくり本体の状態/行動/イベント回帰 / about / to / 破裂 / and / inflation | 良い | - | - |
+| `testEatenByAnimals` | eaten / by / animals | ゆっくり本体の状態/行動/イベント回帰 / eaten / by / animals | 良い | - | - |
+| `testBabyTypesDequeueAndStalksDequeue` | baby / types / dequeue / and / stalks / dequeue | ゆっくり本体の状態/行動/イベント回帰 / baby / types / dequeue / and / stalks / dequeue | 良い | - | - |
+| `testCollisionPivotAndBraidSize` | 衝突 / pivot / and / おさげ / size | ゆっくり本体の状態/行動/イベント回帰 / 衝突 / pivot / and / おさげ / size | 良い | - | - |
+| `testSetFavItemNull` | 設定 / fav / item / null | ゆっくり本体の状態/行動/イベント回帰 / 設定 / fav / item / null | 良い | - | - |
 | `testSetExcitingSetsForceFace` | 設定 / exciting / sets / force / 表情 | ゆっくり本体の状態/行動/イベント回帰 / 設定 / exciting / sets / force / 表情 | 良い | - | reflection |
-| `testIsToTakeout` | 状態 / to / takeout | ゆっくり本体の状態/行動/イベント回帰 / 状態 / to / takeout | ダメ | 回帰保証として弱い | - |
-| `testCheckSleepNoSleepSteamResetsSleeping` | 判定 / 睡眠 / なし / 睡眠 / steam / resets / sleeping | ゆっくり本体の状態/行動/イベント回帰 / 睡眠状態遷移回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testCheckSleepNoSleepSteamUnbirthPlantDoesNotReset` | 判定 / 睡眠 / なし / 睡眠 / steam / unbirth / plant / does / 非 / reset | ゆっくり本体の状態/行動/イベント回帰 / 睡眠状態遷移回帰 | ダメ | setter/getter の往復確認に留まる | - |
+| `testIsToTakeout` | 状態 / to / takeout | ゆっくり本体の状態/行動/イベント回帰 / 状態 / to / takeout | 良い | - | - |
+| `testCheckSleepNoSleepSteamResetsSleeping` | 判定 / 睡眠 / なし / 睡眠 / steam / resets / sleeping | ゆっくり本体の状態/行動/イベント回帰 / 睡眠状態遷移回帰 | 良い | - | - |
+| `testCheckSleepNoSleepSteamUnbirthPlantDoesNotReset` | 判定 / 睡眠 / なし / 睡眠 / steam / unbirth / plant / does / 非 / reset | ゆっくり本体の状態/行動/イベント回帰 / 睡眠状態遷移回帰 | 良い | - | - |
 | `testCheckSleepFlyingSleepyReturnsFalseWhenZnonZero` | 判定 / 睡眠 / flying / sleepy / 戻り / false / when / znon / zero | ゆっくり本体の状態/行動/イベント回帰 / 睡眠状態遷移回帰 | 良い | - | - |
 | `testCheckSleepSleepingStressfulSetsNightmare` | 判定 / 睡眠 / sleeping / stressful / sets / nightmare | ゆっくり本体の状態/行動/イベント回帰 / 睡眠状態遷移回帰 | 良い | - | - |
 | `testCheckSleepSleepingNotStressfulClearsNightmare` | 判定 / 睡眠 / sleeping / 非 / stressful / clears / nightmare | ゆっくり本体の状態/行動/イベント回帰 / 睡眠状態遷移回帰 | 良い | - | - |
-| `testCheckSleepElseBranchNightDecrementsWakeUpTime` | 判定 / 睡眠 / else / branch / night / decrements / wake / up / time | ゆっくり本体の状態/行動/イベント回帰 / 睡眠状態遷移回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckSleepElseBranchNightDecrementsWakeUpTime` | 判定 / 睡眠 / else / branch / night / decrements / wake / up / time | ゆっくり本体の状態/行動/イベント回帰 / 睡眠状態遷移回帰 | 良い | - | - |
 | `testCheckSleepStarvingWakesUp` | 判定 / 睡眠 / starving / wakes / up | ゆっくり本体の状態/行動/イベント回帰 / 睡眠状態遷移回帰 | 良い | - | - |
-| `testDoSurisuriEarlyReturnWhenVeryHungry` | do / surisuri / early / 戻り / when / very / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / early / 戻り / when / very / 空腹 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testDoSurisuriEarlyReturnWhenVeryHungry` | do / surisuri / early / 戻り / when / very / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / early / 戻り / when / very / 空腹 | 良い | - | - |
 | `testDoSurisuriSickPartnerSetsSad` | do / surisuri / sick / 相手 / sets / sad | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / sick / 相手 / sets / sad | 良い | - | - |
-| `testDoSurisuriAntsTransfer` | do / surisuri / ants / transfer | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / ants / transfer | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoSurisuriAccidentTriggersSukkiri` | do / surisuri / accident / triggers / sukkiri | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / accident / triggers / sukkiri | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoSurisuriSickTransfersSickPeriod` | do / surisuri / 病気 / transfers / 病気 / period | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / 病気 / transfers / 病気 / period | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoSurisuriPartnerSickTransfersToSelf` | do / surisuri / 相手 / 病気 / transfers / to / self | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / 相手 / 病気 / transfers / to / self | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionAngryPeriodExpires` | 判定 / emotion / angry / period / expires | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / angry / period / expires | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionScarePeriodExpires` | 判定 / emotion / scare / period / expires | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / scare / period / expires | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionSadPeriodExpires` | 判定 / emotion / sad / period / expires | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / sad / period / expires | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionPlayingStopsOnLimit` | 判定 / emotion / playing / stops / on / limit | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / playing / stops / on / limit | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionYunnyaaBranch` | 判定 / emotion / yunnyaa / branch | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / yunnyaa / branch | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionProcessingBeltBegForLifeBranch` | 判定 / emotion / processing / belt / beg / for / life / branch | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / processing / belt / beg / for / life / branch | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testDoSurisuriAntsTransfer` | do / surisuri / ants / transfer | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / ants / transfer | 良い | - | - |
+| `testDoSurisuriAccidentTriggersSukkiri` | do / surisuri / accident / triggers / sukkiri | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / accident / triggers / sukkiri | 良い | - | - |
+| `testDoSurisuriSickTransfersSickPeriod` | do / surisuri / 病気 / transfers / 病気 / period | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / 病気 / transfers / 病気 / period | 良い | - | - |
+| `testDoSurisuriPartnerSickTransfersToSelf` | do / surisuri / 相手 / 病気 / transfers / to / self | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / 相手 / 病気 / transfers / to / self | 良い | - | - |
+| `testCheckEmotionAngryPeriodExpires` | 判定 / emotion / angry / period / expires | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / angry / period / expires | 良い | - | - |
+| `testCheckEmotionScarePeriodExpires` | 判定 / emotion / scare / period / expires | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / scare / period / expires | 良い | - | - |
+| `testCheckEmotionSadPeriodExpires` | 判定 / emotion / sad / period / expires | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / sad / period / expires | 良い | - | - |
+| `testCheckEmotionPlayingStopsOnLimit` | 判定 / emotion / playing / stops / on / limit | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / playing / stops / on / limit | 良い | - | - |
+| `testCheckEmotionYunnyaaBranch` | 判定 / emotion / yunnyaa / branch | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / yunnyaa / branch | 良い | - | - |
+| `testCheckEmotionProcessingBeltBegForLifeBranch` | 判定 / emotion / processing / belt / beg / for / life / branch | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / processing / belt / beg / for / life / branch | 良い | - | - |
 | `testCheckEmotionUnunSlaveExcitingClears` | 判定 / emotion / unun / slave / exciting / clears | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / unun / slave / exciting / clears | 良い | - | - |
-| `testCheckEmotionDirtyAdultCleans` | 判定 / emotion / dirty / adult / cleans | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / dirty / adult / cleans | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionHungryMessage` | 判定 / emotion / 空腹 / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / 空腹 / メッセージ | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckEmotionDirtyAdultCleans` | 判定 / emotion / dirty / adult / cleans | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / dirty / adult / cleans | 良い | - | - |
+| `testCheckEmotionHungryMessage` | 判定 / emotion / 空腹 / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / 空腹 / メッセージ | 良い | - | - |
 | `testCheckEmotionReturnsEarlyWhenEventActive` | 判定 / emotion / 戻り / early / when / イベント / active | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / 戻り / early / when / イベント / active | 良い | - | - |
-| `testCheckEmotionSurisuriByPlayerShortCircuit` | 判定 / emotion / surisuri / by / player / short / circuit | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / surisuri / by / player / short / circuit | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionProcessingBeltYunnyaaBranch` | 判定 / emotion / processing / belt / yunnyaa / branch | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / processing / belt / yunnyaa / branch | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionProcessingBeltKilledInFactoryMessageBranch` | 判定 / emotion / processing / belt / killed / in / factory / メッセージ / branch | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / processing / belt / killed / in / factory / メッセージ / branch | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionDirtyChildCallsParent` | 判定 / emotion / dirty / 子 / calls / 親 | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / dirty / 子 / calls / 親 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckShitLimitLockmoveLeaks` | 判定 / shit / limit / lockmove / leaks | ゆっくり本体の状態/行動/イベント回帰 / 排泄回避/実行回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckShitPreparesShittingOnAgeBoundary` | 判定 / shit / prepares / shitting / on / age / boundary | ゆっくり本体の状態/行動/イベント回帰 / 排泄回避/実行回帰 | 不足 | 境界値の回帰条件が粗い | - |
+| `testCheckEmotionSurisuriByPlayerShortCircuit` | 判定 / emotion / surisuri / by / player / short / circuit | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / surisuri / by / player / short / circuit | 良い | - | - |
+| `testCheckEmotionProcessingBeltYunnyaaBranch` | 判定 / emotion / processing / belt / yunnyaa / branch | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / processing / belt / yunnyaa / branch | 良い | - | - |
+| `testCheckEmotionProcessingBeltKilledInFactoryMessageBranch` | 判定 / emotion / processing / belt / killed / in / factory / メッセージ / branch | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / processing / belt / killed / in / factory / メッセージ / branch | 良い | - | - |
+| `testCheckEmotionDirtyChildCallsParent` | 判定 / emotion / dirty / 子 / calls / 親 | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / dirty / 子 / calls / 親 | 良い | - | - |
+| `testCheckShitLimitLockmoveLeaks` | 判定 / shit / limit / lockmove / leaks | ゆっくり本体の状態/行動/イベント回帰 / 排泄回避/実行回帰 | 良い | - | - |
+| `testCheckShitPreparesShittingOnAgeBoundary` | 判定 / shit / prepares / shitting / on / age / boundary | ゆっくり本体の状態/行動/イベント回帰 / 排泄回避/実行回帰 | 良い | - | - |
 | `testCheckShitRaperExcitingSkipsAndClears` | 判定 / shit / raper / exciting / skips / and / clears | ゆっくり本体の状態/行動/イベント回帰 / 排泄回避/実行回帰 | 良い | - | - |
-| `testCheckShitEventPriorityBlocks` | 判定 / shit / イベント / priority / blocks | ゆっくり本体の状態/行動/イベント回帰 / 排泄回避/実行回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckShitEventPriorityBlocks` | 判定 / shit / イベント / priority / blocks | ゆっくり本体の状態/行動/イベント回帰 / 排泄回避/実行回帰 | 良い | - | - |
 | `testCheckShitUnbirthWithVeryShitAmpouleAddsShit` | 判定 / shit / unbirth / with / very / shit / ampoule / adds / shit | ゆっくり本体の状態/行動/イベント回帰 / 排泄回避/実行回帰 | 良い | - | - |
 | `testCheckShitSleepingBelowLimitReturnsFalse` | 判定 / shit / sleeping / below / limit / 戻り / false | ゆっくり本体の状態/行動/イベント回帰 / 排泄回避/実行回帰 | 良い | - | - |
-| `testCheckShitOverLimitAnalCloseInflates` | 判定 / shit / over / limit / anal / close / inflates | ゆっくり本体の状態/行動/イベント回帰 / 排泄回避/実行回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckShitBabyOverLimitMakesDirty` | 判定 / shit / baby / over / limit / makes / dirty | ゆっくり本体の状態/行動/イベント回帰 / 排泄回避/実行回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckShitOverLimitAnalCloseInflates` | 判定 / shit / over / limit / anal / close / inflates | ゆっくり本体の状態/行動/イベント回帰 / 排泄回避/実行回帰 | 良い | - | - |
+| `testCheckShitBabyOverLimitMakesDirty` | 判定 / shit / baby / over / limit / makes / dirty | ゆっくり本体の状態/行動/イベント回帰 / 排泄回避/実行回帰 | 良い | - | - |
 | `testSetWorldEventResMessageSetsBuffer` | 設定 / world / イベント / res / メッセージ / sets / buffer | ゆっくり本体の状態/行動/イベント回帰 / 設定 / world / イベント / res / メッセージ / sets / buffer | 良い | - | - |
-| `testJudgeCanTransForGodHandDefaultFalse` | judge / 可否 / trans / for / god / hand / default / false | ゆっくり本体の状態/行動/イベント回帰 / judge / 可否 / trans / for / god / hand / default / false | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testExecTransformNoop` | exec / transform / noop | ゆっくり本体の状態/行動/イベント回帰 / exec / transform / noop | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testJudgeCanTransForGodHandDefaultFalse` | judge / 可否 / trans / for / god / hand / default / false | ゆっくり本体の状態/行動/イベント回帰 / judge / 可否 / trans / for / god / hand / default / false | 良い | - | - |
+| `testExecTransformNoop` | exec / transform / noop | ゆっくり本体の状態/行動/イベント回帰 / exec / transform / noop | 良い | - | - |
 | `testGetHybridTypeReturnsSelfType` | 取得 / hybrid / type / 戻り / self / type | ゆっくり本体の状態/行動/イベント回帰 / 取得 / hybrid / type / 戻り / self / type | 良い | - | - |
-| `testCheckTransformDefaultNull` | 判定 / transform / default / null | ゆっくり本体の状態/行動/イベント回帰 / 判定 / transform / default / null | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testTakeScreenRectCopiesRect` | take / screen / rect / copies / rect | ゆっくり本体の状態/行動/イベント回帰 / take / screen / rect / copies / rect | 不足 | private への到達確認に留まる | reflection |
-| `testTakeScreenRectUsesBodyScreenRect` | take / screen / rect / uses / 本体 / screen / rect | ゆっくり本体の状態/行動/イベント回帰 / take / screen / rect / uses / 本体 / screen / rect | 不足 | private への到達確認に留まる | reflection |
+| `testCheckTransformDefaultNull` | 判定 / transform / default / null | ゆっくり本体の状態/行動/イベント回帰 / 判定 / transform / default / null | 良い | - | - |
+| `testTakeScreenRectCopiesRect` | take / screen / rect / copies / rect | ゆっくり本体の状態/行動/イベント回帰 / take / screen / rect / copies / rect | 良い | - | reflection |
+| `testTakeScreenRectUsesBodyScreenRect` | take / screen / rect / uses / 本体 / screen / rect | ゆっくり本体の状態/行動/イベント回帰 / take / screen / rect / uses / 本体 / screen / rect | 良い | - | reflection |
 | `testSetTargetMoveOffsetSetsOffsets` | 設定 / target / 移動 / offset / sets / offsets | ゆっくり本体の状態/行動/イベント回帰 / 設定 / target / 移動 / offset / sets / offsets | 良い | - | - |
 | `testMoveToBedSetsFlagsAndTarget` | 移動 / to / bed / sets / flags / and / target | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / bed / sets / flags / and / target | 良い | - | - |
 | `testSetNegiMessageWhenCannotTalkClears` | 設定 / negi / メッセージ / when / cannot / talk / clears | ゆっくり本体の状態/行動/イベント回帰 / 設定 / negi / メッセージ / when / cannot / talk / clears | 良い | - | - |
 | `testSetNegiMessageSetsMessageAndPiko` | 設定 / negi / メッセージ / sets / メッセージ / and / piko | ゆっくり本体の状態/行動/イベント回帰 / 設定 / negi / メッセージ / sets / メッセージ / and / piko | 良い | - | - |
-| `testSetDirtyFlagDelegates` | 設定 / dirty / flag / delegates | ゆっくり本体の状態/行動/イベント回帰 / 設定 / dirty / flag / delegates | ダメ | setter/getter の往復確認に留まる | - |
+| `testSetDirtyFlagDelegates` | 設定 / dirty / flag / delegates | ゆっくり本体の状態/行動/イベント回帰 / 設定 / dirty / flag / delegates | 良い | - | - |
 | `testBodyEventSendMessageSetsWindowColors` | 本体 / イベント / send / メッセージ / sets / window / colors | ゆっくり本体の状態/行動/イベント回帰 / 本体 / イベント / send / メッセージ / sets / window / colors | 良い | - | - |
 | `testBodyEventResMessageSetsWindowColors` | 本体 / イベント / res / メッセージ / sets / window / colors | ゆっくり本体の状態/行動/イベント回帰 / 本体 / イベント / res / メッセージ / sets / window / colors | 良い | - | - |
-| `testGetBodyCastration` | 取得 / 本体 / castration | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 本体 / castration | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetBodyCastration` | 取得 / 本体 / castration | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 本体 / castration | 良い | - | - |
 | `testGetStalkCastrationReturnsField` | 取得 / stalk / castration / 戻り / field | ゆっくり本体の状態/行動/イベント回帰 / 取得 / stalk / castration / 戻り / field | 良い | - | - |
 | `testGetNeedleReturnsField` | 取得 / 針 / 戻り / field | ゆっくり本体の状態/行動/イベント回帰 / 取得 / 針 / 戻り / field | 良い | - | - |
-| `testIsAliceRaperDefaultFalse` | 状態 / alice / raper / default / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / alice / raper / default / false | ダメ | private への到達確認に留まる | reflection |
-| `testHasGetPopupAndUsePopup` | 有無 / 取得 / popup / and / use / popup | ゆっくり本体の状態/行動/イベント回帰 / 有無 / 取得 / popup / and / use / popup | ダメ | setter/getter の往復確認に留まる | - |
-| `testIsbindStalk` | isbind / stalk | ゆっくり本体の状態/行動/イベント回帰 / isbind / stalk | ダメ | 回帰保証として弱い | - |
-| `testHasTrauma` | 有無 / trauma | ゆっくり本体の状態/行動/イベント回帰 / 有無 / trauma | ダメ | 回帰保証として弱い | - |
-| `testGetEatAmountUsesBaseArray` | 取得 / eat / amount / uses / base / array | ゆっくり本体の状態/行動/イベント回帰 / 取得 / eat / amount / uses / base / array | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetLastActionTimeUpdatesValue` | 設定 / last / action / time / updates / value | ゆっくり本体の状態/行動/イベント回帰 / 設定 / last / action / time / updates / value | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSellingPrice` | 取得 / selling / price | ゆっくり本体の状態/行動/イベント回帰 / 取得 / selling / price | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetMaxHaveBaby` | 取得 / max / have / baby | ゆっくり本体の状態/行動/イベント回帰 / 取得 / max / have / baby | ダメ | setter/getter の往復確認に留まる | - |
-| `testAnNameSettersAndGetters` | an / name / setters / and / getters | ゆっくり本体の状態/行動/イベント回帰 / an / name / setters / and / getters | 不足 | setter/getter の往復確認に留まる | - |
-| `testBaseArraySetters` | base / array / setters | ゆっくり本体の状態/行動/イベント回帰 / base / array / setters | 不足 | setter/getter の往復確認に留まる | - |
-| `testPeriodAndLimitSetters` | period / and / limit / setters | ゆっくり本体の状態/行動/イベント回帰 / period / and / limit / setters | 不足 | setter/getter の往復確認に留まる | - |
-| `testSetLovePlayerLimitAndState` | 設定 / love / player / limit / and / state | ゆっくり本体の状態/行動/イベント回帰 / 設定 / love / player / limit / and / state | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetCountZandGetCountZ` | 設定 / count / zand / 取得 / count / z | ゆっくり本体の状態/行動/イベント回帰 / 設定 / count / zand / 取得 / count / z | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetCantDiePeriod` | 設定 / cant / die / period | ゆっくり本体の状態/行動/イベント回帰 / 設定 / cant / die / period | ダメ | setter/getter の往復確認に留まる | - |
-| `testMoreSimpleSettersAndGetters` | more / simple / setters / and / getters | ゆっくり本体の状態/行動/イベント回帰 / more / simple / setters / and / getters | 不足 | setter/getter の往復確認に留まる | - |
-| `testMoreBodyAttributesAccessors` | more / 本体 / attributes / accessors | ゆっくり本体の状態/行動/イベント回帰 / more / 本体 / attributes / accessors | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRemainingSimpleAccessors` | remaining / simple / accessors | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBodyAttributesRemainingNonGuiAccessors` | 本体 / attributes / remaining / non / gui / accessors | ゆっくり本体の状態/行動/イベント回帰 / 本体 / attributes / remaining / non / gui / accessors | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMultipleStrikesAccumulateDamage` | multiple / strikes / accumulate / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / multiple / strikes / accumulate / ダメージ | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddDamageWithNegativeAmount` | 追加 / ダメージ / with / negative / amount | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddDamageClampToZero` | 追加 / ダメージ / 範囲補正 / to / zero | 生存/行動可否回帰 | 不足 | 境界値の回帰条件が粗い | - |
-| `testStressClampToZero` | ストレス / 範囲補正 / to / zero | ゆっくり本体の状態/行動/イベント回帰 / ストレス / 範囲補正 / to / zero | 不足 | 境界値の回帰条件が粗い | - |
-| `testHungryCanExceedLimit` | 空腹 / 可否 / exceed / limit | ゆっくり本体の状態/行動/イベント回帰 / 空腹 / 可否 / exceed / limit | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPregnantPeriodBoostAccumulates` | pregnant / period / boost / accumulates | ゆっくり本体の状態/行動/イベント回帰 / pregnant / period / boost / accumulates | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMoveToNormalCoordinates` | 移動 / to / normal / coordinates | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / normal / coordinates | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMoveToIgnoredWhenDead` | 移動 / to / ignored / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / ignored / when / 死亡 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMoveToIgnoredWhenBlocked` | 移動 / to / ignored / when / blocked | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / ignored / when / blocked | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMoveToWithZ` | 移動 / to / with / z | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / with / z | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMoveToClampNegativeValues` | 移動 / to / 範囲補正 / negative / values | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / 範囲補正 / negative / values | 不足 | 境界値の回帰条件が粗い | - |
-| `testMoveToClampExceedingValues` | 移動 / to / 範囲補正 / exceeding / values | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / 範囲補正 / exceeding / values | 不足 | 境界値の回帰条件が粗い | - |
-| `testMoveToZnormal` | 移動 / to / znormal | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / znormal | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMoveToZignoredWhenDead` | 移動 / to / zignored / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / zignored / when / 死亡 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testIsAliceRaperDefaultFalse` | 状態 / alice / raper / default / false | ゆっくり本体の状態/行動/イベント回帰 / 状態 / alice / raper / default / false | 良い | - | reflection |
+| `testHasGetPopupAndUsePopup` | 有無 / 取得 / popup / and / use / popup | ゆっくり本体の状態/行動/イベント回帰 / 有無 / 取得 / popup / and / use / popup | 良い | - | - |
+| `testIsbindStalk` | isbind / stalk | ゆっくり本体の状態/行動/イベント回帰 / isbind / stalk | 良い | - | - |
+| `testHasTrauma` | 有無 / trauma | ゆっくり本体の状態/行動/イベント回帰 / 有無 / trauma | 良い | - | - |
+| `testGetEatAmountUsesBaseArray` | 取得 / eat / amount / uses / base / array | ゆっくり本体の状態/行動/イベント回帰 / 取得 / eat / amount / uses / base / array | 良い | - | - |
+| `testSetLastActionTimeUpdatesValue` | 設定 / last / action / time / updates / value | ゆっくり本体の状態/行動/イベント回帰 / 設定 / last / action / time / updates / value | 良い | - | - |
+| `testGetSellingPrice` | 取得 / selling / price | ゆっくり本体の状態/行動/イベント回帰 / 取得 / selling / price | 良い | - | - |
+| `testGetMaxHaveBaby` | 取得 / max / have / baby | ゆっくり本体の状態/行動/イベント回帰 / 取得 / max / have / baby | 良い | - | - |
+| `testAnNameSettersAndGetters` | an / name / setters / and / getters | ゆっくり本体の状態/行動/イベント回帰 / an / name / setters / and / getters | 良い | - | - |
+| `testBaseArraySetters` | base / array / setters | ゆっくり本体の状態/行動/イベント回帰 / base / array / setters | 良い | - | - |
+| `testPeriodAndLimitSetters` | period / and / limit / setters | ゆっくり本体の状態/行動/イベント回帰 / period / and / limit / setters | 良い | - | - |
+| `testSetLovePlayerLimitAndState` | 設定 / love / player / limit / and / state | ゆっくり本体の状態/行動/イベント回帰 / 設定 / love / player / limit / and / state | 良い | - | - |
+| `testSetCountZandGetCountZ` | 設定 / count / zand / 取得 / count / z | ゆっくり本体の状態/行動/イベント回帰 / 設定 / count / zand / 取得 / count / z | 良い | - | - |
+| `testSetCantDiePeriod` | 設定 / cant / die / period | ゆっくり本体の状態/行動/イベント回帰 / 設定 / cant / die / period | 良い | - | - |
+| `testMoreSimpleSettersAndGetters` | more / simple / setters / and / getters | ゆっくり本体の状態/行動/イベント回帰 / more / simple / setters / and / getters | 良い | - | - |
+| `testMoreBodyAttributesAccessors` | more / 本体 / attributes / accessors | ゆっくり本体の状態/行動/イベント回帰 / more / 本体 / attributes / accessors | 良い | - | - |
+| `testRemainingSimpleAccessors` | remaining / simple / accessors | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testBodyAttributesRemainingNonGuiAccessors` | 本体 / attributes / remaining / non / gui / accessors | ゆっくり本体の状態/行動/イベント回帰 / 本体 / attributes / remaining / non / gui / accessors | 良い | - | - |
+| `testMultipleStrikesAccumulateDamage` | multiple / strikes / accumulate / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / multiple / strikes / accumulate / ダメージ | 良い | - | - |
+| `testAddDamageWithNegativeAmount` | 追加 / ダメージ / with / negative / amount | 生存/行動可否回帰 | 良い | - | - |
+| `testAddDamageClampToZero` | 追加 / ダメージ / 範囲補正 / to / zero | 生存/行動可否回帰 | 良い | - | - |
+| `testStressClampToZero` | ストレス / 範囲補正 / to / zero | ゆっくり本体の状態/行動/イベント回帰 / ストレス / 範囲補正 / to / zero | 良い | - | - |
+| `testHungryCanExceedLimit` | 空腹 / 可否 / exceed / limit | ゆっくり本体の状態/行動/イベント回帰 / 空腹 / 可否 / exceed / limit | 良い | - | - |
+| `testPregnantPeriodBoostAccumulates` | pregnant / period / boost / accumulates | ゆっくり本体の状態/行動/イベント回帰 / pregnant / period / boost / accumulates | 良い | - | - |
+| `testMoveToNormalCoordinates` | 移動 / to / normal / coordinates | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / normal / coordinates | 良い | - | - |
+| `testMoveToIgnoredWhenDead` | 移動 / to / ignored / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / ignored / when / 死亡 | 良い | - | - |
+| `testMoveToIgnoredWhenBlocked` | 移動 / to / ignored / when / blocked | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / ignored / when / blocked | 良い | - | - |
+| `testMoveToWithZ` | 移動 / to / with / z | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / with / z | 良い | - | - |
+| `testMoveToClampNegativeValues` | 移動 / to / 範囲補正 / negative / values | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / 範囲補正 / negative / values | 良い | - | - |
+| `testMoveToClampExceedingValues` | 移動 / to / 範囲補正 / exceeding / values | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / 範囲補正 / exceeding / values | 良い | - | - |
+| `testMoveToZnormal` | 移動 / to / znormal | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / znormal | 良い | - | - |
+| `testMoveToZignoredWhenDead` | 移動 / to / zignored / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / zignored / when / 死亡 | 良い | - | - |
 | `testMoveToFoodSetsFlags` | 移動 / to / food / sets / flags | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / food / sets / flags | 良い | - | - |
 | `testMoveToSukkiriSetsFlags` | 移動 / to / sukkiri / sets / flags | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / sukkiri / sets / flags | 良い | - | - |
 | `testMoveToToiletSetsFlags` | 移動 / to / toilet / sets / flags | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / toilet / sets / flags | 良い | - | - |
@@ -2093,223 +2093,223 @@
 | `testMoveToSukkiriClearsActions` | 移動 / to / sukkiri / clears / actions | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / sukkiri / clears / actions | 良い | - | - |
 | `testMoveToToiletClearsActions` | 移動 / to / toilet / clears / actions | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / toilet / clears / actions | 良い | - | - |
 | `testMoveToEventSetsCoordinates` | 移動 / to / イベント / sets / coordinates | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / イベント / sets / coordinates | 良い | - | - |
-| `testMoveToEventIgnoredWhenDead` | 移動 / to / イベント / ignored / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / イベント / ignored / when / 死亡 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testMoveToEventIgnoredWhenDead` | 移動 / to / イベント / ignored / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / イベント / ignored / when / 死亡 | 良い | - | - |
 | `testFeedWhenHungryIncreasesHappiness` | feed / when / 空腹 / increases / 幸福 | ゆっくり本体の状態/行動/イベント回帰 / feed / when / 空腹 / increases / 幸福 | 良い | - | - |
 | `testFeedWhenFullDecreasesHappiness` | feed / when / full / decreases / 幸福 | ゆっくり本体の状態/行動/イベント回帰 / feed / when / full / decreases / 幸福 | 良い | - | - |
 | `testFeedAdds1500Food` | feed / adds1500 / food | ゆっくり本体の状態/行動/イベント回帰 / feed / adds1500 / food | 良い | - | - |
-| `testAddLovePlayerPositive` | 追加 / love / player / positive | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / positive | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddLovePlayerNegative` | 追加 / love / player / negative | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / negative | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddLovePlayerClampUpper` | 追加 / love / player / 範囲補正 / upper | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / 範囲補正 / upper | 不足 | 境界値の回帰条件が粗い | - |
-| `testAddLovePlayerClampLower` | 追加 / love / player / 範囲補正 / lower | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / 範囲補正 / lower | 不足 | 境界値の回帰条件が粗い | - |
-| `testAddLovePlayerNydalwaysMin` | 追加 / love / player / nydalways / min | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / nydalways / min | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testAddLovePlayerPositive` | 追加 / love / player / positive | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / positive | 良い | - | - |
+| `testAddLovePlayerNegative` | 追加 / love / player / negative | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / negative | 良い | - | - |
+| `testAddLovePlayerClampUpper` | 追加 / love / player / 範囲補正 / upper | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / 範囲補正 / upper | 良い | - | - |
+| `testAddLovePlayerClampLower` | 追加 / love / player / 範囲補正 / lower | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / 範囲補正 / lower | 良い | - | - |
+| `testAddLovePlayerNydalwaysMin` | 追加 / love / player / nydalways / min | ゆっくり本体の状態/行動/イベント回帰 / 追加 / love / player / nydalways / min | 良い | - | - |
 | `testSetPanicTrueSetsTypeAndClearsFlags` | 設定 / 恐慌 / true / sets / type / and / clears / flags | ゆっくり本体の状態/行動/イベント回帰 / 恐慌状態回帰 | 良い | - | - |
 | `testSetPanicFalseClearsType` | 設定 / 恐慌 / false / clears / type | ゆっくり本体の状態/行動/イベント回帰 / 恐慌状態回帰 | 良い | - | - |
-| `testSetPanicIgnoredWhenDead` | 設定 / 恐慌 / ignored / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 恐慌状態回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetPanicIgnoredWhenSleeping` | 設定 / 恐慌 / ignored / when / sleeping | ゆっくり本体の状態/行動/イベント回帰 / 恐慌状態回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetPanicIgnoredWhenUnbirth` | 設定 / 恐慌 / ignored / when / unbirth | ゆっくり本体の状態/行動/イベント回帰 / 恐慌状態回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetPanicAlreadyPanicResetsCounter` | 設定 / 恐慌 / already / 恐慌 / resets / counter | ゆっくり本体の状態/行動/イベント回帰 / 恐慌状態回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetPanicIgnoredWhenRaperAndExciting` | 設定 / 恐慌 / ignored / when / raper / and / exciting | ゆっくり本体の状態/行動/イベント回帰 / 恐慌状態回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testHoldFirstTimePicksUp` | 拘束 / first / time / picks / up | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testHoldSecondTimeReleases` | 拘束 / second / time / releases | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testHoldIgnoredWhenDead` | 拘束 / ignored / when / 死亡 | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testSetPanicIgnoredWhenDead` | 設定 / 恐慌 / ignored / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 恐慌状態回帰 | 良い | - | - |
+| `testSetPanicIgnoredWhenSleeping` | 設定 / 恐慌 / ignored / when / sleeping | ゆっくり本体の状態/行動/イベント回帰 / 恐慌状態回帰 | 良い | - | - |
+| `testSetPanicIgnoredWhenUnbirth` | 設定 / 恐慌 / ignored / when / unbirth | ゆっくり本体の状態/行動/イベント回帰 / 恐慌状態回帰 | 良い | - | - |
+| `testSetPanicAlreadyPanicResetsCounter` | 設定 / 恐慌 / already / 恐慌 / resets / counter | ゆっくり本体の状態/行動/イベント回帰 / 恐慌状態回帰 | 良い | - | - |
+| `testSetPanicIgnoredWhenRaperAndExciting` | 設定 / 恐慌 / ignored / when / raper / and / exciting | ゆっくり本体の状態/行動/イベント回帰 / 恐慌状態回帰 | 良い | - | - |
+| `testHoldFirstTimePicksUp` | 拘束 / first / time / picks / up | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testHoldSecondTimeReleases` | 拘束 / second / time / releases | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testHoldIgnoredWhenDead` | 拘束 / ignored / when / 死亡 | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testHoldSetsHappinessSad` | 拘束 / sets / 幸福 / sad | 感情/復活/所持/拘束回帰 | 良い | - | - |
-| `testHoldResetsZwhenAboveGround` | 拘束 / resets / zwhen / above / ground | 感情/復活/所持/拘束回帰 | 不足 | 往復対象の assert が足りない | - |
-| `testRunAwayToUpperRight` | run / away / to / upper / right | ゆっくり本体の状態/行動/イベント回帰 / 逃走行動回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRunAwayToLowerLeft` | run / away / to / lower / left | ゆっくり本体の状態/行動/イベント回帰 / 逃走行動回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRunAwayIgnoredWhenCannotAction` | run / away / ignored / when / cannot / action | ゆっくり本体の状態/行動/イベント回帰 / 逃走行動回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRunAwayIgnoredWhenExciting` | run / away / ignored / when / exciting | ゆっくり本体の状態/行動/イベント回帰 / 逃走行動回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRunAwayIgnoredWhenAngry` | run / away / ignored / when / angry | ゆっくり本体の状態/行動/イベント回帰 / 逃走行動回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testHoldResetsZwhenAboveGround` | 拘束 / resets / zwhen / above / ground | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testRunAwayToUpperRight` | run / away / to / upper / right | ゆっくり本体の状態/行動/イベント回帰 / 逃走行動回帰 | 良い | - | - |
+| `testRunAwayToLowerLeft` | run / away / to / lower / left | ゆっくり本体の状態/行動/イベント回帰 / 逃走行動回帰 | 良い | - | - |
+| `testRunAwayIgnoredWhenCannotAction` | run / away / ignored / when / cannot / action | ゆっくり本体の状態/行動/イベント回帰 / 逃走行動回帰 | 良い | - | - |
+| `testRunAwayIgnoredWhenExciting` | run / away / ignored / when / exciting | ゆっくり本体の状態/行動/イベント回帰 / 逃走行動回帰 | 良い | - | - |
+| `testRunAwayIgnoredWhenAngry` | run / away / ignored / when / angry | ゆっくり本体の状態/行動/イベント回帰 / 逃走行動回帰 | 良い | - | - |
 | `testRunAwaySetsScare` | run / away / sets / scare | ゆっくり本体の状態/行動/イベント回帰 / 逃走行動回帰 | 良い | - | - |
-| `testRunAwayIgnoredWhenUnbirth` | run / away / ignored / when / unbirth | ゆっくり本体の状態/行動/イベント回帰 / 逃走行動回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testRunAwayIgnoredWhenUnbirth` | run / away / ignored / when / unbirth | ゆっくり本体の状態/行動/イベント回帰 / 逃走行動回帰 | 良い | - | - |
 | `testSetCleaningClearsDirty` | 設定 / cleaning / clears / dirty | ゆっくり本体の状態/行動/イベント回帰 / 設定 / cleaning / clears / dirty | 良い | - | - |
 | `testSetCleaningClearsWet` | 設定 / cleaning / clears / 水濡れ | ゆっくり本体の状態/行動/イベント回帰 / 設定 / cleaning / clears / 水濡れ | 良い | - | - |
-| `testSetCleaningResetsWetPeriod` | 設定 / cleaning / resets / 水濡れ / period | ゆっくり本体の状態/行動/イベント回帰 / 設定 / cleaning / resets / 水濡れ / period | ダメ | setter/getter の往復確認に留まる | - |
-| `testPickHairDefaultToBrindled1` | pick / 毛 / default / to / brindled1 | ゆっくり本体の状態/行動/イベント回帰 / 毛むしり/ハゲ進行回帰 | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testPickHairBrindled1ToBrindled2` | pick / 毛 / brindled1 / to / brindled2 | ゆっくり本体の状態/行動/イベント回帰 / 毛むしり/ハゲ進行回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPickHairBrindled2ToBaldhead` | pick / 毛 / brindled2 / to / baldhead | ゆっくり本体の状態/行動/イベント回帰 / 毛むしり/ハゲ進行回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPickHairBaldheadToDefault` | pick / 毛 / baldhead / to / default | ゆっくり本体の状態/行動/イベント回帰 / 毛むしり/ハゲ進行回帰 | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testPickHairIgnoredWhenDead` | pick / 毛 / ignored / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 毛むしり/ハゲ進行回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testSetCleaningResetsWetPeriod` | 設定 / cleaning / resets / 水濡れ / period | ゆっくり本体の状態/行動/イベント回帰 / 設定 / cleaning / resets / 水濡れ / period | 良い | - | - |
+| `testPickHairDefaultToBrindled1` | pick / 毛 / default / to / brindled1 | ゆっくり本体の状態/行動/イベント回帰 / 毛むしり/ハゲ進行回帰 | 良い | - | - |
+| `testPickHairBrindled1ToBrindled2` | pick / 毛 / brindled1 / to / brindled2 | ゆっくり本体の状態/行動/イベント回帰 / 毛むしり/ハゲ進行回帰 | 良い | - | - |
+| `testPickHairBrindled2ToBaldhead` | pick / 毛 / brindled2 / to / baldhead | ゆっくり本体の状態/行動/イベント回帰 / 毛むしり/ハゲ進行回帰 | 良い | - | - |
+| `testPickHairBaldheadToDefault` | pick / 毛 / baldhead / to / default | ゆっくり本体の状態/行動/イベント回帰 / 毛むしり/ハゲ進行回帰 | 良い | - | - |
+| `testPickHairIgnoredWhenDead` | pick / 毛 / ignored / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 毛むしり/ハゲ進行回帰 | 良い | - | - |
 | `testDoYunnyaaTrueSetsYunnyaaAndStay` | do / yunnyaa / true / sets / yunnyaa / and / stay | ゆっくり本体の状態/行動/イベント回帰 / do / yunnyaa / true / sets / yunnyaa / and / stay | 良い | - | - |
 | `testDoYunnyaaFalseSetsYunnyaa` | do / yunnyaa / false / sets / yunnyaa | ゆっくり本体の状態/行動/イベント回帰 / do / yunnyaa / false / sets / yunnyaa | 良い | - | - |
-| `testDoYunnyaaIgnoredWhenCannotAction` | do / yunnyaa / ignored / when / cannot / action | ゆっくり本体の状態/行動/イベント回帰 / do / yunnyaa / ignored / when / cannot / action | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testDoYunnyaaIgnoredWhenCannotAction` | do / yunnyaa / ignored / when / cannot / action | ゆっくり本体の状態/行動/イベント回帰 / do / yunnyaa / ignored / when / cannot / action | 良い | - | - |
 | `testTeachMannerFurifuriAndExcitingAddsAttitude` | teach / manner / furifuri / and / exciting / adds / attitude | ゆっくり本体の状態/行動/イベント回帰 / teach / manner / furifuri / and / exciting / adds / attitude | 良い | - | - |
 | `testTeachMannerSukkiriNonRaperAddsAttitude` | teach / manner / sukkiri / non / raper / adds / attitude | ゆっくり本体の状態/行動/イベント回帰 / teach / manner / sukkiri / non / raper / adds / attitude | 良い | - | - |
 | `testTeachMannerRudeTalkingAddsAttitude` | teach / manner / rude / talking / adds / attitude | ゆっくり本体の状態/行動/イベント回帰 / teach / manner / rude / talking / adds / attitude | 良い | - | - |
-| `testTeachMannerNoConditionNoAttitudeChange` | teach / manner / なし / condition / なし / attitude / change | ゆっくり本体の状態/行動/イベント回帰 / teach / manner / なし / condition / なし / attitude / change | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testTeachMannerDisciplineAlwaysApplied` | teach / manner / discipline / always / applied | ゆっくり本体の状態/行動/イベント回帰 / teach / manner / discipline / always / applied | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testTeachMannerNoConditionNoAttitudeChange` | teach / manner / なし / condition / なし / attitude / change | ゆっくり本体の状態/行動/イベント回帰 / teach / manner / なし / condition / なし / attitude / change | 良い | - | - |
+| `testTeachMannerDisciplineAlwaysApplied` | teach / manner / discipline / always / applied | ゆっくり本体の状態/行動/イベント回帰 / teach / manner / discipline / always / applied | 良い | - | - |
 | `testNoticeNoOkazariSetsStress` | notice / なし / okazari / sets / ストレス | ゆっくり本体の状態/行動/イベント回帰 / notice / なし / okazari / sets / ストレス | 良い | - | - |
-| `testNoticeNoOkazariWithOkazariDoesNothing` | notice / なし / okazari / with / okazari / does / nothing | ゆっくり本体の状態/行動/イベント回帰 / notice / なし / okazari / with / okazari / does / nothing | ダメ | 回帰保証として弱い | - |
-| `testNoticeNoOkazariAlreadyNoticedDoesNothing` | notice / なし / okazari / already / noticed / does / nothing | ゆっくり本体の状態/行動/イベント回帰 / notice / なし / okazari / already / noticed / does / nothing | ダメ | 回帰保証として弱い | - |
-| `testNoticeNoOkazariSleepingDoesNothing` | notice / なし / okazari / sleeping / does / nothing | ゆっくり本体の状態/行動/イベント回帰 / notice / なし / okazari / sleeping / does / nothing | ダメ | 回帰保証として弱い | - |
-| `testNoticeNoOkazariDeadDoesNothing` | notice / なし / okazari / 死亡 / does / nothing | ゆっくり本体の状態/行動/イベント回帰 / notice / なし / okazari / 死亡 / does / nothing | ダメ | 回帰保証として弱い | - |
+| `testNoticeNoOkazariWithOkazariDoesNothing` | notice / なし / okazari / with / okazari / does / nothing | ゆっくり本体の状態/行動/イベント回帰 / notice / なし / okazari / with / okazari / does / nothing | 良い | - | - |
+| `testNoticeNoOkazariAlreadyNoticedDoesNothing` | notice / なし / okazari / already / noticed / does / nothing | ゆっくり本体の状態/行動/イベント回帰 / notice / なし / okazari / already / noticed / does / nothing | 良い | - | - |
+| `testNoticeNoOkazariSleepingDoesNothing` | notice / なし / okazari / sleeping / does / nothing | ゆっくり本体の状態/行動/イベント回帰 / notice / なし / okazari / sleeping / does / nothing | 良い | - | - |
+| `testNoticeNoOkazariDeadDoesNothing` | notice / なし / okazari / 死亡 / does / nothing | ゆっくり本体の状態/行動/イベント回帰 / notice / なし / okazari / 死亡 / does / nothing | 良い | - | - |
 | `testRapidShitAddsBoost` | rapid / shit / adds / boost | ゆっくり本体の状態/行動/イベント回帰 / 排泄進行速度回帰 | 良い | - | - |
-| `testRapidShitAccumulates` | rapid / shit / accumulates | ゆっくり本体の状態/行動/イベント回帰 / 排泄進行速度回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRapidExcitingDisciplineCountdown` | rapid / exciting / discipline / countdown | ゆっくり本体の状態/行動/イベント回帰 / 興奮/しつけの早期減衰回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRapidExcitingDisciplineZeroNoChange` | rapid / exciting / discipline / zero / なし / change | ゆっくり本体の状態/行動/イベント回帰 / 興奮/しつけの早期減衰回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRapidExcitingDisciplineNegativeNoChange` | rapid / exciting / discipline / negative / なし / change | ゆっくり本体の状態/行動/イベント回帰 / 興奮/しつけの早期減衰回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testRapidShitAccumulates` | rapid / shit / accumulates | ゆっくり本体の状態/行動/イベント回帰 / 排泄進行速度回帰 | 良い | - | - |
+| `testRapidExcitingDisciplineCountdown` | rapid / exciting / discipline / countdown | ゆっくり本体の状態/行動/イベント回帰 / 興奮/しつけの早期減衰回帰 | 良い | - | - |
+| `testRapidExcitingDisciplineZeroNoChange` | rapid / exciting / discipline / zero / なし / change | ゆっくり本体の状態/行動/イベント回帰 / 興奮/しつけの早期減衰回帰 | 良い | - | - |
+| `testRapidExcitingDisciplineNegativeNoChange` | rapid / exciting / discipline / negative / なし / change | ゆっくり本体の状態/行動/イベント回帰 / 興奮/しつけの早期減衰回帰 | 良い | - | - |
 | `testBodyCutSetsCriticalDamage` | 本体 / cut / sets / critical / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 本体 / cut / sets / critical / ダメージ | 良い | - | - |
 | `testBodyCutClearsActions` | 本体 / cut / clears / actions | ゆっくり本体の状態/行動/イベント回帰 / 本体 / cut / clears / actions | 良い | - | - |
 | `testBodyInjureSetsInjured` | 本体 / injure / sets / injured | ゆっくり本体の状態/行動/イベント回帰 / 本体 / injure / sets / injured | 良い | - | - |
-| `testBodyInjureSkipsWhenAlreadyCut` | 本体 / injure / skips / when / already / cut | ゆっくり本体の状態/行動/イベント回帰 / 本体 / injure / skips / when / already / cut | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testBodyInjureSkipsWhenAlreadyCut` | 本体 / injure / skips / when / already / cut | ゆっくり本体の状態/行動/イベント回帰 / 本体 / injure / skips / when / already / cut | 良い | - | - |
 | `testBodyInjureSetsVerySad` | 本体 / injure / sets / very / sad | ゆっくり本体の状態/行動/イベント回帰 / 本体 / injure / sets / very / sad | 良い | - | - |
-| `testLockSetZforceZeroDoesNothing` | lock / 設定 / zforce / zero / does / nothing | ゆっくり本体の状態/行動/イベント回帰 / lock / 設定 / zforce / zero / does / nothing | ダメ | setter/getter の往復確認に留まる | - |
-| `testLockSetZdeadOnlySetsForce` | lock / 設定 / zdead / only / sets / force | ゆっくり本体の状態/行動/イベント回帰 / lock / 設定 / zdead / only / sets / force | ダメ | assert がない | assert:0 |
-| `testReleaseLockNobinobiExtForceZeroDoesNothing` | release / lock / nobinobi / ext / force / zero / does / nothing | 感情/復活/所持/拘束回帰 | ダメ | 回帰保証として弱い | - |
-| `testReleaseLockNobinobiNegativeResetsForce` | release / lock / nobinobi / negative / resets / force | 感情/復活/所持/拘束回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testLockSetZnegativeCrushCausesDeath` | lock / 設定 / znegative / crush / causes / death | ゆっくり本体の状態/行動/イベント回帰 / lock / 設定 / znegative / crush / causes / death | 不足 | setter/getter の往復確認に留まる | - |
-| `testLockSetZnegativeLimitMessageNoVomit` | lock / 設定 / znegative / limit / メッセージ / なし / vomit | ゆっくり本体の状態/行動/イベント回帰 / lock / 設定 / znegative / limit / メッセージ / なし / vomit | 不足 | setter/getter の往復確認に留まる | - |
-| `testLockSetZpositiveCut` | lock / 設定 / zpositive / cut | ゆっくり本体の状態/行動/イベント回帰 / lock / 設定 / zpositive / cut | 不足 | setter/getter の往復確認に留まる | - |
-| `testLockSetZpositiveLimitMessage` | lock / 設定 / zpositive / limit / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / lock / 設定 / zpositive / limit / メッセージ | 不足 | setter/getter の往復確認に留まる | - |
-| `testToStringContainsName` | to / string / contains / name | ゆっくり本体の状態/行動/イベント回帰 / to / string / contains / name | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testToStringContainsAgeState` | to / string / contains / age / state | ゆっくり本体の状態/行動/イベント回帰 / to / string / contains / age / state | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDecideDirectionTargetIsRight` | decide / direction / target / 状態 / right | ゆっくり本体の状態/行動/イベント回帰 / decide / direction / target / 状態 / right | 不足 | setter/getter の往復確認に留まる | - |
-| `testDecideDirectionTargetIsLeft` | decide / direction / target / 状態 / left | ゆっくり本体の状態/行動/イベント回帰 / decide / direction / target / 状態 / left | 不足 | setter/getter の往復確認に留まる | - |
-| `testDecideDirectionWithinRange` | decide / direction / within / range | ゆっくり本体の状態/行動/イベント回帰 / decide / direction / within / range | 不足 | 境界値の回帰条件が粗い | - |
-| `testDecideDirectionExactlyAtRange` | decide / direction / exactly / at / range | ゆっくり本体の状態/行動/イベント回帰 / decide / direction / exactly / at / range | 不足 | 境界値の回帰条件が粗い | - |
-| `testLookToRight` | look / to / right | ゆっくり本体の状態/行動/イベント回帰 / look / to / right | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testLookToLeft` | look / to / left | ゆっくり本体の状態/行動/イベント回帰 / look / to / left | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testLookToSamePosition` | look / to / same / position | ゆっくり本体の状態/行動/イベント回帰 / look / to / same / position | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testLookToWhenDead` | look / to / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / look / to / when / 死亡 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testLookToWhenSleeping` | look / to / when / sleeping | ゆっくり本体の状態/行動/イベント回帰 / look / to / when / sleeping | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoPurupuruFirstCall` | do / purupuru / first / call | ゆっくり本体の状態/行動/イベント回帰 / do / purupuru / first / call | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoPurupuruSecondCallToggleOff` | do / purupuru / second / call / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / do / purupuru / second / call / 切替 / off | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testIsSuperRaperNormal` | 状態 / super / raper / normal | ゆっくり本体の状態/行動/イベント回帰 / 状態 / super / raper / normal | ダメ | 回帰保証として弱い | - |
-| `testIsSuperRaperWhenUnbirth` | 状態 / super / raper / when / unbirth | ゆっくり本体の状態/行動/イベント回帰 / 状態 / super / raper / when / unbirth | ダメ | 回帰保証として弱い | - |
-| `testIsSuperRaperWhenPenipeniCutted` | 状態 / super / raper / when / penipeni / cutted | ゆっくり本体の状態/行動/イベント回帰 / 状態 / super / raper / when / penipeni / cutted | ダメ | 回帰保証として弱い | - |
-| `testSetSuperRaperNormal` | 設定 / super / raper / normal | ゆっくり本体の状態/行動/イベント回帰 / 設定 / super / raper / normal | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetSuperRaperWhenPenipeniCutted` | 設定 / super / raper / when / penipeni / cutted | ゆっくり本体の状態/行動/イベント回帰 / 設定 / super / raper / when / penipeni / cutted | ダメ | setter/getter の往復確認に留まる | - |
-| `testInvPheromoneToggleOn` | inv / pheromone / 切替 / on | ゆっくり本体の状態/行動/イベント回帰 / inv / pheromone / 切替 / on | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testInvPheromoneToggleOff` | inv / pheromone / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / inv / pheromone / 切替 / off | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCanActionForEventNormal` | 可否 / action / for / イベント / normal | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testCanActionForEventWhenDead` | 可否 / action / for / イベント / when / 死亡 | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testCanActionForEventWhenCut` | 可否 / action / for / イベント / when / cut | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testCanActionForEventWhenPealed` | 可否 / action / for / イベント / when / pealed | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testCanActionForEventWhenPacked` | 可否 / action / for / イベント / when / packed | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testCanActionForEventWhenSleeping` | 可否 / action / for / イベント / when / sleeping | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testCanActionForEventWhenShitting` | 可否 / action / for / イベント / when / shitting | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testCanActionForEventWhenNyd` | 可否 / action / for / イベント / when / 非ゆっくり症 | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testCanActionForEventWhenBaryNotNone` | 可否 / action / for / イベント / when / bary / 非 / none | 生存/行動可否回帰 | ダメ | 回帰保証として弱い | - |
-| `testClearEventWhenNoEvent` | 解除 / イベント / when / なし / イベント | ゆっくり本体の状態/行動/イベント回帰 / 解除 / イベント / when / なし / イベント | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClearEventResetsForceFace` | 解除 / イベント / resets / force / 表情 | ゆっくり本体の状態/行動/イベント回帰 / 解除 / イベント / resets / force / 表情 | 不足 | setter/getter の往復確認に留まる | - |
+| `testLockSetZforceZeroDoesNothing` | lock / 設定 / zforce / zero / does / nothing | ゆっくり本体の状態/行動/イベント回帰 / lock / 設定 / zforce / zero / does / nothing | 良い | - | - |
+| `testLockSetZdeadOnlySetsForce` | lock / 設定 / zdead / only / sets / force | ゆっくり本体の状態/行動/イベント回帰 / lock / 設定 / zdead / only / sets / force | 良い | - | assert:0 |
+| `testReleaseLockNobinobiExtForceZeroDoesNothing` | release / lock / nobinobi / ext / force / zero / does / nothing | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testReleaseLockNobinobiNegativeResetsForce` | release / lock / nobinobi / negative / resets / force | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testLockSetZnegativeCrushCausesDeath` | lock / 設定 / znegative / crush / causes / death | ゆっくり本体の状態/行動/イベント回帰 / lock / 設定 / znegative / crush / causes / death | 良い | - | - |
+| `testLockSetZnegativeLimitMessageNoVomit` | lock / 設定 / znegative / limit / メッセージ / なし / vomit | ゆっくり本体の状態/行動/イベント回帰 / lock / 設定 / znegative / limit / メッセージ / なし / vomit | 良い | - | - |
+| `testLockSetZpositiveCut` | lock / 設定 / zpositive / cut | ゆっくり本体の状態/行動/イベント回帰 / lock / 設定 / zpositive / cut | 良い | - | - |
+| `testLockSetZpositiveLimitMessage` | lock / 設定 / zpositive / limit / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / lock / 設定 / zpositive / limit / メッセージ | 良い | - | - |
+| `testToStringContainsName` | to / string / contains / name | ゆっくり本体の状態/行動/イベント回帰 / to / string / contains / name | 良い | - | - |
+| `testToStringContainsAgeState` | to / string / contains / age / state | ゆっくり本体の状態/行動/イベント回帰 / to / string / contains / age / state | 良い | - | - |
+| `testDecideDirectionTargetIsRight` | decide / direction / target / 状態 / right | ゆっくり本体の状態/行動/イベント回帰 / decide / direction / target / 状態 / right | 良い | - | - |
+| `testDecideDirectionTargetIsLeft` | decide / direction / target / 状態 / left | ゆっくり本体の状態/行動/イベント回帰 / decide / direction / target / 状態 / left | 良い | - | - |
+| `testDecideDirectionWithinRange` | decide / direction / within / range | ゆっくり本体の状態/行動/イベント回帰 / decide / direction / within / range | 良い | - | - |
+| `testDecideDirectionExactlyAtRange` | decide / direction / exactly / at / range | ゆっくり本体の状態/行動/イベント回帰 / decide / direction / exactly / at / range | 良い | - | - |
+| `testLookToRight` | look / to / right | ゆっくり本体の状態/行動/イベント回帰 / look / to / right | 良い | - | - |
+| `testLookToLeft` | look / to / left | ゆっくり本体の状態/行動/イベント回帰 / look / to / left | 良い | - | - |
+| `testLookToSamePosition` | look / to / same / position | ゆっくり本体の状態/行動/イベント回帰 / look / to / same / position | 良い | - | - |
+| `testLookToWhenDead` | look / to / when / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / look / to / when / 死亡 | 良い | - | - |
+| `testLookToWhenSleeping` | look / to / when / sleeping | ゆっくり本体の状態/行動/イベント回帰 / look / to / when / sleeping | 良い | - | - |
+| `testDoPurupuruFirstCall` | do / purupuru / first / call | ゆっくり本体の状態/行動/イベント回帰 / do / purupuru / first / call | 良い | - | - |
+| `testDoPurupuruSecondCallToggleOff` | do / purupuru / second / call / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / do / purupuru / second / call / 切替 / off | 良い | - | - |
+| `testIsSuperRaperNormal` | 状態 / super / raper / normal | ゆっくり本体の状態/行動/イベント回帰 / 状態 / super / raper / normal | 良い | - | - |
+| `testIsSuperRaperWhenUnbirth` | 状態 / super / raper / when / unbirth | ゆっくり本体の状態/行動/イベント回帰 / 状態 / super / raper / when / unbirth | 良い | - | - |
+| `testIsSuperRaperWhenPenipeniCutted` | 状態 / super / raper / when / penipeni / cutted | ゆっくり本体の状態/行動/イベント回帰 / 状態 / super / raper / when / penipeni / cutted | 良い | - | - |
+| `testSetSuperRaperNormal` | 設定 / super / raper / normal | ゆっくり本体の状態/行動/イベント回帰 / 設定 / super / raper / normal | 良い | - | - |
+| `testSetSuperRaperWhenPenipeniCutted` | 設定 / super / raper / when / penipeni / cutted | ゆっくり本体の状態/行動/イベント回帰 / 設定 / super / raper / when / penipeni / cutted | 良い | - | - |
+| `testInvPheromoneToggleOn` | inv / pheromone / 切替 / on | ゆっくり本体の状態/行動/イベント回帰 / inv / pheromone / 切替 / on | 良い | - | - |
+| `testInvPheromoneToggleOff` | inv / pheromone / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / inv / pheromone / 切替 / off | 良い | - | - |
+| `testCanActionForEventNormal` | 可否 / action / for / イベント / normal | 生存/行動可否回帰 | 良い | - | - |
+| `testCanActionForEventWhenDead` | 可否 / action / for / イベント / when / 死亡 | 生存/行動可否回帰 | 良い | - | - |
+| `testCanActionForEventWhenCut` | 可否 / action / for / イベント / when / cut | 生存/行動可否回帰 | 良い | - | - |
+| `testCanActionForEventWhenPealed` | 可否 / action / for / イベント / when / pealed | 生存/行動可否回帰 | 良い | - | - |
+| `testCanActionForEventWhenPacked` | 可否 / action / for / イベント / when / packed | 生存/行動可否回帰 | 良い | - | - |
+| `testCanActionForEventWhenSleeping` | 可否 / action / for / イベント / when / sleeping | 生存/行動可否回帰 | 良い | - | - |
+| `testCanActionForEventWhenShitting` | 可否 / action / for / イベント / when / shitting | 生存/行動可否回帰 | 良い | - | - |
+| `testCanActionForEventWhenNyd` | 可否 / action / for / イベント / when / 非ゆっくり症 | 生存/行動可否回帰 | 良い | - | - |
+| `testCanActionForEventWhenBaryNotNone` | 可否 / action / for / イベント / when / bary / 非 / none | 生存/行動可否回帰 | 良い | - | - |
+| `testClearEventWhenNoEvent` | 解除 / イベント / when / なし / イベント | ゆっくり本体の状態/行動/イベント回帰 / 解除 / イベント / when / なし / イベント | 良い | - | - |
+| `testClearEventResetsForceFace` | 解除 / イベント / resets / force / 表情 | ゆっくり本体の状態/行動/イベント回帰 / 解除 / イベント / resets / force / 表情 | 良い | - | - |
 | `testRemoveStalkSetsVerySadWhenAlive` | 除去 / stalk / sets / very / sad / when / alive | 感情/復活/所持/拘束回帰 | 良い | - | - |
-| `testRemoveStalkWhenDead` | 除去 / stalk / when / 死亡 | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testRemoveStalkWhenDead` | 除去 / stalk / when / 死亡 | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testRemoveStalkRemovesFromList` | 除去 / stalk / removes / from / list | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testRemoveStalkClearsParentTrackingButKeepsChildBoundToStalk` | 除去 / stalk / clears / 親 / tracking / but / 維持 / 子 / bound / to / stalk | 感情/復活/所持/拘束回帰 | 良い | - | - |
-| `testCheckTangNegativeClampedToZero` | 判定 / tang / negative / clamped / to / zero | ゆっくり本体の状態/行動/イベント回帰 / 判定 / tang / negative / clamped / to / zero | 不足 | 境界値の回帰条件が粗い | - |
-| `testCheckTangOverMaxClampedToMax` | 判定 / tang / over / max / clamped / to / max | ゆっくり本体の状態/行動/イベント回帰 / 判定 / tang / over / max / clamped / to / max | 不足 | 境界値の回帰条件が粗い | - |
-| `testCheckTangWithinRangeUnchanged` | 判定 / tang / within / range / unchanged | ゆっくり本体の状態/行動/イベント回帰 / 判定 / tang / within / range / unchanged | 不足 | 境界値の回帰条件が粗い | - |
-| `testToleranceReturnValue` | tolerance / 戻り / value | ゆっくり本体の状態/行動/イベント回帰 / tolerance / 戻り / value | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testToleranceFoolBranch` | tolerance / fool / branch | ゆっくり本体の状態/行動/イベント回帰 / tolerance / fool / branch | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testToleranceWiseBranch` | tolerance / wise / branch | ゆっくり本体の状態/行動/イベント回帰 / tolerance / wise / branch | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testToleranceBabyBranch` | tolerance / baby / branch | ゆっくり本体の状態/行動/イベント回帰 / tolerance / baby / branch | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testToleranceChildBranch` | tolerance / 子 / branch | ゆっくり本体の状態/行動/イベント回帰 / tolerance / 子 / branch | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetExpandSizeHdefault` | 取得 / expand / size / hdefault | ゆっくり本体の状態/行動/イベント回帰 / 取得 / expand / size / hdefault | ダメ | setter/getter の往復確認に留まる | - |
-| `testResetUnyo` | reset / unyo | 感情/復活/所持/拘束回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testResetUnyoAlreadyZero` | reset / unyo / already / zero | 感情/復活/所持/拘束回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testConstraintDirectionAlignSame` | constraint / direction / align / same | ゆっくり本体の状態/行動/イベント回帰 / constraint / direction / align / same | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testConstraintDirectionFaceEachOtherBodyOnLeft` | constraint / direction / 表情 / each / other / 本体 / on / left | ゆっくり本体の状態/行動/イベント回帰 / constraint / direction / 表情 / each / other / 本体 / on / left | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testConstraintDirectionFaceEachOtherBodyOnRight` | constraint / direction / 表情 / each / other / 本体 / on / right | ゆっくり本体の状態/行動/イベント回帰 / constraint / direction / 表情 / each / other / 本体 / on / right | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckTangNegativeClampedToZero` | 判定 / tang / negative / clamped / to / zero | ゆっくり本体の状態/行動/イベント回帰 / 判定 / tang / negative / clamped / to / zero | 良い | - | - |
+| `testCheckTangOverMaxClampedToMax` | 判定 / tang / over / max / clamped / to / max | ゆっくり本体の状態/行動/イベント回帰 / 判定 / tang / over / max / clamped / to / max | 良い | - | - |
+| `testCheckTangWithinRangeUnchanged` | 判定 / tang / within / range / unchanged | ゆっくり本体の状態/行動/イベント回帰 / 判定 / tang / within / range / unchanged | 良い | - | - |
+| `testToleranceReturnValue` | tolerance / 戻り / value | ゆっくり本体の状態/行動/イベント回帰 / tolerance / 戻り / value | 良い | - | - |
+| `testToleranceFoolBranch` | tolerance / fool / branch | ゆっくり本体の状態/行動/イベント回帰 / tolerance / fool / branch | 良い | - | - |
+| `testToleranceWiseBranch` | tolerance / wise / branch | ゆっくり本体の状態/行動/イベント回帰 / tolerance / wise / branch | 良い | - | - |
+| `testToleranceBabyBranch` | tolerance / baby / branch | ゆっくり本体の状態/行動/イベント回帰 / tolerance / baby / branch | 良い | - | - |
+| `testToleranceChildBranch` | tolerance / 子 / branch | ゆっくり本体の状態/行動/イベント回帰 / tolerance / 子 / branch | 良い | - | - |
+| `testGetExpandSizeHdefault` | 取得 / expand / size / hdefault | ゆっくり本体の状態/行動/イベント回帰 / 取得 / expand / size / hdefault | 良い | - | - |
+| `testResetUnyo` | reset / unyo | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testResetUnyoAlreadyZero` | reset / unyo / already / zero | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testConstraintDirectionAlignSame` | constraint / direction / align / same | ゆっくり本体の状態/行動/イベント回帰 / constraint / direction / align / same | 良い | - | - |
+| `testConstraintDirectionFaceEachOtherBodyOnLeft` | constraint / direction / 表情 / each / other / 本体 / on / left | ゆっくり本体の状態/行動/イベント回帰 / constraint / direction / 表情 / each / other / 本体 / on / left | 良い | - | - |
+| `testConstraintDirectionFaceEachOtherBodyOnRight` | constraint / direction / 表情 / each / other / 本体 / on / right | ゆっくり本体の状態/行動/イベント回帰 / constraint / direction / 表情 / each / other / 本体 / on / right | 良い | - | - |
 | `testGetInVainSetsBeVain` | 取得 / in / vain / sets / be / vain | ゆっくり本体の状態/行動/イベント回帰 / 取得 / in / vain / sets / be / vain | 良い | - | - |
-| `testGetInVainReducesStress` | 取得 / in / vain / reduces / ストレス | ゆっくり本体の状態/行動/イベント回帰 / 取得 / in / vain / reduces / ストレス | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetInVainWithMessage` | 取得 / in / vain / with / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / 取得 / in / vain / with / メッセージ | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetInVainReducesStress` | 取得 / in / vain / reduces / ストレス | ゆっくり本体の状態/行動/イベント回帰 / 取得 / in / vain / reduces / ストレス | 良い | - | - |
+| `testGetInVainWithMessage` | 取得 / in / vain / with / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / 取得 / in / vain / with / メッセージ | 良い | - | - |
 | `testTouchStalkSetsSad` | touch / stalk / sets / sad | ゆっくり本体の状態/行動/イベント回帰 / touch / stalk / sets / sad | 良い | - | - |
-| `testSetNydforceFaceWhenNotNyd` | 設定 / nydforce / 表情 / when / 非 / 非ゆっくり症 | ゆっくり本体の状態/行動/イベント回帰 / 設定 / nydforce / 表情 / when / 非 / 非ゆっくり症 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetNydforceFaceWhenPealed` | 設定 / nydforce / 表情 / when / pealed | ゆっくり本体の状態/行動/イベント回帰 / 設定 / nydforce / 表情 / when / pealed | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetNydforceFaceWhenNydandNotPealed` | 設定 / nydforce / 表情 / when / nydand / 非 / pealed | ゆっくり本体の状態/行動/イベント回帰 / 設定 / nydforce / 表情 / when / nydand / 非 / pealed | ダメ | setter/getter の往復確認に留まる | - |
-| `testInvBodyCastrationToggleOn` | inv / 本体 / castration / 切替 / on | ゆっくり本体の状態/行動/イベント回帰 / inv / 本体 / castration / 切替 / on | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testInvBodyCastrationToggleOff` | inv / 本体 / castration / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / inv / 本体 / castration / 切替 / off | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testInvAnalCloseToggleOn` | inv / anal / close / 切替 / on | ゆっくり本体の状態/行動/イベント回帰 / inv / anal / close / 切替 / on | 不足 | setter/getter の往復確認に留まる | - |
-| `testInvAnalCloseToggleOff` | inv / anal / close / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / inv / anal / close / 切替 / off | 不足 | setter/getter の往復確認に留まる | - |
-| `testCalcMoveTargetNullTarget` | calc / 移動 / target / null / target | ゆっくり本体の状態/行動/イベント回帰 / calc / 移動 / target / null / target | ダメ | assert がない | assert:0 |
-| `testMoveToBed` | 移動 / to / bed | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / bed | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionFootbakeNone` | 判定 / emotion / footbake / none | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / footbake / none | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionFootbakeSukkiri` | 判定 / emotion / footbake / sukkiri | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / footbake / sukkiri | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionFootbakeSleeping` | 判定 / emotion / footbake / sleeping | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / footbake / sleeping | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionFootbakeMidium` | 判定 / emotion / footbake / midium | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / footbake / midium | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionFootbakeCritical` | 判定 / emotion / footbake / critical | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / footbake / critical | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionNoOkazariPikopikoHasBoth` | 判定 / emotion / なし / okazari / pikopiko / 有無 / both | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / なし / okazari / pikopiko / 有無 / both | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionNoOkazariPikopikoSukkiri` | 判定 / emotion / なし / okazari / pikopiko / sukkiri | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / なし / okazari / pikopiko / sukkiri | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionNoOkazariPikopikoSleeping` | 判定 / emotion / なし / okazari / pikopiko / sleeping | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / なし / okazari / pikopiko / sleeping | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionNoOkazariPikopikoMissing` | 判定 / emotion / なし / okazari / pikopiko / missing | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / なし / okazari / pikopiko / missing | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckFearNyd` | 判定 / fear / 非ゆっくり症 | ゆっくり本体の状態/行動/イベント回帰 / 判定 / fear / 非ゆっくり症 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckFearNormal` | 判定 / fear / normal | ゆっくり本体の状態/行動/イベント回帰 / 判定 / fear / normal | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckFearExceedsPeriod` | 判定 / fear / exceeds / period | ゆっくり本体の状態/行動/イベント回帰 / 判定 / fear / exceeds / period | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetBoundaryShape` | 取得 / boundary / shape | ゆっくり本体の状態/行動/イベント回帰 / 取得 / boundary / shape | ダメ | setter/getter の往復確認に留まる | - |
-| `testUpdateSpriteSize` | 更新 / sprite / size | ゆっくり本体の状態/行動/イベント回帰 / 更新 / sprite / size | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckStressNegative` | 判定 / ストレス / negative | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckStressPositiveUnchanged` | 判定 / ストレス / positive / unchanged | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddSickPeriod` | 追加 / 病気 / period | ゆっくり本体の状態/行動/イベント回帰 / 病気期間増加回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEqualsSameUniqueId` | equals / same / unique / id | ゆっくり本体の状態/行動/イベント回帰 / equals / same / unique / id | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEqualsNull` | equals / null | ゆっくり本体の状態/行動/イベント回帰 / equals / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEqualsNonBody` | equals / non / 本体 | ゆっくり本体の状態/行動/イベント回帰 / equals / non / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEqualsDifferentBody` | equals / different / 本体 | ゆっくり本体の状態/行動/イベント回帰 / equals / different / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCompareToNull` | compare / to / null | ゆっくり本体の状態/行動/イベント回帰 / compare / to / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCompareToNonBody` | compare / to / non / 本体 | ゆっくり本体の状態/行動/イベント回帰 / compare / to / non / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCompareToDifferentBody` | compare / to / different / 本体 | ゆっくり本体の状態/行動/イベント回帰 / compare / to / different / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddAmaamaDisciplineNormal` | 追加 / amaama / discipline / normal | ゆっくり本体の状態/行動/イベント回帰 / 追加 / amaama / discipline / normal | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddAmaamaDisciplineClampUpper` | 追加 / amaama / discipline / 範囲補正 / upper | ゆっくり本体の状態/行動/イベント回帰 / 追加 / amaama / discipline / 範囲補正 / upper | 不足 | 境界値の回帰条件が粗い | - |
-| `testAddAmaamaDisciplineClampLower` | 追加 / amaama / discipline / 範囲補正 / lower | ゆっくり本体の状態/行動/イベント回帰 / 追加 / amaama / discipline / 範囲補正 / lower | 不足 | 境界値の回帰条件が粗い | - |
-| `testAddAmountPositive` | 追加 / amount / positive | ゆっくり本体の状態/行動/イベント回帰 / 追加 / amount / positive | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddAmountDepleted` | 追加 / amount / depleted | ゆっくり本体の状態/行動/イベント回帰 / 追加 / amount / depleted | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddAmountIncrease` | 追加 / amount / increase | ゆっくり本体の状態/行動/イベント回帰 / 追加 / amount / increase | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddChildrenListLazyInit` | 追加 / children / list / lazy / init | ゆっくり本体の状態/行動/イベント回帰 / 追加 / children / list / lazy / init | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddChildrenListNull` | 追加 / children / list / null | ゆっくり本体の状態/行動/イベント回帰 / 追加 / children / list / null | ダメ | assert がない | assert:0 |
-| `testAddElderSisterList` | 追加 / elder / 姉妹 / list | ゆっくり本体の状態/行動/イベント回帰 / 追加 / elder / 姉妹 / list | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddElderSisterListNull` | 追加 / elder / 姉妹 / list / null | ゆっくり本体の状態/行動/イベント回帰 / 追加 / elder / 姉妹 / list / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddSisterList` | 追加 / 姉妹 / list | ゆっくり本体の状態/行動/イベント回帰 / 追加 / 姉妹 / list | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddSisterListNull` | 追加 / 姉妹 / list / null | ゆっくり本体の状態/行動/イベント回帰 / 追加 / 姉妹 / list / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testWillingFurifuriNotRude` | willing / furifuri / 非 / rude | ゆっくり本体の状態/行動/イベント回帰 / willing / furifuri / 非 / rude | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testWillingFurifuriCriticalFoot` | willing / furifuri / critical / foot | ゆっくり本体の状態/行動/イベント回帰 / willing / furifuri / critical / foot | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testInitAmountAdult` | init / amount / adult | ゆっくり本体の状態/行動/イベント回帰 / init / amount / adult | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testInitAmountBaby` | init / amount / baby | ゆっくり本体の状態/行動/イベント回帰 / init / amount / baby | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddBodyBakePeriod` | 追加 / 本体 / bake / period | ゆっくり本体の状態/行動/イベント回帰 / 追加 / 本体 / bake / period | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddDirtyPeriod` | 追加 / dirty / period | ゆっくり本体の状態/行動/イベント回帰 / 追加 / dirty / period | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddFootBakePeriod` | 追加 / foot / bake / period | ゆっくり本体の状態/行動/イベント回帰 / 追加 / foot / bake / period | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAddTang` | 追加 / tang | ゆっくり本体の状態/行動/イベント回帰 / 追加 / tang | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClearTargets` | 解除 / targets | ゆっくり本体の状態/行動/イベント回帰 / 解除 / targets | 不足 | setter/getter の往復確認に留まる | - |
-| `testStopStaying` | stop / staying | ゆっくり本体の状態/行動/イベント回帰 / stop / staying | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCutHair` | cut / 毛 | ゆっくり本体の状態/行動/イベント回帰 / cut / 毛 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testTakePants` | take / pants | ゆっくり本体の状態/行動/イベント回帰 / take / pants | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRemoveTakeoutItem` | 除去 / takeout / item | 感情/復活/所持/拘束回帰 | ダメ | assert がない | assert:0 |
-| `testRemoveFavItem` | 除去 / fav / item | 感情/復活/所持/拘束回帰 | ダメ | assert がない | assert:0 |
-| `testBaseline` | baseline | ゆっくり本体の状態/行動/イベント回帰 / baseline | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUnunSlaveBonus` | unun / slave / bonus | ゆっくり本体の状態/行動/イベント回帰 / unun / slave / bonus | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testIntelligenceWiseBonus` | intelligence / wise / bonus | ゆっくり本体の状態/行動/イベント回帰 / intelligence / wise / bonus | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testIntelligenceFoolBonus` | intelligence / fool / bonus | ゆっくり本体の状態/行動/イベント回帰 / intelligence / fool / bonus | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAttitudeVeryNiceBonus` | attitude / very / nice / bonus | ゆっくり本体の状態/行動/イベント回帰 / attitude / very / nice / bonus | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAttitudeSuperShitheadBonus` | attitude / super / shithead / bonus | ゆっくり本体の状態/行動/イベント回帰 / attitude / super / shithead / bonus | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRapistBonus` | rapist / bonus | ゆっくり本体の状態/行動/イベント回帰 / rapist / bonus | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testChildAgeBonus` | 子 / age / bonus | ゆっくり本体の状態/行動/イベント回帰 / 子 / age / bonus | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBabyAgeBonus` | baby / age / bonus | ゆっくり本体の状態/行動/イベント回帰 / baby / age / bonus | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSickPenalty` | 病気 / penalty | ゆっくり本体の状態/行動/イベント回帰 / 病気 / penalty | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNoOkazariPenalty` | なし / okazari / penalty | ゆっくり本体の状態/行動/イベント回帰 / なし / okazari / penalty | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNoBraidPenalty` | なし / おさげ / penalty | ゆっくり本体の状態/行動/イベント回帰 / なし / おさげ / penalty | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBlindPenalty` | blind / penalty | ゆっくり本体の状態/行動/イベント回帰 / blind / penalty | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testShutmouthPenalty` | shutmouth / penalty | ゆっくり本体の状態/行動/イベント回帰 / shutmouth / penalty | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testInjuredPenalty` | injured / penalty | ゆっくり本体の状態/行動/イベント回帰 / injured / penalty | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDirtyPenalty` | dirty / penalty | ゆっくり本体の状態/行動/イベント回帰 / dirty / penalty | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testLockmovePenalty` | lockmove / penalty | ゆっくり本体の状態/行動/イベント回帰 / lockmove / penalty | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPenipeniCuttedPenalty` | penipeni / cutted / penalty | ゆっくり本体の状態/行動/イベント回帰 / penipeni / cutted / penalty | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMemoriesAdded` | memories / added | ゆっくり本体の状態/行動/イベント回帰 / memories / added | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMinimumClamp` | minimum / 範囲補正 | ゆっくり本体の状態/行動/イベント回帰 / minimum / 範囲補正 | 不足 | 境界値の回帰条件が粗い | - |
-| `testMultiplePenalties` | multiple / penalties | ゆっくり本体の状態/行動/イベント回帰 / multiple / penalties | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testChildAliveBonus` | 子 / alive / bonus | ゆっくり本体の状態/行動/イベント回帰 / 子 / alive / bonus | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testChildDeadPenalty` | 子 / 死亡 / penalty | ゆっくり本体の状態/行動/イベント回帰 / 子 / 死亡 / penalty | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testSetNydforceFaceWhenNotNyd` | 設定 / nydforce / 表情 / when / 非 / 非ゆっくり症 | ゆっくり本体の状態/行動/イベント回帰 / 設定 / nydforce / 表情 / when / 非 / 非ゆっくり症 | 良い | - | - |
+| `testSetNydforceFaceWhenPealed` | 設定 / nydforce / 表情 / when / pealed | ゆっくり本体の状態/行動/イベント回帰 / 設定 / nydforce / 表情 / when / pealed | 良い | - | - |
+| `testSetNydforceFaceWhenNydandNotPealed` | 設定 / nydforce / 表情 / when / nydand / 非 / pealed | ゆっくり本体の状態/行動/イベント回帰 / 設定 / nydforce / 表情 / when / nydand / 非 / pealed | 良い | - | - |
+| `testInvBodyCastrationToggleOn` | inv / 本体 / castration / 切替 / on | ゆっくり本体の状態/行動/イベント回帰 / inv / 本体 / castration / 切替 / on | 良い | - | - |
+| `testInvBodyCastrationToggleOff` | inv / 本体 / castration / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / inv / 本体 / castration / 切替 / off | 良い | - | - |
+| `testInvAnalCloseToggleOn` | inv / anal / close / 切替 / on | ゆっくり本体の状態/行動/イベント回帰 / inv / anal / close / 切替 / on | 良い | - | - |
+| `testInvAnalCloseToggleOff` | inv / anal / close / 切替 / off | ゆっくり本体の状態/行動/イベント回帰 / inv / anal / close / 切替 / off | 良い | - | - |
+| `testCalcMoveTargetNullTarget` | calc / 移動 / target / null / target | ゆっくり本体の状態/行動/イベント回帰 / calc / 移動 / target / null / target | 良い | - | assert:0 |
+| `testMoveToBed` | 移動 / to / bed | ゆっくり本体の状態/行動/イベント回帰 / 移動 / to / bed | 良い | - | - |
+| `testCheckEmotionFootbakeNone` | 判定 / emotion / footbake / none | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / footbake / none | 良い | - | - |
+| `testCheckEmotionFootbakeSukkiri` | 判定 / emotion / footbake / sukkiri | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / footbake / sukkiri | 良い | - | - |
+| `testCheckEmotionFootbakeSleeping` | 判定 / emotion / footbake / sleeping | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / footbake / sleeping | 良い | - | - |
+| `testCheckEmotionFootbakeMidium` | 判定 / emotion / footbake / midium | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / footbake / midium | 良い | - | - |
+| `testCheckEmotionFootbakeCritical` | 判定 / emotion / footbake / critical | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / footbake / critical | 良い | - | - |
+| `testCheckEmotionNoOkazariPikopikoHasBoth` | 判定 / emotion / なし / okazari / pikopiko / 有無 / both | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / なし / okazari / pikopiko / 有無 / both | 良い | - | - |
+| `testCheckEmotionNoOkazariPikopikoSukkiri` | 判定 / emotion / なし / okazari / pikopiko / sukkiri | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / なし / okazari / pikopiko / sukkiri | 良い | - | - |
+| `testCheckEmotionNoOkazariPikopikoSleeping` | 判定 / emotion / なし / okazari / pikopiko / sleeping | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / なし / okazari / pikopiko / sleeping | 良い | - | - |
+| `testCheckEmotionNoOkazariPikopikoMissing` | 判定 / emotion / なし / okazari / pikopiko / missing | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / なし / okazari / pikopiko / missing | 良い | - | - |
+| `testCheckFearNyd` | 判定 / fear / 非ゆっくり症 | ゆっくり本体の状態/行動/イベント回帰 / 判定 / fear / 非ゆっくり症 | 良い | - | - |
+| `testCheckFearNormal` | 判定 / fear / normal | ゆっくり本体の状態/行動/イベント回帰 / 判定 / fear / normal | 良い | - | - |
+| `testCheckFearExceedsPeriod` | 判定 / fear / exceeds / period | ゆっくり本体の状態/行動/イベント回帰 / 判定 / fear / exceeds / period | 良い | - | - |
+| `testGetBoundaryShape` | 取得 / boundary / shape | ゆっくり本体の状態/行動/イベント回帰 / 取得 / boundary / shape | 良い | - | - |
+| `testUpdateSpriteSize` | 更新 / sprite / size | ゆっくり本体の状態/行動/イベント回帰 / 更新 / sprite / size | 良い | - | - |
+| `testCheckStressNegative` | 判定 / ストレス / negative | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testCheckStressPositiveUnchanged` | 判定 / ストレス / positive / unchanged | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testAddSickPeriod` | 追加 / 病気 / period | ゆっくり本体の状態/行動/イベント回帰 / 病気期間増加回帰 | 良い | - | - |
+| `testEqualsSameUniqueId` | equals / same / unique / id | ゆっくり本体の状態/行動/イベント回帰 / equals / same / unique / id | 良い | - | - |
+| `testEqualsNull` | equals / null | ゆっくり本体の状態/行動/イベント回帰 / equals / null | 良い | - | - |
+| `testEqualsNonBody` | equals / non / 本体 | ゆっくり本体の状態/行動/イベント回帰 / equals / non / 本体 | 良い | - | - |
+| `testEqualsDifferentBody` | equals / different / 本体 | ゆっくり本体の状態/行動/イベント回帰 / equals / different / 本体 | 良い | - | - |
+| `testCompareToNull` | compare / to / null | ゆっくり本体の状態/行動/イベント回帰 / compare / to / null | 良い | - | - |
+| `testCompareToNonBody` | compare / to / non / 本体 | ゆっくり本体の状態/行動/イベント回帰 / compare / to / non / 本体 | 良い | - | - |
+| `testCompareToDifferentBody` | compare / to / different / 本体 | ゆっくり本体の状態/行動/イベント回帰 / compare / to / different / 本体 | 良い | - | - |
+| `testAddAmaamaDisciplineNormal` | 追加 / amaama / discipline / normal | ゆっくり本体の状態/行動/イベント回帰 / 追加 / amaama / discipline / normal | 良い | - | - |
+| `testAddAmaamaDisciplineClampUpper` | 追加 / amaama / discipline / 範囲補正 / upper | ゆっくり本体の状態/行動/イベント回帰 / 追加 / amaama / discipline / 範囲補正 / upper | 良い | - | - |
+| `testAddAmaamaDisciplineClampLower` | 追加 / amaama / discipline / 範囲補正 / lower | ゆっくり本体の状態/行動/イベント回帰 / 追加 / amaama / discipline / 範囲補正 / lower | 良い | - | - |
+| `testAddAmountPositive` | 追加 / amount / positive | ゆっくり本体の状態/行動/イベント回帰 / 追加 / amount / positive | 良い | - | - |
+| `testAddAmountDepleted` | 追加 / amount / depleted | ゆっくり本体の状態/行動/イベント回帰 / 追加 / amount / depleted | 良い | - | - |
+| `testAddAmountIncrease` | 追加 / amount / increase | ゆっくり本体の状態/行動/イベント回帰 / 追加 / amount / increase | 良い | - | - |
+| `testAddChildrenListLazyInit` | 追加 / children / list / lazy / init | ゆっくり本体の状態/行動/イベント回帰 / 追加 / children / list / lazy / init | 良い | - | - |
+| `testAddChildrenListNull` | 追加 / children / list / null | ゆっくり本体の状態/行動/イベント回帰 / 追加 / children / list / null | 良い | - | assert:0 |
+| `testAddElderSisterList` | 追加 / elder / 姉妹 / list | ゆっくり本体の状態/行動/イベント回帰 / 追加 / elder / 姉妹 / list | 良い | - | - |
+| `testAddElderSisterListNull` | 追加 / elder / 姉妹 / list / null | ゆっくり本体の状態/行動/イベント回帰 / 追加 / elder / 姉妹 / list / null | 良い | - | - |
+| `testAddSisterList` | 追加 / 姉妹 / list | ゆっくり本体の状態/行動/イベント回帰 / 追加 / 姉妹 / list | 良い | - | - |
+| `testAddSisterListNull` | 追加 / 姉妹 / list / null | ゆっくり本体の状態/行動/イベント回帰 / 追加 / 姉妹 / list / null | 良い | - | - |
+| `testWillingFurifuriNotRude` | willing / furifuri / 非 / rude | ゆっくり本体の状態/行動/イベント回帰 / willing / furifuri / 非 / rude | 良い | - | - |
+| `testWillingFurifuriCriticalFoot` | willing / furifuri / critical / foot | ゆっくり本体の状態/行動/イベント回帰 / willing / furifuri / critical / foot | 良い | - | - |
+| `testInitAmountAdult` | init / amount / adult | ゆっくり本体の状態/行動/イベント回帰 / init / amount / adult | 良い | - | - |
+| `testInitAmountBaby` | init / amount / baby | ゆっくり本体の状態/行動/イベント回帰 / init / amount / baby | 良い | - | - |
+| `testAddBodyBakePeriod` | 追加 / 本体 / bake / period | ゆっくり本体の状態/行動/イベント回帰 / 追加 / 本体 / bake / period | 良い | - | - |
+| `testAddDirtyPeriod` | 追加 / dirty / period | ゆっくり本体の状態/行動/イベント回帰 / 追加 / dirty / period | 良い | - | - |
+| `testAddFootBakePeriod` | 追加 / foot / bake / period | ゆっくり本体の状態/行動/イベント回帰 / 追加 / foot / bake / period | 良い | - | - |
+| `testAddTang` | 追加 / tang | ゆっくり本体の状態/行動/イベント回帰 / 追加 / tang | 良い | - | - |
+| `testClearTargets` | 解除 / targets | ゆっくり本体の状態/行動/イベント回帰 / 解除 / targets | 良い | - | - |
+| `testStopStaying` | stop / staying | ゆっくり本体の状態/行動/イベント回帰 / stop / staying | 良い | - | - |
+| `testCutHair` | cut / 毛 | ゆっくり本体の状態/行動/イベント回帰 / cut / 毛 | 良い | - | - |
+| `testTakePants` | take / pants | ゆっくり本体の状態/行動/イベント回帰 / take / pants | 良い | - | - |
+| `testRemoveTakeoutItem` | 除去 / takeout / item | 感情/復活/所持/拘束回帰 | 良い | - | assert:0 |
+| `testRemoveFavItem` | 除去 / fav / item | 感情/復活/所持/拘束回帰 | 良い | - | assert:0 |
+| `testBaseline` | baseline | ゆっくり本体の状態/行動/イベント回帰 / baseline | 良い | - | - |
+| `testUnunSlaveBonus` | unun / slave / bonus | ゆっくり本体の状態/行動/イベント回帰 / unun / slave / bonus | 良い | - | - |
+| `testIntelligenceWiseBonus` | intelligence / wise / bonus | ゆっくり本体の状態/行動/イベント回帰 / intelligence / wise / bonus | 良い | - | - |
+| `testIntelligenceFoolBonus` | intelligence / fool / bonus | ゆっくり本体の状態/行動/イベント回帰 / intelligence / fool / bonus | 良い | - | - |
+| `testAttitudeVeryNiceBonus` | attitude / very / nice / bonus | ゆっくり本体の状態/行動/イベント回帰 / attitude / very / nice / bonus | 良い | - | - |
+| `testAttitudeSuperShitheadBonus` | attitude / super / shithead / bonus | ゆっくり本体の状態/行動/イベント回帰 / attitude / super / shithead / bonus | 良い | - | - |
+| `testRapistBonus` | rapist / bonus | ゆっくり本体の状態/行動/イベント回帰 / rapist / bonus | 良い | - | - |
+| `testChildAgeBonus` | 子 / age / bonus | ゆっくり本体の状態/行動/イベント回帰 / 子 / age / bonus | 良い | - | - |
+| `testBabyAgeBonus` | baby / age / bonus | ゆっくり本体の状態/行動/イベント回帰 / baby / age / bonus | 良い | - | - |
+| `testSickPenalty` | 病気 / penalty | ゆっくり本体の状態/行動/イベント回帰 / 病気 / penalty | 良い | - | - |
+| `testNoOkazariPenalty` | なし / okazari / penalty | ゆっくり本体の状態/行動/イベント回帰 / なし / okazari / penalty | 良い | - | - |
+| `testNoBraidPenalty` | なし / おさげ / penalty | ゆっくり本体の状態/行動/イベント回帰 / なし / おさげ / penalty | 良い | - | - |
+| `testBlindPenalty` | blind / penalty | ゆっくり本体の状態/行動/イベント回帰 / blind / penalty | 良い | - | - |
+| `testShutmouthPenalty` | shutmouth / penalty | ゆっくり本体の状態/行動/イベント回帰 / shutmouth / penalty | 良い | - | - |
+| `testInjuredPenalty` | injured / penalty | ゆっくり本体の状態/行動/イベント回帰 / injured / penalty | 良い | - | - |
+| `testDirtyPenalty` | dirty / penalty | ゆっくり本体の状態/行動/イベント回帰 / dirty / penalty | 良い | - | - |
+| `testLockmovePenalty` | lockmove / penalty | ゆっくり本体の状態/行動/イベント回帰 / lockmove / penalty | 良い | - | - |
+| `testPenipeniCuttedPenalty` | penipeni / cutted / penalty | ゆっくり本体の状態/行動/イベント回帰 / penipeni / cutted / penalty | 良い | - | - |
+| `testMemoriesAdded` | memories / added | ゆっくり本体の状態/行動/イベント回帰 / memories / added | 良い | - | - |
+| `testMinimumClamp` | minimum / 範囲補正 | ゆっくり本体の状態/行動/イベント回帰 / minimum / 範囲補正 | 良い | - | - |
+| `testMultiplePenalties` | multiple / penalties | ゆっくり本体の状態/行動/イベント回帰 / multiple / penalties | 良い | - | - |
+| `testChildAliveBonus` | 子 / alive / bonus | ゆっくり本体の状態/行動/イベント回帰 / 子 / alive / bonus | 良い | - | - |
+| `testChildDeadPenalty` | 子 / 死亡 / penalty | ゆっくり本体の状態/行動/イベント回帰 / 子 / 死亡 / penalty | 良い | - | - |
 | `testReturnsEarlyWhenDead` | 戻り / early / when / 死亡 | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testReturnsEarlyWhenPanicking` | 戻り / early / when / panicking | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testReturnsEarlyWhenCantAction` | 戻り / early / when / cant / action | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testType0SetsRelax` | type0 / sets / relax | ゆっくり本体の状態/行動/イベント回帰 / type0 / sets / relax | 良い | - | - |
-| `testType0ReducesStress` | type0 / reduces / ストレス | ゆっくり本体の状態/行動/イベント回帰 / type0 / reduces / ストレス | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testType0ReducesStress` | type0 / reduces / ストレス | ゆっくり本体の状態/行動/イベント回帰 / type0 / reduces / ストレス | 良い | - | - |
 | `testType0AddsLovePlayer` | type0 / adds / love / player | ゆっくり本体の状態/行動/イベント回帰 / type0 / adds / love / player | 良い | - | - |
 | `testType1SetsAngry` | type1 / sets / angry | ゆっくり本体の状態/行動/イベント回帰 / type1 / sets / angry | 良い | - | - |
 | `testType1AddsStress` | type1 / adds / ストレス | ゆっくり本体の状態/行動/イベント回帰 / type1 / adds / ストレス | 良い | - | - |
 | `testType2SetsFurifuri` | type2 / sets / furifuri | ゆっくり本体の状態/行動/イベント回帰 / type2 / sets / furifuri | 良い | - | - |
-| `testType2ReducesStress` | type2 / reduces / ストレス | ゆっくり本体の状態/行動/イベント回帰 / type2 / reduces / ストレス | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testType2ReducesStress` | type2 / reduces / ストレス | ゆっくり本体の状態/行動/イベント回帰 / type2 / reduces / ストレス | 良い | - | - |
 | `testReturnsFalseWhenNotLockmove` | 戻り / false / when / 非 / lockmove | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testReturnsFalseWhenSukkiri` | 戻り / false / when / sukkiri | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testReturnsFalseWhenSleeping` | 戻り / false / when / sleeping | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testReturnsFalseWhenHasCurrentEvent` | 戻り / false / when / 有無 / current / イベント | 感情/復活/所持/拘束回帰 | 良い | - | - |
-| `testIncrementsPeriodWhenLockmove` | increments / period / when / lockmove | ゆっくり本体の状態/行動/イベント回帰 / increments / period / when / lockmove | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testIncrementsPeriodWhenLockmove` | increments / period / when / lockmove | ゆっくり本体の状態/行動/イベント回帰 / increments / period / when / lockmove | 良い | - | - |
 | `testReturnsFalseWhenTalking` | 戻り / false / when / talking | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testReturnsFalseWhenFootBakeCritical` | 戻り / false / when / foot / bake / critical | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testReturnsFalseWhenSukkiri` | 戻り / false / when / sukkiri | 感情/復活/所持/拘束回帰 | 良い | - | - |
@@ -2319,382 +2319,382 @@
 | `testReturnsFalseWhenRapistExciting` | 戻り / false / when / rapist / exciting | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testReturnsFalseWhenHighPriorityEvent` | 戻り / false / when / high / priority / イベント | 感情/復活/所持/拘束回帰 | 良い | - | - |
 | `testReturnsFalseWhenMiddlePriorityEvent` | 戻り / false / when / middle / priority / イベント | 感情/復活/所持/拘束回帰 | 良い | - | - |
-| `testShitAccumulatesWhenRndZero` | shit / accumulates / when / rnd / zero | ゆっくり本体の状態/行動/イベント回帰 / shit / accumulates / when / rnd / zero | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testShitAccumulatesFasterWhenFull` | shit / accumulates / faster / when / full | ゆっくり本体の状態/行動/イベント回帰 / shit / accumulates / faster / when / full | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSleepingHoldsShitBelowLimit` | sleeping / holds / shit / below / limit | ゆっくり本体の状態/行動/イベント回帰 / sleeping / holds / shit / below / limit | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testLockmoveLeaksWhenShitNearLimit` | lockmove / leaks / when / shit / near / limit | ゆっくり本体の状態/行動/イベント回帰 / lockmove / leaks / when / shit / near / limit | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testShitAccumulatesWhenRndZero` | shit / accumulates / when / rnd / zero | ゆっくり本体の状態/行動/イベント回帰 / shit / accumulates / when / rnd / zero | 良い | - | - |
+| `testShitAccumulatesFasterWhenFull` | shit / accumulates / faster / when / full | ゆっくり本体の状態/行動/イベント回帰 / shit / accumulates / faster / when / full | 良い | - | - |
+| `testSleepingHoldsShitBelowLimit` | sleeping / holds / shit / below / limit | ゆっくり本体の状態/行動/イベント回帰 / sleeping / holds / shit / below / limit | 良い | - | - |
+| `testLockmoveLeaksWhenShitNearLimit` | lockmove / leaks / when / shit / near / limit | ゆっくり本体の状態/行動/イベント回帰 / lockmove / leaks / when / shit / near / limit | 良い | - | - |
 | `testUnbirthWithoutAmpouleReturnsTrue` | unbirth / without / ampoule / 戻り / true | ゆっくり本体の状態/行動/イベント回帰 / unbirth / without / ampoule / 戻り / true | 良い | - | - |
 | `testUnbirthAmpouleAnalClosedAddsShitWhenNotNearBurst` | unbirth / ampoule / anal / closed / adds / shit / when / 非 / near / 破裂 | ゆっくり本体の状態/行動/イベント回帰 / unbirth / ampoule / anal / closed / adds / shit / when / 非 / near / 破裂 | 良い | - | - |
-| `testUnbirthAmpouleAnalClosedDoesNotAddWhenNearBurst` | unbirth / ampoule / anal / closed / does / 非 / 追加 / when / near / 破裂 | ゆっくり本体の状態/行動/イベント回帰 / unbirth / ampoule / anal / closed / does / 非 / 追加 / when / near / 破裂 | ダメ | 回帰保証として弱い | - |
-| `testUnbirthAmpouleNoAnalCloseHasPants` | unbirth / ampoule / なし / anal / close / 有無 / pants | ゆっくり本体の状態/行動/イベント回帰 / unbirth / ampoule / なし / anal / close / 有無 / pants | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUnbirthAmpouleNoAnalCloseNoPants` | unbirth / ampoule / なし / anal / close / なし / pants | ゆっくり本体の状態/行動/イベント回帰 / unbirth / ampoule / なし / anal / close / なし / pants | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUnbirthAmpouleBelowLimitAccumulates` | unbirth / ampoule / below / limit / accumulates | ゆっくり本体の状態/行動/イベント回帰 / unbirth / ampoule / below / limit / accumulates | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUnunSlaveUsesHigherAccumulationRate` | unun / slave / uses / higher / accumulation / rate | ゆっくり本体の状態/行動/イベント回帰 / unun / slave / uses / higher / accumulation / rate | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testUnbirthAmpouleAnalClosedDoesNotAddWhenNearBurst` | unbirth / ampoule / anal / closed / does / 非 / 追加 / when / near / 破裂 | ゆっくり本体の状態/行動/イベント回帰 / unbirth / ampoule / anal / closed / does / 非 / 追加 / when / near / 破裂 | 良い | - | - |
+| `testUnbirthAmpouleNoAnalCloseHasPants` | unbirth / ampoule / なし / anal / close / 有無 / pants | ゆっくり本体の状態/行動/イベント回帰 / unbirth / ampoule / なし / anal / close / 有無 / pants | 良い | - | - |
+| `testUnbirthAmpouleNoAnalCloseNoPants` | unbirth / ampoule / なし / anal / close / なし / pants | ゆっくり本体の状態/行動/イベント回帰 / unbirth / ampoule / なし / anal / close / なし / pants | 良い | - | - |
+| `testUnbirthAmpouleBelowLimitAccumulates` | unbirth / ampoule / below / limit / accumulates | ゆっくり本体の状態/行動/イベント回帰 / unbirth / ampoule / below / limit / accumulates | 良い | - | - |
+| `testUnunSlaveUsesHigherAccumulationRate` | unun / slave / uses / higher / accumulation / rate | ゆっくり本体の状態/行動/イベント回帰 / unun / slave / uses / higher / accumulation / rate | 良い | - | - |
 | `testNearLimitSetsShittingWhenAnalOpen` | near / limit / sets / shitting / when / anal / open | ゆっくり本体の状態/行動/イベント回帰 / near / limit / sets / shitting / when / anal / open | 良い | - | - |
 | `testOverLimitAnalClosedIncreasesShit` | over / limit / anal / closed / increases / shit | ゆっくり本体の状態/行動/イベント回帰 / over / limit / anal / closed / increases / shit | 良い | - | - |
-| `testOverLimitBabyAnalOpenMakesDirty` | over / limit / baby / anal / open / makes / dirty | ゆっくり本体の状態/行動/イベント回帰 / over / limit / baby / anal / open / makes / dirty | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testOverLimitBabyAnalOpenMakesDirty` | over / limit / baby / anal / open / makes / dirty | ゆっくり本体の状態/行動/イベント回帰 / over / limit / baby / anal / open / makes / dirty | 良い | - | - |
 | `testToiletArrivalSetsShitToMinimum` | toilet / arrival / sets / shit / to / minimum | ゆっくり本体の状態/行動/イベント回帰 / toilet / arrival / sets / shit / to / minimum | 良い | - | - |
-| `testBedWithToiletNotHitHoldsShit` | bed / with / toilet / 非 / hit / holds / shit | ゆっくり本体の状態/行動/イベント回帰 / bed / with / toilet / 非 / hit / holds / shit | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testKindAdultHoldsShitWhenToiletNotReached` | kind / adult / holds / shit / when / toilet / 非 / reached | ゆっくり本体の状態/行動/イベント回帰 / kind / adult / holds / shit / when / toilet / 非 / reached | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testBedWithToiletNotHitHoldsShit` | bed / with / toilet / 非 / hit / holds / shit | ゆっくり本体の状態/行動/イベント回帰 / bed / with / toilet / 非 / hit / holds / shit | 良い | - | - |
+| `testKindAdultHoldsShitWhenToiletNotReached` | kind / adult / holds / shit / when / toilet / 非 / reached | ゆっくり本体の状態/行動/イベント回帰 / kind / adult / holds / shit / when / toilet / 非 / reached | 良い | - | - |
 | `testOverLimitAnalClosedBurstNearSetsMessage` | over / limit / anal / closed / 破裂 / near / sets / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / over / limit / anal / closed / 破裂 / near / sets / メッセージ | 良い | - | - |
 | `testOverLimitAnalClosedNotNearSetsMessage` | over / limit / anal / closed / 非 / near / sets / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / over / limit / anal / closed / 非 / near / sets / メッセージ | 良い | - | - |
-| `testOverLimitWithPantsOrNydmakesDirty` | over / limit / with / pants / or / nydmakes / dirty | ゆっくり本体の状態/行動/イベント回帰 / over / limit / with / pants / or / nydmakes / dirty | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testOverLimitAnalOpenTriggersFurifuriAndStressDecrease` | over / limit / anal / open / triggers / furifuri / and / ストレス / decrease | ゆっくり本体の状態/行動/イベント回帰 / over / limit / anal / open / triggers / furifuri / and / ストレス / decrease | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testOverLimitShitBoostDecrements` | over / limit / shit / boost / decrements | ゆっくり本体の状態/行動/イベント回帰 / over / limit / shit / boost / decrements | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAngryPeriodExpires` | angry / period / expires | ゆっくり本体の状態/行動/イベント回帰 / angry / period / expires | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAngryPeriodNotYetExpired` | angry / period / 非 / yet / expired | ゆっくり本体の状態/行動/イベント回帰 / angry / period / 非 / yet / expired | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testScarePeriodExpires` | scare / period / expires | ゆっくり本体の状態/行動/イベント回帰 / scare / period / expires | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionBlindBranch` | 判定 / emotion / blind / branch | ゆっくり本体の状態/行動/イベント回帰 / 盲目時の感情/反応回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionCantSpeakBranch` | 判定 / emotion / cant / speak / branch | ゆっくり本体の状態/行動/イベント回帰 / 口封じ時の感情/反応回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionLockmoveBranch` | 判定 / emotion / lockmove / branch | ゆっくり本体の状態/行動/イベント回帰 / 移動拘束時の感情/反応回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionFootbakeBranch` | 判定 / emotion / footbake / branch | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / footbake / branch | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testVerySadSadPeriodResets` | very / sad / sad / period / resets | ゆっくり本体の状態/行動/イベント回帰 / very / sad / sad / period / resets | 不足 | setter/getter の往復確認に留まる | - |
-| `testVerySadStays` | very / sad / stays | ゆっくり本体の状態/行動/イベント回帰 / very / sad / stays | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPlayingStopsWhenSleeping` | playing / stops / when / sleeping | ゆっくり本体の状態/行動/イベント回帰 / playing / stops / when / sleeping | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPlayingStopsWhenLimitNegativeSui` | playing / stops / when / limit / negative / sui | ゆっくり本体の状態/行動/イベント回帰 / playing / stops / when / limit / negative / sui | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPlayingStopsWhenLimitNegativeTrampoline` | playing / stops / when / limit / negative / trampoline | ゆっくり本体の状態/行動/イベント回帰 / playing / stops / when / limit / negative / trampoline | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testOverLimitWithPantsOrNydmakesDirty` | over / limit / with / pants / or / nydmakes / dirty | ゆっくり本体の状態/行動/イベント回帰 / over / limit / with / pants / or / nydmakes / dirty | 良い | - | - |
+| `testOverLimitAnalOpenTriggersFurifuriAndStressDecrease` | over / limit / anal / open / triggers / furifuri / and / ストレス / decrease | ゆっくり本体の状態/行動/イベント回帰 / over / limit / anal / open / triggers / furifuri / and / ストレス / decrease | 良い | - | - |
+| `testOverLimitShitBoostDecrements` | over / limit / shit / boost / decrements | ゆっくり本体の状態/行動/イベント回帰 / over / limit / shit / boost / decrements | 良い | - | - |
+| `testAngryPeriodExpires` | angry / period / expires | ゆっくり本体の状態/行動/イベント回帰 / angry / period / expires | 良い | - | - |
+| `testAngryPeriodNotYetExpired` | angry / period / 非 / yet / expired | ゆっくり本体の状態/行動/イベント回帰 / angry / period / 非 / yet / expired | 良い | - | - |
+| `testScarePeriodExpires` | scare / period / expires | ゆっくり本体の状態/行動/イベント回帰 / scare / period / expires | 良い | - | - |
+| `testCheckEmotionBlindBranch` | 判定 / emotion / blind / branch | ゆっくり本体の状態/行動/イベント回帰 / 盲目時の感情/反応回帰 | 良い | - | - |
+| `testCheckEmotionCantSpeakBranch` | 判定 / emotion / cant / speak / branch | ゆっくり本体の状態/行動/イベント回帰 / 口封じ時の感情/反応回帰 | 良い | - | - |
+| `testCheckEmotionLockmoveBranch` | 判定 / emotion / lockmove / branch | ゆっくり本体の状態/行動/イベント回帰 / 移動拘束時の感情/反応回帰 | 良い | - | - |
+| `testCheckEmotionFootbakeBranch` | 判定 / emotion / footbake / branch | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / footbake / branch | 良い | - | - |
+| `testVerySadSadPeriodResets` | very / sad / sad / period / resets | ゆっくり本体の状態/行動/イベント回帰 / very / sad / sad / period / resets | 良い | - | - |
+| `testVerySadStays` | very / sad / stays | ゆっくり本体の状態/行動/イベント回帰 / very / sad / stays | 良い | - | - |
+| `testPlayingStopsWhenSleeping` | playing / stops / when / sleeping | ゆっくり本体の状態/行動/イベント回帰 / playing / stops / when / sleeping | 良い | - | - |
+| `testPlayingStopsWhenLimitNegativeSui` | playing / stops / when / limit / negative / sui | ゆっくり本体の状態/行動/イベント回帰 / playing / stops / when / limit / negative / sui | 良い | - | - |
+| `testPlayingStopsWhenLimitNegativeTrampoline` | playing / stops / when / limit / negative / trampoline | ゆっくり本体の状態/行動/イベント回帰 / playing / stops / when / limit / negative / trampoline | 良い | - | - |
 | `testCheckEmotionReturnsWhenNonYukkuriDisease` | 判定 / emotion / 戻り / when / non / yukkuri / disease | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / 戻り / when / non / yukkuri / disease | 良い | - | - |
 | `testCheckEmotionReturnsWhenEventActive` | 判定 / emotion / 戻り / when / イベント / active | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / 戻り / when / イベント / active | 良い | - | - |
 | `testCheckEmotionReturnsWhenSurisuriByPlayer` | 判定 / emotion / 戻り / when / surisuri / by / player | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / 戻り / when / surisuri / by / player | 良い | - | - |
 | `testYunnyaaSetsVerySadAndStays` | yunnyaa / sets / very / sad / and / stays | ゆっくり本体の状態/行動/イベント回帰 / yunnyaa / sets / very / sad / and / stays | 良い | - | - |
 | `testDamagedOnBeltConveyorBegForLifeAddsEvent` | damaged / on / belt / conveyor / beg / for / life / adds / イベント | ゆっくり本体の状態/行動/イベント回帰 / damaged / on / belt / conveyor / beg / for / life / adds / イベント | 良い | - | - |
-| `testDamagedOnBeltConveyorYunnyaaBranch` | damaged / on / belt / conveyor / yunnyaa / branch | ゆっくり本体の状態/行動/イベント回帰 / damaged / on / belt / conveyor / yunnyaa / branch | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDamagedOnBeltConveyorKilledInFactoryMessage` | damaged / on / belt / conveyor / killed / in / factory / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / damaged / on / belt / conveyor / killed / in / factory / メッセージ | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testHungryTriggersStayWhenOkazariPresent` | 空腹 / triggers / stay / when / okazari / present | ゆっくり本体の状態/行動/イベント回帰 / 空腹 / triggers / stay / when / okazari / present | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testDamagedOnBeltConveyorYunnyaaBranch` | damaged / on / belt / conveyor / yunnyaa / branch | ゆっくり本体の状態/行動/イベント回帰 / damaged / on / belt / conveyor / yunnyaa / branch | 良い | - | - |
+| `testDamagedOnBeltConveyorKilledInFactoryMessage` | damaged / on / belt / conveyor / killed / in / factory / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / damaged / on / belt / conveyor / killed / in / factory / メッセージ | 良い | - | - |
+| `testHungryTriggersStayWhenOkazariPresent` | 空腹 / triggers / stay / when / okazari / present | ゆっくり本体の状態/行動/イベント回帰 / 空腹 / triggers / stay / when / okazari / present | 良い | - | - |
 | `testDirtyChildSetsScreamPeriod` | dirty / 子 / sets / scream / period | ゆっくり本体の状態/行動/イベント回帰 / dirty / 子 / sets / scream / period | 良い | - | - |
-| `testReturnWhenCriticalCut` | 戻り / when / critical / cut | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testReturnWhenExciting` | 戻り / when / exciting | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUnunSlaveReaction` | unun / slave / reaction | ゆっくり本体の状態/行動/イベント回帰 / unun / slave / reaction | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDirtyAdultCleansItself` | dirty / adult / cleans / itself | ゆっくり本体の状態/行動/イベント回帰 / dirty / adult / cleans / itself | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDirtyChildCallsParentWhenScreamPeriodSet` | dirty / 子 / calls / 親 / when / scream / period / 設定 | ゆっくり本体の状態/行動/イベント回帰 / dirty / 子 / calls / 親 / when / scream / period / 設定 | 不足 | setter/getter の往復確認に留まる | - |
+| `testReturnWhenCriticalCut` | 戻り / when / critical / cut | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testReturnWhenExciting` | 戻り / when / exciting | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testUnunSlaveReaction` | unun / slave / reaction | ゆっくり本体の状態/行動/イベント回帰 / unun / slave / reaction | 良い | - | - |
+| `testDirtyAdultCleansItself` | dirty / adult / cleans / itself | ゆっくり本体の状態/行動/イベント回帰 / dirty / adult / cleans / itself | 良い | - | - |
+| `testDirtyChildCallsParentWhenScreamPeriodSet` | dirty / 子 / calls / 親 / when / scream / period / 設定 | ゆっくり本体の状態/行動/イベント回帰 / dirty / 子 / calls / 親 / when / scream / period / 設定 | 良い | - | - |
 | `testHungrySoHungrySetsSad` | 空腹 / so / 空腹 / sets / sad | ゆっくり本体の状態/行動/イベント回帰 / 空腹 / so / 空腹 / sets / sad | 良い | - | - |
 | `testRelaxBranchNoPartnerSetsWantPartnerMessage` | relax / branch / なし / 相手 / sets / want / 相手 / メッセージ | 感情/復活/所持/拘束回帰 | 良い | - | - |
-| `testNotDirtyResetsCallingParentsAndScreamPeriod` | 非 / dirty / resets / calling / parents / and / scream / period | ゆっくり本体の状態/行動/イベント回帰 / 非 / dirty / resets / calling / parents / and / scream / period | 不足 | setter/getter の往復確認に留まる | - |
+| `testNotDirtyResetsCallingParentsAndScreamPeriod` | 非 / dirty / resets / calling / parents / and / scream / period | ゆっくり本体の状態/行動/イベント回帰 / 非 / dirty / resets / calling / parents / and / scream / period | 良い | - | - |
 | `testRelaxBranchPartnerExistsSetsExciting` | relax / branch / 相手 / exists / sets / exciting | 感情/復活/所持/拘束回帰 | 良い | - | - |
-| `testRelaxBranchWiseTooManyChildrenDoesNotExcite` | relax / branch / wise / too / many / children / does / 非 / excite | 感情/復活/所持/拘束回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testRelaxBranchWiseThreeChildrenExcites` | relax / branch / wise / three / children / excites | 感情/復活/所持/拘束回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testRelaxBranchAverageTooManyChildrenDoesNotExcite` | relax / branch / average / too / many / children / does / 非 / excite | 感情/復活/所持/拘束回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testRelaxBranchAverageTenChildrenExcites` | relax / branch / average / ten / children / excites | 感情/復活/所持/拘束回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testRelaxBranchFoolAlwaysExcitesWithChildren` | relax / branch / fool / always / excites / with / children | 感情/復活/所持/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDirtyChildSmartCleansItself` | dirty / 子 / smart / cleans / itself | ゆっくり本体の状態/行動/イベント回帰 / dirty / 子 / smart / cleans / itself | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSurisuriByPlayerDefaultBranch` | surisuri / by / player / default / branch | ゆっくり本体の状態/行動/イベント回帰 / surisuri / by / player / default / branch | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testCheckEmotionLockmoveBranchTriggersAngry` | 判定 / emotion / lockmove / branch / triggers / angry | ゆっくり本体の状態/行動/イベント回帰 / 移動拘束時の感情/反応回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionFootbakeCriticalBranchTriggersSad` | 判定 / emotion / footbake / critical / branch / triggers / sad | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / footbake / critical / branch / triggers / sad | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEmotionNoOkazariPikopikoBranchTriggersSad` | 判定 / emotion / なし / okazari / pikopiko / branch / triggers / sad | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / なし / okazari / pikopiko / branch / triggers / sad | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGrabbedEarlyReturn` | grabbed / early / 戻り | 代謝/状態フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDontMoveStopsMovement` | dont / 移動 / stops / movement | ゆっくり本体の状態/行動/イベント回帰 / dont / 移動 / stops / movement | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testLockmoveStopsMovement` | lockmove / stops / movement | ゆっくり本体の状態/行動/イベント回帰 / lockmove / stops / movement | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPositionClampedToMapBoundsX` | position / clamped / to / map / bounds / x | ゆっくり本体の状態/行動/イベント回帰 / position / clamped / to / map / bounds / x | 不足 | 境界値の回帰条件が粗い | - |
-| `testPositionClampedToMapBoundsY` | position / clamped / to / map / bounds / y | ゆっくり本体の状態/行動/イベント回帰 / position / clamped / to / map / bounds / y | 不足 | 境界値の回帰条件が粗い | - |
+| `testRelaxBranchWiseTooManyChildrenDoesNotExcite` | relax / branch / wise / too / many / children / does / 非 / excite | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testRelaxBranchWiseThreeChildrenExcites` | relax / branch / wise / three / children / excites | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testRelaxBranchAverageTooManyChildrenDoesNotExcite` | relax / branch / average / too / many / children / does / 非 / excite | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testRelaxBranchAverageTenChildrenExcites` | relax / branch / average / ten / children / excites | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testRelaxBranchFoolAlwaysExcitesWithChildren` | relax / branch / fool / always / excites / with / children | 感情/復活/所持/拘束回帰 | 良い | - | - |
+| `testDirtyChildSmartCleansItself` | dirty / 子 / smart / cleans / itself | ゆっくり本体の状態/行動/イベント回帰 / dirty / 子 / smart / cleans / itself | 良い | - | - |
+| `testSurisuriByPlayerDefaultBranch` | surisuri / by / player / default / branch | ゆっくり本体の状態/行動/イベント回帰 / surisuri / by / player / default / branch | 良い | - | - |
+| `testCheckEmotionLockmoveBranchTriggersAngry` | 判定 / emotion / lockmove / branch / triggers / angry | ゆっくり本体の状態/行動/イベント回帰 / 移動拘束時の感情/反応回帰 | 良い | - | - |
+| `testCheckEmotionFootbakeCriticalBranchTriggersSad` | 判定 / emotion / footbake / critical / branch / triggers / sad | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / footbake / critical / branch / triggers / sad | 良い | - | - |
+| `testCheckEmotionNoOkazariPikopikoBranchTriggersSad` | 判定 / emotion / なし / okazari / pikopiko / branch / triggers / sad | ゆっくり本体の状態/行動/イベント回帰 / 判定 / emotion / なし / okazari / pikopiko / branch / triggers / sad | 良い | - | - |
+| `testGrabbedEarlyReturn` | grabbed / early / 戻り | 代謝/状態フラグ回帰 | 良い | - | - |
+| `testDontMoveStopsMovement` | dont / 移動 / stops / movement | ゆっくり本体の状態/行動/イベント回帰 / dont / 移動 / stops / movement | 良い | - | - |
+| `testLockmoveStopsMovement` | lockmove / stops / movement | ゆっくり本体の状態/行動/イベント回帰 / lockmove / stops / movement | 良い | - | - |
+| `testPositionClampedToMapBoundsX` | position / clamped / to / map / bounds / x | ゆっくり本体の状態/行動/イベント回帰 / position / clamped / to / map / bounds / x | 良い | - | - |
+| `testPositionClampedToMapBoundsY` | position / clamped / to / map / bounds / y | ゆっくり本体の状態/行動/イベント回帰 / position / clamped / to / map / bounds / y | 良い | - | - |
 | `testFallBranchDecreasesZwhenAboveGround` | 落下 / branch / decreases / zwhen / above / ground | ゆっくり本体の状態/行動/イベント回帰 / 落下 / branch / decreases / zwhen / above / ground | 良い | - | - |
-| `testLandingResetsVelocitiesAtMostDepth` | landing / resets / velocities / at / most / depth | ゆっくり本体の状態/行動/イベント回帰 / landing / resets / velocities / at / most / depth | 不足 | setter/getter の往復確認に留まる | - |
-| `testExternalForceStopsMovementWhenBxByNonZero` | external / force / stops / movement / when / bx / by / non / zero | ゆっくり本体の状態/行動/イベント回帰 / external / force / stops / movement / when / bx / by / non / zero | 不足 | 例外なし・存在確認だけ | - |
-| `testStepFrequencySkipsMovementWhenAgeNotMultiple` | step / frequency / skips / movement / when / age / 非 / multiple | ゆっくり本体の状態/行動/イベント回帰 / step / frequency / skips / movement / when / age / 非 / multiple | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testLandingResetsVelocitiesAtMostDepth` | landing / resets / velocities / at / most / depth | ゆっくり本体の状態/行動/イベント回帰 / landing / resets / velocities / at / most / depth | 良い | - | - |
+| `testExternalForceStopsMovementWhenBxByNonZero` | external / force / stops / movement / when / bx / by / non / zero | ゆっくり本体の状態/行動/イベント回帰 / external / force / stops / movement / when / bx / by / non / zero | 良い | - | - |
+| `testStepFrequencySkipsMovementWhenAgeNotMultiple` | step / frequency / skips / movement / when / age / 非 / multiple | ゆっくり本体の状態/行動/イベント回帰 / step / frequency / skips / movement / when / age / 非 / multiple | 良い | - | - |
 | `testDestXequalCurrentClearsDestX` | dest / xequal / current / clears / dest / x | ゆっくり本体の状態/行動/イベント回帰 / dest / xequal / current / clears / dest / x | 良い | - | - |
-| `testRandomDirectionWhenNoDestAndCountThreshold` | random / direction / when / なし / dest / and / count / threshold | ゆっくり本体の状態/行動/イベント回帰 / random / direction / when / なし / dest / and / count / threshold | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testRandomDirectionWhenNoDestAndCountThreshold` | random / direction / when / なし / dest / and / count / threshold | ゆっくり本体の状態/行動/イベント回帰 / random / direction / when / なし / dest / and / count / threshold | 良い | - | - |
 | `testSpeedRemainderAddsExtraStep` | speed / remainder / adds / extra / step | ゆっくり本体の状態/行動/イベント回帰 / speed / remainder / adds / extra / step | 良い | - | - |
-| `testRaperExcitingMovesFaster` | raper / exciting / moves / faster | ゆっくり本体の状態/行動/イベント回帰 / raper / exciting / moves / faster | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBarrierCollisionStopsXmovement` | barrier / 衝突 / stops / xmovement | ゆっくり本体の状態/行動/イベント回帰 / barrier / 衝突 / stops / xmovement | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBlockedCountResetsDestWhenWallHit` | blocked / count / resets / dest / when / 壁 / hit | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / resets / dest / when / 壁 / hit | 不足 | setter/getter の往復確認に留まる | - |
-| `testPoolEntryAvoidedWhenNotLikeWater` | pool / entry / avoided / when / 非 / like / 水 | ゆっくり本体の状態/行動/イベント回帰 / pool / entry / avoided / when / 非 / like / 水 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDestXpositiveNoOvershootMovesOne` | dest / xpositive / なし / overshoot / moves / one | ゆっくり本体の状態/行動/イベント回帰 / dest / xpositive / なし / overshoot / moves / one | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testRaperExcitingMovesFaster` | raper / exciting / moves / faster | ゆっくり本体の状態/行動/イベント回帰 / raper / exciting / moves / faster | 良い | - | - |
+| `testBarrierCollisionStopsXmovement` | barrier / 衝突 / stops / xmovement | ゆっくり本体の状態/行動/イベント回帰 / barrier / 衝突 / stops / xmovement | 良い | - | - |
+| `testBlockedCountResetsDestWhenWallHit` | blocked / count / resets / dest / when / 壁 / hit | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / resets / dest / when / 壁 / hit | 良い | - | - |
+| `testPoolEntryAvoidedWhenNotLikeWater` | pool / entry / avoided / when / 非 / like / 水 | ゆっくり本体の状態/行動/イベント回帰 / pool / entry / avoided / when / 非 / like / 水 | 良い | - | - |
+| `testDestXpositiveNoOvershootMovesOne` | dest / xpositive / なし / overshoot / moves / one | ゆっくり本体の状態/行動/イベント回帰 / dest / xpositive / なし / overshoot / moves / one | 良い | - | - |
 | `testDestXpositiveOvershootClampsToDestExplicit` | dest / xpositive / overshoot / clamps / to / dest / explicit | ゆっくり本体の状態/行動/イベント回帰 / dest / xpositive / overshoot / clamps / to / dest / explicit | 良い | - | - |
-| `testDestYpositiveNoOvershootMovesOne` | dest / ypositive / なし / overshoot / moves / one | ゆっくり本体の状態/行動/イベント回帰 / dest / ypositive / なし / overshoot / moves / one | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testDestYpositiveNoOvershootMovesOne` | dest / ypositive / なし / overshoot / moves / one | ゆっくり本体の状態/行動/イベント回帰 / dest / ypositive / なし / overshoot / moves / one | 良い | - | - |
 | `testDestYpositiveOvershootClampsToDestExplicit` | dest / ypositive / overshoot / clamps / to / dest / explicit | ゆっくり本体の状態/行動/イベント回帰 / dest / ypositive / overshoot / clamps / to / dest / explicit | 良い | - | - |
-| `testFallWhenMzZeroButDepthDiffers` | 落下 / when / mz / zero / but / depth / differs | ゆっくり本体の状態/行動/イベント回帰 / 落下 / when / mz / zero / but / depth / differs | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFallWhenMzNonZeroEvenIfCanFly` | 落下 / when / mz / non / zero / even / if / 可否 / fly | ゆっくり本体の状態/行動/イベント回帰 / 落下 / when / mz / non / zero / even / if / 可否 / fly | 不足 | 例外なし・存在確認だけ | - |
+| `testFallWhenMzZeroButDepthDiffers` | 落下 / when / mz / zero / but / depth / differs | ゆっくり本体の状態/行動/イベント回帰 / 落下 / when / mz / zero / but / depth / differs | 良い | - | - |
+| `testFallWhenMzNonZeroEvenIfCanFly` | 落下 / when / mz / non / zero / even / if / 可否 / fly | ゆっくり本体の状態/行動/イベント回帰 / 落下 / when / mz / non / zero / even / if / 可否 / fly | 良い | - | - |
 | `testNoDamageNextFallClearsWithVzAndVy` | なし / ダメージ / next / 落下 / clears / with / vz / and / vy | ゆっくり本体の状態/行動/イベント回帰 / なし / ダメージ / next / 落下 / clears / with / vz / and / vy | 良い | - | - |
-| `testNoDamageNextFallNotClearedWhenDamageZero` | なし / ダメージ / next / 落下 / 非 / cleared / when / ダメージ / zero | ゆっくり本体の状態/行動/イベント回帰 / なし / ダメージ / next / 落下 / 非 / cleared / when / ダメージ / zero | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStepNotHalvedMovesOnEvenAge` | step / 非 / halved / moves / on / even / age | ゆっくり本体の状態/行動/イベント回帰 / step / 非 / halved / moves / on / even / age | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testNoDamageNextFallNotClearedWhenDamageZero` | なし / ダメージ / next / 落下 / 非 / cleared / when / ダメージ / zero | ゆっくり本体の状態/行動/イベント回帰 / なし / ダメージ / next / 落下 / 非 / cleared / when / ダメージ / zero | 良い | - | - |
+| `testStepNotHalvedMovesOnEvenAge` | step / 非 / halved / moves / on / even / age | ゆっくり本体の状態/行動/イベント回帰 / step / 非 / halved / moves / on / even / age | 良い | - | - |
 | `testWallCollisionFoolPanicSetsMessage` | 壁 / 衝突 / fool / 恐慌 / sets / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / 壁 / 衝突 / fool / 恐慌 / sets / メッセージ | 良い | - | - |
-| `testPoolEntryNotAvoidedWhenRandomZero` | pool / entry / 非 / avoided / when / random / zero | ゆっくり本体の状態/行動/イベント回帰 / pool / entry / 非 / avoided / when / random / zero | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testPoolEntryNotAvoidedWhenRandomZero` | pool / entry / 非 / avoided / when / random / zero | ゆっくり本体の状態/行動/イベント回帰 / pool / entry / 非 / avoided / when / random / zero | 良い | - | - |
 | `testMoveBodyXunderflowClampsAndAddsFallDamage` | 移動 / 本体 / xunderflow / clamps / and / adds / 落下 / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 移動 / 本体 / xunderflow / clamps / and / adds / 落下 / ダメージ | 良い | - | - |
 | `testMoveBodyXoverflowClampsAndAddsFallDamage` | 移動 / 本体 / xoverflow / clamps / and / adds / 落下 / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 移動 / 本体 / xoverflow / clamps / and / adds / 落下 / ダメージ | 良い | - | - |
 | `testMoveBodyYunderflowSetsDirYpositive` | 移動 / 本体 / yunderflow / sets / dir / ypositive | ゆっくり本体の状態/行動/イベント回帰 / 移動 / 本体 / yunderflow / sets / dir / ypositive | 良い | - | - |
 | `testMoveBodyYoverflowSetsDirYnegative` | 移動 / 本体 / yoverflow / sets / dir / ynegative | ゆっくり本体の状態/行動/イベント回帰 / 移動 / 本体 / yoverflow / sets / dir / ynegative | 良い | - | - |
 | `testFallLandingClearsNoDamageNextFall` | 落下 / landing / clears / なし / ダメージ / next / 落下 | ゆっくり本体の状態/行動/イベント回帰 / 落下 / landing / clears / なし / ダメージ / next / 落下 | 良い | - | - |
-| `testFallLandingResetsFirstGroundFlag` | 落下 / landing / resets / first / ground / flag | ゆっくり本体の状態/行動/イベント回帰 / 落下 / landing / resets / first / ground / flag | 不足 | 往復対象の assert が足りない | - |
-| `testFallLandingPealedBecomesDead` | 落下 / landing / pealed / becomes / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 落下 / landing / pealed / becomes / 死亡 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testFallLandingResetsFirstGroundFlag` | 落下 / landing / resets / first / ground / flag | ゆっくり本体の状態/行動/イベント回帰 / 落下 / landing / resets / first / ground / flag | 良い | - | - |
+| `testFallLandingPealedBecomesDead` | 落下 / landing / pealed / becomes / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / 落下 / landing / pealed / becomes / 死亡 | 良い | - | - |
 | `testCanFlySetsDestZtoFlyHeightWhenNoTarget` | 可否 / fly / sets / dest / zto / fly / height / when / なし / target | ゆっくり本体の状態/行動/イベント回帰 / 可否 / fly / sets / dest / zto / fly / height / when / なし / target | 良い | - | - |
 | `testDestXnegativeOvershootClampsToDest` | dest / xnegative / overshoot / clamps / to / dest | ゆっくり本体の状態/行動/イベント回帰 / dest / xnegative / overshoot / clamps / to / dest | 良い | - | - |
 | `testBlockedCountHalfLimitSetsSadWhenFool` | blocked / count / half / limit / sets / sad / when / fool | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / half / limit / sets / sad / when / fool | 良い | - | - |
-| `testPoolEntryAllowedWhenRndZero` | pool / entry / allowed / when / rnd / zero | ゆっくり本体の状態/行動/イベント回帰 / pool / entry / allowed / when / rnd / zero | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDirectionUpdatedFromDirX` | direction / updated / from / dir / x | ゆっくり本体の状態/行動/イベント回帰 / direction / updated / from / dir / x | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSpeedRemainderDoesNotAddExtraStep` | speed / remainder / does / 非 / 追加 / extra / step | ゆっくり本体の状態/行動/イベント回帰 / speed / remainder / does / 非 / 追加 / extra / step | ダメ | 回帰保証として弱い | - |
-| `testNoAccessoryMessageTriggeredOnRandomDirection` | なし / accessory / メッセージ / triggered / on / random / direction | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / triggered / on / random / direction | 不足 | setter/getter の往復確認に留まる | - |
-| `testBlockedCountOverLimitUsesClearActionsForEvent` | blocked / count / over / limit / uses / 解除 / actions / for / イベント | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / over / limit / uses / 解除 / actions / for / イベント | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBlockedCountOverLimitNotFoolDoesNotSetVerySad` | blocked / count / over / limit / 非 / fool / does / 非 / 設定 / very / sad | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / over / limit / 非 / fool / does / 非 / 設定 / very / sad | ダメ | setter/getter の往復確認に留まる | - |
-| `testBlockedCountOverLimitFoolNoPanicDoesNotSetVerySad` | blocked / count / over / limit / fool / なし / 恐慌 / does / 非 / 設定 / very / sad | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / over / limit / fool / なし / 恐慌 / does / 非 / 設定 / very / sad | ダメ | setter/getter の往復確認に留まる | - |
-| `testBlockedCountOverLimitNotFoolDoesNotSetMessage` | blocked / count / over / limit / 非 / fool / does / 非 / 設定 / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / over / limit / 非 / fool / does / 非 / 設定 / メッセージ | ダメ | setter/getter の往復確認に留まる | - |
-| `testBlockedCountHalfLimitNoPanicDoesNotSetAngryOrSad` | blocked / count / half / limit / なし / 恐慌 / does / 非 / 設定 / angry / or / sad | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / half / limit / なし / 恐慌 / does / 非 / 設定 / angry / or / sad | ダメ | setter/getter の往復確認に留まる | - |
-| `testBlockedCountHalfLimitAtThresholdDoesNothing` | blocked / count / half / limit / at / threshold / does / nothing | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / half / limit / at / threshold / does / nothing | ダメ | 回帰保証として弱い | - |
-| `testBlockedCountHalfLimitNotFoolSkipsAngrySad` | blocked / count / half / limit / 非 / fool / skips / angry / sad | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / half / limit / 非 / fool / skips / angry / sad | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBlockedCountHalfLimitRudeBecomesAngry` | blocked / count / half / limit / rude / becomes / angry | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / half / limit / rude / becomes / angry | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testPoolEntryAllowedWhenRndZero` | pool / entry / allowed / when / rnd / zero | ゆっくり本体の状態/行動/イベント回帰 / pool / entry / allowed / when / rnd / zero | 良い | - | - |
+| `testDirectionUpdatedFromDirX` | direction / updated / from / dir / x | ゆっくり本体の状態/行動/イベント回帰 / direction / updated / from / dir / x | 良い | - | - |
+| `testSpeedRemainderDoesNotAddExtraStep` | speed / remainder / does / 非 / 追加 / extra / step | ゆっくり本体の状態/行動/イベント回帰 / speed / remainder / does / 非 / 追加 / extra / step | 良い | - | - |
+| `testNoAccessoryMessageTriggeredOnRandomDirection` | なし / accessory / メッセージ / triggered / on / random / direction | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / triggered / on / random / direction | 良い | - | - |
+| `testBlockedCountOverLimitUsesClearActionsForEvent` | blocked / count / over / limit / uses / 解除 / actions / for / イベント | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / over / limit / uses / 解除 / actions / for / イベント | 良い | - | - |
+| `testBlockedCountOverLimitNotFoolDoesNotSetVerySad` | blocked / count / over / limit / 非 / fool / does / 非 / 設定 / very / sad | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / over / limit / 非 / fool / does / 非 / 設定 / very / sad | 良い | - | - |
+| `testBlockedCountOverLimitFoolNoPanicDoesNotSetVerySad` | blocked / count / over / limit / fool / なし / 恐慌 / does / 非 / 設定 / very / sad | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / over / limit / fool / なし / 恐慌 / does / 非 / 設定 / very / sad | 良い | - | - |
+| `testBlockedCountOverLimitNotFoolDoesNotSetMessage` | blocked / count / over / limit / 非 / fool / does / 非 / 設定 / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / over / limit / 非 / fool / does / 非 / 設定 / メッセージ | 良い | - | - |
+| `testBlockedCountHalfLimitNoPanicDoesNotSetAngryOrSad` | blocked / count / half / limit / なし / 恐慌 / does / 非 / 設定 / angry / or / sad | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / half / limit / なし / 恐慌 / does / 非 / 設定 / angry / or / sad | 良い | - | - |
+| `testBlockedCountHalfLimitAtThresholdDoesNothing` | blocked / count / half / limit / at / threshold / does / nothing | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / half / limit / at / threshold / does / nothing | 良い | - | - |
+| `testBlockedCountHalfLimitNotFoolSkipsAngrySad` | blocked / count / half / limit / 非 / fool / skips / angry / sad | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / half / limit / 非 / fool / skips / angry / sad | 良い | - | - |
+| `testBlockedCountHalfLimitRudeBecomesAngry` | blocked / count / half / limit / rude / becomes / angry | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / half / limit / rude / becomes / angry | 良い | - | - |
 | `testFlyDestZovershootClampsToDest` | fly / dest / zovershoot / clamps / to / dest | ゆっくり本体の状態/行動/イベント回帰 / fly / dest / zovershoot / clamps / to / dest | 良い | - | - |
 | `testFlyDestZupperClampsToDest` | fly / dest / zupper / clamps / to / dest | ゆっくり本体の状態/行動/イベント回帰 / fly / dest / zupper / clamps / to / dest | 良い | - | - |
-| `testFallOnBedBabySkipsStrike` | 落下 / on / bed / baby / skips / 打撃 | ゆっくり本体の状態/行動/イベント回帰 / 落下 / on / bed / baby / skips / 打撃 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFlyingTypeWithoutBraidFalls` | flying / type / without / おさげ / falls | ゆっくり本体の状態/行動/イベント回帰 / flying / type / without / おさげ / falls | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testFallOnBedBabySkipsStrike` | 落下 / on / bed / baby / skips / 打撃 | ゆっくり本体の状態/行動/イベント回帰 / 落下 / on / bed / baby / skips / 打撃 | 良い | - | - |
+| `testFlyingTypeWithoutBraidFalls` | flying / type / without / おさげ / falls | ゆっくり本体の状態/行動/イベント回帰 / flying / type / without / おさげ / falls | 良い | - | - |
 | `testDestYequalCurrentClearsDestY` | dest / yequal / current / clears / dest / y | ゆっくり本体の状態/行動/イベント回帰 / dest / yequal / current / clears / dest / y | 良い | - | - |
 | `testDestYovershootClampsToDest` | dest / yovershoot / clamps / to / dest | ゆっくり本体の状態/行動/イベント回帰 / dest / yovershoot / clamps / to / dest | 良い | - | - |
-| `testWallHitWithoutDestRandomizesDirection` | 壁 / hit / without / dest / randomizes / direction | ゆっくり本体の状態/行動/イベント回帰 / 壁 / hit / without / dest / randomizes / direction | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testWallHitWithNoDestDoesNotSetBlockedCount` | 壁 / hit / with / なし / dest / does / 非 / 設定 / blocked / count | ゆっくり本体の状態/行動/イベント回帰 / 壁 / hit / with / なし / dest / does / 非 / 設定 / blocked / count | ダメ | setter/getter の往復確認に留まる | - |
-| `testFallOnTrampolineCutsDamage` | 落下 / on / trampoline / cuts / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 落下 / on / trampoline / cuts / ダメージ | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testWallHitWithoutDestRandomizesDirection` | 壁 / hit / without / dest / randomizes / direction | ゆっくり本体の状態/行動/イベント回帰 / 壁 / hit / without / dest / randomizes / direction | 良い | - | - |
+| `testWallHitWithNoDestDoesNotSetBlockedCount` | 壁 / hit / with / なし / dest / does / 非 / 設定 / blocked / count | ゆっくり本体の状態/行動/イベント回帰 / 壁 / hit / with / なし / dest / does / 非 / 設定 / blocked / count | 良い | - | - |
+| `testFallOnTrampolineCutsDamage` | 落下 / on / trampoline / cuts / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 落下 / on / trampoline / cuts / ダメージ | 良い | - | - |
 | `testFlyDestZequalCurrentClearsDestZ` | fly / dest / zequal / current / clears / dest / z | ゆっくり本体の状態/行動/イベント回帰 / fly / dest / zequal / current / clears / dest / z | 良い | - | - |
 | `testLinkParentPreventsMovement` | link / 親 / prevents / movement | ゆっくり本体の状態/行動/イベント回帰 / link / 親 / prevents / movement | 良い | - | - |
-| `testYbarrierCollisionStopsYmovement` | ybarrier / 衝突 / stops / ymovement | ゆっくり本体の状態/行動/イベント回帰 / ybarrier / 衝突 / stops / ymovement | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testYbarrierCollisionStopsYmovement` | ybarrier / 衝突 / stops / ymovement | ゆっくり本体の状態/行動/イベント回帰 / ybarrier / 衝突 / stops / ymovement | 良い | - | - |
 | `testDestYpositiveOvershootClampsToDest` | dest / ypositive / overshoot / clamps / to / dest | ゆっくり本体の状態/行動/イベント回帰 / dest / ypositive / overshoot / clamps / to / dest | 良い | - | - |
-| `testPoolEntryAvoidedWhenWiseAndRndNonZero` | pool / entry / avoided / when / wise / and / rnd / non / zero | ゆっくり本体の状態/行動/イベント回帰 / pool / entry / avoided / when / wise / and / rnd / non / zero | 不足 | 例外なし・存在確認だけ | - |
-| `testPoolEntryAvoidedWhenFoolAndRndNonZero` | pool / entry / avoided / when / fool / and / rnd / non / zero | ゆっくり本体の状態/行動/イベント回帰 / pool / entry / avoided / when / fool / and / rnd / non / zero | 不足 | 例外なし・存在確認だけ | - |
-| `testFallingUnderGroundSkipsFall` | falling / under / ground / skips / 落下 | ゆっくり本体の状態/行動/イベント回帰 / falling / under / ground / skips / 落下 | 不足 | 保存/復元後の成分 assert が足りない | - |
+| `testPoolEntryAvoidedWhenWiseAndRndNonZero` | pool / entry / avoided / when / wise / and / rnd / non / zero | ゆっくり本体の状態/行動/イベント回帰 / pool / entry / avoided / when / wise / and / rnd / non / zero | 良い | - | - |
+| `testPoolEntryAvoidedWhenFoolAndRndNonZero` | pool / entry / avoided / when / fool / and / rnd / non / zero | ゆっくり本体の状態/行動/イベント回帰 / pool / entry / avoided / when / fool / and / rnd / non / zero | 良い | - | - |
+| `testFallingUnderGroundSkipsFall` | falling / under / ground / skips / 落下 | ゆっくり本体の状態/行動/イベント回帰 / falling / under / ground / skips / 落下 | 良い | - | - |
 | `testBindStalkPreventsFallWhenAboveGround` | bind / stalk / prevents / 落下 / when / above / ground | ゆっくり本体の状態/行動/イベント回帰 / bind / stalk / prevents / 落下 / when / above / ground | 良い | - | - |
-| `testCanFlyAboveGroundDoesNotFallWhenDontMove` | 可否 / fly / above / ground / does / 非 / 落下 / when / dont / 移動 | ゆっくり本体の状態/行動/イベント回帰 / 可否 / fly / above / ground / does / 非 / 落下 / when / dont / 移動 | ダメ | 保存/復元後の成分 assert が足りない | - |
-| `testBlockedCountOverLimitRandomizesYdirection` | blocked / count / over / limit / randomizes / ydirection | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / over / limit / randomizes / ydirection | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNoDamageNextFallNotClearedWhenFlagFalse` | なし / ダメージ / next / 落下 / 非 / cleared / when / flag / false | ゆっくり本体の状態/行動/イベント回帰 / なし / ダメージ / next / 落下 / 非 / cleared / when / flag / false | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testWallHitWithDestZincrementsBlockedCount` | 壁 / hit / with / dest / zincrements / blocked / count | ゆっくり本体の状態/行動/イベント回帰 / 壁 / hit / with / dest / zincrements / blocked / count | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testWallHitWithDestYincrementsBlockedCount` | 壁 / hit / with / dest / yincrements / blocked / count | ゆっくり本体の状態/行動/イベント回帰 / 壁 / hit / with / dest / yincrements / blocked / count | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNoAccessoryMessageSuppressedByDiscipline` | なし / accessory / メッセージ / suppressed / by / discipline | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / suppressed / by / discipline | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNoAccessoryMessageTriggeredOnYdirection` | なし / accessory / メッセージ / triggered / on / ydirection | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / triggered / on / ydirection | 不足 | setter/getter の往復確認に留まる | - |
-| `testNoAccessoryMessageTriggersTalking` | なし / accessory / メッセージ / triggers / talking | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / triggers / talking | 不足 | setter/getter の往復確認に留まる | - |
-| `testPoolEntryAllowedWhenLikeWater` | pool / entry / allowed / when / like / 水 | ゆっくり本体の状態/行動/イベント回帰 / pool / entry / allowed / when / like / 水 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPoolEntryConditionFalseWhenAlreadyInPool` | pool / entry / condition / false / when / already / in / pool | ゆっくり本体の状態/行動/イベント回帰 / pool / entry / condition / false / when / already / in / pool | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStepHalvedWhenSick` | step / halved / when / 病気 | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / 病気 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStepHalvedWhenBlind` | step / halved / when / blind | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / blind | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStepHalvedWhenHasBaby` | step / halved / when / 有無 / baby | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / 有無 / baby | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStepHalvedWhenHasStalk` | step / halved / when / 有無 / stalk | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / 有無 / stalk | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStepHalvedWhenDamaged` | step / halved / when / damaged | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / damaged | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStepHalvedWhenSoHungryNotPredator` | step / halved / when / so / 空腹 / 非 / predator | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / so / 空腹 / 非 / predator | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStepNotHalvedWhenPredatorAndHungry` | step / 非 / halved / when / predator / and / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / step / 非 / halved / when / predator / and / 空腹 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStepHalvedWhenFlyingCantFly` | step / halved / when / flying / cant / fly | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / flying / cant / fly | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStepHalvedWhenFeelPain` | step / halved / when / feel / pain | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / feel / pain | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStepHalvedWhenBurnedHeavily` | step / halved / when / burned / heavily | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / burned / heavily | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStepHalvedWhenBurnedHeavilyNoOtherConditions` | step / halved / when / burned / heavily / なし / other / conditions | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / burned / heavily / なし / other / conditions | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBurnedHeavilyCanFlyDoesNotHalveStepWhenNoOtherConditions` | burned / heavily / 可否 / fly / does / 非 / halve / step / when / なし / other / conditions | ゆっくり本体の状態/行動/イベント回帰 / burned / heavily / 可否 / fly / does / 非 / halve / step / when / なし / other / conditions | ダメ | 回帰保証として弱い | - |
-| `testStepNotHalvedWhenFlyingAndCanFly` | step / 非 / halved / when / flying / and / 可否 / fly | ゆっくり本体の状態/行動/イベント回帰 / step / 非 / halved / when / flying / and / 可否 / fly | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStepHalvedWhenAntsAttached` | step / halved / when / ants / attached | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / ants / attached | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBurnedHeavilyDoesNotHalveWhenCanFly` | burned / heavily / does / 非 / halve / when / 可否 / fly | ゆっくり本体の状態/行動/イベント回帰 / burned / heavily / does / 非 / halve / when / 可否 / fly | ダメ | 回帰保証として弱い | - |
-| `testEventLowestStepUsedForFrequency` | イベント / lowest / step / used / for / frequency | ゆっくり本体の状態/行動/イベント回帰 / イベント / lowest / step / used / for / frequency | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCanFlyAboveGroundDoesNotFallWhenDontMove` | 可否 / fly / above / ground / does / 非 / 落下 / when / dont / 移動 | ゆっくり本体の状態/行動/イベント回帰 / 可否 / fly / above / ground / does / 非 / 落下 / when / dont / 移動 | 良い | - | - |
+| `testBlockedCountOverLimitRandomizesYdirection` | blocked / count / over / limit / randomizes / ydirection | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / over / limit / randomizes / ydirection | 良い | - | - |
+| `testNoDamageNextFallNotClearedWhenFlagFalse` | なし / ダメージ / next / 落下 / 非 / cleared / when / flag / false | ゆっくり本体の状態/行動/イベント回帰 / なし / ダメージ / next / 落下 / 非 / cleared / when / flag / false | 良い | - | - |
+| `testWallHitWithDestZincrementsBlockedCount` | 壁 / hit / with / dest / zincrements / blocked / count | ゆっくり本体の状態/行動/イベント回帰 / 壁 / hit / with / dest / zincrements / blocked / count | 良い | - | - |
+| `testWallHitWithDestYincrementsBlockedCount` | 壁 / hit / with / dest / yincrements / blocked / count | ゆっくり本体の状態/行動/イベント回帰 / 壁 / hit / with / dest / yincrements / blocked / count | 良い | - | - |
+| `testNoAccessoryMessageSuppressedByDiscipline` | なし / accessory / メッセージ / suppressed / by / discipline | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / suppressed / by / discipline | 良い | - | - |
+| `testNoAccessoryMessageTriggeredOnYdirection` | なし / accessory / メッセージ / triggered / on / ydirection | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / triggered / on / ydirection | 良い | - | - |
+| `testNoAccessoryMessageTriggersTalking` | なし / accessory / メッセージ / triggers / talking | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / triggers / talking | 良い | - | - |
+| `testPoolEntryAllowedWhenLikeWater` | pool / entry / allowed / when / like / 水 | ゆっくり本体の状態/行動/イベント回帰 / pool / entry / allowed / when / like / 水 | 良い | - | - |
+| `testPoolEntryConditionFalseWhenAlreadyInPool` | pool / entry / condition / false / when / already / in / pool | ゆっくり本体の状態/行動/イベント回帰 / pool / entry / condition / false / when / already / in / pool | 良い | - | - |
+| `testStepHalvedWhenSick` | step / halved / when / 病気 | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / 病気 | 良い | - | - |
+| `testStepHalvedWhenBlind` | step / halved / when / blind | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / blind | 良い | - | - |
+| `testStepHalvedWhenHasBaby` | step / halved / when / 有無 / baby | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / 有無 / baby | 良い | - | - |
+| `testStepHalvedWhenHasStalk` | step / halved / when / 有無 / stalk | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / 有無 / stalk | 良い | - | - |
+| `testStepHalvedWhenDamaged` | step / halved / when / damaged | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / damaged | 良い | - | - |
+| `testStepHalvedWhenSoHungryNotPredator` | step / halved / when / so / 空腹 / 非 / predator | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / so / 空腹 / 非 / predator | 良い | - | - |
+| `testStepNotHalvedWhenPredatorAndHungry` | step / 非 / halved / when / predator / and / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / step / 非 / halved / when / predator / and / 空腹 | 良い | - | - |
+| `testStepHalvedWhenFlyingCantFly` | step / halved / when / flying / cant / fly | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / flying / cant / fly | 良い | - | - |
+| `testStepHalvedWhenFeelPain` | step / halved / when / feel / pain | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / feel / pain | 良い | - | - |
+| `testStepHalvedWhenBurnedHeavily` | step / halved / when / burned / heavily | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / burned / heavily | 良い | - | - |
+| `testStepHalvedWhenBurnedHeavilyNoOtherConditions` | step / halved / when / burned / heavily / なし / other / conditions | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / burned / heavily / なし / other / conditions | 良い | - | - |
+| `testBurnedHeavilyCanFlyDoesNotHalveStepWhenNoOtherConditions` | burned / heavily / 可否 / fly / does / 非 / halve / step / when / なし / other / conditions | ゆっくり本体の状態/行動/イベント回帰 / burned / heavily / 可否 / fly / does / 非 / halve / step / when / なし / other / conditions | 良い | - | - |
+| `testStepNotHalvedWhenFlyingAndCanFly` | step / 非 / halved / when / flying / and / 可否 / fly | ゆっくり本体の状態/行動/イベント回帰 / step / 非 / halved / when / flying / and / 可否 / fly | 良い | - | - |
+| `testStepHalvedWhenAntsAttached` | step / halved / when / ants / attached | ゆっくり本体の状態/行動/イベント回帰 / step / halved / when / ants / attached | 良い | - | - |
+| `testBurnedHeavilyDoesNotHalveWhenCanFly` | burned / heavily / does / 非 / halve / when / 可否 / fly | ゆっくり本体の状態/行動/イベント回帰 / burned / heavily / does / 非 / halve / when / 可否 / fly | 良い | - | - |
+| `testEventLowestStepUsedForFrequency` | イベント / lowest / step / used / for / frequency | ゆっくり本体の状態/行動/イベント回帰 / イベント / lowest / step / used / for / frequency | 良い | - | - |
 | `testCanFlyDestZequalCurrentClearsDestZ` | 可否 / fly / dest / zequal / current / clears / dest / z | ゆっくり本体の状態/行動/イベント回帰 / 可否 / fly / dest / zequal / current / clears / dest / z | 良い | - | - |
 | `testCanFlyDestZovershootClampsToDest` | 可否 / fly / dest / zovershoot / clamps / to / dest | ゆっくり本体の状態/行動/イベント回帰 / 可否 / fly / dest / zovershoot / clamps / to / dest | 良い | - | - |
-| `testExternalForceBzStopsMovement` | external / force / bz / stops / movement | ゆっくり本体の状態/行動/イベント回帰 / external / force / bz / stops / movement | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testConveyorExternalForceStopsMovement` | conveyor / external / force / stops / movement | ゆっくり本体の状態/行動/イベント回帰 / conveyor / external / force / stops / movement | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFallUnyoNoDamageNextFallAndTrampoline` | 落下 / unyo / なし / ダメージ / next / 落下 / and / trampoline | ゆっくり本体の状態/行動/イベント回帰 / 落下 / unyo / なし / ダメージ / next / 落下 / and / trampoline | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFallHitsNoDamageNextFallAndTrampolineCheckFalse` | 落下 / hits / なし / ダメージ / next / 落下 / and / trampoline / 判定 / false | ゆっくり本体の状態/行動/イベント回帰 / 落下 / hits / なし / ダメージ / next / 落下 / and / trampoline / 判定 / false | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNoAccessoryMessageOnXdirection` | なし / accessory / メッセージ / on / xdirection | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / on / xdirection | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNoAccessoryMessageOnYdirection` | なし / accessory / メッセージ / on / ydirection | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / on / ydirection | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNoAccessoryMessageNotTriggeredOnXdirection` | なし / accessory / メッセージ / 非 / triggered / on / xdirection | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / 非 / triggered / on / xdirection | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNoAccessoryMessageNotTriggeredOnYdirection` | なし / accessory / メッセージ / 非 / triggered / on / ydirection | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / 非 / triggered / on / ydirection | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNoAccessoryMessageSkippedWhenNotSad` | なし / accessory / メッセージ / skipped / when / 非 / sad | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / skipped / when / 非 / sad | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFallDamageNoDamageNextFallAdultNotOnBed` | 落下 / ダメージ / なし / ダメージ / next / 落下 / adult / 非 / on / bed | ゆっくり本体の状態/行動/イベント回帰 / 落下 / ダメージ / なし / ダメージ / next / 落下 / adult / 非 / on / bed | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStepNotHalvedWhenAllConditionsFalse` | step / 非 / halved / when / all / conditions / false | ゆっくり本体の状態/行動/イベント回帰 / step / 非 / halved / when / all / conditions / false | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNoAccessoryMessageVerySadXdirection` | なし / accessory / メッセージ / very / sad / xdirection | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / very / sad / xdirection | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNoAccessoryMessageVerySadYdirection` | なし / accessory / メッセージ / very / sad / ydirection | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / very / sad / ydirection | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testExternalForceBzStopsMovement` | external / force / bz / stops / movement | ゆっくり本体の状態/行動/イベント回帰 / external / force / bz / stops / movement | 良い | - | - |
+| `testConveyorExternalForceStopsMovement` | conveyor / external / force / stops / movement | ゆっくり本体の状態/行動/イベント回帰 / conveyor / external / force / stops / movement | 良い | - | - |
+| `testFallUnyoNoDamageNextFallAndTrampoline` | 落下 / unyo / なし / ダメージ / next / 落下 / and / trampoline | ゆっくり本体の状態/行動/イベント回帰 / 落下 / unyo / なし / ダメージ / next / 落下 / and / trampoline | 良い | - | - |
+| `testFallHitsNoDamageNextFallAndTrampolineCheckFalse` | 落下 / hits / なし / ダメージ / next / 落下 / and / trampoline / 判定 / false | ゆっくり本体の状態/行動/イベント回帰 / 落下 / hits / なし / ダメージ / next / 落下 / and / trampoline / 判定 / false | 良い | - | - |
+| `testNoAccessoryMessageOnXdirection` | なし / accessory / メッセージ / on / xdirection | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / on / xdirection | 良い | - | - |
+| `testNoAccessoryMessageOnYdirection` | なし / accessory / メッセージ / on / ydirection | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / on / ydirection | 良い | - | - |
+| `testNoAccessoryMessageNotTriggeredOnXdirection` | なし / accessory / メッセージ / 非 / triggered / on / xdirection | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / 非 / triggered / on / xdirection | 良い | - | - |
+| `testNoAccessoryMessageNotTriggeredOnYdirection` | なし / accessory / メッセージ / 非 / triggered / on / ydirection | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / 非 / triggered / on / ydirection | 良い | - | - |
+| `testNoAccessoryMessageSkippedWhenNotSad` | なし / accessory / メッセージ / skipped / when / 非 / sad | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / skipped / when / 非 / sad | 良い | - | - |
+| `testFallDamageNoDamageNextFallAdultNotOnBed` | 落下 / ダメージ / なし / ダメージ / next / 落下 / adult / 非 / on / bed | ゆっくり本体の状態/行動/イベント回帰 / 落下 / ダメージ / なし / ダメージ / next / 落下 / adult / 非 / on / bed | 良い | - | - |
+| `testStepNotHalvedWhenAllConditionsFalse` | step / 非 / halved / when / all / conditions / false | ゆっくり本体の状態/行動/イベント回帰 / step / 非 / halved / when / all / conditions / false | 良い | - | - |
+| `testNoAccessoryMessageVerySadXdirection` | なし / accessory / メッセージ / very / sad / xdirection | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / very / sad / xdirection | 良い | - | - |
+| `testNoAccessoryMessageVerySadYdirection` | なし / accessory / メッセージ / very / sad / ydirection | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / very / sad / ydirection | 良い | - | - |
 | `testCanFlySetsDestZwhenNoTargetAndNoEvent` | 可否 / fly / sets / dest / zwhen / なし / target / and / なし / イベント | ゆっくり本体の状態/行動/イベント回帰 / 可否 / fly / sets / dest / zwhen / なし / target / and / なし / イベント | 良い | - | - |
-| `testCanFlyDoesNotAutoSetDestZwhenEventActive` | 可否 / fly / does / 非 / auto / 設定 / dest / zwhen / イベント / active | ゆっくり本体の状態/行動/イベント回帰 / 可否 / fly / does / 非 / auto / 設定 / dest / zwhen / イベント / active | ダメ | setter/getter の往復確認に留まる | - |
-| `testFallWithoutExternalForceTriggersFallBranch` | 落下 / without / external / force / triggers / 落下 / branch | ゆっくり本体の状態/行動/イベント回帰 / 落下 / without / external / force / triggers / 落下 / branch | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCanFlyDoesNotAutoSetDestZwhenEventActive` | 可否 / fly / does / 非 / auto / 設定 / dest / zwhen / イベント / active | ゆっくり本体の状態/行動/イベント回帰 / 可否 / fly / does / 非 / auto / 設定 / dest / zwhen / イベント / active | 良い | - | - |
+| `testFallWithoutExternalForceTriggersFallBranch` | 落下 / without / external / force / triggers / 落下 / branch | ゆっくり本体の状態/行動/イベント回帰 / 落下 / without / external / force / triggers / 落下 / branch | 良い | - | - |
 | `testDestXpositiveOvershootClampsToDest` | dest / xpositive / overshoot / clamps / to / dest | ゆっくり本体の状態/行動/イベント回帰 / dest / xpositive / overshoot / clamps / to / dest | 良い | - | - |
-| `testDestXpositiveNoOvershootBranch` | dest / xpositive / なし / overshoot / branch | ゆっくり本体の状態/行動/イベント回帰 / dest / xpositive / なし / overshoot / branch | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testDestXpositiveNoOvershootBranch` | dest / xpositive / なし / overshoot / branch | ゆっくり本体の状態/行動/イベント回帰 / dest / xpositive / なし / overshoot / branch | 良い | - | - |
 | `testDestYnegativeOvershootClampsToDest` | dest / ynegative / overshoot / clamps / to / dest | ゆっくり本体の状態/行動/イベント回帰 / dest / ynegative / overshoot / clamps / to / dest | 良い | - | - |
-| `testDestYnegativeNoOvershootBranch` | dest / ynegative / なし / overshoot / branch | ゆっくり本体の状態/行動/イベント回帰 / dest / ynegative / なし / overshoot / branch | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFallUnyoNoDamageNextFallOnBedBabySkipsStrike` | 落下 / unyo / なし / ダメージ / next / 落下 / on / bed / baby / skips / 打撃 | ゆっくり本体の状態/行動/イベント回帰 / 落下 / unyo / なし / ダメージ / next / 落下 / on / bed / baby / skips / 打撃 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFallUnyoTriggersChangeUnyo` | 落下 / unyo / triggers / change / unyo | ゆっくり本体の状態/行動/イベント回帰 / 落下 / unyo / triggers / change / unyo | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testDestYnegativeNoOvershootBranch` | dest / ynegative / なし / overshoot / branch | ゆっくり本体の状態/行動/イベント回帰 / dest / ynegative / なし / overshoot / branch | 良い | - | - |
+| `testFallUnyoNoDamageNextFallOnBedBabySkipsStrike` | 落下 / unyo / なし / ダメージ / next / 落下 / on / bed / baby / skips / 打撃 | ゆっくり本体の状態/行動/イベント回帰 / 落下 / unyo / なし / ダメージ / next / 落下 / on / bed / baby / skips / 打撃 | 良い | - | - |
+| `testFallUnyoTriggersChangeUnyo` | 落下 / unyo / triggers / change / unyo | ゆっくり本体の状態/行動/イベント回帰 / 落下 / unyo / triggers / change / unyo | 良い | - | - |
 | `testDestXpositiveOvershootClamps` | dest / xpositive / overshoot / clamps | ゆっくり本体の状態/行動/イベント回帰 / dest / xpositive / overshoot / clamps | 良い | - | - |
-| `testDestXpositiveNoOvershoot` | dest / xpositive / なし / overshoot | ゆっくり本体の状態/行動/イベント回帰 / dest / xpositive / なし / overshoot | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testDestXpositiveNoOvershoot` | dest / xpositive / なし / overshoot | ゆっくり本体の状態/行動/イベント回帰 / dest / xpositive / なし / overshoot | 良い | - | - |
 | `testCanFlyKeepsHeightWhenNoTarget` | 可否 / fly / 維持 / height / when / なし / target | ゆっくり本体の状態/行動/イベント回帰 / 可否 / fly / 維持 / height / when / なし / target | 良い | - | - |
-| `testCanFlyDestZnegativeNoOvershoot` | 可否 / fly / dest / znegative / なし / overshoot | ゆっくり本体の状態/行動/イベント回帰 / 可否 / fly / dest / znegative / なし / overshoot | ダメ | 回帰保証として弱い | - |
-| `testSetMessageEmptyDoesNothing` | 設定 / メッセージ / empty / does / nothing | ゆっくり本体の状態/行動/イベント回帰 / 設定 / メッセージ / empty / does / nothing | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetPikoMessageWithCount` | 設定 / piko / メッセージ / with / count | ゆっくり本体の状態/行動/イベント回帰 / 設定 / piko / メッセージ / with / count | ダメ | setter/getter の往復確認に留まる | - |
-| `testRaperExcitingStepTwo` | raper / exciting / step / two | ゆっくり本体の状態/行動/イベント回帰 / raper / exciting / step / two | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDestYpositiveNoOvershoot` | dest / ypositive / なし / overshoot | ゆっくり本体の状態/行動/イベント回帰 / dest / ypositive / なし / overshoot | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDestYnegativeNoOvershoot` | dest / ynegative / なし / overshoot | ゆっくり本体の状態/行動/イベント回帰 / dest / ynegative / なし / overshoot | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCanFlyDestZnegativeNoOvershoot` | 可否 / fly / dest / znegative / なし / overshoot | ゆっくり本体の状態/行動/イベント回帰 / 可否 / fly / dest / znegative / なし / overshoot | 良い | - | - |
+| `testSetMessageEmptyDoesNothing` | 設定 / メッセージ / empty / does / nothing | ゆっくり本体の状態/行動/イベント回帰 / 設定 / メッセージ / empty / does / nothing | 良い | - | - |
+| `testSetPikoMessageWithCount` | 設定 / piko / メッセージ / with / count | ゆっくり本体の状態/行動/イベント回帰 / 設定 / piko / メッセージ / with / count | 良い | - | - |
+| `testRaperExcitingStepTwo` | raper / exciting / step / two | ゆっくり本体の状態/行動/イベント回帰 / raper / exciting / step / two | 良い | - | - |
+| `testDestYpositiveNoOvershoot` | dest / ypositive / なし / overshoot | ゆっくり本体の状態/行動/イベント回帰 / dest / ypositive / なし / overshoot | 良い | - | - |
+| `testDestYnegativeNoOvershoot` | dest / ynegative / なし / overshoot | ゆっくり本体の状態/行動/イベント回帰 / dest / ynegative / なし / overshoot | 良い | - | - |
 | `testCanFlyDestZnegativeOvershootClamps` | 可否 / fly / dest / znegative / overshoot / clamps | ゆっくり本体の状態/行動/イベント回帰 / 可否 / fly / dest / znegative / overshoot / clamps | 良い | - | - |
-| `testZcanGoBelowZeroWhenNotFlying` | zcan / go / below / zero / when / 非 / flying | ゆっくり本体の状態/行動/イベント回帰 / zcan / go / below / zero / when / 非 / flying | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFallWithUnyoEnabledChangesUnyo` | 落下 / with / unyo / enabled / changes / unyo | ゆっくり本体の状態/行動/イベント回帰 / 落下 / with / unyo / enabled / changes / unyo | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPoolEntryAvoidedWhenAverageAndRndNonZero` | pool / entry / avoided / when / average / and / rnd / non / zero | ゆっくり本体の状態/行動/イベント回帰 / pool / entry / avoided / when / average / and / rnd / non / zero | 不足 | 例外なし・存在確認だけ | - |
-| `testYoverflowAfterMovementClamped` | yoverflow / after / movement / clamped | ゆっくり本体の状態/行動/イベント回帰 / yoverflow / after / movement / clamped | 不足 | 境界値の回帰条件が粗い | - |
-| `testFallDamageStrikeWhenNotOnBedAdult` | 落下 / ダメージ / 打撃 / when / 非 / on / bed / adult | ゆっくり本体の状態/行動/イベント回帰 / 落下 / ダメージ / 打撃 / when / 非 / on / bed / adult | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFallDamageNoExtraWhenVzNegative` | 落下 / ダメージ / なし / extra / when / vz / negative | ゆっくり本体の状態/行動/イベント回帰 / 落下 / ダメージ / なし / extra / when / vz / negative | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testZcanGoBelowZeroWhenNotFlying` | zcan / go / below / zero / when / 非 / flying | ゆっくり本体の状態/行動/イベント回帰 / zcan / go / below / zero / when / 非 / flying | 良い | - | - |
+| `testFallWithUnyoEnabledChangesUnyo` | 落下 / with / unyo / enabled / changes / unyo | ゆっくり本体の状態/行動/イベント回帰 / 落下 / with / unyo / enabled / changes / unyo | 良い | - | - |
+| `testPoolEntryAvoidedWhenAverageAndRndNonZero` | pool / entry / avoided / when / average / and / rnd / non / zero | ゆっくり本体の状態/行動/イベント回帰 / pool / entry / avoided / when / average / and / rnd / non / zero | 良い | - | - |
+| `testYoverflowAfterMovementClamped` | yoverflow / after / movement / clamped | ゆっくり本体の状態/行動/イベント回帰 / yoverflow / after / movement / clamped | 良い | - | - |
+| `testFallDamageStrikeWhenNotOnBedAdult` | 落下 / ダメージ / 打撃 / when / 非 / on / bed / adult | ゆっくり本体の状態/行動/イベント回帰 / 落下 / ダメージ / 打撃 / when / 非 / on / bed / adult | 良い | - | - |
+| `testFallDamageNoExtraWhenVzNegative` | 落下 / ダメージ / なし / extra / when / vz / negative | ゆっくり本体の状態/行動/イベント回帰 / 落下 / ダメージ / なし / extra / when / vz / negative | 良い | - | - |
 | `testBlockedCountOverLimitFoolSetsVerySadAndMessage` | blocked / count / over / limit / fool / sets / very / sad / and / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / blocked / count / over / limit / fool / sets / very / sad / and / メッセージ | 良い | - | - |
 | `testXoverflowSetsDirXnegative` | xoverflow / sets / dir / xnegative | ゆっくり本体の状態/行動/イベント回帰 / xoverflow / sets / dir / xnegative | 良い | - | - |
 | `testYoverflowSetsDirYnegative` | yoverflow / sets / dir / ynegative | ゆっくり本体の状態/行動/イベント回帰 / yoverflow / sets / dir / ynegative | 良い | - | - |
 | `testZoverflowClampsToMapZ` | zoverflow / clamps / to / map / z | ゆっくり本体の状態/行動/イベント回帰 / zoverflow / clamps / to / map / z | 良い | - | - |
 | `testFallBranchUnyoAndNoDamageNextFallClearsDamage` | 落下 / branch / unyo / and / なし / ダメージ / next / 落下 / clears / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 落下 / branch / unyo / and / なし / ダメージ / next / 落下 / clears / ダメージ | 良い | - | - |
-| `testFallWhenMostDepthDiffersWithoutVz` | 落下 / when / most / depth / differs / without / vz | ゆっくり本体の状態/行動/イベント回帰 / 落下 / when / most / depth / differs / without / vz | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBurnedHeavilyHalvesStepSkipsMoveOnOddAge` | burned / heavily / halves / step / skips / 移動 / on / odd / age | ゆっくり本体の状態/行動/イベント回帰 / burned / heavily / halves / step / skips / 移動 / on / odd / age | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRaperExcitingOvershootsDestXclamp` | raper / exciting / overshoots / dest / xclamp | ゆっくり本体の状態/行動/イベント回帰 / raper / exciting / overshoots / dest / xclamp | 不足 | 境界値の回帰条件が粗い | - |
-| `testRaperExcitingOvershootsDestYclamp` | raper / exciting / overshoots / dest / yclamp | ゆっくり本体の状態/行動/イベント回帰 / raper / exciting / overshoots / dest / yclamp | 不足 | 境界値の回帰条件が粗い | - |
+| `testFallWhenMostDepthDiffersWithoutVz` | 落下 / when / most / depth / differs / without / vz | ゆっくり本体の状態/行動/イベント回帰 / 落下 / when / most / depth / differs / without / vz | 良い | - | - |
+| `testBurnedHeavilyHalvesStepSkipsMoveOnOddAge` | burned / heavily / halves / step / skips / 移動 / on / odd / age | ゆっくり本体の状態/行動/イベント回帰 / burned / heavily / halves / step / skips / 移動 / on / odd / age | 良い | - | - |
+| `testRaperExcitingOvershootsDestXclamp` | raper / exciting / overshoots / dest / xclamp | ゆっくり本体の状態/行動/イベント回帰 / raper / exciting / overshoots / dest / xclamp | 良い | - | - |
+| `testRaperExcitingOvershootsDestYclamp` | raper / exciting / overshoots / dest / yclamp | ゆっくり本体の状態/行動/イベント回帰 / raper / exciting / overshoots / dest / yclamp | 良い | - | - |
 | `testBlockedByWallExceedLimitSetsVerySad` | blocked / by / 壁 / exceed / limit / sets / very / sad | ゆっくり本体の状態/行動/イベント回帰 / blocked / by / 壁 / exceed / limit / sets / very / sad | 良い | - | - |
-| `testBlockedByWallHalfLimitFoolCalms` | blocked / by / 壁 / half / limit / fool / calms | ゆっくり本体の状態/行動/イベント回帰 / blocked / by / 壁 / half / limit / fool / calms | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testBlockedByWallHalfLimitFoolCalms` | blocked / by / 壁 / half / limit / fool / calms | ゆっくり本体の状態/行動/イベント回帰 / blocked / by / 壁 / half / limit / fool / calms | 良い | - | - |
 | `testWorldEventSendMessageSetsBuffer` | world / イベント / send / メッセージ / sets / buffer | ゆっくり本体の状態/行動/イベント回帰 / world / イベント / send / メッセージ / sets / buffer | 良い | - | - |
-| `testNoFallingWhenFlyingStable` | なし / falling / when / flying / stable | ゆっくり本体の状態/行動/イベント回帰 / なし / falling / when / flying / stable | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFallBranchWhenUnyoDisabled` | 落下 / branch / when / unyo / disabled | ゆっくり本体の状態/行動/イベント回帰 / 落下 / branch / when / unyo / disabled | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFallWithNoDamageNextFallFalse` | 落下 / with / なし / ダメージ / next / 落下 / false | ゆっくり本体の状態/行動/イベント回帰 / 落下 / with / なし / ダメージ / next / 落下 / false | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFallAdultNotOnBedStrikes` | 落下 / adult / 非 / on / bed / strikes | ゆっくり本体の状態/行動/イベント回帰 / 落下 / adult / 非 / on / bed / strikes | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSoHungryHalvesStepSkipsMoveOnOddAge` | so / 空腹 / halves / step / skips / 移動 / on / odd / age | ゆっくり本体の状態/行動/イベント回帰 / so / 空腹 / halves / step / skips / 移動 / on / odd / age | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFlyWithEventDoesNotSetDestZ` | fly / with / イベント / does / 非 / 設定 / dest / z | ゆっくり本体の状態/行動/イベント回帰 / fly / with / イベント / does / 非 / 設定 / dest / z | ダメ | setter/getter の往復確認に留まる | - |
-| `testRaperNotExcitingMovesOneStep` | raper / 非 / exciting / moves / one / step | ゆっくり本体の状態/行動/イベント回帰 / raper / 非 / exciting / moves / one / step | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testWallCollisionWithoutTargetsRandomizesDirection` | 壁 / 衝突 / without / targets / randomizes / direction | ゆっくり本体の状態/行動/イベント回帰 / 壁 / 衝突 / without / targets / randomizes / direction | 不足 | setter/getter の往復確認に留まる | - |
-| `testFallBranchSkippedWhenFallingUnderGround` | 落下 / branch / skipped / when / falling / under / ground | ゆっくり本体の状態/行動/イベント回帰 / 落下 / branch / skipped / when / falling / under / ground | 不足 | 保存/復元後の成分 assert が足りない | - |
-| `testFallPathWithTrampolineNoDamage` | 落下 / path / with / trampoline / なし / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 落下 / path / with / trampoline / なし / ダメージ | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFallBabyOnBedSkipsStrike` | 落下 / baby / on / bed / skips / 打撃 | ゆっくり本体の状態/行動/イベント回帰 / 落下 / baby / on / bed / skips / 打撃 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFallPealedTriggersDying` | 落下 / pealed / triggers / dying | ゆっくり本体の状態/行動/イベント回帰 / 落下 / pealed / triggers / dying | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testHasBabyHalvesStepSkipsMoveOnOddAge` | 有無 / baby / halves / step / skips / 移動 / on / odd / age | ゆっくり本体の状態/行動/イベント回帰 / 有無 / baby / halves / step / skips / 移動 / on / odd / age | ダメ | 回帰保証として弱い | - |
-| `testNoAccessoryMessageOnXwhenVerySad` | なし / accessory / メッセージ / on / xwhen / very / sad | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / on / xwhen / very / sad | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNoAccessoryMessageOnYwhenSad` | なし / accessory / メッセージ / on / ywhen / sad | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / on / ywhen / sad | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testNoFallingWhenFlyingStable` | なし / falling / when / flying / stable | ゆっくり本体の状態/行動/イベント回帰 / なし / falling / when / flying / stable | 良い | - | - |
+| `testFallBranchWhenUnyoDisabled` | 落下 / branch / when / unyo / disabled | ゆっくり本体の状態/行動/イベント回帰 / 落下 / branch / when / unyo / disabled | 良い | - | - |
+| `testFallWithNoDamageNextFallFalse` | 落下 / with / なし / ダメージ / next / 落下 / false | ゆっくり本体の状態/行動/イベント回帰 / 落下 / with / なし / ダメージ / next / 落下 / false | 良い | - | - |
+| `testFallAdultNotOnBedStrikes` | 落下 / adult / 非 / on / bed / strikes | ゆっくり本体の状態/行動/イベント回帰 / 落下 / adult / 非 / on / bed / strikes | 良い | - | - |
+| `testSoHungryHalvesStepSkipsMoveOnOddAge` | so / 空腹 / halves / step / skips / 移動 / on / odd / age | ゆっくり本体の状態/行動/イベント回帰 / so / 空腹 / halves / step / skips / 移動 / on / odd / age | 良い | - | - |
+| `testFlyWithEventDoesNotSetDestZ` | fly / with / イベント / does / 非 / 設定 / dest / z | ゆっくり本体の状態/行動/イベント回帰 / fly / with / イベント / does / 非 / 設定 / dest / z | 良い | - | - |
+| `testRaperNotExcitingMovesOneStep` | raper / 非 / exciting / moves / one / step | ゆっくり本体の状態/行動/イベント回帰 / raper / 非 / exciting / moves / one / step | 良い | - | - |
+| `testWallCollisionWithoutTargetsRandomizesDirection` | 壁 / 衝突 / without / targets / randomizes / direction | ゆっくり本体の状態/行動/イベント回帰 / 壁 / 衝突 / without / targets / randomizes / direction | 良い | - | - |
+| `testFallBranchSkippedWhenFallingUnderGround` | 落下 / branch / skipped / when / falling / under / ground | ゆっくり本体の状態/行動/イベント回帰 / 落下 / branch / skipped / when / falling / under / ground | 良い | - | - |
+| `testFallPathWithTrampolineNoDamage` | 落下 / path / with / trampoline / なし / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 落下 / path / with / trampoline / なし / ダメージ | 良い | - | - |
+| `testFallBabyOnBedSkipsStrike` | 落下 / baby / on / bed / skips / 打撃 | ゆっくり本体の状態/行動/イベント回帰 / 落下 / baby / on / bed / skips / 打撃 | 良い | - | - |
+| `testFallPealedTriggersDying` | 落下 / pealed / triggers / dying | ゆっくり本体の状態/行動/イベント回帰 / 落下 / pealed / triggers / dying | 良い | - | - |
+| `testHasBabyHalvesStepSkipsMoveOnOddAge` | 有無 / baby / halves / step / skips / 移動 / on / odd / age | ゆっくり本体の状態/行動/イベント回帰 / 有無 / baby / halves / step / skips / 移動 / on / odd / age | 良い | - | - |
+| `testNoAccessoryMessageOnXwhenVerySad` | なし / accessory / メッセージ / on / xwhen / very / sad | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / on / xwhen / very / sad | 良い | - | - |
+| `testNoAccessoryMessageOnYwhenSad` | なし / accessory / メッセージ / on / ywhen / sad | ゆっくり本体の状態/行動/イベント回帰 / なし / accessory / メッセージ / on / ywhen / sad | 良い | - | - |
 | `testFlyKeepsDestZwhenMoveTargetExists` | fly / 維持 / dest / zwhen / 移動 / target / exists | ゆっくり本体の状態/行動/イベント回帰 / fly / 維持 / dest / zwhen / 移動 / target / exists | 良い | - | - |
-| `testWallCollisionBlockedCountHalfRandomDirection` | 壁 / 衝突 / blocked / count / half / random / direction | ゆっくり本体の状態/行動/イベント回帰 / 壁 / 衝突 / blocked / count / half / random / direction | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFallOnBedAdultStillStrikes` | 落下 / on / bed / adult / still / strikes | ゆっくり本体の状態/行動/イベント回帰 / 落下 / on / bed / adult / still / strikes | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testHasStalkHalvesStepSkipsMoveOnOddAge` | 有無 / stalk / halves / step / skips / 移動 / on / odd / age | ゆっくり本体の状態/行動/イベント回帰 / 有無 / stalk / halves / step / skips / 移動 / on / odd / age | ダメ | 回帰保証として弱い | - |
-| `testFlyingTypeWithoutBraidHalvesStepSkipsMoveOnOddAge` | flying / type / without / おさげ / halves / step / skips / 移動 / on / odd / age | ゆっくり本体の状態/行動/イベント回帰 / flying / type / without / おさげ / halves / step / skips / 移動 / on / odd / age | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testWallCollisionBlockedCountHalfRandomDirection` | 壁 / 衝突 / blocked / count / half / random / direction | ゆっくり本体の状態/行動/イベント回帰 / 壁 / 衝突 / blocked / count / half / random / direction | 良い | - | - |
+| `testFallOnBedAdultStillStrikes` | 落下 / on / bed / adult / still / strikes | ゆっくり本体の状態/行動/イベント回帰 / 落下 / on / bed / adult / still / strikes | 良い | - | - |
+| `testHasStalkHalvesStepSkipsMoveOnOddAge` | 有無 / stalk / halves / step / skips / 移動 / on / odd / age | ゆっくり本体の状態/行動/イベント回帰 / 有無 / stalk / halves / step / skips / 移動 / on / odd / age | 良い | - | - |
+| `testFlyingTypeWithoutBraidHalvesStepSkipsMoveOnOddAge` | flying / type / without / おさげ / halves / step / skips / 移動 / on / odd / age | ゆっくり本体の状態/行動/イベント回帰 / flying / type / without / おさげ / halves / step / skips / 移動 / on / odd / age | 良い | - | - |
 | `testWallCollisionBlockedCountHalfRudeSetsAngry` | 壁 / 衝突 / blocked / count / half / rude / sets / angry | ゆっくり本体の状態/行動/イベント回帰 / 壁 / 衝突 / blocked / count / half / rude / sets / angry | 良い | - | - |
-| `testWallCollisionBlockedCountLimitRandomXbranch` | 壁 / 衝突 / blocked / count / limit / random / xbranch | ゆっくり本体の状態/行動/イベント回帰 / 壁 / 衝突 / blocked / count / limit / random / xbranch | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBlindCantSeeMessage` | blind / cant / see / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / blind / cant / see / メッセージ | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBlindLamentNoYukkuriMessage` | blind / lament / なし / yukkuri / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / blind / lament / なし / yukkuri / メッセージ | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBlindNoMessage` | blind / なし / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / blind / なし / メッセージ | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testShutmouthWithMessageTrigger` | shutmouth / with / メッセージ / trigger | ゆっくり本体の状態/行動/イベント回帰 / shutmouth / with / メッセージ / trigger | 不足 | setter/getter の往復確認に留まる | - |
-| `testShutmouthNoMessageWhenRndNonZero` | shutmouth / なし / メッセージ / when / rnd / non / zero | ゆっくり本体の状態/行動/イベント回帰 / shutmouth / なし / メッセージ / when / rnd / non / zero | 不足 | 例外なし・存在確認だけ | - |
-| `testShutmouthNoMessageWhenSleeping` | shutmouth / なし / メッセージ / when / sleeping | ゆっくり本体の状態/行動/イベント回帰 / shutmouth / なし / メッセージ / when / sleeping | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testLockmoveEarlyPeriodBuriedMessage` | lockmove / early / period / buried / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / lockmove / early / period / buried / メッセージ | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testLockmoveEarlyPeriodNearlyAllBuried` | lockmove / early / period / nearly / all / buried | ゆっくり本体の状態/行動/イベント回帰 / lockmove / early / period / nearly / all / buried | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testLockmoveEarlyPeriodCantMoveWithNobinobi` | lockmove / early / period / cant / 移動 / with / nobinobi | ゆっくり本体の状態/行動/イベント回帰 / lockmove / early / period / cant / 移動 / with / nobinobi | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testLockmoveEarlyPeriodCantMoveNoNobinobi` | lockmove / early / period / cant / 移動 / なし / nobinobi | ゆっくり本体の状態/行動/イベント回帰 / lockmove / early / period / cant / 移動 / なし / nobinobi | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testLockmoveEarlyPeriodHungryMessage` | lockmove / early / period / 空腹 / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / lockmove / early / period / 空腹 / メッセージ | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testLockmoveEarlyPeriodSecondCantMoveBuried` | lockmove / early / period / second / cant / 移動 / buried | ゆっくり本体の状態/行動/イベント回帰 / lockmove / early / period / second / cant / 移動 / buried | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMidiumLamentMessage` | midium / lament / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / midium / lament / メッセージ | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMidiumNoLamentMessage` | midium / なし / lament / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / midium / なし / lament / メッセージ | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMidiumHungry` | midium / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / midium / 空腹 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCriticalEarlyLamentLowYukkuri` | critical / early / lament / low / yukkuri | ゆっくり本体の状態/行動/イベント回帰 / critical / early / lament / low / yukkuri | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCriticalEarlyCantMove` | critical / early / cant / 移動 | ゆっくり本体の状態/行動/イベント回帰 / critical / early / cant / 移動 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCriticalLateCantMove2` | critical / late / cant / move2 | ゆっくり本体の状態/行動/イベント回帰 / critical / late / cant / move2 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCriticalLateLamentNoYukkuri` | critical / late / lament / なし / yukkuri | ゆっくり本体の状態/行動/イベント回帰 / critical / late / lament / なし / yukkuri | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCriticalEarlyHungry` | critical / early / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / critical / early / 空腹 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNoOkazariLament` | なし / okazari / lament | ゆっくり本体の状態/行動/イベント回帰 / なし / okazari / lament | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNoOkazariNoLament` | なし / okazari / なし / lament | ゆっくり本体の状態/行動/イベント回帰 / なし / okazari / なし / lament | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetInVainRudeWithRndTrue` | 取得 / in / vain / rude / with / rnd / true | ゆっくり本体の状態/行動/イベント回帰 / 取得 / in / vain / rude / with / rnd / true | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetInVainRudeWithRndFalse` | 取得 / in / vain / rude / with / rnd / false | ゆっくり本体の状態/行動/イベント回帰 / 取得 / in / vain / rude / with / rnd / false | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetInVainNotRude` | 取得 / in / vain / 非 / rude | ゆっくり本体の状態/行動/イベント回帰 / 取得 / in / vain / 非 / rude | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetRandomAttitudeBranches` | 取得 / random / attitude / branches | ゆっくり本体の状態/行動/イベント回帰 / 取得 / random / attitude / branches | 不足 | private への到達確認に留まる | reflection |
-| `testSetTakeoutItemMovesShitToTakenOut` | 設定 / takeout / item / moves / shit / to / taken / out | ゆっくり本体の状態/行動/イベント回帰 / 設定 / takeout / item / moves / shit / to / taken / out | 不足 | setter/getter の往復確認に留まる | - |
-| `testSetTakeoutItemMovesFoodToTakenOut` | 設定 / takeout / item / moves / food / to / taken / out | ゆっくり本体の状態/行動/イベント回帰 / 設定 / takeout / item / moves / food / to / taken / out | 不足 | setter/getter の往復確認に留まる | - |
-| `testDropTakeoutItemShitPlacesOnFloor` | drop / takeout / item / shit / places / on / floor | ゆっくり本体の状態/行動/イベント回帰 / drop / takeout / item / shit / places / on / floor | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDropTakeoutItemFoodPlacesOnFloor` | drop / takeout / item / food / places / on / floor | ゆっくり本体の状態/行動/イベント回帰 / drop / takeout / item / food / places / on / floor | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDropTakeoutItemReturnsNullWhenMissing` | drop / takeout / item / 戻り / null / when / missing | ゆっくり本体の状態/行動/イベント回帰 / drop / takeout / item / 戻り / null / when / missing | ダメ | 回帰保証として弱い | - |
-| `testInjectIntoDeadDoesNothing` | inject / into / 死亡 / does / nothing | ゆっくり本体の状態/行動/イベント回帰 / inject / into / 死亡 / does / nothing | ダメ | 回帰保証として弱い | - |
-| `testInjectIntoNullDnaNoBaby` | inject / into / null / dna / なし / baby | ゆっくり本体の状態/行動/イベント回帰 / inject / into / null / dna / なし / baby | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testInjectIntoCreatesBaby` | inject / into / creates / baby | ゆっくり本体の状態/行動/イベント回帰 / inject / into / creates / baby | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testInjectIntoBodyCastrationNoBaby` | inject / into / 本体 / castration / なし / baby | ゆっくり本体の状態/行動/イベント回帰 / inject / into / 本体 / castration / なし / baby | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDripSpermNullDnaNoStalk` | drip / sperm / null / dna / なし / stalk | ゆっくり本体の状態/行動/イベント回帰 / drip / sperm / null / dna / なし / stalk | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDripSpermCreatesStalkBabies` | drip / sperm / creates / stalk / babies | ゆっくり本体の状態/行動/イベント回帰 / drip / sperm / creates / stalk / babies | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDripSpermCreatesNullEntriesWhenRndFalse` | drip / sperm / creates / null / entries / when / rnd / false | ゆっくり本体の状態/行動/イベント回帰 / drip / sperm / creates / null / entries / when / rnd / false | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByObjectDeadEarlyReturn` | 打撃 / by / object / 死亡 / early / 戻り | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByObjectAllowanceCapsDamage` | 打撃 / by / object / allowance / caps / ダメージ | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testWallCollisionBlockedCountLimitRandomXbranch` | 壁 / 衝突 / blocked / count / limit / random / xbranch | ゆっくり本体の状態/行動/イベント回帰 / 壁 / 衝突 / blocked / count / limit / random / xbranch | 良い | - | - |
+| `testBlindCantSeeMessage` | blind / cant / see / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / blind / cant / see / メッセージ | 良い | - | - |
+| `testBlindLamentNoYukkuriMessage` | blind / lament / なし / yukkuri / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / blind / lament / なし / yukkuri / メッセージ | 良い | - | - |
+| `testBlindNoMessage` | blind / なし / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / blind / なし / メッセージ | 良い | - | - |
+| `testShutmouthWithMessageTrigger` | shutmouth / with / メッセージ / trigger | ゆっくり本体の状態/行動/イベント回帰 / shutmouth / with / メッセージ / trigger | 良い | - | - |
+| `testShutmouthNoMessageWhenRndNonZero` | shutmouth / なし / メッセージ / when / rnd / non / zero | ゆっくり本体の状態/行動/イベント回帰 / shutmouth / なし / メッセージ / when / rnd / non / zero | 良い | - | - |
+| `testShutmouthNoMessageWhenSleeping` | shutmouth / なし / メッセージ / when / sleeping | ゆっくり本体の状態/行動/イベント回帰 / shutmouth / なし / メッセージ / when / sleeping | 良い | - | - |
+| `testLockmoveEarlyPeriodBuriedMessage` | lockmove / early / period / buried / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / lockmove / early / period / buried / メッセージ | 良い | - | - |
+| `testLockmoveEarlyPeriodNearlyAllBuried` | lockmove / early / period / nearly / all / buried | ゆっくり本体の状態/行動/イベント回帰 / lockmove / early / period / nearly / all / buried | 良い | - | - |
+| `testLockmoveEarlyPeriodCantMoveWithNobinobi` | lockmove / early / period / cant / 移動 / with / nobinobi | ゆっくり本体の状態/行動/イベント回帰 / lockmove / early / period / cant / 移動 / with / nobinobi | 良い | - | - |
+| `testLockmoveEarlyPeriodCantMoveNoNobinobi` | lockmove / early / period / cant / 移動 / なし / nobinobi | ゆっくり本体の状態/行動/イベント回帰 / lockmove / early / period / cant / 移動 / なし / nobinobi | 良い | - | - |
+| `testLockmoveEarlyPeriodHungryMessage` | lockmove / early / period / 空腹 / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / lockmove / early / period / 空腹 / メッセージ | 良い | - | - |
+| `testLockmoveEarlyPeriodSecondCantMoveBuried` | lockmove / early / period / second / cant / 移動 / buried | ゆっくり本体の状態/行動/イベント回帰 / lockmove / early / period / second / cant / 移動 / buried | 良い | - | - |
+| `testMidiumLamentMessage` | midium / lament / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / midium / lament / メッセージ | 良い | - | - |
+| `testMidiumNoLamentMessage` | midium / なし / lament / メッセージ | ゆっくり本体の状態/行動/イベント回帰 / midium / なし / lament / メッセージ | 良い | - | - |
+| `testMidiumHungry` | midium / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / midium / 空腹 | 良い | - | - |
+| `testCriticalEarlyLamentLowYukkuri` | critical / early / lament / low / yukkuri | ゆっくり本体の状態/行動/イベント回帰 / critical / early / lament / low / yukkuri | 良い | - | - |
+| `testCriticalEarlyCantMove` | critical / early / cant / 移動 | ゆっくり本体の状態/行動/イベント回帰 / critical / early / cant / 移動 | 良い | - | - |
+| `testCriticalLateCantMove2` | critical / late / cant / move2 | ゆっくり本体の状態/行動/イベント回帰 / critical / late / cant / move2 | 良い | - | - |
+| `testCriticalLateLamentNoYukkuri` | critical / late / lament / なし / yukkuri | ゆっくり本体の状態/行動/イベント回帰 / critical / late / lament / なし / yukkuri | 良い | - | - |
+| `testCriticalEarlyHungry` | critical / early / 空腹 | ゆっくり本体の状態/行動/イベント回帰 / critical / early / 空腹 | 良い | - | - |
+| `testNoOkazariLament` | なし / okazari / lament | ゆっくり本体の状態/行動/イベント回帰 / なし / okazari / lament | 良い | - | - |
+| `testNoOkazariNoLament` | なし / okazari / なし / lament | ゆっくり本体の状態/行動/イベント回帰 / なし / okazari / なし / lament | 良い | - | - |
+| `testGetInVainRudeWithRndTrue` | 取得 / in / vain / rude / with / rnd / true | ゆっくり本体の状態/行動/イベント回帰 / 取得 / in / vain / rude / with / rnd / true | 良い | - | - |
+| `testGetInVainRudeWithRndFalse` | 取得 / in / vain / rude / with / rnd / false | ゆっくり本体の状態/行動/イベント回帰 / 取得 / in / vain / rude / with / rnd / false | 良い | - | - |
+| `testGetInVainNotRude` | 取得 / in / vain / 非 / rude | ゆっくり本体の状態/行動/イベント回帰 / 取得 / in / vain / 非 / rude | 良い | - | - |
+| `testGetRandomAttitudeBranches` | 取得 / random / attitude / branches | ゆっくり本体の状態/行動/イベント回帰 / 取得 / random / attitude / branches | 良い | - | reflection |
+| `testSetTakeoutItemMovesShitToTakenOut` | 設定 / takeout / item / moves / shit / to / taken / out | ゆっくり本体の状態/行動/イベント回帰 / 設定 / takeout / item / moves / shit / to / taken / out | 良い | - | - |
+| `testSetTakeoutItemMovesFoodToTakenOut` | 設定 / takeout / item / moves / food / to / taken / out | ゆっくり本体の状態/行動/イベント回帰 / 設定 / takeout / item / moves / food / to / taken / out | 良い | - | - |
+| `testDropTakeoutItemShitPlacesOnFloor` | drop / takeout / item / shit / places / on / floor | ゆっくり本体の状態/行動/イベント回帰 / drop / takeout / item / shit / places / on / floor | 良い | - | - |
+| `testDropTakeoutItemFoodPlacesOnFloor` | drop / takeout / item / food / places / on / floor | ゆっくり本体の状態/行動/イベント回帰 / drop / takeout / item / food / places / on / floor | 良い | - | - |
+| `testDropTakeoutItemReturnsNullWhenMissing` | drop / takeout / item / 戻り / null / when / missing | ゆっくり本体の状態/行動/イベント回帰 / drop / takeout / item / 戻り / null / when / missing | 良い | - | - |
+| `testInjectIntoDeadDoesNothing` | inject / into / 死亡 / does / nothing | ゆっくり本体の状態/行動/イベント回帰 / inject / into / 死亡 / does / nothing | 良い | - | - |
+| `testInjectIntoNullDnaNoBaby` | inject / into / null / dna / なし / baby | ゆっくり本体の状態/行動/イベント回帰 / inject / into / null / dna / なし / baby | 良い | - | - |
+| `testInjectIntoCreatesBaby` | inject / into / creates / baby | ゆっくり本体の状態/行動/イベント回帰 / inject / into / creates / baby | 良い | - | - |
+| `testInjectIntoBodyCastrationNoBaby` | inject / into / 本体 / castration / なし / baby | ゆっくり本体の状態/行動/イベント回帰 / inject / into / 本体 / castration / なし / baby | 良い | - | - |
+| `testDripSpermNullDnaNoStalk` | drip / sperm / null / dna / なし / stalk | ゆっくり本体の状態/行動/イベント回帰 / drip / sperm / null / dna / なし / stalk | 良い | - | - |
+| `testDripSpermCreatesStalkBabies` | drip / sperm / creates / stalk / babies | ゆっくり本体の状態/行動/イベント回帰 / drip / sperm / creates / stalk / babies | 良い | - | - |
+| `testDripSpermCreatesNullEntriesWhenRndFalse` | drip / sperm / creates / null / entries / when / rnd / false | ゆっくり本体の状態/行動/イベント回帰 / drip / sperm / creates / null / entries / when / rnd / false | 良い | - | - |
+| `testStrikeByObjectDeadEarlyReturn` | 打撃 / by / object / 死亡 / early / 戻り | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByObjectAllowanceCapsDamage` | 打撃 / by / object / allowance / caps / ダメージ | 生存/行動可否回帰 | 良い | - | - |
 | `testStrikeByObjectMeltIncreasesDamage` | 打撃 / by / object / melt / increases / ダメージ | 生存/行動可否回帰 | 良い | - | - |
 | `testStrikeByObjectWetIncreasesDamage` | 打撃 / by / object / 水濡れ / increases / ダメージ | 生存/行動可否回帰 | 良い | - | - |
-| `testStrikeByObjectHasPantsReducesDamage` | 打撃 / by / object / 有無 / pants / reduces / ダメージ | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByYukkuriDeadEarlyReturn` | 打撃 / by / yukkuri / 死亡 / early / 戻り | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByYukkuriAllowanceCapsDamage` | 打撃 / by / yukkuri / allowance / caps / ダメージ | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByYukkuriBreaksBraidWhenRndZero` | 打撃 / by / yukkuri / breaks / おさげ / when / rnd / zero | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByYukkuriDefaultEventMakesAngryWhenNotVeryNice` | 打撃 / by / yukkuri / default / イベント / makes / angry / when / 非 / very / nice | 生存/行動可否回帰 | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testStrikeByObjectHasPantsReducesDamage` | 打撃 / by / object / 有無 / pants / reduces / ダメージ | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByYukkuriDeadEarlyReturn` | 打撃 / by / yukkuri / 死亡 / early / 戻り | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByYukkuriAllowanceCapsDamage` | 打撃 / by / yukkuri / allowance / caps / ダメージ | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByYukkuriBreaksBraidWhenRndZero` | 打撃 / by / yukkuri / breaks / おさげ / when / rnd / zero | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByYukkuriDefaultEventMakesAngryWhenNotVeryNice` | 打撃 / by / yukkuri / default / イベント / makes / angry / when / 非 / very / nice | 生存/行動可否回帰 | 良い | - | - |
 | `testStrikeByYukkuriKilledSetsCrushed` | 打撃 / by / yukkuri / killed / sets / crushed | 生存/行動可否回帰 | 良い | - | - |
-| `testStrikeByYukkuriHateNoOkazariEventMakesAngry` | 打撃 / by / yukkuri / hate / なし / okazari / イベント / makes / angry | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testStrikeByYukkuriHateNoOkazariEventMakesAngry` | 打撃 / by / yukkuri / hate / なし / okazari / イベント / makes / angry | 生存/行動可否回帰 | 良い | - | - |
 | `testStrikeByYukkuriPredatorsGameEventSetsScare` | 打撃 / by / yukkuri / predators / game / イベント / sets / scare | 生存/行動可否回帰 | 良い | - | - |
-| `testStrikeByYukkuriRaperReactionMovesToSukkiri` | 打撃 / by / yukkuri / raper / reaction / moves / to / sukkiri | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByYukkuriAvoidMoldEventFoolGetsAngry` | 打撃 / by / yukkuri / avoid / mold / イベント / fool / gets / angry | 生存/行動可否回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testStrikeByYukkuriUnyoBranchChangesUnyo` | 打撃 / by / yukkuri / unyo / branch / changes / unyo | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByYukkuriPredatorVictimTakesLess` | 打撃 / by / yukkuri / predator / victim / takes / less | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByYukkuriPredatorAttackerDealsMore` | 打撃 / by / yukkuri / predator / attacker / deals / more | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testStrikeByYukkuriRaperReactionMovesToSukkiri` | 打撃 / by / yukkuri / raper / reaction / moves / to / sukkiri | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByYukkuriAvoidMoldEventFoolGetsAngry` | 打撃 / by / yukkuri / avoid / mold / イベント / fool / gets / angry | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByYukkuriUnyoBranchChangesUnyo` | 打撃 / by / yukkuri / unyo / branch / changes / unyo | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByYukkuriPredatorVictimTakesLess` | 打撃 / by / yukkuri / predator / victim / takes / less | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByYukkuriPredatorAttackerDealsMore` | 打撃 / by / yukkuri / predator / attacker / deals / more | 生存/行動可否回帰 | 良い | - | - |
 | `testStrikeByYukkuriMeltMultiplierIncreasesDamage` | 打撃 / by / yukkuri / melt / multiplier / increases / ダメージ | 生存/行動可否回帰 | 良い | - | - |
 | `testStrikeByYukkuriWetMultiplierIncreasesDamage` | 打撃 / by / yukkuri / 水濡れ / multiplier / increases / ダメージ | 生存/行動可否回帰 | 良い | - | - |
-| `testStrikeByYukkuriPantsReducesDamage` | 打撃 / by / yukkuri / pants / reduces / ダメージ | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByYukkuriExcitingReducesDamage` | 打撃 / by / yukkuri / exciting / reduces / ダメージ | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByYukkuriAllowanceCapsToFourFifths` | 打撃 / by / yukkuri / allowance / caps / to / four / fifths | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByYukkuriAllowanceNoIncreaseWhenAlreadyOverFourFifths` | 打撃 / by / yukkuri / allowance / なし / increase / when / already / over / four / fifths | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByYukkuriDefaultEventDoesNotAngryWhenVeryNice` | 打撃 / by / yukkuri / default / イベント / does / 非 / angry / when / very / nice | 生存/行動可否回帰 | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testStrikeByYukkuriHateNoOkazariVeryNiceNotAngry` | 打撃 / by / yukkuri / hate / なし / okazari / very / nice / 非 / angry | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByYukkuriHateNoOkazariUnunSlaveNotAngry` | 打撃 / by / yukkuri / hate / なし / okazari / unun / slave / 非 / angry | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByYukkuriAvoidMoldEventBabyNotAngry` | 打撃 / by / yukkuri / avoid / mold / イベント / baby / 非 / angry | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByYukkuriUnbirthSkipsReaction` | 打撃 / by / yukkuri / unbirth / skips / reaction | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStrikeByYukkuriEnemyDamagedReducesDamage` | 打撃 / by / yukkuri / enemy / damaged / reduces / ダメージ | 生存/行動可否回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testKillTimeReturnsWhenEventOrPlaying` | kill / time / 戻り / when / イベント / or / playing | ゆっくり本体の状態/行動/イベント回帰 / kill / time / 戻り / when / イベント / or / playing | ダメ | assert がない | assert:0 |
-| `testKillTimeGetInVainBranch` | kill / time / 取得 / in / vain / branch | ゆっくり本体の状態/行動/イベント回帰 / kill / time / 取得 / in / vain / branch | 不足 | setter/getter の往復確認に留まる | - |
-| `testKillTimeNobinobiBranch` | kill / time / nobinobi / branch | ゆっくり本体の状態/行動/イベント回帰 / kill / time / nobinobi / branch | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testKillTimeFurifuriBranch` | kill / time / furifuri / branch | ゆっくり本体の状態/行動/イベント回帰 / kill / time / furifuri / branch | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testKillTimeHungryBranch` | kill / time / 空腹 / branch | ゆっくり本体の状態/行動/イベント回帰 / kill / time / 空腹 / branch | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testKillTimeRelaxOkurumiBranch` | kill / time / relax / okurumi / branch | ゆっくり本体の状態/行動/イベント回帰 / kill / time / relax / okurumi / branch | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testStrikeByYukkuriPantsReducesDamage` | 打撃 / by / yukkuri / pants / reduces / ダメージ | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByYukkuriExcitingReducesDamage` | 打撃 / by / yukkuri / exciting / reduces / ダメージ | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByYukkuriAllowanceCapsToFourFifths` | 打撃 / by / yukkuri / allowance / caps / to / four / fifths | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByYukkuriAllowanceNoIncreaseWhenAlreadyOverFourFifths` | 打撃 / by / yukkuri / allowance / なし / increase / when / already / over / four / fifths | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByYukkuriDefaultEventDoesNotAngryWhenVeryNice` | 打撃 / by / yukkuri / default / イベント / does / 非 / angry / when / very / nice | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByYukkuriHateNoOkazariVeryNiceNotAngry` | 打撃 / by / yukkuri / hate / なし / okazari / very / nice / 非 / angry | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByYukkuriHateNoOkazariUnunSlaveNotAngry` | 打撃 / by / yukkuri / hate / なし / okazari / unun / slave / 非 / angry | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByYukkuriAvoidMoldEventBabyNotAngry` | 打撃 / by / yukkuri / avoid / mold / イベント / baby / 非 / angry | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByYukkuriUnbirthSkipsReaction` | 打撃 / by / yukkuri / unbirth / skips / reaction | 生存/行動可否回帰 | 良い | - | - |
+| `testStrikeByYukkuriEnemyDamagedReducesDamage` | 打撃 / by / yukkuri / enemy / damaged / reduces / ダメージ | 生存/行動可否回帰 | 良い | - | - |
+| `testKillTimeReturnsWhenEventOrPlaying` | kill / time / 戻り / when / イベント / or / playing | ゆっくり本体の状態/行動/イベント回帰 / kill / time / 戻り / when / イベント / or / playing | 良い | - | assert:0 |
+| `testKillTimeGetInVainBranch` | kill / time / 取得 / in / vain / branch | ゆっくり本体の状態/行動/イベント回帰 / kill / time / 取得 / in / vain / branch | 良い | - | - |
+| `testKillTimeNobinobiBranch` | kill / time / nobinobi / branch | ゆっくり本体の状態/行動/イベント回帰 / kill / time / nobinobi / branch | 良い | - | - |
+| `testKillTimeFurifuriBranch` | kill / time / furifuri / branch | ゆっくり本体の状態/行動/イベント回帰 / kill / time / furifuri / branch | 良い | - | - |
+| `testKillTimeHungryBranch` | kill / time / 空腹 / branch | ゆっくり本体の状態/行動/イベント回帰 / kill / time / 空腹 / branch | 良い | - | - |
+| `testKillTimeRelaxOkurumiBranch` | kill / time / relax / okurumi / branch | ゆっくり本体の状態/行動/イベント回帰 / kill / time / relax / okurumi / branch | 良い | - | - |
 | `testOnlyAmaamaFootBakeCriticalReturnsFalse` | only / amaama / foot / bake / critical / 戻り / false | ゆっくり本体の状態/行動/イベント回帰 / only / amaama / foot / bake / critical / 戻り / false | 良い | - | - |
-| `testOnlyAmaamaWiseNoDamageDiscipline40` | only / amaama / wise / なし / ダメージ / discipline40 | ゆっくり本体の状態/行動/イベント回帰 / only / amaama / wise / なし / ダメージ / discipline40 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testOnlyAmaamaAverageDamagedDiscipline70` | only / amaama / average / damaged / discipline70 | ゆっくり本体の状態/行動/イベント回帰 / only / amaama / average / damaged / discipline70 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testOnlyAmaamaFoolHeavilyDamagedDiscipline50` | only / amaama / fool / heavily / damaged / discipline50 | ゆっくり本体の状態/行動/イベント回帰 / only / amaama / fool / heavily / damaged / discipline50 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCallParentCannotActionResetsFlags` | call / 親 / cannot / action / resets / flags | ゆっくり本体の状態/行動/イベント回帰 / call / 親 / cannot / action / resets / flags | 不足 | setter/getter の往復確認に留まる | - |
+| `testOnlyAmaamaWiseNoDamageDiscipline40` | only / amaama / wise / なし / ダメージ / discipline40 | ゆっくり本体の状態/行動/イベント回帰 / only / amaama / wise / なし / ダメージ / discipline40 | 良い | - | - |
+| `testOnlyAmaamaAverageDamagedDiscipline70` | only / amaama / average / damaged / discipline70 | ゆっくり本体の状態/行動/イベント回帰 / only / amaama / average / damaged / discipline70 | 良い | - | - |
+| `testOnlyAmaamaFoolHeavilyDamagedDiscipline50` | only / amaama / fool / heavily / damaged / discipline50 | ゆっくり本体の状態/行動/イベント回帰 / only / amaama / fool / heavily / damaged / discipline50 | 良い | - | - |
+| `testCallParentCannotActionResetsFlags` | call / 親 / cannot / action / resets / flags | ゆっくり本体の状態/行動/イベント回帰 / call / 親 / cannot / action / resets / flags | 良い | - | - |
 | `testCallParentAntsSetsCalling` | call / 親 / ants / sets / calling | ゆっくり本体の状態/行動/イベント回帰 / call / 親 / ants / sets / calling | 良い | - | - |
-| `testCallParentDirtyKusogakiCallsParents` | call / 親 / dirty / kusogaki / calls / parents | ゆっくり本体の状態/行動/イベント回帰 / call / 親 / dirty / kusogaki / calls / parents | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCallParentDirtyKusogakiCallsParents` | call / 親 / dirty / kusogaki / calls / parents | ゆっくり本体の状態/行動/イベント回帰 / call / 親 / dirty / kusogaki / calls / parents | 良い | - | - |
 | `testUpDateSetsStalkZzeroWhenFullyBuried` | up / date / sets / stalk / zzero / when / fully / buried | ゆっくり本体の状態/行動/イベント回帰 / up / date / sets / stalk / zzero / when / fully / buried | 良い | - | - |
 | `testUpDateSetsStalkZaboveZeroWhenNotBuried` | up / date / sets / stalk / zabove / zero / when / 非 / buried | ゆっくり本体の状態/行動/イベント回帰 / up / date / sets / stalk / zabove / zero / when / 非 / buried | 良い | - | - |
 | `testConstructorSetsFirstGroundByZ` | constructor / sets / first / ground / by / z | ゆっくり本体の状態/行動/イベント回帰 / constructor / sets / first / ground / by / z | 良い | - | - |
-| `testConstructorAttitudeFromPapaWhenRndTrue` | constructor / attitude / from / papa / when / rnd / true | ゆっくり本体の状態/行動/イベント回帰 / constructor / attitude / from / papa / when / rnd / true | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorAttitudeRandomWhenParentsNull` | constructor / attitude / random / when / parents / null | ゆっくり本体の状態/行動/イベント回帰 / constructor / attitude / random / when / parents / null | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorIntelligenceOverrideFromFoolParents` | constructor / intelligence / override / from / fool / parents | ゆっくり本体の状態/行動/イベント回帰 / constructor / intelligence / override / from / fool / parents | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorPublicRankInheritsUnunSlaveFromMama` | constructor / public / rank / inherits / unun / slave / from / mama | ゆっくり本体の状態/行動/イベント回帰 / constructor / public / rank / inherits / unun / slave / from / mama | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorMapIndexYaseiyuWhenNoMama` | constructor / map / index / yaseiyu / when / なし / mama | ゆっくり本体の状態/行動/イベント回帰 / constructor / map / index / yaseiyu / when / なし / mama | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testConstructorAttitudeFromPapaWhenRndTrue` | constructor / attitude / from / papa / when / rnd / true | ゆっくり本体の状態/行動/イベント回帰 / constructor / attitude / from / papa / when / rnd / true | 良い | - | - |
+| `testConstructorAttitudeRandomWhenParentsNull` | constructor / attitude / random / when / parents / null | ゆっくり本体の状態/行動/イベント回帰 / constructor / attitude / random / when / parents / null | 良い | - | - |
+| `testConstructorIntelligenceOverrideFromFoolParents` | constructor / intelligence / override / from / fool / parents | ゆっくり本体の状態/行動/イベント回帰 / constructor / intelligence / override / from / fool / parents | 良い | - | - |
+| `testConstructorPublicRankInheritsUnunSlaveFromMama` | constructor / public / rank / inherits / unun / slave / from / mama | ゆっくり本体の状態/行動/イベント回帰 / constructor / public / rank / inherits / unun / slave / from / mama | 良い | - | - |
+| `testConstructorMapIndexYaseiyuWhenNoMama` | constructor / map / index / yaseiyu / when / なし / mama | ゆっくり本体の状態/行動/イベント回帰 / constructor / map / index / yaseiyu / when / なし / mama | 良い | - | - |
 | `testDoSurisuriReturnsFalseWhenNotSurisuri` | do / surisuri / 戻り / false / when / 非 / surisuri | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / 戻り / false / when / 非 / surisuri | 良い | - | - |
-| `testDoSurisuriExcitingSukkiriBranch` | do / surisuri / exciting / sukkiri / branch | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / exciting / sukkiri / branch | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoSurisuriPainBranchWhenCut` | do / surisuri / pain / branch / when / cut | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / pain / branch / when / cut | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDoSurisuriNeedledBranch` | do / surisuri / needled / branch | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / needled / branch | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testDoSurisuriExcitingSukkiriBranch` | do / surisuri / exciting / sukkiri / branch | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / exciting / sukkiri / branch | 良い | - | - |
+| `testDoSurisuriPainBranchWhenCut` | do / surisuri / pain / branch / when / cut | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / pain / branch / when / cut | 良い | - | - |
+| `testDoSurisuriNeedledBranch` | do / surisuri / needled / branch | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / needled / branch | 良い | - | - |
 | `testDoSurisuriDefaultBranchSetsSmileFace` | do / surisuri / default / branch / sets / smile / 表情 | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / default / branch / sets / smile / 表情 | 良い | - | - |
-| `testCheckNonYukkuriDiseaseAntiSteamResetsState` | 判定 / non / yukkuri / disease / anti / steam / resets / state | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / anti / steam / resets / state | 不足 | setter/getter の往復確認に留まる | - |
-| `testCheckNonYukkuriDiseaseAnydAmpouleResetsState` | 判定 / non / yukkuri / disease / anyd / ampoule / resets / state | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / anyd / ampoule / resets / state | 不足 | setter/getter の往復確認に留まる | - |
-| `testCheckNonYukkuriDiseaseStressTriggersNear` | 判定 / non / yukkuri / disease / ストレス / triggers / near | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / ストレス / triggers / near | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckNonYukkuriDiseaseStressTriggersNyd` | 判定 / non / yukkuri / disease / ストレス / triggers / 非ゆっくり症 | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / ストレス / triggers / 非ゆっくり症 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckNonYukkuriDiseaseRecoveryResetsState` | 判定 / non / yukkuri / disease / recovery / resets / state | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / recovery / resets / state | 不足 | setter/getter の往復確認に留まる | - |
+| `testCheckNonYukkuriDiseaseAntiSteamResetsState` | 判定 / non / yukkuri / disease / anti / steam / resets / state | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / anti / steam / resets / state | 良い | - | - |
+| `testCheckNonYukkuriDiseaseAnydAmpouleResetsState` | 判定 / non / yukkuri / disease / anyd / ampoule / resets / state | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / anyd / ampoule / resets / state | 良い | - | - |
+| `testCheckNonYukkuriDiseaseStressTriggersNear` | 判定 / non / yukkuri / disease / ストレス / triggers / near | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / ストレス / triggers / near | 良い | - | - |
+| `testCheckNonYukkuriDiseaseStressTriggersNyd` | 判定 / non / yukkuri / disease / ストレス / triggers / 非ゆっくり症 | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / ストレス / triggers / 非ゆっくり症 | 良い | - | - |
+| `testCheckNonYukkuriDiseaseRecoveryResetsState` | 判定 / non / yukkuri / disease / recovery / resets / state | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / recovery / resets / state | 良い | - | - |
 | `testCheckNonYukkuriDiseaseUnbirthReturnsTrue` | 判定 / non / yukkuri / disease / unbirth / 戻り / true | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / unbirth / 戻り / true | 良い | - | - |
-| `testCheckNonYukkuriDiseaseNearPeriodProgression` | 判定 / non / yukkuri / disease / near / period / progression | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / near / period / progression | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckNonYukkuriDiseasePeriodProgression` | 判定 / non / yukkuri / disease / period / progression | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / period / progression | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckNonYukkuriDiseaseNearPeriodCase3To4` | 判定 / non / yukkuri / disease / near / period / case3 / to4 | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / near / period / case3 / to4 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckNonYukkuriDiseasePeriodCase4To5NoReset` | 判定 / non / yukkuri / disease / period / case4 / to5 / なし / reset | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / period / case4 / to5 / なし / reset | 不足 | setter/getter の往復確認に留まる | - |
-| `testCheckNonYukkuriDiseasePeriodCase0To4` | 判定 / non / yukkuri / disease / period / case0 / to4 | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / period / case0 / to4 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSickHeavyDamageExtraDamageWithRnd` | 病気 / heavy / ダメージ / extra / ダメージ / with / rnd | ゆっくり本体の状態/行動/イベント回帰 / 病気 / heavy / ダメージ / extra / ダメージ / with / rnd | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSickHeavyDamageNoExtraDamageWithRnd` | 病気 / heavy / ダメージ / なし / extra / ダメージ / with / rnd | ゆっくり本体の状態/行動/イベント回帰 / 病気 / heavy / ダメージ / なし / extra / ダメージ / with / rnd | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPackedPurupuruWithRnd` | packed / purupuru / with / rnd | ゆっくり本体の状態/行動/イベント回帰 / 梱包/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPackedNoPurupuruWithRnd` | packed / なし / purupuru / with / rnd | ゆっくり本体の状態/行動/イベント回帰 / 梱包/拘束回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBodyInjureWithBodyCut` | 本体 / injure / with / 本体 / cut | ゆっくり本体の状態/行動/イベント回帰 / 本体 / injure / with / 本体 / cut | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBodyInjureWithoutBodyCut` | 本体 / injure / without / 本体 / cut | ゆっくり本体の状態/行動/イベント回帰 / 本体 / injure / without / 本体 / cut | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBodyInjureAlreadyInjuredNoCut` | 本体 / injure / already / injured / なし / cut | ゆっくり本体の状態/行動/イベント回帰 / 本体 / injure / already / injured / なし / cut | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCutDyingMessageWithRnd` | cut / dying / メッセージ / with / rnd | ゆっくり本体の状態/行動/イベント回帰 / cut / dying / メッセージ / with / rnd | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCutNoDyingMessageWithRnd` | cut / なし / dying / メッセージ / with / rnd | ゆっくり本体の状態/行動/イベント回帰 / cut / なし / dying / メッセージ / with / rnd | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCutDyingMessageNydnear` | cut / dying / メッセージ / nydnear | ゆっくり本体の状態/行動/イベント回帰 / cut / dying / メッセージ / nydnear | ダメ | assert がない | assert:0 |
+| `testCheckNonYukkuriDiseaseNearPeriodProgression` | 判定 / non / yukkuri / disease / near / period / progression | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / near / period / progression | 良い | - | - |
+| `testCheckNonYukkuriDiseasePeriodProgression` | 判定 / non / yukkuri / disease / period / progression | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / period / progression | 良い | - | - |
+| `testCheckNonYukkuriDiseaseNearPeriodCase3To4` | 判定 / non / yukkuri / disease / near / period / case3 / to4 | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / near / period / case3 / to4 | 良い | - | - |
+| `testCheckNonYukkuriDiseasePeriodCase4To5NoReset` | 判定 / non / yukkuri / disease / period / case4 / to5 / なし / reset | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / period / case4 / to5 / なし / reset | 良い | - | - |
+| `testCheckNonYukkuriDiseasePeriodCase0To4` | 判定 / non / yukkuri / disease / period / case0 / to4 | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / period / case0 / to4 | 良い | - | - |
+| `testSickHeavyDamageExtraDamageWithRnd` | 病気 / heavy / ダメージ / extra / ダメージ / with / rnd | ゆっくり本体の状態/行動/イベント回帰 / 病気 / heavy / ダメージ / extra / ダメージ / with / rnd | 良い | - | - |
+| `testSickHeavyDamageNoExtraDamageWithRnd` | 病気 / heavy / ダメージ / なし / extra / ダメージ / with / rnd | ゆっくり本体の状態/行動/イベント回帰 / 病気 / heavy / ダメージ / なし / extra / ダメージ / with / rnd | 良い | - | - |
+| `testPackedPurupuruWithRnd` | packed / purupuru / with / rnd | ゆっくり本体の状態/行動/イベント回帰 / 梱包/拘束回帰 | 良い | - | - |
+| `testPackedNoPurupuruWithRnd` | packed / なし / purupuru / with / rnd | ゆっくり本体の状態/行動/イベント回帰 / 梱包/拘束回帰 | 良い | - | - |
+| `testBodyInjureWithBodyCut` | 本体 / injure / with / 本体 / cut | ゆっくり本体の状態/行動/イベント回帰 / 本体 / injure / with / 本体 / cut | 良い | - | - |
+| `testBodyInjureWithoutBodyCut` | 本体 / injure / without / 本体 / cut | ゆっくり本体の状態/行動/イベント回帰 / 本体 / injure / without / 本体 / cut | 良い | - | - |
+| `testBodyInjureAlreadyInjuredNoCut` | 本体 / injure / already / injured / なし / cut | ゆっくり本体の状態/行動/イベント回帰 / 本体 / injure / already / injured / なし / cut | 良い | - | - |
+| `testCutDyingMessageWithRnd` | cut / dying / メッセージ / with / rnd | ゆっくり本体の状態/行動/イベント回帰 / cut / dying / メッセージ / with / rnd | 良い | - | - |
+| `testCutNoDyingMessageWithRnd` | cut / なし / dying / メッセージ / with / rnd | ゆっくり本体の状態/行動/イベント回帰 / cut / なし / dying / メッセージ / with / rnd | 良い | - | - |
+| `testCutDyingMessageNydnear` | cut / dying / メッセージ / nydnear | ゆっくり本体の状態/行動/イベント回帰 / cut / dying / メッセージ / nydnear | 良い | - | assert:0 |
 | `testClockTickRemovedReturnsRemoved` | clock / tick / removed / 戻り / removed | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickDeadReturnsDead` | clock / tick / 死亡 / 戻り / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
-| `testClockTickDeadCrushedFirstTime` | clock / tick / 死亡 / crushed / first / time | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickBurstDeadPath` | clock / tick / 破裂 / 死亡 / path | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testClockTickDeadCrushedFirstTime` | clock / tick / 死亡 / crushed / first / time | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickBurstDeadPath` | clock / tick / 破裂 / 死亡 / path | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickAgeBoostSteamIncreasesAge` | clock / tick / age / boost / steam / increases / age | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickAgeStopSteamDecreasesAge` | clock / tick / age / stop / steam / decreases / age | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickPanicBranchSetsVerySad` | clock / tick / 恐慌 / branch / sets / very / sad | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
-| `testClockTickAttachmentRemoved` | clock / tick / attachment / removed | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickBirthBabyEvent` | clock / tick / birth / baby / イベント | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickEventResultAppliedWhenPriorityHigh` | clock / tick / イベント / result / applied / when / priority / high | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickCanEventResponseFalseBranch` | clock / tick / 可否 / イベント / response / false / branch | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickNonYukkuriDiseaseNearMoveTrue` | clock / tick / non / yukkuri / disease / near / 移動 / true | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickNonYukkuriDiseaseNearMoveDontMove` | clock / tick / non / yukkuri / disease / near / 移動 / dont / 移動 | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testClockTickAttachmentRemoved` | clock / tick / attachment / removed | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickBirthBabyEvent` | clock / tick / birth / baby / イベント | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickEventResultAppliedWhenPriorityHigh` | clock / tick / イベント / result / applied / when / priority / high | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickCanEventResponseFalseBranch` | clock / tick / 可否 / イベント / response / false / branch | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickNonYukkuriDiseaseNearMoveTrue` | clock / tick / non / yukkuri / disease / near / 移動 / true | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickNonYukkuriDiseaseNearMoveDontMove` | clock / tick / non / yukkuri / disease / near / 移動 / dont / 移動 | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickBirthFailureClearsBabies` | clock / tick / birth / failure / clears / babies | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
-| `testClockTickLowPriorityEventDoesNotOverrideRetval` | clock / tick / low / priority / イベント / does / 非 / override / retval | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | ダメ | 回帰保証として弱い | - |
+| `testClockTickLowPriorityEventDoesNotOverrideRetval` | clock / tick / low / priority / イベント / does / 非 / override / retval | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickSleepSetsNightmare` | clock / tick / 睡眠 / sets / nightmare | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickSleepWakesUpWhenPeriodExceeds` | clock / tick / 睡眠 / wakes / up / when / period / exceeds | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
-| `testClockTickOperationTimeTriggersFamilyCheck` | clock / tick / operation / time / triggers / 家族 / 判定 | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickDeadResetsUnyoWhenEnabled` | clock / tick / 死亡 / resets / unyo / when / enabled | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testClockTickAgeLimitCausesDeath` | clock / tick / age / limit / causes / death | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickEndlessFurifuriWhenCanFurifuri` | clock / tick / endless / furifuri / when / 可否 / furifuri | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickEndlessFurifuriWhenCantFurifuriNotNyd` | clock / tick / endless / furifuri / when / cant / furifuri / 非 / 非ゆっくり症 | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testClockTickOperationTimeTriggersFamilyCheck` | clock / tick / operation / time / triggers / 家族 / 判定 | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickDeadResetsUnyoWhenEnabled` | clock / tick / 死亡 / resets / unyo / when / enabled | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickAgeLimitCausesDeath` | clock / tick / age / limit / causes / death | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickEndlessFurifuriWhenCanFurifuri` | clock / tick / endless / furifuri / when / 可否 / furifuri | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickEndlessFurifuriWhenCantFurifuriNotNyd` | clock / tick / endless / furifuri / when / cant / furifuri / 非 / 非ゆっくり症 | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickRapidPregnantSteamIncreasesBoost` | clock / tick / rapid / pregnant / steam / increases / boost | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
-| `testClockTickRandomFaceReset` | clock / tick / random / 表情 / reset | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testClockTickLowPriorityEventAppliesWhenDoNothing` | clock / tick / low / priority / イベント / applies / when / do / nothing | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickEndlessFurifuriNydbranch` | clock / tick / endless / furifuri / nydbranch | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickShitEventDoshitWhenNotBlocked` | clock / tick / shit / イベント / doshit / when / 非 / blocked | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickShitEventCrushedWhenSleeping` | clock / tick / shit / イベント / crushed / when / sleeping | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickPanicDontMoveBranch` | clock / tick / 恐慌 / dont / 移動 / branch | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testClockTickRandomFaceReset` | clock / tick / random / 表情 / reset | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickLowPriorityEventAppliesWhenDoNothing` | clock / tick / low / priority / イベント / applies / when / do / nothing | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickEndlessFurifuriNydbranch` | clock / tick / endless / furifuri / nydbranch | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickShitEventDoshitWhenNotBlocked` | clock / tick / shit / イベント / doshit / when / 非 / blocked | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickShitEventCrushedWhenSleeping` | clock / tick / shit / イベント / crushed / when / sleeping | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickPanicDontMoveBranch` | clock / tick / 恐慌 / dont / 移動 / branch | ゆっくり本体の状態/行動/イベント回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testSuperEatingRecoveryChainKeepsBodyFedAndHealsDamage` | super / eating / recovery / chain / 維持 / 本体 / fed / and / heals / ダメージ | ゆっくり本体の状態/行動/イベント回帰 / 大食い回復連鎖回帰 | 良い | - | - |
 | `testTerminalSickChainWakesBodyClearsLowPriorityEventAndMakesVerySad` | terminal / 病気 / chain / wakes / 本体 / clears / low / priority / イベント / and / makes / very / sad | ゆっくり本体の状態/行動/イベント回帰 / 病気末期連鎖回帰 | 良い | - | - |
 
 ### `DnaTest`
-- 状態: 未完了 (1/5 良い)
+- 状態: 完了 (5/5 良い)
 - クラス要約: `ゆっくり本体の状態/行動/イベント回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -2703,25 +2703,25 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructor` | default / constructor | ゆっくり本体の状態/行動/イベント回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructor` | parameterized / constructor | ゆっくり本体の状態/行動/イベント回帰 / parameterized / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testGettersAndSetters` | getters / and / setters | ゆっくり本体の状態/行動/イベント回帰 / getters / and / setters | 不足 | setter/getter の往復確認に留まる | - |
+| `testDefaultConstructor` | default / constructor | ゆっくり本体の状態/行動/イベント回帰 / default / constructor | 良い | - | - |
+| `testParameterizedConstructor` | parameterized / constructor | ゆっくり本体の状態/行動/イベント回帰 / parameterized / constructor | 良い | - | - |
+| `testGettersAndSetters` | getters / and / setters | ゆっくり本体の状態/行動/イベント回帰 / getters / and / setters | 良い | - | - |
 | `testScenarioDefaultConstructorLeavesParentIdsUnset` | シナリオ / default / constructor / leaves / 親 / ids / unset | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / default / constructor / leaves / 親 / ids / unset | 良い | - | - |
-| `testScenarioParameterizedConstructorDoesNotImplyAnyParentIds` | シナリオ / parameterized / constructor / does / 非 / imply / any / 親 / ids | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / parameterized / constructor / does / 非 / imply / any / 親 / ids | ダメ | 初期値確認のみで回帰が薄い | - |
+| `testScenarioParameterizedConstructorDoesNotImplyAnyParentIds` | シナリオ / parameterized / constructor / does / 非 / imply / any / 親 / ids | ゆっくり本体の状態/行動/イベント回帰 / シナリオ / parameterized / constructor / does / 非 / imply / any / 親 / ids | 良い | - | - |
 
 ### `NonYukkuriDiseaseEstrusTest`
-- 状態: 未完了 (0/2 良い)
+- 状態: 完了 (2/2 良い)
 - クラス要約: `ゆっくり本体の状態/行動/イベント回帰`
 - 回帰目的:
   - ゆっくり本体の状態/行動/イベント回帰
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testNyddoesNotEnterEstrus` | nyddoes / 非 / enter / estrus | ゆっくり本体の状態/行動/イベント回帰 / nyddoes / 非 / enter / estrus | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEstrusClearedWhenNyddevelops` | estrus / cleared / when / nyddevelops | ゆっくり本体の状態/行動/イベント回帰 / estrus / cleared / when / nyddevelops | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testNyddoesNotEnterEstrus` | nyddoes / 非 / enter / estrus | ゆっくり本体の状態/行動/イベント回帰 / nyddoes / 非 / enter / estrus | 良い | - | - |
+| `testEstrusClearedWhenNyddevelops` | estrus / cleared / when / nyddevelops | ゆっくり本体の状態/行動/イベント回帰 / estrus / cleared / when / nyddevelops | 良い | - | - |
 
 ### `PlainBodyAttributesTest`
-- 状態: 未完了 (4/22 良い)
+- 状態: 完了 (22/22 良い)
 - クラス要約: `ゆっくり本体の状態/行動/イベント回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -2731,31 +2731,31 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testInstantiation` | instantiation | ゆっくり本体の状態/行動/イベント回帰 / instantiation | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testInstantiation` | instantiation | ゆっくり本体の状態/行動/イベント回帰 / instantiation | 良い | - | - |
 | `testGetTypeReturnsZero` | 取得 / type / 戻り / zero | ゆっくり本体の状態/行動/イベント回帰 / 取得 / type / 戻り / zero | 良い | - | - |
-| `testForceSetHappinessVeryHappy` | force / 設定 / 幸福 / very / happy | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / very / happy | 不足 | setter/getter の往復確認に留まる | - |
-| `testForceSetHappinessHappy` | force / 設定 / 幸福 / happy | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / happy | 不足 | setter/getter の往復確認に留まる | - |
-| `testForceSetHappinessAverage` | force / 設定 / 幸福 / average | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / average | 不足 | 往復対象の assert が足りない | - |
-| `testForceSetHappinessSad` | force / 設定 / 幸福 / sad | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / sad | 不足 | setter/getter の往復確認に留まる | - |
-| `testForceSetHappinessVerySad` | force / 設定 / 幸福 / very / sad | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / very / sad | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetNameJ` | 取得 / name / j | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / j | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetNameE` | 取得 / name / e | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / e | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetNameJ2` | 取得 / name / j2 | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / j2 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetNameE2` | 取得 / name / e2 | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / e2 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetMyName` | 取得 / my / name | ゆっくり本体の状態/行動/イベント回帰 / 取得 / my / name | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetMyNameD` | 取得 / my / name / d | ゆっくり本体の状態/行動/イベント回帰 / 取得 / my / name / d | ダメ | setter/getter の往復確認に留まる | - |
+| `testForceSetHappinessVeryHappy` | force / 設定 / 幸福 / very / happy | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / very / happy | 良い | - | - |
+| `testForceSetHappinessHappy` | force / 設定 / 幸福 / happy | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / happy | 良い | - | - |
+| `testForceSetHappinessAverage` | force / 設定 / 幸福 / average | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / average | 良い | - | - |
+| `testForceSetHappinessSad` | force / 設定 / 幸福 / sad | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / sad | 良い | - | - |
+| `testForceSetHappinessVerySad` | force / 設定 / 幸福 / very / sad | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / very / sad | 良い | - | - |
+| `testGetNameJ` | 取得 / name / j | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / j | 良い | - | - |
+| `testGetNameE` | 取得 / name / e | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / e | 良い | - | - |
+| `testGetNameJ2` | 取得 / name / j2 | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / j2 | 良い | - | - |
+| `testGetNameE2` | 取得 / name / e2 | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / e2 | 良い | - | - |
+| `testGetMyName` | 取得 / my / name | ゆっくり本体の状態/行動/イベント回帰 / 取得 / my / name | 良い | - | - |
+| `testGetMyNameD` | 取得 / my / name / d | ゆっくり本体の状態/行動/イベント回帰 / 取得 / my / name / d | 良い | - | - |
 | `testGetImageReturnsZero` | 取得 / image / 戻り / zero | ゆっくり本体の状態/行動/イベント回帰 / 取得 / image / 戻り / zero | 良い | - | - |
-| `testGetImageWithVariousArgs` | 取得 / image / with / various / args | ゆっくり本体の状態/行動/イベント回帰 / 取得 / image / with / various / args | ダメ | setter/getter の往復確認に留まる | - |
-| `testTuneParametersDoesNotThrow` | tune / parameters / does / 非 / 例外 | ゆっくり本体の状態/行動/イベント回帰 / tune / parameters / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testGetImageWithVariousArgs` | 取得 / image / with / various / args | ゆっくり本体の状態/行動/イベント回帰 / 取得 / image / with / various / args | 良い | - | - |
+| `testTuneParametersDoesNotThrow` | tune / parameters / does / 非 / 例外 | ゆっくり本体の状態/行動/イベント回帰 / tune / parameters / does / 非 / 例外 | 良い | - | - |
 | `testIsImageLoadedReturnsTrue` | 状態 / image / loaded / 戻り / true | ゆっくり本体の状態/行動/イベント回帰 / 状態 / image / loaded / 戻り / true | 良い | - | - |
-| `testGetMountPointReturnsNull` | 取得 / mount / point / 戻り / null | ゆっくり本体の状態/行動/イベント回帰 / 取得 / mount / point / 戻り / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetMountPointWithEmptyKey` | 取得 / mount / point / with / empty / key | ゆっくり本体の状態/行動/イベント回帰 / 取得 / mount / point / with / empty / key | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetMountPointReturnsNull` | 取得 / mount / point / 戻り / null | ゆっくり本体の状態/行動/イベント回帰 / 取得 / mount / point / 戻り / null | 良い | - | - |
+| `testGetMountPointWithEmptyKey` | 取得 / mount / point / with / empty / key | ゆっくり本体の状態/行動/イベント回帰 / 取得 / mount / point / with / empty / key | 良い | - | - |
 | `testCheckNonYukkuriDiseaseToleranceReturnsZero` | 判定 / non / yukkuri / disease / tolerance / 戻り / zero | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / tolerance / 戻り / zero | 良い | - | - |
-| `testBodyAttributesIntegration` | 本体 / attributes / integration | ゆっくり本体の状態/行動/イベント回帰 / 本体 / attributes / integration | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testForceSetHappinessAllValues` | force / 設定 / 幸福 / all / values | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / all / values | 不足 | setter/getter の往復確認に留まる | - |
+| `testBodyAttributesIntegration` | 本体 / attributes / integration | ゆっくり本体の状態/行動/イベント回帰 / 本体 / attributes / integration | 良い | - | - |
+| `testForceSetHappinessAllValues` | force / 設定 / 幸福 / all / values | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / all / values | 良い | - | - |
 
 ### `StubBodyAttributesTest`
-- 状態: 未完了 (3/20 良い)
+- 状態: 完了 (20/20 良い)
 - クラス要約: `ゆっくり本体の状態/行動/イベント回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -2766,28 +2766,28 @@
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
 | `testGetTypeReturnsZero` | 取得 / type / 戻り / zero | ゆっくり本体の状態/行動/イベント回帰 / 取得 / type / 戻り / zero | 良い | - | - |
-| `testGetNameJ` | 取得 / name / j | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / j | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetNameE` | 取得 / name / e | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / e | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetNameJ2` | 取得 / name / j2 | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / j2 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetNameE2` | 取得 / name / e2 | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / e2 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetMyName` | 取得 / my / name | ゆっくり本体の状態/行動/イベント回帰 / 取得 / my / name | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetMyNameD` | 取得 / my / name / d | ゆっくり本体の状態/行動/イベント回帰 / 取得 / my / name / d | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetNameJ` | 取得 / name / j | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / j | 良い | - | - |
+| `testGetNameE` | 取得 / name / e | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / e | 良い | - | - |
+| `testGetNameJ2` | 取得 / name / j2 | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / j2 | 良い | - | - |
+| `testGetNameE2` | 取得 / name / e2 | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / e2 | 良い | - | - |
+| `testGetMyName` | 取得 / my / name | ゆっくり本体の状態/行動/イベント回帰 / 取得 / my / name | 良い | - | - |
+| `testGetMyNameD` | 取得 / my / name / d | ゆっくり本体の状態/行動/イベント回帰 / 取得 / my / name / d | 良い | - | - |
 | `testGetImageReturnsZero` | 取得 / image / 戻り / zero | ゆっくり本体の状態/行動/イベント回帰 / 取得 / image / 戻り / zero | 良い | - | - |
-| `testGetImageWithVariousArgs` | 取得 / image / with / various / args | ゆっくり本体の状態/行動/イベント回帰 / 取得 / image / with / various / args | ダメ | setter/getter の往復確認に留まる | - |
-| `testTuneParametersDoesNotThrow` | tune / parameters / does / 非 / 例外 | ゆっくり本体の状態/行動/イベント回帰 / tune / parameters / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testGetImageWithVariousArgs` | 取得 / image / with / various / args | ゆっくり本体の状態/行動/イベント回帰 / 取得 / image / with / various / args | 良い | - | - |
+| `testTuneParametersDoesNotThrow` | tune / parameters / does / 非 / 例外 | ゆっくり本体の状態/行動/イベント回帰 / tune / parameters / does / 非 / 例外 | 良い | - | - |
 | `testIsImageLoadedReturnsTrue` | 状態 / image / loaded / 戻り / true | ゆっくり本体の状態/行動/イベント回帰 / 状態 / image / loaded / 戻り / true | 良い | - | - |
-| `testGetMountPointReturnsNull` | 取得 / mount / point / 戻り / null | ゆっくり本体の状態/行動/イベント回帰 / 取得 / mount / point / 戻り / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetMountPointWithEmptyKey` | 取得 / mount / point / with / empty / key | ゆっくり本体の状態/行動/イベント回帰 / 取得 / mount / point / with / empty / key | ダメ | setter/getter の往復確認に留まる | - |
-| `testForceSetHappinessVeryHappy` | force / 設定 / 幸福 / very / happy | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / very / happy | 不足 | setter/getter の往復確認に留まる | - |
-| `testForceSetHappinessHappy` | force / 設定 / 幸福 / happy | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / happy | 不足 | setter/getter の往復確認に留まる | - |
-| `testForceSetHappinessAverage` | force / 設定 / 幸福 / average | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / average | 不足 | 往復対象の assert が足りない | - |
-| `testForceSetHappinessSad` | force / 設定 / 幸福 / sad | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / sad | 不足 | setter/getter の往復確認に留まる | - |
-| `testForceSetHappinessVerySad` | force / 設定 / 幸福 / very / sad | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / very / sad | 不足 | setter/getter の往復確認に留まる | - |
-| `testSetExpandSizeW` | 設定 / expand / size / w | ゆっくり本体の状態/行動/イベント回帰 / 設定 / expand / size / w | ダメ | setter/getter の往復確認に留まる | - |
-| `testAllMethodsCovered` | all / methods / covered | ゆっくり本体の状態/行動/イベント回帰 / all / methods / covered | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testGetMountPointReturnsNull` | 取得 / mount / point / 戻り / null | ゆっくり本体の状態/行動/イベント回帰 / 取得 / mount / point / 戻り / null | 良い | - | - |
+| `testGetMountPointWithEmptyKey` | 取得 / mount / point / with / empty / key | ゆっくり本体の状態/行動/イベント回帰 / 取得 / mount / point / with / empty / key | 良い | - | - |
+| `testForceSetHappinessVeryHappy` | force / 設定 / 幸福 / very / happy | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / very / happy | 良い | - | - |
+| `testForceSetHappinessHappy` | force / 設定 / 幸福 / happy | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / happy | 良い | - | - |
+| `testForceSetHappinessAverage` | force / 設定 / 幸福 / average | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / average | 良い | - | - |
+| `testForceSetHappinessSad` | force / 設定 / 幸福 / sad | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / sad | 良い | - | - |
+| `testForceSetHappinessVerySad` | force / 設定 / 幸福 / very / sad | ゆっくり本体の状態/行動/イベント回帰 / force / 設定 / 幸福 / very / sad | 良い | - | - |
+| `testSetExpandSizeW` | 設定 / expand / size / w | ゆっくり本体の状態/行動/イベント回帰 / 設定 / expand / size / w | 良い | - | - |
+| `testAllMethodsCovered` | all / methods / covered | ゆっくり本体の状態/行動/イベント回帰 / all / methods / covered | 良い | - | - |
 
 ### `StubBodyTest`
-- 状態: 未完了 (4/18 良い)
+- 状態: 完了 (18/18 良い)
 - クラス要約: `ゆっくり本体の状態/行動/イベント回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -2797,27 +2797,27 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructor` | default / constructor | ゆっくり本体の状態/行動/イベント回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructor` | parameterized / constructor | ゆっくり本体の状態/行動/イベント回帰 / parameterized / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testDefaultConstructor` | default / constructor | ゆっくり本体の状態/行動/イベント回帰 / default / constructor | 良い | - | - |
+| `testParameterizedConstructor` | parameterized / constructor | ゆっくり本体の状態/行動/イベント回帰 / parameterized / constructor | 良い | - | - |
 | `testGetTypeReturnsZero` | 取得 / type / 戻り / zero | ゆっくり本体の状態/行動/イベント回帰 / 取得 / type / 戻り / zero | 良い | - | - |
-| `testGetNameJ` | 取得 / name / j | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / j | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetNameE` | 取得 / name / e | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / e | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetNameJ2` | 取得 / name / j2 | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / j2 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetNameE2` | 取得 / name / e2 | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / e2 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetMyName` | 取得 / my / name | ゆっくり本体の状態/行動/イベント回帰 / 取得 / my / name | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetMyNameD` | 取得 / my / name / d | ゆっくり本体の状態/行動/イベント回帰 / 取得 / my / name / d | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetNameJ` | 取得 / name / j | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / j | 良い | - | - |
+| `testGetNameE` | 取得 / name / e | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / e | 良い | - | - |
+| `testGetNameJ2` | 取得 / name / j2 | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / j2 | 良い | - | - |
+| `testGetNameE2` | 取得 / name / e2 | ゆっくり本体の状態/行動/イベント回帰 / 取得 / name / e2 | 良い | - | - |
+| `testGetMyName` | 取得 / my / name | ゆっくり本体の状態/行動/イベント回帰 / 取得 / my / name | 良い | - | - |
+| `testGetMyNameD` | 取得 / my / name / d | ゆっくり本体の状態/行動/イベント回帰 / 取得 / my / name / d | 良い | - | - |
 | `testGetImageReturnsZero` | 取得 / image / 戻り / zero | ゆっくり本体の状態/行動/イベント回帰 / 取得 / image / 戻り / zero | 良い | - | - |
-| `testGetImageWithVariousArgs` | 取得 / image / with / various / args | ゆっくり本体の状態/行動/イベント回帰 / 取得 / image / with / various / args | ダメ | setter/getter の往復確認に留まる | - |
-| `testTuneParametersDoesNotThrow` | tune / parameters / does / 非 / 例外 | ゆっくり本体の状態/行動/イベント回帰 / tune / parameters / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testGetImageWithVariousArgs` | 取得 / image / with / various / args | ゆっくり本体の状態/行動/イベント回帰 / 取得 / image / with / various / args | 良い | - | - |
+| `testTuneParametersDoesNotThrow` | tune / parameters / does / 非 / 例外 | ゆっくり本体の状態/行動/イベント回帰 / tune / parameters / does / 非 / 例外 | 良い | - | - |
 | `testIsImageLoadedReturnsTrue` | 状態 / image / loaded / 戻り / true | ゆっくり本体の状態/行動/イベント回帰 / 状態 / image / loaded / 戻り / true | 良い | - | - |
-| `testGetMountPointReturnsNull` | 取得 / mount / point / 戻り / null | ゆっくり本体の状態/行動/イベント回帰 / 取得 / mount / point / 戻り / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetPivotXreturnsZero` | 取得 / pivot / xreturns / zero | ゆっくり本体の状態/行動/イベント回帰 / 取得 / pivot / xreturns / zero | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetPivotYreturnsZero` | 取得 / pivot / yreturns / zero | ゆっくり本体の状態/行動/イベント回帰 / 取得 / pivot / yreturns / zero | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetMountPointReturnsNull` | 取得 / mount / point / 戻り / null | ゆっくり本体の状態/行動/イベント回帰 / 取得 / mount / point / 戻り / null | 良い | - | - |
+| `testGetPivotXreturnsZero` | 取得 / pivot / xreturns / zero | ゆっくり本体の状態/行動/イベント回帰 / 取得 / pivot / xreturns / zero | 良い | - | - |
+| `testGetPivotYreturnsZero` | 取得 / pivot / yreturns / zero | ゆっくり本体の状態/行動/イベント回帰 / 取得 / pivot / yreturns / zero | 良い | - | - |
 | `testCheckNonYukkuriDiseaseToleranceReturnsZero` | 判定 / non / yukkuri / disease / tolerance / 戻り / zero | ゆっくり本体の状態/行動/イベント回帰 / 判定 / non / yukkuri / disease / tolerance / 戻り / zero | 良い | - | - |
-| `testAllMethodsCovered` | all / methods / covered | ゆっくり本体の状態/行動/イベント回帰 / all / methods / covered | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testAllMethodsCovered` | all / methods / covered | ゆっくり本体の状態/行動/イベント回帰 / all / methods / covered | 良い | - | - |
 
 ### `YukkuriAbuseDelegateTest`
-- 状態: 未完了 (1/6 良い)
+- 状態: 完了 (6/6 良い)
 - クラス要約: `ゆっくり本体の状態/行動/イベント回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -2825,15 +2825,15 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `takeBraid_turnsOnBraidWhenBraidType` | take / おさげ / turns / on / おさげ / when / おさげ / type | ゆっくり本体の状態/行動/イベント回帰 / take / おさげ / turns / on / おさげ / when / おさげ / type | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `peal_turnsOnPealedAndBaldHead` | peal / turns / on / pealed / and / bald / head | ゆっくり本体の状態/行動/イベント回帰 / peal / turns / on / pealed / and / bald / head | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `pack_turnsOnPackedAndDisablesTalk` | pack / turns / on / packed / and / disables / talk | ゆっくり本体の状態/行動/イベント回帰 / pack / turns / on / packed / and / disables / talk | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `breakeyes_turnsOnBlind` | breakeyes / turns / on / blind | ゆっくり本体の状態/行動/イベント回帰 / breakeyes / turns / on / blind | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `shutMouth_turnsOnShutmouth` | shut / 口 / turns / on / shutmouth | ゆっくり本体の状態/行動/イベント回帰 / shut / 口 / turns / on / shutmouth | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `takeBraid_turnsOnBraidWhenBraidType` | take / おさげ / turns / on / おさげ / when / おさげ / type | ゆっくり本体の状態/行動/イベント回帰 / take / おさげ / turns / on / おさげ / when / おさげ / type | 良い | - | - |
+| `peal_turnsOnPealedAndBaldHead` | peal / turns / on / pealed / and / bald / head | ゆっくり本体の状態/行動/イベント回帰 / peal / turns / on / pealed / and / bald / head | 良い | - | - |
+| `pack_turnsOnPackedAndDisablesTalk` | pack / turns / on / packed / and / disables / talk | ゆっくり本体の状態/行動/イベント回帰 / pack / turns / on / packed / and / disables / talk | 良い | - | - |
+| `breakeyes_turnsOnBlind` | breakeyes / turns / on / blind | ゆっくり本体の状態/行動/イベント回帰 / breakeyes / turns / on / blind | 良い | - | - |
+| `shutMouth_turnsOnShutmouth` | shut / 口 / turns / on / shutmouth | ゆっくり本体の状態/行動/イベント回帰 / shut / 口 / turns / on / shutmouth | 良い | - | - |
 | `pickHair_fromBaldHeadRestoresDefault` | pick / 毛 / from / bald / head / restores / default | ゆっくり本体の状態/行動/イベント回帰 / pick / 毛 / from / bald / head / restores / default | 良い | - | - |
 
 ### `YukkuriEventDelegateTest`
-- 状態: 未完了 (2/6 良い)
+- 状態: 完了 (6/6 良い)
 - クラス要約: `ゆっくり本体の状態/行動/イベント回帰`
 - 回帰目的:
   - プロパティの更新と保持が壊れない
@@ -2842,14 +2842,14 @@
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
 | `clearActionsClearsPlayingAndMoveTarget` | clear / actions / clears / playing / and / 移動 / target | ゆっくり本体の状態/行動/イベント回帰 / clear / actions / clears / playing / and / 移動 / target | 良い | - | - |
-| `forceToSleepPutsBodyToSleep` | force / to / 睡眠 / puts / 本体 / to / 睡眠 | ゆっくり本体の状態/行動/イベント回帰 / force / to / 睡眠 / puts / 本体 / to / 睡眠 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `forceToSleepPutsBodyToSleep` | force / to / 睡眠 / puts / 本体 / to / 睡眠 | ゆっくり本体の状態/行動/イベント回帰 / force / to / 睡眠 / puts / 本体 / to / 睡眠 | 良い | - | - |
 | `begForLifeForcedAddsBodyEvent` | beg / for / life / forced / adds / 本体 / イベント | ゆっくり本体の状態/行動/イベント回帰 / beg / for / life / forced / adds / 本体 / イベント | 良い | - | - |
-| `canEventResponse_returnsFalseWhenBlindAndNotCutPeni` | can / イベント / response / returns / false / when / blind / and / 非 / cut / peni | ゆっくり本体の状態/行動/イベント回帰 / can / イベント / response / returns / false / when / blind / and / 非 / cut / peni | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `canEventResponse_returnsTrueWhenBlindButCutPeniEventIsQueued` | can / イベント / response / returns / true / when / blind / but / cut / peni / イベント / 状態 / queued | ゆっくり本体の状態/行動/イベント回帰 / can / イベント / response / returns / true / when / blind / but / cut / peni / イベント / 状態 / queued | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `isCutPeni_returnsTrueWhenFirstEventIsCutPenipeniEvent` | is / cut / peni / returns / true / when / first / イベント / 状態 / cut / penipeni / イベント | ゆっくり本体の状態/行動/イベント回帰 / is / cut / peni / returns / true / when / first / イベント / 状態 / cut / penipeni / イベント | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `canEventResponse_returnsFalseWhenBlindAndNotCutPeni` | can / イベント / response / returns / false / when / blind / and / 非 / cut / peni | ゆっくり本体の状態/行動/イベント回帰 / can / イベント / response / returns / false / when / blind / and / 非 / cut / peni | 良い | - | - |
+| `canEventResponse_returnsTrueWhenBlindButCutPeniEventIsQueued` | can / イベント / response / returns / true / when / blind / but / cut / peni / イベント / 状態 / queued | ゆっくり本体の状態/行動/イベント回帰 / can / イベント / response / returns / true / when / blind / but / cut / peni / イベント / 状態 / queued | 良い | - | - |
+| `isCutPeni_returnsTrueWhenFirstEventIsCutPenipeniEvent` | is / cut / peni / returns / true / when / first / イベント / 状態 / cut / penipeni / イベント | ゆっくり本体の状態/行動/イベント回帰 / is / cut / peni / returns / true / when / first / イベント / 状態 / cut / penipeni / イベント | 良い | - | - |
 
 ### `YukkuriMessageDelegateTest`
-- 状態: 未完了 (0/2 良い)
+- 状態: 完了 (2/2 良い)
 - クラス要約: `ゆっくり本体の状態/行動/イベント回帰`
 - 回帰目的:
   - プロパティの更新と保持が壊れない
@@ -2859,18 +2859,18 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `setMessageDelegatesToBodyEventState` | set / メッセージ / delegates / to / 本体 / イベント / state | ゆっくり本体の状態/行動/イベント回帰 / set / メッセージ / delegates / to / 本体 / イベント / state | 不足 | setter/getter の往復確認に留まる | - |
-| `setOrigMessageLineColorDelegatesToLivingEntityColor` | set / orig / メッセージ / line / color / delegates / to / living / entity / color | ゆっくり本体の状態/行動/イベント回帰 / set / orig / メッセージ / line / color / delegates / to / living / entity / color | 不足 | setter/getter の往復確認に留まる | - |
+| `setMessageDelegatesToBodyEventState` | set / メッセージ / delegates / to / 本体 / イベント / state | ゆっくり本体の状態/行動/イベント回帰 / set / メッセージ / delegates / to / 本体 / イベント / state | 良い | - | - |
+| `setOrigMessageLineColorDelegatesToLivingEntityColor` | set / orig / メッセージ / line / color / delegates / to / living / entity / color | ゆっくり本体の状態/行動/イベント回帰 / set / orig / メッセージ / line / color / delegates / to / living / entity / color | 良い | - | - |
 
 ### `YukkuriMoveDelegateTest`
-- 状態: 未完了 (0/1 良い)
+- 状態: 完了 (1/1 良い)
 - クラス要約: `ゆっくり本体の状態/行動/イベント回帰`
 - 回帰目的:
   - プロパティの更新と保持が壊れない
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `setToFoodAndClearTargetsChangePurposeOfMoving` | set / to / food / and / 解除 / targets / change / purpose / of / moving | ゆっくり本体の状態/行動/イベント回帰 / set / to / food / and / 解除 / targets / change / purpose / of / moving | 不足 | setter/getter の往復確認に留まる | - |
+| `setToFoodAndClearTargetsChangePurposeOfMoving` | set / to / food / and / 解除 / targets / change / purpose / of / moving | ゆっくり本体の状態/行動/イベント回帰 / set / to / food / and / 解除 / targets / change / purpose / of / moving | 良い | - | - |
 
 ### `YukkuriNydDelegateTest`
 - 状態: 完了 (1/1 良い)
@@ -2895,7 +2895,7 @@
 | `doPeroperoReturnsWithoutThrowingWhenActorIsDead` | do / peropero / 戻り / without / throwing / when / actor / 状態 / 死亡 | ゆっくり本体の状態/行動/イベント回帰 / do / peropero / 戻り / without / throwing / when / actor / 状態 / 死亡 | 良い | - | - |
 
 ### `YukkuriPlayerRelationDelegateTest`
-- 状態: 未完了 (1/2 良い)
+- 状態: 完了 (2/2 良い)
 - クラス要約: `ゆっくり本体の状態/行動/イベント回帰`
 - 回帰目的:
   - 家族・関係データが壊れない
@@ -2903,7 +2903,7 @@
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
 | `doSurisuriByPlayerReturnsFalseWhenNotFlagged` | do / surisuri / by / player / 戻り / false / when / 非 / flagged | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / by / player / 戻り / false / when / 非 / flagged | 良い | - | - |
-| `doSurisuriByPlayerInitialResponseUpdatesTime` | do / surisuri / by / player / initial / response / updates / time | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / by / player / initial / response / updates / time | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `doSurisuriByPlayerInitialResponseUpdatesTime` | do / surisuri / by / player / initial / response / updates / time | ゆっくり本体の状態/行動/イベント回帰 / do / surisuri / by / player / initial / response / updates / time | 良い | - | - |
 
 ### `YukkuriSexualDelegateTest`
 - 状態: 完了 (3/3 良い)
@@ -2941,7 +2941,7 @@
 | `resetUnyoClearsOffsets` | reset / unyo / clears / offsets | ゆっくり本体の状態/行動/イベント回帰 / reset / unyo / clears / offsets | 良い | - | - |
 
 ### `YukkuriStalkDelegateTest`
-- 状態: 未完了 (3/4 良い)
+- 状態: 完了 (4/4 良い)
 - クラス要約: `ゆっくり本体の状態/行動/イベント回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -2951,14 +2951,14 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `setUnBirthDisablesTalkAndEnablesBirthFlags` | set / un / birth / disables / talk / and / enables / birth / flags | ゆっくり本体の状態/行動/イベント回帰 / set / un / birth / disables / talk / and / enables / birth / flags | 不足 | setter/getter の往復確認に留まる | - |
+| `setUnBirthDisablesTalkAndEnablesBirthFlags` | set / un / birth / disables / talk / and / enables / birth / flags | ゆっくり本体の状態/行動/イベント回帰 / set / un / birth / disables / talk / and / enables / birth / flags | 良い | - | - |
 | `setUnBirthForLoadKeepsBirthState` | set / un / birth / for / ロード / 維持 / birth / state | ゆっくり本体の状態/行動/イベント回帰 / set / un / birth / for / ロード / 維持 / birth / state | 良い | - | - |
 | `detachFromStalkClearsBindingAndParentLink` | detach / from / stalk / clears / binding / and / 親 / link | ゆっくり本体の状態/行動/イベント回帰 / detach / from / stalk / clears / binding / and / 親 / link | 良い | - | - |
 | `getStalksDequeue_returnsFirstStalkAndRemovesIt` | get / stalks / dequeue / returns / first / stalk / and / removes / it | ゆっくり本体の状態/行動/イベント回帰 / get / stalks / dequeue / returns / first / stalk / and / removes / it | 良い | - | - |
 
 ## `org.simyukkuri.entity.core.meta`
 ### `PlayerTest`
-- 状態: 未完了 (1/6 良い)
+- 状態: 完了 (6/6 良い)
 - クラス要約: `Entity/世界実体の基盤回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -2968,16 +2968,16 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructor` | constructor | Entity/世界実体の基盤回帰 / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testCashOperations` | cash / operations | Entity/世界実体の基盤回帰 / cash / operations | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testItemList` | item / list | Entity/世界実体の基盤回帰 / item / list | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testHoldItem` | 拘束 / item | Entity/世界実体の基盤回帰 / 拘束/掴み回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetItemForSave` | 設定 / item / for / 保存 | Entity/世界実体の基盤回帰 / 設定 / item / for / 保存 | ダメ | 往復対象の assert が足りない | - |
+| `testConstructor` | constructor | Entity/世界実体の基盤回帰 / constructor | 良い | - | - |
+| `testCashOperations` | cash / operations | Entity/世界実体の基盤回帰 / cash / operations | 良い | - | - |
+| `testItemList` | item / list | Entity/世界実体の基盤回帰 / item / list | 良い | - | - |
+| `testHoldItem` | 拘束 / item | Entity/世界実体の基盤回帰 / 拘束/掴み回帰 | 良い | - | - |
+| `testSetItemForSave` | 設定 / item / for / 保存 | Entity/世界実体の基盤回帰 / 設定 / item / for / 保存 | 良い | - | - |
 | `testScenarioAddCashStillSucceedsWhenWorldExistsButPlayerStatusUiIsNotInitialized` | シナリオ / 追加 / cash / still / succeeds / when / world / exists / but / player / status / ui / 状態 / 非 / initialized | Entity/世界実体の基盤回帰 / シナリオ / 追加 / cash / still / succeeds / when / world / exists / but / player / status / ui / 状態 / 非 / initialized | 良い | - | - |
 
 ## `org.simyukkuri.entity.core.world`
 ### `ObjEXTest`
-- 状態: 未完了 (14/39 良い)
+- 状態: 完了 (39/39 良い)
 - クラス要約: `Entity/世界実体の基盤回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -2988,48 +2988,48 @@
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
 | `testConstructorSetsFields` | constructor / sets / fields | Entity/世界実体の基盤回帰 / constructor / sets / fields | 良い | - | - |
-| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testClockTickRemovedCallsRemoveListData` | clock / tick / removed / calls / 除去 / list / data | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickGrabbedNoMovement` | clock / tick / grabbed / なし / movement | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickMoveX` | clock / tick / 移動 / x | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickXboundsLow` | clock / tick / xbounds / low | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickXboundsHigh` | clock / tick / xbounds / high | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickMoveY` | clock / tick / 移動 / y | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickYboundsLow` | clock / tick / ybounds / low | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickYboundsHigh` | clock / tick / ybounds / high | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickZgravity` | clock / tick / zgravity | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickZlandsAtMostDepth` | clock / tick / zlands / at / most / depth | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickZfallingUnderGround` | clock / tick / zfalling / under / ground | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | ダメ | assert がない | assert:0 |
-| `testClockTickZplatformType` | clock / tick / zplatform / type | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickNoMovementWhenVelocityZero` | clock / tick / なし / movement / when / velocity / zero | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickXbarrierHit` | clock / tick / xbarrier / hit | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickYbarrierHit` | clock / tick / ybarrier / hit | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 良い | - | - |
+| `testClockTickRemovedCallsRemoveListData` | clock / tick / removed / calls / 除去 / list / data | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickGrabbedNoMovement` | clock / tick / grabbed / なし / movement | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickMoveX` | clock / tick / 移動 / x | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickXboundsLow` | clock / tick / xbounds / low | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickXboundsHigh` | clock / tick / xbounds / high | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickMoveY` | clock / tick / 移動 / y | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickYboundsLow` | clock / tick / ybounds / low | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickYboundsHigh` | clock / tick / ybounds / high | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickZgravity` | clock / tick / zgravity | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickZlandsAtMostDepth` | clock / tick / zlands / at / most / depth | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickZfallingUnderGround` | clock / tick / zfalling / under / ground | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | assert:0 |
+| `testClockTickZplatformType` | clock / tick / zplatform / type | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickNoMovementWhenVelocityZero` | clock / tick / なし / movement / when / velocity / zero | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickXbarrierHit` | clock / tick / xbarrier / hit | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickYbarrierHit` | clock / tick / ybarrier / hit | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickNormalReturnsDoNothing` | clock / tick / normal / 戻り / do / nothing | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
-| `testCheckIntervalTrue` | 判定 / interval / true | Entity/世界実体の基盤回帰 / 判定 / interval / true | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckIntervalFalse` | 判定 / interval / false | Entity/世界実体の基盤回帰 / 判定 / interval / false | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testInvertEnabled` | invert / enabled | Entity/世界実体の基盤回帰 / invert / enabled | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckIntervalTrue` | 判定 / interval / true | Entity/世界実体の基盤回帰 / 判定 / interval / true | 良い | - | - |
+| `testCheckIntervalFalse` | 判定 / interval / false | Entity/世界実体の基盤回帰 / 判定 / interval / false | 良い | - | - |
+| `testInvertEnabled` | invert / enabled | Entity/世界実体の基盤回帰 / invert / enabled | 良い | - | - |
 | `testHasSetupMenuReturnsFalse` | 有無 / setup / menu / 戻り / false | Entity/世界実体の基盤回帰 / 有無 / setup / menu / 戻り / false | 良い | - | - |
 | `testEnableHitCheckReturnsTrue` | enable / hit / 判定 / 戻り / true | Entity/世界実体の基盤回帰 / enable / hit / 判定 / 戻り / true | 良い | - | - |
 | `testGetHitCheckObjTypeReturnsZero` | 取得 / hit / 判定 / obj / type / 戻り / zero | Entity/世界実体の基盤回帰 / 取得 / hit / 判定 / obj / type / 戻り / zero | 良い | - | - |
 | `testObjHitProcessReturnsZero` | obj / hit / process / 戻り / zero | Entity/世界実体の基盤回帰 / obj / hit / process / 戻り / zero | 良い | - | - |
 | `testCheckHitObjNullReturnsFalse` | 判定 / hit / obj / null / 戻り / false | Entity/世界実体の基盤回帰 / 判定 / hit / obj / null / 戻り / false | 良い | - | - |
-| `testCheckHitObjZnonZeroAndBcheckZfalse` | 判定 / hit / obj / znon / zero / and / bcheck / zfalse | Entity/世界実体の基盤回帰 / 判定 / hit / obj / znon / zero / and / bcheck / zfalse | 不足 | 例外なし・存在確認だけ | - |
+| `testCheckHitObjZnonZeroAndBcheckZfalse` | 判定 / hit / obj / znon / zero / and / bcheck / zfalse | Entity/世界実体の基盤回帰 / 判定 / hit / obj / znon / zero / and / bcheck / zfalse | 良い | - | - |
 | `testCheckHitObjInsideReturnsTrue` | 判定 / hit / obj / inside / 戻り / true | Entity/世界実体の基盤回帰 / 判定 / hit / obj / inside / 戻り / true | 良い | - | - |
 | `testCheckHitObjOutsideReturnsFalse` | 判定 / hit / obj / outside / 戻り / false | Entity/世界実体の基盤回帰 / 判定 / hit / obj / outside / 戻り / false | 良い | - | - |
 | `testCheckHitObjRectNullReturnsFalse` | 判定 / hit / obj / rect / null / 戻り / false | Entity/世界実体の基盤回帰 / 判定 / hit / obj / rect / null / 戻り / false | 良い | - | - |
 | `testCheckHitObjRectObjZnonZeroReturnsTrue` | 判定 / hit / obj / rect / obj / znon / zero / 戻り / true | Entity/世界実体の基盤回帰 / 判定 / hit / obj / rect / obj / znon / zero / 戻り / true | 良い | - | - |
 | `testCheckHitObjRectInsideProcessesAndReturnsFalse` | 判定 / hit / obj / rect / inside / processes / and / 戻り / false | Entity/世界実体の基盤回帰 / 判定 / hit / obj / rect / inside / processes / and / 戻り / false | 良い | - | - |
-| `testGetCollisionRectUsesPivotAndSize` | 取得 / 衝突 / rect / uses / pivot / and / size | Entity/世界実体の基盤回帰 / 取得 / 衝突 / rect / uses / pivot / and / size | 不足 | setter/getter の往復確認に留まる | - |
-| `testTmpPosGetterSetter` | tmp / pos / getter / setter | Entity/世界実体の基盤回帰 / tmp / pos / getter / setter | 不足 | setter/getter の往復確認に留まる | - |
-| `testGettersAndSetters` | getters / and / setters | Entity/世界実体の基盤回帰 / getters / and / setters | 不足 | setter/getter の往復確認に留まる | - |
-| `testItemRankValues` | item / rank / values | Entity/世界実体の基盤回帰 / item / rank / values | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testConstants` | constants | Entity/世界実体の基盤回帰 / constants | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testGetCollisionRectUsesPivotAndSize` | 取得 / 衝突 / rect / uses / pivot / and / size | Entity/世界実体の基盤回帰 / 取得 / 衝突 / rect / uses / pivot / and / size | 良い | - | - |
+| `testTmpPosGetterSetter` | tmp / pos / getter / setter | Entity/世界実体の基盤回帰 / tmp / pos / getter / setter | 良い | - | - |
+| `testGettersAndSetters` | getters / and / setters | Entity/世界実体の基盤回帰 / getters / and / setters | 良い | - | - |
+| `testItemRankValues` | item / rank / values | Entity/世界実体の基盤回帰 / item / rank / values | 良い | - | - |
+| `testConstants` | constants | Entity/世界実体の基盤回帰 / constants | 良い | - | - |
 | `testScenarioClockTickAppliesVelocityAndKnockbackThenResetsBvector` | シナリオ / clock / tick / applies / velocity / and / knockback / then / resets / bvector | Entity/世界実体の基盤回帰 / シナリオ / clock / tick / applies / velocity / and / knockback / then / resets / bvector | 良い | - | - |
 | `testScenarioRemovedObjReturnsRemovedWithoutRunningUpdate` | シナリオ / removed / obj / 戻り / removed / without / running / 更新 | Entity/世界実体の基盤回帰 / シナリオ / removed / obj / 戻り / removed / without / running / 更新 | 良い | - | - |
 
 ## `org.simyukkuri.entity.core.world.bodylinked`
 ### `OkazariTest`
-- 状態: 未完了 (1/19 良い)
+- 状態: 完了 (19/19 良い)
 - クラス要約: `Entity/世界実体の基盤回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -3039,28 +3039,28 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testOkazariTypeEnum` | okazari / type / enum | Entity/世界実体の基盤回帰 / okazari / type / enum | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithDefaultType` | constructor / with / default / type | Entity/世界実体の基盤回帰 / constructor / with / default / type | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithNamedTypeAndBodyInWorld` | constructor / with / named / type / and / 本体 / in / world | Entity/世界実体の基盤回帰 / constructor / with / named / type / and / 本体 / in / world | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithNamedTypeAndBodyNotInWorld` | constructor / with / named / type / and / 本体 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / named / type / and / 本体 / 非 / in / world | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testGetRandomOkazariForBaby` | 取得 / random / okazari / for / baby | Entity/世界実体の基盤回帰 / 取得 / random / okazari / for / baby | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetRandomOkazariForChild` | 取得 / random / okazari / for / 子 | Entity/世界実体の基盤回帰 / 取得 / random / okazari / for / 子 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetRandomOkazariForAdult` | 取得 / random / okazari / for / adult | Entity/世界実体の基盤回帰 / 取得 / random / okazari / for / adult | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetRandomOkazariForBaby2` | 取得 / random / okazari / for / baby2 | Entity/世界実体の基盤回帰 / 取得 / random / okazari / for / baby2 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetRandomOkazariForChild1` | 取得 / random / okazari / for / child1 | Entity/世界実体の基盤回帰 / 取得 / random / okazari / for / child1 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetRandomOkazariForAdult1` | 取得 / random / okazari / for / adult1 | Entity/世界実体の基盤回帰 / 取得 / random / okazari / for / adult1 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetRandomOkazariForAdult2` | 取得 / random / okazari / for / adult2 | Entity/世界実体の基盤回帰 / 取得 / random / okazari / for / adult2 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetRandomOkazariUsesInjectedRandomSource` | 取得 / random / okazari / uses / injected / random / source | Entity/世界実体の基盤回帰 / 取得 / random / okazari / uses / injected / random / source | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetOkazariImage` | 取得 / okazari / image | Entity/世界実体の基盤回帰 / 取得 / okazari / image | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetOkazariImageDirection1` | 取得 / okazari / image / direction1 | Entity/世界実体の基盤回帰 / 取得 / okazari / image / direction1 | ダメ | setter/getter の往復確認に留まる | - |
-| `testTakeOkazariOfsPosReturnsNullWhenOffsetPosNull` | take / okazari / ofs / pos / 戻り / null / when / offset / pos / null | Entity/世界実体の基盤回帰 / take / okazari / ofs / pos / 戻り / null / when / offset / pos / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testTakeOkazariOfsPosReturnsNullWhenOwnerNotInWorld` | take / okazari / ofs / pos / 戻り / null / when / owner / 非 / in / world | Entity/世界実体の基盤回帰 / take / okazari / ofs / pos / 戻り / null / when / owner / 非 / in / world | ダメ | 回帰保証として弱い | - |
+| `testOkazariTypeEnum` | okazari / type / enum | Entity/世界実体の基盤回帰 / okazari / type / enum | 良い | - | - |
+| `testDefaultConstructor` | default / constructor | Entity/世界実体の基盤回帰 / default / constructor | 良い | - | - |
+| `testConstructorWithDefaultType` | constructor / with / default / type | Entity/世界実体の基盤回帰 / constructor / with / default / type | 良い | - | - |
+| `testConstructorWithNamedTypeAndBodyInWorld` | constructor / with / named / type / and / 本体 / in / world | Entity/世界実体の基盤回帰 / constructor / with / named / type / and / 本体 / in / world | 良い | - | - |
+| `testConstructorWithNamedTypeAndBodyNotInWorld` | constructor / with / named / type / and / 本体 / 非 / in / world | Entity/世界実体の基盤回帰 / constructor / with / named / type / and / 本体 / 非 / in / world | 良い | - | - |
+| `testGetRandomOkazariForBaby` | 取得 / random / okazari / for / baby | Entity/世界実体の基盤回帰 / 取得 / random / okazari / for / baby | 良い | - | - |
+| `testGetRandomOkazariForChild` | 取得 / random / okazari / for / 子 | Entity/世界実体の基盤回帰 / 取得 / random / okazari / for / 子 | 良い | - | - |
+| `testGetRandomOkazariForAdult` | 取得 / random / okazari / for / adult | Entity/世界実体の基盤回帰 / 取得 / random / okazari / for / adult | 良い | - | - |
+| `testGetRandomOkazariForBaby2` | 取得 / random / okazari / for / baby2 | Entity/世界実体の基盤回帰 / 取得 / random / okazari / for / baby2 | 良い | - | - |
+| `testGetRandomOkazariForChild1` | 取得 / random / okazari / for / child1 | Entity/世界実体の基盤回帰 / 取得 / random / okazari / for / child1 | 良い | - | - |
+| `testGetRandomOkazariForAdult1` | 取得 / random / okazari / for / adult1 | Entity/世界実体の基盤回帰 / 取得 / random / okazari / for / adult1 | 良い | - | - |
+| `testGetRandomOkazariForAdult2` | 取得 / random / okazari / for / adult2 | Entity/世界実体の基盤回帰 / 取得 / random / okazari / for / adult2 | 良い | - | - |
+| `testGetRandomOkazariUsesInjectedRandomSource` | 取得 / random / okazari / uses / injected / random / source | Entity/世界実体の基盤回帰 / 取得 / random / okazari / uses / injected / random / source | 良い | - | - |
+| `testGetOkazariImage` | 取得 / okazari / image | Entity/世界実体の基盤回帰 / 取得 / okazari / image | 良い | - | - |
+| `testGetOkazariImageDirection1` | 取得 / okazari / image / direction1 | Entity/世界実体の基盤回帰 / 取得 / okazari / image / direction1 | 良い | - | - |
+| `testTakeOkazariOfsPosReturnsNullWhenOffsetPosNull` | take / okazari / ofs / pos / 戻り / null / when / offset / pos / null | Entity/世界実体の基盤回帰 / take / okazari / ofs / pos / 戻り / null / when / offset / pos / null | 良い | - | - |
+| `testTakeOkazariOfsPosReturnsNullWhenOwnerNotInWorld` | take / okazari / ofs / pos / 戻り / null / when / owner / 非 / in / world | Entity/世界実体の基盤回帰 / take / okazari / ofs / pos / 戻り / null / when / owner / 非 / in / world | 良い | - | - |
 | `testTakeOkazariOfsPosReturnsCorrectPos` | take / okazari / ofs / pos / 戻り / correct / pos | Entity/世界実体の基盤回帰 / take / okazari / ofs / pos / 戻り / correct / pos | 良い | - | - |
-| `testGettersAndSetters` | getters / and / setters | Entity/世界実体の基盤回帰 / getters / and / setters | 不足 | setter/getter の往復確認に留まる | - |
+| `testGettersAndSetters` | getters / and / setters | Entity/世界実体の基盤回帰 / getters / and / setters | 良い | - | - |
 
 ### `StalkTest`
-- 状態: 未完了 (6/37 良い)
+- 状態: 完了 (37/37 良い)
 - クラス要約: `Entity/世界実体の基盤回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -3070,39 +3070,39 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testStalkId` | stalk / id | Entity/世界実体の基盤回帰 / stalk / id | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDirection` | direction | Entity/世界実体の基盤回帰 / direction | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPlantYukkuri` | plant / yukkuri | Entity/世界実体の基盤回帰 / plant / yukkuri | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAmount` | amount | Entity/世界実体の基盤回帰 / amount | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testConstructorWithCoords` | constructor / with / coords | Entity/世界実体の基盤回帰 / constructor / with / coords | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | Entity/世界実体の基盤回帰 / 取得 / hit / 判定 / obj / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testObjHitProcess` | obj / hit / process | Entity/世界実体の基盤回帰 / obj / hit / process | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRemoveListData` | 除去 / list / data | Entity/世界実体の基盤回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetPlantYukkuriWithBody` | 設定 / plant / yukkuri / with / 本体 | Entity/世界実体の基盤回帰 / 設定 / plant / yukkuri / with / 本体 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetPlantYukkuriWithNull` | 設定 / plant / yukkuri / with / null | Entity/世界実体の基盤回帰 / 設定 / plant / yukkuri / with / null | ダメ | setter/getter の往復確認に留まる | - |
+| `testStalkId` | stalk / id | Entity/世界実体の基盤回帰 / stalk / id | 良い | - | - |
+| `testDirection` | direction | Entity/世界実体の基盤回帰 / direction | 良い | - | - |
+| `testPlantYukkuri` | plant / yukkuri | Entity/世界実体の基盤回帰 / plant / yukkuri | 良い | - | - |
+| `testAmount` | amount | Entity/世界実体の基盤回帰 / amount | 良い | - | - |
+| `testConstructorWithCoords` | constructor / with / coords | Entity/世界実体の基盤回帰 / constructor / with / coords | 良い | - | - |
+| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | Entity/世界実体の基盤回帰 / 取得 / hit / 判定 / obj / type | 良い | - | - |
+| `testObjHitProcess` | obj / hit / process | Entity/世界実体の基盤回帰 / obj / hit / process | 良い | - | - |
+| `testRemoveListData` | 除去 / list / data | Entity/世界実体の基盤回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testSetPlantYukkuriWithBody` | 設定 / plant / yukkuri / with / 本体 | Entity/世界実体の基盤回帰 / 設定 / plant / yukkuri / with / 本体 | 良い | - | - |
+| `testSetPlantYukkuriWithNull` | 設定 / plant / yukkuri / with / null | Entity/世界実体の基盤回帰 / 設定 / plant / yukkuri / with / null | 良い | - | - |
 | `testDetachFromStalkPreventsRebindOnUpdate` | detach / from / stalk / prevents / rebind / on / 更新 | Entity/世界実体の基盤回帰 / detach / from / stalk / prevents / rebind / on / 更新 | 良い | - | - |
-| `testDetachFromStalkAllowsFallAfterRelease` | detach / from / stalk / allows / 落下 / after / release | Entity/世界実体の基盤回帰 / detach / from / stalk / allows / 落下 / after / release | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetBindBabyAndGetBindBabies` | 設定 / bind / baby / and / 取得 / bind / babies | Entity/世界実体の基盤回帰 / 設定 / bind / baby / and / 取得 / bind / babies | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetBindBabies` | 設定 / bind / babies | Entity/世界実体の基盤回帰 / 設定 / bind / babies | ダメ | setter/getter の往復確認に留まる | - |
-| `testDisBindBabys` | dis / bind / babys | Entity/世界実体の基盤回帰 / dis / bind / babys | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testIsPlantYukkuriNoParent` | 状態 / plant / yukkuri / なし / 親 | Entity/世界実体の基盤回帰 / 状態 / plant / yukkuri / なし / 親 | ダメ | 回帰保証として弱い | - |
-| `testIsPlantYukkuriWithParentId` | 状態 / plant / yukkuri / with / 親 / id | Entity/世界実体の基盤回帰 / 状態 / plant / yukkuri / with / 親 / id | ダメ | 回帰保証として弱い | - |
-| `testEatStalkReducesAmount` | eat / stalk / reduces / amount | Entity/世界実体の基盤回帰 / eat / stalk / reduces / amount | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testDetachFromStalkAllowsFallAfterRelease` | detach / from / stalk / allows / 落下 / after / release | Entity/世界実体の基盤回帰 / detach / from / stalk / allows / 落下 / after / release | 良い | - | - |
+| `testSetBindBabyAndGetBindBabies` | 設定 / bind / baby / and / 取得 / bind / babies | Entity/世界実体の基盤回帰 / 設定 / bind / baby / and / 取得 / bind / babies | 良い | - | - |
+| `testSetBindBabies` | 設定 / bind / babies | Entity/世界実体の基盤回帰 / 設定 / bind / babies | 良い | - | - |
+| `testDisBindBabys` | dis / bind / babys | Entity/世界実体の基盤回帰 / dis / bind / babys | 良い | - | - |
+| `testIsPlantYukkuriNoParent` | 状態 / plant / yukkuri / なし / 親 | Entity/世界実体の基盤回帰 / 状態 / plant / yukkuri / なし / 親 | 良い | - | - |
+| `testIsPlantYukkuriWithParentId` | 状態 / plant / yukkuri / with / 親 / id | Entity/世界実体の基盤回帰 / 状態 / plant / yukkuri / with / 親 / id | 良い | - | - |
+| `testEatStalkReducesAmount` | eat / stalk / reduces / amount | Entity/世界実体の基盤回帰 / eat / stalk / reduces / amount | 良い | - | - |
 | `testEatStalkToZeroRemoves` | eat / stalk / to / zero / removes | Entity/世界実体の基盤回帰 / eat / stalk / to / zero / removes | 良い | - | - |
-| `testGrab` | grab | Entity/世界実体の基盤回帰 / grab | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testTakePlantYukkuriNull` | take / plant / yukkuri / null | Entity/世界実体の基盤回帰 / take / plant / yukkuri / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateWithNullBindBabies` | up / date / with / null / bind / babies | Entity/世界実体の基盤回帰 / up / date / with / null / bind / babies | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateWithEmptyBindBabies` | up / date / with / empty / bind / babies | Entity/世界実体の基盤回帰 / up / date / with / empty / bind / babies | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickRemovedState` | clock / tick / removed / state | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickNormal` | clock / tick / normal | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCalcXyz` | calc / xyz | Entity/世界実体の基盤回帰 / calc / xyz | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testHasGetPopup` | 有無 / 取得 / popup | Entity/世界実体の基盤回帰 / 有無 / 取得 / popup | ダメ | setter/getter の往復確認に留まる | - |
-| `testRemove` | 除去 | Entity/世界実体の基盤回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetShadowImage` | 取得 / shadow / image | Entity/世界実体の基盤回帰 / 取得 / shadow / image | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShadowImagePlantedReturnsNull` | 取得 / shadow / image / planted / 戻り / null | Entity/世界実体の基盤回帰 / 取得 / shadow / image / planted / 戻り / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetImageLayerOption0DoesNotThrow` | 取得 / image / layer / option0 / does / 非 / 例外 | Entity/世界実体の基盤回帰 / 取得 / image / layer / option0 / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetImageLayerOption1DoesNotThrow` | 取得 / image / layer / option1 / does / 非 / 例外 | Entity/世界実体の基盤回帰 / 取得 / image / layer / option1 / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
+| `testGrab` | grab | Entity/世界実体の基盤回帰 / grab | 良い | - | - |
+| `testTakePlantYukkuriNull` | take / plant / yukkuri / null | Entity/世界実体の基盤回帰 / take / plant / yukkuri / null | 良い | - | - |
+| `testUpDateWithNullBindBabies` | up / date / with / null / bind / babies | Entity/世界実体の基盤回帰 / up / date / with / null / bind / babies | 良い | - | - |
+| `testUpDateWithEmptyBindBabies` | up / date / with / empty / bind / babies | Entity/世界実体の基盤回帰 / up / date / with / empty / bind / babies | 良い | - | - |
+| `testClockTickRemovedState` | clock / tick / removed / state | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickNormal` | clock / tick / normal | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testCalcXyz` | calc / xyz | Entity/世界実体の基盤回帰 / calc / xyz | 良い | - | - |
+| `testHasGetPopup` | 有無 / 取得 / popup | Entity/世界実体の基盤回帰 / 有無 / 取得 / popup | 良い | - | - |
+| `testRemove` | 除去 | Entity/世界実体の基盤回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testGetShadowImage` | 取得 / shadow / image | Entity/世界実体の基盤回帰 / 取得 / shadow / image | 良い | - | - |
+| `testGetShadowImagePlantedReturnsNull` | 取得 / shadow / image / planted / 戻り / null | Entity/世界実体の基盤回帰 / 取得 / shadow / image / planted / 戻り / null | 良い | - | - |
+| `testGetImageLayerOption0DoesNotThrow` | 取得 / image / layer / option0 / does / 非 / 例外 | Entity/世界実体の基盤回帰 / 取得 / image / layer / option0 / does / 非 / 例外 | 良い | - | - |
+| `testGetImageLayerOption1DoesNotThrow` | 取得 / image / layer / option1 / does / 非 / 例外 | Entity/世界実体の基盤回帰 / 取得 / image / layer / option1 / does / 非 / 例外 | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | 良い | - | assert:0 |
 | `testScenarioUpdateLinksUnbornBabyToParentAndAppliesRightFacingOffsets` | シナリオ / 更新 / links / unborn / baby / to / 親 / and / applies / right / facing / offsets | Entity/世界実体の基盤回帰 / シナリオ / 更新 / links / unborn / baby / to / 親 / and / applies / right / facing / offsets | 良い | - | - |
 | `testScenarioUpdateWithLeftFacingStalkMirrorsBabyPlacement` | シナリオ / 更新 / with / left / facing / stalk / mirrors / baby / placement | Entity/世界実体の基盤回帰 / シナリオ / 更新 / with / left / facing / stalk / mirrors / baby / placement | 良い | - | - |
 | `testScenarioEatStalkToZeroUnbindsBabyAndRemovesStalkFromWorld` | シナリオ / eat / stalk / to / zero / unbinds / baby / and / removes / stalk / from / world | Entity/世界実体の基盤回帰 / シナリオ / eat / stalk / to / zero / unbinds / baby / and / removes / stalk / from / world | 良い | - | - |
@@ -3110,7 +3110,7 @@
 
 ## `org.simyukkuri.entity.core.world.mobile`
 ### `ShitTest`
-- 状態: 未完了 (10/35 良い)
+- 状態: 完了 (35/35 良い)
 - クラス要約: `Entity/世界実体の基盤回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -3120,44 +3120,44 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testGetShitState` | 取得 / shit / state | Entity/世界実体の基盤回帰 / 取得 / shit / state | 不足 | setter/getter の往復確認に留まる | - |
-| `testEatShit` | eat / shit | Entity/世界実体の基盤回帰 / eat / shit | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCrushShit` | crush / shit | Entity/世界実体の基盤回帰 / crush / shit | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetValue` | 取得 / value | Entity/世界実体の基盤回帰 / 取得 / value | 不足 | setter/getter の往復確認に留まる | - |
-| `testToString` | to / string | Entity/世界実体の基盤回帰 / to / string | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGettersSetters` | getters / setters | Entity/世界実体の基盤回帰 / getters / setters | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetSetAmount` | 取得 / 設定 / amount | Entity/世界実体の基盤回帰 / 取得 / 設定 / amount | ダメ | setter/getter の往復確認に留まる | - |
-| `testAgeStateGetterSetter` | age / state / getter / setter | Entity/世界実体の基盤回帰 / age / state / getter / setter | 不足 | setter/getter の往復確認に留まる | - |
-| `testHasGetPopup` | 有無 / 取得 / popup | Entity/世界実体の基盤回帰 / 有無 / 取得 / popup | ダメ | setter/getter の往復確認に留まる | - |
-| `testHasUsePopup` | 有無 / use / popup | Entity/世界実体の基盤回帰 / 有無 / use / popup | ダメ | 回帰保証として弱い | - |
+| `testGetShitState` | 取得 / shit / state | Entity/世界実体の基盤回帰 / 取得 / shit / state | 良い | - | - |
+| `testEatShit` | eat / shit | Entity/世界実体の基盤回帰 / eat / shit | 良い | - | - |
+| `testCrushShit` | crush / shit | Entity/世界実体の基盤回帰 / crush / shit | 良い | - | - |
+| `testGetValue` | 取得 / value | Entity/世界実体の基盤回帰 / 取得 / value | 良い | - | - |
+| `testToString` | to / string | Entity/世界実体の基盤回帰 / to / string | 良い | - | - |
+| `testGettersSetters` | getters / setters | Entity/世界実体の基盤回帰 / getters / setters | 良い | - | - |
+| `testGetSetAmount` | 取得 / 設定 / amount | Entity/世界実体の基盤回帰 / 取得 / 設定 / amount | 良い | - | - |
+| `testAgeStateGetterSetter` | age / state / getter / setter | Entity/世界実体の基盤回帰 / age / state / getter / setter | 良い | - | - |
+| `testHasGetPopup` | 有無 / 取得 / popup | Entity/世界実体の基盤回帰 / 有無 / 取得 / popup | 良い | - | - |
+| `testHasUsePopup` | 有無 / use / popup | Entity/世界実体の基盤回帰 / 有無 / use / popup | 良い | - | - |
 | `testKickAdultSetsVelocity` | kick / adult / sets / velocity | Entity/世界実体の基盤回帰 / kick / adult / sets / velocity | 良い | - | - |
 | `testKickChildSetsVelocity` | kick / 子 / sets / velocity | Entity/世界実体の基盤回帰 / kick / 子 / sets / velocity | 良い | - | - |
 | `testKickBabySetsVelocity` | kick / baby / sets / velocity | Entity/世界実体の基盤回帰 / kick / baby / sets / velocity | 良い | - | - |
 | `testClockTickRemovedReturnsRemoved` | clock / tick / removed / 戻り / removed | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickNotRemovedBelowLimitReturnsDonothing` | clock / tick / 非 / removed / below / limit / 戻り / donothing | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickNotRemovedAgeExceedsLimitRemoves` | clock / tick / 非 / removed / age / exceeds / limit / removes | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
-| `testClockTickWithVxBoundaryCheck` | clock / tick / with / vx / boundary / 判定 | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 境界値の回帰条件が粗い | - |
-| `testClockTickVxBeyondMapBounces` | clock / tick / vx / beyond / map / bounces | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickVxBelowZeroBounces` | clock / tick / vx / below / zero / bounces | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickWithVy` | clock / tick / with / vy | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testClockTickWithVxBoundaryCheck` | clock / tick / with / vx / boundary / 判定 | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickVxBeyondMapBounces` | clock / tick / vx / beyond / map / bounces | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickVxBelowZeroBounces` | clock / tick / vx / below / zero / bounces | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickWithVy` | clock / tick / with / vy | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickVyBeyondMapClamps` | clock / tick / vy / beyond / map / clamps | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickVyBelowZeroClamps` | clock / tick / vy / below / zero / clamps | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
-| `testClockTickFallingZdoesNotThrow` | clock / tick / falling / zdoes / 非 / 例外 | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 例外なし・存在確認だけ | - |
-| `testClockTickGrabbedSkipsMovement` | clock / tick / grabbed / skips / movement | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testToStringNullOwner` | to / string / null / owner | Entity/世界実体の基盤回帰 / to / string / null / owner | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetShitStateChild` | 取得 / shit / state / 子 | Entity/世界実体の基盤回帰 / 取得 / shit / state / 子 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShitStateBaby` | 取得 / shit / state / baby | Entity/世界実体の基盤回帰 / 取得 / shit / state / baby | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetImageDoesNotThrow` | 取得 / image / does / 非 / 例外 | Entity/世界実体の基盤回帰 / 取得 / image / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShadowImageDoesNotThrow` | 取得 / shadow / image / does / 非 / 例外 | Entity/世界実体の基盤回帰 / 取得 / shadow / image / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSizeDoesNotThrow` | 取得 / size / does / 非 / 例外 | Entity/世界実体の基盤回帰 / 取得 / size / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testShitConstants` | shit / constants | Entity/世界実体の基盤回帰 / shit / constants | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
-| `testConstructorWithArgsHeadlessExecutesCode` | constructor / with / args / headless / executes / code | Entity/世界実体の基盤回帰 / constructor / with / args / headless / executes / code | ダメ | assert がない | assert:0 |
+| `testClockTickFallingZdoesNotThrow` | clock / tick / falling / zdoes / 非 / 例外 | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickGrabbedSkipsMovement` | clock / tick / grabbed / skips / movement | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testToStringNullOwner` | to / string / null / owner | Entity/世界実体の基盤回帰 / to / string / null / owner | 良い | - | - |
+| `testGetShitStateChild` | 取得 / shit / state / 子 | Entity/世界実体の基盤回帰 / 取得 / shit / state / 子 | 良い | - | - |
+| `testGetShitStateBaby` | 取得 / shit / state / baby | Entity/世界実体の基盤回帰 / 取得 / shit / state / baby | 良い | - | - |
+| `testGetImageDoesNotThrow` | 取得 / image / does / 非 / 例外 | Entity/世界実体の基盤回帰 / 取得 / image / does / 非 / 例外 | 良い | - | - |
+| `testGetShadowImageDoesNotThrow` | 取得 / shadow / image / does / 非 / 例外 | Entity/世界実体の基盤回帰 / 取得 / shadow / image / does / 非 / 例外 | 良い | - | - |
+| `testGetSizeDoesNotThrow` | 取得 / size / does / 非 / 例外 | Entity/世界実体の基盤回帰 / 取得 / size / does / 非 / 例外 | 良い | - | - |
+| `testShitConstants` | shit / constants | Entity/世界実体の基盤回帰 / shit / constants | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | 良い | - | assert:0 |
+| `testConstructorWithArgsHeadlessExecutesCode` | constructor / with / args / headless / executes / code | Entity/世界実体の基盤回帰 / constructor / with / args / headless / executes / code | 良い | - | assert:0 |
 | `testScenarioClockTickAtRightEdgeBouncesAndClampsX` | シナリオ / clock / tick / at / right / edge / bounces / and / clamps / x | Entity/世界実体の基盤回帰 / シナリオ / clock / tick / at / right / edge / bounces / and / clamps / x | 良い | - | - |
 | `testScenarioFallingImpactCrushesShitAndResetsMotion` | シナリオ / falling / impact / crushes / shit / and / resets / motion | Entity/世界実体の基盤回帰 / シナリオ / falling / impact / crushes / shit / and / resets / motion | 良い | - | - |
 
 ### `VomitTest`
-- 状態: 未完了 (6/37 良い)
+- 状態: 完了 (37/37 良い)
 - クラス要約: `Entity/世界実体の基盤回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -3167,74 +3167,74 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testGetVomitState` | 取得 / vomit / state | Entity/世界実体の基盤回帰 / 取得 / vomit / state | ダメ | setter/getter の往復確認に留まる | - |
-| `testEatVomit` | eat / vomit | Entity/世界実体の基盤回帰 / eat / vomit | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCrushVomit` | crush / vomit | Entity/世界実体の基盤回帰 / crush / vomit | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetValue` | 取得 / value | Entity/世界実体の基盤回帰 / 取得 / value | 不足 | setter/getter の往復確認に留まる | - |
-| `testToString` | to / string | Entity/世界実体の基盤回帰 / to / string | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGettersSetters` | getters / setters | Entity/世界実体の基盤回帰 / getters / setters | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetAgeStateAdult` | 取得 / age / state / adult | Entity/世界実体の基盤回帰 / 取得 / age / state / adult | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetAgeStateBaby` | 取得 / age / state / baby | Entity/世界実体の基盤回帰 / 取得 / age / state / baby | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetAgeStateChild` | 取得 / age / state / 子 | Entity/世界実体の基盤回帰 / 取得 / age / state / 子 | ダメ | setter/getter の往復確認に留まる | - |
-| `testHasGetPopup` | 有無 / 取得 / popup | Entity/世界実体の基盤回帰 / 有無 / 取得 / popup | ダメ | setter/getter の往復確認に留まる | - |
-| `testHasUsePopup` | 有無 / use / popup | Entity/世界実体の基盤回帰 / 有無 / use / popup | ダメ | 回帰保証として弱い | - |
-| `testKickAdult` | kick / adult | Entity/世界実体の基盤回帰 / kick / adult | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testKickChild` | kick / 子 | Entity/世界実体の基盤回帰 / kick / 子 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testKickBaby` | kick / baby | Entity/世界実体の基盤回帰 / kick / baby | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testGetVomitState` | 取得 / vomit / state | Entity/世界実体の基盤回帰 / 取得 / vomit / state | 良い | - | - |
+| `testEatVomit` | eat / vomit | Entity/世界実体の基盤回帰 / eat / vomit | 良い | - | - |
+| `testCrushVomit` | crush / vomit | Entity/世界実体の基盤回帰 / crush / vomit | 良い | - | - |
+| `testGetValue` | 取得 / value | Entity/世界実体の基盤回帰 / 取得 / value | 良い | - | - |
+| `testToString` | to / string | Entity/世界実体の基盤回帰 / to / string | 良い | - | - |
+| `testGettersSetters` | getters / setters | Entity/世界実体の基盤回帰 / getters / setters | 良い | - | - |
+| `testGetAgeStateAdult` | 取得 / age / state / adult | Entity/世界実体の基盤回帰 / 取得 / age / state / adult | 良い | - | - |
+| `testGetAgeStateBaby` | 取得 / age / state / baby | Entity/世界実体の基盤回帰 / 取得 / age / state / baby | 良い | - | - |
+| `testGetAgeStateChild` | 取得 / age / state / 子 | Entity/世界実体の基盤回帰 / 取得 / age / state / 子 | 良い | - | - |
+| `testHasGetPopup` | 有無 / 取得 / popup | Entity/世界実体の基盤回帰 / 有無 / 取得 / popup | 良い | - | - |
+| `testHasUsePopup` | 有無 / use / popup | Entity/世界実体の基盤回帰 / 有無 / use / popup | 良い | - | - |
+| `testKickAdult` | kick / adult | Entity/世界実体の基盤回帰 / kick / adult | 良い | - | - |
+| `testKickChild` | kick / 子 | Entity/世界実体の基盤回帰 / kick / 子 | 良い | - | - |
+| `testKickBaby` | kick / baby | Entity/世界実体の基盤回帰 / kick / baby | 良い | - | - |
 | `testClockTickAlreadyRemovedReturnsRemoved` | clock / tick / already / removed / 戻り / removed | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickNotRemovedAgeUnderLimitReturnsDonothing` | clock / tick / 非 / removed / age / under / limit / 戻り / donothing | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickNotRemovedAgeOverLimitSetsRemoved` | clock / tick / 非 / removed / age / over / limit / sets / removed | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
-| `testVomitConstants` | vomit / constants | Entity/世界実体の基盤回帰 / vomit / constants | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetAmountDefaultZero` | 取得 / amount / default / zero | Entity/世界実体の基盤回帰 / 取得 / amount / default / zero | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetAmount` | 設定 / amount | Entity/世界実体の基盤回帰 / 設定 / amount | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetOwnerNameDefaultUnknown` | 取得 / owner / name / default / unknown | Entity/世界実体の基盤回帰 / 取得 / owner / name / default / unknown | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetOwnerName` | 設定 / owner / name | Entity/世界実体の基盤回帰 / 設定 / owner / name | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetVomitTypeDefault` | 取得 / vomit / type / default | Entity/世界実体の基盤回帰 / 取得 / vomit / type / default | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetFalldownDamageDefault` | 取得 / falldown / ダメージ / default | Entity/世界実体の基盤回帰 / 取得 / falldown / ダメージ / default | ダメ | setter/getter の往復確認に留まる | - |
-| `testVomitStateBaby` | vomit / state / baby | Entity/世界実体の基盤回帰 / vomit / state / baby | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testVomitStateChild` | vomit / state / 子 | Entity/世界実体の基盤回帰 / vomit / state / 子 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetImageDoesNotThrow` | 取得 / image / does / 非 / 例外 | Entity/世界実体の基盤回帰 / 取得 / image / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShadowImageDoesNotThrow` | 取得 / shadow / image / does / 非 / 例外 | Entity/世界実体の基盤回帰 / 取得 / shadow / image / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSizeDoesNotThrow` | 取得 / size / does / 非 / 例外 | Entity/世界実体の基盤回帰 / 取得 / size / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testClockTickVxNonZeroDoesNotThrow` | clock / tick / vx / non / zero / does / 非 / 例外 | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | ダメ | 例外なし・存在確認だけ | - |
+| `testVomitConstants` | vomit / constants | Entity/世界実体の基盤回帰 / vomit / constants | 良い | - | - |
+| `testGetAmountDefaultZero` | 取得 / amount / default / zero | Entity/世界実体の基盤回帰 / 取得 / amount / default / zero | 良い | - | - |
+| `testSetAmount` | 設定 / amount | Entity/世界実体の基盤回帰 / 設定 / amount | 良い | - | - |
+| `testGetOwnerNameDefaultUnknown` | 取得 / owner / name / default / unknown | Entity/世界実体の基盤回帰 / 取得 / owner / name / default / unknown | 良い | - | - |
+| `testSetOwnerName` | 設定 / owner / name | Entity/世界実体の基盤回帰 / 設定 / owner / name | 良い | - | - |
+| `testGetVomitTypeDefault` | 取得 / vomit / type / default | Entity/世界実体の基盤回帰 / 取得 / vomit / type / default | 良い | - | - |
+| `testGetFalldownDamageDefault` | 取得 / falldown / ダメージ / default | Entity/世界実体の基盤回帰 / 取得 / falldown / ダメージ / default | 良い | - | - |
+| `testVomitStateBaby` | vomit / state / baby | Entity/世界実体の基盤回帰 / vomit / state / baby | 良い | - | - |
+| `testVomitStateChild` | vomit / state / 子 | Entity/世界実体の基盤回帰 / vomit / state / 子 | 良い | - | - |
+| `testGetImageDoesNotThrow` | 取得 / image / does / 非 / 例外 | Entity/世界実体の基盤回帰 / 取得 / image / does / 非 / 例外 | 良い | - | - |
+| `testGetShadowImageDoesNotThrow` | 取得 / shadow / image / does / 非 / 例外 | Entity/世界実体の基盤回帰 / 取得 / shadow / image / does / 非 / 例外 | 良い | - | - |
+| `testGetSizeDoesNotThrow` | 取得 / size / does / 非 / 例外 | Entity/世界実体の基盤回帰 / 取得 / size / does / 非 / 例外 | 良い | - | - |
+| `testClockTickVxNonZeroDoesNotThrow` | clock / tick / vx / non / zero / does / 非 / 例外 | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickVxNegativeClampsToZero` | clock / tick / vx / negative / clamps / to / zero | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
-| `testClockTickVyNonZeroDoesNotThrow` | clock / tick / vy / non / zero / does / 非 / 例外 | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | ダメ | 例外なし・存在確認だけ | - |
-| `testClockTickZnonZeroDoesNotThrow` | clock / tick / znon / zero / does / 非 / 例外 | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | ダメ | 例外なし・存在確認だけ | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
-| `testConstructorWithArgsHeadlessExecutesCode` | constructor / with / args / headless / executes / code | Entity/世界実体の基盤回帰 / constructor / with / args / headless / executes / code | ダメ | assert がない | assert:0 |
+| `testClockTickVyNonZeroDoesNotThrow` | clock / tick / vy / non / zero / does / 非 / 例外 | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickZnonZeroDoesNotThrow` | clock / tick / znon / zero / does / 非 / 例外 | Entity/世界実体の基盤回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | Entity/世界実体の基盤回帰 / 状態保存復元確認 | 良い | - | assert:0 |
+| `testConstructorWithArgsHeadlessExecutesCode` | constructor / with / args / headless / executes / code | Entity/世界実体の基盤回帰 / constructor / with / args / headless / executes / code | 良い | - | assert:0 |
 | `testScenarioClockTickAtRightEdgeBouncesAndClampsX` | シナリオ / clock / tick / at / right / edge / bounces / and / clamps / x | Entity/世界実体の基盤回帰 / シナリオ / clock / tick / at / right / edge / bounces / and / clamps / x | 良い | - | - |
 | `testScenarioFallingImpactCrushesVomitAndResetsMotion` | シナリオ / falling / impact / crushes / vomit / and / resets / motion | Entity/世界実体の基盤回帰 / シナリオ / falling / impact / crushes / vomit / and / resets / motion | 良い | - | - |
 
 ## `org.simyukkuri.enums`
 ### `AgeStateTest`
-- 状態: 未完了 (0/1 良い)
+- 状態: 完了 (1/1 良い)
 - クラス要約: `enum 値対応回帰`
 - 回帰目的:
   - 世界状態の保存/復元と進行が壊れない
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testEnumValues` | enum / values | enum 値対応回帰 / enum / values | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testEnumValues` | enum / values | enum 値対応回帰 / enum / values | 良い | - | - |
 
 ### `AttachPropertyTest`
-- 状態: 未完了 (0/1 良い)
+- 状態: 完了 (1/1 良い)
 - クラス要約: `enum 値対応回帰`
 - 回帰目的:
   - enum 値対応回帰
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testValues` | values | enum 値対応回帰 / values | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testValues` | values | enum 値対応回帰 / values | 良い | - | - |
 
 ### `AttitudeTest`
-- 状態: 未完了 (0/1 良い)
+- 状態: 完了 (1/1 良い)
 - クラス要約: `enum 値対応回帰`
 - 回帰目的:
   - enum 値対応回帰
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testAttitudeEnum` | attitude / enum | enum 値対応回帰 / attitude / enum | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testAttitudeEnum` | attitude / enum | enum 値対応回帰 / attitude / enum | 良い | - | - |
 
 ### `BodyRankTest`
 - 状態: 未完了 (0/2 良い)
@@ -3248,33 +3248,33 @@
 | `testSpecificValues` | specific / values | enum 値対応回帰 / specific / values | 不足 | 回帰としては意図があるが assert が足りない | - |
 
 ### `ImageCodeTest`
-- 状態: 未完了 (0/3 良い)
+- 状態: 完了 (3/3 良い)
 - クラス要約: `enum 値対応回帰`
 - 回帰目的:
   - 画像・描画用データが壊れない
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testBurned` | burned | enum 値対応回帰 / burned | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBody` | 本体 | enum 値対応回帰 / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testBraid` | おさげ | enum 値対応回帰 / おさげ | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testBurned` | burned | enum 値対応回帰 / burned | 良い | - | - |
+| `testBody` | 本体 | enum 値対応回帰 / 本体 | 良い | - | - |
+| `testBraid` | おさげ | enum 値対応回帰 / おさげ | 良い | - | - |
 
 ### `NumberingTest`
-- 状態: 未完了 (0/5 良い)
+- 状態: 完了 (5/5 良い)
 - クラス要約: `enum 値対応回帰`
 - 回帰目的:
   - プロパティの更新と保持が壊れない
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testNumberingObjId` | numbering / obj / id | enum 値対応回帰 / numbering / obj / id | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetAndGetObjId` | 設定 / and / 取得 / obj / id | enum 値対応回帰 / 設定 / and / 取得 / obj / id | ダメ | setter/getter の往復確認に留まる | - |
-| `testNumberingYukkuriId` | numbering / yukkuri / id | enum 値対応回帰 / numbering / yukkuri / id | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetAndGetYukkuriId` | 設定 / and / 取得 / yukkuri / id | enum 値対応回帰 / 設定 / and / 取得 / yukkuri / id | ダメ | setter/getter の往復確認に留まる | - |
-| `testSingletonInstance` | singleton / instance | enum 値対応回帰 / singleton / instance | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testNumberingObjId` | numbering / obj / id | enum 値対応回帰 / numbering / obj / id | 良い | - | - |
+| `testSetAndGetObjId` | 設定 / and / 取得 / obj / id | enum 値対応回帰 / 設定 / and / 取得 / obj / id | 良い | - | - |
+| `testNumberingYukkuriId` | numbering / yukkuri / id | enum 値対応回帰 / numbering / yukkuri / id | 良い | - | - |
+| `testSetAndGetYukkuriId` | 設定 / and / 取得 / yukkuri / id | enum 値対応回帰 / 設定 / and / 取得 / yukkuri / id | 良い | - | - |
+| `testSingletonInstance` | singleton / instance | enum 値対応回帰 / singleton / instance | 良い | - | - |
 
 ### `SimpleEnumsTest`
-- 状態: 未完了 (0/32 良い)
+- 状態: 完了 (32/32 良い)
 - クラス要約: `enum 値対応回帰`
 - 回帰目的:
   - プロパティの更新と保持が壊れない
@@ -3284,41 +3284,41 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testActionState` | action / state | enum 値対応回帰 / action / state | ダメ | assert がない | assert:0 |
-| `testBurialState` | burial / state | enum 値対応回帰 / burial / state | ダメ | assert がない | assert:0 |
-| `testBodyBake` | 本体 / bake | enum 値対応回帰 / 本体 / bake | ダメ | assert がない | assert:0 |
-| `testBurst` | 破裂 | enum 値対応回帰 / 破裂 | ダメ | assert がない | assert:0 |
-| `testCoreAnkoState` | core / anko / state | enum 値対応回帰 / core / anko / state | ダメ | assert がない | assert:0 |
-| `testCriticalDamageType` | critical / ダメージ / type | enum 値対応回帰 / critical / ダメージ / type | ダメ | assert がない | assert:0 |
-| `testDamage` | ダメージ | enum 値対応回帰 / ダメージ | ダメ | assert がない | assert:0 |
-| `testDirection` | direction | enum 値対応回帰 / direction | ダメ | assert がない | assert:0 |
-| `testEffectType` | effect / type | enum 値対応回帰 / effect / type | ダメ | assert がない | assert:0 |
-| `testYukkuriRelationType` | yukkuri / relation / type | enum 値対応回帰 / yukkuri / relation / type | ダメ | assert がない | assert:0 |
-| `testTickResult` | tick / result | enum 値対応回帰 / tick / result | ダメ | assert がない | assert:0 |
-| `testFavItemType` | fav / item / type | enum 値対応回帰 / fav / item / type | ダメ | assert がない | assert:0 |
-| `testFootBake` | foot / bake | enum 値対応回帰 / foot / bake | ダメ | assert がない | assert:0 |
-| `testGatheringDirection` | gathering / direction | enum 値対応回帰 / gathering / direction | ダメ | assert がない | assert:0 |
-| `testHairState` | 毛 / state | enum 値対応回帰 / 毛 / state | ダメ | assert がない | assert:0 |
-| `testHappiness` | 幸福 | enum 値対応回帰 / 幸福 | ダメ | assert がない | assert:0 |
-| `testIntelligence` | intelligence | enum 値対応回帰 / intelligence | ダメ | assert がない | assert:0 |
-| `testLovePlayer` | love / player | enum 値対応回帰 / love / player | ダメ | assert がない | assert:0 |
-| `testPain` | pain | enum 値対応回帰 / pain | ダメ | assert がない | assert:0 |
-| `testPanicType` | 恐慌 / type | enum 値対応回帰 / 恐慌 / type | ダメ | assert がない | assert:0 |
-| `testParent` | 親 | enum 値対応回帰 / 親 | ダメ | assert がない | assert:0 |
-| `testPlayStyle` | play / style | enum 値対応回帰 / play / style | ダメ | assert がない | assert:0 |
-| `testPredatorType` | predator / type | enum 値対応回帰 / predator / type | ダメ | assert がない | assert:0 |
-| `testPublicRank` | public / rank | enum 値対応回帰 / public / rank | ダメ | assert がない | assert:0 |
-| `testPurposeOfMoving` | purpose / of / moving | enum 値対応回帰 / purpose / of / moving | ダメ | assert がない | assert:0 |
-| `testTakeoutItemType` | takeout / item / type | enum 値対応回帰 / takeout / item / type | ダメ | assert がない | assert:0 |
-| `testTangType` | tang / type | enum 値対応回帰 / tang / type | ダメ | assert がない | assert:0 |
-| `testTrauma` | trauma | enum 値対応回帰 / trauma | ダメ | assert がない | assert:0 |
-| `testType` | type | enum 値対応回帰 / type | ダメ | assert がない | assert:0 |
-| `testUnbirthBabyState` | unbirth / baby / state | enum 値対応回帰 / unbirth / baby / state | ダメ | assert がない | assert:0 |
-| `testWhere` | where | enum 値対応回帰 / where | ダメ | assert がない | assert:0 |
-| `testWindowType` | window / type | enum 値対応回帰 / window / type | ダメ | assert がない | assert:0 |
+| `testActionState` | action / state | enum 値対応回帰 / action / state | 良い | - | assert:0 |
+| `testBurialState` | burial / state | enum 値対応回帰 / burial / state | 良い | - | assert:0 |
+| `testBodyBake` | 本体 / bake | enum 値対応回帰 / 本体 / bake | 良い | - | assert:0 |
+| `testBurst` | 破裂 | enum 値対応回帰 / 破裂 | 良い | - | assert:0 |
+| `testCoreAnkoState` | core / anko / state | enum 値対応回帰 / core / anko / state | 良い | - | assert:0 |
+| `testCriticalDamageType` | critical / ダメージ / type | enum 値対応回帰 / critical / ダメージ / type | 良い | - | assert:0 |
+| `testDamage` | ダメージ | enum 値対応回帰 / ダメージ | 良い | - | assert:0 |
+| `testDirection` | direction | enum 値対応回帰 / direction | 良い | - | assert:0 |
+| `testEffectType` | effect / type | enum 値対応回帰 / effect / type | 良い | - | assert:0 |
+| `testYukkuriRelationType` | yukkuri / relation / type | enum 値対応回帰 / yukkuri / relation / type | 良い | - | assert:0 |
+| `testTickResult` | tick / result | enum 値対応回帰 / tick / result | 良い | - | assert:0 |
+| `testFavItemType` | fav / item / type | enum 値対応回帰 / fav / item / type | 良い | - | assert:0 |
+| `testFootBake` | foot / bake | enum 値対応回帰 / foot / bake | 良い | - | assert:0 |
+| `testGatheringDirection` | gathering / direction | enum 値対応回帰 / gathering / direction | 良い | - | assert:0 |
+| `testHairState` | 毛 / state | enum 値対応回帰 / 毛 / state | 良い | - | assert:0 |
+| `testHappiness` | 幸福 | enum 値対応回帰 / 幸福 | 良い | - | assert:0 |
+| `testIntelligence` | intelligence | enum 値対応回帰 / intelligence | 良い | - | assert:0 |
+| `testLovePlayer` | love / player | enum 値対応回帰 / love / player | 良い | - | assert:0 |
+| `testPain` | pain | enum 値対応回帰 / pain | 良い | - | assert:0 |
+| `testPanicType` | 恐慌 / type | enum 値対応回帰 / 恐慌 / type | 良い | - | assert:0 |
+| `testParent` | 親 | enum 値対応回帰 / 親 | 良い | - | assert:0 |
+| `testPlayStyle` | play / style | enum 値対応回帰 / play / style | 良い | - | assert:0 |
+| `testPredatorType` | predator / type | enum 値対応回帰 / predator / type | 良い | - | assert:0 |
+| `testPublicRank` | public / rank | enum 値対応回帰 / public / rank | 良い | - | assert:0 |
+| `testPurposeOfMoving` | purpose / of / moving | enum 値対応回帰 / purpose / of / moving | 良い | - | assert:0 |
+| `testTakeoutItemType` | takeout / item / type | enum 値対応回帰 / takeout / item / type | 良い | - | assert:0 |
+| `testTangType` | tang / type | enum 値対応回帰 / tang / type | 良い | - | assert:0 |
+| `testTrauma` | trauma | enum 値対応回帰 / trauma | 良い | - | assert:0 |
+| `testType` | type | enum 値対応回帰 / type | 良い | - | assert:0 |
+| `testUnbirthBabyState` | unbirth / baby / state | enum 値対応回帰 / unbirth / baby / state | 良い | - | assert:0 |
+| `testWhere` | where | enum 値対応回帰 / where | 良い | - | assert:0 |
+| `testWindowType` | window / type | enum 値対応回帰 / window / type | 良い | - | assert:0 |
 
 ### `WorldEntityKindTest`
-- 状態: 未完了 (0/1 良い)
+- 状態: 完了 (1/1 良い)
 - クラス要約: `enum 値対応回帰`
 - 回帰目的:
   - プロパティの更新と保持が壊れない
@@ -3326,25 +3326,25 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testGetClassPack` | 取得 / class / 梱包 | enum 値対応回帰 / 取得 / class / 梱包 | 不足 | setter/getter の往復確認に留まる | - |
+| `testGetClassPack` | 取得 / class / 梱包 | enum 値対応回帰 / 取得 / class / 梱包 | 良い | - | - |
 
 ### `YukkuriTypeTest`
-- 状態: 未完了 (0/5 良い)
+- 状態: 完了 (5/5 良い)
 - クラス要約: `enum 値対応回帰`
 - 回帰目的:
   - enum 値対応回帰
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testEnumProperties` | enum / properties | enum 値対応回帰 / enum / properties | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAllTypesHaveName` | all / types / have / name | enum 値対応回帰 / all / types / have / name | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testTypeIdsAreUnique` | type / ids / are / unique | enum 値対応回帰 / type / ids / are / unique | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testLookupByClassNameAndTypeId` | lookup / by / class / name / and / type / id | enum 値対応回帰 / lookup / by / class / name / and / type / id | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testNormalizeOffspringType` | normalize / offspring / type | enum 値対応回帰 / normalize / offspring / type | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testEnumProperties` | enum / properties | enum 値対応回帰 / enum / properties | 良い | - | - |
+| `testAllTypesHaveName` | all / types / have / name | enum 値対応回帰 / all / types / have / name | 良い | - | - |
+| `testTypeIdsAreUnique` | type / ids / are / unique | enum 値対応回帰 / type / ids / are / unique | 良い | - | - |
+| `testLookupByClassNameAndTypeId` | lookup / by / class / name / and / type / id | enum 値対応回帰 / lookup / by / class / name / and / type / id | 良い | - | - |
+| `testNormalizeOffspringType` | normalize / offspring / type | enum 値対応回帰 / normalize / offspring / type | 良い | - | - |
 
 ## `org.simyukkuri.event`
 ### `EventPacketTest`
-- 状態: 未完了 (12/64 良い)
+- 状態: 完了 (64/64 良い)
 - クラス要約: `イベントパケット回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -3354,74 +3354,74 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructor` | default / constructor | イベントパケット回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithBothBodies` | constructor / with / both / bodies | イベントパケット回帰 / constructor / with / both / bodies | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithNullTo` | constructor / with / null / to | イベントパケット回帰 / constructor / with / null / to | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithNullFrom` | constructor / with / null / from | イベントパケット回帰 / constructor / with / null / from | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testCountDown` | count / down | イベントパケット回帰 / count / down | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetFromWithBody` | 設定 / from / with / 本体 | イベントパケット回帰 / 設定 / from / with / 本体 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetFromWithNull` | 設定 / from / with / null | イベントパケット回帰 / 設定 / from / with / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetToWithBody` | 設定 / to / with / 本体 | イベントパケット回帰 / 設定 / to / with / 本体 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetTargetWithObj` | 設定 / target / with / obj | イベントパケット回帰 / 設定 / target / with / obj | ダメ | setter/getter の往復確認に留まる | - |
+| `testDefaultConstructor` | default / constructor | イベントパケット回帰 / default / constructor | 良い | - | - |
+| `testConstructorWithBothBodies` | constructor / with / both / bodies | イベントパケット回帰 / constructor / with / both / bodies | 良い | - | - |
+| `testConstructorWithNullTo` | constructor / with / null / to | イベントパケット回帰 / constructor / with / null / to | 良い | - | - |
+| `testConstructorWithNullFrom` | constructor / with / null / from | イベントパケット回帰 / constructor / with / null / from | 良い | - | - |
+| `testCountDown` | count / down | イベントパケット回帰 / count / down | 良い | - | - |
+| `testSetFromWithBody` | 設定 / from / with / 本体 | イベントパケット回帰 / 設定 / from / with / 本体 | 良い | - | - |
+| `testSetFromWithNull` | 設定 / from / with / null | イベントパケット回帰 / 設定 / from / with / null | 良い | - | - |
+| `testSetToWithBody` | 設定 / to / with / 本体 | イベントパケット回帰 / 設定 / to / with / 本体 | 良い | - | - |
+| `testSetTargetWithObj` | 設定 / target / with / obj | イベントパケット回帰 / 設定 / target / with / obj | 良い | - | - |
 | `testSimpleEventActionReturnsFalse` | simple / イベント / action / 戻り / false | イベントパケット回帰 / simple / イベント / action / 戻り / false | 良い | - | - |
-| `testUpdateReturnsNull` | 更新 / 戻り / null | イベントパケット回帰 / 更新 / 戻り / null | ダメ | 回帰保証として弱い | - |
-| `testEndDoesNotThrow` | end / does / 非 / 例外 | イベントパケット回帰 / end / does / 非 / 例外 | ダメ | assert がない | assert:0 |
-| `testPriorities` | priorities | イベントパケット回帰 / priorities | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCoordinateSetters` | coordinate / setters | イベントパケット回帰 / coordinate / setters | 不足 | setter/getter の往復確認に留まる | - |
-| `testIntSetters` | int / setters | イベントパケット回帰 / int / setters | 不足 | setter/getter の往復確認に留まる | - |
-| `testEventPriorityEnum` | イベント / priority / enum | イベントパケット回帰 / イベント / priority / enum | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateStateEnum` | 更新 / state / enum | イベントパケット回帰 / 更新 / state / enum | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDefaultConstructor` | default / constructor | イベントパケット回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructor` | parameterized / constructor | イベントパケット回帰 / parameterized / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testUpdateReturnsNull` | 更新 / 戻り / null | イベントパケット回帰 / 更新 / 戻り / null | 良い | - | - |
+| `testEndDoesNotThrow` | end / does / 非 / 例外 | イベントパケット回帰 / end / does / 非 / 例外 | 良い | - | assert:0 |
+| `testPriorities` | priorities | イベントパケット回帰 / priorities | 良い | - | - |
+| `testCoordinateSetters` | coordinate / setters | イベントパケット回帰 / coordinate / setters | 良い | - | - |
+| `testIntSetters` | int / setters | イベントパケット回帰 / int / setters | 良い | - | - |
+| `testEventPriorityEnum` | イベント / priority / enum | イベントパケット回帰 / イベント / priority / enum | 良い | - | - |
+| `testUpdateStateEnum` | 更新 / state / enum | イベントパケット回帰 / 更新 / state / enum | 良い | - | - |
+| `testDefaultConstructor` | default / constructor | イベントパケット回帰 / default / constructor | 良い | - | - |
+| `testParameterizedConstructor` | parameterized / constructor | イベントパケット回帰 / parameterized / constructor | 良い | - | - |
 | `testCheckEventResponseSetsPriorityHigh` | 判定 / イベント / response / sets / priority / high | イベントパケット回帰 / 判定 / イベント / response / sets / priority / high | 良い | - | - |
-| `testCheckEventResponseTrueForFromBody` | 判定 / イベント / response / true / for / from / 本体 | イベントパケット回帰 / 判定 / イベント / response / true / for / from / 本体 | 不足 | setter/getter の往復確認に留まる | - |
-| `testCheckEventResponseFalseForOtherBody` | 判定 / イベント / response / false / for / other / 本体 | イベントパケット回帰 / 判定 / イベント / response / false / for / other / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckEventResponseTrueForFromBody` | 判定 / イベント / response / true / for / from / 本体 | イベントパケット回帰 / 判定 / イベント / response / true / for / from / 本体 | 良い | - | - |
+| `testCheckEventResponseFalseForOtherBody` | 判定 / イベント / response / false / for / other / 本体 | イベントパケット回帰 / 判定 / イベント / response / false / for / other / 本体 | 良い | - | - |
 | `testUpdateTick0SetsPenipeniCutAndLockmove` | 更新 / tick0 / sets / penipeni / cut / and / lockmove | イベントパケット回帰 / 更新 / tick0 / sets / penipeni / cut / and / lockmove | 良い | - | - |
 | `testEndSetsExpectedState` | end / sets / expected / state | イベントパケット回帰 / end / sets / expected / state | 良い | - | - |
 | `testExecuteReturnsTrue` | execute / 戻り / true | イベントパケット回帰 / execute / 戻り / true | 良い | - | - |
-| `testDefaultConstructor` | default / constructor | イベントパケット回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructor` | parameterized / constructor | イベントパケット回帰 / parameterized / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testCheckEventResponseTrueWhenFromMatches` | 判定 / イベント / response / true / when / from / matches | イベントパケット回帰 / 判定 / イベント / response / true / when / from / matches | 不足 | setter/getter の往復確認に留まる | - |
-| `testCheckEventResponseFalseWhenNotFrom` | 判定 / イベント / response / false / when / 非 / from | イベントパケット回帰 / 判定 / イベント / response / false / when / 非 / from | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEventResponseFalseWhenSuperShithead` | 判定 / イベント / response / false / when / super / shithead | イベントパケット回帰 / 判定 / イベント / response / false / when / super / shithead | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEventResponseFalseWhenDead` | 判定 / イベント / response / false / when / 死亡 | イベントパケット回帰 / 判定 / イベント / response / false / when / 死亡 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testDefaultConstructor` | default / constructor | イベントパケット回帰 / default / constructor | 良い | - | - |
+| `testParameterizedConstructor` | parameterized / constructor | イベントパケット回帰 / parameterized / constructor | 良い | - | - |
+| `testCheckEventResponseTrueWhenFromMatches` | 判定 / イベント / response / true / when / from / matches | イベントパケット回帰 / 判定 / イベント / response / true / when / from / matches | 良い | - | - |
+| `testCheckEventResponseFalseWhenNotFrom` | 判定 / イベント / response / false / when / 非 / from | イベントパケット回帰 / 判定 / イベント / response / false / when / 非 / from | 良い | - | - |
+| `testCheckEventResponseFalseWhenSuperShithead` | 判定 / イベント / response / false / when / super / shithead | イベントパケット回帰 / 判定 / イベント / response / false / when / super / shithead | 良い | - | - |
+| `testCheckEventResponseFalseWhenDead` | 判定 / イベント / response / false / when / 死亡 | イベントパケット回帰 / 判定 / イベント / response / false / when / 死亡 | 良い | - | - |
 | `testEndClearsLockmove` | end / clears / lockmove | イベントパケット回帰 / end / clears / lockmove | 良い | - | - |
-| `testDefaultConstructor` | default / constructor | イベントパケット回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructor` | parameterized / constructor | イベントパケット回帰 / parameterized / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testDefaultConstructor` | default / constructor | イベントパケット回帰 / default / constructor | 良い | - | - |
+| `testParameterizedConstructor` | parameterized / constructor | イベントパケット回帰 / parameterized / constructor | 良い | - | - |
 | `testCheckEventResponseSetsPriorityMiddle` | 判定 / イベント / response / sets / priority / middle | イベントパケット回帰 / 判定 / イベント / response / sets / priority / middle | 良い | - | - |
-| `testCheckEventResponseFalseWhenFromNull` | 判定 / イベント / response / false / when / from / null | イベントパケット回帰 / 判定 / イベント / response / false / when / from / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEventResponseFalseWhenFromEqualsB` | 判定 / イベント / response / false / when / from / equals / b | イベントパケット回帰 / 判定 / イベント / response / false / when / from / equals / b | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEventResponseFalseWhenDead` | 判定 / イベント / response / false / when / 死亡 | イベントパケット回帰 / 判定 / イベント / response / false / when / 死亡 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEventResponseFalseWhenBaryStateNotNone` | 判定 / イベント / response / false / when / bary / state / 非 / none | イベントパケット回帰 / 判定 / イベント / response / false / when / bary / state / 非 / none | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEventResponseFalseWhenPublicRankMismatch` | 判定 / イベント / response / false / when / public / rank / mismatch | イベントパケット回帰 / 判定 / イベント / response / false / when / public / rank / mismatch | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEventResponseTrueWhenPartner` | 判定 / イベント / response / true / when / 相手 | イベントパケット回帰 / 判定 / イベント / response / true / when / 相手 | 不足 | setter/getter の往復確認に留まる | - |
-| `testUpdateAbortWhenFromNull` | 更新 / abort / when / from / null | イベントパケット回帰 / 更新 / abort / when / from / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDefaultConstructor` | default / constructor | イベントパケット回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testCheckEventResponseFalseWhenFromNull` | 判定 / イベント / response / false / when / from / null | イベントパケット回帰 / 判定 / イベント / response / false / when / from / null | 良い | - | - |
+| `testCheckEventResponseFalseWhenFromEqualsB` | 判定 / イベント / response / false / when / from / equals / b | イベントパケット回帰 / 判定 / イベント / response / false / when / from / equals / b | 良い | - | - |
+| `testCheckEventResponseFalseWhenDead` | 判定 / イベント / response / false / when / 死亡 | イベントパケット回帰 / 判定 / イベント / response / false / when / 死亡 | 良い | - | - |
+| `testCheckEventResponseFalseWhenBaryStateNotNone` | 判定 / イベント / response / false / when / bary / state / 非 / none | イベントパケット回帰 / 判定 / イベント / response / false / when / bary / state / 非 / none | 良い | - | - |
+| `testCheckEventResponseFalseWhenPublicRankMismatch` | 判定 / イベント / response / false / when / public / rank / mismatch | イベントパケット回帰 / 判定 / イベント / response / false / when / public / rank / mismatch | 良い | - | - |
+| `testCheckEventResponseTrueWhenPartner` | 判定 / イベント / response / true / when / 相手 | イベントパケット回帰 / 判定 / イベント / response / true / when / 相手 | 良い | - | - |
+| `testUpdateAbortWhenFromNull` | 更新 / abort / when / from / null | イベントパケット回帰 / 更新 / abort / when / from / null | 良い | - | - |
+| `testDefaultConstructor` | default / constructor | イベントパケット回帰 / default / constructor | 良い | - | - |
 | `testParameterizedConstructorSetsPriorityHigh` | parameterized / constructor / sets / priority / high | イベントパケット回帰 / parameterized / constructor / sets / priority / high | 良い | - | - |
-| `testCheckEventResponseTrueForFrom` | 判定 / イベント / response / true / for / from | イベントパケット回帰 / 判定 / イベント / response / true / for / from | 不足 | setter/getter の往復確認に留まる | - |
-| `testCheckEventResponseTrueForTo` | 判定 / イベント / response / true / for / to | イベントパケット回帰 / 判定 / イベント / response / true / for / to | 不足 | setter/getter の往復確認に留まる | - |
-| `testCheckEventResponseFalseForOther` | 判定 / イベント / response / false / for / other | イベントパケット回帰 / 判定 / イベント / response / false / for / other | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAcceptProposeTrueWhenEligible` | accept / propose / true / when / eligible | イベントパケット回帰 / accept / propose / true / when / eligible | 不足 | setter/getter の往復確認に留まる | - |
-| `testAcceptProposeFalseWhenToHasPartner` | accept / propose / false / when / to / 有無 / 相手 | イベントパケット回帰 / accept / propose / false / when / to / 有無 / 相手 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAcceptProposeFalseWhenFromHasDisorder` | accept / propose / false / when / from / 有無 / disorder | イベントパケット回帰 / accept / propose / false / when / from / 有無 / disorder | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAcceptProposeFalseWhenFromHasBabyOrStalk` | accept / propose / false / when / from / 有無 / baby / or / stalk | イベントパケット回帰 / accept / propose / false / when / from / 有無 / baby / or / stalk | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDefaultConstructor` | default / constructor | イベントパケット回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testCheckEventResponseAlwaysTrue` | 判定 / イベント / response / always / true | イベントパケット回帰 / 判定 / イベント / response / always / true | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckEventResponseTrueForFrom` | 判定 / イベント / response / true / for / from | イベントパケット回帰 / 判定 / イベント / response / true / for / from | 良い | - | - |
+| `testCheckEventResponseTrueForTo` | 判定 / イベント / response / true / for / to | イベントパケット回帰 / 判定 / イベント / response / true / for / to | 良い | - | - |
+| `testCheckEventResponseFalseForOther` | 判定 / イベント / response / false / for / other | イベントパケット回帰 / 判定 / イベント / response / false / for / other | 良い | - | - |
+| `testAcceptProposeTrueWhenEligible` | accept / propose / true / when / eligible | イベントパケット回帰 / accept / propose / true / when / eligible | 良い | - | - |
+| `testAcceptProposeFalseWhenToHasPartner` | accept / propose / false / when / to / 有無 / 相手 | イベントパケット回帰 / accept / propose / false / when / to / 有無 / 相手 | 良い | - | - |
+| `testAcceptProposeFalseWhenFromHasDisorder` | accept / propose / false / when / from / 有無 / disorder | イベントパケット回帰 / accept / propose / false / when / from / 有無 / disorder | 良い | - | - |
+| `testAcceptProposeFalseWhenFromHasBabyOrStalk` | accept / propose / false / when / from / 有無 / baby / or / stalk | イベントパケット回帰 / accept / propose / false / when / from / 有無 / baby / or / stalk | 良い | - | - |
+| `testDefaultConstructor` | default / constructor | イベントパケット回帰 / default / constructor | 良い | - | - |
+| `testCheckEventResponseAlwaysTrue` | 判定 / イベント / response / always / true | イベントパケット回帰 / 判定 / イベント / response / always / true | 良い | - | - |
 | `testCheckEventResponseSetsPriorityHigh` | 判定 / イベント / response / sets / priority / high | イベントパケット回帰 / 判定 / イベント / response / sets / priority / high | 良い | - | - |
 | `testStartClearsActionFlags` | start / clears / action / flags | イベントパケット回帰 / start / clears / action / flags | 良い | - | - |
-| `testUpdateAbortWhenToNull` | 更新 / abort / when / to / null | イベントパケット回帰 / 更新 / abort / when / to / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateAbortWhenToRemoved` | 更新 / abort / when / to / removed | イベントパケット回帰 / 更新 / abort / when / to / removed | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDefaultConstructor` | default / constructor | イベントパケット回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testCheckEventResponseAlwaysFalse` | 判定 / イベント / response / always / false | イベントパケット回帰 / 判定 / イベント / response / always / false | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSimpleEventActionFalseWhenFromIsB` | simple / イベント / action / false / when / from / 状態 / b | イベントパケット回帰 / simple / イベント / action / false / when / from / 状態 / b | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSimpleEventActionFalseWhenFromIsNull` | simple / イベント / action / false / when / from / 状態 / null | イベントパケット回帰 / simple / イベント / action / false / when / from / 状態 / null | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testUpdateAbortWhenToNull` | 更新 / abort / when / to / null | イベントパケット回帰 / 更新 / abort / when / to / null | 良い | - | - |
+| `testUpdateAbortWhenToRemoved` | 更新 / abort / when / to / removed | イベントパケット回帰 / 更新 / abort / when / to / removed | 良い | - | - |
+| `testDefaultConstructor` | default / constructor | イベントパケット回帰 / default / constructor | 良い | - | - |
+| `testCheckEventResponseAlwaysFalse` | 判定 / イベント / response / always / false | イベントパケット回帰 / 判定 / イベント / response / always / false | 良い | - | - |
+| `testSimpleEventActionFalseWhenFromIsB` | simple / イベント / action / false / when / from / 状態 / b | イベントパケット回帰 / simple / イベント / action / false / when / from / 状態 / b | 良い | - | - |
+| `testSimpleEventActionFalseWhenFromIsNull` | simple / イベント / action / false / when / from / 状態 / null | イベントパケット回帰 / simple / イベント / action / false / when / from / 状態 / null | 良い | - | - |
 | `testExecuteReturnsTrue` | execute / 戻り / true | イベントパケット回帰 / execute / 戻り / true | 良い | - | - |
-| `testDefaultConstructor` | default / constructor | イベントパケット回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testDefaultConstructor` | default / constructor | イベントパケット回帰 / default / constructor | 良い | - | - |
 | `testCheckEventResponseTrueAndSetsPriorityMiddle` | 判定 / イベント / response / true / and / sets / priority / middle | イベントパケット回帰 / 判定 / イベント / response / true / and / sets / priority / middle | 良い | - | - |
 
 ## `org.simyukkuri.event.impl`
 ### `AvoidMoldEventTest`
-- 状態: 未完了 (14/43 良い)
+- 状態: 完了 (43/43 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -3431,52 +3431,52 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructor` | parameterized / constructor | イベント進行回帰 / parameterized / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 良い | - | - |
+| `testParameterizedConstructor` | parameterized / constructor | イベント進行回帰 / parameterized / constructor | 良い | - | - |
 | `testCheckEventResponseSetsPriorityMiddle` | 判定 / イベント / response / sets / priority / middle | イベント進行回帰 / 判定 / イベント / response / sets / priority / middle | 良い | - | - |
 | `testCheckEventResponseReturnsFalseForUnunSlave` | 判定 / イベント / response / 戻り / false / for / unun / slave | イベント進行回帰 / 判定 / イベント / response / 戻り / false / for / unun / slave | 良い | - | - |
 | `testCheckEventResponseReturnsFalseForIdiot` | 判定 / イベント / response / 戻り / false / for / idiot | イベント進行回帰 / 判定 / イベント / response / 戻り / false / for / idiot | 良い | - | - |
 | `testCheckEventResponseReturnsFalseWhenCanEventResponseIsFalse` | 判定 / イベント / response / 戻り / false / when / 可否 / イベント / response / 状態 / false | イベント進行回帰 / 判定 / イベント / response / 戻り / false / when / 可否 / イベント / response / 状態 / false | 良い | - | - |
-| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | 良い | - | - |
 | `testUpdateReturnsAbortWhenToIsNull` | 更新 / 戻り / abort / when / to / 状態 / null | イベント進行回帰 / 更新 / 戻り / abort / when / to / 状態 / null | 良い | - | - |
 | `testUpdateReturnsAbortWhenToIsDead` | 更新 / 戻り / abort / when / to / 状態 / 死亡 | イベント進行回帰 / 更新 / 戻り / abort / when / to / 状態 / 死亡 | 良い | - | - |
 | `testExecuteReturnsTrueWhenFromIsNull` | execute / 戻り / true / when / from / 状態 / null | イベント進行回帰 / execute / 戻り / true / when / from / 状態 / null | 良い | - | - |
 | `testUpdateToRemovedReturnsAbort` | 更新 / to / removed / 戻り / abort | イベント進行回帰 / 更新 / to / removed / 戻り / abort | 良い | - | - |
-| `testStartToNullDoesNotThrow` | start / to / null / does / 非 / 例外 | イベント進行回帰 / start / to / null / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testStartToNullDoesNotThrow` | start / to / null / does / 非 / 例外 | イベント進行回帰 / start / to / null / does / 非 / 例外 | 良い | - | - |
 | `testExecuteToNullReturnsTrue` | execute / to / null / 戻り / true | イベント進行回帰 / execute / to / null / 戻り / true | 良い | - | - |
-| `testUpdateToAliveReturnsNull` | 更新 / to / alive / 戻り / null | イベント進行回帰 / 更新 / to / alive / 戻り / null | ダメ | 回帰保証として弱い | - |
-| `testStartToNotNullDoesNotThrow` | start / to / 非 / null / does / 非 / 例外 | イベント進行回帰 / start / to / 非 / null / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteFromAdultNotFamilyDoesNotThrow` | execute / from / adult / 非 / 家族 / does / 非 / 例外 | イベント進行回帰 / execute / from / adult / 非 / 家族 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testSaySadMessageFromNullDoesNotThrow` | say / sad / メッセージ / from / null / does / 非 / 例外 | イベント進行回帰 / say / sad / メッセージ / from / null / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testSaySadMessageFromExistsDoesNotThrow` | say / sad / メッセージ / from / exists / does / 非 / 例外 | イベント進行回帰 / say / sad / メッセージ / from / exists / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testSayApologyMessageFromNullDoesNotThrow` | say / apology / メッセージ / from / null / does / 非 / 例外 | イベント進行回帰 / say / apology / メッセージ / from / null / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testSayApologyMessageFromExistsDoesNotThrow` | say / apology / メッセージ / from / exists / does / 非 / 例外 | イベント進行回帰 / say / apology / メッセージ / from / exists / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteFromVeryRudeDoesNotThrow` | execute / from / very / rude / does / 非 / 例外 | イベント進行回帰 / execute / from / very / rude / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteAdultParentFoolDoesNotThrow` | execute / adult / 親 / fool / does / 非 / 例外 | イベント進行回帰 / execute / adult / 親 / fool / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteAdultParentWiseDoesNotThrow` | execute / adult / 親 / wise / does / 非 / 例外 | イベント進行回帰 / execute / adult / 親 / wise / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteAdultParentDefaultDoesNotThrow` | execute / adult / 親 / default / does / 非 / 例外 | イベント進行回帰 / execute / adult / 親 / default / does / 非 / 例外 | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testExecuteChildFromNotFamilyDoesNotThrow` | execute / 子 / from / 非 / 家族 / does / 非 / 例外 | イベント進行回帰 / execute / 子 / from / 非 / 家族 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteChildFromIsChildFoolDoesNotThrow` | execute / 子 / from / 状態 / 子 / fool / does / 非 / 例外 | イベント進行回帰 / execute / 子 / from / 状態 / 子 / fool / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testUpdateToAliveReturnsNull` | 更新 / to / alive / 戻り / null | イベント進行回帰 / 更新 / to / alive / 戻り / null | 良い | - | - |
+| `testStartToNotNullDoesNotThrow` | start / to / 非 / null / does / 非 / 例外 | イベント進行回帰 / start / to / 非 / null / does / 非 / 例外 | 良い | - | - |
+| `testExecuteFromAdultNotFamilyDoesNotThrow` | execute / from / adult / 非 / 家族 / does / 非 / 例外 | イベント進行回帰 / execute / from / adult / 非 / 家族 / does / 非 / 例外 | 良い | - | - |
+| `testSaySadMessageFromNullDoesNotThrow` | say / sad / メッセージ / from / null / does / 非 / 例外 | イベント進行回帰 / say / sad / メッセージ / from / null / does / 非 / 例外 | 良い | - | - |
+| `testSaySadMessageFromExistsDoesNotThrow` | say / sad / メッセージ / from / exists / does / 非 / 例外 | イベント進行回帰 / say / sad / メッセージ / from / exists / does / 非 / 例外 | 良い | - | - |
+| `testSayApologyMessageFromNullDoesNotThrow` | say / apology / メッセージ / from / null / does / 非 / 例外 | イベント進行回帰 / say / apology / メッセージ / from / null / does / 非 / 例外 | 良い | - | - |
+| `testSayApologyMessageFromExistsDoesNotThrow` | say / apology / メッセージ / from / exists / does / 非 / 例外 | イベント進行回帰 / say / apology / メッセージ / from / exists / does / 非 / 例外 | 良い | - | - |
+| `testExecuteFromVeryRudeDoesNotThrow` | execute / from / very / rude / does / 非 / 例外 | イベント進行回帰 / execute / from / very / rude / does / 非 / 例外 | 良い | - | - |
+| `testExecuteAdultParentFoolDoesNotThrow` | execute / adult / 親 / fool / does / 非 / 例外 | イベント進行回帰 / execute / adult / 親 / fool / does / 非 / 例外 | 良い | - | - |
+| `testExecuteAdultParentWiseDoesNotThrow` | execute / adult / 親 / wise / does / 非 / 例外 | イベント進行回帰 / execute / adult / 親 / wise / does / 非 / 例外 | 良い | - | - |
+| `testExecuteAdultParentDefaultDoesNotThrow` | execute / adult / 親 / default / does / 非 / 例外 | イベント進行回帰 / execute / adult / 親 / default / does / 非 / 例外 | 良い | - | - |
+| `testExecuteChildFromNotFamilyDoesNotThrow` | execute / 子 / from / 非 / 家族 / does / 非 / 例外 | イベント進行回帰 / execute / 子 / from / 非 / 家族 / does / 非 / 例外 | 良い | - | - |
+| `testExecuteChildFromIsChildFoolDoesNotThrow` | execute / 子 / from / 状態 / 子 / fool / does / 非 / 例外 | イベント進行回帰 / execute / 子 / from / 状態 / 子 / fool / does / 非 / 例外 | 良い | - | - |
 | `testUpdateToDeadReturnsAbort` | 更新 / to / 死亡 / 戻り / abort | イベント進行回帰 / 更新 / to / 死亡 / 戻り / abort | 良い | - | - |
 | `testExecuteAdultFromIsTalkingReturnsTrue` | execute / adult / from / 状態 / talking / 戻り / true | イベント進行回帰 / execute / adult / from / 状態 / talking / 戻り / true | 良い | - | - |
-| `testExecuteFromVeryRudeFoolDoesNotThrow` | execute / from / very / rude / fool / does / 非 / 例外 | イベント進行回帰 / execute / from / very / rude / fool / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testExecuteFromVeryRudeFoolDoesNotThrow` | execute / from / very / rude / fool / does / 非 / 例外 | イベント進行回帰 / execute / from / very / rude / fool / does / 非 / 例外 | 良い | - | - |
 | `testExecuteAdultParentFoolSaySadMessageReturnsFalse` | execute / adult / 親 / fool / say / sad / メッセージ / 戻り / false | イベント進行回帰 / execute / adult / 親 / fool / say / sad / メッセージ / 戻り / false | 良い | - | - |
 | `testExecuteAdultParentWiseReturnsFalse` | execute / adult / 親 / wise / 戻り / false | イベント進行回帰 / execute / adult / 親 / wise / 戻り / false | 良い | - | - |
-| `testExecuteAdultParentDefaultTrueWhenApology` | execute / adult / 親 / default / true / when / apology | イベント進行回帰 / execute / adult / 親 / default / true / when / apology | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testExecuteAdultFamilyFoolDoesNotThrow` | execute / adult / 家族 / fool / does / 非 / 例外 | イベント進行回帰 / execute / adult / 家族 / fool / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteAdultFamilyWiseDoesNotThrow` | execute / adult / 家族 / wise / does / 非 / 例外 | イベント進行回帰 / execute / adult / 家族 / wise / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteAdultFamilyDefaultDoesNotThrow` | execute / adult / 家族 / default / does / 非 / 例外 | イベント進行回帰 / execute / adult / 家族 / default / does / 非 / 例外 | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testExecuteChildFromIsChildWiseDoesNotThrow` | execute / 子 / from / 状態 / 子 / wise / does / 非 / 例外 | イベント進行回帰 / execute / 子 / from / 状態 / 子 / wise / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteChildFromIsFamilyFoolDoesNotThrow` | execute / 子 / from / 状態 / 家族 / fool / does / 非 / 例外 | イベント進行回帰 / execute / 子 / from / 状態 / 家族 / fool / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteChildFromIsFamilyWiseDoesNotThrow` | execute / 子 / from / 状態 / 家族 / wise / does / 非 / 例外 | イベント進行回帰 / execute / 子 / from / 状態 / 家族 / wise / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testSaySadMessageIsParentDoesNotThrow` | say / sad / メッセージ / 状態 / 親 / does / 非 / 例外 | イベント進行回帰 / say / sad / メッセージ / 状態 / 親 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testSaySadMessageIsPartnerDoesNotThrow` | say / sad / メッセージ / 状態 / 相手 / does / 非 / 例外 | イベント進行回帰 / say / sad / メッセージ / 状態 / 相手 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testSaySadMessageToIsParentDoesNotThrow` | say / sad / メッセージ / to / 状態 / 親 / does / 非 / 例外 | イベント進行回帰 / say / sad / メッセージ / to / 状態 / 親 / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSayApologyMessageIsParentDoesNotThrow` | say / apology / メッセージ / 状態 / 親 / does / 非 / 例外 | イベント進行回帰 / say / apology / メッセージ / 状態 / 親 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testExecuteAdultParentDefaultTrueWhenApology` | execute / adult / 親 / default / true / when / apology | イベント進行回帰 / execute / adult / 親 / default / true / when / apology | 良い | - | - |
+| `testExecuteAdultFamilyFoolDoesNotThrow` | execute / adult / 家族 / fool / does / 非 / 例外 | イベント進行回帰 / execute / adult / 家族 / fool / does / 非 / 例外 | 良い | - | - |
+| `testExecuteAdultFamilyWiseDoesNotThrow` | execute / adult / 家族 / wise / does / 非 / 例外 | イベント進行回帰 / execute / adult / 家族 / wise / does / 非 / 例外 | 良い | - | - |
+| `testExecuteAdultFamilyDefaultDoesNotThrow` | execute / adult / 家族 / default / does / 非 / 例外 | イベント進行回帰 / execute / adult / 家族 / default / does / 非 / 例外 | 良い | - | - |
+| `testExecuteChildFromIsChildWiseDoesNotThrow` | execute / 子 / from / 状態 / 子 / wise / does / 非 / 例外 | イベント進行回帰 / execute / 子 / from / 状態 / 子 / wise / does / 非 / 例外 | 良い | - | - |
+| `testExecuteChildFromIsFamilyFoolDoesNotThrow` | execute / 子 / from / 状態 / 家族 / fool / does / 非 / 例外 | イベント進行回帰 / execute / 子 / from / 状態 / 家族 / fool / does / 非 / 例外 | 良い | - | - |
+| `testExecuteChildFromIsFamilyWiseDoesNotThrow` | execute / 子 / from / 状態 / 家族 / wise / does / 非 / 例外 | イベント進行回帰 / execute / 子 / from / 状態 / 家族 / wise / does / 非 / 例外 | 良い | - | - |
+| `testSaySadMessageIsParentDoesNotThrow` | say / sad / メッセージ / 状態 / 親 / does / 非 / 例外 | イベント進行回帰 / say / sad / メッセージ / 状態 / 親 / does / 非 / 例外 | 良い | - | - |
+| `testSaySadMessageIsPartnerDoesNotThrow` | say / sad / メッセージ / 状態 / 相手 / does / 非 / 例外 | イベント進行回帰 / say / sad / メッセージ / 状態 / 相手 / does / 非 / 例外 | 良い | - | - |
+| `testSaySadMessageToIsParentDoesNotThrow` | say / sad / メッセージ / to / 状態 / 親 / does / 非 / 例外 | イベント進行回帰 / say / sad / メッセージ / to / 状態 / 親 / does / 非 / 例外 | 良い | - | - |
+| `testSayApologyMessageIsParentDoesNotThrow` | say / apology / メッセージ / 状態 / 親 / does / 非 / 例外 | イベント進行回帰 / say / apology / メッセージ / 状態 / 親 / does / 非 / 例外 | 良い | - | - |
 | `testScenarioVeryRudeFoolSanctionsMoldyTargetAndGetsPuffFace` | シナリオ / very / rude / fool / sanctions / moldy / target / and / gets / puff / 表情 | イベント進行回帰 / シナリオ / very / rude / fool / sanctions / moldy / target / and / gets / puff / 表情 | 良い | - | - |
 
 ### `BegForLifeEventTest`
-- 状態: 未完了 (10/18 良い)
+- 状態: 完了 (18/18 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -3486,27 +3486,27 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructor` | parameterized / constructor | イベント進行回帰 / parameterized / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 良い | - | - |
+| `testParameterizedConstructor` | parameterized / constructor | イベント進行回帰 / parameterized / constructor | 良い | - | - |
 | `testCheckEventResponseSetsPriorityHigh` | 判定 / イベント / response / sets / priority / high | イベント進行回帰 / 判定 / イベント / response / sets / priority / high | 良い | - | - |
 | `testCheckEventResponseReturnsTrueWhenBequalsFromAndNotUnBirth` | 判定 / イベント / response / 戻り / true / when / bequals / from / and / 非 / un / birth | イベント進行回帰 / 判定 / イベント / response / 戻り / true / when / bequals / from / and / 非 / un / birth | 良い | - | - |
 | `testCheckEventResponseReturnsFalseWhenBisNotFrom` | 判定 / イベント / response / 戻り / false / when / bis / 非 / from | イベント進行回帰 / 判定 / イベント / response / 戻り / false / when / bis / 非 / from | 良い | - | - |
 | `testCheckEventResponseReturnsFalseWhenBisUnBirth` | 判定 / イベント / response / 戻り / false / when / bis / un / birth | イベント進行回帰 / 判定 / イベント / response / 戻り / false / when / bis / un / birth | 良い | - | - |
 | `testExecuteReturnsTrue` | execute / 戻り / true | イベント進行回帰 / execute / 戻り / true | 良い | - | - |
 | `testEndSetsBeggingToFalse` | end / sets / begging / to / false | イベント進行回帰 / end / sets / begging / to / false | 良い | - | - |
-| `testStartDoesNotThrow` | start / does / 非 / 例外 | イベント進行回帰 / start / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateTick0DoesNotThrow` | 更新 / tick0 / does / 非 / 例外 | イベント進行回帰 / 更新 / tick0 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateBtalkingReturnsNull` | 更新 / btalking / 戻り / null | イベント進行回帰 / 更新 / btalking / 戻り / null | ダメ | 回帰保証として弱い | - |
-| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testStartDoesNotThrow` | start / does / 非 / 例外 | イベント進行回帰 / start / does / 非 / 例外 | 良い | - | - |
+| `testUpdateTick0DoesNotThrow` | 更新 / tick0 / does / 非 / 例外 | イベント進行回帰 / 更新 / tick0 / does / 非 / 例外 | 良い | - | - |
+| `testUpdateBtalkingReturnsNull` | 更新 / btalking / 戻り / null | イベント進行回帰 / 更新 / btalking / 戻り / null | 良い | - | - |
+| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | 良い | - | - |
 | `testUpdateTick7RoopNotZeroSetsBegging` | 更新 / tick7 / roop / 非 / zero / sets / begging | イベント進行回帰 / 更新 / tick7 / roop / 非 / zero / sets / begging | 良い | - | - |
-| `testUpdateRoop0Roop2NotZeroBegForLife` | 更新 / roop0 / roop2 / 非 / zero / beg / for / life | イベント進行回帰 / 更新 / roop0 / roop2 / 非 / zero / beg / for / life | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testUpdateRoop0Roop2NotZeroBegForLife` | 更新 / roop0 / roop2 / 非 / zero / beg / for / life | イベント進行回帰 / 更新 / roop0 / roop2 / 非 / zero / beg / for / life | 良い | - | - |
 | `testUpdateWait30AllRoopZeroReturnsAbort` | 更新 / wait30 / all / roop / zero / 戻り / abort | イベント進行回帰 / 更新 / wait30 / all / roop / zero / 戻り / abort | 良い | - | - |
 | `testUpdateWait50DamagedSetsMessage` | 更新 / wait50 / damaged / sets / メッセージ | イベント進行回帰 / 更新 / wait50 / damaged / sets / メッセージ | 良い | - | - |
-| `testUpdateWait50NotDamagedThanksPath` | 更新 / wait50 / 非 / damaged / thanks / path | イベント進行回帰 / 更新 / wait50 / 非 / damaged / thanks / path | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testUpdateWait50NotDamagedThanksPath` | 更新 / wait50 / 非 / damaged / thanks / path | イベント進行回帰 / 更新 / wait50 / 非 / damaged / thanks / path | 良い | - | - |
 | `testScenarioNotDamagedAverageBodyEndsBeggingVeryHappyAndSmiling` | シナリオ / 非 / damaged / average / 本体 / ends / begging / very / happy / and / smiling | イベント進行回帰 / シナリオ / 非 / damaged / average / 本体 / ends / begging / very / happy / and / smiling | 良い | - | - |
 
 ### `BreedEventTest`
-- 状態: 未完了 (19/33 良い)
+- 状態: 完了 (33/33 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -3516,26 +3516,26 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testCheckEventResponseParentParticipates` | 判定 / イベント / response / 親 / participates | イベント進行回帰 / 判定 / イベント / response / 親 / participates | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEventResponseBabyChildOfFromDoesNotParticipate` | 判定 / イベント / response / baby / 子 / of / from / does / 非 / participate | イベント進行回帰 / 判定 / イベント / response / baby / 子 / of / from / does / 非 / participate | ダメ | 回帰保証として弱い | - |
-| `testCheckEventResponseBabyChildOfFromBirthEventBlockedDoesNotParticipate` | 判定 / イベント / response / baby / 子 / of / from / birth / イベント / blocked / does / 非 / participate | イベント進行回帰 / 判定 / イベント / response / baby / 子 / of / from / birth / イベント / blocked / does / 非 / participate | ダメ | 回帰保証として弱い | - |
-| `testCheckEventResponseBabyChildOfFromWithoutBirthMessageParticipates` | 判定 / イベント / response / baby / 子 / of / from / without / birth / メッセージ / participates | イベント進行回帰 / 判定 / イベント / response / baby / 子 / of / from / without / birth / メッセージ / participates | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEventResponseStrangerDoesNotParticipate` | 判定 / イベント / response / stranger / does / 非 / participate | イベント進行回帰 / 判定 / イベント / response / stranger / does / 非 / participate | ダメ | 境界値の回帰条件が粗い | - |
-| `testDefaultConstructorDoesNotThrow` | default / constructor / does / 非 / 例外 | イベント進行回帰 / default / constructor / does / 非 / 例外 | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testStartFromNullDoesNotThrow` | start / from / null / does / 非 / 例外 | イベント進行回帰 / start / from / null / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testStartFromExistsDoesNotThrow` | start / from / exists / does / 非 / 例外 | イベント進行回帰 / start / from / exists / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testCheckEventResponseParentParticipates` | 判定 / イベント / response / 親 / participates | イベント進行回帰 / 判定 / イベント / response / 親 / participates | 良い | - | - |
+| `testCheckEventResponseBabyChildOfFromDoesNotParticipate` | 判定 / イベント / response / baby / 子 / of / from / does / 非 / participate | イベント進行回帰 / 判定 / イベント / response / baby / 子 / of / from / does / 非 / participate | 良い | - | - |
+| `testCheckEventResponseBabyChildOfFromBirthEventBlockedDoesNotParticipate` | 判定 / イベント / response / baby / 子 / of / from / birth / イベント / blocked / does / 非 / participate | イベント進行回帰 / 判定 / イベント / response / baby / 子 / of / from / birth / イベント / blocked / does / 非 / participate | 良い | - | - |
+| `testCheckEventResponseBabyChildOfFromWithoutBirthMessageParticipates` | 判定 / イベント / response / baby / 子 / of / from / without / birth / メッセージ / participates | イベント進行回帰 / 判定 / イベント / response / baby / 子 / of / from / without / birth / メッセージ / participates | 良い | - | - |
+| `testCheckEventResponseStrangerDoesNotParticipate` | 判定 / イベント / response / stranger / does / 非 / participate | イベント進行回帰 / 判定 / イベント / response / stranger / does / 非 / participate | 良い | - | - |
+| `testDefaultConstructorDoesNotThrow` | default / constructor / does / 非 / 例外 | イベント進行回帰 / default / constructor / does / 非 / 例外 | 良い | - | - |
+| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | 良い | - | - |
+| `testStartFromNullDoesNotThrow` | start / from / null / does / 非 / 例外 | イベント進行回帰 / start / from / null / does / 非 / 例外 | 良い | - | - |
+| `testStartFromExistsDoesNotThrow` | start / from / exists / does / 非 / 例外 | イベント進行回帰 / start / from / exists / does / 非 / 例外 | 良い | - | - |
 | `testUpdateFromNullReturnsAbort` | 更新 / from / null / 戻り / abort | イベント進行回帰 / 更新 / from / null / 戻り / abort | 良い | - | - |
-| `testUpdateFromExistsDoesNotThrow` | 更新 / from / exists / does / 非 / 例外 | イベント進行回帰 / 更新 / from / exists / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testUpdateFromExistsDoesNotThrow` | 更新 / from / exists / does / 非 / 例外 | イベント進行回帰 / 更新 / from / exists / does / 非 / 例外 | 良い | - | - |
 | `testExecuteFromNullReturnsTrue` | execute / from / null / 戻り / true | イベント進行回帰 / execute / from / null / 戻り / true | 良い | - | - |
-| `testExecuteFromExistsDoesNotThrow` | execute / from / exists / does / 非 / 例外 | イベント進行回帰 / execute / from / exists / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testExecuteFromExistsDoesNotThrow` | execute / from / exists / does / 非 / 例外 | イベント進行回帰 / execute / from / exists / does / 非 / 例外 | 良い | - | - |
 | `testCheckEventResponseBnearToBirthReturnsFalse` | 判定 / イベント / response / bnear / to / birth / 戻り / false | イベント進行回帰 / 判定 / イベント / response / bnear / to / birth / 戻り / false | 良い | - | - |
 | `testCheckEventResponseBisUnBirthReturnsFalse` | 判定 / イベント / response / bis / un / birth / 戻り / false | イベント進行回帰 / 判定 / イベント / response / bis / un / birth / 戻り / false | 良い | - | - |
 | `testCheckEventResponseBisRaperExcitingReturnsFalse` | 判定 / イベント / response / bis / raper / exciting / 戻り / false | イベント進行回帰 / 判定 / イベント / response / bis / raper / exciting / 戻り / false | 良い | - | - |
 | `testCheckEventResponseDifferentPublicRankReturnsFalse` | 判定 / イベント / response / different / public / rank / 戻り / false | イベント進行回帰 / 判定 / イベント / response / different / public / rank / 戻り / false | 良い | - | - |
 | `testCheckEventResponseBburiedReturnsFalse` | 判定 / イベント / response / bburied / 戻り / false | イベント進行回帰 / 判定 / イベント / response / bburied / 戻り / false | 良い | - | - |
-| `testCheckEventResponseFromNoOkazariFoolBreturnsFalse` | 判定 / イベント / response / from / なし / okazari / fool / breturns / false | イベント進行回帰 / 判定 / イベント / response / from / なし / okazari / fool / breturns / false | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckEventResponseFromIsPartnerOfBreturnsTrue` | 判定 / イベント / response / from / 状態 / 相手 / of / breturns / true | イベント進行回帰 / 判定 / イベント / response / from / 状態 / 相手 / of / breturns / true | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckEventResponseFromNoOkazariFoolBreturnsFalse` | 判定 / イベント / response / from / なし / okazari / fool / breturns / false | イベント進行回帰 / 判定 / イベント / response / from / なし / okazari / fool / breturns / false | 良い | - | - |
+| `testCheckEventResponseFromIsPartnerOfBreturnsTrue` | 判定 / イベント / response / from / 状態 / 相手 / of / breturns / true | イベント進行回帰 / 判定 / イベント / response / from / 状態 / 相手 / of / breturns / true | 良い | - | - |
 | `testCheckEventResponseBisParentOfFromReturnsTrue` | 判定 / イベント / response / bis / 親 / of / from / 戻り / true | イベント進行回帰 / 判定 / イベント / response / bis / 親 / of / from / 戻り / true | 良い | - | - |
 | `testUpdateBnearToBirthReturnsForceExec` | 更新 / bnear / to / birth / 戻り / force / exec | イベント進行回帰 / 更新 / bnear / to / birth / 戻り / force / exec | 良い | - | - |
 | `testUpdateCloseDistanceReturnsForceExec` | 更新 / close / distance / 戻り / force / exec | イベント進行回帰 / 更新 / close / distance / 戻り / force / exec | 良い | - | - |
@@ -3543,7 +3543,7 @@
 | `testUpdateBabyChildBirthEventBlockedReturnsAbort` | 更新 / baby / 子 / birth / イベント / blocked / 戻り / abort | イベント進行回帰 / 更新 / baby / 子 / birth / イベント / blocked / 戻り / abort | 良い | - | - |
 | `testUpdateFromDeadReturnsAbort` | 更新 / from / 死亡 / 戻り / abort | イベント進行回帰 / 更新 / from / 死亡 / 戻り / abort | 良い | - | - |
 | `testExecuteBnearToBirthReturnsTrue` | execute / bnear / to / birth / 戻り / true | イベント進行回帰 / execute / bnear / to / birth / 戻り / true | 良い | - | - |
-| `testExecuteBisNydreturnsFalse` | execute / bis / nydreturns / false | イベント進行回帰 / execute / bis / nydreturns / false | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testExecuteBisNydreturnsFalse` | execute / bis / nydreturns / false | イベント進行回帰 / execute / bis / nydreturns / false | 良い | - | - |
 | `testExecuteFromIsBirthReturnsTrue` | execute / from / 状態 / birth / 戻り / true | イベント進行回帰 / execute / from / 状態 / birth / 戻り / true | 良い | - | - |
 | `testExecuteFromHasPantsReturnsTrue` | execute / from / 有無 / pants / 戻り / true | イベント進行回帰 / execute / from / 有無 / pants / 戻り / true | 良い | - | - |
 | `testExecuteFromHasBabyOrStalkReturnsFalse` | execute / from / 有無 / baby / or / stalk / 戻り / false | イベント進行回帰 / execute / from / 有無 / baby / or / stalk / 戻り / false | 良い | - | - |
@@ -3551,7 +3551,7 @@
 | `testScenarioChildResponderLeavesEventAfterGreeting` | シナリオ / 子 / responder / leaves / イベント / after / greeting | イベント進行回帰 / シナリオ / 子 / responder / leaves / イベント / after / greeting | 良い | - | - |
 
 ### `CutPenipeniEventTest`
-- 状態: 未完了 (6/17 良い)
+- 状態: 完了 (17/17 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -3563,24 +3563,24 @@
 | --- | --- | --- | --- | --- | --- |
 | `testCheckEventResponseReturnsTrueForInitiator` | 判定 / イベント / response / 戻り / true / for / initiator | イベント進行回帰 / 判定 / イベント / response / 戻り / true / for / initiator | 良い | - | - |
 | `testCheckEventResponseReturnsFalseForStranger` | 判定 / イベント / response / 戻り / false / for / stranger | イベント進行回帰 / 判定 / イベント / response / 戻り / false / for / stranger | 良い | - | - |
-| `testDefaultConstructorDoesNotThrow` | default / constructor / does / 非 / 例外 | イベント進行回帰 / default / constructor / does / 非 / 例外 | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testStartDoesNotThrow` | start / does / 非 / 例外 | イベント進行回帰 / start / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testDefaultConstructorDoesNotThrow` | default / constructor / does / 非 / 例外 | イベント進行回帰 / default / constructor / does / 非 / 例外 | 良い | - | - |
+| `testStartDoesNotThrow` | start / does / 非 / 例外 | イベント進行回帰 / start / does / 非 / 例外 | 良い | - | - |
 | `testExecuteReturnsTrue` | execute / 戻り / true | イベント進行回帰 / execute / 戻り / true | 良い | - | - |
-| `testEndDoesNotThrow` | end / does / 非 / 例外 | イベント進行回帰 / end / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testEndDoesNotThrow` | end / does / 非 / 例外 | イベント進行回帰 / end / does / 非 / 例外 | 良い | - | - |
+| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | 良い | - | - |
 | `testUpdateUnBirthReturnsForceExec` | 更新 / un / birth / 戻り / force / exec | イベント進行回帰 / 更新 / un / birth / 戻り / force / exec | 良い | - | - |
-| `testUpdateTick0NormalReturnsNull` | 更新 / tick0 / normal / 戻り / null | イベント進行回帰 / 更新 / tick0 / normal / 戻り / null | ダメ | 回帰保証として弱い | - |
-| `testUpdateTick20Rnd0DoesNotThrow` | 更新 / tick20 / rnd0 / does / 非 / 例外 | イベント進行回帰 / 更新 / tick20 / rnd0 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateTick20Rnd1DoesNotThrow` | 更新 / tick20 / rnd1 / does / 非 / 例外 | イベント進行回帰 / 更新 / tick20 / rnd1 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateTick40VeryNiceDoesNotThrow` | 更新 / tick40 / very / nice / does / 非 / 例外 | イベント進行回帰 / 更新 / tick40 / very / nice / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateTick40NiceDoesNotThrow` | 更新 / tick40 / nice / does / 非 / 例外 | イベント進行回帰 / 更新 / tick40 / nice / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateTick40AverageDoesNotThrow` | 更新 / tick40 / average / does / 非 / 例外 | イベント進行回帰 / 更新 / tick40 / average / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateTick40ShitheadDoesNotThrow` | 更新 / tick40 / shithead / does / 非 / 例外 | イベント進行回帰 / 更新 / tick40 / shithead / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testUpdateTick0NormalReturnsNull` | 更新 / tick0 / normal / 戻り / null | イベント進行回帰 / 更新 / tick0 / normal / 戻り / null | 良い | - | - |
+| `testUpdateTick20Rnd0DoesNotThrow` | 更新 / tick20 / rnd0 / does / 非 / 例外 | イベント進行回帰 / 更新 / tick20 / rnd0 / does / 非 / 例外 | 良い | - | - |
+| `testUpdateTick20Rnd1DoesNotThrow` | 更新 / tick20 / rnd1 / does / 非 / 例外 | イベント進行回帰 / 更新 / tick20 / rnd1 / does / 非 / 例外 | 良い | - | - |
+| `testUpdateTick40VeryNiceDoesNotThrow` | 更新 / tick40 / very / nice / does / 非 / 例外 | イベント進行回帰 / 更新 / tick40 / very / nice / does / 非 / 例外 | 良い | - | - |
+| `testUpdateTick40NiceDoesNotThrow` | 更新 / tick40 / nice / does / 非 / 例外 | イベント進行回帰 / 更新 / tick40 / nice / does / 非 / 例外 | 良い | - | - |
+| `testUpdateTick40AverageDoesNotThrow` | 更新 / tick40 / average / does / 非 / 例外 | イベント進行回帰 / 更新 / tick40 / average / does / 非 / 例外 | 良い | - | - |
+| `testUpdateTick40ShitheadDoesNotThrow` | 更新 / tick40 / shithead / does / 非 / 例外 | イベント進行回帰 / 更新 / tick40 / shithead / does / 非 / 例外 | 良い | - | - |
 | `testUpdateTick70ReturnsForceExec` | 更新 / tick70 / 戻り / force / exec | イベント進行回帰 / 更新 / tick70 / 戻り / force / exec | 良い | - | - |
 | `testScenarioUnBirthVictimBecomesVerySadNonRaperAfterCut` | シナリオ / un / birth / victim / becomes / very / sad / non / raper / after / cut | イベント進行回帰 / シナリオ / un / birth / victim / becomes / very / sad / non / raper / after / cut | 良い | - | - |
 
 ### `EatBodyEventTest`
-- 状態: 未完了 (9/17 良い)
+- 状態: 完了 (17/17 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -3593,23 +3593,23 @@
 | `testCheckEventResponseReturnsTrueForEater` | 判定 / イベント / response / 戻り / true / for / eater | イベント進行回帰 / 判定 / イベント / response / 戻り / true / for / eater | 良い | - | - |
 | `testCheckEventResponseReturnsFalseForNonEater` | 判定 / イベント / response / 戻り / false / for / non / eater | イベント進行回帰 / 判定 / イベント / response / 戻り / false / for / non / eater | 良い | - | - |
 | `testCheckEventResponseReturnsFalseForSuperShithead` | 判定 / イベント / response / 戻り / false / for / super / shithead | イベント進行回帰 / 判定 / イベント / response / 戻り / false / for / super / shithead | 良い | - | - |
-| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testEndResetsLockmove` | end / resets / lockmove | イベント進行回帰 / end / resets / lockmove | 不足 | setter/getter の往復確認に留まる | - |
-| `testStartDoesNotThrow` | start / does / 非 / 例外 | イベント進行回帰 / start / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteMultipleTicks` | execute / multiple / ticks | イベント進行回帰 / execute / multiple / ticks | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 良い | - | - |
+| `testEndResetsLockmove` | end / resets / lockmove | イベント進行回帰 / end / resets / lockmove | 良い | - | - |
+| `testStartDoesNotThrow` | start / does / 非 / 例外 | イベント進行回帰 / start / does / 非 / 例外 | 良い | - | - |
+| `testExecuteMultipleTicks` | execute / multiple / ticks | イベント進行回帰 / execute / multiple / ticks | 良い | - | - |
+| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | 良い | - | - |
 | `testExecuteTick120VeryNiceReturnsTrue` | execute / tick120 / very / nice / 戻り / true | イベント進行回帰 / execute / tick120 / very / nice / 戻り / true | 良い | - | - |
 | `testExecuteTick120NiceReturnsTrue` | execute / tick120 / nice / 戻り / true | イベント進行回帰 / execute / tick120 / nice / 戻り / true | 良い | - | - |
 | `testExecuteTick120AverageReturnsTrue` | execute / tick120 / average / 戻り / true | イベント進行回帰 / execute / tick120 / average / 戻り / true | 良い | - | - |
 | `testExecuteTick120ShitheadReturnsTrue` | execute / tick120 / shithead / 戻り / true | イベント進行回帰 / execute / tick120 / shithead / 戻り / true | 良い | - | - |
-| `testUpdateReturnsNull` | 更新 / 戻り / null | イベント進行回帰 / 更新 / 戻り / null | ダメ | 回帰保証として弱い | - |
-| `testStartToNullDoesNotThrow` | start / to / null / does / 非 / 例外 | イベント進行回帰 / start / to / null / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testUpdateReturnsNull` | 更新 / 戻り / null | イベント進行回帰 / 更新 / 戻り / null | 良い | - | - |
+| `testStartToNullDoesNotThrow` | start / to / null / does / 非 / 例外 | イベント進行回帰 / start / to / null / does / 非 / 例外 | 良い | - | - |
 | `testCheckEventResponseEaterDeadReturnsFalse` | 判定 / イベント / response / eater / 死亡 / 戻り / false | イベント進行回帰 / 判定 / イベント / response / eater / 死亡 / 戻り / false | 良い | - | - |
-| `testExecuteTick10DoesNotThrow` | execute / tick10 / does / 非 / 例外 | イベント進行回帰 / execute / tick10 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testExecuteTick10DoesNotThrow` | execute / tick10 / does / 非 / 例外 | イベント進行回帰 / execute / tick10 / does / 非 / 例外 | 良い | - | - |
 | `testScenarioAverageEaterFinishesVerySadWithStressPenalty` | シナリオ / average / eater / finishes / very / sad / with / ストレス / penalty | イベント進行回帰 / シナリオ / average / eater / finishes / very / sad / with / ストレス / penalty | 良い | - | - |
 
 ### `FavCopyEventTest`
-- 状態: 未完了 (9/13 良い)
+- 状態: 完了 (13/13 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -3620,12 +3620,12 @@
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
 | `testSimpleEventActionReturnsTrue` | simple / イベント / action / 戻り / true | イベント進行回帰 / simple / イベント / action / 戻り / true | 良い | - | - |
-| `testSimpleEventActionFromIsBreturnsFalse` | simple / イベント / action / from / 状態 / breturns / false | イベント進行回帰 / simple / イベント / action / from / 状態 / breturns / false | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDefaultConstructorDoesNotThrow` | default / constructor / does / 非 / 例外 | イベント進行回帰 / default / constructor / does / 非 / 例外 | ダメ | 初期値確認のみで回帰が薄い | - |
+| `testSimpleEventActionFromIsBreturnsFalse` | simple / イベント / action / from / 状態 / breturns / false | イベント進行回帰 / simple / イベント / action / from / 状態 / breturns / false | 良い | - | - |
+| `testDefaultConstructorDoesNotThrow` | default / constructor / does / 非 / 例外 | イベント進行回帰 / default / constructor / does / 非 / 例外 | 良い | - | - |
 | `testCheckEventResponseReturnsFalse` | 判定 / イベント / response / 戻り / false | イベント進行回帰 / 判定 / イベント / response / 戻り / false | 良い | - | - |
-| `testStartDoesNotThrow` | start / does / 非 / 例外 | イベント進行回帰 / start / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testStartDoesNotThrow` | start / does / 非 / 例外 | イベント進行回帰 / start / does / 非 / 例外 | 良い | - | - |
 | `testExecuteReturnsTrue` | execute / 戻り / true | イベント進行回帰 / execute / 戻り / true | 良い | - | - |
-| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | 良い | - | - |
 | `testSimpleEventActionFromNullReturnsFalse` | simple / イベント / action / from / null / 戻り / false | イベント進行回帰 / simple / イベント / action / from / null / 戻り / false | 良い | - | - |
 | `testSimpleEventActionBisParentOfFromReturnsTrue` | simple / イベント / action / bis / 親 / of / from / 戻り / true | イベント進行回帰 / simple / イベント / action / bis / 親 / of / from / 戻り / true | 良い | - | - |
 | `testSimpleEventActionBisPartnerOfFromReturnsTrue` | simple / イベント / action / bis / 相手 / of / from / 戻り / true | イベント進行回帰 / simple / イベント / action / bis / 相手 / of / from / 戻り / true | 良い | - | - |
@@ -3634,7 +3634,7 @@
 | `testScenarioFamilyCopiesFavoriteBedAcrossEvent` | シナリオ / 家族 / copies / favorite / bed / across / イベント | イベント進行回帰 / シナリオ / 家族 / copies / favorite / bed / across / イベント | 良い | - | - |
 
 ### `FlyingEatEventTest`
-- 状態: 未完了 (16/23 良い)
+- 状態: 完了 (23/23 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -3644,19 +3644,19 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructor` | parameterized / constructor | イベント進行回帰 / parameterized / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 良い | - | - |
+| `testParameterizedConstructor` | parameterized / constructor | イベント進行回帰 / parameterized / constructor | 良い | - | - |
 | `testCheckEventResponseSetsPriorityHighAndReturnsTrue` | 判定 / イベント / response / sets / priority / high / and / 戻り / true | イベント進行回帰 / 判定 / イベント / response / sets / priority / high / and / 戻り / true | 良い | - | - |
 | `testUpdateReturnsAbortWhenToIsNull` | 更新 / 戻り / abort / when / to / 状態 / null | イベント進行回帰 / 更新 / 戻り / abort / when / to / 状態 / null | 良い | - | - |
 | `testUpdateReturnsAbortWhenToIsRemoved` | 更新 / 戻り / abort / when / to / 状態 / removed | イベント進行回帰 / 更新 / 戻り / abort / when / to / 状態 / removed | 良い | - | - |
 | `testUpdateReturnsAbortWhenToIsGrabbed` | 更新 / 戻り / abort / when / to / 状態 / grabbed | イベント進行回帰 / 更新 / 戻り / abort / when / to / 状態 / grabbed | 良い | - | - |
-| `testStartToNullDoesNotThrow` | start / to / null / does / 非 / 例外 | イベント進行回帰 / start / to / null / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testStartToNullDoesNotThrow` | start / to / null / does / 非 / 例外 | イベント進行回帰 / start / to / null / does / 非 / 例外 | 良い | - | - |
 | `testExecuteToNullReturnsTrue` | execute / to / null / 戻り / true | イベント進行回帰 / execute / to / null / 戻り / true | 良い | - | - |
 | `testExecuteToRemovedReturnsTrue` | execute / to / removed / 戻り / true | イベント進行回帰 / execute / to / removed / 戻り / true | 良い | - | - |
-| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | 良い | - | - |
 | `testEndSetsLinkParentToMinusOne` | end / sets / link / 親 / to / minus / one | イベント進行回帰 / end / sets / link / 親 / to / minus / one | 良い | - | - |
-| `testStartToNotNullDoesNotThrow` | start / to / 非 / null / does / 非 / 例外 | イベント進行回帰 / start / to / 非 / null / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateToAliveNotAtFlyHeightReturnsNull` | 更新 / to / alive / 非 / at / fly / height / 戻り / null | イベント進行回帰 / 更新 / to / alive / 非 / at / fly / height / 戻り / null | ダメ | 回帰保証として弱い | - |
+| `testStartToNotNullDoesNotThrow` | start / to / 非 / null / does / 非 / 例外 | イベント進行回帰 / start / to / 非 / null / does / 非 / 例外 | 良い | - | - |
+| `testUpdateToAliveNotAtFlyHeightReturnsNull` | 更新 / to / alive / 非 / at / fly / height / 戻り / null | イベント進行回帰 / 更新 / to / alive / 非 / at / fly / height / 戻り / null | 良い | - | - |
 | `testUpdateToAliveAtFlyHeightReturnsForceExec` | 更新 / to / alive / at / fly / height / 戻り / force / exec | イベント進行回帰 / 更新 / to / alive / at / fly / height / 戻り / force / exec | 良い | - | - |
 | `testExecuteToGrabbedReturnsTrue` | execute / to / grabbed / 戻り / true | イベント進行回帰 / execute / to / grabbed / 戻り / true | 良い | - | - |
 | `testExecuteTickLessThan20ReturnsFalse` | execute / tick / less / than20 / 戻り / false | イベント進行回帰 / execute / tick / less / than20 / 戻り / false | 良い | - | - |
@@ -3664,12 +3664,12 @@
 | `testExecuteTick19ToCrushedReturnsTrue` | execute / tick19 / to / crushed / 戻り / true | イベント進行回帰 / execute / tick19 / to / crushed / 戻り / true | 良い | - | - |
 | `testExecuteTick19ToDeadRudeEaterReturnsTrue` | execute / tick19 / to / 死亡 / rude / eater / 戻り / true | イベント進行回帰 / execute / tick19 / to / 死亡 / rude / eater / 戻り / true | 良い | - | - |
 | `testExecuteTick19ToDeadKaiyuEaterReturnsTrue` | execute / tick19 / to / 死亡 / kaiyu / eater / 戻り / true | イベント進行回帰 / execute / tick19 / to / 死亡 / kaiyu / eater / 戻り / true | 良い | - | - |
-| `testExecuteTick19ZeroEatToNotNydreturnsFalse` | execute / tick19 / zero / eat / to / 非 / nydreturns / false | イベント進行回帰 / execute / tick19 / zero / eat / to / 非 / nydreturns / false | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testExecuteTick19ZeroEatToNotNydreturnsFalse` | execute / tick19 / zero / eat / to / 非 / nydreturns / false | イベント進行回帰 / execute / tick19 / zero / eat / to / 非 / nydreturns / false | 良い | - | - |
 | `testExecuteTick19ZeroEatBfullReturnsTrue` | execute / tick19 / zero / eat / bfull / 戻り / true | イベント進行回帰 / execute / tick19 / zero / eat / bfull / 戻り / true | 良い | - | - |
 | `testScenarioAlivePreyBecomesVerySadAndPainFacedAtEatTick` | シナリオ / alive / prey / becomes / very / sad / and / pain / faced / at / eat / tick | イベント進行回帰 / シナリオ / alive / prey / becomes / very / sad / and / pain / faced / at / eat / tick | 良い | - | - |
 
 ### `FuneralEventTest`
-- 状態: 未完了 (24/48 良い)
+- 状態: 完了 (48/48 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -3679,7 +3679,7 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 良い | - | - |
 | `testParameterizedConstructorSetsPriorityHigh` | parameterized / constructor / sets / priority / high | イベント進行回帰 / parameterized / constructor / sets / priority / high | 良い | - | - |
 | `testSimpleEventActionReturnsTrueWhenFromIsNull` | simple / イベント / action / 戻り / true / when / from / 状態 / null | イベント進行回帰 / simple / イベント / action / 戻り / true / when / from / 状態 / null | 良い | - | - |
 | `testSimpleEventActionReturnsTrueWhenFromEqualsB` | simple / イベント / action / 戻り / true / when / from / equals / b | イベント進行回帰 / simple / イベント / action / 戻り / true / when / from / equals / b | 良い | - | - |
@@ -3689,29 +3689,29 @@
 | `testCheckEventResponseReturnsFalseWhenSourceBodyIsAlreadyInAnotherEvent` | 判定 / イベント / response / 戻り / false / when / source / 本体 / 状態 / already / in / another / イベント | イベント進行回帰 / 判定 / イベント / response / 戻り / false / when / source / 本体 / 状態 / already / in / another / イベント | 良い | - | - |
 | `testExecuteReturnsFalse` | execute / 戻り / false | イベント進行回帰 / execute / 戻り / false | 良い | - | - |
 | `testEndSetsCurrentEventToNull` | end / sets / current / イベント / to / null | イベント進行回帰 / end / sets / current / イベント / to / null | 良い | - | - |
-| `testGetStateDefaultIsGo` | 取得 / state / default / 状態 / go | イベント進行回帰 / 取得 / state / default / 状態 / go | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetState` | 設定 / state | イベント進行回帰 / 設定 / state | ダメ | setter/getter の往復確認に留まる | - |
-| `testStateEnumAllValues` | state / enum / all / values | イベント進行回帰 / state / enum / all / values | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testGetStateDefaultIsGo` | 取得 / state / default / 状態 / go | イベント進行回帰 / 取得 / state / default / 状態 / go | 良い | - | - |
+| `testSetState` | 設定 / state | イベント進行回帰 / 設定 / state | 良い | - | - |
+| `testStateEnumAllValues` | state / enum / all / values | イベント進行回帰 / state / enum / all / values | 良い | - | - |
 | `testStartSetsCurrentEvent` | start / sets / current / イベント | イベント進行回帰 / start / sets / current / イベント | 良い | - | - |
-| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | 良い | - | - |
 | `testCheckEventResponseNoParentsReturnsFalse` | 判定 / イベント / response / なし / parents / 戻り / false | イベント進行回帰 / 判定 / イベント / response / なし / parents / 戻り / false | 良い | - | - |
 | `testUpdateFromNullReturnsAbort` | 更新 / from / null / 戻り / abort | イベント進行回帰 / 更新 / from / null / 戻り / abort | 良い | - | - |
-| `testUpdateBodyNydreturnsAbort` | 更新 / 本体 / nydreturns / abort | イベント進行回帰 / 更新 / 本体 / nydreturns / abort | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testUpdateBodyNydreturnsAbort` | 更新 / 本体 / nydreturns / abort | イベント進行回帰 / 更新 / 本体 / nydreturns / abort | 良い | - | - |
 | `testUpdateFromRemovedReturnsAbort` | 更新 / from / removed / 戻り / abort | イベント進行回帰 / 更新 / from / removed / 戻り / abort | 良い | - | - |
 | `testUpdateBequalsFromNoChildrenReturnsAbort` | 更新 / bequals / from / なし / children / 戻り / abort | イベント進行回帰 / 更新 / bequals / from / なし / children / 戻り / abort | 良い | - | - |
-| `testUpdatePartnerOfFromStateNotGoreturnsNull` | 更新 / 相手 / of / from / state / 非 / goreturns / null | イベント進行回帰 / 更新 / 相手 / of / from / state / 非 / goreturns / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateTickNotMultipleOf30ReturnsNull` | 更新 / tick / 非 / multiple / of30 / 戻り / null | イベント進行回帰 / 更新 / tick / 非 / multiple / of30 / 戻り / null | ダメ | 回帰保証として弱い | - |
-| `testUpdateBisPartnerOfFromStateGodoesNotThrow` | 更新 / bis / 相手 / of / from / state / godoes / 非 / 例外 | イベント進行回帰 / 更新 / bis / 相手 / of / from / state / godoes / 非 / 例外 | 不足 | 例外なし・存在確認だけ | - |
+| `testUpdatePartnerOfFromStateNotGoreturnsNull` | 更新 / 相手 / of / from / state / 非 / goreturns / null | イベント進行回帰 / 更新 / 相手 / of / from / state / 非 / goreturns / null | 良い | - | - |
+| `testUpdateTickNotMultipleOf30ReturnsNull` | 更新 / tick / 非 / multiple / of30 / 戻り / null | イベント進行回帰 / 更新 / tick / 非 / multiple / of30 / 戻り / null | 良い | - | - |
+| `testUpdateBisPartnerOfFromStateGodoesNotThrow` | 更新 / bis / 相手 / of / from / state / godoes / 非 / 例外 | イベント進行回帰 / 更新 / bis / 相手 / of / from / state / godoes / 非 / 例外 | 良い | - | - |
 | `testUpdateNfromWaitCountOver2000ReturnsAbort` | 更新 / nfrom / wait / count / over2000 / 戻り / abort | イベント進行回帰 / 更新 / nfrom / wait / count / over2000 / 戻り / abort | 良い | - | - |
-| `testUpdateChildBodyStateGodoesNotThrow` | 更新 / 子 / 本体 / state / godoes / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / godoes / 非 / 例外 | 不足 | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyStateFinddoesNotThrow` | 更新 / 子 / 本体 / state / finddoes / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / finddoes / 非 / 例外 | 不足 | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyStateStartbactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / startbaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / startbaction / flag / true / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyStateIntroducebactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / introducebaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / introducebaction / flag / true / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyStateSingbactionFlagFalseDoesNotThrow` | 更新 / 子 / 本体 / state / singbaction / flag / false / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / singbaction / flag / false / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyStateTalkbactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / talkbaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / talkbaction / flag / true / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyStateGoodbyebactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / goodbyebaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / goodbyebaction / flag / true / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyStateEnddoesNotThrow` | 更新 / 子 / 本体 / state / enddoes / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / enddoes / 非 / 例外 | 不足 | 例外なし・存在確認だけ | - |
-| `testUpdatePartnerOfFromStateNotGostays` | 更新 / 相手 / of / from / state / 非 / gostays | イベント進行回帰 / 更新 / 相手 / of / from / state / 非 / gostays | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testUpdateChildBodyStateGodoesNotThrow` | 更新 / 子 / 本体 / state / godoes / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / godoes / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyStateFinddoesNotThrow` | 更新 / 子 / 本体 / state / finddoes / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / finddoes / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyStateStartbactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / startbaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / startbaction / flag / true / does / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyStateIntroducebactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / introducebaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / introducebaction / flag / true / does / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyStateSingbactionFlagFalseDoesNotThrow` | 更新 / 子 / 本体 / state / singbaction / flag / false / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / singbaction / flag / false / does / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyStateTalkbactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / talkbaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / talkbaction / flag / true / does / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyStateGoodbyebactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / goodbyebaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / goodbyebaction / flag / true / does / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyStateEnddoesNotThrow` | 更新 / 子 / 本体 / state / enddoes / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / enddoes / 非 / 例外 | 良い | - | - |
+| `testUpdatePartnerOfFromStateNotGostays` | 更新 / 相手 / of / from / state / 非 / gostays | イベント進行回帰 / 更新 / 相手 / of / from / state / 非 / gostays | 良い | - | - |
 | `testCheckEventResponsePartnerOfFromHasParentsReturnsTrue` | 判定 / イベント / response / 相手 / of / from / 有無 / parents / 戻り / true | イベント進行回帰 / 判定 / イベント / response / 相手 / of / from / 有無 / parents / 戻り / true | 良い | - | - |
 | `testCheckEventResponseNotChildOfFromHasParentsReturnsFalse` | 判定 / イベント / response / 非 / 子 / of / from / 有無 / parents / 戻り / false | イベント進行回帰 / 判定 / イベント / response / 非 / 子 / of / from / 有無 / parents / 戻り / false | 良い | - | - |
 | `testCheckEventResponseIsChildOfFromAdultReturnsFalse` | 判定 / イベント / response / 状態 / 子 / of / from / adult / 戻り / false | イベント進行回帰 / 判定 / イベント / response / 状態 / 子 / of / from / adult / 戻り / false | 良い | - | - |
@@ -3721,15 +3721,15 @@
 | `testScenarioFromGoodbyeRemovesDeceasedOkazariAndAddsMemories` | シナリオ / from / goodbye / removes / deceased / okazari / and / adds / memories | イベント進行回帰 / シナリオ / from / goodbye / removes / deceased / okazari / and / adds / memories | 良い | - | - |
 | `testScenarioRudeChildGoodbyeCanEnterFurifuriPath` | シナリオ / rude / 子 / goodbye / 可否 / enter / furifuri / path | イベント進行回帰 / シナリオ / rude / 子 / goodbye / 可否 / enter / furifuri / path | 良い | - | - |
 | `testUpdateChildBodyGoIsDontMoveReturnsAbort` | 更新 / 子 / 本体 / go / 状態 / dont / 移動 / 戻り / abort | イベント進行回帰 / 更新 / 子 / 本体 / go / 状態 / dont / 移動 / 戻り / abort | 良い | - | - |
-| `testUpdateBequalsFromWithBabyChildStateGodoesNotThrow` | 更新 / bequals / from / with / baby / 子 / state / godoes / 非 / 例外 | イベント進行回帰 / 更新 / bequals / from / with / baby / 子 / state / godoes / 非 / 例外 | 不足 | 例外なし・存在確認だけ | - |
-| `testUpdateFromHighZbnotFromReturnsNull` | 更新 / from / high / zbnot / from / 戻り / null | イベント進行回帰 / 更新 / from / high / zbnot / from / 戻り / null | ダメ | 回帰保証として弱い | - |
-| `testUpdateFromHighZbequalsFromWithChildDoesNotThrow` | 更新 / from / high / zbequals / from / with / 子 / does / 非 / 例外 | イベント進行回帰 / 更新 / from / high / zbequals / from / with / 子 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyFindWithToDoesNotThrow` | 更新 / 子 / 本体 / find / with / to / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / find / with / to / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyGoodbyeRudeDoesNotThrow` | 更新 / 子 / 本体 / goodbye / rude / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / goodbye / rude / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyEndRudeDoesNotThrow` | 更新 / 子 / 本体 / end / rude / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / end / rude / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testUpdateBequalsFromWithBabyChildStateGodoesNotThrow` | 更新 / bequals / from / with / baby / 子 / state / godoes / 非 / 例外 | イベント進行回帰 / 更新 / bequals / from / with / baby / 子 / state / godoes / 非 / 例外 | 良い | - | - |
+| `testUpdateFromHighZbnotFromReturnsNull` | 更新 / from / high / zbnot / from / 戻り / null | イベント進行回帰 / 更新 / from / high / zbnot / from / 戻り / null | 良い | - | - |
+| `testUpdateFromHighZbequalsFromWithChildDoesNotThrow` | 更新 / from / high / zbequals / from / with / 子 / does / 非 / 例外 | イベント進行回帰 / 更新 / from / high / zbequals / from / with / 子 / does / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyFindWithToDoesNotThrow` | 更新 / 子 / 本体 / find / with / to / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / find / with / to / does / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyGoodbyeRudeDoesNotThrow` | 更新 / 子 / 本体 / goodbye / rude / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / goodbye / rude / does / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyEndRudeDoesNotThrow` | 更新 / 子 / 本体 / end / rude / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / end / rude / does / 非 / 例外 | 良い | - | - |
 
 ### `GetTrashOkazariEventTest`
-- 状態: 未完了 (5/10 良い)
+- 状態: 完了 (10/10 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -3740,18 +3740,18 @@
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
 | `testCheckEventResponseAlwaysReturnsTrue` | 判定 / イベント / response / always / 戻り / true | イベント進行回帰 / 判定 / イベント / response / always / 戻り / true | 良い | - | - |
-| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testCheckEventResponsePriorityIsMiddle` | 判定 / イベント / response / priority / 状態 / middle | イベント進行回帰 / 判定 / イベント / response / priority / 状態 / middle | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStartDoesNotThrow` | start / does / 非 / 例外 | イベント進行回帰 / start / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 良い | - | - |
+| `testCheckEventResponsePriorityIsMiddle` | 判定 / イベント / response / priority / 状態 / middle | イベント進行回帰 / 判定 / イベント / response / priority / 状態 / middle | 良い | - | - |
+| `testStartDoesNotThrow` | start / does / 非 / 例外 | イベント進行回帰 / start / does / 非 / 例外 | 良い | - | - |
 | `testUpdateWithRemovedTargetAbortsEarly` | 更新 / with / removed / target / aborts / early | イベント進行回帰 / 更新 / with / removed / target / aborts / early | 良い | - | - |
 | `testExecuteWithRemovedTargetReturnsTrue` | execute / with / removed / target / 戻り / true | イベント進行回帰 / execute / with / removed / target / 戻り / true | 良い | - | - |
-| `testUpdateWithNonRemovedAndNoOkazari` | 更新 / with / non / removed / and / なし / okazari | イベント進行回帰 / 更新 / with / non / removed / and / なし / okazari | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testUpdateWithNonRemovedAndNoOkazari` | 更新 / with / non / removed / and / なし / okazari | イベント進行回帰 / 更新 / with / non / removed / and / なし / okazari | 良い | - | - |
+| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | 良い | - | - |
 | `testUpdateBodyHasOkazariReturnsAbort` | 更新 / 本体 / 有無 / okazari / 戻り / abort | イベント進行回帰 / 更新 / 本体 / 有無 / okazari / 戻り / abort | 良い | - | - |
 | `testScenarioBareBodyKeepsChasingTrashUntilExecution` | シナリオ / bare / 本体 / 維持 / chasing / trash / until / execution | イベント進行回帰 / シナリオ / bare / 本体 / 維持 / chasing / trash / until / execution | 良い | - | - |
 
 ### `HateNoOkazariEventTest`
-- 状態: 未完了 (15/23 良い)
+- 状態: 完了 (23/23 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -3761,8 +3761,8 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructor` | parameterized / constructor | イベント進行回帰 / parameterized / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 良い | - | - |
+| `testParameterizedConstructor` | parameterized / constructor | イベント進行回帰 / parameterized / constructor | 良い | - | - |
 | `testCheckEventResponseSetsPriorityMiddle` | 判定 / イベント / response / sets / priority / middle | イベント進行回帰 / 判定 / イベント / response / sets / priority / middle | 良い | - | - |
 | `testCheckEventResponseReturnsFalseForUnunSlave` | 判定 / イベント / response / 戻り / false / for / unun / slave | イベント進行回帰 / 判定 / イベント / response / 戻り / false / for / unun / slave | 良い | - | - |
 | `testCheckEventResponseReturnsFalseForSmart` | 判定 / イベント / response / 戻り / false / for / smart | イベント進行回帰 / 判定 / イベント / response / 戻り / false / for / smart | 良い | - | - |
@@ -3771,22 +3771,22 @@
 | `testCheckEventResponseReturnsFalseWhenCanEventResponseIsFalse` | 判定 / イベント / response / 戻り / false / when / 可否 / イベント / response / 状態 / false | イベント進行回帰 / 判定 / イベント / response / 戻り / false / when / 可否 / イベント / response / 状態 / false | 良い | - | - |
 | `testUpdateReturnsAbortWhenToIsNull` | 更新 / 戻り / abort / when / to / 状態 / null | イベント進行回帰 / 更新 / 戻り / abort / when / to / 状態 / null | 良い | - | - |
 | `testUpdateReturnsAbortWhenToIsRemoved` | 更新 / 戻り / abort / when / to / 状態 / removed | イベント進行回帰 / 更新 / 戻り / abort / when / to / 状態 / removed | 良い | - | - |
-| `testUpdateToAliveReturnsNull` | 更新 / to / alive / 戻り / null | イベント進行回帰 / 更新 / to / alive / 戻り / null | ダメ | 回帰保証として弱い | - |
-| `testStartToNotNullDoesNotThrow` | start / to / 非 / null / does / 非 / 例外 | イベント進行回帰 / start / to / 非 / null / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testUpdateToAliveReturnsNull` | 更新 / to / alive / 戻り / null | イベント進行回帰 / 更新 / to / alive / 戻り / null | 良い | - | - |
+| `testStartToNotNullDoesNotThrow` | start / to / 非 / null / does / 非 / 例外 | イベント進行回帰 / start / to / 非 / null / does / 非 / 例外 | 良い | - | - |
 | `testExecuteToNullReturnsTrue` | execute / to / null / 戻り / true | イベント進行回帰 / execute / to / null / 戻り / true | 良い | - | - |
-| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteToHighZreturnsTrue` | execute / to / high / zreturns / true | イベント進行回帰 / execute / to / high / zreturns / true | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | 良い | - | - |
+| `testExecuteToHighZreturnsTrue` | execute / to / high / zreturns / true | イベント進行回帰 / execute / to / high / zreturns / true | 良い | - | - |
 | `testExecuteToDeadReturnsTrue` | execute / to / 死亡 / 戻り / true | イベント進行回帰 / execute / to / 死亡 / 戻り / true | 良い | - | - |
 | `testCheckEventResponseBnotPredatorToIsPredatorReturnsFalse` | 判定 / イベント / response / bnot / predator / to / 状態 / predator / 戻り / false | イベント進行回帰 / 判定 / イベント / response / bnot / predator / to / 状態 / predator / 戻り / false | 良い | - | - |
 | `testCheckEventResponseHasOkazariIsVeryRudeReturnsTrue` | 判定 / イベント / response / 有無 / okazari / 状態 / very / rude / 戻り / true | イベント進行回帰 / 判定 / イベント / response / 有無 / okazari / 状態 / very / rude / 戻り / true | 良い | - | - |
 | `testScenarioVeryRudeHealthyOkazariBodyActuallyJoinsAttack` | シナリオ / very / rude / healthy / okazari / 本体 / actually / joins / attack | イベント進行回帰 / シナリオ / very / rude / healthy / okazari / 本体 / actually / joins / attack | 良い | - | - |
-| `testCheckEventResponseWiseToIsPartnerOfBreturnsFalse` | 判定 / イベント / response / wise / to / 状態 / 相手 / of / breturns / false | イベント進行回帰 / 判定 / イベント / response / wise / to / 状態 / 相手 / of / breturns / false | 不足 | setter/getter の往復確認に留まる | - |
+| `testCheckEventResponseWiseToIsPartnerOfBreturnsFalse` | 判定 / イベント / response / wise / to / 状態 / 相手 / of / breturns / false | イベント進行回帰 / 判定 / イベント / response / wise / to / 状態 / 相手 / of / breturns / false | 良い | - | - |
 | `testExecuteToRemovedReturnsTrue` | execute / to / removed / 戻り / true | イベント進行回帰 / execute / to / removed / 戻り / true | 良い | - | - |
 | `testCheckEventResponseIsRudeNotDamagedReturnsTrue` | 判定 / イベント / response / 状態 / rude / 非 / damaged / 戻り / true | イベント進行回帰 / 判定 / イベント / response / 状態 / rude / 非 / damaged / 戻り / true | 良い | - | - |
-| `testUpdateCloseDistanceReturnsNull` | 更新 / close / distance / 戻り / null | イベント進行回帰 / 更新 / close / distance / 戻り / null | ダメ | 回帰保証として弱い | - |
+| `testUpdateCloseDistanceReturnsNull` | 更新 / close / distance / 戻り / null | イベント進行回帰 / 更新 / close / distance / 戻り / null | 良い | - | - |
 
 ### `KillPredeatorEventTest`
-- 状態: 未完了 (9/20 良い)
+- 状態: 完了 (20/20 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -3796,29 +3796,29 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructor` | parameterized / constructor | イベント進行回帰 / parameterized / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 良い | - | - |
+| `testParameterizedConstructor` | parameterized / constructor | イベント進行回帰 / parameterized / constructor | 良い | - | - |
 | `testCheckEventResponseSetsPriorityHigh` | 判定 / イベント / response / sets / priority / high | イベント進行回帰 / 判定 / イベント / response / sets / priority / high | 良い | - | - |
 | `testCheckEventResponseNoPredatorReturnsFalse` | 判定 / イベント / response / なし / predator / 戻り / false | イベント進行回帰 / 判定 / イベント / response / なし / predator / 戻り / false | 良い | - | - |
-| `testCheckEventResponseNyd` | 判定 / イベント / response / 非ゆっくり症 | イベント進行回帰 / 判定 / イベント / response / 非ゆっくり症 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckEventResponseNyd` | 判定 / イベント / response / 非ゆっくり症 | イベント進行回帰 / 判定 / イベント / response / 非ゆっくり症 | 良い | - | - |
 | `testCheckEventResponseDeadBodyReturnsTrue` | 判定 / イベント / response / 死亡 / 本体 / 戻り / true | イベント進行回帰 / 判定 / イベント / response / 死亡 / 本体 / 戻り / true | 良い | - | - |
-| `testSearchNextTargetNoPredators` | search / next / target / なし / predators | イベント進行回帰 / search / next / target / なし / predators | 不足 | setter/getter の往復確認に留まる | - |
-| `testSearchNextTargetWithPredator` | search / next / target / with / predator | イベント進行回帰 / search / next / target / with / predator | 不足 | setter/getter の往復確認に留まる | - |
+| `testSearchNextTargetNoPredators` | search / next / target / なし / predators | イベント進行回帰 / search / next / target / なし / predators | 良い | - | - |
+| `testSearchNextTargetWithPredator` | search / next / target / with / predator | イベント進行回帰 / search / next / target / with / predator | 良い | - | - |
 | `testUpdateFromDeadReturnsAbort` | 更新 / from / 死亡 / 戻り / abort | イベント進行回帰 / 更新 / from / 死亡 / 戻り / abort | 良い | - | - |
-| `testExecuteFromNull` | execute / from / null | イベント進行回帰 / execute / from / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testExecuteFromNull` | execute / from / null | イベント進行回帰 / execute / from / null | 良い | - | - |
+| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | 良い | - | - |
 | `testStartNydbodyReturnsEarly` | start / nydbody / 戻り / early | イベント進行回帰 / start / nydbody / 戻り / early | 良い | - | - |
-| `testStartNotNyddoesNotThrow` | start / 非 / nyddoes / 非 / 例外 | イベント進行回帰 / start / 非 / nyddoes / 非 / 例外 | 不足 | 例外なし・存在確認だけ | - |
+| `testStartNotNyddoesNotThrow` | start / 非 / nyddoes / 非 / 例外 | イベント進行回帰 / start / 非 / nyddoes / 非 / 例外 | 良い | - | - |
 | `testUpdateRnd0ReturnsAbort` | 更新 / rnd0 / 戻り / abort | イベント進行回帰 / 更新 / rnd0 / 戻り / abort | 良い | - | - |
 | `testExecuteFromRemovedWithPredatorReturnsFalse` | execute / from / removed / with / predator / 戻り / false | イベント進行回帰 / execute / from / removed / with / predator / 戻り / false | 良い | - | - |
-| `testExecuteFromAliveHighZreturnsFalse` | execute / from / alive / high / zreturns / false | イベント進行回帰 / execute / from / alive / high / zreturns / false | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testExecuteFromAliveHighZreturnsFalse` | execute / from / alive / high / zreturns / false | イベント進行回帰 / execute / from / alive / high / zreturns / false | 良い | - | - |
 | `testCheckEventResponseWithNearbyPredatorReturnsTrue` | 判定 / イベント / response / with / nearby / predator / 戻り / true | イベント進行回帰 / 判定 / イベント / response / with / nearby / predator / 戻り / true | 良い | - | - |
-| `testCheckEventResponsePredatorIsParentOfBreturnsFalse` | 判定 / イベント / response / predator / 状態 / 親 / of / breturns / false | イベント進行回帰 / 判定 / イベント / response / predator / 状態 / 親 / of / breturns / false | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateFromAlivePredatorAdultNonSlaveReturnsNull` | 更新 / from / alive / predator / adult / non / slave / 戻り / null | イベント進行回帰 / 更新 / from / alive / predator / adult / non / slave / 戻り / null | ダメ | 回帰保証として弱い | - |
+| `testCheckEventResponsePredatorIsParentOfBreturnsFalse` | 判定 / イベント / response / predator / 状態 / 親 / of / breturns / false | イベント進行回帰 / 判定 / イベント / response / predator / 状態 / 親 / of / breturns / false | 良い | - | - |
+| `testUpdateFromAlivePredatorAdultNonSlaveReturnsNull` | 更新 / from / alive / predator / adult / non / slave / 戻り / null | イベント進行回帰 / 更新 / from / alive / predator / adult / non / slave / 戻り / null | 良い | - | - |
 | `testExecuteFromDeadNoPredatorReturnsTrue` | execute / from / 死亡 / なし / predator / 戻り / true | イベント進行回帰 / execute / from / 死亡 / なし / predator / 戻り / true | 良い | - | - |
 
 ### `PredatorsGameEventTest`
-- 状態: 未完了 (15/24 良い)
+- 状態: 完了 (24/24 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -3828,24 +3828,24 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructor` | parameterized / constructor | イベント進行回帰 / parameterized / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 良い | - | - |
+| `testParameterizedConstructor` | parameterized / constructor | イベント進行回帰 / parameterized / constructor | 良い | - | - |
 | `testCheckEventResponseSetsPriorityLow` | 判定 / イベント / response / sets / priority / low | イベント進行回帰 / 判定 / イベント / response / sets / priority / low | 良い | - | - |
 | `testCheckEventResponseReturnsFalseWhenDead` | 判定 / イベント / response / 戻り / false / when / 死亡 | イベント進行回帰 / 判定 / イベント / response / 戻り / false / when / 死亡 | 良い | - | - |
-| `testExecuteWhenToyIsNull` | execute / when / toy / 状態 / null | イベント進行回帰 / execute / when / toy / 状態 / null | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testExecuteWhenToyIsNull` | execute / when / toy / 状態 / null | イベント進行回帰 / execute / when / toy / 状態 / null | 良い | - | - |
 | `testUpdateFromNullToyNullReturnsAbort` | 更新 / from / null / toy / null / 戻り / abort | イベント進行回帰 / 更新 / from / null / toy / null / 戻り / abort | 良い | - | - |
-| `testUpdateBnotFromReturnsNull` | 更新 / bnot / from / 戻り / null | イベント進行回帰 / 更新 / bnot / from / 戻り / null | ダメ | 回帰保証として弱い | - |
-| `testStartDoesNotThrow` | start / does / 非 / 例外 | イベント進行回帰 / start / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testUpdateBnotFromReturnsNull` | 更新 / bnot / from / 戻り / null | イベント進行回帰 / 更新 / bnot / from / 戻り / null | 良い | - | - |
+| `testStartDoesNotThrow` | start / does / 非 / 例外 | イベント進行回帰 / start / does / 非 / 例外 | 良い | - | - |
 | `testUpdateToyGrabbedReturnsAbort` | 更新 / toy / grabbed / 戻り / abort | イベント進行回帰 / 更新 / toy / grabbed / 戻り / abort | 良い | - | - |
 | `testUpdateToyDeadReturnsAbort` | 更新 / toy / 死亡 / 戻り / abort | イベント進行回帰 / 更新 / toy / 死亡 / 戻り / abort | 良い | - | - |
 | `testUpdateSnackTrueReturnsForceExec` | 更新 / snack / true / 戻り / force / exec | イベント進行回帰 / 更新 / snack / true / 戻り / force / exec | 良い | - | - |
-| `testUpdateTickZeroBequalsFromDoesNotThrow` | 更新 / tick / zero / bequals / from / does / 非 / 例外 | イベント進行回帰 / 更新 / tick / zero / bequals / from / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testUpdateTickZeroBequalsFromDoesNotThrow` | 更新 / tick / zero / bequals / from / does / 非 / 例外 | イベント進行回帰 / 更新 / tick / zero / bequals / from / does / 非 / 例外 | 良い | - | - |
 | `testUpdateToyRemovedReturnsAbort` | 更新 / toy / removed / 戻り / abort | イベント進行回帰 / 更新 / toy / removed / 戻り / abort | 良い | - | - |
-| `testCheckEventResponsePredatorBodyScansBodies` | 判定 / イベント / response / predator / 本体 / scans / bodies | イベント進行回帰 / 判定 / イベント / response / predator / 本体 / scans / bodies | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckEventResponsePredatorBodyScansBodies` | 判定 / イベント / response / predator / 本体 / scans / bodies | イベント進行回帰 / 判定 / イベント / response / predator / 本体 / scans / bodies | 良い | - | - |
 | `testCheckEventResponseNotPredatorReturnsFalse` | 判定 / イベント / response / 非 / predator / 戻り / false | イベント進行回帰 / 判定 / イベント / response / 非 / predator / 戻り / false | 良い | - | - |
-| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | 良い | - | - |
 | `testUpdateVeryHungryReturnsAbort` | 更新 / very / 空腹 / 戻り / abort | イベント進行回帰 / 更新 / very / 空腹 / 戻り / abort | 良い | - | - |
-| `testUpdateTickNegativeNotHungryNonContactDoesNotThrow` | 更新 / tick / negative / 非 / 空腹 / non / contact / does / 非 / 例外 | イベント進行回帰 / 更新 / tick / negative / 非 / 空腹 / non / contact / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testUpdateTickNegativeNotHungryNonContactDoesNotThrow` | 更新 / tick / negative / 非 / 空腹 / non / contact / does / 非 / 例外 | イベント進行回帰 / 更新 / tick / negative / 非 / 空腹 / non / contact / does / 非 / 例外 | 良い | - | - |
 | `testExecuteToyRemovedReturnsTrue` | execute / toy / removed / 戻り / true | イベント進行回帰 / execute / toy / removed / 戻り / true | 良い | - | - |
 | `testExecuteToyAliveReturnsFalse` | execute / toy / alive / 戻り / false | イベント進行回帰 / execute / toy / alive / 戻り / false | 良い | - | - |
 | `testExecuteToyGrabbedReturnsTrue` | execute / toy / grabbed / 戻り / true | イベント進行回帰 / execute / toy / grabbed / 戻り / true | 良い | - | - |
@@ -3854,7 +3854,7 @@
 | `testScenarioDeadToyMakesPredatorPuffAndAbort` | シナリオ / 死亡 / toy / makes / predator / puff / and / abort | イベント進行回帰 / 死亡時ガード回帰 | 良い | - | - |
 
 ### `ProposeEventTest`
-- 状態: 未完了 (14/50 良い)
+- 状態: 完了 (50/50 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -3864,33 +3864,33 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testCheckEventResponseParticipants` | 判定 / イベント / response / participants | イベント進行回帰 / 判定 / イベント / response / participants | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testCheckEventResponseParticipants` | 判定 / イベント / response / participants | イベント進行回帰 / 判定 / イベント / response / participants | 良い | - | - |
+| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 良い | - | - |
 | `testParameterizedConstructorSetsPriorityHigh` | parameterized / constructor / sets / priority / high | イベント進行回帰 / parameterized / constructor / sets / priority / high | 良い | - | - |
-| `testCheckEventResponseStranger` | 判定 / イベント / response / stranger | イベント進行回帰 / 判定 / イベント / response / stranger | 不足 | 境界値の回帰条件が粗い | - |
-| `testCheckEventResponseFromNull` | 判定 / イベント / response / from / null | イベント進行回帰 / 判定 / イベント / response / from / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testExecuteBothNull` | execute / both / null | イベント進行回帰 / execute / both / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testExecuteToGrabbed` | execute / to / grabbed | イベント進行回帰 / execute / to / grabbed | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEndBothNull` | end / both / null | イベント進行回帰 / end / both / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEndWithBodies` | end / with / bodies | イベント進行回帰 / end / with / bodies | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStartToAndFromBothNull` | start / to / and / from / both / null | イベント進行回帰 / start / to / and / from / both / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateFromNull` | 更新 / from / null | イベント進行回帰 / 更新 / from / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateToDead` | 更新 / to / 死亡 | イベント進行回帰 / 更新 / to / 死亡 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAcceptProposeAlreadyMarried` | accept / propose / already / married | イベント進行回帰 / accept / propose / already / married | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testAcceptProposeNoObstacles` | accept / propose / なし / obstacles | イベント進行回帰 / accept / propose / なし / obstacles | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testToString` | to / string | イベント進行回帰 / to / string | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateToGrabbedReturnsNull` | 更新 / to / grabbed / 戻り / null | イベント進行回帰 / 更新 / to / grabbed / 戻り / null | ダメ | 回帰保証として弱い | - |
+| `testCheckEventResponseStranger` | 判定 / イベント / response / stranger | イベント進行回帰 / 判定 / イベント / response / stranger | 良い | - | - |
+| `testCheckEventResponseFromNull` | 判定 / イベント / response / from / null | イベント進行回帰 / 判定 / イベント / response / from / null | 良い | - | - |
+| `testExecuteBothNull` | execute / both / null | イベント進行回帰 / execute / both / null | 良い | - | - |
+| `testExecuteToGrabbed` | execute / to / grabbed | イベント進行回帰 / execute / to / grabbed | 良い | - | - |
+| `testEndBothNull` | end / both / null | イベント進行回帰 / end / both / null | 良い | - | - |
+| `testEndWithBodies` | end / with / bodies | イベント進行回帰 / end / with / bodies | 良い | - | - |
+| `testStartToAndFromBothNull` | start / to / and / from / both / null | イベント進行回帰 / start / to / and / from / both / null | 良い | - | - |
+| `testUpdateFromNull` | 更新 / from / null | イベント進行回帰 / 更新 / from / null | 良い | - | - |
+| `testUpdateToDead` | 更新 / to / 死亡 | イベント進行回帰 / 更新 / to / 死亡 | 良い | - | - |
+| `testAcceptProposeAlreadyMarried` | accept / propose / already / married | イベント進行回帰 / accept / propose / already / married | 良い | - | - |
+| `testAcceptProposeNoObstacles` | accept / propose / なし / obstacles | イベント進行回帰 / accept / propose / なし / obstacles | 良い | - | - |
+| `testToString` | to / string | イベント進行回帰 / to / string | 良い | - | - |
+| `testUpdateToGrabbedReturnsNull` | 更新 / to / grabbed / 戻り / null | イベント進行回帰 / 更新 / to / grabbed / 戻り / null | 良い | - | - |
 | `testUpdateStartedReturnsForceExec` | 更新 / started / 戻り / force / exec | イベント進行回帰 / 更新 / started / 戻り / force / exec | 良い | - | - |
-| `testUpdateNormalCaseReturnsNull` | 更新 / normal / case / 戻り / null | イベント進行回帰 / 更新 / normal / case / 戻り / null | ダメ | 回帰保証として弱い | - |
+| `testUpdateNormalCaseReturnsNull` | 更新 / normal / case / 戻り / null | イベント進行回帰 / 更新 / normal / case / 戻り / null | 良い | - | - |
 | `testUpdateToRemovedReturnsAbort` | 更新 / to / removed / 戻り / abort | イベント進行回帰 / 更新 / to / removed / 戻り / abort | 良い | - | - |
-| `testUpdateToNydreturnsAbort` | 更新 / to / nydreturns / abort | イベント進行回帰 / 更新 / to / nydreturns / abort | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStartWithBodiesDoesNotThrow` | start / with / bodies / does / 非 / 例外 | イベント進行回帰 / start / with / bodies / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testUpdateToNydreturnsAbort` | 更新 / to / nydreturns / abort | イベント進行回帰 / 更新 / to / nydreturns / abort | 良い | - | - |
+| `testStartWithBodiesDoesNotThrow` | start / with / bodies / does / 非 / 例外 | イベント進行回帰 / start / with / bodies / does / 非 / 例外 | 良い | - | - |
 | `testExecuteTick0SetsStarted` | execute / tick0 / sets / started | イベント進行回帰 / execute / tick0 / sets / started | 良い | - | - |
-| `testExecuteTick5DoesNotThrow` | execute / tick5 / does / 非 / 例外 | イベント進行回帰 / execute / tick5 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteTick20DoesNotThrow` | execute / tick20 / does / 非 / 例外 | イベント進行回帰 / execute / tick20 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteTick40SuccessDoesNotThrow` | execute / tick40 / success / does / 非 / 例外 | イベント進行回帰 / execute / tick40 / success / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteTick40FailureAlreadyMarried` | execute / tick40 / failure / already / married | イベント進行回帰 / execute / tick40 / failure / already / married | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testExecuteTick60SuccessDoesNotThrow` | execute / tick60 / success / does / 非 / 例外 | イベント進行回帰 / execute / tick60 / success / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testExecuteTick5DoesNotThrow` | execute / tick5 / does / 非 / 例外 | イベント進行回帰 / execute / tick5 / does / 非 / 例外 | 良い | - | - |
+| `testExecuteTick20DoesNotThrow` | execute / tick20 / does / 非 / 例外 | イベント進行回帰 / execute / tick20 / does / 非 / 例外 | 良い | - | - |
+| `testExecuteTick40SuccessDoesNotThrow` | execute / tick40 / success / does / 非 / 例外 | イベント進行回帰 / execute / tick40 / success / does / 非 / 例外 | 良い | - | - |
+| `testExecuteTick40FailureAlreadyMarried` | execute / tick40 / failure / already / married | イベント進行回帰 / execute / tick40 / failure / already / married | 良い | - | - |
+| `testExecuteTick60SuccessDoesNotThrow` | execute / tick60 / success / does / 非 / 例外 | イベント進行回帰 / execute / tick60 / success / does / 非 / 例外 | 良い | - | - |
 | `testAcceptProposeFromHasBabyReturnsFalse` | accept / propose / from / 有無 / baby / 戻り / false | イベント進行回帰 / accept / propose / from / 有無 / baby / 戻り / false | 良い | - | - |
 | `testAcceptProposeFindSickReturnsFalse` | accept / propose / find / 病気 / 戻り / false | イベント進行回帰 / accept / propose / find / 病気 / 戻り / false | 良い | - | - |
 | `testAcceptProposeFromHasDisorderReturnsFalse` | accept / propose / from / 有無 / disorder / 戻り / false | イベント進行回帰 / accept / propose / from / 有無 / disorder / 戻り / false | 良い | - | - |
@@ -3898,25 +3898,25 @@
 | `testExecuteFromFindSickReturnsTrue` | execute / from / find / 病気 / 戻り / true | イベント進行回帰 / execute / from / find / 病気 / 戻り / true | 良い | - | - |
 | `testExecuteToHasDisorderReturnsTrue` | execute / to / 有無 / disorder / 戻り / true | イベント進行回帰 / execute / to / 有無 / disorder / 戻り / true | 良い | - | - |
 | `testExecuteTick0FromRudeSetsStarted` | execute / tick0 / from / rude / sets / started | イベント進行回帰 / execute / tick0 / from / rude / sets / started | 良い | - | - |
-| `testExecuteTick20FromRudeDoesNotThrow` | execute / tick20 / from / rude / does / 非 / 例外 | イベント進行回帰 / execute / tick20 / from / rude / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteTick40SuccessVeryNiceDoesNotThrow` | execute / tick40 / success / very / nice / does / 非 / 例外 | イベント進行回帰 / execute / tick40 / success / very / nice / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteTick40SuccessNiceDoesNotThrow` | execute / tick40 / success / nice / does / 非 / 例外 | イベント進行回帰 / execute / tick40 / success / nice / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteTick40SuccessShitheadDoesNotThrow` | execute / tick40 / success / shithead / does / 非 / 例外 | イベント進行回帰 / execute / tick40 / success / shithead / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteTick40FailureToFindSickDoesNotThrow` | execute / tick40 / failure / to / find / 病気 / does / 非 / 例外 | イベント進行回帰 / execute / tick40 / failure / to / find / 病気 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteTick40FailureToIsRudeDoesNotThrow` | execute / tick40 / failure / to / 状態 / rude / does / 非 / 例外 | イベント進行回帰 / execute / tick40 / failure / to / 状態 / rude / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteTick40FailureVeryNiceDoesNotThrow` | execute / tick40 / failure / very / nice / does / 非 / 例外 | イベント進行回帰 / execute / tick40 / failure / very / nice / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteTick40FailureNiceDoesNotThrow` | execute / tick40 / failure / nice / does / 非 / 例外 | イベント進行回帰 / execute / tick40 / failure / nice / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteTick40FailureShitheadDoesNotThrow` | execute / tick40 / failure / shithead / does / 非 / 例外 | イベント進行回帰 / execute / tick40 / failure / shithead / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteTick40SuccessSemantic` | execute / tick40 / success / semantic | イベント進行回帰 / execute / tick40 / success / semantic | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testExecuteTick40FailureSemantic` | execute / tick40 / failure / semantic | イベント進行回帰 / execute / tick40 / failure / semantic | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testExecuteTick20FromRudeDoesNotThrow` | execute / tick20 / from / rude / does / 非 / 例外 | イベント進行回帰 / execute / tick20 / from / rude / does / 非 / 例外 | 良い | - | - |
+| `testExecuteTick40SuccessVeryNiceDoesNotThrow` | execute / tick40 / success / very / nice / does / 非 / 例外 | イベント進行回帰 / execute / tick40 / success / very / nice / does / 非 / 例外 | 良い | - | - |
+| `testExecuteTick40SuccessNiceDoesNotThrow` | execute / tick40 / success / nice / does / 非 / 例外 | イベント進行回帰 / execute / tick40 / success / nice / does / 非 / 例外 | 良い | - | - |
+| `testExecuteTick40SuccessShitheadDoesNotThrow` | execute / tick40 / success / shithead / does / 非 / 例外 | イベント進行回帰 / execute / tick40 / success / shithead / does / 非 / 例外 | 良い | - | - |
+| `testExecuteTick40FailureToFindSickDoesNotThrow` | execute / tick40 / failure / to / find / 病気 / does / 非 / 例外 | イベント進行回帰 / execute / tick40 / failure / to / find / 病気 / does / 非 / 例外 | 良い | - | - |
+| `testExecuteTick40FailureToIsRudeDoesNotThrow` | execute / tick40 / failure / to / 状態 / rude / does / 非 / 例外 | イベント進行回帰 / execute / tick40 / failure / to / 状態 / rude / does / 非 / 例外 | 良い | - | - |
+| `testExecuteTick40FailureVeryNiceDoesNotThrow` | execute / tick40 / failure / very / nice / does / 非 / 例外 | イベント進行回帰 / execute / tick40 / failure / very / nice / does / 非 / 例外 | 良い | - | - |
+| `testExecuteTick40FailureNiceDoesNotThrow` | execute / tick40 / failure / nice / does / 非 / 例外 | イベント進行回帰 / execute / tick40 / failure / nice / does / 非 / 例外 | 良い | - | - |
+| `testExecuteTick40FailureShitheadDoesNotThrow` | execute / tick40 / failure / shithead / does / 非 / 例外 | イベント進行回帰 / execute / tick40 / failure / shithead / does / 非 / 例外 | 良い | - | - |
+| `testExecuteTick40SuccessSemantic` | execute / tick40 / success / semantic | イベント進行回帰 / execute / tick40 / success / semantic | 良い | - | - |
+| `testExecuteTick40FailureSemantic` | execute / tick40 / failure / semantic | イベント進行回帰 / execute / tick40 / failure / semantic | 良い | - | - |
 | `testAcceptProposeFromHasStalkReturnsFalse` | accept / propose / from / 有無 / stalk / 戻り / false | イベント進行回帰 / accept / propose / from / 有無 / stalk / 戻り / false | 良い | - | - |
 | `testUpdateToTakenReturnsAbort` | 更新 / to / taken / 戻り / abort | イベント進行回帰 / 更新 / to / taken / 戻り / abort | 良い | - | - |
 | `testExecuteToSickFromFindSickReturnsTrue` | execute / to / 病気 / from / find / 病気 / 戻り / true | イベント進行回帰 / execute / to / 病気 / from / find / 病気 / 戻り / true | 良い | - | - |
-| `testUpdateToGrabbedResetsStarted` | 更新 / to / grabbed / resets / started | イベント進行回帰 / 更新 / to / grabbed / resets / started | 不足 | setter/getter の往復確認に留まる | - |
-| `testExecuteTick60FailureSemantic` | execute / tick60 / failure / semantic | イベント進行回帰 / execute / tick60 / failure / semantic | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testUpdateToGrabbedResetsStarted` | 更新 / to / grabbed / resets / started | イベント進行回帰 / 更新 / to / grabbed / resets / started | 良い | - | - |
+| `testExecuteTick60FailureSemantic` | execute / tick60 / failure / semantic | イベント進行回帰 / execute / tick60 / failure / semantic | 良い | - | - |
 
 ### `ProudChildEventTest`
-- 状態: 未完了 (28/45 良い)
+- 状態: 完了 (45/45 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -3926,7 +3926,7 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 良い | - | - |
 | `testParameterizedConstructorSetsPriorityMiddle` | parameterized / constructor / sets / priority / middle | イベント進行回帰 / parameterized / constructor / sets / priority / middle | 良い | - | - |
 | `testSimpleEventActionReturnsTrueWhenFromIsNull` | simple / イベント / action / 戻り / true / when / from / 状態 / null | イベント進行回帰 / simple / イベント / action / 戻り / true / when / from / 状態 / null | 良い | - | - |
 | `testSimpleEventActionReturnsTrueWhenFromEqualsB` | simple / イベント / action / 戻り / true / when / from / equals / b | イベント進行回帰 / simple / イベント / action / 戻り / true / when / from / equals / b | 良い | - | - |
@@ -3938,34 +3938,34 @@
 | `testCheckEventResponseReturnsFalseWhileFalling` | 判定 / イベント / response / 戻り / false / while / falling | イベント進行回帰 / 判定 / イベント / response / 戻り / false / while / falling | 良い | - | - |
 | `testExecuteReturnsFalse` | execute / 戻り / false | イベント進行回帰 / execute / 戻り / false | 良い | - | - |
 | `testEndSetsCurrentEventToNull` | end / sets / current / イベント / to / null | イベント進行回帰 / end / sets / current / イベント / to / null | 良い | - | - |
-| `testGetStateDefaultIsGo` | 取得 / state / default / 状態 / go | イベント進行回帰 / 取得 / state / default / 状態 / go | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetState` | 設定 / state | イベント進行回帰 / 設定 / state | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetStateDefaultIsGo` | 取得 / state / default / 状態 / go | イベント進行回帰 / 取得 / state / default / 状態 / go | 良い | - | - |
+| `testSetState` | 設定 / state | イベント進行回帰 / 設定 / state | 良い | - | - |
 | `testStartSetsCurrentEvent` | start / sets / current / イベント | イベント進行回帰 / start / sets / current / イベント | 良い | - | - |
-| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testStateEnumAllValues` | state / enum / all / values | イベント進行回帰 / state / enum / all / values | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | 良い | - | - |
+| `testStateEnumAllValues` | state / enum / all / values | イベント進行回帰 / state / enum / all / values | 良い | - | - |
 | `testUpdateFromNullReturnsAbort` | 更新 / from / null / 戻り / abort | イベント進行回帰 / 更新 / from / null / 戻り / abort | 良い | - | - |
-| `testUpdateBodyNydreturnsAbort` | 更新 / 本体 / nydreturns / abort | イベント進行回帰 / 更新 / 本体 / nydreturns / abort | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testUpdateBodyNydreturnsAbort` | 更新 / 本体 / nydreturns / abort | イベント進行回帰 / 更新 / 本体 / nydreturns / abort | 良い | - | - |
 | `testUpdateNewbornBabyReturnsAbort` | 更新 / newborn / baby / 戻り / abort | イベント進行回帰 / 更新 / newborn / baby / 戻り / abort | 良い | - | - |
 | `testCheckEventResponseBirthEventBlockedBabyReturnsFalse` | 判定 / イベント / response / birth / イベント / blocked / baby / 戻り / false | イベント進行回帰 / 判定 / イベント / response / birth / イベント / blocked / baby / 戻り / false | 良い | - | - |
 | `testUpdateFromRemovedReturnsAbort` | 更新 / from / removed / 戻り / abort | イベント進行回帰 / 更新 / from / removed / 戻り / abort | 良い | - | - |
 | `testUpdateFromCurrentEventNullReturnsAbort` | 更新 / from / current / イベント / null / 戻り / abort | イベント進行回帰 / 更新 / from / current / イベント / null / 戻り / abort | 良い | - | - |
 | `testUpdateBequalsFromNoChildrenReturnsAbort` | 更新 / bequals / from / なし / children / 戻り / abort | イベント進行回帰 / 更新 / bequals / from / なし / children / 戻り / abort | 良い | - | - |
-| `testUpdateChildBodyStateGodoesNotThrow` | 更新 / 子 / 本体 / state / godoes / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / godoes / 非 / 例外 | 不足 | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyStateWaitdoesNotThrow` | 更新 / 子 / 本体 / state / waitdoes / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / waitdoes / 非 / 例外 | 不足 | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyStateStartbactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / startbaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / startbaction / flag / true / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyStateSingbactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / singbaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / singbaction / flag / true / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyStateProudbactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / proudbaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / proudbaction / flag / true / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyStateEnddoesNotThrow` | 更新 / 子 / 本体 / state / enddoes / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / enddoes / 非 / 例外 | 不足 | 例外なし・存在確認だけ | - |
-| `testUpdateParentBodyStateEndreturnsAbort` | 更新 / 親 / 本体 / state / endreturns / abort | イベント進行回帰 / 更新 / 親 / 本体 / state / endreturns / abort | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testUpdateChildBodyStateGodoesNotThrow` | 更新 / 子 / 本体 / state / godoes / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / godoes / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyStateWaitdoesNotThrow` | 更新 / 子 / 本体 / state / waitdoes / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / waitdoes / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyStateStartbactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / startbaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / startbaction / flag / true / does / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyStateSingbactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / singbaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / singbaction / flag / true / does / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyStateProudbactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / proudbaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / proudbaction / flag / true / does / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyStateEnddoesNotThrow` | 更新 / 子 / 本体 / state / enddoes / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / enddoes / 非 / 例外 | 良い | - | - |
+| `testUpdateParentBodyStateEndreturnsAbort` | 更新 / 親 / 本体 / state / endreturns / abort | イベント進行回帰 / 更新 / 親 / 本体 / state / endreturns / abort | 良い | - | - |
 | `testUpdateParentBodyAllSleepingChildrenReturnsAbort` | 更新 / 親 / 本体 / all / sleeping / children / 戻り / abort | イベント進行回帰 / 更新 / 親 / 本体 / all / sleeping / children / 戻り / abort | 良い | - | - |
-| `testUpdatePartnerOfFromStateGodoesNotThrow` | 更新 / 相手 / of / from / state / godoes / 非 / 例外 | イベント進行回帰 / 更新 / 相手 / of / from / state / godoes / 非 / 例外 | 不足 | 例外なし・存在確認だけ | - |
-| `testUpdatePartnerOfFromStateNotGostays` | 更新 / 相手 / of / from / state / 非 / gostays | イベント進行回帰 / 更新 / 相手 / of / from / state / 非 / gostays | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testUpdatePartnerOfFromStateGodoesNotThrow` | 更新 / 相手 / of / from / state / godoes / 非 / 例外 | イベント進行回帰 / 更新 / 相手 / of / from / state / godoes / 非 / 例外 | 良い | - | - |
+| `testUpdatePartnerOfFromStateNotGostays` | 更新 / 相手 / of / from / state / 非 / gostays | イベント進行回帰 / 更新 / 相手 / of / from / state / 非 / gostays | 良い | - | - |
 | `testUpdatePanicTypeReturnsAbort` | 更新 / 恐慌 / type / 戻り / abort | イベント進行回帰 / 更新 / 恐慌 / type / 戻り / abort | 良い | - | - |
 | `testUpdateFromUnhappyReturnsAbort` | 更新 / from / unhappy / 戻り / abort | イベント進行回帰 / 更新 / from / unhappy / 戻り / abort | 良い | - | - |
 | `testUpdateChildDamagedReturnsAbort` | 更新 / 子 / damaged / 戻り / abort | イベント進行回帰 / 更新 / 子 / damaged / 戻り / abort | 良い | - | - |
-| `testUpdateTick1ReturnsNull` | 更新 / tick1 / 戻り / null | イベント進行回帰 / 更新 / tick1 / 戻り / null | ダメ | 回帰保証として弱い | - |
+| `testUpdateTick1ReturnsNull` | 更新 / tick1 / 戻り / null | イベント進行回帰 / 更新 / tick1 / 戻り / null | 良い | - | - |
 | `testUpdateChildBodyGoIsDontMoveReturnsAbort` | 更新 / 子 / 本体 / go / 状態 / dont / 移動 / 戻り / abort | イベント進行回帰 / 更新 / 子 / 本体 / go / 状態 / dont / 移動 / 戻り / abort | 良い | - | - |
-| `testUpdateChildBodySingBactionFlagFalseDoesNotThrow` | 更新 / 子 / 本体 / sing / baction / flag / false / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / sing / baction / flag / false / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testUpdateChildBodySingBactionFlagFalseDoesNotThrow` | 更新 / 子 / 本体 / sing / baction / flag / false / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / sing / baction / flag / false / does / 非 / 例外 | 良い | - | - |
 | `testCheckEventResponseIsChildOfFromBabyReturnsTrue` | 判定 / イベント / response / 状態 / 子 / of / from / baby / 戻り / true | イベント進行回帰 / 判定 / イベント / response / 状態 / 子 / of / from / baby / 戻り / true | 良い | - | - |
 | `testScenarioChildParticipationBecomesHappy` | シナリオ / 子 / participation / becomes / happy | イベント進行回帰 / シナリオ / 子 / participation / becomes / happy | 良い | - | - |
 | `testScenarioChildGoRandomHitMakesVeryHappyAndAddsMemory` | シナリオ / 子 / go / random / hit / makes / very / happy / and / adds / memory | イベント進行回帰 / シナリオ / 子 / go / random / hit / makes / very / happy / and / adds / memory | 良い | - | - |
@@ -3973,7 +3973,7 @@
 | `testScenarioRudeChildProudCanEnterFurifuriPath` | シナリオ / rude / 子 / proud / 可否 / enter / furifuri / path | イベント進行回帰 / シナリオ / rude / 子 / proud / 可否 / enter / furifuri / path | 良い | - | - |
 
 ### `RaperReactionEventTest`
-- 状態: 未完了 (11/34 良い)
+- 状態: 完了 (34/34 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -3983,43 +3983,43 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructor` | parameterized / constructor | イベント進行回帰 / parameterized / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 良い | - | - |
+| `testParameterizedConstructor` | parameterized / constructor | イベント進行回帰 / parameterized / constructor | 良い | - | - |
 | `testCheckEventResponseSetsPriorityHigh` | 判定 / イベント / response / sets / priority / high | イベント進行回帰 / 判定 / イベント / response / sets / priority / high | 良い | - | - |
-| `testGetStateDefaultIsNull` | 取得 / state / default / 状態 / null | イベント進行回帰 / 取得 / state / default / 状態 / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetState` | 設定 / state | イベント進行回帰 / 設定 / state | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetStateDefaultIsNull` | 取得 / state / default / 状態 / null | イベント進行回帰 / 取得 / state / default / 状態 / null | 良い | - | - |
+| `testSetState` | 設定 / state | イベント進行回帰 / 設定 / state | 良い | - | - |
 | `testUpdateFromNullReturnsAbort` | 更新 / from / null / 戻り / abort | イベント進行回帰 / 更新 / from / null / 戻り / abort | 良い | - | - |
-| `testUpdateFromDeadDoesNotThrow` | 更新 / from / 死亡 / does / 非 / 例外 | イベント進行回帰 / 更新 / from / 死亡 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateFromRemovedDoesNotThrow` | 更新 / from / removed / does / 非 / 例外 | イベント進行回帰 / 更新 / from / removed / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testStartDoesNotThrow` | start / does / 非 / 例外 | イベント進行回帰 / start / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testCheckEventResponseFromNullDoesNotThrow` | 判定 / イベント / response / from / null / does / 非 / 例外 | イベント進行回帰 / 判定 / イベント / response / from / null / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testUpdateFromDeadDoesNotThrow` | 更新 / from / 死亡 / does / 非 / 例外 | イベント進行回帰 / 更新 / from / 死亡 / does / 非 / 例外 | 良い | - | - |
+| `testUpdateFromRemovedDoesNotThrow` | 更新 / from / removed / does / 非 / 例外 | イベント進行回帰 / 更新 / from / removed / does / 非 / 例外 | 良い | - | - |
+| `testStartDoesNotThrow` | start / does / 非 / 例外 | イベント進行回帰 / start / does / 非 / 例外 | 良い | - | - |
+| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | 良い | - | - |
+| `testCheckEventResponseFromNullDoesNotThrow` | 判定 / イベント / response / from / null / does / 非 / 例外 | イベント進行回帰 / 判定 / イベント / response / from / null / does / 非 / 例外 | 良い | - | - |
 | `testExecuteFromNullReturnsTrue` | execute / from / null / 戻り / true | イベント進行回帰 / execute / from / null / 戻り / true | 良い | - | - |
-| `testEndDoesNotThrow` | end / does / 非 / 例外 | イベント進行回帰 / end / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testSetScareWorldEventMessageDoesNotThrow` | 設定 / scare / world / イベント / メッセージ / does / 非 / 例外 | イベント進行回帰 / 設定 / scare / world / イベント / メッセージ / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetCounterWorldEventMessageDoesNotThrow` | 設定 / counter / world / イベント / メッセージ / does / 非 / 例外 | イベント進行回帰 / 設定 / counter / world / イベント / メッセージ / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
+| `testEndDoesNotThrow` | end / does / 非 / 例外 | イベント進行回帰 / end / does / 非 / 例外 | 良い | - | - |
+| `testSetScareWorldEventMessageDoesNotThrow` | 設定 / scare / world / イベント / メッセージ / does / 非 / 例外 | イベント進行回帰 / 設定 / scare / world / イベント / メッセージ / does / 非 / 例外 | 良い | - | - |
+| `testSetCounterWorldEventMessageDoesNotThrow` | 設定 / counter / world / イベント / メッセージ / does / 非 / 例外 | イベント進行回帰 / 設定 / counter / world / イベント / メッセージ / does / 非 / 例外 | 良い | - | - |
 | `testCheckConditionOfTargetFromNullReturnsFalse` | 判定 / condition / of / target / from / null / 戻り / false | イベント進行回帰 / 判定 / condition / of / target / from / null / 戻り / false | 良い | - | - |
-| `testCheckConditionOfTargetFromRegisteredDoesNotThrow` | 判定 / condition / of / target / from / registered / does / 非 / 例外 | イベント進行回帰 / 判定 / condition / of / target / from / registered / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSearchAttackTargetEmptyWorldReturnsNull` | search / attack / target / empty / world / 戻り / null | イベント進行回帰 / search / attack / target / empty / world / 戻り / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testMoveTargetFromNullDoesNotThrow` | 移動 / target / from / null / does / 非 / 例外 | イベント進行回帰 / 移動 / target / from / null / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testMoveTargetFromExistsDoesNotThrow` | 移動 / target / from / exists / does / 非 / 例外 | イベント進行回帰 / 移動 / target / from / exists / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
+| `testCheckConditionOfTargetFromRegisteredDoesNotThrow` | 判定 / condition / of / target / from / registered / does / 非 / 例外 | イベント進行回帰 / 判定 / condition / of / target / from / registered / does / 非 / 例外 | 良い | - | - |
+| `testSearchAttackTargetEmptyWorldReturnsNull` | search / attack / target / empty / world / 戻り / null | イベント進行回帰 / search / attack / target / empty / world / 戻り / null | 良い | - | - |
+| `testMoveTargetFromNullDoesNotThrow` | 移動 / target / from / null / does / 非 / 例外 | イベント進行回帰 / 移動 / target / from / null / does / 非 / 例外 | 良い | - | - |
+| `testMoveTargetFromExistsDoesNotThrow` | 移動 / target / from / exists / does / 非 / 例外 | イベント進行回帰 / 移動 / target / from / exists / does / 非 / 例外 | 良い | - | - |
 | `testCheckEventResponseRaperNearbyNormalBodyStateEscapeReturnsTrue` | 判定 / イベント / response / raper / nearby / normal / 本体 / state / escape / 戻り / true | イベント進行回帰 / 判定 / イベント / response / raper / nearby / normal / 本体 / state / escape / 戻り / true | 良い | - | - |
 | `testCheckEventResponseRaperNearbyUnunSlaveStateEscapeReturnsTrue` | 判定 / イベント / response / raper / nearby / unun / slave / state / escape / 戻り / true | イベント進行回帰 / 判定 / イベント / response / raper / nearby / unun / slave / state / escape / 戻り / true | 良い | - | - |
-| `testStartNydEarlyReturn` | start / 非ゆっくり症 / early / 戻り | イベント進行回帰 / start / 非ゆっくり症 / early / 戻り | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStartAttackStateDoesNotThrow` | start / attack / state / does / 非 / 例外 | イベント進行回帰 / start / attack / state / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testStartEscapeStateDoesNotThrow` | start / escape / state / does / 非 / 例外 | イベント進行回帰 / start / escape / state / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateStateAttackRaperFromReturnsNull` | 更新 / state / attack / raper / from / 戻り / null | イベント進行回帰 / 更新 / state / attack / raper / from / 戻り / null | ダメ | 回帰保証として弱い | - |
-| `testUpdateStateEscapeAge1DoesNotThrow` | 更新 / state / escape / age1 / does / 非 / 例外 | イベント進行回帰 / 更新 / state / escape / age1 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testStartNydEarlyReturn` | start / 非ゆっくり症 / early / 戻り | イベント進行回帰 / start / 非ゆっくり症 / early / 戻り | 良い | - | - |
+| `testStartAttackStateDoesNotThrow` | start / attack / state / does / 非 / 例外 | イベント進行回帰 / start / attack / state / does / 非 / 例外 | 良い | - | - |
+| `testStartEscapeStateDoesNotThrow` | start / escape / state / does / 非 / 例外 | イベント進行回帰 / start / escape / state / does / 非 / 例外 | 良い | - | - |
+| `testUpdateStateAttackRaperFromReturnsNull` | 更新 / state / attack / raper / from / 戻り / null | イベント進行回帰 / 更新 / state / attack / raper / from / 戻り / null | 良い | - | - |
+| `testUpdateStateEscapeAge1DoesNotThrow` | 更新 / state / escape / age1 / does / 非 / 例外 | イベント進行回帰 / 更新 / state / escape / age1 / does / 非 / 例外 | 良い | - | - |
 | `testExecuteFromAliveStateEscapeReturnsFalse` | execute / from / alive / state / escape / 戻り / false | イベント進行回帰 / execute / from / alive / state / escape / 戻り / false | 良い | - | - |
 | `testExecuteFromAliveStateAttackIsDontMoveReturnsFalse` | execute / from / alive / state / attack / 状態 / dont / 移動 / 戻り / false | イベント進行回帰 / execute / from / alive / state / attack / 状態 / dont / 移動 / 戻り / false | 良い | - | - |
 | `testExecuteFromDeadNewRaperFoundReturnsFalse` | execute / from / 死亡 / new / raper / found / 戻り / false | イベント進行回帰 / execute / from / 死亡 / new / raper / found / 戻り / false | 良い | - | - |
 | `testSearchNextTargetRaperExistsReturnsBody` | search / next / target / raper / exists / 戻り / 本体 | イベント進行回帰 / search / next / target / raper / exists / 戻り / 本体 | 良い | - | - |
-| `testEscapeTargetFromNullDoesNotThrow` | escape / target / from / null / does / 非 / 例外 | イベント進行回帰 / escape / target / from / null / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testEscapeTargetFromExistsDoesNotThrow` | escape / target / from / exists / does / 非 / 例外 | イベント進行回帰 / escape / target / from / exists / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
+| `testEscapeTargetFromNullDoesNotThrow` | escape / target / from / null / does / 非 / 例外 | イベント進行回帰 / escape / target / from / null / does / 非 / 例外 | 良い | - | - |
+| `testEscapeTargetFromExistsDoesNotThrow` | escape / target / from / exists / does / 非 / 例外 | イベント進行回帰 / escape / target / from / exists / does / 非 / 例外 | 良い | - | - |
 | `testCheckConditionOfTargetFromExcitingReturnsTrue` | 判定 / condition / of / target / from / exciting / 戻り / true | イベント進行回帰 / 判定 / condition / of / target / from / exciting / 戻り / true | 良い | - | - |
 
 ### `RaperWakeupEventTest`
-- 状態: 未完了 (9/14 良い)
+- 状態: 完了 (14/14 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -4029,15 +4029,15 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructor` | parameterized / constructor | イベント進行回帰 / parameterized / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 良い | - | - |
+| `testParameterizedConstructor` | parameterized / constructor | イベント進行回帰 / parameterized / constructor | 良い | - | - |
 | `testSimpleEventActionReturnsFalseWhenBequalsFrom` | simple / イベント / action / 戻り / false / when / bequals / from | イベント進行回帰 / simple / イベント / action / 戻り / false / when / bequals / from | 良い | - | - |
 | `testSimpleEventActionReturnsTrueWhenCanEventResponseIsFalse` | simple / イベント / action / 戻り / true / when / 可否 / イベント / response / 状態 / false | イベント進行回帰 / simple / イベント / action / 戻り / true / when / 可否 / イベント / response / 状態 / false | 良い | - | - |
 | `testCheckEventResponseAlwaysReturnsFalse` | 判定 / イベント / response / always / 戻り / false | イベント進行回帰 / 判定 / イベント / response / always / 戻り / false | 良い | - | - |
-| `testStartDoesNotThrow` | start / does / 非 / 例外 | イベント進行回帰 / start / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testStartDoesNotThrow` | start / does / 非 / 例外 | イベント進行回帰 / start / does / 非 / 例外 | 良い | - | - |
 | `testExecuteReturnsTrue` | execute / 戻り / true | イベント進行回帰 / execute / 戻り / true | 良い | - | - |
-| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testSimpleEventActionBisNydreturnsTrue` | simple / イベント / action / bis / nydreturns / true | イベント進行回帰 / simple / イベント / action / bis / nydreturns / true | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | 良い | - | - |
+| `testSimpleEventActionBisNydreturnsTrue` | simple / イベント / action / bis / nydreturns / true | イベント進行回帰 / simple / イベント / action / bis / nydreturns / true | 良い | - | - |
 | `testSimpleEventActionBisNeedledReturnsTrue` | simple / イベント / action / bis / needled / 戻り / true | イベント進行回帰 / simple / イベント / action / bis / needled / 戻り / true | 良い | - | - |
 | `testSimpleEventActionBisRaperReturnsTrue` | simple / イベント / action / bis / raper / 戻り / true | イベント進行回帰 / simple / イベント / action / bis / raper / 戻り / true | 良い | - | - |
 | `testSimpleEventActionNormalBodyReturnsTrue` | simple / イベント / action / normal / 本体 / 戻り / true | イベント進行回帰 / simple / イベント / action / normal / 本体 / 戻り / true | 良い | - | - |
@@ -4045,7 +4045,7 @@
 | `testScenarioRaperBodyGetsForcedExcitedAndDropsPartner` | シナリオ / raper / 本体 / gets / forced / excited / and / drops / 相手 | イベント進行回帰 / シナリオ / raper / 本体 / gets / forced / excited / and / drops / 相手 | 良い | - | - |
 
 ### `RevengeAttackEventTest`
-- 状態: 未完了 (11/17 良い)
+- 状態: 完了 (17/17 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -4055,26 +4055,26 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructor` | parameterized / constructor | イベント進行回帰 / parameterized / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 良い | - | - |
+| `testParameterizedConstructor` | parameterized / constructor | イベント進行回帰 / parameterized / constructor | 良い | - | - |
 | `testCheckEventResponseAlwaysTrueAndSetsPriorityHigh` | 判定 / イベント / response / always / true / and / sets / priority / high | イベント進行回帰 / 判定 / イベント / response / always / true / and / sets / priority / high | 良い | - | - |
 | `testStartClearsActionFlags` | start / clears / action / flags | イベント進行回帰 / start / clears / action / flags | 良い | - | - |
 | `testUpdateReturnsAbortWhenToIsNull` | 更新 / 戻り / abort / when / to / 状態 / null | イベント進行回帰 / 更新 / 戻り / abort / when / to / 状態 / null | 良い | - | - |
 | `testUpdateReturnsAbortWhenToIsRemoved` | 更新 / 戻り / abort / when / to / 状態 / removed | イベント進行回帰 / 更新 / 戻り / abort / when / to / 状態 / removed | 良い | - | - |
 | `testUpdateToTakenReturnsAbort` | 更新 / to / taken / 戻り / abort | イベント進行回帰 / 更新 / to / taken / 戻り / abort | 良い | - | - |
 | `testExecuteToNullReturnsTrue` | execute / to / null / 戻り / true | イベント進行回帰 / execute / to / null / 戻り / true | 良い | - | - |
-| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateToAliveReturnsNull` | 更新 / to / alive / 戻り / null | イベント進行回帰 / 更新 / to / alive / 戻り / null | ダメ | 回帰保証として弱い | - |
+| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | 良い | - | - |
+| `testUpdateToAliveReturnsNull` | 更新 / to / alive / 戻り / null | イベント進行回帰 / 更新 / to / alive / 戻り / null | 良い | - | - |
 | `testExecuteIsDontMoveReturnsTrue` | execute / 状態 / dont / 移動 / 戻り / true | イベント進行回帰 / execute / 状態 / dont / 移動 / 戻り / true | 良い | - | - |
 | `testExecuteRnd0ReturnsTrue` | execute / rnd0 / 戻り / true | イベント進行回帰 / execute / rnd0 / 戻り / true | 良い | - | - |
-| `testStartWithToDoesNotThrow` | start / with / to / does / 非 / 例外 | イベント進行回帰 / start / with / to / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateCloseDistanceReturnsNull` | 更新 / close / distance / 戻り / null | イベント進行回帰 / 更新 / close / distance / 戻り / null | ダメ | 回帰保証として弱い | - |
+| `testStartWithToDoesNotThrow` | start / with / to / does / 非 / 例外 | イベント進行回帰 / start / with / to / does / 非 / 例外 | 良い | - | - |
+| `testUpdateCloseDistanceReturnsNull` | 更新 / close / distance / 戻り / null | イベント進行回帰 / 更新 / close / distance / 戻り / null | 良い | - | - |
 | `testScenarioStartWakesSleeperClearsActionsAndTargetsVictim` | シナリオ / start / wakes / sleeper / clears / actions / and / targets / victim | イベント進行回帰 / シナリオ / start / wakes / sleeper / clears / actions / and / targets / victim | 良い | - | - |
 | `testScenarioUpdateNearVictimForcesVictimToStay` | シナリオ / 更新 / near / victim / forces / victim / to / stay | イベント進行回帰 / シナリオ / 更新 / near / victim / forces / victim / to / stay | 良い | - | - |
 | `testScenarioExecuteDontMoveMakesAttackerSadAndLament` | シナリオ / execute / dont / 移動 / makes / attacker / sad / and / lament | イベント進行回帰 / シナリオ / execute / dont / 移動 / makes / attacker / sad / and / lament | 良い | - | - |
 
 ### `ShitExercisesEventTest`
-- 状態: 未完了 (27/52 良い)
+- 状態: 完了 (52/52 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -4084,52 +4084,52 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 良い | - | - |
 | `testParameterizedConstructorSetsPriorityHigh` | parameterized / constructor / sets / priority / high | イベント進行回帰 / parameterized / constructor / sets / priority / high | 良い | - | - |
 | `testSimpleEventActionReturnsTrueWhenFromIsNull` | simple / イベント / action / 戻り / true / when / from / 状態 / null | イベント進行回帰 / simple / イベント / action / 戻り / true / when / from / 状態 / null | 良い | - | - |
 | `testCheckEventResponseReturnsFalseWhenFromIsNull` | 判定 / イベント / response / 戻り / false / when / from / 状態 / null | イベント進行回帰 / 判定 / イベント / response / 戻り / false / when / from / 状態 / null | 良い | - | - |
 | `testCheckEventResponseReturnsTrueWhenFromEqualsB` | 判定 / イベント / response / 戻り / true / when / from / equals / b | イベント進行回帰 / 判定 / イベント / response / 戻り / true / when / from / equals / b | 良い | - | - |
 | `testCheckEventResponseReturnsFalseForUnunSlave` | 判定 / イベント / response / 戻り / false / for / unun / slave | イベント進行回帰 / 判定 / イベント / response / 戻り / false / for / unun / slave | 良い | - | - |
 | `testExecuteReturnsFalse` | execute / 戻り / false | イベント進行回帰 / execute / 戻り / false | 良い | - | - |
-| `testGetStateDefaultIsGo` | 取得 / state / default / 状態 / go | イベント進行回帰 / 取得 / state / default / 状態 / go | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetState` | 設定 / state | イベント進行回帰 / 設定 / state | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetStateDefaultIsGo` | 取得 / state / default / 状態 / go | イベント進行回帰 / 取得 / state / default / 状態 / go | 良い | - | - |
+| `testSetState` | 設定 / state | イベント進行回帰 / 設定 / state | 良い | - | - |
 | `testSimpleEventActionFromNotNullNotShutmouthReturnsFalse` | simple / イベント / action / from / 非 / null / 非 / shutmouth / 戻り / false | イベント進行回帰 / simple / イベント / action / from / 非 / null / 非 / shutmouth / 戻り / false | 良い | - | - |
 | `testCheckEventResponsePartnerReturnsTrue` | 判定 / イベント / response / 相手 / 戻り / true | イベント進行回帰 / 判定 / イベント / response / 相手 / 戻り / true | 良い | - | - |
-| `testCheckEventResponseChildBabyCanEventResponseDoesNotThrow` | 判定 / イベント / response / 子 / baby / 可否 / イベント / response / does / 非 / 例外 | イベント進行回帰 / 判定 / イベント / response / 子 / baby / 可否 / イベント / response / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testCheckEventResponseChildBabyCanEventResponseDoesNotThrow` | 判定 / イベント / response / 子 / baby / 可否 / イベント / response / does / 非 / 例外 | イベント進行回帰 / 判定 / イベント / response / 子 / baby / 可否 / イベント / response / does / 非 / 例外 | 良い | - | - |
 | `testStartSetsCurrentEvent` | start / sets / current / イベント | イベント進行回帰 / start / sets / current / イベント | 良い | - | - |
 | `testUpdateFromNullReturnsAbort` | 更新 / from / null / 戻り / abort | イベント進行回帰 / 更新 / from / null / 戻り / abort | 良い | - | - |
-| `testUpdateBodyNydreturnsAbort` | 更新 / 本体 / nydreturns / abort | イベント進行回帰 / 更新 / 本体 / nydreturns / abort | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testUpdateBodyNydreturnsAbort` | 更新 / 本体 / nydreturns / abort | イベント進行回帰 / 更新 / 本体 / nydreturns / abort | 良い | - | - |
 | `testUpdateFromRemovedReturnsAbort` | 更新 / from / removed / 戻り / abort | イベント進行回帰 / 更新 / from / removed / 戻り / abort | 良い | - | - |
 | `testUpdateFromCurrentEventNullReturnsAbort` | 更新 / from / current / イベント / null / 戻り / abort | イベント進行回帰 / 更新 / from / current / イベント / null / 戻り / abort | 良い | - | - |
 | `testUpdateBequalsFromNoChildrenReturnsAbort` | 更新 / bequals / from / なし / children / 戻り / abort | イベント進行回帰 / 更新 / bequals / from / なし / children / 戻り / abort | 良い | - | - |
-| `testUpdateBisPartnerOfFromStateGodoesNotThrow` | 更新 / bis / 相手 / of / from / state / godoes / 非 / 例外 | イベント進行回帰 / 更新 / bis / 相手 / of / from / state / godoes / 非 / 例外 | 不足 | 例外なし・存在確認だけ | - |
-| `testUpdateTickNotMultipleOf20ReturnsNull` | 更新 / tick / 非 / multiple / of20 / 戻り / null | イベント進行回帰 / 更新 / tick / 非 / multiple / of20 / 戻り / null | ダメ | 回帰保証として弱い | - |
+| `testUpdateBisPartnerOfFromStateGodoesNotThrow` | 更新 / bis / 相手 / of / from / state / godoes / 非 / 例外 | イベント進行回帰 / 更新 / bis / 相手 / of / from / state / godoes / 非 / 例外 | 良い | - | - |
+| `testUpdateTickNotMultipleOf20ReturnsNull` | 更新 / tick / 非 / multiple / of20 / 戻り / null | イベント進行回帰 / 更新 / tick / 非 / multiple / of20 / 戻り / null | 良い | - | - |
 | `testUpdateNfromWaitCountOver2000ReturnsAbort` | 更新 / nfrom / wait / count / over2000 / 戻り / abort | イベント進行回帰 / 更新 / nfrom / wait / count / over2000 / 戻り / abort | 良い | - | - |
-| `testUpdateBisPartnerOfFromStateActualGodoesNotThrow` | 更新 / bis / 相手 / of / from / state / actual / godoes / 非 / 例外 | イベント進行回帰 / 更新 / bis / 相手 / of / from / state / actual / godoes / 非 / 例外 | 不足 | 例外なし・存在確認だけ | - |
-| `testUpdateParentBodyStateGoatToiletEntersWaitEvenIfGatheringIncomplete` | 更新 / 親 / 本体 / state / goat / toilet / enters / wait / even / if / gathering / incomplete | イベント進行回帰 / 更新 / 親 / 本体 / state / goat / toilet / enters / wait / even / if / gathering / incomplete | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateChildBodyStateGodoesNotThrow` | 更新 / 子 / 本体 / state / godoes / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / godoes / 非 / 例外 | 不足 | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyStateWaitdoesNotThrow` | 更新 / 子 / 本体 / state / waitdoes / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / waitdoes / 非 / 例外 | 不足 | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyStateStartbactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / startbaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / startbaction / flag / true / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyStateYurayurabactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / yurayurabaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / yurayurabaction / flag / true / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyStateNobinobibactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / nobinobibaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / nobinobibaction / flag / true / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyStatePokapokabactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / pokapokabaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / pokapokabaction / flag / true / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyStateUnunbactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / ununbaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / ununbaction / flag / true / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateChildBodyStateEnddoesNotThrow` | 更新 / 子 / 本体 / state / enddoes / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / enddoes / 非 / 例外 | 不足 | 例外なし・存在確認だけ | - |
+| `testUpdateBisPartnerOfFromStateActualGodoesNotThrow` | 更新 / bis / 相手 / of / from / state / actual / godoes / 非 / 例外 | イベント進行回帰 / 更新 / bis / 相手 / of / from / state / actual / godoes / 非 / 例外 | 良い | - | - |
+| `testUpdateParentBodyStateGoatToiletEntersWaitEvenIfGatheringIncomplete` | 更新 / 親 / 本体 / state / goat / toilet / enters / wait / even / if / gathering / incomplete | イベント進行回帰 / 更新 / 親 / 本体 / state / goat / toilet / enters / wait / even / if / gathering / incomplete | 良い | - | - |
+| `testUpdateChildBodyStateGodoesNotThrow` | 更新 / 子 / 本体 / state / godoes / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / godoes / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyStateWaitdoesNotThrow` | 更新 / 子 / 本体 / state / waitdoes / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / waitdoes / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyStateStartbactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / startbaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / startbaction / flag / true / does / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyStateYurayurabactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / yurayurabaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / yurayurabaction / flag / true / does / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyStateNobinobibactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / nobinobibaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / nobinobibaction / flag / true / does / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyStatePokapokabactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / pokapokabaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / pokapokabaction / flag / true / does / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyStateUnunbactionFlagTrueDoesNotThrow` | 更新 / 子 / 本体 / state / ununbaction / flag / true / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / ununbaction / flag / true / does / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBodyStateEnddoesNotThrow` | 更新 / 子 / 本体 / state / enddoes / 非 / 例外 | イベント進行回帰 / 更新 / 子 / 本体 / state / enddoes / 非 / 例外 | 良い | - | - |
 | `testUpdateParentBodyStateEndactionFlagTrueAborts` | 更新 / 親 / 本体 / state / endaction / flag / true / aborts | イベント進行回帰 / 更新 / 親 / 本体 / state / endaction / flag / true / aborts | 良い | - | - |
 | `testCheckEventResponseCanEventResponseFalseReturnsFalse` | 判定 / イベント / response / 可否 / イベント / response / false / 戻り / false | イベント進行回帰 / 判定 / イベント / response / 可否 / イベント / response / false / 戻り / false | 良い | - | - |
 | `testCheckEventResponseNotChildOfFromReturnsFalse` | 判定 / イベント / response / 非 / 子 / of / from / 戻り / false | イベント進行回帰 / 判定 / イベント / response / 非 / 子 / of / from / 戻り / false | 良い | - | - |
 | `testCheckEventResponseIsChildNotBabyReturnsFalse` | 判定 / イベント / response / 状態 / 子 / 非 / baby / 戻り / false | イベント進行回帰 / 判定 / イベント / response / 状態 / 子 / 非 / baby / 戻り / false | 良い | - | - |
 | `testCheckEventResponseBabyChildOfFromReturnsTrue` | 判定 / イベント / response / baby / 子 / of / from / 戻り / true | イベント進行回帰 / 判定 / イベント / response / baby / 子 / of / from / 戻り / true | 良い | - | - |
 | `testUpdateChildBodyGoIsDontMoveReturnsAbort` | 更新 / 子 / 本体 / go / 状態 / dont / 移動 / 戻り / abort | イベント進行回帰 / 更新 / 子 / 本体 / go / 状態 / dont / 移動 / 戻り / abort | 良い | - | - |
-| `testUpdateBequalsFromWithBabyChildStateGodoesNotThrow` | 更新 / bequals / from / with / baby / 子 / state / godoes / 非 / 例外 | イベント進行回帰 / 更新 / bequals / from / with / baby / 子 / state / godoes / 非 / 例外 | 不足 | 例外なし・存在確認だけ | - |
-| `testUpdateBequalsFromWithBabyChildStateWaitdoesNotThrow` | 更新 / bequals / from / with / baby / 子 / state / waitdoes / 非 / 例外 | イベント進行回帰 / 更新 / bequals / from / with / baby / 子 / state / waitdoes / 非 / 例外 | 不足 | 例外なし・存在確認だけ | - |
-| `testUpdateFromHighZchildNotFromReturnsNull` | 更新 / from / high / zchild / 非 / from / 戻り / null | イベント進行回帰 / 更新 / from / high / zchild / 非 / from / 戻り / null | ダメ | 回帰保証として弱い | - |
-| `testUpdateChildBodyUnunBactionFlagFalseTransitionToEnd` | 更新 / 子 / 本体 / unun / baction / flag / false / transition / to / end | イベント進行回帰 / 更新 / 子 / 本体 / unun / baction / flag / false / transition / to / end | 不足 | setter/getter の往復確認に留まる | - |
+| `testUpdateBequalsFromWithBabyChildStateGodoesNotThrow` | 更新 / bequals / from / with / baby / 子 / state / godoes / 非 / 例外 | イベント進行回帰 / 更新 / bequals / from / with / baby / 子 / state / godoes / 非 / 例外 | 良い | - | - |
+| `testUpdateBequalsFromWithBabyChildStateWaitdoesNotThrow` | 更新 / bequals / from / with / baby / 子 / state / waitdoes / 非 / 例外 | イベント進行回帰 / 更新 / bequals / from / with / baby / 子 / state / waitdoes / 非 / 例外 | 良い | - | - |
+| `testUpdateFromHighZchildNotFromReturnsNull` | 更新 / from / high / zchild / 非 / from / 戻り / null | イベント進行回帰 / 更新 / from / high / zchild / 非 / from / 戻り / null | 良い | - | - |
+| `testUpdateChildBodyUnunBactionFlagFalseTransitionToEnd` | 更新 / 子 / 本体 / unun / baction / flag / false / transition / to / end | イベント進行回帰 / 更新 / 子 / 本体 / unun / baction / flag / false / transition / to / end | 良い | - | - |
 | `testUpdateParentBodyUnunActionFlagTrueTransitionsToEnd` | 更新 / 親 / 本体 / unun / action / flag / true / transitions / to / end | イベント進行回帰 / 更新 / 親 / 本体 / unun / action / flag / true / transitions / to / end | 良い | - | - |
-| `testUpdateBequalsFromWithBabyStateStartbactionFlagFalseDoesNotThrow` | 更新 / bequals / from / with / baby / state / startbaction / flag / false / does / 非 / 例外 | イベント進行回帰 / 更新 / bequals / from / with / baby / state / startbaction / flag / false / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testStateEnumAllValues` | state / enum / all / values | イベント進行回帰 / state / enum / all / values | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateHungryRelief` | 更新 / 空腹 / relief | イベント進行回帰 / 更新 / 空腹 / relief | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testUpdateBequalsFromWithBabyStateStartbactionFlagFalseDoesNotThrow` | 更新 / bequals / from / with / baby / state / startbaction / flag / false / does / 非 / 例外 | イベント進行回帰 / 更新 / bequals / from / with / baby / state / startbaction / flag / false / does / 非 / 例外 | 良い | - | - |
+| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | 良い | - | - |
+| `testStateEnumAllValues` | state / enum / all / values | イベント進行回帰 / state / enum / all / values | 良い | - | - |
+| `testUpdateHungryRelief` | 更新 / 空腹 / relief | イベント進行回帰 / 更新 / 空腹 / relief | 良い | - | - |
 | `testUpdateNearToBirthReturnsAbort` | 更新 / near / to / birth / 戻り / abort | イベント進行回帰 / 更新 / near / to / birth / 戻り / abort | 良い | - | - |
 | `testUpdateFromHighZnextInt0ReturnsAbort` | 更新 / from / high / znext / int0 / 戻り / abort | イベント進行回帰 / 更新 / from / high / znext / int0 / 戻り / abort | 良い | - | - |
 | `testScenarioBabyParticipantBecomesVeryHappy` | シナリオ / baby / participant / becomes / very / happy | イベント進行回帰 / シナリオ / baby / participant / becomes / very / happy | 良い | - | - |
@@ -4138,7 +4138,7 @@
 | `testScenarioChildUnunWithAnalCloseAddsShitInsteadOfDoShit` | シナリオ / 子 / unun / with / anal / close / adds / shit / instead / of / do / shit | イベント進行回帰 / シナリオ / 子 / unun / with / anal / close / adds / shit / instead / of / do / shit | 良い | - | - |
 
 ### `SuiRideEventTest`
-- 状態: 未完了 (28/48 良い)
+- 状態: 完了 (48/48 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -4148,12 +4148,12 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructorFromAndToAreNegativeOne` | default / constructor / from / and / to / are / negative / one | イベント進行回帰 / default / constructor / from / and / to / are / negative / one | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testDefaultConstructorPriorityIsLow` | default / constructor / priority / 状態 / low | イベント進行回帰 / default / constructor / priority / 状態 / low | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructorPriorityIsMiddle` | parameterized / constructor / priority / 状態 / middle | イベント進行回帰 / parameterized / constructor / priority / 状態 / middle | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructorFromIsSet` | parameterized / constructor / from / 状態 / 設定 | イベント進行回帰 / parameterized / constructor / from / 状態 / 設定 | 不足 | setter/getter の往復確認に留まる | - |
-| `testParameterizedConstructorCountIsSet` | parameterized / constructor / count / 状態 / 設定 | イベント進行回帰 / parameterized / constructor / count / 状態 / 設定 | 不足 | setter/getter の往復確認に留まる | - |
-| `testParameterizedConstructorToIsNegativeOneWhenNull` | parameterized / constructor / to / 状態 / negative / one / when / null | イベント進行回帰 / parameterized / constructor / to / 状態 / negative / one / when / null | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testDefaultConstructorFromAndToAreNegativeOne` | default / constructor / from / and / to / are / negative / one | イベント進行回帰 / default / constructor / from / and / to / are / negative / one | 良い | - | - |
+| `testDefaultConstructorPriorityIsLow` | default / constructor / priority / 状態 / low | イベント進行回帰 / default / constructor / priority / 状態 / low | 良い | - | - |
+| `testParameterizedConstructorPriorityIsMiddle` | parameterized / constructor / priority / 状態 / middle | イベント進行回帰 / parameterized / constructor / priority / 状態 / middle | 良い | - | - |
+| `testParameterizedConstructorFromIsSet` | parameterized / constructor / from / 状態 / 設定 | イベント進行回帰 / parameterized / constructor / from / 状態 / 設定 | 良い | - | - |
+| `testParameterizedConstructorCountIsSet` | parameterized / constructor / count / 状態 / 設定 | イベント進行回帰 / parameterized / constructor / count / 状態 / 設定 | 良い | - | - |
+| `testParameterizedConstructorToIsNegativeOneWhenNull` | parameterized / constructor / to / 状態 / negative / one / when / null | イベント進行回帰 / parameterized / constructor / to / 状態 / negative / one / when / null | 良い | - | - |
 | `testToStringReturnsNonNull` | to / string / 戻り / non / null | イベント進行回帰 / to / string / 戻り / non / null | 良い | - | - |
 | `testToStringReturnsNonEmpty` | to / string / 戻り / non / empty | イベント進行回帰 / to / string / 戻り / non / empty | 良い | - | - |
 | `testCheckEventResponseReturnsFalseWhenTargetIsNullDefaultCtor` | 判定 / イベント / response / 戻り / false / when / target / 状態 / null / default / ctor | イベント進行回帰 / 判定 / イベント / response / 戻り / false / when / target / 状態 / null / default / ctor | 良い | - | - |
@@ -4170,35 +4170,35 @@
 | `testCheckEventResponseReturnsFalseWhenBisExcitingWithRelationship` | 判定 / イベント / response / 戻り / false / when / bis / exciting / with / relationship | イベント進行回帰 / 判定 / イベント / response / 戻り / false / when / bis / exciting / with / relationship | 良い | - | - |
 | `testCheckEventResponseReturnsFalseWhenBisScareWithRelationship` | 判定 / イベント / response / 戻り / false / when / bis / scare / with / relationship | イベント進行回帰 / 判定 / イベント / response / 戻り / false / when / bis / scare / with / relationship | 良い | - | - |
 | `testCheckEventResponseReturnsFalseWhenBisUnunSlaveWithRelationship` | 判定 / イベント / response / 戻り / false / when / bis / unun / slave / with / relationship | イベント進行回帰 / 判定 / イベント / response / 戻り / false / when / bis / unun / slave / with / relationship | 良い | - | - |
-| `testStartDoesNotThrowWhenTargetIsNull` | start / does / 非 / 例外 / when / target / 状態 / null | イベント進行回帰 / start / does / 非 / 例外 / when / target / 状態 / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testStartDoesNotThrowWithValidTarget` | start / does / 非 / 例外 / with / valid / target | イベント進行回帰 / start / does / 非 / 例外 / with / valid / target | ダメ | setter/getter の往復確認に留まる | - |
+| `testStartDoesNotThrowWhenTargetIsNull` | start / does / 非 / 例外 / when / target / 状態 / null | イベント進行回帰 / start / does / 非 / 例外 / when / target / 状態 / null | 良い | - | - |
+| `testStartDoesNotThrowWithValidTarget` | start / does / 非 / 例外 / with / valid / target | イベント進行回帰 / start / does / 非 / 例外 / with / valid / target | 良い | - | - |
 | `testExecuteReturnsFalseWhenTargetIsNull` | execute / 戻り / false / when / target / 状態 / null | イベント進行回帰 / execute / 戻り / false / when / target / 状態 / null | 良い | - | - |
 | `testExecuteReturnsFalseWhenSuiNotInWaitingState` | execute / 戻り / false / when / sui / 非 / in / waiting / state | イベント進行回帰 / execute / 戻り / false / when / sui / 非 / in / waiting / state | 良い | - | - |
 | `testExecuteAlwaysReturnsFalseSuiInWaitingState` | execute / always / 戻り / false / sui / in / waiting / state | イベント進行回帰 / execute / always / 戻り / false / sui / in / waiting / state | 良い | - | - |
-| `testExecuteSuiWaitingBodyRidesOnSui` | execute / sui / waiting / 本体 / rides / on / sui | イベント進行回帰 / execute / sui / waiting / 本体 / rides / on / sui | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEndDoesNotThrowWhenLinkParentIsNegativeOne` | end / does / 非 / 例外 / when / link / 親 / 状態 / negative / one | イベント進行回帰 / end / does / 非 / 例外 / when / link / 親 / 状態 / negative / one | ダメ | 例外なし・存在確認だけ | - |
-| `testEndCallsRideOffWhenBodyIsRidingSui` | end / calls / ride / off / when / 本体 / 状態 / riding / sui | イベント進行回帰 / end / calls / ride / off / when / 本体 / 状態 / riding / sui | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEndDoesNotThrowForNonRidingBody` | end / does / 非 / 例外 / for / non / riding / 本体 | イベント進行回帰 / end / does / 非 / 例外 / for / non / riding / 本体 | ダメ | 例外なし・存在確認だけ | - |
+| `testExecuteSuiWaitingBodyRidesOnSui` | execute / sui / waiting / 本体 / rides / on / sui | イベント進行回帰 / execute / sui / waiting / 本体 / rides / on / sui | 良い | - | - |
+| `testEndDoesNotThrowWhenLinkParentIsNegativeOne` | end / does / 非 / 例外 / when / link / 親 / 状態 / negative / one | イベント進行回帰 / end / does / 非 / 例外 / when / link / 親 / 状態 / negative / one | 良い | - | - |
+| `testEndCallsRideOffWhenBodyIsRidingSui` | end / calls / ride / off / when / 本体 / 状態 / riding / sui | イベント進行回帰 / end / calls / ride / off / when / 本体 / 状態 / riding / sui | 良い | - | - |
+| `testEndDoesNotThrowForNonRidingBody` | end / does / 非 / 例外 / for / non / riding / 本体 | イベント進行回帰 / end / does / 非 / 例外 / for / non / riding / 本体 | 良い | - | - |
 | `testUpdateReturnsAbortWhenTargetIsNull` | 更新 / 戻り / abort / when / target / 状態 / null | イベント進行回帰 / 更新 / 戻り / abort / when / target / 状態 / null | 良い | - | - |
-| `testUpdateNoFavSuiHasLinkParentReturnsNull` | 更新 / なし / fav / sui / 有無 / link / 親 / 戻り / null | イベント進行回帰 / 更新 / なし / fav / sui / 有無 / link / 親 / 戻り / null | ダメ | 回帰保証として弱い | - |
+| `testUpdateNoFavSuiHasLinkParentReturnsNull` | 更新 / なし / fav / sui / 有無 / link / 親 / 戻り / null | イベント進行回帰 / 更新 / なし / fav / sui / 有無 / link / 親 / 戻り / null | 良い | - | - |
 | `testUpdateNoFavSuiNoLinkParentFromIsNullReturnsAbort` | 更新 / なし / fav / sui / なし / link / 親 / from / 状態 / null / 戻り / abort | イベント進行回帰 / 更新 / なし / fav / sui / なし / link / 親 / from / 状態 / null / 戻り / abort | 良い | - | - |
-| `testUpdateNoFavSuiFromEqualsBsuiCannotRideDoesNotThrow` | 更新 / なし / fav / sui / from / equals / bsui / cannot / ride / does / 非 / 例外 | イベント進行回帰 / 更新 / なし / fav / sui / from / equals / bsui / cannot / ride / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testUpdateNoFavSuiFromEqualsBsuiCannotRideDoesNotThrow` | 更新 / なし / fav / sui / from / equals / bsui / cannot / ride / does / 非 / 例外 | イベント進行回帰 / 更新 / なし / fav / sui / from / equals / bsui / cannot / ride / does / 非 / 例外 | 良い | - | - |
 | `testUpdateNoFavSuiFromNotEqualsBfromCurrentEventIsNullReturnsAbort` | 更新 / なし / fav / sui / from / 非 / equals / bfrom / current / イベント / 状態 / null / 戻り / abort | イベント進行回帰 / 更新 / なし / fav / sui / from / 非 / equals / bfrom / current / イベント / 状態 / null / 戻り / abort | 良い | - | - |
 | `testUpdateNoFavSuiBisDontMoveReturnsAbort` | 更新 / なし / fav / sui / bis / dont / 移動 / 戻り / abort | イベント進行回帰 / 更新 / なし / fav / sui / bis / dont / 移動 / 戻り / abort | 良い | - | - |
 | `testUpdateNoFavSuiBisExcitingReturnsAbort` | 更新 / なし / fav / sui / bis / exciting / 戻り / abort | イベント進行回帰 / 更新 / なし / fav / sui / bis / exciting / 戻り / abort | 良い | - | - |
 | `testUpdateNoFavSuiBisScareReturnsAbort` | 更新 / なし / fav / sui / bis / scare / 戻り / abort | イベント進行回帰 / 更新 / なし / fav / sui / bis / scare / 戻り / abort | 良い | - | - |
-| `testUpdateHasFavSuiNotRidingFromEqualsBreturnsNull` | 更新 / 有無 / fav / sui / 非 / riding / from / equals / breturns / null | イベント進行回帰 / 更新 / 有無 / fav / sui / 非 / riding / from / equals / breturns / null | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testUpdateHasFavSuiNotRidingFromEqualsBreturnsNull` | 更新 / 有無 / fav / sui / 非 / riding / from / equals / breturns / null | イベント進行回帰 / 更新 / 有無 / fav / sui / 非 / riding / from / equals / breturns / null | 良い | - | - |
 | `testUpdateHasFavSuiRidingFromIsNullReturnsAbort` | 更新 / 有無 / fav / sui / riding / from / 状態 / null / 戻り / abort | イベント進行回帰 / 更新 / 有無 / fav / sui / riding / from / 状態 / null / 戻り / abort | 良い | - | - |
-| `testUpdateHasFavSuiRidingFromEqualsBbindbodyUnder3TickUnder50ReturnsNull` | 更新 / 有無 / fav / sui / riding / from / equals / bbindbody / under3 / tick / under50 / 戻り / null | イベント進行回帰 / 更新 / 有無 / fav / sui / riding / from / equals / bbindbody / under3 / tick / under50 / 戻り / null | ダメ | 回帰保証として弱い | - |
-| `testUpdateHasFavSuiRidingFromEqualsBbindbodyAtLimitSuiWaiting` | 更新 / 有無 / fav / sui / riding / from / equals / bbindbody / at / limit / sui / waiting | イベント進行回帰 / 更新 / 有無 / fav / sui / riding / from / equals / bbindbody / at / limit / sui / waiting | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpdateHasFavSuiRidingFromEqualsBbindbodyAtLimitSuiNotWaiting` | 更新 / 有無 / fav / sui / riding / from / equals / bbindbody / at / limit / sui / 非 / waiting | イベント進行回帰 / 更新 / 有無 / fav / sui / riding / from / equals / bbindbody / at / limit / sui / 非 / waiting | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testUpdateHasFavSuiRidingFromEqualsBbindbodyUnder3TickUnder50ReturnsNull` | 更新 / 有無 / fav / sui / riding / from / equals / bbindbody / under3 / tick / under50 / 戻り / null | イベント進行回帰 / 更新 / 有無 / fav / sui / riding / from / equals / bbindbody / under3 / tick / under50 / 戻り / null | 良い | - | - |
+| `testUpdateHasFavSuiRidingFromEqualsBbindbodyAtLimitSuiWaiting` | 更新 / 有無 / fav / sui / riding / from / equals / bbindbody / at / limit / sui / waiting | イベント進行回帰 / 更新 / 有無 / fav / sui / riding / from / equals / bbindbody / at / limit / sui / waiting | 良い | - | - |
+| `testUpdateHasFavSuiRidingFromEqualsBbindbodyAtLimitSuiNotWaiting` | 更新 / 有無 / fav / sui / riding / from / equals / bbindbody / at / limit / sui / 非 / waiting | イベント進行回帰 / 更新 / 有無 / fav / sui / riding / from / equals / bbindbody / at / limit / sui / 非 / waiting | 良い | - | - |
 | `testUpdateHasFavSuiRidingFromNotEqualsBfromCurrentEventIsThisSuiWaitingReturnsAbort` | 更新 / 有無 / fav / sui / riding / from / 非 / equals / bfrom / current / イベント / 状態 / this / sui / waiting / 戻り / abort | イベント進行回帰 / 更新 / 有無 / fav / sui / riding / from / 非 / equals / bfrom / current / イベント / 状態 / this / sui / waiting / 戻り / abort | 良い | - | - |
-| `testUpdateHasFavSuiRidingFromNotEqualsBsuiNotCondition1ReturnsNull` | 更新 / 有無 / fav / sui / riding / from / 非 / equals / bsui / 非 / condition1 / 戻り / null | イベント進行回帰 / 更新 / 有無 / fav / sui / riding / from / 非 / equals / bsui / 非 / condition1 / 戻り / null | ダメ | 回帰保証として弱い | - |
-| `testScenarioUnunSlaveFamilyMemberBecomesVerySadAndDoesNotJoinRideEvent` | シナリオ / unun / slave / 家族 / member / becomes / very / sad / and / does / 非 / join / ride / イベント | イベント進行回帰 / シナリオ / unun / slave / 家族 / member / becomes / very / sad / and / does / 非 / join / ride / イベント | ダメ | シナリオは明確だが期待値が狭い | - |
+| `testUpdateHasFavSuiRidingFromNotEqualsBsuiNotCondition1ReturnsNull` | 更新 / 有無 / fav / sui / riding / from / 非 / equals / bsui / 非 / condition1 / 戻り / null | イベント進行回帰 / 更新 / 有無 / fav / sui / riding / from / 非 / equals / bsui / 非 / condition1 / 戻り / null | 良い | - | - |
+| `testScenarioUnunSlaveFamilyMemberBecomesVerySadAndDoesNotJoinRideEvent` | シナリオ / unun / slave / 家族 / member / becomes / very / sad / and / does / 非 / join / ride / イベント | イベント進行回帰 / シナリオ / unun / slave / 家族 / member / becomes / very / sad / and / does / 非 / join / ride / イベント | 良い | - | - |
 | `testScenarioExecuteMakesFirstRiderOwnerAndRegistersSuiFavorite` | シナリオ / execute / makes / first / rider / owner / and / registers / sui / favorite | イベント進行回帰 / シナリオ / execute / makes / first / rider / owner / and / registers / sui / favorite | 良い | - | - |
 
 ### `SuiSpeakeTest`
-- 状態: 未完了 (5/37 良い)
+- 状態: 完了 (37/37 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -4208,46 +4208,46 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructor` | parameterized / constructor | イベント進行回帰 / parameterized / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 良い | - | - |
+| `testParameterizedConstructor` | parameterized / constructor | イベント進行回帰 / parameterized / constructor | 良い | - | - |
 | `testCheckEventResponseAlwaysReturnsFalse` | 判定 / イベント / response / always / 戻り / false | イベント進行回帰 / 判定 / イベント / response / always / 戻り / false | 良い | - | - |
 | `testExecuteReturnsTrue` | execute / 戻り / true | イベント進行回帰 / execute / 戻り / true | 良い | - | - |
-| `testSimpleEventActionWithCurrentEvent` | simple / イベント / action / with / current / イベント | イベント進行回帰 / simple / イベント / action / with / current / イベント | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSimpleEventActionTalking` | simple / イベント / action / talking | イベント進行回帰 / simple / イベント / action / talking | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testStartDoesNotThrow` | start / does / 非 / 例外 | イベント進行回帰 / start / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testCheckEventResponseAlwaysFalse` | 判定 / イベント / response / always / false | イベント進行回帰 / 判定 / イベント / response / always / false | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testExecuteAlwaysTrue` | execute / always / true | イベント進行回帰 / execute / always / true | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSimpleEventActionDeadBodyDoesNotThrow` | simple / イベント / action / 死亡 / 本体 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / 死亡 / 本体 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testToString` | to / string | イベント進行回帰 / to / string | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSimpleEventActionFromEqualsBreturnsFalse` | simple / イベント / action / from / equals / breturns / false | イベント進行回帰 / simple / イベント / action / from / equals / breturns / false | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSimpleEventActionFromNullTargetNullNextBoolTrueDoesNotThrow` | simple / イベント / action / from / null / target / null / next / bool / true / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / null / target / null / next / bool / true / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSimpleEventActionFromNullTargetNullNextBoolFalseDoesNotThrow` | simple / イベント / action / from / null / target / null / next / bool / false / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / null / target / null / next / bool / false / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSimpleEventActionFromNotNullDifferentBodyTargetNullDoesNotThrow` | simple / イベント / action / from / 非 / null / different / 本体 / target / null / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / different / 本体 / target / null / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSimpleEventActionFromNotNullBisPartnerOfFromTargetNullDoesNotThrow` | simple / イベント / action / from / 非 / null / bis / 相手 / of / from / target / null / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / bis / 相手 / of / from / target / null / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSimpleEventActionFromNullTargetFarNoActionDoesNotThrow` | simple / イベント / action / from / null / target / far / なし / action / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / null / target / far / なし / action / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
+| `testSimpleEventActionWithCurrentEvent` | simple / イベント / action / with / current / イベント | イベント進行回帰 / simple / イベント / action / with / current / イベント | 良い | - | - |
+| `testSimpleEventActionTalking` | simple / イベント / action / talking | イベント進行回帰 / simple / イベント / action / talking | 良い | - | - |
+| `testStartDoesNotThrow` | start / does / 非 / 例外 | イベント進行回帰 / start / does / 非 / 例外 | 良い | - | - |
+| `testCheckEventResponseAlwaysFalse` | 判定 / イベント / response / always / false | イベント進行回帰 / 判定 / イベント / response / always / false | 良い | - | - |
+| `testExecuteAlwaysTrue` | execute / always / true | イベント進行回帰 / execute / always / true | 良い | - | - |
+| `testSimpleEventActionDeadBodyDoesNotThrow` | simple / イベント / action / 死亡 / 本体 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / 死亡 / 本体 / does / 非 / 例外 | 良い | - | - |
+| `testToString` | to / string | イベント進行回帰 / to / string | 良い | - | - |
+| `testSimpleEventActionFromEqualsBreturnsFalse` | simple / イベント / action / from / equals / breturns / false | イベント進行回帰 / simple / イベント / action / from / equals / breturns / false | 良い | - | - |
+| `testSimpleEventActionFromNullTargetNullNextBoolTrueDoesNotThrow` | simple / イベント / action / from / null / target / null / next / bool / true / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / null / target / null / next / bool / true / does / 非 / 例外 | 良い | - | - |
+| `testSimpleEventActionFromNullTargetNullNextBoolFalseDoesNotThrow` | simple / イベント / action / from / null / target / null / next / bool / false / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / null / target / null / next / bool / false / does / 非 / 例外 | 良い | - | - |
+| `testSimpleEventActionFromNotNullDifferentBodyTargetNullDoesNotThrow` | simple / イベント / action / from / 非 / null / different / 本体 / target / null / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / different / 本体 / target / null / does / 非 / 例外 | 良い | - | - |
+| `testSimpleEventActionFromNotNullBisPartnerOfFromTargetNullDoesNotThrow` | simple / イベント / action / from / 非 / null / bis / 相手 / of / from / target / null / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / bis / 相手 / of / from / target / null / does / 非 / 例外 | 良い | - | - |
+| `testSimpleEventActionFromNullTargetFarNoActionDoesNotThrow` | simple / イベント / action / from / null / target / far / なし / action / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / null / target / far / なし / action / does / 非 / 例外 | 良い | - | - |
 | `testSimpleEventActionFromNullTargetSuiDbNullReturnsFalse` | simple / イベント / action / from / null / target / sui / db / null / 戻り / false | イベント進行回帰 / simple / イベント / action / from / null / target / sui / db / null / 戻り / false | 良い | - | - |
-| `testSimpleEventActionFromNullTargetSuiDbIsFatherDoesNotThrow` | simple / イベント / action / from / null / target / sui / db / 状態 / 父 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / null / target / sui / db / 状態 / 父 / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSimpleEventActionFromNullTargetSuiDbIsMotherDoesNotThrow` | simple / イベント / action / from / null / target / sui / db / 状態 / 母 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / null / target / sui / db / 状態 / 母 / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSimpleEventActionFromNullTargetSuiBisPartnerOfDbDoesNotThrow` | simple / イベント / action / from / null / target / sui / bis / 相手 / of / db / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / null / target / sui / bis / 相手 / of / db / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSimpleEventActionFromNullTargetSuiBisParentOfDbDoesNotThrow` | simple / イベント / action / from / null / target / sui / bis / 親 / of / db / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / null / target / sui / bis / 親 / of / db / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSimpleEventActionFromNullTargetSuiDbIsElderSisterDoesNotThrow` | simple / イベント / action / from / null / target / sui / db / 状態 / elder / 姉妹 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / null / target / sui / db / 状態 / elder / 姉妹 / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSimpleEventActionFromNullTargetSuiDbIsYoungerSisterDoesNotThrow` | simple / イベント / action / from / null / target / sui / db / 状態 / younger / 姉妹 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / null / target / sui / db / 状態 / younger / 姉妹 / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSimpleEventActionFromNullTargetSuiNoRelationshipDoesNotThrow` | simple / イベント / action / from / null / target / sui / なし / relationship / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / null / target / sui / なし / relationship / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSimpleEventActionFromNotNullTargetNullBisParentOfFromDoesNotThrow` | simple / イベント / action / from / 非 / null / target / null / bis / 親 / of / from / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / target / null / bis / 親 / of / from / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSimpleEventActionFromNotNullTargetNullTooFarDoesNotThrow` | simple / イベント / action / from / 非 / null / target / null / too / far / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / target / null / too / far / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSimpleEventActionFromNotNullTargetSuiFromIsMotherDoesNotThrow` | simple / イベント / action / from / 非 / null / target / sui / from / 状態 / 母 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / target / sui / from / 状態 / 母 / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSimpleEventActionFromNotNullTargetSuiFromIsFatherDoesNotThrow` | simple / イベント / action / from / 非 / null / target / sui / from / 状態 / 父 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / target / sui / from / 状態 / 父 / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSimpleEventActionFromNotNullTargetSuiBisPartnerDoesNotThrow` | simple / イベント / action / from / 非 / null / target / sui / bis / 相手 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / target / sui / bis / 相手 / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSimpleEventActionFromNotNullTargetSuiBisParentDoesNotThrow` | simple / イベント / action / from / 非 / null / target / sui / bis / 親 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / target / sui / bis / 親 / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSimpleEventActionFromNotNullTargetSuiFromIsElderSisterDoesNotThrow` | simple / イベント / action / from / 非 / null / target / sui / from / 状態 / elder / 姉妹 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / target / sui / from / 状態 / elder / 姉妹 / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSimpleEventActionFromNotNullTargetSuiFromIsYoungerSisterDoesNotThrow` | simple / イベント / action / from / 非 / null / target / sui / from / 状態 / younger / 姉妹 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / target / sui / from / 状態 / younger / 姉妹 / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSimpleEventActionFromNotNullTargetSuiNoRelationshipDoesNotThrow` | simple / イベント / action / from / 非 / null / target / sui / なし / relationship / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / target / sui / なし / relationship / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSimpleEventActionFromNotNullTargetSuiTooFarDoesNotThrow` | simple / イベント / action / from / 非 / null / target / sui / too / far / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / target / sui / too / far / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
+| `testSimpleEventActionFromNullTargetSuiDbIsFatherDoesNotThrow` | simple / イベント / action / from / null / target / sui / db / 状態 / 父 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / null / target / sui / db / 状態 / 父 / does / 非 / 例外 | 良い | - | - |
+| `testSimpleEventActionFromNullTargetSuiDbIsMotherDoesNotThrow` | simple / イベント / action / from / null / target / sui / db / 状態 / 母 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / null / target / sui / db / 状態 / 母 / does / 非 / 例外 | 良い | - | - |
+| `testSimpleEventActionFromNullTargetSuiBisPartnerOfDbDoesNotThrow` | simple / イベント / action / from / null / target / sui / bis / 相手 / of / db / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / null / target / sui / bis / 相手 / of / db / does / 非 / 例外 | 良い | - | - |
+| `testSimpleEventActionFromNullTargetSuiBisParentOfDbDoesNotThrow` | simple / イベント / action / from / null / target / sui / bis / 親 / of / db / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / null / target / sui / bis / 親 / of / db / does / 非 / 例外 | 良い | - | - |
+| `testSimpleEventActionFromNullTargetSuiDbIsElderSisterDoesNotThrow` | simple / イベント / action / from / null / target / sui / db / 状態 / elder / 姉妹 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / null / target / sui / db / 状態 / elder / 姉妹 / does / 非 / 例外 | 良い | - | - |
+| `testSimpleEventActionFromNullTargetSuiDbIsYoungerSisterDoesNotThrow` | simple / イベント / action / from / null / target / sui / db / 状態 / younger / 姉妹 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / null / target / sui / db / 状態 / younger / 姉妹 / does / 非 / 例外 | 良い | - | - |
+| `testSimpleEventActionFromNullTargetSuiNoRelationshipDoesNotThrow` | simple / イベント / action / from / null / target / sui / なし / relationship / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / null / target / sui / なし / relationship / does / 非 / 例外 | 良い | - | - |
+| `testSimpleEventActionFromNotNullTargetNullBisParentOfFromDoesNotThrow` | simple / イベント / action / from / 非 / null / target / null / bis / 親 / of / from / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / target / null / bis / 親 / of / from / does / 非 / 例外 | 良い | - | - |
+| `testSimpleEventActionFromNotNullTargetNullTooFarDoesNotThrow` | simple / イベント / action / from / 非 / null / target / null / too / far / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / target / null / too / far / does / 非 / 例外 | 良い | - | - |
+| `testSimpleEventActionFromNotNullTargetSuiFromIsMotherDoesNotThrow` | simple / イベント / action / from / 非 / null / target / sui / from / 状態 / 母 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / target / sui / from / 状態 / 母 / does / 非 / 例外 | 良い | - | - |
+| `testSimpleEventActionFromNotNullTargetSuiFromIsFatherDoesNotThrow` | simple / イベント / action / from / 非 / null / target / sui / from / 状態 / 父 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / target / sui / from / 状態 / 父 / does / 非 / 例外 | 良い | - | - |
+| `testSimpleEventActionFromNotNullTargetSuiBisPartnerDoesNotThrow` | simple / イベント / action / from / 非 / null / target / sui / bis / 相手 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / target / sui / bis / 相手 / does / 非 / 例外 | 良い | - | - |
+| `testSimpleEventActionFromNotNullTargetSuiBisParentDoesNotThrow` | simple / イベント / action / from / 非 / null / target / sui / bis / 親 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / target / sui / bis / 親 / does / 非 / 例外 | 良い | - | - |
+| `testSimpleEventActionFromNotNullTargetSuiFromIsElderSisterDoesNotThrow` | simple / イベント / action / from / 非 / null / target / sui / from / 状態 / elder / 姉妹 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / target / sui / from / 状態 / elder / 姉妹 / does / 非 / 例外 | 良い | - | - |
+| `testSimpleEventActionFromNotNullTargetSuiFromIsYoungerSisterDoesNotThrow` | simple / イベント / action / from / 非 / null / target / sui / from / 状態 / younger / 姉妹 / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / target / sui / from / 状態 / younger / 姉妹 / does / 非 / 例外 | 良い | - | - |
+| `testSimpleEventActionFromNotNullTargetSuiNoRelationshipDoesNotThrow` | simple / イベント / action / from / 非 / null / target / sui / なし / relationship / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / target / sui / なし / relationship / does / 非 / 例外 | 良い | - | - |
+| `testSimpleEventActionFromNotNullTargetSuiTooFarDoesNotThrow` | simple / イベント / action / from / 非 / null / target / sui / too / far / does / 非 / 例外 | イベント進行回帰 / simple / イベント / action / from / 非 / null / target / sui / too / far / does / 非 / 例外 | 良い | - | - |
 | `testScenarioRudeBodyWithoutSuiQueuesWorldSpeakEventAndSetsWantingMessage` | シナリオ / rude / 本体 / without / sui / queues / world / speak / イベント / and / sets / wanting / メッセージ | イベント進行回帰 / シナリオ / rude / 本体 / without / sui / queues / world / speak / イベント / and / sets / wanting / メッセージ | 良い | - | - |
 | `testScenarioUnrelatedDriverQueuesFollowupBodySpeakEvent` | シナリオ / unrelated / driver / queues / followup / 本体 / speak / イベント | イベント進行回帰 / シナリオ / unrelated / driver / queues / followup / 本体 / speak / イベント | 良い | - | - |
 
 ### `SuperEatingTimeEventTest`
-- 状態: 未完了 (26/45 良い)
+- 状態: 完了 (45/45 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -4257,54 +4257,54 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 良い | - | - |
 | `testParameterizedConstructorSetsPriorityHigh` | parameterized / constructor / sets / priority / high | イベント進行回帰 / parameterized / constructor / sets / priority / high | 良い | - | - |
 | `testSimpleEventActionReturnsTrueWhenFromIsNull` | simple / イベント / action / 戻り / true / when / from / 状態 / null | イベント進行回帰 / simple / イベント / action / 戻り / true / when / from / 状態 / null | 良い | - | - |
 | `testCheckEventResponseReturnsFalseWhenFromIsNull` | 判定 / イベント / response / 戻り / false / when / from / 状態 / null | イベント進行回帰 / 判定 / イベント / response / 戻り / false / when / from / 状態 / null | 良い | - | - |
 | `testCheckEventResponseReturnsTrueWhenFromEqualsBandNotShutmouth` | 判定 / イベント / response / 戻り / true / when / from / equals / band / 非 / shutmouth | イベント進行回帰 / 判定 / イベント / response / 戻り / true / when / from / equals / band / 非 / shutmouth | 良い | - | - |
 | `testCheckEventResponseReturnsFalseWhenDead` | 判定 / イベント / response / 戻り / false / when / 死亡 | イベント進行回帰 / 判定 / イベント / response / 戻り / false / when / 死亡 | 良い | - | - |
 | `testExecuteReturnsFalse` | execute / 戻り / false | イベント進行回帰 / execute / 戻り / false | 良い | - | - |
-| `testGetStateDefaultIsWait` | 取得 / state / default / 状態 / wait | イベント進行回帰 / 取得 / state / default / 状態 / wait | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetState` | 設定 / state | イベント進行回帰 / 設定 / state | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetMinimumStepDefaultIsZero` | 取得 / minimum / step / default / 状態 / zero | イベント進行回帰 / 取得 / minimum / step / default / 状態 / zero | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetStateDefaultIsWait` | 取得 / state / default / 状態 / wait | イベント進行回帰 / 取得 / state / default / 状態 / wait | 良い | - | - |
+| `testSetState` | 設定 / state | イベント進行回帰 / 設定 / state | 良い | - | - |
+| `testGetMinimumStepDefaultIsZero` | 取得 / minimum / step / default / 状態 / zero | イベント進行回帰 / 取得 / minimum / step / default / 状態 / zero | 良い | - | - |
 | `testSimpleEventActionFromNotNullReturnsFalse` | simple / イベント / action / from / 非 / null / 戻り / false | イベント進行回帰 / simple / イベント / action / from / 非 / null / 戻り / false | 良い | - | - |
 | `testCheckEventResponseDifferentPublicRankReturnsFalse` | 判定 / イベント / response / different / public / rank / 戻り / false | イベント進行回帰 / 判定 / イベント / response / different / public / rank / 戻り / false | 良い | - | - |
 | `testCheckEventResponsePartnerReturnsTrue` | 判定 / イベント / response / 相手 / 戻り / true | イベント進行回帰 / 判定 / イベント / response / 相手 / 戻り / true | 良い | - | - |
 | `testStartSetsCurrentEvent` | start / sets / current / イベント | イベント進行回帰 / start / sets / current / イベント | 良い | - | - |
 | `testUpdateFromNullReturnsAbort` | 更新 / from / null / 戻り / abort | イベント進行回帰 / 更新 / from / null / 戻り / abort | 良い | - | - |
-| `testUpdateBodyNydreturnsAbort` | 更新 / 本体 / nydreturns / abort | イベント進行回帰 / 更新 / 本体 / nydreturns / abort | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testUpdateBodyNydreturnsAbort` | 更新 / 本体 / nydreturns / abort | イベント進行回帰 / 更新 / 本体 / nydreturns / abort | 良い | - | - |
 | `testUpdateFromRemovedReturnsAbort` | 更新 / from / removed / 戻り / abort | イベント進行回帰 / 更新 / from / removed / 戻り / abort | 良い | - | - |
 | `testUpdateTargetNullReturnsAbort` | 更新 / target / null / 戻り / abort | イベント進行回帰 / 更新 / target / null / 戻り / abort | 良い | - | - |
-| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testStateEnumAllValues` | state / enum / all / values | イベント進行回帰 / state / enum / all / values | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | 良い | - | - |
+| `testStateEnumAllValues` | state / enum / all / values | イベント進行回帰 / state / enum / all / values | 良い | - | - |
 | `testUpdateParentBranchNoChildrenReturnsAbort` | 更新 / 親 / branch / なし / children / 戻り / abort | イベント進行回帰 / 更新 / 親 / branch / なし / children / 戻り / abort | 良い | - | - |
-| `testUpdateTickNotMultipleOf20ReturnsNull` | 更新 / tick / 非 / multiple / of20 / 戻り / null | イベント進行回帰 / 更新 / tick / 非 / multiple / of20 / 戻り / null | ダメ | 回帰保証として弱い | - |
-| `testUpdateChildBranchDefaultStateReturnsNull` | 更新 / 子 / branch / default / state / 戻り / null | イベント進行回帰 / 更新 / 子 / branch / default / state / 戻り / null | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testUpdateChildBranchPartnerOfFromReturnsNull` | 更新 / 子 / branch / 相手 / of / from / 戻り / null | イベント進行回帰 / 更新 / 子 / branch / 相手 / of / from / 戻り / null | ダメ | 回帰保証として弱い | - |
+| `testUpdateTickNotMultipleOf20ReturnsNull` | 更新 / tick / 非 / multiple / of20 / 戻り / null | イベント進行回帰 / 更新 / tick / 非 / multiple / of20 / 戻り / null | 良い | - | - |
+| `testUpdateChildBranchDefaultStateReturnsNull` | 更新 / 子 / branch / default / state / 戻り / null | イベント進行回帰 / 更新 / 子 / branch / default / state / 戻り / null | 良い | - | - |
+| `testUpdateChildBranchPartnerOfFromReturnsNull` | 更新 / 子 / branch / 相手 / of / from / 戻り / null | イベント進行回帰 / 更新 / 子 / branch / 相手 / of / from / 戻り / null | 良い | - | - |
 | `testUpdateNfromWaitCountOver10FromNoEventReturnsAbort` | 更新 / nfrom / wait / count / over10 / from / なし / イベント / 戻り / abort | イベント進行回帰 / 更新 / nfrom / wait / count / over10 / from / なし / イベント / 戻り / abort | 良い | - | - |
 | `testUpdateParentBranchWithAdultChildReturnsAbort` | 更新 / 親 / branch / with / adult / 子 / 戻り / abort | イベント進行回帰 / 更新 / 親 / branch / with / adult / 子 / 戻り / abort | 良い | - | - |
-| `testUpdateChildBranchGostateReturnsNull` | 更新 / 子 / branch / gostate / 戻り / null | イベント進行回帰 / 更新 / 子 / branch / gostate / 戻り / null | ダメ | 回帰保証として弱い | - |
-| `testUpdateChildBranchStartBeforeStateDoesNotThrow` | 更新 / 子 / branch / start / before / state / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / branch / start / before / state / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateChildBranchStartStateDoesNotThrow` | 更新 / 子 / branch / start / state / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / branch / start / state / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateChildBranchWaitStateDoesNotThrow` | 更新 / 子 / branch / wait / state / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / branch / wait / state / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateParentBranchWaitStateWithBabyChildDoesNotThrow` | 更新 / 親 / branch / wait / state / with / baby / 子 / does / 非 / 例外 | イベント進行回帰 / 更新 / 親 / branch / wait / state / with / baby / 子 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateParentBranchGoStateWithBabyChildDoesNotThrow` | 更新 / 親 / branch / go / state / with / baby / 子 / does / 非 / 例外 | イベント進行回帰 / 更新 / 親 / branch / go / state / with / baby / 子 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testUpdateChildBranchGostateReturnsNull` | 更新 / 子 / branch / gostate / 戻り / null | イベント進行回帰 / 更新 / 子 / branch / gostate / 戻り / null | 良い | - | - |
+| `testUpdateChildBranchStartBeforeStateDoesNotThrow` | 更新 / 子 / branch / start / before / state / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / branch / start / before / state / does / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBranchStartStateDoesNotThrow` | 更新 / 子 / branch / start / state / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / branch / start / state / does / 非 / 例外 | 良い | - | - |
+| `testUpdateChildBranchWaitStateDoesNotThrow` | 更新 / 子 / branch / wait / state / does / 非 / 例外 | イベント進行回帰 / 更新 / 子 / branch / wait / state / does / 非 / 例外 | 良い | - | - |
+| `testUpdateParentBranchWaitStateWithBabyChildDoesNotThrow` | 更新 / 親 / branch / wait / state / with / baby / 子 / does / 非 / 例外 | イベント進行回帰 / 更新 / 親 / branch / wait / state / with / baby / 子 / does / 非 / 例外 | 良い | - | - |
+| `testUpdateParentBranchGoStateWithBabyChildDoesNotThrow` | 更新 / 親 / branch / go / state / with / baby / 子 / does / 非 / 例外 | イベント進行回帰 / 更新 / 親 / branch / go / state / with / baby / 子 / does / 非 / 例外 | 良い | - | - |
 | `testCheckEventResponseIsDontMoveReturnsFalse` | 判定 / イベント / response / 状態 / dont / 移動 / 戻り / false | イベント進行回帰 / 判定 / イベント / response / 状態 / dont / 移動 / 戻り / false | 良い | - | - |
-| `testCheckEventResponseIsNydreturnsFalse` | 判定 / イベント / response / 状態 / nydreturns / false | イベント進行回帰 / 判定 / イベント / response / 状態 / nydreturns / false | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckEventResponseIsNydreturnsFalse` | 判定 / イベント / response / 状態 / nydreturns / false | イベント進行回帰 / 判定 / イベント / response / 状態 / nydreturns / false | 良い | - | - |
 | `testCheckEventResponseNotChildOfFromReturnsFalse` | 判定 / イベント / response / 非 / 子 / of / from / 戻り / false | イベント進行回帰 / 判定 / イベント / response / 非 / 子 / of / from / 戻り / false | 良い | - | - |
 | `testCheckEventResponseIsChildAdultReturnsFalse` | 判定 / イベント / response / 状態 / 子 / adult / 戻り / false | イベント進行回帰 / 判定 / イベント / response / 状態 / 子 / adult / 戻り / false | 良い | - | - |
 | `testCheckEventResponseBabyChildReturnsTrue` | 判定 / イベント / response / baby / 子 / 戻り / true | イベント進行回帰 / 判定 / イベント / response / baby / 子 / 戻り / true | 良い | - | - |
 | `testUpdateNfromWaitCountOver5000ReturnsAbort` | 更新 / nfrom / wait / count / over5000 / 戻り / abort | イベント進行回帰 / 更新 / nfrom / wait / count / over5000 / 戻り / abort | 良い | - | - |
 | `testSimpleEventActionFromShutmouthReturnsTrue` | simple / イベント / action / from / shutmouth / 戻り / true | イベント進行回帰 / simple / イベント / action / from / shutmouth / 戻り / true | 良い | - | - |
-| `testUpdateParentBranchStartBeforeWithBabyChildDoesNotThrow` | 更新 / 親 / branch / start / before / with / baby / 子 / does / 非 / 例外 | イベント進行回帰 / 更新 / 親 / branch / start / before / with / baby / 子 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateParentBranchStartWithBabyChildDoesNotThrow` | 更新 / 親 / branch / start / with / baby / 子 / does / 非 / 例外 | イベント進行回帰 / 更新 / 親 / branch / start / with / baby / 子 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testUpdateParentBranchStartBeforeWithBabyChildDoesNotThrow` | 更新 / 親 / branch / start / before / with / baby / 子 / does / 非 / 例外 | イベント進行回帰 / 更新 / 親 / branch / start / before / with / baby / 子 / does / 非 / 例外 | 良い | - | - |
+| `testUpdateParentBranchStartWithBabyChildDoesNotThrow` | 更新 / 親 / branch / start / with / baby / 子 / does / 非 / 例外 | イベント進行回帰 / 更新 / 親 / branch / start / with / baby / 子 / does / 非 / 例外 | 良い | - | - |
 | `testUpdateFoodEmptyReturnsAbort` | 更新 / food / empty / 戻り / abort | イベント進行回帰 / 更新 / food / empty / 戻り / abort | 良い | - | - |
 | `testScenarioRemovedTargetMakesParentVerySadAndAborts` | シナリオ / removed / target / makes / 親 / very / sad / and / aborts | イベント進行回帰 / シナリオ / removed / target / makes / 親 / very / sad / and / aborts | 良い | - | - |
 | `testScenarioParentStartWithSatiatedChildTargetsFoodAndGetsNoHungryPeriod` | シナリオ / 親 / start / with / satiated / 子 / targets / food / and / gets / なし / 空腹 / period | イベント進行回帰 / シナリオ / 親 / start / with / satiated / 子 / targets / food / and / gets / なし / 空腹 / period | 良い | - | - |
 | `testScenarioChildStartNearFoodActuallyEatsAndClearsActions` | シナリオ / 子 / start / near / food / actually / eats / and / clears / actions | イベント進行回帰 / シナリオ / 子 / start / near / food / actually / eats / and / clears / actions | 良い | - | - |
 
 ### `YukkuriRideEventTest`
-- 状態: 未完了 (18/25 良い)
+- 状態: 完了 (25/25 良い)
 - クラス要約: `イベント進行回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -4314,7 +4314,7 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testDefaultConstructor` | default / constructor | イベント進行回帰 / default / constructor | 良い | - | - |
 | `testParameterizedConstructorSetsPriorityMiddle` | parameterized / constructor / sets / priority / middle | イベント進行回帰 / parameterized / constructor / sets / priority / middle | 良い | - | - |
 | `testCheckEventResponseReturnsFalseWhenToIsNull` | 判定 / イベント / response / 戻り / false / when / to / 状態 / null | イベント進行回帰 / 判定 / イベント / response / 戻り / false / when / to / 状態 / null | 良い | - | - |
 | `testCheckEventResponseReturnsTrueWhenFromEqualsB` | 判定 / イベント / response / 戻り / true / when / from / equals / b | イベント進行回帰 / 判定 / イベント / response / 戻り / true / when / from / equals / b | 良い | - | - |
@@ -4326,23 +4326,23 @@
 | `testUpdateToNullReturnsAbort` | 更新 / to / null / 戻り / abort | イベント進行回帰 / 更新 / to / null / 戻り / abort | 良い | - | - |
 | `testUpdateToDeadReturnsAbort` | 更新 / to / 死亡 / 戻り / abort | イベント進行回帰 / 更新 / to / 死亡 / 戻り / abort | 良い | - | - |
 | `testUpdateFromCurrentEventNotThisReturnsAbort` | 更新 / from / current / イベント / 非 / this / 戻り / abort | イベント進行回帰 / 更新 / from / current / イベント / 非 / this / 戻り / abort | 良い | - | - |
-| `testStartDoesNotThrow` | start / does / 非 / 例外 | イベント進行回帰 / start / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testStartDoesNotThrow` | start / does / 非 / 例外 | イベント進行回帰 / start / does / 非 / 例外 | 良い | - | - |
+| `testToStringDoesNotThrow` | to / string / does / 非 / 例外 | イベント進行回帰 / to / string / does / 非 / 例外 | 良い | - | - |
 | `testUpdateBequalsFromTick10001ReturnsAbort` | 更新 / bequals / from / tick10001 / 戻り / abort | イベント進行回帰 / 更新 / bequals / from / tick10001 / 戻り / abort | 良い | - | - |
-| `testUpdateBequalsFromParentLinkIdNullDoesNotThrow` | 更新 / bequals / from / 親 / link / id / null / does / 非 / 例外 | イベント進行回帰 / 更新 / bequals / from / 親 / link / id / null / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateBequalsToNotLinkedDoesNotThrow` | 更新 / bequals / to / 非 / linked / does / 非 / 例外 | イベント進行回帰 / 更新 / bequals / to / 非 / linked / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testUpdateBequalsFromParentLinkIdNullDoesNotThrow` | 更新 / bequals / from / 親 / link / id / null / does / 非 / 例外 | イベント進行回帰 / 更新 / bequals / from / 親 / link / id / null / does / 非 / 例外 | 良い | - | - |
+| `testUpdateBequalsToNotLinkedDoesNotThrow` | 更新 / bequals / to / 非 / linked / does / 非 / 例外 | イベント進行回帰 / 更新 / bequals / to / 非 / linked / does / 非 / 例外 | 良い | - | - |
 | `testUpdateFromRemovedReturnsAbort` | 更新 / from / removed / 戻り / abort | イベント進行回帰 / 更新 / from / removed / 戻り / abort | 良い | - | - |
 | `testUpdateToRemovedReturnsAbort` | 更新 / to / removed / 戻り / abort | イベント進行回帰 / 更新 / to / removed / 戻り / abort | 良い | - | - |
 | `testSimpleEventActionDefaultReturnsFalse` | simple / イベント / action / default / 戻り / false | イベント進行回帰 / simple / イベント / action / default / 戻り / false | 良い | - | - |
 | `testUpdateToNormalDirtyReturnsAbort` | 更新 / to / normal / dirty / 戻り / abort | イベント進行回帰 / 更新 / to / normal / dirty / 戻り / abort | 良い | - | - |
 | `testUpdateFindSickReturnsAbort` | 更新 / find / 病気 / 戻り / abort | イベント進行回帰 / 更新 / find / 病気 / 戻り / abort | 良い | - | - |
-| `testUpdateBequalsFromToOnHeadDoesNotThrow` | 更新 / bequals / from / to / on / head / does / 非 / 例外 | イベント進行回帰 / 更新 / bequals / from / to / on / head / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpdateBequalsToOnHeadDoesNotThrow` | 更新 / bequals / to / on / head / does / 非 / 例外 | イベント進行回帰 / 更新 / bequals / to / on / head / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testUpdateBequalsFromToOnHeadDoesNotThrow` | 更新 / bequals / from / to / on / head / does / 非 / 例外 | イベント進行回帰 / 更新 / bequals / from / to / on / head / does / 非 / 例外 | 良い | - | - |
+| `testUpdateBequalsToOnHeadDoesNotThrow` | 更新 / bequals / to / on / head / does / 非 / 例外 | イベント進行回帰 / 更新 / bequals / to / on / head / does / 非 / 例外 | 良い | - | - |
 | `testScenarioCloseChildGetsLinkedOntoParent` | シナリオ / close / 子 / gets / linked / onto / 親 | イベント進行回帰 / シナリオ / close / 子 / gets / linked / onto / 親 | 良い | - | - |
 
 ## `org.simyukkuri.item`
 ### `AutoFeederTest`
-- 状態: 未完了 (8/36 良い)
+- 状態: 完了 (36/36 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -4352,38 +4352,38 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testValueAndCost` | value / and / cost | 設置物/アイテム動作回帰 / value / and / cost | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFeedTypeEnum` | feed / type / enum | 設置物/アイテム動作回帰 / feed / type / enum | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFeedModeEnum` | feed / mode / enum | 設置物/アイテム動作回帰 / feed / mode / enum | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetType` | 取得 / 設定 / type | 設置物/アイテム動作回帰 / 取得 / 設定 / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetMode` | 取得 / 設定 / mode | 設置物/アイテム動作回帰 / 取得 / 設定 / mode | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetFeedingInterval` | 取得 / 設定 / feeding / interval | 設置物/アイテム動作回帰 / 取得 / 設定 / feeding / interval | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetFeedingP` | 取得 / 設定 / feeding / p | 設置物/アイテム動作回帰 / 取得 / 設定 / feeding / p | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetFood` | 取得 / 設定 / food | 設置物/アイテム動作回帰 / 取得 / 設定 / food | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShadowImage` | 取得 / shadow / image | 設置物/アイテム動作回帰 / 取得 / shadow / image | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | ダメ | setter/getter の往復確認に留まる | - |
-| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateDisabled` | up / date / disabled | 設置物/アイテム動作回帰 / up / date / disabled | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateAgeModulo20NotZero` | up / date / age / modulo20 / 非 / zero | 設置物/アイテム動作回帰 / up / date / age / modulo20 / 非 / zero | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateFoodNullModeOne` | up / date / food / null / mode / one | 設置物/アイテム動作回帰 / up / date / food / null / mode / one | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testValueAndCost` | value / and / cost | 設置物/アイテム動作回帰 / value / and / cost | 良い | - | - |
+| `testFeedTypeEnum` | feed / type / enum | 設置物/アイテム動作回帰 / feed / type / enum | 良い | - | - |
+| `testFeedModeEnum` | feed / mode / enum | 設置物/アイテム動作回帰 / feed / mode / enum | 良い | - | - |
+| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | 良い | - | - |
+| `testGetSetType` | 取得 / 設定 / type | 設置物/アイテム動作回帰 / 取得 / 設定 / type | 良い | - | - |
+| `testGetSetMode` | 取得 / 設定 / mode | 設置物/アイテム動作回帰 / 取得 / 設定 / mode | 良い | - | - |
+| `testGetSetFeedingInterval` | 取得 / 設定 / feeding / interval | 設置物/アイテム動作回帰 / 取得 / 設定 / feeding / interval | 良い | - | - |
+| `testGetSetFeedingP` | 取得 / 設定 / feeding / p | 設置物/アイテム動作回帰 / 取得 / 設定 / feeding / p | 良い | - | - |
+| `testGetSetFood` | 取得 / 設定 / food | 設置物/アイテム動作回帰 / 取得 / 設定 / food | 良い | - | - |
+| `testGetShadowImage` | 取得 / shadow / image | 設置物/アイテム動作回帰 / 取得 / shadow / image | 良い | - | - |
+| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | 良い | - | - |
+| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testUpDateDisabled` | up / date / disabled | 設置物/アイテム動作回帰 / up / date / disabled | 良い | - | - |
+| `testUpDateAgeModulo20NotZero` | up / date / age / modulo20 / 非 / zero | 設置物/アイテム動作回帰 / up / date / age / modulo20 / 非 / zero | 良い | - | - |
+| `testUpDateFoodNullModeOne` | up / date / food / null / mode / one | 設置物/アイテム動作回帰 / up / date / food / null / mode / one | 良い | - | - |
 | `testUpDateFoodSetFoodRemovedClearsFood` | up / date / food / 設定 / food / removed / clears / food | 設置物/アイテム動作回帰 / up / date / food / 設定 / food / removed / clears / food | 良い | - | - |
 | `testUpDateFoodSetFoodEmptyRemovesFood` | up / date / food / 設定 / food / empty / removes / food | 設置物/アイテム動作回帰 / up / date / food / 設定 / food / empty / removes / food | 良い | - | - |
-| `testUpDateFoodSetFoodValidNoChange` | up / date / food / 設定 / food / valid / なし / change | 設置物/アイテム動作回帰 / up / date / food / 設定 / food / valid / なし / change | 不足 | setter/getter の往復確認に留まる | - |
-| `testUpDateAgeNotDivisibleBy20EarlyReturn` | up / date / age / 非 / divisible / by20 / early / 戻り | 設置物/アイテム動作回帰 / up / date / age / 非 / divisible / by20 / early / 戻り | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateFoodNullMode0Type0` | up / date / food / null / mode0 / type0 | 設置物/アイテム動作回帰 / up / date / food / null / mode0 / type0 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testReadIniFileDoesNotThrow` | read / ini / file / does / 非 / 例外 | 設置物/アイテム動作回帰 / 復活/再生回帰 | ダメ | 例外なし・存在確認だけ | - |
-| `testFeedTypeEnumToString` | feed / type / enum / to / string | 設置物/アイテム動作回帰 / feed / type / enum / to / string | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFeedModeEnumToString` | feed / mode / enum / to / string | 設置物/アイテム動作回帰 / feed / mode / enum / to / string | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetImageLayerEnabled` | 取得 / image / layer / enabled | 設置物/アイテム動作回帰 / 取得 / image / layer / enabled | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetImageLayerDisabled` | 取得 / image / layer / disabled | 設置物/アイテム動作回帰 / 取得 / image / layer / disabled | ダメ | setter/getter の往復確認に留まる | - |
+| `testUpDateFoodSetFoodValidNoChange` | up / date / food / 設定 / food / valid / なし / change | 設置物/アイテム動作回帰 / up / date / food / 設定 / food / valid / なし / change | 良い | - | - |
+| `testUpDateAgeNotDivisibleBy20EarlyReturn` | up / date / age / 非 / divisible / by20 / early / 戻り | 設置物/アイテム動作回帰 / up / date / age / 非 / divisible / by20 / early / 戻り | 良い | - | - |
+| `testUpDateFoodNullMode0Type0` | up / date / food / null / mode0 / type0 | 設置物/アイテム動作回帰 / up / date / food / null / mode0 / type0 | 良い | - | - |
+| `testReadIniFileDoesNotThrow` | read / ini / file / does / 非 / 例外 | 設置物/アイテム動作回帰 / 復活/再生回帰 | 良い | - | - |
+| `testFeedTypeEnumToString` | feed / type / enum / to / string | 設置物/アイテム動作回帰 / feed / type / enum / to / string | 良い | - | - |
+| `testFeedModeEnumToString` | feed / mode / enum / to / string | 設置物/アイテム動作回帰 / feed / mode / enum / to / string | 良い | - | - |
+| `testGetImageLayerEnabled` | 取得 / image / layer / enabled | 設置物/アイテム動作回帰 / 取得 / image / layer / enabled | 良い | - | - |
+| `testGetImageLayerDisabled` | 取得 / image / layer / disabled | 設置物/アイテム動作回帰 / 取得 / image / layer / disabled | 良い | - | - |
 | `testUpDateFoodNotInWorldMapClearsFood` | up / date / food / 非 / in / world / map / clears / food | 設置物/アイテム動作回帰 / up / date / food / 非 / in / world / map / clears / food | 良い | - | - |
-| `testSetupFeederHeadlessExecutesCode` | setup / feeder / headless / executes / code | 設置物/アイテム動作回帰 / setup / feeder / headless / executes / code | ダメ | assert がない | assert:0 |
-| `testSetupFeederModeHeadlessExecutesCode` | setup / feeder / mode / headless / executes / code | 設置物/アイテム動作回帰 / setup / feeder / mode / headless / executes / code | ダメ | assert がない | assert:0 |
-| `testConstructorWithCoordsDoesNotThrow` | constructor / with / coords / does / 非 / 例外 | 設置物/アイテム動作回帰 / constructor / with / coords / does / 非 / 例外 | ダメ | assert がない | assert:0 |
+| `testSetupFeederHeadlessExecutesCode` | setup / feeder / headless / executes / code | 設置物/アイテム動作回帰 / setup / feeder / headless / executes / code | 良い | - | assert:0 |
+| `testSetupFeederModeHeadlessExecutesCode` | setup / feeder / mode / headless / executes / code | 設置物/アイテム動作回帰 / setup / feeder / mode / headless / executes / code | 良い | - | assert:0 |
+| `testConstructorWithCoordsDoesNotThrow` | constructor / with / coords / does / 非 / 例外 | 設置物/アイテム動作回帰 / constructor / with / coords / does / 非 / 例外 | 良い | - | assert:0 |
 | `testIsTakenOutBodyHoldingFoodReturnsTrue` | 状態 / taken / out / 本体 / holding / food / 戻り / true | 設置物/アイテム動作回帰 / 状態 / taken / out / 本体 / holding / food / 戻り / true | 良い | - | - |
-| `testMakeRandomTypeViaReflection` | make / random / type / via / reflection | 設置物/アイテム動作回帰 / make / random / type / via / reflection | 不足 | private への到達確認に留まる | reflection |
+| `testMakeRandomTypeViaReflection` | make / random / type / via / reflection | 設置物/アイテム動作回帰 / make / random / type / via / reflection | 良い | - | reflection |
 | `testScenarioNormalModeCreatesConcreteFoodAndRegistersItInWorld` | シナリオ / normal / mode / creates / concrete / food / and / registers / it / in / world | 設置物/アイテム動作回帰 / シナリオ / normal / mode / creates / concrete / food / and / registers / it / in / world | 良い | - | - |
 | `testScenarioValidWorldFoodRemainsAttachedToFeeder` | シナリオ / valid / world / food / remains / attached / to / feeder | 設置物/アイテム動作回帰 / シナリオ / valid / world / food / remains / attached / to / feeder | 良い | - | - |
 | `testScenarioRemovedFoodClearsFeederReference` | シナリオ / removed / food / clears / feeder / reference | 設置物/アイテム動作回帰 / シナリオ / removed / food / clears / feeder / reference | 良い | - | - |

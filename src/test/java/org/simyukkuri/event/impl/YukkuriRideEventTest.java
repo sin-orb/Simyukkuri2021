@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -178,7 +179,7 @@ public class YukkuriRideEventTest {
             f.setAccessible(true);
             f.setInt(event, 10000); // becomes 10001 after tick++ in update
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
         assertEquals(org.simyukkuri.event.EventPacket.UpdateState.ABORT, event.update(from));
     }
@@ -196,7 +197,7 @@ public class YukkuriRideEventTest {
             f.setAccessible(true);
             f.setInt(event, -1); // becomes 0 after tick++, 0%20==0
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
         assertDoesNotThrow(() -> event.update(from));
     }

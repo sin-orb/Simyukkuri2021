@@ -120,7 +120,7 @@ class HouseTest extends ItemTestBase {
         try {
             House.loadImages(House.class.getClassLoader(), null);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
@@ -142,7 +142,7 @@ class HouseTest extends ItemTestBase {
             House h = new House(100, 100, 0);
             org.junit.jupiter.api.Assertions.assertNotNull(h);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 

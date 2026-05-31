@@ -138,7 +138,7 @@ class BedLogicTest {
             hf.setAccessible(true);
             hf.setInt(bed, 20);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
         SimYukkuri.world.getCurrentWorldState().getBeds().put(bed.getObjId(), bed);
         try {

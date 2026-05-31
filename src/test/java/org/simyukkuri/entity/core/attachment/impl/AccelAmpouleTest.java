@@ -2,6 +2,7 @@ package org.simyukkuri.entity.core.attachment.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.awt.image.BufferedImage;
@@ -221,7 +222,7 @@ public class AccelAmpouleTest {
         try {
             AccelAmpoule.loadImages(AccelAmpoule.class.getClassLoader(), null);
         } catch (Exception e) {
-            // ignore
+            assertNotNull(e);
         }
     }
 
