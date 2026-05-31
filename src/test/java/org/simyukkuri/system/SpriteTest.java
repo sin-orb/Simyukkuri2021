@@ -18,33 +18,40 @@ public class SpriteTest {
     public void testConstructorCenterCenter() {
         Sprite sprite = new Sprite(100, 50, Sprite.PIVOT_CENTER_CENTER);
 
-        assertNotNull(sprite);
-        assertEquals(100, sprite.getOriginalW());
-        assertEquals(50, sprite.getOriginalH());
-        assertEquals(100, sprite.getImageW());
-        assertEquals(50, sprite.getImageH());
-        assertEquals(Sprite.PIVOT_CENTER_CENTER, sprite.getPivotType());
-
-        // Pivot should be at center
-        assertEquals(50, sprite.getPivotX()); // 100 >> 1
-        assertEquals(25, sprite.getPivotY()); // 50 >> 1
+        assertNotNull(sprite, "Sprite インスタンスが生成されること");
+        assertEquals(100, sprite.getOriginalW(),           "originalW=100");
+        assertEquals(50,  sprite.getOriginalH(),           "originalH=50");
+        assertEquals(100, sprite.getImageW(),              "imageW=100（original と同じ）");
+        assertEquals(50,  sprite.getImageH(),              "imageH=50（original と同じ）");
+        assertEquals(Sprite.PIVOT_CENTER_CENTER, sprite.getPivotType(), "pivotType が CENTER_CENTER");
+        // CENTER_CENTER: pivotX=w>>1=50, pivotY=h>>1=25
+        assertEquals(50, sprite.getPivotX(), "pivotX=100>>1=50");
+        assertEquals(25, sprite.getPivotY(), "pivotY=50>>1=25");
     }
 
     @Test
     public void testConstructorCenterBottom() {
         Sprite sprite = new Sprite(100, 50, Sprite.PIVOT_CENTER_BOTTOM);
 
-        assertEquals(Sprite.PIVOT_CENTER_BOTTOM, sprite.getPivotType());
-
-        // Pivot should be at center/bottom
-        assertEquals(50, sprite.getPivotX()); // 100 >> 1
-        assertEquals(49, sprite.getPivotY()); // 50 - 1
+        assertEquals(Sprite.PIVOT_CENTER_BOTTOM, sprite.getPivotType(), "pivotType が CENTER_BOTTOM");
+        // CENTER_BOTTOM: pivotX=w>>1=50, pivotY=h-1=49
+        assertEquals(50, sprite.getPivotX(), "pivotX=100>>1=50");
+        assertEquals(49, sprite.getPivotY(), "pivotY=50-1=49（CENTERの25より下方）");
+        // CENTER と BOTTOM で pivotY が異なること
+        Sprite center = new Sprite(100, 50, Sprite.PIVOT_CENTER_CENTER);
+        assertEquals(25, center.getPivotY(),  "CENTER pivotY=25");
+        assertEquals(49, sprite.getPivotY(),  "BOTTOM pivotY=49 > CENTER の 25");
     }
 
     @Test
     public void testDefaultConstructor() {
         Sprite sprite = new Sprite();
-        assertNotNull(sprite);
+        assertNotNull(sprite, "デフォルトコンストラクタで Sprite が生成されること");
+        // デフォルト初期値: originalW/H=0, imageW/H=0
+        assertEquals(0, sprite.getOriginalW(), "デフォルトの originalW は 0 であること");
+        assertEquals(0, sprite.getOriginalH(), "デフォルトの originalH は 0 であること");
+        assertEquals(0, sprite.getImageW(),    "デフォルトの imageW は 0 であること");
+        assertEquals(0, sprite.getImageH(),    "デフォルトの imageH は 0 であること");
     }
 
     @Test
@@ -53,11 +60,14 @@ public class SpriteTest {
 
         sprite.setSpriteSize(200, 100);
 
-        assertEquals(200, sprite.getImageW());
-        assertEquals(100, sprite.getImageH());
-        // Pivot should be recalculated
-        assertEquals(100, sprite.getPivotX()); // 200 >> 1
-        assertEquals(50, sprite.getPivotY()); // 100 >> 1
+        assertEquals(200, sprite.getImageW(),  "setSpriteSize後は imageW=200");
+        assertEquals(100, sprite.getImageH(),  "setSpriteSize後は imageH=100");
+        // ピボットが新しいサイズで再計算されること
+        assertEquals(100, sprite.getPivotX(), "CENTER: 200>>1=100");
+        assertEquals(50,  sprite.getPivotY(), "CENTER: 100>>1=50");
+        // originalW/H は変化しないこと
+        assertEquals(100, sprite.getOriginalW(), "setSpriteSize後も originalW は不変");
+        assertEquals(50,  sprite.getOriginalH(), "setSpriteSize後も originalH は不変");
     }
 
     @Test
@@ -66,12 +76,15 @@ public class SpriteTest {
 
         sprite.addSpriteSize(20, 10);
 
-        // Should add to original size
-        assertEquals(120, sprite.getImageW()); // 100 + 20
-        assertEquals(60, sprite.getImageH()); // 50 + 10
-        // Pivot should be recalculated
-        assertEquals(60, sprite.getPivotX()); // 120 >> 1
-        assertEquals(30, sprite.getPivotY()); // 60 >> 1
+        // original + delta でimage sizeが設定されること
+        assertEquals(120, sprite.getImageW(), "addSpriteSize: 100+20=120");
+        assertEquals(60,  sprite.getImageH(), "addSpriteSize: 50+10=60");
+        // ピボットが新しいサイズで再計算されること
+        assertEquals(60, sprite.getPivotX(), "CENTER: 120>>1=60");
+        assertEquals(30, sprite.getPivotY(), "CENTER: 60>>1=30");
+        // originalは変化しないこと
+        assertEquals(100, sprite.getOriginalW(), "addSpriteSize後も originalW=100 のまま");
+        assertEquals(50,  sprite.getOriginalH(), "addSpriteSize後も originalH=50 のまま");
     }
 
     @Test
@@ -103,8 +116,14 @@ public class SpriteTest {
         Sprite sprite = new Sprite(100, 50, Sprite.PIVOT_CENTER_CENTER);
 
         sprite.setPivotType(Sprite.PIVOT_CENTER_BOTTOM);
+        assertEquals(Sprite.PIVOT_CENTER_BOTTOM, sprite.getPivotType(),
+                "setPivotType 後は getPivotType() が新しい type を返すこと");
 
-        assertEquals(Sprite.PIVOT_CENTER_BOTTOM, sprite.getPivotType());
+        // setPivotType 単独ではpivotは再計算されないが、size変更で新しいtypeが使われること
+        sprite.setSpriteSize(80, 40);
+        // PIVOT_CENTER_BOTTOM: pivotX=80>>1=40, pivotY=40-1=39
+        assertEquals(40, sprite.getPivotX(), "BOTTOM type でサイズ変更後の pivotX が正しいこと");
+        assertEquals(39, sprite.getPivotY(), "BOTTOM type でサイズ変更後の pivotY が正しいこと");
     }
 
     @Test
@@ -112,50 +131,63 @@ public class SpriteTest {
         Sprite sprite = new Sprite();
 
         sprite.setOriginalW(150);
-        assertEquals(150, sprite.getOriginalW());
+        assertEquals(150, sprite.getOriginalW(), "setOriginalW(150) → getOriginalW()=150");
 
         sprite.setOriginalH(75);
-        assertEquals(75, sprite.getOriginalH());
+        assertEquals(75, sprite.getOriginalH(), "setOriginalH(75) → getOriginalH()=75");
 
         sprite.setImageW(200);
-        assertEquals(200, sprite.getImageW());
+        assertEquals(200, sprite.getImageW(), "setImageW(200) → getImageW()=200");
 
         sprite.setImageH(100);
-        assertEquals(100, sprite.getImageH());
+        assertEquals(100, sprite.getImageH(), "setImageH(100) → getImageH()=100");
 
         sprite.setPivotX(50);
-        assertEquals(50, sprite.getPivotX());
+        assertEquals(50, sprite.getPivotX(), "setPivotX(50) → getPivotX()=50");
 
         sprite.setPivotY(25);
-        assertEquals(25, sprite.getPivotY());
+        assertEquals(25, sprite.getPivotY(), "setPivotY(25) → getPivotY()=25");
+
+        // originalW/H と imageW/H は独立しているため相互に影響しないこと
+        assertEquals(150, sprite.getOriginalW(), "imageW を変更しても originalW が変化しないこと");
+        assertEquals(75,  sprite.getOriginalH(), "imageH を変更しても originalH が変化しないこと");
     }
 
     @Test
     public void testPivotCalculationCenter() {
         Sprite sprite = new Sprite(100, 50, Sprite.PIVOT_CENTER_CENTER);
 
-        // Test with different sizes
+        // CENTER: pivotX = w>>1, pivotY = h>>1
         sprite.setSpriteSize(200, 100);
-        assertEquals(100, sprite.getPivotX());
-        assertEquals(50, sprite.getPivotY());
+        assertEquals(100, sprite.getPivotX(), "CENTER: 200>>1=100");
+        assertEquals(50,  sprite.getPivotY(), "CENTER: 100>>1=50");
 
         sprite.setSpriteSize(50, 25);
-        assertEquals(25, sprite.getPivotX());
-        assertEquals(12, sprite.getPivotY());
+        assertEquals(25, sprite.getPivotX(), "CENTER: 50>>1=25");
+        assertEquals(12, sprite.getPivotY(), "CENTER: 25>>1=12");
+
+        // 初期サイズ (100,50) に戻った場合の確認
+        sprite.setSpriteSize(100, 50);
+        assertEquals(50, sprite.getPivotX(), "CENTER: 100>>1=50");
+        assertEquals(25, sprite.getPivotY(), "CENTER: 50>>1=25");
     }
 
     @Test
     public void testPivotCalculationBottom() {
         Sprite sprite = new Sprite(100, 50, Sprite.PIVOT_CENTER_BOTTOM);
 
-        // Test with different sizes
+        // BOTTOM: pivotX = w>>1, pivotY = h-1
         sprite.setSpriteSize(200, 100);
-        assertEquals(100, sprite.getPivotX());
-        assertEquals(99, sprite.getPivotY()); // height - 1
+        assertEquals(100, sprite.getPivotX(), "BOTTOM: 200>>1=100");
+        assertEquals(99,  sprite.getPivotY(), "BOTTOM: 100-1=99");
 
         sprite.setSpriteSize(50, 25);
-        assertEquals(25, sprite.getPivotX());
-        assertEquals(24, sprite.getPivotY()); // height - 1
+        assertEquals(25, sprite.getPivotX(), "BOTTOM: 50>>1=25");
+        assertEquals(24, sprite.getPivotY(), "BOTTOM: 25-1=24");
+
+        // BOTTOM は CENTER より pivotY が大きい（下方）: (100,50) のとき BOTTOM=49 > CENTER=25
+        sprite.setSpriteSize(100, 50);
+        assertEquals(49, sprite.getPivotY(), "BOTTOM: pivotY=h-1=49 であること");
     }
 
     @Test
@@ -167,31 +199,32 @@ public class SpriteTest {
 
         Rectangle4y[] rects = sprite.getScreenRect();
 
-        // Both should be at origin with different widths
-        assertEquals(0, rects[0].getX());
-        assertEquals(0, rects[1].getX());
-        assertEquals(50, rects[0].getWidth());
-        assertEquals(-50, rects[1].getWidth()); // Negative for right side
+        // 左rect（正向き）と右rect（ミラー）の確認
+        assertEquals(0,   rects[0].getX(),     "左rect の X が 0 であること");
+        assertEquals(0,   rects[1].getX(),     "右rect の X が 0 であること（同じ起点）");
+        assertEquals(50,  rects[0].getWidth(), "左rect の width が 50 であること");
+        assertEquals(-50, rects[1].getWidth(), "右rect の width が -50（ミラー）であること");
+        // 高さは同じであること
+        assertEquals(rects[0].getHeight(), rects[1].getHeight(), "左右rect の height が同じであること");
     }
 
     @Test
     public void testOriginalVsImageSize() {
         Sprite sprite = new Sprite(100, 50, Sprite.PIVOT_CENTER_CENTER);
 
-        // Original size should remain constant
-        assertEquals(100, sprite.getOriginalW());
-        assertEquals(50, sprite.getOriginalH());
+        // setSpriteSize 前の original は変わらないこと
+        assertEquals(100, sprite.getOriginalW(), "初期 originalW=100");
+        assertEquals(50,  sprite.getOriginalH(), "初期 originalH=50");
 
-        // Change image size
+        // imageサイズを変更
         sprite.setSpriteSize(200, 100);
 
-        // Original should not change
-        assertEquals(100, sprite.getOriginalW());
-        assertEquals(50, sprite.getOriginalH());
-
-        // Image size should change
-        assertEquals(200, sprite.getImageW());
-        assertEquals(100, sprite.getImageH());
+        // originalは変化しないこと
+        assertEquals(100, sprite.getOriginalW(), "setSpriteSize後も originalW=100 のままであること");
+        assertEquals(50,  sprite.getOriginalH(), "setSpriteSize後も originalH=50 のままであること");
+        // imageはサイズ変更されること
+        assertEquals(200, sprite.getImageW(), "setSpriteSize後は imageW=200 に変わること");
+        assertEquals(100, sprite.getImageH(), "setSpriteSize後は imageH=100 に変わること");
     }
 
     @Nested
@@ -200,16 +233,17 @@ public class SpriteTest {
         public void testScenario_SetPivotTypeAloneDoesNotRecalculatePivotUntilSizeChanges() {
             Sprite sprite = new Sprite(100, 50, Sprite.PIVOT_CENTER_CENTER);
 
+            // setPivotType 単独ではpivot値は変化しないこと（CENTER_CENTERのまま）
             sprite.setPivotType(Sprite.PIVOT_CENTER_BOTTOM);
+            assertEquals(Sprite.PIVOT_CENTER_BOTTOM, sprite.getPivotType(),
+                    "setPivotType後はtypeが変わること");
+            assertEquals(50, sprite.getPivotX(), "type変更直後はpivotXが変化しないこと");
+            assertEquals(25, sprite.getPivotY(), "type変更直後はpivotYが変化しないこと（まだCENTERの値）");
 
-            assertEquals(Sprite.PIVOT_CENTER_BOTTOM, sprite.getPivotType());
-            assertEquals(50, sprite.getPivotX());
-            assertEquals(25, sprite.getPivotY());
-
+            // setSpriteSize後はBOTTOMとして再計算されること
             sprite.setSpriteSize(120, 60);
-
-            assertEquals(60, sprite.getPivotX());
-            assertEquals(59, sprite.getPivotY());
+            assertEquals(60, sprite.getPivotX(), "BOTTOM: 120>>1=60");
+            assertEquals(59, sprite.getPivotY(), "BOTTOM: 60-1=59（CENTERなら30のはず）");
         }
 
         @Test

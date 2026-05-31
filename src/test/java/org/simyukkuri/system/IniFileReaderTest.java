@@ -27,35 +27,41 @@ public class IniFileReaderTest {
     public void testOpenNonExistent() {
         File nonExistent = new File("nonexistent_file_12345.ini");
         IniFileReader reader = new IniFileReader(nonExistent, null);
+        assertNotNull(reader, "存在しないファイルでも IniFileReader インスタンスが生成されること");
 
         boolean opened = reader.open(getClass().getClassLoader());
-
-        // Should return false for non-existent file
-        assertFalse(opened);
+        assertFalse(opened, "存在しないファイルを open すると false を返すこと");
     }
 
     @Test
     public void testReadNextWithoutOpen() {
         File testFile = new File("test.ini");
         IniFileReader reader = new IniFileReader(testFile, null);
-
-        assertThrows(NullPointerException.class, reader::readNext);
+        // open() 前に readNext() を呼ぶと NPE になること（設計上の制限）
+        assertThrows(NullPointerException.class, reader::readNext,
+                "open() 前に readNext() を呼ぶと NullPointerException が発生すること");
     }
 
     @Test
     public void testClose() {
         File testFile = new File("test.ini");
         IniFileReader reader = new IniFileReader(testFile, null);
-
-        assertThrows(NullPointerException.class, reader::close);
+        // open() 前に close() を呼ぶと NPE になること（設計上の制限）
+        assertThrows(NullPointerException.class, reader::close,
+                "open() 前に close() を呼ぶと NullPointerException が発生すること");
     }
 
     @Test
     public void testConstants() {
-        // Verify constants exist
-        assertEquals("Section", IniFileReader.INI_SECTION);
-        assertEquals("Key", IniFileReader.INI_KEY);
-        assertEquals("Value", IniFileReader.INI_VALUE);
+        // 定数の具体的な値確認
+        assertEquals("Section", IniFileReader.INI_SECTION, "INI_SECTION は 'Section' であること");
+        assertEquals("Key",     IniFileReader.INI_KEY,     "INI_KEY は 'Key' であること");
+        assertEquals("Value",   IniFileReader.INI_VALUE,   "INI_VALUE は 'Value' であること");
+        // 3つの定数がすべて異なること
+        assertFalse(IniFileReader.INI_SECTION.equals(IniFileReader.INI_KEY),
+                "INI_SECTION と INI_KEY は異なること");
+        assertFalse(IniFileReader.INI_KEY.equals(IniFileReader.INI_VALUE),
+                "INI_KEY と INI_VALUE は異なること");
     }
 
     // --- open with real temp file ---
@@ -103,9 +109,12 @@ public class IniFileReaderTest {
         }
         IniFileReader reader = new IniFileReader(tmp, null);
         reader.open(getClass().getClassLoader());
+        // コメント行はスキップされて最初のkeyが返ること
         HashMap<String, String> result = reader.readNext();
-        assertNotNull(result);
-        assertEquals("Section1", result.get(IniFileReader.INI_SECTION));
+        assertNotNull(result, "コメント行はスキップされること");
+        assertEquals("Section1", result.get(IniFileReader.INI_SECTION), "Section1 が読めること");
+        assertEquals("key", result.get(IniFileReader.INI_KEY), "key=value の key が読めること");
+        assertEquals("value", result.get(IniFileReader.INI_VALUE), "key=value の value が読めること");
         reader.close();
     }
 
@@ -118,9 +127,12 @@ public class IniFileReaderTest {
         }
         IniFileReader reader = new IniFileReader(tmp, null);
         reader.open(getClass().getClassLoader());
+        // 空行はスキップされて最初のkeyが返ること
         HashMap<String, String> result = reader.readNext();
-        assertNotNull(result);
-        assertEquals("Sect", result.get(IniFileReader.INI_SECTION));
+        assertNotNull(result, "空行はスキップされること");
+        assertEquals("Sect", result.get(IniFileReader.INI_SECTION), "Sect が読めること");
+        assertEquals("k", result.get(IniFileReader.INI_KEY), "k=v の k が読めること");
+        assertEquals("v", result.get(IniFileReader.INI_VALUE), "k=v の v が読めること");
         reader.close();
     }
 
@@ -133,9 +145,13 @@ public class IniFileReaderTest {
         }
         IniFileReader reader = new IniFileReader(tmp, null);
         reader.open(getClass().getClassLoader());
-        reader.readNext(); // reads key=val
-        HashMap<String, String> result2 = reader.readNext(); // EOF
-        assertNull(result2);
+        // 1回目: key=val が読める
+        HashMap<String, String> result1 = reader.readNext();
+        assertNotNull(result1, "1回目は null でないこと");
+        assertEquals("key", result1.get(IniFileReader.INI_KEY), "1回目は key=val の key が読めること");
+        // 2回目: EOF → null を返すこと
+        HashMap<String, String> result2 = reader.readNext();
+        assertNull(result2, "EOF 後は null を返すこと");
         reader.close();
     }
 
@@ -150,9 +166,11 @@ public class IniFileReaderTest {
         }
         IniFileReader reader = new IniFileReader(tmp, null);
         reader.open(getClass().getClassLoader());
+        // 閉じ括弧なしのセクション行はスキップされて次の有効なsectionが返ること
         HashMap<String, String> result = reader.readNext();
-        assertNotNull(result);
-        assertEquals("ValidSect", result.get(IniFileReader.INI_SECTION));
+        assertNotNull(result, "閉じ括弧なしのセクションはスキップされること");
+        assertEquals("ValidSect", result.get(IniFileReader.INI_SECTION), "ValidSect が読めること");
+        assertEquals("k", result.get(IniFileReader.INI_KEY), "k=v の k が読めること");
         reader.close();
     }
 

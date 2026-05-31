@@ -1,6 +1,7 @@
 package org.simyukkuri.yukkuri;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import org.junit.jupiter.api.AfterEach;
@@ -24,7 +25,9 @@ public class SerializationTestTest {
 
     @Test
     public void testMainDoesNotThrow() {
-        // mainはSystem.out/errに出力するだけで例外を投げない
         assertDoesNotThrow(() -> SerializationTest.main(new String[0]));
+        // main() はシリアライズしてファイルに保存するため、test_save.dat が作成されること
+        assertTrue(new File("test_save.dat").exists(),
+                "SerializationTest.main() 実行後に test_save.dat が作成されること");
     }
 }

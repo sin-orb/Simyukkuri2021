@@ -1,43 +1,35 @@
 package org.simyukkuri.enums;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Test;
+import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class BodyRankTest {
 
-    @ParameterizedTest
-    @EnumSource(YukkuriRank.class)
-    void testBodyRankProperties(YukkuriRank rank) {
-        assertNotNull(rank);
-        // Image index should be >= 0
-        assertTrue(rank.getImageIndex() >= 0, "Image index should be non-negative");
-        // Message index should be >= 0
-        assertTrue(rank.getMessageIndex() >= 0, "Message index should be non-negative");
-
-        // Display name might be null if resources are not loaded in test environment,
-        // but the method should not throw exception.
-        // If resources are loaded, it should be a string.
-        // We just call it to ensure no exception.
-        // String name = rank.getName(); // UnusedDisplayName();
-        // System.out.println(rank + ": " + name);
+    static Stream<Arguments> rankMappings() {
+        return Stream.of(
+            Arguments.of(YukkuriRank.KAIYU,        0, 0),
+            Arguments.of(YukkuriRank.SUTEYU,       0, 0),
+            Arguments.of(YukkuriRank.NORAYU_CLEAN, 0, 1),
+            Arguments.of(YukkuriRank.NORAYU,       1, 1),
+            Arguments.of(YukkuriRank.YASEIYU,      0, 1)
+        );
     }
 
-    @Test
-    void testSpecificValues() {
-        // Test a specific value to ensure mapping is correct as per code
-        // KAIYU(0, 0, ...)
-        YukkuriRank kaiyu = YukkuriRank.KAIYU;
-        assertEquals(0, kaiyu.getImageIndex());
-        assertEquals(0, kaiyu.getMessageIndex());
+    @ParameterizedTest
+    @MethodSource("rankMappings")
+    void testBodyRankProperties(YukkuriRank rank, int expectedImage, int expectedMessage) {
+        assertEquals(expectedImage,   rank.getImageIndex(),   rank + " imageIndex mismatch");
+        assertEquals(expectedMessage, rank.getMessageIndex(), rank + " messageIndex mismatch");
+    }
 
-        // NORAYU(1, 1, ...)
-        YukkuriRank norayu = YukkuriRank.NORAYU;
-        assertEquals(1, norayu.getImageIndex());
-        assertEquals(1, norayu.getMessageIndex());
+    @ParameterizedTest
+    @MethodSource("rankMappings")
+    void testSpecificValues(YukkuriRank rank, int expectedImage, int expectedMessage) {
+        assertEquals(expectedImage,   rank.getImageIndex());
+        assertEquals(expectedMessage, rank.getMessageIndex());
     }
 }

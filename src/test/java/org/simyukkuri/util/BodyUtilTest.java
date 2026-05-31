@@ -1,9 +1,12 @@
 package org.simyukkuri.util;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Map;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
@@ -36,7 +39,12 @@ public class BodyUtilTest {
             BufferedImage[][][][] dummyPack =
                     new BufferedImage[org.simyukkuri.enums.YukkuriRank.values().length][200][20][
                             20];
-            BufferedImage dummyImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+            // 描画後のpixel変化確認のため不透明な赤ピクセルを持つダミー画像を使用
+            BufferedImage dummyImage = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D dg = dummyImage.createGraphics();
+            dg.setColor(Color.RED);
+            dg.fillRect(0, 0, 10, 10);
+            dg.dispose();
             for (int i = 0; i < dummyPack.length; i++) {
                 for (int j = 0; j < 200; j++) {
                     for (int k = 0; k < 20; k++) {
@@ -75,7 +83,23 @@ public class BodyUtilTest {
     public void testDrawBodyBasic() {
         Yukkuri body = WorldTestHelper.createBody();
         mockSprites(body);
+
+        // 描画前は透明（alpha=0）
+        int before = img.getRGB(50, 50);
         YukkuriUtil.drawYukkuri(g2, null, body);
+        // 不透明な赤ダミー画像で描画後はpixelが変化すること（描画経路が壊れていないこと）
+        // 描画されたpixelのいずれかが透明でなければOK
+        boolean anyDrawn = false;
+        outer:
+        for (int x = 0; x < img.getWidth(); x++) {
+            for (int y = 0; y < img.getHeight(); y++) {
+                if (img.getRGB(x, y) != before) {
+                    anyDrawn = true;
+                    break outer;
+                }
+            }
+        }
+        assertTrue(anyDrawn, "drawYukkuri 後に少なくとも 1 ピクセルが描画されること");
     }
 
     @Test
@@ -240,10 +264,25 @@ public class BodyUtilTest {
         } catch (Exception e) {
             assertNotNull(e);
         }
+
+        // 多数の状態で drawYukkuri を呼んだ後、少なくとも 1 ピクセルが描画されていること
+        int transparent = 0;  // TYPE_INT_ARGB の初期値
+        boolean anyDrawn = false;
+        outer:
+        for (int x = 0; x < img.getWidth(); x++) {
+            for (int y = 0; y < img.getHeight(); y++) {
+                if (img.getRGB(x, y) != transparent) {
+                    anyDrawn = true;
+                    break outer;
+                }
+            }
+        }
+        assertTrue(anyDrawn, "多数の状態で drawYukkuri を呼んだ後、少なくとも 1 ピクセルが描画されること");
     }
 
     @Test
     void testConstructor_doesNotThrow() {
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> new YukkuriUtil());
+        YukkuriUtil util = new YukkuriUtil();
+        assertNotNull(util, "YukkuriUtil のインスタンスが生成されること");
     }
 }

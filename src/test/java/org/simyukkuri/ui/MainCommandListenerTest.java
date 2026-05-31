@@ -1,6 +1,7 @@
 package org.simyukkuri.ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.awt.event.ItemEvent;
 import javax.swing.JComboBox;
@@ -26,12 +27,18 @@ public class MainCommandListenerTest {
 
         @SuppressWarnings("unchecked")
         JComboBox<String> combo = MainCommandUi.getGameSpeedCombo();
+        // まず index 0 に設定してから index 2 に変更
+        combo.setSelectedIndex(0);
+        ItemEvent e0 = new ItemEvent(combo, ItemEvent.ITEM_STATE_CHANGED, combo.getSelectedItem(), ItemEvent.SELECTED);
+        speedListener.itemStateChanged(e0);
+        int speedBefore = MainCommandUi.getSelectedGameSpeed();
+
         combo.setSelectedIndex(2);
+        ItemEvent e2 = new ItemEvent(combo, ItemEvent.ITEM_STATE_CHANGED, combo.getSelectedItem(), ItemEvent.SELECTED);
+        speedListener.itemStateChanged(e2);
 
-        ItemEvent e = new ItemEvent(combo, ItemEvent.ITEM_STATE_CHANGED, combo.getSelectedItem(), ItemEvent.SELECTED);
-        speedListener.itemStateChanged(e);
-
-        assertEquals(2, MainCommandUi.getSelectedGameSpeed());
+        assertEquals(2, MainCommandUi.getSelectedGameSpeed(), "index 2 を選択するとゲームスピードが 2 になること");
+        assertNotEquals(speedBefore, MainCommandUi.getSelectedGameSpeed(), "index を変えるとゲームスピードが変化すること");
     }
 
     @Test
@@ -40,12 +47,20 @@ public class MainCommandListenerTest {
 
         @SuppressWarnings("unchecked")
         JComboBox<GadgetMenu.GadgetMenuChoice> combo = MainCommandUi.getMainItemCombo();
+        // まず index 0 を選択してから index 1 に変更
+        combo.setSelectedIndex(0);
+        ItemEvent e0 = new ItemEvent(combo, ItemEvent.ITEM_STATE_CHANGED, combo.getSelectedItem(), ItemEvent.SELECTED);
+        itemListener.itemStateChanged(e0);
+        GadgetMenu.GadgetMenuChoice before = GadgetMenu.getSelectMain();
+
         combo.setSelectedIndex(1);
+        ItemEvent e1 = new ItemEvent(combo, ItemEvent.ITEM_STATE_CHANGED, combo.getSelectedItem(), ItemEvent.SELECTED);
+        itemListener.itemStateChanged(e1);
 
-        ItemEvent e = new ItemEvent(combo, ItemEvent.ITEM_STATE_CHANGED, combo.getSelectedItem(), ItemEvent.SELECTED);
-        itemListener.itemStateChanged(e);
-
-        assertEquals(GadgetMenu.getMainCategory()[1], GadgetMenu.getSelectMain());
+        assertEquals(GadgetMenu.getMainCategory()[1], GadgetMenu.getSelectMain(),
+                "index 1 を選択すると getSelectMain が getMainCategory()[1] になること");
+        assertNotEquals(before, GadgetMenu.getSelectMain(),
+                "index を変えると selectMain が変化すること");
     }
 
     @Test
@@ -64,11 +79,20 @@ public class MainCommandListenerTest {
         combo.addItem(GadgetMenu.GadgetMenuChoice.HOT);
         combo.addItem(GadgetMenu.GadgetMenuChoice.VIYUGRA);
         combo.addItem(GadgetMenu.GadgetMenuChoice.SWEETS1);
+
+        // まず index 0（NORMAL）を選択してから index 5（SWEETS1）に変更
+        combo.setSelectedIndex(0);
+        ItemEvent e0 = new ItemEvent(combo, ItemEvent.ITEM_STATE_CHANGED, combo.getSelectedItem(), ItemEvent.SELECTED);
+        subListener.itemStateChanged(e0);
+        GadgetMenu.GadgetMenuChoice before = GadgetMenu.getSelectSub();
+
         combo.setSelectedIndex(5);
+        ItemEvent e5 = new ItemEvent(combo, ItemEvent.ITEM_STATE_CHANGED, combo.getSelectedItem(), ItemEvent.SELECTED);
+        subListener.itemStateChanged(e5);
 
-        ItemEvent e = new ItemEvent(combo, ItemEvent.ITEM_STATE_CHANGED, combo.getSelectedItem(), ItemEvent.SELECTED);
-        subListener.itemStateChanged(e);
-
-        assertEquals(GadgetMenu.GadgetMenuChoice.SWEETS1, GadgetMenu.getSelectSub());
+        assertEquals(GadgetMenu.GadgetMenuChoice.SWEETS1, GadgetMenu.getSelectSub(),
+                "SWEETS1 を選択すると getSelectSub が SWEETS1 になること");
+        assertNotEquals(before, GadgetMenu.getSelectSub(),
+                "index を変えると selectSub が変化すること");
     }
 }

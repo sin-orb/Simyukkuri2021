@@ -1,8 +1,10 @@
 package org.simyukkuri.system;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import javax.swing.ImageIcon;
 
 import org.junit.jupiter.api.Test;
 
@@ -84,41 +86,57 @@ public class IconPoolTest {
 
     @Test
     public void testGetUiSkinImageArray_notNull() {
-        assertNotNull(IconPool.getUiSkinImageArray());
+        java.awt.image.BufferedImage[] arr = IconPool.getUiSkinImageArray();
+        assertNotNull(arr, "getUiSkinImageArray が非null を返すこと");
+        assertEquals(IconPool.UiSkin.values().length, arr.length,
+                "配列サイズが UiSkin enum の要素数と一致すること");
     }
 
     // --- getButtonIconImageArray ---
 
     @Test
     public void testGetButtonIconImageArray_notNull() {
-        assertNotNull(IconPool.getButtonIconImageArray());
+        java.awt.image.BufferedImage[] arr = IconPool.getButtonIconImageArray();
+        assertNotNull(arr, "getButtonIconImageArray が非null を返すこと");
+        assertEquals(IconPool.ButtonIcon.values().length, arr.length,
+                "配列サイズが ButtonIcon enum の要素数と一致すること");
     }
 
     // --- getStatusIconImageArray ---
 
     @Test
     public void testGetStatusIconImageArray_notNull() {
-        assertNotNull(IconPool.getStatusIconImageArray());
+        ImageIcon[] arr = IconPool.getStatusIconImageArray();
+        assertNotNull(arr, "getStatusIconImageArray が非null を返すこと");
+        assertEquals(IconPool.StatusIcon.values().length, arr.length,
+                "配列サイズが StatusIcon enum の要素数と一致すること");
     }
 
     // --- getCursorIconImageArray ---
 
     @Test
     public void testGetCursorIconImageArray_notNull() {
-        assertNotNull(IconPool.getCursorIconImageArray());
+        java.awt.image.BufferedImage[] arr = IconPool.getCursorIconImageArray();
+        assertNotNull(arr, "getCursorIconImageArray が非null を返すこと");
+        assertEquals(IconPool.CursorIcon.values().length, arr.length,
+                "配列サイズが CursorIcon enum の要素数と一致すること");
     }
 
     // --- getHelpIconImageArray ---
 
     @Test
     public void testGetHelpIconImageArray_notNull() {
-        assertNotNull(IconPool.getHelpIconImageArray());
+        java.awt.image.BufferedImage[] arr = IconPool.getHelpIconImageArray();
+        assertNotNull(arr, "getHelpIconImageArray が非null を返すこと");
+        assertEquals(IconPool.HelpIcon.values().length, arr.length,
+                "配列サイズが HelpIcon enum の要素数と一致すること");
     }
 
     // --- Constructor ---
 
     @Test
     public void testConstructor_doesNotThrow() {
-        assertDoesNotThrow(() -> new IconPool());
+        IconPool instance = new IconPool();
+        assertNotNull(instance, "IconPool インスタンスが生成されること");
     }
 }

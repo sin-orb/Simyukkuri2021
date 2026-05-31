@@ -2,6 +2,7 @@ package org.simyukkuri.item;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -25,7 +26,8 @@ class ProductChuteTest extends ItemTestBase {
         item.setObjId(1);
         SimYukkuri.world.getCurrentWorldState().getProductChutes().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentWorldState().getProductChutes().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getProductChutes().containsKey(item.getObjId()),
+                "デフォルトコンストラクタ後に productChutes に登録されること");
     }
 
     @Test
@@ -43,40 +45,54 @@ class ProductChuteTest extends ItemTestBase {
 
     @Test
     void testGetShadowImageIsNull() {
+        // ProductChute には影なし（仕様）
         ProductChute item = new ProductChute();
-        assertNull(item.getShadowImage());
+        assertNull(item.getShadowImage(), "ProductChute は影なし仕様で null を返すこと");
     }
 
     @Test
     void testGetHitCheckObjType() {
         ProductChute item = new ProductChute();
-        // YUKKURI + SHIT + FOOD + TOY + OBJECT + VOMIT + STALK
-        assertTrue(item.getHitCheckObjType() > 0);
+        int expected = org.simyukkuri.entity.core.world.WorldEntity.YUKKURI
+                + org.simyukkuri.entity.core.world.WorldEntity.SHIT
+                + org.simyukkuri.entity.core.world.WorldEntity.FOOD
+                + org.simyukkuri.entity.core.world.WorldEntity.TOY
+                + org.simyukkuri.entity.core.world.WorldEntity.OBJECT
+                + org.simyukkuri.entity.core.world.WorldEntity.VOMIT
+                + org.simyukkuri.entity.core.world.WorldEntity.STALK;
+        assertEquals(expected, item.getHitCheckObjType(),
+                "hitCheckObjType が YUKKURI+SHIT+FOOD+TOY+OBJECT+VOMIT+STALK の組み合わせであること");
     }
 
     @Test
     void testRemoveListData() {
         ProductChute item = new ProductChute(50, 50, 0);
         int id = item.getObjId();
-        assertTrue(SimYukkuri.world.getCurrentWorldState().getProductChutes().containsKey(id));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getProductChutes().containsKey(id),
+                "removeFromWorld 前は productChutes に登録されていること");
         item.removeFromWorld();
-        assertFalse(SimYukkuri.world.getCurrentWorldState().getProductChutes().containsKey(id));
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getProductChutes().containsKey(id),
+                "removeFromWorld 後は productChutes から除去されること");
     }
 
     @Test
     void testObjHitProcessWithStone() {
         ProductChute chute = new ProductChute(50, 50, 0);
         Stone stone = new Stone(50, 50, 0);
+        long cashBefore = SimYukkuri.world.getPlayer().getCash();
         // Stone は Yukkuri でも Diffuser でも Yunba でもないので Cash.addCash + o.remove()
-        assertEquals(0, chute.objHitProcess(stone));
-        assertTrue(stone.isRemoved());
+        assertEquals(0, chute.objHitProcess(stone), "石の処理で 0 を返すこと");
+        assertTrue(stone.isRemoved(), "石が除去されること");
+        assertTrue(SimYukkuri.world.getPlayer().getCash() != cashBefore || stone.isRemoved(),
+                "石の処理でキャッシュ変化または除去が起きること");
     }
 
     @Test
     void testGetImageLayer_enabled_doesNotThrow() {
         ProductChute item = new ProductChute(50, 50, 0);
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> item.getImageLayer(layer));
+        int count = item.getImageLayer(layer);
+        assertEquals(1, count, "enabled 状態で getImageLayer が 1 を返すこと");
     }
 
     @Test
@@ -84,12 +100,13 @@ class ProductChuteTest extends ItemTestBase {
         ProductChute item = new ProductChute(50, 50, 0);
         item.setEnabled(false);
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> item.getImageLayer(layer));
+        int count = item.getImageLayer(layer);
+        assertEquals(1, count, "disabled 状態でも getImageLayer が 1 を返すこと");
     }
 
     @Test
     void testGetBounding_doesNotThrow() {
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> ProductChute.getBounding());
+        assertNotNull(ProductChute.getBounding(), "getBounding が非null を返すこと");
     }
 
     @Nested

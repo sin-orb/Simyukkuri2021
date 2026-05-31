@@ -1,6 +1,5 @@
 package org.simyukkuri.logic;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -32,8 +31,12 @@ class BodyDeadSearchRuleTest {
 		me.setAgeState(AgeState.ADULT);
 		you.setDead(true);
 		me.setExciting(true);
+		me.setTargetBind(true);  // exciting ブランチで false に変わることを確認するため事前に true
 
-		assertDoesNotThrow(() -> assertTrue(YukkuriDeadSearchRule.handleDeadFound(me, you, 0, 0)));
+		assertTrue(YukkuriDeadSearchRule.handleDeadFound(me, you, 0, 0),
+				"exciting ブランチは true を返すこと");
+		assertFalse(me.isTargetBind(),
+				"exciting ブランチで setTargetBind(false) が呼ばれること");
 	}
 
 	@Test
@@ -52,7 +55,7 @@ class BodyDeadSearchRuleTest {
 		me.setAgeState(AgeState.ADULT);
 		you.setDead(true);
 
-		assertDoesNotThrow(() -> assertFalse(YukkuriDeadSearchRule.handleDeadFound(me, you, 0, 0)));
+		assertFalse(YukkuriDeadSearchRule.handleDeadFound(me, you, 0, 0));
 	}
 
 	private static Sprite[] makeSprites(int w, int h) {

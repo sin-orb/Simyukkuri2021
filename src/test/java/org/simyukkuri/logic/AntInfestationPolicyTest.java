@@ -1,6 +1,7 @@
 package org.simyukkuri.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
 import org.junit.jupiter.api.AfterEach;
@@ -52,14 +53,23 @@ public class AntInfestationPolicyTest {
 		SimYukkuri.RND = rng;
 
 		Reimu body = new Reimu();
-		body.setAge(100000);
+		body.setAge(100000);  // age=100000 >= childLimit=50400 → ADULT, base=960000
 		body.setDirty(true);
 		body.setHasBaby(true);
 		body.getBabyTypes().add(new org.simyukkuri.entity.core.living.yukkuri.Dna());
 
+		// 前提条件の確認: ADULTかつdirty・dontJump両方が有効なこと
+		assertEquals(org.simyukkuri.enums.AgeState.ADULT, body.getAgeState(),
+				"age=100000 は ADULT");
+		assertTrue(body.isDirty(), "dirty フラグが true");
+		assertTrue(body.isDontJump(), "hasBaby=true により isDontJump()=true");
+
 		AntInfestationPolicy.judgeNewAnt(body);
 
-		assertEquals(240000, rng.lastBound);
-		assertEquals(0, body.getAttachmentSize(Ants.class));
+		// ADULT(960000) /2(dirty) /2(dontJump) = 240000
+		assertEquals(240000, rng.lastBound,
+				"ADULT 基準値 960000 を dirty と dontJump で 2 回半減した値");
+		assertEquals(0, body.getAttachmentSize(Ants.class),
+				"rng.nextInt が 0 を返すため hit せずアリは付かない");
 	}
 }

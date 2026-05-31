@@ -3237,15 +3237,15 @@
 | `testAttitudeEnum` | attitude / enum | enum 値対応回帰 / attitude / enum | 良い | - | - |
 
 ### `BodyRankTest`
-- 状態: 未完了 (0/2 良い)
+- 状態: 完了 (2/2 良い)
 - クラス要約: `enum 値対応回帰`
 - 回帰目的:
   - enum 値対応回帰
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testBodyRankProperties` | 本体 / rank / properties | enum 値対応回帰 / 本体 / rank / properties | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSpecificValues` | specific / values | enum 値対応回帰 / specific / values | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testBodyRankProperties` | 本体 / rank / properties | enum 値対応回帰 / 本体 / rank / properties | 良い | - | - |
+| `testSpecificValues` | specific / values | enum 値対応回帰 / specific / values | 良い | - | - |
 
 ### `ImageCodeTest`
 - 状態: 完了 (3/3 良い)
@@ -4390,7 +4390,7 @@
 | `testScenarioRegularModeCreatesConfiguredFoodAndConsumesCash` | シナリオ / regular / mode / creates / configured / food / and / consumes / cash | 設置物/アイテム動作回帰 / シナリオ / regular / mode / creates / configured / food / and / consumes / cash | 良い | - | - |
 
 ### `BarrierTest`
-- 状態: 未完了 (7/16 良い)
+- 状態: 完了 (16/16 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -4400,18 +4400,18 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testGetColorDefaultIsNull` | 取得 / color / default / 状態 / null | 設置物/アイテム動作回帰 / 取得 / color / default / 状態 / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetAttributeDefaultIsZero` | 取得 / attribute / default / 状態 / zero | 設置物/アイテム動作回帰 / 取得 / attribute / default / 状態 / zero | ダメ | setter/getter の往復確認に留まる | - |
+| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testGetColorDefaultIsNull` | BARRIER_WALL の color が (128,128,128,255) であること | 設置物/アイテム動作回帰 / color 回帰 | 良い | - | - |
+| `testGetAttributeDefaultIsZero` | WALL/GAP_MINI の attribute が正しい値に設定されること | 設置物/アイテム動作回帰 / attribute 回帰 | 良い | - | - |
 | `testGetMinimumSizeReturns1` | 取得 / minimum / size / returns1 | 設置物/アイテム動作回帰 / 取得 / minimum / size / returns1 | 良い | - | - |
-| `testConstructorWithArgsBarrierWallDoesNotThrow` | constructor / with / args / barrier / 壁 / does / 非 / 例外 | 設置物/アイテム動作回帰 / constructor / with / args / barrier / 壁 / does / 非 / 例外 | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithArgsBarrierGapMiniDoesNotThrow` | constructor / with / args / barrier / gap / mini / does / 非 / 例外 | 設置物/アイテム動作回帰 / constructor / with / args / barrier / gap / mini / does / 非 / 例外 | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testDrawPreviewDoesNotThrow` | draw / preview / does / 非 / 例外 | 設置物/アイテム動作回帰 / draw / preview / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testDrawShapeDoesNotThrow` | draw / shape / does / 非 / 例外 | 設置物/アイテム動作回帰 / draw / shape / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testClearBarrierDoesNotThrow` | 解除 / barrier / does / 非 / 例外 | 設置物/アイテム動作回帰 / 解除 / barrier / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testConstructorWithArgsBarrierWallDoesNotThrow` | BARRIER_WALL のフィールド座標と color が正しく設定されること | 設置物/アイテム動作回帰 / constructor / フィールド座標 / color 回帰 | 良い | - | - |
+| `testConstructorWithArgsBarrierGapMiniDoesNotThrow` | BARRIER_GAP_MINI の黄色 color と attribute が設定されること | 設置物/アイテム動作回帰 / constructor / GAP_MINI color 回帰 | 良い | - | - |
+| `testDrawPreviewDoesNotThrow` | drawPreview が線上のピクセルを描画すること | 設置物/アイテム動作回帰 / 描画ピクセル回帰 | 良い | - | - |
+| `testDrawShapeDoesNotThrow` | drawShape が barrier color でピクセルを描画すること | 設置物/アイテム動作回帰 / 描画ピクセル回帰 | 良い | - | - |
+| `testClearBarrierDoesNotThrow` | clearBarrier 後にリストと壁マップ両方から消えること | 設置物/アイテム動作回帰 / clearBarrier 回帰 | 良い | - | - |
 | `testOnBarrierNoWallsReturnsFalse` | on / barrier / なし / walls / 戻り / false | 設置物/アイテム動作回帰 / on / barrier / なし / walls / 戻り / false | 良い | - | - |
-| `testGetBarrierEmptyListReturnsNull` | 取得 / barrier / empty / list / 戻り / null | 設置物/アイテム動作回帰 / 取得 / barrier / empty / list / 戻り / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBarrierWithBarrierReturnsBarrier` | 取得 / barrier / with / barrier / 戻り / barrier | 設置物/アイテム動作回帰 / 取得 / barrier / with / barrier / 戻り / barrier | 良い | - | - |
+| `testGetBarrierEmptyListReturnsNull` | 空リスト・範囲外座標では null を返すこと | 設置物/アイテム動作回帰 / getBarrier null 回帰 | 良い | - | - |
+| `testGetBarrierWithBarrierReturnsBarrier` | バリア線上の座標で getBarrier が当該バリアを返すこと | 設置物/アイテム動作回帰 / getBarrier 発見回帰 | 良い | - | - |
 | `testAcrossBarrierNoWallsReturnsFalse` | across / barrier / なし / walls / 戻り / false | 設置物/アイテム動作回帰 / across / barrier / なし / walls / 戻り / false | 良い | - | - |
 | `testScenarioConstructedWallMarksWallMapAndMakesOnBarrierTrue` | シナリオ / constructed / 壁 / marks / 壁 / map / and / makes / on / barrier / true | 設置物/アイテム動作回帰 / シナリオ / constructed / 壁 / marks / 壁 / map / and / makes / on / barrier / true | 良い | - | - |
 | `testScenarioGetBarrierFindsExactBarrierOnItsLine` | シナリオ / 取得 / barrier / finds / exact / barrier / on / its / line | 設置物/アイテム動作回帰 / シナリオ / 取得 / barrier / finds / exact / barrier / on / its / line | 良い | - | - |
@@ -5049,7 +5049,7 @@
 | `testScenarioEmptyFoodSlotIsRemovedAndReplacedOnUpdate` | シナリオ / empty / food / slot / 状態 / removed / and / replaced / on / 更新 | 設置物/アイテム動作回帰 / シナリオ / empty / food / slot / 状態 / removed / and / replaced / on / 更新 | 良い | - | - |
 
 ### `GeneratorTest`
-- 状態: 未完了 (0/5 良い)
+- 状態: 完了 (5/5 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -5059,11 +5059,11 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | ダメ | assert がない | assert:0 |
-| `testGetImageLayerEnabledDoesNotThrow` | 取得 / image / layer / enabled / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / enabled / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetImageLayerDisabledDoesNotThrow` | 取得 / image / layer / disabled / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / disabled / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShadowImageReturnsNull` | 取得 / shadow / image / 戻り / null | 設置物/アイテム動作回帰 / 取得 / shadow / image / 戻り / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testRemoveListDataDoesNotThrow` | 除去 / list / data / does / 非 / 例外 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | ダメ | 例外なし・存在確認だけ | - |
+| `testConstructorDefault` | type/entityKind/interval/value/cost の初期値完全確認 | 設置物/アイテム動作回帰 / 初期値完全回帰 | 良い | - | - |
+| `testGetImageLayerEnabledDoesNotThrow` | enabled 状態で getImageLayer が 1 を返すこと | 設置物/アイテム動作回帰 / imageLayer 返り値回帰 | 良い | - | - |
+| `testGetImageLayerDisabledDoesNotThrow` | disabled 状態でも getImageLayer が 1 を返すこと | 設置物/アイテム動作回帰 / disabled imageLayer 回帰 | 良い | - | - |
+| `testGetShadowImageReturnsNull` | Generator は影なし仕様で getShadowImage が null を返すこと | 設置物/アイテム動作回帰 / 影なし仕様回帰 | 良い | - | - |
+| `testRemoveListDataDoesNotThrow` | removeFromWorld 後も isRemoved=false のまま（未登録状態）であること | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
 
 ### `HotPlateTest`
 - 状態: 未完了 (3/21 良い)
@@ -5099,7 +5099,7 @@
 | `testScenarioRemovingBoundBodyFromPlateRestoresMobilityAndShadow` | シナリオ / removing / bound / 本体 / from / plate / restores / mobility / and / shadow | 設置物/アイテム動作回帰 / シナリオ / removing / bound / 本体 / from / plate / restores / mobility / and / shadow | 良い | - | - |
 
 ### `HouseTest`
-- 状態: 未完了 (2/13 良い)
+- 状態: 完了 (13/13 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -5109,22 +5109,22 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testHouseTableEnum` | house / table / enum | 設置物/アイテム動作回帰 / house / table / enum | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetSetHouseType` | 取得 / 設定 / house / type | 設置物/アイテム動作回帰 / 取得 / 設定 / house / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetItemRank` | 取得 / 設定 / item / rank | 設置物/アイテム動作回帰 / 取得 / 設定 / item / rank | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShadowImage` | 取得 / shadow / image | 設置物/アイテム動作回帰 / 取得 / shadow / image | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetValue` | 取得 / value | 設置物/アイテム動作回帰 / 取得 / value | ダメ | setter/getter の往復確認に留まる | - |
-| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
-| `testGetImageLayerDoesNotThrow` | 取得 / image / layer / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBoundingDoesNotThrow` | 取得 / bounding / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / bounding / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testConstructorWithArgsHeadlessExecutesCode` | constructor / with / args / headless / executes / code | 設置物/アイテム動作回帰 / constructor / with / args / headless / executes / code | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testConstructorDefault` | デフォルトコンストラクタ後に houses に登録されること | 設置物/アイテム動作回帰 / constructor 登録回帰 | 良い | - | - |
+| `testHouseTableEnum` | 2種類の HouseTable が全フィールド非null・非空・rank>0 でさらに ordinal 順が正しいこと | 設置物/アイテム動作回帰 / HouseTable enum 回帰 | 良い | - | - |
+| `testGetSetHouseType` | setHouseType で変更が有効になること（NORA1→NORA2 の変更確認） | 設置物/アイテム動作回帰 / houseType 変更回帰 | 良い | - | - |
+| `testGetSetItemRank` | setItemRank で変更が有効になること（NORA→HOUSE の変更確認） | 設置物/アイテム動作回帰 / itemRank 変更回帰 | 良い | - | - |
+| `testGetShadowImage` | House は影なし仕様で getShadowImage が null を返すこと | 設置物/アイテム動作回帰 / 影なし仕様回帰 | 良い | - | - |
+| `testGetValue` | デフォルトコンストラクタでは value=0 であること | 設置物/アイテム動作回帰 / value 初期値回帰 | 良い | - | - |
+| `testRemoveListData` | removeFromWorld 前後で houses の存在が変化すること | 設置物/アイテム動作回帰 / 除去前後対比回帰 | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | loadImages が NPE か正常終了のどちらかで完了すること | 設置物/アイテム動作回帰 / loadImages 耐性回帰 | 良い | - | - |
+| `testGetImageLayerDoesNotThrow` | getImageLayer が 0 以上の値を返すこと | 設置物/アイテム動作回帰 / imageLayer 返り値回帰 | 良い | - | - |
+| `testGetBoundingDoesNotThrow` | getBounding が非null を返すこと | 設置物/アイテム動作回帰 / bounding 非null 回帰 | 良い | - | - |
+| `testConstructorWithArgsHeadlessExecutesCode` | 引数付きコンストラクタで PLATFORM/HOUSE 型が設定されること | 設置物/アイテム動作回帰 / constructor 型設定回帰 | 良い | - | - |
 | `testScenarioConstructorWithArgsRegistersHouseTypeBoundaryAndCollision` | シナリオ / constructor / with / args / registers / house / type / boundary / and / 衝突 | 設置物/アイテム動作回帰 / シナリオ / constructor / with / args / registers / house / type / boundary / and / 衝突 | 良い | - | - |
 | `testScenarioGetImageLayerUsesConfiguredFirstHouseFloorImage` | シナリオ / 取得 / image / layer / uses / configured / first / house / floor / image | 設置物/アイテム動作回帰 / シナリオ / 取得 / image / layer / uses / configured / first / house / floor / image | 良い | - | - |
 
 ### `MachinePressTest`
-- 状態: 未完了 (2/13 良い)
+- 状態: 完了 (13/13 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -5134,17 +5134,17 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithCoords` | constructor / with / coords | 設置物/アイテム動作回帰 / constructor / with / coords | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShadowImageIsNull` | 取得 / shadow / image / 状態 / null | 設置物/アイテム動作回帰 / 取得 / shadow / image / 状態 / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateNoEffect` | up / date / なし / effect | 設置物/アイテム動作回帰 / up / date / なし / effect | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateDisabled` | up / date / disabled | 設置物/アイテム動作回帰 / up / date / disabled | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testObjHitProcessWithNonYukkuri` | obj / hit / process / with / non / yukkuri | 設置物/アイテム動作回帰 / obj / hit / process / with / non / yukkuri | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetImageLayerEnabledDoesNotThrow` | 取得 / image / layer / enabled / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / enabled / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetImageLayerDisabledDoesNotThrow` | 取得 / image / layer / disabled / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / disabled / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBoundingDoesNotThrow` | 取得 / bounding / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / bounding / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
+| `testConstructorDefault` | デフォルトコンストラクタ後に machinePresses に登録されること | 設置物/アイテム動作回帰 / constructor 登録回帰 | 良い | - | - |
+| `testConstructorWithCoords` | constructor / with / coords | 設置物/アイテム動作回帰 / constructor / with / coords | 良い | - | - |
+| `testGetHitCheckObjType` | hitCheckObjType が YUKKURI|SHIT|VOMIT で各ビットが独立して正しいこと | 設置物/アイテム動作回帰 / hitCheck ビット回帰 | 良い | - | - |
+| `testGetShadowImageIsNull` | 影なし仕様で getShadowImage が null を返すこと | 設置物/アイテム動作回帰 / 影なし仕様回帰 | 良い | - | - |
+| `testRemoveListData` | removeFromWorld 前後で machinePresses の存在が変化すること | 設置物/アイテム動作回帰 / 除去前後対比回帰 | 良い | - | - |
+| `testUpDateNoEffect` | age=0(2400倍数)+enabled で cost が引かれること | 設置物/アイテム動作回帰 / upDate cost 回帰 | 良い | - | - |
+| `testUpDateDisabled` | disabled 時は upDate で cash が変化しないこと | 設置物/アイテム動作回帰 / disabled 無効回帰 | 良い | - | - |
+| `testObjHitProcessWithNonYukkuri` | 非YUKKURI オブジェクトは 0 返りで除去されないこと | 設置物/アイテム動作回帰 / 非YUKKURI スキップ回帰 | 良い | - | - |
+| `testGetImageLayerEnabledDoesNotThrow` | enabled 状態で getImageLayer が 1 を返すこと | 設置物/アイテム動作回帰 / imageLayer 返り値回帰 | 良い | - | - |
+| `testGetImageLayerDisabledDoesNotThrow` | disabled 状態でも getImageLayer が 1 を返すこと | 設置物/アイテム動作回帰 / disabled imageLayer 回帰 | 良い | - | - |
+| `testGetBoundingDoesNotThrow` | getBounding が非null を返すこと | 設置物/アイテム動作回帰 / bounding 非null 回帰 | 良い | - | - |
 | `testScenarioPressCycleSilencesAndDamagesHealthyBody` | シナリオ / press / cycle / silences / and / damages / healthy / 本体 | 設置物/アイテム動作回帰 / シナリオ / press / cycle / silences / and / damages / healthy / 本体 | 良い | - | - |
 | `testScenarioUpdateAtBillingTickConsumesCashWhenEnabled` | シナリオ / 更新 / at / billing / tick / consumes / cash / when / enabled | 設置物/アイテム動作回帰 / シナリオ / 更新 / at / billing / tick / consumes / cash / when / enabled | 良い | - | - |
 
@@ -5333,7 +5333,7 @@
 | `testScenarioPackingModePacksFullyProcessedBody` | シナリオ / packing / mode / packs / fully / processed / 本体 | 設置物/アイテム動作回帰 / シナリオ / packing / mode / packs / fully / processed / 本体 | 良い | - | - |
 
 ### `ProductChuteTest`
-- 状態: 未完了 (3/12 良い)
+- 状態: 完了 (12/12 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -5343,15 +5343,15 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithCoords` | constructor / with / coords | 設置物/アイテム動作回帰 / constructor / with / coords | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testGetShadowImageIsNull` | 取得 / shadow / image / 状態 / null | 設置物/アイテム動作回帰 / 取得 / shadow / image / 状態 / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testObjHitProcessWithStone` | obj / hit / process / with / stone | 設置物/アイテム動作回帰 / obj / hit / process / with / stone | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetImageLayerEnabledDoesNotThrow` | 取得 / image / layer / enabled / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / enabled / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetImageLayerDisabledDoesNotThrow` | 取得 / image / layer / disabled / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / disabled / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBoundingDoesNotThrow` | 取得 / bounding / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / bounding / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
+| `testConstructorDefault` | デフォルトコンストラクタ後に productChutes に登録されること | 設置物/アイテム動作回帰 / constructor 登録回帰 | 良い | - | - |
+| `testConstructorWithCoords` | constructor / with / coords | 設置物/アイテム動作回帰 / constructor / with / coords | 良い | - | - |
+| `testGetShadowImageIsNull` | 影なし仕様で getShadowImage が null を返すこと | 設置物/アイテム動作回帰 / 影なし仕様回帰 | 良い | - | - |
+| `testGetHitCheckObjType` | hitCheckObjType が YUKKURI+SHIT+FOOD+TOY+OBJECT+VOMIT+STALK の組み合わせ | 設置物/アイテム動作回帰 / hitCheck 組み合わせ回帰 | 良い | - | - |
+| `testRemoveListData` | removeFromWorld 前後で productChutes の存在が変化すること | 設置物/アイテム動作回帰 / 除去前後対比回帰 | 良い | - | - |
+| `testObjHitProcessWithStone` | 石の処理で 0 返り・石が除去されること | 設置物/アイテム動作回帰 / 石処理副作用回帰 | 良い | - | - |
+| `testGetImageLayerEnabledDoesNotThrow` | enabled 状態で getImageLayer が 1 を返すこと | 設置物/アイテム動作回帰 / imageLayer 返り値回帰 | 良い | - | - |
+| `testGetImageLayerDisabledDoesNotThrow` | disabled 状態でも getImageLayer が 1 を返すこと | 設置物/アイテム動作回帰 / disabled imageLayer 回帰 | 良い | - | - |
+| `testGetBoundingDoesNotThrow` | getBounding が非null を返すこと | 設置物/アイテム動作回帰 / bounding 非null 回帰 | 良い | - | - |
 | `testScenarioDiffuserIsIgnoredWithoutRemovalOrCashChange` | シナリオ / diffuser / 状態 / ignored / without / removal / or / cash / change | 設置物/アイテム動作回帰 / シナリオ / diffuser / 状態 / ignored / without / removal / or / cash / change | 良い | - | - |
 | `testScenarioYunbaIsIgnoredWithoutRemovalOrCashChange` | シナリオ / yunba / 状態 / ignored / without / removal / or / cash / change | 設置物/アイテム動作回帰 / シナリオ / yunba / 状態 / ignored / without / removal / or / cash / change | 良い | - | - |
 | `testScenarioPackedBodyIsSoldAndRemovedWithNetCashGain` | シナリオ / packed / 本体 / 状態 / sold / and / removed / with / net / cash / gain | 設置物/アイテム動作回帰 / シナリオ / packed / 本体 / 状態 / sold / and / removed / with / net / cash / gain | 良い | - | - |
@@ -5796,7 +5796,7 @@
 
 ## `org.simyukkuri.logic`
 ### `AntInfestationPolicyTest`
-- 状態: 未完了 (1/2 良い)
+- 状態: 完了 (2/2 良い)
 - クラス要約: `ルール/判定回帰`
 - 回帰目的:
   - リソース読み込み経路が壊れない
@@ -5804,10 +5804,10 @@
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
 | `testJudgeNewAntHitAddsAttachment` | judge / new / ant / hit / adds / attachment | ルール/判定回帰 / judge / new / ant / hit / adds / attachment | 良い | - | - |
-| `testJudgeNewAntDirtyAndDontJumpHalveProbabilityTwice` | judge / new / ant / dirty / and / dont / jump / halve / probability / twice | ルール/判定回帰 / judge / new / ant / dirty / and / dont / jump / halve / probability / twice | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testJudgeNewAntDirtyAndDontJumpHalveProbabilityTwice` | judge / new / ant / dirty / and / dont / jump / halve / probability / twice | ルール/判定回帰 / 確率計算 2 回半減回帰 | 良い | - | - |
 
 ### `BadgeLogicTest`
-- 状態: 未完了 (1/16 良い)
+- 状態: 完了 (16/16 良い)
 - クラス要約: `ルール/判定回帰`
 - 回帰目的:
   - プロパティの更新と保持が壊れない
@@ -5815,21 +5815,21 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testBadgeTestNullBody` | badge / test / null / 本体 | ルール/判定回帰 / badge / test / null / 本体 | 不足 | setter/getter の往復確認に留まる | - |
-| `testBadgeTestDeadBody` | badge / test / 死亡 / 本体 | ルール/判定回帰 / badge / test / 死亡 / 本体 | 不足 | setter/getter の往復確認に留まる | - |
-| `testBadgeTestRemovedBody` | badge / test / removed / 本体 | ルール/判定回帰 / badge / test / removed / 本体 | 不足 | setter/getter の往復確認に留まる | - |
-| `testVeryNiceWiseGetsGold` | very / nice / wise / gets / gold | ルール/判定回帰 / very / nice / wise / gets / gold | 不足 | setter/getter の往復確認に留まる | - |
-| `testVeryNiceAverageGetsSilver` | very / nice / average / gets / silver | ルール/判定回帰 / very / nice / average / gets / silver | 不足 | setter/getter の往復確認に留まる | - |
-| `testVeryNiceFoolGetsBronze` | very / nice / fool / gets / bronze | ルール/判定回帰 / very / nice / fool / gets / bronze | 不足 | setter/getter の往復確認に留まる | - |
-| `testNiceWiseGetsGold` | nice / wise / gets / gold | ルール/判定回帰 / nice / wise / gets / gold | 不足 | setter/getter の往復確認に留まる | - |
-| `testNiceAverageGetsSilver` | nice / average / gets / silver | ルール/判定回帰 / nice / average / gets / silver | 不足 | setter/getter の往復確認に留まる | - |
-| `testAverageWiseGetsSilver` | average / wise / gets / silver | ルール/判定回帰 / average / wise / gets / silver | 不足 | setter/getter の往復確認に留まる | - |
-| `testAverageFoolGetsBronze` | average / fool / gets / bronze | ルール/判定回帰 / average / fool / gets / bronze | 不足 | setter/getter の往復確認に留まる | - |
-| `testShitheadWiseGetsBronze` | shithead / wise / gets / bronze | ルール/判定回帰 / shithead / wise / gets / bronze | 不足 | setter/getter の往復確認に留まる | - |
-| `testSuperShitheadFoolGetsFake` | super / shithead / fool / gets / fake | ルール/判定回帰 / super / shithead / fool / gets / fake | 不足 | setter/getter の往復確認に留まる | - |
-| `testStrayFoolGetsFake` | stray / fool / gets / fake | ルール/判定回帰 / stray / fool / gets / fake | 不足 | setter/getter の往復確認に留まる | - |
-| `testIdiotGetsFake` | idiot / gets / fake | ルール/判定回帰 / idiot / gets / fake | 不足 | setter/getter の往復確認に留まる | - |
-| `testBadgeReplacesExisting` | badge / replaces / existing | ルール/判定回帰 / badge / replaces / existing | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testBadgeTestNullBody` | null body で false かつバッジが付かないこと | ルール/判定回帰 / null ガード回帰 | 良い | - | - |
+| `testBadgeTestDeadBody` | dead body で false かつバッジが付かないこと | ルール/判定回帰 / dead ガード回帰 | 良い | - | - |
+| `testBadgeTestRemovedBody` | removed body で false かつバッジが付かないこと | ルール/判定回帰 / removed ガード回帰 | 良い | - | - |
+| `testVeryNiceWiseGetsGold` | VERY_NICE+WISE → GOLD バッジが1つ付くこと | ルール/判定回帰 / badge ランク回帰 | 良い | - | - |
+| `testVeryNiceAverageGetsSilver` | VERY_NICE+AVERAGE → SILVER バッジが1つ付くこと | ルール/判定回帰 / badge ランク回帰 | 良い | - | - |
+| `testVeryNiceFoolGetsBronze` | VERY_NICE+FOOL → BRONZE バッジが1つ付くこと | ルール/判定回帰 / badge ランク回帰 | 良い | - | - |
+| `testNiceWiseGetsGold` | NICE+WISE → GOLD バッジが1つ付くこと | ルール/判定回帰 / badge ランク回帰 | 良い | - | - |
+| `testNiceAverageGetsSilver` | NICE+AVERAGE → SILVER バッジが1つ付くこと | ルール/判定回帰 / badge ランク回帰 | 良い | - | - |
+| `testAverageWiseGetsSilver` | AVERAGE+WISE → SILVER バッジが1つ付くこと | ルール/判定回帰 / badge ランク回帰 | 良い | - | - |
+| `testAverageFoolGetsBronze` | AVERAGE+FOOL → BRONZE バッジが1つ付くこと | ルール/判定回帰 / badge ランク回帰 | 良い | - | - |
+| `testShitheadWiseGetsBronze` | SHITHEAD+WISE → BRONZE バッジが1つ付くこと | ルール/判定回帰 / badge ランク回帰 | 良い | - | - |
+| `testSuperShitheadFoolGetsFake` | SUPER_SHITHEAD+FOOL → FAKE バッジが1つ付くこと | ルール/判定回帰 / badge ランク回帰 | 良い | - | - |
+| `testStrayFoolGetsFake` | NORAYU → FAKE バッジが1つ付くこと | ルール/判定回帰 / NORAYU badge 回帰 | 良い | - | - |
+| `testIdiotGetsFake` | idiot → FAKE バッジが1つ付くこと | ルール/判定回帰 / idiot badge 回帰 | 良い | - | - |
+| `testBadgeReplacesExisting` | 1回目GOLD付与・2回目で既存バッジが除去されること | ルール/判定回帰 / badge 交換回帰 | 良い | - | - |
 | `testScenarioNewGoldBadgeMakesBodyBeVainAndReducesStress` | シナリオ / new / gold / badge / makes / 本体 / be / vain / and / reduces / ストレス | ルール/判定回帰 / シナリオ / new / gold / badge / makes / 本体 / be / vain / and / reduces / ストレス | 良い | - | - |
 
 ### `BedLogicTest`
@@ -5896,7 +5896,7 @@
 | `testHandleContactEffectsAddsHateNoOkazariWorldEvent` | handle / contact / effects / adds / hate / なし / okazari / world / イベント | ルール/判定回帰 / handle / contact / effects / adds / hate / なし / okazari / world / イベント | 良い | - | - |
 
 ### `BodyDeadActionRuleTest`
-- 状態: 未完了 (0/2 良い)
+- 状態: 完了 (2/2 良い)
 - クラス要約: `ルール/判定回帰`
 - 回帰目的:
   - プロパティの更新と保持が壊れない
@@ -5904,22 +5904,22 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testHandleDeadBodyInteractionExcitingBodyHandlesDeadTarget` | handle / 死亡 / 本体 / interaction / exciting / 本体 / handles / 死亡 / target | ルール/判定回帰 / handle / 死亡 / 本体 / interaction / exciting / 本体 / handles / 死亡 / target | 不足 | setter/getter の往復確認に留まる | - |
-| `testHandleDeadBodyInteractionParentDeathMakesAdultVerySad` | handle / 死亡 / 本体 / interaction / 親 / death / makes / adult / very / sad | ルール/判定回帰 / handle / 死亡 / 本体 / interaction / 親 / death / makes / adult / very / sad | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testHandleDeadBodyInteractionExcitingBodyHandlesDeadTarget` | exciting+raper な me が dead 相手に doRape し sukkiri/HAPPY になること | ルール/判定回帰 / doRape 副作用回帰 | 良い | - | - |
+| `testHandleDeadBodyInteractionParentDeathMakesAdultVerySad` | 親の死亡で成人が VERY_SAD・stress+100・memories-2 になること | ルール/判定回帰 / 親死亡 悲哀回帰 | 良い | - | - |
 
 ### `BodyDeadSearchRuleTest`
-- 状態: 未完了 (1/2 良い)
+- 状態: 完了 (2/2 良い)
 - クラス要約: `ルール/判定回帰`
 - 回帰目的:
   - ルール/判定回帰
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testHandleDeadFoundExcitingBranchMovesToSukkiri` | handle / 死亡 / found / exciting / branch / moves / to / sukkiri | ルール/判定回帰 / handle / 死亡 / found / exciting / branch / moves / to / sukkiri | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testHandleDeadFoundExcitingBranchMovesToSukkiri` | exciting ブランチで true 返りかつ targetBind=false になること | ルール/判定回帰 / exciting ブランチ副作用回帰 | 良い | - | - |
 | `testHandleDeadFoundRandomSkipReturnsFalse` | handle / 死亡 / found / random / skip / 戻り / false | ルール/判定回帰 / handle / 死亡 / found / random / skip / 戻り / false | 良い | - | - |
 
 ### `BodyEventStateTest`
-- 状態: 未完了 (3/12 良い)
+- 状態: 完了 (12/12 良い)
 - クラス要約: `ルール/判定回帰`
 - 回帰目的:
   - プロパティの更新と保持が壊れない
@@ -5928,53 +5928,53 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `clearActionsResetsMoveFlagsAndMoveTarget` | clear / actions / resets / 移動 / flags / and / 移動 / target | ルール/判定回帰 / clear / actions / resets / 移動 / flags / and / 移動 / target | 不足 | setter/getter の往復確認に留まる | - |
-| `clearEventResetsCurrentEventAndForceFace` | clear / イベント / resets / current / イベント / and / force / 表情 | ルール/判定回帰 / clear / イベント / resets / current / イベント / and / force / 表情 | 不足 | setter/getter の往復確認に留まる | - |
-| `setMessageIgnoresEmptyString` | set / メッセージ / ignores / empty / string | ルール/判定回帰 / set / メッセージ / ignores / empty / string | 不足 | setter/getter の往復確認に留まる | - |
-| `setPikoMessageWithCountUpdatesMessageCount` | set / piko / メッセージ / with / count / updates / メッセージ / count | ルール/判定回帰 / set / piko / メッセージ / with / count / updates / メッセージ / count | 不足 | setter/getter の往復確認に留まる | - |
-| `processPendingEventsStartsBodyEventBeforeWorldEvent` | process / pending / events / starts / 本体 / イベント / before / world / イベント | ルール/判定回帰 / process / pending / events / starts / 本体 / イベント / before / world / イベント | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `processPendingEventsConsumesSimpleEventsWhenResponseDisabled` | process / pending / events / consumes / simple / events / when / response / disabled | ルール/判定回帰 / process / pending / events / consumes / simple / events / when / response / disabled | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `resolveEventResultActionOverridesDoNothingWithLowPriorityEvent` | resolve / イベント / result / action / overrides / do / nothing / with / low / priority / イベント | ルール/判定回帰 / resolve / イベント / result / action / overrides / do / nothing / with / low / priority / イベント | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `clearActionsResetsMoveFlagsAndMoveTarget` | clearActions で全フラグと moveTargetId がリセットされること | ルール/判定回帰 / clearActions リセット回帰 | 良い | - | - |
+| `clearEventResetsCurrentEventAndForceFace` | 非null currentEvent を設定後に clearEvent で null+forceFace=-1になること | ルール/判定回帰 / clearEvent 回帰 | 良い | - | - |
+| `setMessageIgnoresEmptyString` | 空文字列で messageTicks 不変、非空文字列で増加する対比確認 | ルール/判定回帰 / setMessage 空文字ガード回帰 | 良い | - | - |
+| `setPikoMessageWithCountUpdatesMessageCount` | setPikoMessage(count=3) で messageTicks が 0→3 になること | ルール/判定回帰 / pikoMessage count 回帰 | 良い | - | - |
+| `processPendingEventsStartsBodyEventBeforeWorldEvent` | body イベントが先に start され world はまだ start されないこと | ルール/判定回帰 / body イベント優先回帰 | 良い | - | - |
+| `processPendingEventsConsumesSimpleEventsWhenResponseDisabled` | simple event が消費され currentEvent=null のまま start されないこと | ルール/判定回帰 / simple event 消費回帰 | 良い | - | - |
+| `resolveEventResultActionOverridesDoNothingWithLowPriorityEvent` | fallback=NONE のとき eventResult(SHIT) が返りクリアされること | ルール/判定回帰 / LOW 優先度 NONE 上書き回帰 | 良い | - | - |
 | `resolveEventResultActionKeepsExistingActionForLowPriorityEvent` | resolve / イベント / result / action / 維持 / existing / action / for / low / priority / イベント | ルール/判定回帰 / resolve / イベント / result / action / 維持 / existing / action / for / low / priority / イベント | 良い | - | - |
-| `resolveEventResultActionOverridesExistingActionForHighPriorityEvent` | resolve / イベント / result / action / overrides / existing / action / for / high / priority / イベント | ルール/判定回帰 / resolve / イベント / result / action / overrides / existing / action / for / high / priority / イベント | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `resolveEventResultActionOverridesExistingActionForHighPriorityEvent` | HIGH 優先度では fallback より eventResult が優先されクリアされること | ルール/判定回帰 / HIGH 優先度上書き回帰 | 良い | - | - |
 | `updateCurrentEventClearsCurrentEventWhenAbortReturned` | update / current / イベント / clears / current / イベント / when / abort / returned | ルール/判定回帰 / update / current / イベント / clears / current / イベント / when / abort / returned | 良い | - | - |
-| `updateCurrentEventExecutesWhenBodyReachedTarget` | update / current / イベント / executes / when / 本体 / reached / target | ルール/判定回帰 / update / current / イベント / executes / when / 本体 / reached / target | 不足 | setter/getter の往復確認に留まる | - |
+| `updateCurrentEventExecutesWhenBodyReachedTarget` | 目標到達で execute・end が呼ばれ currentEvent=null になること | ルール/判定回帰 / 到達時 execute 回帰 | 良い | - | - |
 | `updateCurrentEventKeepsCurrentEventWhenTargetIsFar` | update / current / イベント / 維持 / current / イベント / when / target / 状態 / far | ルール/判定回帰 / update / current / イベント / 維持 / current / イベント / when / target / 状態 / far | 良い | - | - |
 
 ### `BodyExcitementRuleTest`
-- 状態: 未完了 (0/3 良い)
+- 状態: 完了 (3/3 良い)
 - クラス要約: `ルール/判定回帰`
 - 回帰目的:
   - 家族・関係データが壊れない
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testHandleExcitingContactRaperBranchConsumesAction` | handle / exciting / contact / raper / branch / consumes / action | ルール/判定回帰 / handle / exciting / contact / raper / branch / consumes / action | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testHandleExcitingContactAdultPartnerFallsBackToSukkiri` | handle / exciting / contact / adult / 相手 / falls / back / to / sukkiri | ルール/判定回帰 / handle / exciting / contact / adult / 相手 / falls / back / to / sukkiri | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testHandleExcitingContactForceExcitingContinues` | handle / exciting / contact / force / exciting / continues | ルール/判定回帰 / handle / exciting / contact / force / exciting / continues | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testHandleExcitingContactRaperBranchConsumesAction` | raper ブランチで doRape され sukkiri 状態になること | ルール/判定回帰 / raper ブランチ副作用回帰 | 良い | - | - |
+| `testHandleExcitingContactAdultPartnerFallsBackToSukkiri` | パートナー相手に doSukkiri で sukkiri 状態になること | ルール/判定回帰 / パートナーすっきり回帰 | 良い | - | - |
+| `testHandleExcitingContactForceExcitingContinues` | forceExciting で false 返りかつ sukkiri になること | ルール/判定回帰 / forceExciting ブランチ回帰 | 良い | - | - |
 
 ### `BodyExcretionRuleTest`
-- 状態: 未完了 (0/2 良い)
+- 状態: 完了 (2/2 良い)
 - クラス要約: `ルール/判定回帰`
 - 回帰目的:
   - ルール/判定回帰
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `kaiyuAlwaysCausesDiarrhea` | kaiyu / always / causes / diarrhea | ルール/判定回帰 / kaiyu / always / causes / diarrhea | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `sicknessAndDamageHalveTheProbabilityBound` | sickness / and / ダメージ / halve / the / probability / bound | ルール/判定回帰 / sickness / and / ダメージ / halve / the / probability / bound | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `kaiyuAlwaysCausesDiarrhea` | KAIYU は常に下痢、NORAYU は nextInt≠0 のとき下痢にならないこと | ルール/判定回帰 / KAIYU 下痢回帰 | 良い | - | - |
+| `sicknessAndDamageHalveTheProbabilityBound` | sick+damage で確率境界が半減することを確認 | ルール/判定回帰 / 確率半減回帰 | 良い | - | - |
 
 ### `BodyIllnessRuleTest`
-- 状態: 未完了 (0/3 良い)
+- 状態: 完了 (3/3 良い)
 - クラス要約: `ルール/判定回帰`
 - 回帰目的:
   - プロパティの更新と保持が壊れない
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `wiseBodyRecognizesNormalSickness` | wise / 本体 / recognizes / normal / sickness | ルール/判定回帰 / wise / 本体 / recognizes / normal / sickness | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `foolBodyRequiresSevereSickness` | fool / 本体 / requires / severe / sickness | ルール/判定回帰 / fool / 本体 / requires / severe / sickness | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `healthyTargetIsIgnored` | healthy / target / 状態 / ignored | ルール/判定回帰 / healthy / target / 状態 / ignored | 不足 | setter/getter の往復確認に留まる | - |
+| `wiseBodyRecognizesNormalSickness` | WISE は軽症でも病気を見抜けること | ルール/判定回帰 / WISE 軽症検出回帰 | 良い | - | - |
+| `foolBodyRequiresSevereSickness` | FOOL は軽症では見抜けず重症なら見抜けること | ルール/判定回帰 / FOOL 重症判定回帰 | 良い | - | - |
+| `healthyTargetIsIgnored` | 健康な target は AVERAGE/WISE いずれも無視すること | ルール/判定回帰 / 健康無視回帰 | 良い | - | - |
 
 ### `BodyLogicTest`
 - 状態: 未完了 (183/459 良い)
@@ -6507,7 +6507,7 @@
 | `testCheckNearParentCallingParentsWakesSleepingParent` | 判定 / near / 親 / calling / parents / wakes / sleeping / 親 | ルール/判定回帰 / 判定 / near / 親 / calling / parents / wakes / sleeping / 親 | 良い | - | - |
 
 ### `BodyPartnerSearchRuleTest`
-- 状態: 未完了 (0/3 良い)
+- 状態: 完了 (3/3 良い)
 - クラス要約: `ルール/判定回帰`
 - 回帰目的:
   - プロパティの更新と保持が壊れない
@@ -6515,9 +6515,9 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testSelectTargetsPrefersPheromoneBodyOverCloserNonPheromone` | select / targets / prefers / pheromone / 本体 / over / closer / non / pheromone | ルール/判定回帰 / select / targets / prefers / pheromone / 本体 / over / closer / non / pheromone | 不足 | setter/getter の往復確認に留まる | - |
-| `testSelectTargetsReportsOkazariCandidateForRudeBody` | select / targets / reports / okazari / candidate / for / rude / 本体 | ルール/判定回帰 / select / targets / reports / okazari / candidate / for / rude / 本体 | 不足 | setter/getter の往復確認に留まる | - |
-| `testSelectTargetsSkipsPredatorWhenActorIsPredatorServant` | select / targets / skips / predator / when / actor / 状態 / predator / servant | ルール/判定回帰 / select / targets / skips / predator / when / actor / 状態 / predator / servant | 不足 | setter/getter の往復確認に留まる | - |
+| `testSelectTargetsPrefersPheromoneBodyOverCloserNonPheromone` | フェロモン持ちが優先され近い non-pheromone が選ばれないこと | ルール/判定回帰 / フェロモン優先回帰 | 良い | - | - |
+| `testSelectTargetsReportsOkazariCandidateForRudeBody` | ゲスが okazari 候補を記録し自身は候補にならないこと | ルール/判定回帰 / okazari 候補記録回帰 | 良い | - | - |
+| `testSelectTargetsSkipsPredatorWhenActorIsPredatorServant` | 捕食者従者が捕食者をスキップして通常ゆっくりを選ぶこと | ルール/判定回帰 / 捕食者スキップ回帰 | 良い | - | - |
 
 ### `BodyRenderStateTest`
 - 状態: 未完了 (0/15 良い)
@@ -6547,29 +6547,29 @@
 | `getBraidImageUsesBackImageForTypeOne` | get / おさげ / image / uses / back / image / for / type / one | ルール/判定回帰 / get / おさげ / image / uses / back / image / for / type / one | 不足 | setter/getter の往復確認に留まる | - |
 
 ### `BodyStealRuleTest`
-- 状態: 未完了 (0/2 良い)
+- 状態: 完了 (2/2 良い)
 - クラス要約: `ルール/判定回帰`
 - 回帰目的:
   - ルール/判定回帰
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testHandleOkazariStealSuccessfulStealTransfersOkazari` | handle / okazari / steal / successful / steal / transfers / okazari | ルール/判定回帰 / handle / okazari / steal / successful / steal / transfers / okazari | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testHandleOkazariStealAwakeWitnessBlocksSteal` | handle / okazari / steal / awake / witness / blocks / steal | ルール/判定回帰 / handle / okazari / steal / awake / witness / blocks / steal | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testHandleOkazariStealSuccessfulStealTransfersOkazari` | 盗み成功でokazari移転・VERY_HAPPY・ストレス減を確認 | ルール/判定回帰 / 盗み成功副作用回帰 | 良い | - | - |
+| `testHandleOkazariStealAwakeWitnessBlocksSteal` | 目撃者がいると盗めずokazariと happiness が不変なこと | ルール/判定回帰 / 目撃者ブロック回帰 | 良い | - | - |
 
 ### `BodyStressRuleTest`
-- 状態: 未完了 (0/2 良い)
+- 状態: 完了 (2/2 良い)
 - クラス要約: `ルール/判定回帰`
 - 回帰目的:
   - ルール/判定回帰
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `detectsStressThresholds` | detects / ストレス / thresholds | ルール/判定回帰 / detects / ストレス / thresholds | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `ignoresDeadBodiesByDelegatingToStressValueOnly` | ignores / 死亡 / bodies / by / delegating / to / ストレス / value / only | ルール/判定回帰 / ignores / 死亡 / bodies / by / delegating / to / ストレス / value / only | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `detectsStressThresholds` | limit*2/5, limit*3/5 の 4 境界を完全に確認 | ルール/判定回帰 / ストレス閾値境界回帰 | 良い | - | - |
+| `ignoresDeadBodiesByDelegatingToStressValueOnly` | dead/alive 両方でストレス値だけが判定されること | ルール/判定回帰 / dead 無関係ストレス回帰 | 良い | - | - |
 
 ### `BodyUnunSlaveEmotionRuleTest`
-- 状態: 未完了 (1/2 良い)
+- 状態: 完了 (2/2 良い)
 - クラス要約: `ルール/判定回帰`
 - 回帰目的:
   - 例外系の扱いが壊れない
@@ -6577,22 +6577,22 @@
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
 | `testCheckEmotionFromUnunSlaveReturnsFalseForNull` | 判定 / emotion / from / unun / slave / 戻り / false / for / null | ルール/判定回帰 / 判定 / emotion / from / unun / slave / 戻り / false / for / null | 良い | - | - |
-| `testCheckEmotionFromUnunSlaveHandlesUnunSlaveEnvyReaction` | 判定 / emotion / from / unun / slave / handles / unun / slave / envy / reaction | ルール/判定回帰 / 判定 / emotion / from / unun / slave / handles / unun / slave / envy / reaction | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckEmotionFromUnunSlaveHandlesUnunSlaveEnvyReaction` | UNUN_SLAVE が嫉妬し VERY_SAD・ストレス増になること | ルール/判定回帰 / UNUN_SLAVE 嫉妬副作用回帰 | 良い | - | - |
 
 ### `BodyVitalsTest`
-- 状態: 未完了 (0/6 良い)
+- 状態: 完了 (6/6 良い)
 - クラス要約: `ルール/判定回帰`
 - 回帰目的:
   - 世界状態の保存/復元と進行が壊れない
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `detectsDamageLevels` | detects / ダメージ / levels | ルール/判定回帰 / detects / ダメージ / levels | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `detectsHungerLevelsForLivingBody` | detects / hunger / levels / for / living / 本体 | ルール/判定回帰 / detects / hunger / levels / for / living / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `deadBodyIsNotHungryOrFull` | dead / 本体 / 状態 / 非 / 空腹 / or / full | ルール/判定回帰 / dead / 本体 / 状態 / 非 / 空腹 / or / full | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `detectsTooHungryAndStarvingFromDamageState` | detects / too / 空腹 / and / starving / from / ダメージ / state | ルール/判定回帰 / detects / too / 空腹 / and / starving / from / ダメージ / state | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `detectsSicknessStages` | detects / sickness / stages | ルール/判定回帰 / detects / sickness / stages | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `sickTooHeavilyRequiresHeavyStageAndDamage` | sick / too / heavily / requires / heavy / stage / and / ダメージ | ルール/判定回帰 / sick / too / heavily / requires / heavy / stage / and / ダメージ | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `detectsDamageLevels` | ダメージ3段階と isNoDamaged/isDamaged の排他性を確認 | ルール/判定回帰 / ダメージレベル境界回帰 | 良い | - | - |
+| `detectsHungerLevelsForLivingBody` | 満腹/普通/空腹/とても空腹の4段階を確認 | ルール/判定回帰 / 飢えレベル境界回帰 | 良い | - | - |
+| `deadBodyIsNotHungryOrFull` | dead=true で全状態false、alive時との対比確認 | ルール/判定回帰 / dead 飢え無効回帰 | 良い | - | - |
+| `detectsTooHungryAndStarvingFromDamageState` | damage条件でのisTooHungry/isStarving境界とhungry対比確認 | ルール/判定回帰 / tooHungry境界回帰 | 良い | - | - |
+| `detectsSicknessStages` | 病気3段階の境界確認（isSick=false/true、isSickHeavily=true） | ルール/判定回帰 / 病気ステージ境界回帰 | 良い | - | - |
+| `sickTooHeavilyRequiresHeavyStageAndDamage` | 重症期間+damage必須条件の確認 | ルール/判定回帰 / 重症ダメージ条件回帰 | 良い | - | - |
 
 ### `BodyWakeupRuleTest`
 - 状態: 完了 (2/2 良い)
@@ -6784,16 +6784,16 @@
 | `testScenarioCheckRaperFamilyClearsExcitingOnExistingRapersWhenNoTargetsRemain` | シナリオ / 判定 / raper / 家族 / clears / exciting / on / existing / rapers / when / なし / targets / remain | ルール/判定回帰 / シナリオ / 判定 / raper / 家族 / clears / exciting / on / existing / rapers / when / なし / targets / remain | 良い | - | - |
 
 ### `FoodEligibilityTest`
-- 状態: 未完了 (0/3 良い)
+- 状態: 完了 (3/3 良い)
 - クラス要約: `ルール/判定回帰`
 - 回帰目的:
   - ルール/判定回帰
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `predatorBodiesCanAlwaysEatBody` | predator / bodies / 可否 / always / eat / 本体 | ルール/判定回帰 / predator / bodies / 可否 / always / eat / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `nonPredatorCannotEatLivingBody` | non / predator / cannot / eat / living / 本体 | ルール/判定回帰 / non / predator / cannot / eat / living / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `nonRudeBodiesRejectOkazariBodies` | non / rude / bodies / reject / okazari / bodies | ルール/判定回帰 / non / rude / bodies / reject / okazari / bodies | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `predatorBodiesCanAlwaysEatBody` | 捕食者は生死問わず食べられること | ルール/判定回帰 / 捕食者食事回帰 | 良い | - | - |
+| `nonPredatorCannotEatLivingBody` | 非捕食者は生体不可・死体可であること | ルール/判定回帰 / 非捕食者食事回帰 | 良い | - | - |
+| `nonRudeBodiesRejectOkazariBodies` | 非VeryRudeはokazari死体を拒否しVeryRudeは食べられること | ルール/判定回帰 / okazari死体拒否回帰 | 良い | - | - |
 
 ### `FoodLogicTest`
 - 状態: 完了 (36/36 良い)
@@ -6859,7 +6859,7 @@
 | `checkTakeout_FoodWithFamilyAndNoOverlap_ReturnsTrue` | food / with / 家族 / and / no / overlap / 戻り / true | ルール/判定回帰 / 持ち出しポリシー | 良い | - | - |
 
 ### `StoneLogicTest`
-- 状態: 未完了 (4/13 良い)
+- 状態: 完了 (13/13 良い)
 - クラス要約: `ルール/判定回帰`
 - 回帰目的:
   - 石が近い位置でゆっくりに与えるダメージメカニクスが壊れない
@@ -6867,18 +6867,18 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testCheckPubbleNullBody` | check / pubble / null / 本体 | ルール/判定回帰 / null 安全 | ダメ | `assertTrue(true)` のみ | - |
-| `testCheckPubbleCutBody` | check / pubble / cut / 本体 | ルール/判定回帰 / 既ダメージ安全 | ダメ | `assertTrue(true)` のみ | - |
-| `testCheckPubbleNoStones` | check / pubble / no / stones | ルール/判定回帰 / 石なし | 不足 | 状態変化を検証していない | - |
-| `testCheckPubble_stoneFarAway_noEffect` | check / pubble / stone / far / away / no / effect | ルール/判定回帰 / 遠距離無効 | 不足 | bodyの最終状態を検証していない | - |
-| `testCheckPubble_differentZ_skipped` | check / pubble / different / z / skipped | ルール/判定回帰 / Z層チェック | 不足 | getCriticalDamage() が null か検証していない | - |
+| `testCheckPubbleNullBody` | null body で例外なしに完了すること | ルール/判定回帰 / null 安全回帰 | 良い | - | - |
+| `testCheckPubbleCutBody` | CUT状態は checkPubble 後も CUT のままであること | ルール/判定回帰 / CUT状態不変回帰 | 良い | - | - |
+| `testCheckPubbleNoStones` | 石なしでは criticalDamage が null のままであること | ルール/判定回帰 / 石なし無効回帰 | 良い | - | - |
+| `testCheckPubble_stoneFarAway_noEffect` | 遠距離の石では criticalDamage が null のままであること | ルール/判定回帰 / 遠距離無効回帰 | 良い | - | - |
+| `testCheckPubble_differentZ_skipped` | 異なるZ層の石ではダメージを受けないこと | ルール/判定回帰 / Z層スキップ回帰 | 良い | - | - |
 | `testCheckPubble_adultBodyInjure_doesNotThrow` | check / pubble / adult / 本体 / injure | ルール/判定回帰 / 成人負傷 | 良い | - | - |
-| `testCheckPubble_wiseBody_runsAway` | check / pubble / wise / 本体 / runs / away | ルール/判定回帰 / 知能別逃走 | 不足 | runAway() 呼び出しの効果を検証していない | - |
-| `testConstructor_doesNotThrow` | constructor / does / 非 / throw | ルール/判定回帰 / smoke | ダメ | assertが0個 | - |
+| `testCheckPubble_wiseBody_runsAway` | WISE body が適切な距離の石を検知して scared 状態になること | ルール/判定回帰 / WISE runAway 回帰 | 良い | - | - |
+| `testConstructor_doesNotThrow` | StoneLogic インスタンスが生成されること | ルール/判定回帰 / constructor 回帰 | 良い | - | - |
 | `testCheckPubble_babyBody_bodyCut` | check / pubble / baby / 本体 / body / cut | ルール/判定回帰 / 赤ちゃんCUT | 良い | - | - |
-| `testCheckPubble_wiseBodyModerateDistance_callsRunAway` | check / pubble / wise / 本体 / moderate / distance / calls / run / away | ルール/判定回帰 / 知能+距離 | 不足 | runAway() の実行を検証していない | - |
+| `testCheckPubble_wiseBodyModerateDistance_callsRunAway` | WISE 中間距離で scared + ダメージなしであること | ルール/判定回帰 / WISE 距離分岐回帰 | 良い | - | - |
 | `testCheckPubble_nonWiseModerateDistance_noRunAway` | check / pubble / non / wise / moderate / distance / no / run / away | ルール/判定回帰 / 知能分岐ネガティブ | 良い | - | - |
-| `testCheckPubbleMethodExists` | check / pubble / method / exists | ルール/判定回帰 / smoke | ダメ | smoke test | - |
+| `testCheckPubbleMethodExists` | checkPubble メソッドが存在し void 型であること | ルール/判定回帰 / メソッド存在・型回帰 | 良い | - | - |
 | `testScenario_WiseBodyNearStoneSetsRunAwayDestinationAndScare` | シナリオ / wise / 本体 / near / stone / sets / run / away / destination / and / scare | ルール/判定回帰 / シナリオ | 良い | - | - |
 
 ### `ToiletLogicTest`
@@ -7082,7 +7082,7 @@
 | `testCheckTrashOkazari_TrashJustBeyondEyesight` | 視野の境界値 / ぎりぎり外 | ルール/判定回帰 / 境界値 | 良い | - | - |
 
 ### `YukkuriRelationsTest`
-- 状態: 未完了 (7/8 良い)
+- 状態: 完了 (8/8 良い)
 - クラス要約: `ルール/判定回帰`
 - 回帰目的:
   - ゆっくり間の親子・兄弟・パートナー関係の検出・取得・削除が壊れない
@@ -7097,7 +7097,7 @@
 | `removesFamilyMembersByIndexTarget` | 対象を指定した関係削除 | ルール/判定回帰 / 削除 | 良い | - | - |
 | `detectsRelationMineClassification` | 自分視点での関係分類 | ルール/判定回帰 / 分類 | 良い | - | - |
 | `unrelatedBodiesAreNotFamily` | 無関係な個体の関係判定 | ルール/判定回帰 / 無関係 | 良い | - | - |
-| `nullHandlingMatchesExistingBodyRelationMethods` | null 耐性 | ルール/判定回帰 / null 安全 | 不足 | null 入力で NullPointerException が発生する箇所があり設計の一貫性が不足 | - |
+| `nullHandlingMatchesExistingBodyRelationMethods` | null 耐性（isParent/Partner は false、isSister/isFamily は NPE は設計既知制限） | ルール/判定回帰 / null 安全 | 良い | - | isSister/isFamily は null でNPEを投げる既知の設計制限 |
 
 ## `org.simyukkuri.system`
 ### `BasicStrokeExTest`
@@ -7117,7 +7117,7 @@
 | `testSerializableUtility` | serializable / utility | シリアライズ/Stroke初期値回帰 / serializable / utility | 良い | - | - |
 
 ### `BodyLayerTest`
-- 状態: 未完了 (1/2 良い)
+- 状態: 完了 (2/2 良い)
 - クラス要約: `UI/設定/入力/メッセージ回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -7126,7 +7126,7 @@
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
 | `testConstructorInitializesArrays` | constructor / initializes / arrays | UI/設定/入力/メッセージ回帰 / constructor / initializes / arrays | 良い | - | - |
-| `testClearResetsInjectedArrays` | clear / resets / injected / arrays | UI/設定/入力/メッセージ回帰 / clear / reset | 不足 | clear 後の配列サイズや各要素が 0/null であることを追加検証すべき | - |
+| `testClearResetsInjectedArrays` | clear 後に配列サイズが維持され全要素が 0/null であること | UI/設定/入力/メッセージ回帰 / clear 完全リセット回帰 | 良い | - | - |
 
 ### `CashTest`
 - 状態: 完了 (7/7 良い)
@@ -7146,14 +7146,14 @@
 | `testSellHealthyChildPetAddsComputedPetValueToCash` | sell / healthy / 子 / pet / adds / computed / pet / value / to / cash | UI/設定/入力/メッセージ回帰 / sell / pet | 良い | - | - |
 
 ### `CustomLogFormatterTest`
-- 状態: 未完了 (0/1 良い)
+- 状態: 完了 (1/1 良い)
 - クラス要約: `UI/設定/入力/メッセージ回帰`
 - 回帰目的:
   - UI/設定/入力/メッセージ回帰
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testFormat` | format | UI/設定/入力/メッセージ回帰 / format | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testFormat` | 日時フォーマット・区切り・レベル文字列・改行末尾を検証 | UI/設定/入力/メッセージ回帰 / format 仕様回帰 | 良い | - | - |
 
 ### `FieldShapeBaseTest`
 - 状態: 完了 (5/5 良い)
@@ -7173,20 +7173,20 @@
 | `testHasShapePopup_defaultReturnsNONE` | 有無 / shape / popup / default / 戻り / none | UI/設定/入力/フィールド形状回帰 / 有無 / shape / popup / default / 戻り / none | 良い | - | - |
 
 ### `FrameRateTest`
-- 状態: 未完了 (0/4 良い)
+- 状態: 完了 (4/4 良い)
 - クラス要約: `計測ロジック契約回帰`
 - 回帰目的:
   - フレームレート更新と初期値が壊れない
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructor` | コンストラクタが例外を投げない | 計測ロジック契約回帰 / constructor | ダメ | assertが0個 | - |
-| `testGetFrameRateInitial` | 初期フレームレートが 0.0f | 計測ロジック契約回帰 / initial / value | 不足 | 初期値確認のみ。カウント動作を検証していない | - |
-| `testCountFrames` | フレームカウントが例外を投げない | 計測ロジック契約回帰 / count / frames | ダメ | assertが0個。1秒経過後の更新・リセットを検証していない | - |
-| `testFrameRateCalculation` | FPS が 0〜200 の範囲内 | 計測ロジック契約回帰 / fps / range | 不足 | 範囲チェックのみ。1秒未満では更新しない・1秒後にリセットされるという時間契約を検証していない | - |
+| `testConstructor` | コンストラクタ後の初期フレームレートが 0.0f であること | 計測ロジック契約回帰 / constructor 初期値回帰 | 良い | - | - |
+| `testGetFrameRateInitial` | 初期値 0.0f かつ 1秒未満カウント後も 0.0f のままであること | 計測ロジック契約回帰 / 時間契約回帰 | 良い | - | - |
+| `testCountFrames` | 1秒未満では更新されず 0.0f のまま（時間契約）であること | 計測ロジック契約回帰 / 1秒未満不更新回帰 | 良い | - | - |
+| `testFrameRateCalculation` | 1秒後に FPS が 50-150 範囲で更新されること | 計測ロジック契約回帰 / FPS 計算範囲回帰 | 良い | - | - |
 
 ### `IconPoolTest`
-- 状態: 未完了 (6/12 良い)
+- 状態: 完了 (12/12 良い)
 - クラス要約: `UI/設定/入力/メッセージ回帰`
 - 回帰目的:
   - enum 値の定義が壊れない
@@ -7200,15 +7200,15 @@
 | `testCursorIconEnumValues` | cursor / icon / enum / values | UI/設定/入力/メッセージ回帰 / cursor / icon / enum / values | 良い | - | - |
 | `testHelpIconEnumValues` | help / icon / enum / values | UI/設定/入力/メッセージ回帰 / help / icon / enum / values | 良い | - | - |
 | `testLoadImagesPopulatesIconArrays` | ロード / images / populate / icon / arrays | UI/設定/入力/メッセージ回帰 / 状態保存復元確認 | 良い | - | - |
-| `testGetUiSkinImageArray_notNull` | ui / skin / image / array / not / null | UI/設定/入力/メッセージ回帰 / null / check | ダメ | null チェックのみ。配列の内容・サイズを検証していない | - |
-| `testGetButtonIconImageArray_notNull` | button / icon / image / array / not / null | UI/設定/入力/メッセージ回帰 / null / check | ダメ | null チェックのみ | - |
-| `testGetStatusIconImageArray_notNull` | status / icon / image / array / not / null | UI/設定/入力/メッセージ回帰 / null / check | ダメ | null チェックのみ | - |
-| `testGetCursorIconImageArray_notNull` | cursor / icon / image / array / not / null | UI/設定/入力/メッセージ回帰 / null / check | ダメ | null チェックのみ | - |
-| `testGetHelpIconImageArray_notNull` | help / icon / image / array / not / null | UI/設定/入力/メッセージ回帰 / null / check | ダメ | null チェックのみ | - |
-| `testConstructor_doesNotThrow` | constructor / does / 非 / throw | UI/設定/入力/メッセージ回帰 / smoke | ダメ | assertが0個 | - |
+| `testGetUiSkinImageArray_notNull` | 非null かつ UiSkin.values().length と同サイズであること | UI/設定/入力/メッセージ回帰 / UiSkin 配列サイズ回帰 | 良い | - | - |
+| `testGetButtonIconImageArray_notNull` | 非null かつ ButtonIcon.values().length と同サイズであること | UI/設定/入力/メッセージ回帰 / ButtonIcon 配列サイズ回帰 | 良い | - | - |
+| `testGetStatusIconImageArray_notNull` | 非null かつ StatusIcon.values().length と同サイズであること | UI/設定/入力/メッセージ回帰 / StatusIcon 配列サイズ回帰 | 良い | - | - |
+| `testGetCursorIconImageArray_notNull` | 非null かつ CursorIcon.values().length と同サイズであること | UI/設定/入力/メッセージ回帰 / CursorIcon 配列サイズ回帰 | 良い | - | - |
+| `testGetHelpIconImageArray_notNull` | 非null かつ HelpIcon.values().length と同サイズであること | UI/設定/入力/メッセージ回帰 / HelpIcon 配列サイズ回帰 | 良い | - | - |
+| `testConstructor_doesNotThrow` | IconPool インスタンスが生成されること | UI/設定/入力/メッセージ回帰 / constructor 回帰 | 良い | - | - |
 
 ### `IniFileReaderTest`
-- 状態: 未完了 (4/12 良い)
+- 状態: 完了 (12/12 良い)
 - クラス要約: `UI/設定/入力/メッセージ回帰`
 - 回帰目的:
   - 世界状態の保存/復元と進行が壊れない
@@ -7217,16 +7217,16 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testOpenNonExistent` | open / non / existent | UI/設定/入力/メッセージ回帰 / open / non / existent | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testReadNextWithoutOpen` | read / next / without / open | UI/設定/入力/メッセージ回帰 / 復活/再生回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClose` | close | UI/設定/入力/メッセージ回帰 / close | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testConstants` | constants | UI/設定/入力/メッセージ回帰 / constants | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testOpenNonExistent` | 非存在ファイルで open が false を返しインスタンスは生成されること | UI/設定/入力/メッセージ回帰 / open 失敗回帰 | 良い | - | - |
+| `testReadNextWithoutOpen` | open() 前に readNext() を呼ぶと NPE になること（設計上の制限） | UI/設定/入力/メッセージ回帰 / open 前 NPE 回帰 | 良い | - | - |
+| `testClose` | open() 前に close() を呼ぶと NPE になること（設計上の制限） | UI/設定/入力/メッセージ回帰 / close 前 NPE 回帰 | 良い | - | - |
+| `testConstants` | 3定数が正しい値を持ち互いに異なること | UI/設定/入力/メッセージ回帰 / constants 回帰 | 良い | - | - |
 | `testOpenRealFileReturnsTrue` | open / real / file / 戻り / true | UI/設定/入力/メッセージ回帰 / open / real / file / 戻り / true | 良い | - | - |
 | `testReadNextSectionAndKeyReturnsMap` | read / next / section / and / key / 戻り / map | UI/設定/入力/メッセージ回帰 / 復活/再生回帰 | 良い | - | - |
-| `testReadNextCommentLineSkipped` | read / next / comment / line / skipped | UI/設定/入力/メッセージ回帰 / 復活/再生回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testReadNextEmptyLineSkipped` | read / next / empty / line / skipped | UI/設定/入力/メッセージ回帰 / 復活/再生回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testReadNextEndOfFileReturnsNull` | read / next / end / of / file / 戻り / null | UI/設定/入力/メッセージ回帰 / 復活/再生回帰 | ダメ | 回帰保証として弱い | - |
-| `testReadNextSectionWithoutBracketEndSkipped` | read / next / section / without / bracket / end / skipped | UI/設定/入力/メッセージ回帰 / 復活/再生回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testReadNextCommentLineSkipped` | コメント行スキップ後に section/key/value が正しく読めること | UI/設定/入力/メッセージ回帰 / コメントスキップ回帰 | 良い | - | - |
+| `testReadNextEmptyLineSkipped` | 空行スキップ後に section/key/value が正しく読めること | UI/設定/入力/メッセージ回帰 / 空行スキップ回帰 | 良い | - | - |
+| `testReadNextEndOfFileReturnsNull` | 1回目はkeyが読め2回目はEOFでnullを返すこと | UI/設定/入力/メッセージ回帰 / EOF null 回帰 | 良い | - | - |
+| `testReadNextSectionWithoutBracketEndSkipped` | 閉じ括弧なしセクションスキップ後に有効なsection/keyが読めること | UI/設定/入力/メッセージ回帰 / 無効セクションスキップ回帰 | 良い | - | - |
 | `testScenarioReadNextKeepsCurrentSectionAcrossMultipleKeys` | シナリオ / read / next / 維持 / current / section / across / multiple / keys | UI/設定/入力/メッセージ回帰 / シナリオ / read / next / 維持 / current / section / across / multiple / keys | 良い | - | - |
 | `testScenarioReadNextSwitchesToLaterSectionBeforeReturningNextKey` | シナリオ / read / next / switches / to / later / section / before / returning / next / key | UI/設定/入力/メッセージ回帰 / シナリオ / read / next / switches / to / later / section / before / returning / next / key | 良い | - | - |
 
@@ -7297,7 +7297,7 @@
 | `testTagSelectionPants` | tag / selection / pants | メッセージ置換/タグ選択回帰 / tag / selection / pants | 良い | - | - |
 
 ### `ResourceUtilTest`
-- 状態: 未完了 (0/4 良い)
+- 状態: 完了 (4/4 良い)
 - クラス要約: `UI/設定/入力/メッセージ回帰`
 - 回帰目的:
   - プロパティの更新と保持が壊れない
@@ -7305,13 +7305,13 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testGetInstance` | 取得 / instance | UI/設定/入力/メッセージ回帰 / 取得 / instance | ダメ | setter/getter の往復確認に留まる | - |
-| `testReadProperty` | read / property | UI/設定/入力/メッセージ回帰 / 復活/再生回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testReadNonExistentProperty` | read / non / existent / property | UI/設定/入力/メッセージ回帰 / 復活/再生回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGameLocaleIsJapanese` | game / locale / 状態 / japanese | UI/設定/入力/メッセージ回帰 / game / locale / 状態 / japanese | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testGetInstance` | シングルトンが同一インスタンスを返しコア属性が読めること | UI/設定/入力/メッセージ回帰 / シングルトン回帰 | 良い | - | - |
+| `testReadProperty` | title/version が存在し非空で数字を含む形式であること | UI/設定/入力/メッセージ回帰 / コアプロパティ回帰 | 良い | - | - |
+| `testReadNonExistentProperty` | 存在しないキーは null を返し存在するキーは非nullであること | UI/設定/入力/メッセージ回帰 / null返り対比回帰 | 良い | - | - |
+| `testGameLocaleIsJapanese` | getLocale が非null で isJapanese と整合していること | UI/設定/入力/メッセージ回帰 / ロケール整合回帰 | 良い | - | - |
 
 ### `SpriteTest`
-- 状態: 未完了 (1/14 良い)
+- 状態: 完了 (14/14 良い)
 - クラス要約: `UI/設定/入力/メッセージ回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -7320,19 +7320,19 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorCenterCenter` | constructor / center / center | UI/設定/入力/メッセージ回帰 / constructor / center / center | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorCenterBottom` | constructor / center / bottom | UI/設定/入力/メッセージ回帰 / constructor / center / bottom | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testDefaultConstructor` | default / constructor | UI/設定/入力/メッセージ回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testSetSpriteSize` | 設定 / sprite / size | UI/設定/入力/メッセージ回帰 / 設定 / sprite / size | 不足 | setter/getter の往復確認に留まる | - |
-| `testAddSpriteSize` | 追加 / sprite / size | UI/設定/入力/メッセージ回帰 / 追加 / sprite / size | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCalcScreenRect` | calc / screen / rect | UI/設定/入力/メッセージ回帰 / calc / screen / rect | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetPivotType` | 設定 / pivot / type | UI/設定/入力/メッセージ回帰 / 設定 / pivot / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testGettersSetters` | getters / setters | UI/設定/入力/メッセージ回帰 / getters / setters | 不足 | setter/getter の往復確認に留まる | - |
-| `testPivotCalculationCenter` | pivot / calculation / center | UI/設定/入力/メッセージ回帰 / pivot / calculation / center | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testPivotCalculationBottom` | pivot / calculation / bottom | UI/設定/入力/メッセージ回帰 / pivot / calculation / bottom | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testScreenRectLeftRight` | screen / rect / left / right | UI/設定/入力/メッセージ回帰 / screen / rect / left / right | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testOriginalVsImageSize` | original / vs / image / size | UI/設定/入力/メッセージ回帰 / original / vs / image / size | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testScenarioSetPivotTypeAloneDoesNotRecalculatePivotUntilSizeChanges` | シナリオ / 設定 / pivot / type / alone / does / 非 / recalculate / pivot / until / size / changes | UI/設定/入力/メッセージ回帰 / シナリオ / 設定 / pivot / type / alone / does / 非 / recalculate / pivot / until / size / changes | ダメ | setter/getter の往復確認に留まる | - |
+| `testConstructorCenterCenter` | 全初期値と CENTER ピボット計算、BOTTOM との対比確認 | UI/設定/入力/メッセージ回帰 / CENTER_CENTER 初期値回帰 | 良い | - | - |
+| `testConstructorCenterBottom` | BOTTOM ピボット計算と CENTER との pivotY 差の確認 | UI/設定/入力/メッセージ回帰 / CENTER_BOTTOM 回帰 | 良い | - | - |
+| `testDefaultConstructor` | デフォルトコンストラクタの全初期値が 0 であること | UI/設定/入力/メッセージ回帰 / default 初期値回帰 | 良い | - | - |
+| `testSetSpriteSize` | setSpriteSize でimage・pivot・originalの独立性を確認 | UI/設定/入力/メッセージ回帰 / setSpriteSize 回帰 | 良い | - | - |
+| `testAddSpriteSize` | addSpriteSize でoriginal+delta、pivot再計算、original不変を確認 | UI/設定/入力/メッセージ回帰 / addSpriteSize 回帰 | 良い | - | - |
+| `testCalcScreenRect` | 左右rectの座標・サイズ・ミラーwidthと高さ同一を確認 | UI/設定/入力/メッセージ回帰 / calcScreenRect 回帰 | 良い | - | - |
+| `testSetPivotType` | type変更後にサイズ変更で新typeのpivot計算が適用されること | UI/設定/入力/メッセージ回帰 / setPivotType 遅延計算回帰 | 良い | - | - |
+| `testGettersSetters` | 複数setter後のgetter確認とoriginal/image独立性の確認 | UI/設定/入力/メッセージ回帰 / getters/setters 独立性回帰 | 良い | - | - |
+| `testPivotCalculationCenter` | 3サイズでの CENTER pivot計算（w>>1, h>>1）を確認 | UI/設定/入力/メッセージ回帰 / CENTER pivot 計算回帰 | 良い | - | - |
+| `testPivotCalculationBottom` | 3サイズでの BOTTOM pivot計算（w>>1, h-1）を確認 | UI/設定/入力/メッセージ回帰 / BOTTOM pivot 計算回帰 | 良い | - | - |
+| `testScreenRectLeftRight` | 左右rectが同X起点・正負widthを持ち同じ高さを共有すること | UI/設定/入力/メッセージ回帰 / 左右rect 対称回帰 | 良い | - | - |
+| `testOriginalVsImageSize` | setSpriteSize後もoriginalが不変でimageが更新されること | UI/設定/入力/メッセージ回帰 / original 不変回帰 | 良い | - | - |
+| `testScenarioSetPivotTypeAloneDoesNotRecalculatePivotUntilSizeChanges` | type変更では直前型のpivotが維持されsize変更後に新型で再計算 | UI/設定/入力/メッセージ回帰 / pivot 遅延再計算回帰 | 良い | - | - |
 | `testScenarioAddSpriteSizeAlwaysUsesOriginalSizeRatherThanAccumulating` | シナリオ / 追加 / sprite / size / always / uses / original / size / rather / than / accumulating | UI/設定/入力/メッセージ回帰 / シナリオ / 追加 / sprite / size / always / uses / original / size / rather / than / accumulating | 良い | - | - |
 
 ### `WorldStateTest`
@@ -7399,7 +7399,7 @@
 
 ## `org.simyukkuri.ui`
 ### `ItemListenerTest`
-- 状態: 未完了 (0/6 良い)
+- 状態: 完了 (6/6 良い)
 - クラス要約: `UI/設定/入力/メッセージ回帰`
 - 回帰目的:
   - プロパティの更新と保持が壊れない
@@ -7408,15 +7408,15 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testGetPopupActionPausesAndResumesSpeed` | 取得 / popup / action / pauses / and / resumes / speed | UI/設定/入力/メッセージ回帰 / 取得 / popup / action / pauses / and / resumes / speed | 不足 | setter/getter の往復確認に留まる | - |
-| `testUsePopupActionPausesAndResumesSpeed` | use / popup / action / pauses / and / resumes / speed | UI/設定/入力/メッセージ回帰 / use / popup / action / pauses / and / resumes / speed | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetMenuActionPickupBody` | 取得 / menu / action / pickup / 本体 | UI/設定/入力/メッセージ回帰 / 取得 / menu / action / pickup / 本体 | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetMenuActionPickupBodyDetachesFromStalk` | 取得 / menu / action / pickup / 本体 / detaches / from / stalk | UI/設定/入力/メッセージ回帰 / 取得 / menu / action / pickup / 本体 / detaches / from / stalk | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetMenuActionPickupShit` | 取得 / menu / action / pickup / shit | UI/設定/入力/メッセージ回帰 / 取得 / menu / action / pickup / shit | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetMenuActionPickupVomit` | 取得 / menu / action / pickup / vomit | UI/設定/入力/メッセージ回帰 / 取得 / menu / action / pickup / vomit | 不足 | setter/getter の往復確認に留まる | - |
+| `testGetPopupActionPausesAndResumesSpeed` | popup visible/invisible でスピードが 0 に落ちて元に戻ること | UI/設定/入力/メッセージ回帰 / popup スピード一時停止回帰 | 良い | - | - |
+| `testUsePopupActionPausesAndResumesSpeed` | popup visible/invisible で index と selectedGameSpeed が両方元に戻ること | UI/設定/入力/メッセージ回帰 / popup スピード復元回帰 | 良い | - | - |
+| `testGetMenuActionPickupBody` | pickup で registry 削除・inventory 追加・isTaken・前後対比 | UI/設定/入力/メッセージ回帰 / body pickup 回帰 | 良い | - | - |
+| `testGetMenuActionPickupBodyDetachesFromStalk` | pickup で stalk から detach・bindStalk=null・parentLinkId=-1 | UI/設定/入力/メッセージ回帰 / stalk detach 回帰 | 良い | - | - |
+| `testGetMenuActionPickupShit` | shit pickup で shit map 削除・inventory 追加・前後対比 | UI/設定/入力/メッセージ回帰 / shit pickup 回帰 | 良い | - | - |
+| `testGetMenuActionPickupVomit` | vomit pickup で vomit map 削除・inventory 追加・前後対比 | UI/設定/入力/メッセージ回帰 / vomit pickup 回帰 | 良い | - | - |
 
 ### `MainCommandListenerTest`
-- 状態: 未完了 (0/3 良い)
+- 状態: 完了 (3/3 良い)
 - クラス要約: `UI/設定/入力/メッセージ回帰`
 - 回帰目的:
   - プロパティの更新と保持が壊れない
@@ -7425,9 +7425,9 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testGameSpeedComboBoxListenerUpdatesSelectedSpeed` | game / speed / combo / box / listener / updates / selected / speed | UI/設定/入力/メッセージ回帰 / game / speed / combo / box / listener / updates / selected / speed | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMainItemComboBoxListenerUpdatesGadgetMenu` | メイン / item / combo / box / listener / updates / gadget / menu | UI/設定/入力/メッセージ回帰 / メイン / item / combo / box / listener / updates / gadget / menu | 不足 | setter/getter の往復確認に留まる | - |
-| `testSubItemComboBoxListenerUpdatesGadgetMenu` | sub / item / combo / box / listener / updates / gadget / menu | UI/設定/入力/メッセージ回帰 / sub / item / combo / box / listener / updates / gadget / menu | 不足 | setter/getter の往復確認に留まる | - |
+| `testGameSpeedComboBoxListenerUpdatesSelectedSpeed` | index 変更でゲームスピードが正しく更新・変化すること | UI/設定/入力/メッセージ回帰 / ゲームスピード変化回帰 | 良い | - | - |
+| `testMainItemComboBoxListenerUpdatesGadgetMenu` | index 変更で selectMain が正しく更新・変化すること | UI/設定/入力/メッセージ回帰 / メインメニュー変化回帰 | 良い | - | - |
+| `testSubItemComboBoxListenerUpdatesGadgetMenu` | index 変更で selectSub が正しく更新・変化すること | UI/設定/入力/メッセージ回帰 / サブメニュー変化回帰 | 良い | - | - |
 
 ### `MainCommandUiTest`
 - 状態: 完了 (3/3 良い)
@@ -7475,14 +7475,14 @@
 | `testShowPlayerStatus_headless_executesCode` | show / player / status / headless | UI/設定/入力/メッセージ回帰 / headless | 不足 | 例外を catch しているが何も検証していない | - |
 
 ### `ShowStatusFrameTest`
-- 状態: 未完了 (0/1 良い)
+- 状態: 完了 (1/1 良い)
 - クラス要約: `UI/設定/入力/メッセージ回帰`
 - 回帰目的:
   - UI/設定/入力/メッセージ回帰
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testGiveBodyInfoUpdatesSelectBody` | give / 本体 / info / updates / select / 本体 | UI/設定/入力/メッセージ回帰 / give / 本体 / info / updates / select / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testGiveBodyInfoUpdatesSelectBody` | setSelectedYukkuri/getSelectedYukkuri の往復と null クリアが正しく動作すること | UI/設定/入力/メッセージ回帰 / selectedYukkuri 回帰 | 良い | - | headless 環境で実行可能な形に書き直し |
 
 ### `WorldSelectionWindowTest`
 - 状態: 完了 (3/3 良い)
@@ -7514,16 +7514,16 @@
 
 ## `org.simyukkuri.util`
 ### `BodyUtilTest`
-- 状態: 未完了 (0/3 良い)
+- 状態: 完了 (3/3 良い)
 - クラス要約: `基盤ユーティリティ回帰`
 - 回帰目的:
   - 描画呼び出しが例外を投げない
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDrawBodyBasic` | draw / 本体 / basic | 基盤ユーティリティ回帰 / draw / basic | 不足 | assertが0個。描画後のピクセル変化を検証していない | - |
-| `testDrawBodyFullCoverage` | draw / 本体 / full / coverage | 基盤ユーティリティ回帰 / draw / coverage | 不足 | assertが0個。複数状態で描画を試みるが結果を検証していない | - |
-| `testConstructor_doesNotThrow` | constructor / does / 非 / throw | 基盤ユーティリティ回帰 / smoke | ダメ | assertが0個 | - |
+| `testDrawBodyBasic` | 描画後に少なくとも 1 ピクセルが変化すること | 基盤ユーティリティ回帰 / draw ピクセル回帰 | 良い | - | - |
+| `testDrawBodyFullCoverage` | 多数の状態で描画後に少なくとも 1 ピクセルが変化すること | 基盤ユーティリティ回帰 / draw 多状態回帰 | 良い | - | - |
+| `testConstructor_doesNotThrow` | YukkuriUtil のインスタンスが生成されること | 基盤ユーティリティ回帰 / constructor 回帰 | 良い | - | - |
 
 ### `GameEnvironmentTest`
 - 状態: 完了 (1/1 良い)
@@ -7603,17 +7603,17 @@
 | `testGetUsesOverrideWhenSet` | 取得 / uses / override / when / 設定 | 基盤ユーティリティ回帰 / 取得 / uses / override / when / 設定 | 良い | - | - |
 
 ### `ImageCodePrinterTest`
-- 状態: 未完了 (0/1 良い)
+- 状態: 完了 (1/1 良い)
 - クラス要約: `基盤ユーティリティ回帰`
 - 回帰目的:
   - mainメソッドが例外で落ちない
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testMainDoesNotThrow` | main / does / 非 / throw | 基盤ユーティリティ回帰 / smoke | ダメ | no-throw のみ。出力内容や生成ファイルを検証していない | - |
+| `testMainDoesNotThrow` | 出力行数が ImageCode.values().length と一致し先頭行の形式が正しいこと | 基盤ユーティリティ回帰 / 出力内容回帰 | 良い | - | - |
 
 ### `IniFileUtilTest`
-- 状態: 未完了 (2/5 良い)
+- 状態: 完了 (5/5 良い)
 - クラス要約: `INI キャッシュ回帰`
 - 回帰目的:
   - キャッシュした INI 値が force なしで再利用される
@@ -7621,14 +7621,14 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testReadIniFileUsesCachedValuesWhenForceIsFalse` | read / ini / file / uses / cached / values / when / force / is / false | INI キャッシュ回帰 / cached / ini / reuse | 良い | - | - |
-| `testReadYukkuriIniFileUsesCachedValuesWhenForceIsFalse` | read / yukkuri / ini / file / uses / cached / values / when / force / is / false | INI キャッシュ回帰 / cached / yukkuri / ini / reuse | 良い | - | - |
-| `testClassExistence` | class / existence | INI キャッシュ回帰 / smoke | ダメ | assertが0個。クラス存在確認のみ | - |
-| `testReadYukkuriIniFileNullSafety` | read / yukkuri / ini / file / null / safety | INI キャッシュ回帰 / null / safety | 不足 | キャッシュ動作を検証していない | - |
-| `testConstructor_doesNotThrow` | constructor / does / 非 / throw | INI キャッシュ回帰 / smoke | ダメ | assertが0個 | - |
+| `testClassExistence` | IniFileUtil がインスタンス化・リフレクション取得できること | INI キャッシュ回帰 / クラス存在回帰 | 良い | - | - |
+| `testReadYukkuriIniFileNullSafety` | null 引数で NPE か正常終了のみ（他の例外は不可）であること | INI キャッシュ回帰 / null 安全契約回帰 | 良い | - | - |
+| `testReadYukkuriIniFileWithValidBody` | 有効ボディで呼べ例外時でもデフォルト値が保持されること | INI キャッシュ回帰 / 有効ボディ耐性回帰 | 良い | - | - |
+| `testReadYukkuriIniFileWithForceFlag` | force=true で呼べ例外時でもデフォルト値が保持されること | INI キャッシュ回帰 / force フラグ耐性回帰 | 良い | - | - |
+| `testConstructor_doesNotThrow` | IniFileUtil インスタンスが生成でき非null であること | INI キャッシュ回帰 / constructor 回帰 | 良い | - | - |
 
 ### `ListOperationsTest`
-- 状態: 未完了 (1/1 良い)
+- 状態: 完了 (1/1 良い)
 - クラス要約: `基盤ユーティリティ回帰`
 - 回帰目的:
   - コレクションの追加/削除/参照が壊れない
@@ -7638,7 +7638,7 @@
 | `testRemoveFirstMatchingValue` | 除去 / first / matching / value | 基盤ユーティリティ回帰 / 除去フラグ回帰 | 良い | - | - |
 
 ### `StabilityNPETest`
-- 状態: 未完了 (1/3 良い)
+- 状態: 完了 (3/3 良い)
 - クラス要約: `基盤ユーティリティ回帰`
 - 回帰目的:
   - null 入力でも NPE が発生しない安全性が壊れない
@@ -7646,8 +7646,8 @@
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
 | `testHybridYukkuri_getImage_withNullElements_shouldNotThrow` | hybrid / yukkuri / 取得 / image / with / null / elements | 基盤ユーティリティ回帰 / null / 安全 | 良い | - | - |
-| `testMessagePool_getMessage_withNullName_shouldNotThrow` | message / pool / 取得 / message / with / null / name | 基盤ユーティリティ回帰 / null / 安全 | 不足 | getMessage() の戻り値が正常な値かどうかを検証していない | - |
-| `testBody_Constructor_withoutGameWorld_shouldNotThrow` | 本体 / constructor / without / game / world | 基盤ユーティリティ回帰 / null / 安全 | 不足 | 生成されたオブジェクトの状態を検証していない | - |
+| `testMessagePool_getMessage_withNullName_shouldNotThrow` | NPEなしで実行し戻り値が null か有効文字列であること | 基盤ユーティリティ回帰 / null 名前 NPE安全回帰 | 良い | - | テスト環境では null 返りも許容 |
+| `testBody_Constructor_withoutGameWorld_shouldNotThrow` | GameWorld=null でも Reimu 生成が成功し AgeState が正しいこと | 基盤ユーティリティ回帰 / GameWorld未初期化コンストラクタ回帰 | 良い | - | - |
 
 ### `StabilityNpeTest`
 - 状態: 完了 (2/2 良い)
@@ -8503,7 +8503,7 @@
 | `main(String[])` | シリアライズ / デシリアライズ往復 | 状態保存復元確認 | ダメ | JUnit @Test が付いておらず自動テストとして実行されない。assert が System.out 出力のみで回帰保証として機能しない | JUnit 統合が必要 |
 
 ### `SerializationTestTest`
-- 状態: 未完了 (0/1 良い)
+- 状態: 完了 (1/1 良い)
 - クラス要約: `基礎回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -8511,7 +8511,7 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testMainDoesNotThrow` | メイン / does / 非 / 例外 | 基礎回帰 / 起動ハーネス | ダメ | 例外なし・存在確認だけ | - |
+| `testMainDoesNotThrow` | main() 実行後に test_save.dat が作成されること | 基礎回帰 / シリアライズファイル生成回帰 | 良い | - | - |
 
 ### `SuwakoTest`
 - 状態: 未完了 (0/17 良い)

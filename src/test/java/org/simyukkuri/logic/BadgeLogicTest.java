@@ -43,25 +43,27 @@ public class BadgeLogicTest {
     @Test
     public void testBadgeTestNullBody() {
         boolean result = BadgeLogic.badgeTest(null);
-        assertFalse(result, "badgeTest should return false for null body");
+        assertFalse(result, "badgeTest(null) は false を返すこと");
     }
 
     @Test
     public void testBadgeTestDeadBody() {
         Reimu dead = new Reimu();
         dead.setDead(true);
-
         boolean result = BadgeLogic.badgeTest(dead);
-        assertFalse(result, "badgeTest should return false for dead body");
+        assertFalse(result, "dead body には badgeTest が false を返すこと");
+        // 死亡ゆっくりにはバッジが付かないこと
+        assertEquals(0, dead.getAttachmentSize(Badge.class), "dead body にはバッジが付かないこと");
     }
 
     @Test
     public void testBadgeTestRemovedBody() {
         Reimu removed = new Reimu();
         removed.setRemoved(true);
-
         boolean result = BadgeLogic.badgeTest(removed);
-        assertFalse(result, "badgeTest should return false for removed body");
+        assertFalse(result, "removed body には badgeTest が false を返すこと");
+        // 除去済みゆっくりにはバッジが付かないこと
+        assertEquals(0, removed.getAttachmentSize(Badge.class), "removed body にはバッジが付かないこと");
     }
 
     // Non-Kaiyu Tests    // Note: Yukkuri doesn't have setRank/setIdiot setters
@@ -72,80 +74,91 @@ public class BadgeLogicTest {
     @Test
     public void testVeryNiceWiseGetsGold() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.VERY_NICE, Intelligence.WISE);
-        assertTrue(BadgeLogic.badgeTest(yukkuri));
-        assertEquals(Badge.BadgeRank.GOLD, getBadgeRank(yukkuri));
+        assertTrue(BadgeLogic.badgeTest(yukkuri), "badgeTest は true を返すこと");
+        assertEquals(Badge.BadgeRank.GOLD, getBadgeRank(yukkuri), "VERY_NICE + WISE = GOLD");
+        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "バッジが 1 つ付いていること");
     }
 
     @Test
     public void testVeryNiceAverageGetsSilver() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.VERY_NICE, Intelligence.AVERAGE);
-        assertTrue(BadgeLogic.badgeTest(yukkuri));
-        assertEquals(Badge.BadgeRank.SILVER, getBadgeRank(yukkuri));
+        assertTrue(BadgeLogic.badgeTest(yukkuri), "badgeTest は true を返すこと");
+        assertEquals(Badge.BadgeRank.SILVER, getBadgeRank(yukkuri), "VERY_NICE + AVERAGE = SILVER");
+        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "バッジが 1 つ付いていること");
     }
 
     @Test
     public void testVeryNiceFoolGetsBronze() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.VERY_NICE, Intelligence.FOOL);
-        assertTrue(BadgeLogic.badgeTest(yukkuri));
-        assertEquals(Badge.BadgeRank.BRONZE, getBadgeRank(yukkuri));
+        assertTrue(BadgeLogic.badgeTest(yukkuri), "badgeTest は true を返すこと");
+        assertEquals(Badge.BadgeRank.BRONZE, getBadgeRank(yukkuri), "VERY_NICE + FOOL = BRONZE");
+        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "バッジが 1 つ付いていること");
     }
 
     @Test
     public void testNiceWiseGetsGold() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.NICE, Intelligence.WISE);
-        assertTrue(BadgeLogic.badgeTest(yukkuri));
-        assertEquals(Badge.BadgeRank.GOLD, getBadgeRank(yukkuri));
+        assertTrue(BadgeLogic.badgeTest(yukkuri), "badgeTest は true を返すこと");
+        assertEquals(Badge.BadgeRank.GOLD, getBadgeRank(yukkuri), "NICE + WISE = GOLD");
+        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "バッジが 1 つ付いていること");
     }
 
     @Test
     public void testNiceAverageGetsSilver() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.NICE, Intelligence.AVERAGE);
-        assertTrue(BadgeLogic.badgeTest(yukkuri));
-        assertEquals(Badge.BadgeRank.SILVER, getBadgeRank(yukkuri));
+        assertTrue(BadgeLogic.badgeTest(yukkuri), "badgeTest は true を返すこと");
+        assertEquals(Badge.BadgeRank.SILVER, getBadgeRank(yukkuri), "NICE + AVERAGE = SILVER");
+        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "バッジが 1 つ付いていること");
     }
 
     @Test
     public void testAverageWiseGetsSilver() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.AVERAGE, Intelligence.WISE);
-        assertTrue(BadgeLogic.badgeTest(yukkuri));
-        assertEquals(Badge.BadgeRank.SILVER, getBadgeRank(yukkuri));
+        assertTrue(BadgeLogic.badgeTest(yukkuri), "badgeTest は true を返すこと");
+        assertEquals(Badge.BadgeRank.SILVER, getBadgeRank(yukkuri), "AVERAGE + WISE = SILVER");
+        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "バッジが 1 つ付いていること");
     }
 
     @Test
     public void testAverageFoolGetsBronze() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.AVERAGE, Intelligence.FOOL);
-        assertTrue(BadgeLogic.badgeTest(yukkuri));
-        assertEquals(Badge.BadgeRank.BRONZE, getBadgeRank(yukkuri));
+        assertTrue(BadgeLogic.badgeTest(yukkuri), "badgeTest は true を返すこと");
+        assertEquals(Badge.BadgeRank.BRONZE, getBadgeRank(yukkuri), "AVERAGE + FOOL = BRONZE");
+        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "バッジが 1 つ付いていること");
     }
 
     @Test
     public void testShitheadWiseGetsBronze() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.SHITHEAD, Intelligence.WISE);
-        assertTrue(BadgeLogic.badgeTest(yukkuri));
-        assertEquals(Badge.BadgeRank.BRONZE, getBadgeRank(yukkuri));
+        assertTrue(BadgeLogic.badgeTest(yukkuri), "badgeTest は true を返すこと");
+        assertEquals(Badge.BadgeRank.BRONZE, getBadgeRank(yukkuri), "SHITHEAD + WISE = BRONZE");
+        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "バッジが 1 つ付いていること");
     }
 
     @Test
     public void testSuperShitheadFoolGetsFake() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.SUPER_SHITHEAD, Intelligence.FOOL);
-        assertTrue(BadgeLogic.badgeTest(yukkuri));
-        assertEquals(Badge.BadgeRank.FAKE, getBadgeRank(yukkuri));
+        assertTrue(BadgeLogic.badgeTest(yukkuri), "badgeTest は true を返すこと");
+        assertEquals(Badge.BadgeRank.FAKE, getBadgeRank(yukkuri), "SUPER_SHITHEAD + FOOL = FAKE");
+        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "バッジが 1 つ付いていること");
     }
 
     @Test
     public void testStrayFoolGetsFake() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.AVERAGE, Intelligence.FOOL);
         yukkuri.setRank(YukkuriRank.NORAYU);
-        assertTrue(BadgeLogic.badgeTest(yukkuri));
-        assertEquals(Badge.BadgeRank.FAKE, getBadgeRank(yukkuri));
+        assertTrue(BadgeLogic.badgeTest(yukkuri), "badgeTest は true を返すこと");
+        assertEquals(Badge.BadgeRank.FAKE, getBadgeRank(yukkuri), "NORAYU = FAKE");
+        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "バッジが 1 つ付いていること");
     }
 
     @Test
     public void testIdiotGetsFake() {
         org.simyukkuri.entity.core.living.yukkuri.impl.Tarinai yukkuri = createKaiyuTarinai();
         yukkuri.setRank(YukkuriRank.KAIYU);
-        assertTrue(BadgeLogic.badgeTest(yukkuri));
-        assertEquals(Badge.BadgeRank.FAKE, getBadgeRank(yukkuri));
+        assertTrue(BadgeLogic.badgeTest(yukkuri), "badgeTest は true を返すこと");
+        assertEquals(Badge.BadgeRank.FAKE, getBadgeRank(yukkuri), "idiot = FAKE");
+        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "バッジが 1 つ付いていること");
     }
 
     // Badge Attachment Tests
@@ -153,18 +166,15 @@ public class BadgeLogicTest {
     public void testBadgeReplacesExisting() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.VERY_NICE, Intelligence.WISE);
 
-        // First badge test - should add badge
-        boolean result1 = BadgeLogic.badgeTest(yukkuri);
-        assertTrue(result1, "First badgeTest should succeed");
-        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "Should have 1 badge");
+        // 1回目: バッジが付くこと
+        assertTrue(BadgeLogic.badgeTest(yukkuri), "1回目の badgeTest は true を返すこと");
+        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "1回目後はバッジが 1 つあること");
+        assertEquals(Badge.BadgeRank.GOLD, getBadgeRank(yukkuri), "1回目後は GOLD バッジであること");
 
-        // Second badge test - should remove existing badge
-        boolean result2 = BadgeLogic.badgeTest(yukkuri);
-        assertTrue(result2, "Second badgeTest should succeed");
-        assertEquals(
-                0,
-                yukkuri.getAttachmentSize(Badge.class),
-                "Badge should be removed on second test");
+        // 2回目: 既存バッジが除去されること（交換ロジック）
+        assertTrue(BadgeLogic.badgeTest(yukkuri), "2回目の badgeTest は true を返すこと");
+        assertEquals(0, yukkuri.getAttachmentSize(Badge.class),
+                "2回目後は既存バッジが除去されること（badge replaces existing）");
     }
 
     // Helper Methods

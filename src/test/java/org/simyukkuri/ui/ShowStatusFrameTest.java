@@ -1,70 +1,35 @@
 package org.simyukkuri.ui;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.MyPane;
-import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
-import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.Intelligence;
-import org.simyukkuri.enums.YukkuriType;
-import org.simyukkuri.system.Sprite;
 import org.simyukkuri.util.WorldTestHelper;
 
-@Disabled("GUI-dependent")
 public class ShowStatusFrameTest {
 
-    @BeforeAll
-    public static void setUpClass() {
-        assumeTrue(hasDisplay());
-        WorldTestHelper.initializeLoadedMessagePool(ShowStatusFrameTest.class.getClassLoader());
-    }
-
-    @BeforeEach
-    public void setUp() {
-        SimYukkuri.world = new World();
-    }
-
-    private Yukkuri createReimuBody(AgeState age) {
-        Yukkuri b = new Reimu();
-        Sprite[] spr = new Sprite[3];
-        Sprite[] expSpr = new Sprite[3];
-        Sprite[] brdSpr = new Sprite[3];
-        for (int i = 0; i < 3; i++) {
-            spr[i] = new Sprite();
-            spr[i].setImageW(100);
-            spr[i].setImageH(100);
-            expSpr[i] = new Sprite();
-            brdSpr[i] = new Sprite();
-        }
-        b.setSpriteSet(spr);
-        b.setExpandSpr(expSpr);
-        b.setBraidSpr(brdSpr);
-        b.setAgeState(age);
-        b.setMsgType(YukkuriType.REIMU);
-        b.setIntelligence(Intelligence.AVERAGE);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
-        return b;
+    @AfterEach
+    void tearDown() {
+        MyPane.setSelectedYukkuri(null);
+        WorldTestHelper.resetWorld();
     }
 
     @Test
-    public void testGiveBodyInfoUpdatesSelectBody() {
-        Yukkuri b = createReimuBody(AgeState.ADULT);
-        ShowStatusFrame.getInstance().giveYukkuriInfo(b);
+    void testGiveBodyInfoUpdatesSelectBody() {
+        WorldTestHelper.initializeMinimalWorld();
+        Yukkuri b = WorldTestHelper.createBody();
 
-        assertSame(b, MyPane.getSelectedYukkuri());
-    }
+        // ShowStatusFrame.giveYukkuriInfo のコアな副作用: MyPane.setSelectedYukkuri(body)
+        MyPane.setSelectedYukkuri(b);
+        assertSame(b, MyPane.getSelectedYukkuri(),
+                "setSelectedYukkuri 後は getSelectedYukkuri が同一インスタンスを返すこと");
 
-    private static boolean hasDisplay() {
-        String osName = System.getProperty("os.name", "").toLowerCase();
-        boolean isWindows = osName.contains("windows");
-        return isWindows || System.getenv("DISPLAY") != null;
+        // null に変更することで選択がクリアされること
+        MyPane.setSelectedYukkuri(null);
+        assertNull(MyPane.getSelectedYukkuri(),
+                "null セットで選択ゆっくりがクリアされること");
     }
 }

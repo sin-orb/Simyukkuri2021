@@ -2,6 +2,8 @@ package org.simyukkuri.util;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -59,9 +61,15 @@ public class StabilityNPETest {
         };
 
         // getMessage 内で name.isEmpty() が呼ばれて NPE にならないことを検証
+        // テスト環境ではメッセージプールが未ロードのため null が返ることも許容される
+        // ただし NPE を投げないこと（実際の回帰保証）
+        String[] result = new String[1];
         assertDoesNotThrow(() -> {
-            MessagePool.getMessage(glitchyBody, MessagePool.Action.Birth);
+            result[0] = MessagePool.getMessage(glitchyBody, MessagePool.Action.Birth);
         });
+        // 戻り値は null か、非空文字列のいずれかであること（無効な文字列は返さないこと）
+        assertTrue(result[0] == null || !result[0].isEmpty(),
+                "getMessage の戻り値は null か空でない文字列であること");
     }
 
     /**
@@ -72,8 +80,12 @@ public class StabilityNPETest {
         // GameWorld.get() が null の状態を確実にする
         GameWorld.set(null);
 
+        Reimu[] created = new Reimu[1];
         assertDoesNotThrow(() -> {
-            new Reimu(0, 0, 0, AgeState.BABY, null, null);
+            created[0] = new Reimu(0, 0, 0, AgeState.BABY, null, null);
         });
+        assertNotNull(created[0], "GameWorld=null でも Reimu インスタンスが生成されること");
+        assertEquals(AgeState.BABY, created[0].getAgeState(),
+                "生成された Reimu のAgeStateが BABY であること");
     }
 }

@@ -55,10 +55,14 @@ public class ItemListenerTest {
         MainCommandUi.getGameSpeedCombo().setSelectedIndex(1);
 
         action.popupMenuWillBecomeVisible(null);
-        assertEquals(0, MainCommandUi.getGameSpeedCombo().getSelectedIndex());
+        assertEquals(0, MainCommandUi.getGameSpeedCombo().getSelectedIndex(),
+                "popup visible でスピードが 0 になること");
 
         action.popupMenuWillBecomeInvisible(null);
-        assertEquals(1, MainCommandUi.getGameSpeedCombo().getSelectedIndex());
+        assertEquals(1, MainCommandUi.getGameSpeedCombo().getSelectedIndex(),
+                "popup invisible でスピードが元の index に戻ること");
+        assertEquals(1, MainCommandUi.getSelectedGameSpeed(),
+                "popup invisible で selectedGameSpeed も元の値に戻ること");
     }
 
     @Test
@@ -68,15 +72,21 @@ public class ItemListenerTest {
         SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         ItemMenu.setGetTarget(b);
 
+        // pickup 前の状態確認
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().containsKey(b.getUniqueId()),
+                "pickup 前は registry に存在すること");
+
         ItemGetMenuAction action = new ItemGetMenuAction();
         ActionEvent e = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, GetMenu.PICKUP.name());
-
         action.actionPerformed(e);
 
-        assertFalse(SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().containsKey(b.getUniqueId()));
-        assertTrue(SimYukkuri.world.getPlayer().getInventoryView().contains(b));
-        assertTrue(b.isTaken());
-        assertNull(ItemMenu.getGetTarget());
+        // pickup 後の状態確認
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().containsKey(b.getUniqueId()),
+                "pickup 後は registry から除去されること");
+        assertTrue(SimYukkuri.world.getPlayer().getInventoryView().contains(b),
+                "pickup 後は inventory に追加されること");
+        assertTrue(b.isTaken(), "pickup 後は isTaken=true");
+        assertNull(ItemMenu.getGetTarget(), "pickup 後は getTarget が null になること");
     }
 
     @Test
@@ -90,16 +100,21 @@ public class ItemListenerTest {
         SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
         ItemMenu.setGetTarget(b);
 
+        // pickup 前の状態確認
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().containsKey(b.getUniqueId()),
+                "pickup 前は registry に存在すること");
+
         ItemGetMenuAction action = new ItemGetMenuAction();
         ActionEvent e = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, GetMenu.PICKUP.name());
-
         action.actionPerformed(e);
 
-        assertFalse(SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().containsKey(b.getUniqueId()));
+        // pickup 後の状態確認
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().containsKey(b.getUniqueId()),
+                "pickup 後は registry から除去されること");
         assertTrue(SimYukkuri.world.getPlayer().getInventoryView().contains(b));
         assertTrue(b.isTaken());
-        assertNull(b.getBindStalk());
-        assertEquals(-1, b.getParentLinkId());
+        assertNull(b.getBindStalk(), "pickup 後は bindStalk が null になること");
+        assertEquals(-1, b.getParentLinkId(), "pickup 後は parentLinkId が -1 になること");
         assertNull(stalk.getAttachedBabyIds().get(0));
         assertNull(ItemMenu.getGetTarget());
     }
@@ -110,13 +125,15 @@ public class ItemListenerTest {
         s.setObjId(org.simyukkuri.enums.Numbering.INSTANCE.numberingObjId());
         SimYukkuri.world.getCurrentWorldState().getShit().put(s.objId, s);
         ItemMenu.setGetTarget(s);
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getShit().containsKey(s.objId),
+                "pickup 前は shit map に存在すること");
 
         ItemGetMenuAction action = new ItemGetMenuAction();
         ActionEvent e = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, GetMenu.PICKUP.name());
-
         action.actionPerformed(e);
 
-        assertFalse(SimYukkuri.world.getCurrentWorldState().getShit().containsKey(s.objId));
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getShit().containsKey(s.objId),
+                "pickup 後は shit map から除去されること");
         assertTrue(SimYukkuri.world.getPlayer().getInventoryView().contains(s));
         assertNull(ItemMenu.getGetTarget());
     }
@@ -127,13 +144,15 @@ public class ItemListenerTest {
         v.setObjId(org.simyukkuri.enums.Numbering.INSTANCE.numberingObjId());
         SimYukkuri.world.getCurrentWorldState().getVomit().put(v.objId, v);
         ItemMenu.setGetTarget(v);
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getVomit().containsKey(v.objId),
+                "pickup 前は vomit map に存在すること");
 
         ItemGetMenuAction action = new ItemGetMenuAction();
         ActionEvent e = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, GetMenu.PICKUP.name());
-
         action.actionPerformed(e);
 
-        assertFalse(SimYukkuri.world.getCurrentWorldState().getVomit().containsKey(v.objId));
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getVomit().containsKey(v.objId),
+                "pickup 後は vomit map から除去されること");
         assertTrue(SimYukkuri.world.getPlayer().getInventoryView().contains(v));
         assertNull(ItemMenu.getGetTarget());
     }

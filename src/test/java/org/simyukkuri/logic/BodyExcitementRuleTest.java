@@ -1,6 +1,5 @@
 package org.simyukkuri.logic;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -39,8 +38,10 @@ class BodyExcitementRuleTest {
 		you.setRaper(false);
 		SimYukkuri.RND = new ConstState(0);
 
-		assertDoesNotThrow(() -> assertTrue(YukkuriExcitementRule.handleExcitingContact(you, me)));
-		assertFalse(me.isToYukkuri(), "rape branch should consume the contact action without switching targets");
+		assertTrue(YukkuriExcitementRule.handleExcitingContact(you, me),
+				"raper ブランチは true を返すこと");
+		assertFalse(me.isToYukkuri(), "rape ブランチはターゲット切替なしでアクションを消費すること");
+		assertTrue(me.isSukkiri(), "doRape により me が sukkiri 状態になること");
 	}
 
 	@Test
@@ -49,6 +50,9 @@ class BodyExcitementRuleTest {
 		SimYukkuri.world.getCurrentWorldState().getEvents().clear();
 		Yukkuri me = WorldTestHelper.createBody();
 		Yukkuri you = WorldTestHelper.createBody();
+		// isPartner() は yukkuriRegistry 経由で解決するため登録が必要
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(me.getUniqueId(), me);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(you.getUniqueId(), you);
 		me.setSpriteSet(makeSprites(1, 1));
 		you.setSpriteSet(makeSprites(1, 1));
 		me.setX(100);
@@ -66,7 +70,9 @@ class BodyExcitementRuleTest {
 		me.setPartner(you.getUniqueId());
 		you.setPartner(me.getUniqueId());
 
-		assertDoesNotThrow(() -> assertTrue(YukkuriExcitementRule.handleExcitingContact(you, me)));
+		assertTrue(YukkuriExcitementRule.handleExcitingContact(you, me),
+				"パートナーとの接触で true を返すこと");
+		assertTrue(me.isSukkiri(), "doSukkiri により me が sukkiri 状態になること");
 	}
 
 	@Test
@@ -89,8 +95,9 @@ class BodyExcitementRuleTest {
 		me.setForceExciting(true);
 		me.setRaper(false);
 
-		assertDoesNotThrow(() -> assertFalse(YukkuriExcitementRule.handleExcitingContact(you, me)));
-		assertTrue(me.isSukkiri(), "force exciting should still trigger sukkiri side effect");
+		assertFalse(YukkuriExcitementRule.handleExcitingContact(you, me),
+				"BABY 相手で forceExciting ブランチは false を返すこと");
+		assertTrue(me.isSukkiri(), "forceExciting ブランチでも doSukkiri によりすっきり状態になること");
 	}
 
 	private static Sprite[] makeSprites(int w, int h) {

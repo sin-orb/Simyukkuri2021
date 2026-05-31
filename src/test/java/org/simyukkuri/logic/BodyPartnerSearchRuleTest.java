@@ -1,6 +1,7 @@
 package org.simyukkuri.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.AfterEach;
@@ -58,7 +59,10 @@ class BodyPartnerSearchRuleTest {
 				me.getEyesightBase(),
 				me.getEyesightBase());
 		assertNotNull(result);
-		assertEquals(pheromone, result.getTargetBody());
+		assertEquals(pheromone, result.getTargetBody(),
+				"フェロモン持ちが優先して選択されること");
+		assertNotEquals(closer, result.getTargetBody(),
+				"より近い non-pheromone 相手は選択されないこと");
 	}
 
 	@Test
@@ -80,7 +84,10 @@ class BodyPartnerSearchRuleTest {
 				me.getEyesightBase(),
 				me.getEyesightBase());
 		assertNotNull(result);
-		assertEquals(target, result.getTargetHasOkazari());
+		assertEquals(target, result.getTargetHasOkazari(),
+				"ゲスは okazari 持ちの相手を候補として記録すること");
+		assertNotEquals(me, result.getTargetHasOkazari(),
+				"自身は okazari 候補に選ばれないこと");
 	}
 
 	@Test
@@ -109,6 +116,9 @@ class BodyPartnerSearchRuleTest {
 				me.getEyesightBase(),
 				me.getEyesightBase());
 		assertNotNull(result);
-		assertEquals(normal, result.getTargetBody());
+		assertEquals(normal, result.getTargetBody(),
+				"捕食者の従者は通常ゆっくりを選択すること");
+		assertNotEquals(predator, result.getTargetBody(),
+				"捕食者の従者は捕食者をスキップすること");
 	}
 }

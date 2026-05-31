@@ -36,42 +36,52 @@ class BodyEventStateTest {
 
 		YukkuriEventState.clearActions(body);
 
-		assertFalse(body.isToSukkiri());
-		assertFalse(body.isToBed());
-		assertFalse(body.isToFood());
-		assertFalse(body.isToShit());
-		assertFalse(body.isToYukkuri());
-		assertFalse(body.isToSteal());
-		assertEquals(-1, body.getMoveTargetId());
+		assertFalse(body.isToSukkiri(),   "clearActions 後は toSukkiri=false");
+		assertFalse(body.isToBed(),       "clearActions 後は toBed=false");
+		assertFalse(body.isToFood(),      "clearActions 後は toFood=false");
+		assertFalse(body.isToShit(),      "clearActions 後は toShit=false");
+		assertFalse(body.isToYukkuri(),   "clearActions 後は toYukkuri=false");
+		assertFalse(body.isToSteal(),     "clearActions 後は toSteal=false");
+		assertEquals(-1, body.getMoveTargetId(), "clearActions 後は moveTargetId=-1");
 	}
 
 	@Test
 	void clearEventResetsCurrentEventAndForceFace() {
+		// currentEvent を非null に設定してから clearEvent でクリアされることを確認
+		TrackingEventPacket event = new TrackingEventPacket();
+		body.setCurrentEvent(event);
 		body.setForceFace(5);
-		body.setCurrentEvent(null);
+
+		assertSame(event, body.getCurrentEvent(), "clearEvent 前は currentEvent が設定されていること");
+		assertEquals(5, body.getForceFace(), "clearEvent 前は forceFace=5");
 
 		YukkuriEventState.clearEvent(body);
 
-		assertNull(body.getCurrentEvent());
-		assertEquals(-1, body.getForceFace());
+		assertNull(body.getCurrentEvent(), "clearEvent 後は currentEvent=null");
+		assertEquals(-1, body.getForceFace(), "clearEvent 後は forceFace=-1");
 	}
 
 	@Test
 	void setMessageIgnoresEmptyString() {
 		body.setMessageTicks(0);
-
+		// 空文字列では messageTicks が変化しないこと
 		YukkuriEventState.setMessage(body, "");
+		assertEquals(0, body.getMessageTicks(), "空文字列では messageTicks は変化しないこと");
 
-		assertEquals(0, body.getMessageTicks());
+		// 対比: 非空文字列では messageTicks が変化すること
+		YukkuriEventState.setMessage(body, "hello");
+		assertTrue(body.getMessageTicks() > 0, "非空文字列では messageTicks が増加すること");
 	}
 
 	@Test
 	void setPikoMessageWithCountUpdatesMessageCount() {
 		body.setMessageTicks(0);
+		int before = body.getMessageTicks();
 
 		YukkuriEventState.setPikoMessage(body, "hi", 3, true);
 
-		assertEquals(3, body.getMessageTicks());
+		assertEquals(3, body.getMessageTicks(), "setPikoMessage(count=3) で messageTicks=3 になること");
+		assertTrue(body.getMessageTicks() > before, "setPikoMessage で messageTicks が増加すること");
 	}
 
 	@Test
@@ -83,10 +93,11 @@ class BodyEventStateTest {
 
 		YukkuriEventState.processPendingEvents(body);
 
-		assertSame(bodyEvent, body.getCurrentEvent());
-		assertTrue(bodyEvent.started);
-		assertFalse(worldEvent.started);
-		assertEquals(0, body.getEvents().size());
+		assertSame(bodyEvent, body.getCurrentEvent(),   "body イベントが先に処理されること");
+		assertTrue(bodyEvent.started,                  "body イベントが start されること");
+		assertFalse(worldEvent.started,                "world イベントはまだ start されないこと");
+		assertEquals(0, body.getEvents().size(),       "処理後 body.events が空になること");
+		assertFalse(bodyEvent.ended,                   "start されただけで end はされないこと");
 	}
 
 	@Test
@@ -101,10 +112,11 @@ class BodyEventStateTest {
 
 		YukkuriEventState.processPendingEvents(body);
 
-		assertNull(body.getCurrentEvent());
-		assertTrue(bodyEvent.simpleActionCalled);
-		assertTrue(worldEvent.simpleActionCalled);
-		assertEquals(0, body.getEvents().size());
+		assertNull(body.getCurrentEvent(),              "レスポンス無効時は currentEvent が null のまま");
+		assertTrue(bodyEvent.simpleActionCalled,        "body の simple event が処理されること");
+		assertTrue(worldEvent.simpleActionCalled,       "world の simple event が処理されること");
+		assertEquals(0, body.getEvents().size(),        "処理後 body.events が空になること");
+		assertFalse(bodyEvent.started,                  "simple event は start されないこと");
 	}
 
 	@Test
@@ -112,10 +124,11 @@ class BodyEventStateTest {
 		body.setCurrentEvent(new TrackingEventPacket(EventPacket.EventPriority.LOW));
 		body.setEventResult(TickResult.SHIT);
 
+		// fallback=NONE のとき LOW 優先度のイベント結果で上書きされること
 		TickResult result = YukkuriEventState.resolveEventResultAction(body, TickResult.NONE);
 
-		assertEquals(TickResult.SHIT, result);
-		assertEquals(TickResult.NONE, body.getEventResult());
+		assertEquals(TickResult.SHIT, result,         "fallback=NONE のとき eventResult(SHIT) が返ること");
+		assertEquals(TickResult.NONE, body.getEventResult(), "消費後は eventResult が NONE にクリアされること");
 	}
 
 	@Test
@@ -134,10 +147,11 @@ class BodyEventStateTest {
 		body.setCurrentEvent(new TrackingEventPacket(EventPacket.EventPriority.HIGH));
 		body.setEventResult(TickResult.SHIT);
 
+		// HIGH 優先度: fallback(BIRTH)があっても eventResult(SHIT) が優先されること
 		TickResult result = YukkuriEventState.resolveEventResultAction(body, TickResult.BIRTH);
 
-		assertEquals(TickResult.SHIT, result);
-		assertEquals(TickResult.NONE, body.getEventResult());
+		assertEquals(TickResult.SHIT, result,         "HIGH 優先度では fallback(BIRTH) より eventResult(SHIT) が返ること");
+		assertEquals(TickResult.NONE, body.getEventResult(), "消費後は eventResult が NONE にクリアされること");
 	}
 
 	@Test
@@ -165,9 +179,10 @@ class BodyEventStateTest {
 
 		YukkuriEventState.updateCurrentEvent(body);
 
-		assertTrue(event.executed);
-		assertTrue(event.ended);
-		assertNull(body.getCurrentEvent());
+		assertTrue(event.executed,              "目標到達で execute が呼ばれること");
+		assertTrue(event.ended,                 "execute 後に end が呼ばれること");
+		assertNull(body.getCurrentEvent(),      "end 後は currentEvent が null になること");
+		assertFalse(event.started,              "update→execute の流れで start は呼ばれないこと");
 	}
 
 	@Test

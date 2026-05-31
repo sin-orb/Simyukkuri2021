@@ -31,23 +31,40 @@ class BodyIllnessRuleTest {
 	@Test
 	void wiseBodyRecognizesNormalSickness() {
 		self.setIntelligence(Intelligence.WISE);
-		target.forceSetSick();
+		// 軽症（isSick=true, isSickHeavily=false）でも WISE は見抜けること
+		target.setSickPeriod(target.getIncubationPeriodBase() + 1);
+		assertTrue(target.isSick(),       "軽症状態の確認");
+		assertFalse(target.isSickHeavily(), "重症ではないことの確認");
 
-		assertTrue(YukkuriIllnessRule.findSick(self, target));
+		assertTrue(YukkuriIllnessRule.findSick(self, target),
+				"WISE は軽症でも病気を見抜くこと");
 	}
 
 	@Test
 	void foolBodyRequiresSevereSickness() {
 		self.setIntelligence(Intelligence.FOOL);
-		target.forceSetSick();
 
-		assertTrue(YukkuriIllnessRule.findSick(self, target));
+		// 軽症では FOOL は見抜けない
+		target.setSickPeriod(target.getIncubationPeriodBase() + 1);
+		assertFalse(YukkuriIllnessRule.findSick(self, target),
+				"FOOL は軽症（isSickHeavily=false）では病気を見抜けないこと");
+
+		// 重症（forceSetSick）なら FOOL も見抜ける
+		target.forceSetSick();
+		assertTrue(target.isSickHeavily(), "forceSetSick で重症になることの確認");
+		assertTrue(YukkuriIllnessRule.findSick(self, target),
+				"FOOL も重症（isSickHeavily=true）なら病気を見抜くこと");
 	}
 
 	@Test
 	void healthyTargetIsIgnored() {
+		// 健康な target はいずれの Intelligence でも false
 		self.setIntelligence(Intelligence.AVERAGE);
+		assertFalse(YukkuriIllnessRule.findSick(self, target),
+				"健康な target は AVERAGE に無視されること");
 
-		assertFalse(YukkuriIllnessRule.findSick(self, target));
+		self.setIntelligence(Intelligence.WISE);
+		assertFalse(YukkuriIllnessRule.findSick(self, target),
+				"健康な target は WISE にも無視されること");
 	}
 }

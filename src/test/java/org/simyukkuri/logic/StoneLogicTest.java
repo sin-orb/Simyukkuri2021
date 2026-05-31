@@ -2,6 +2,7 @@ package org.simyukkuri.logic;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -47,23 +48,29 @@ public class StoneLogicTest {
 
     @Test
     public void testCheckPubbleNullBody() {
-        StoneLogic.checkPubble(null);
-        assertTrue(true, "checkPubble should handle null body gracefully");
+        // null body で NPE にならないこと（事前に body=null）
+        assertDoesNotThrow(() -> StoneLogic.checkPubble(null),
+                "checkPubble(null) が例外を投げないこと");
     }
 
     @Test
     public void testCheckPubbleCutBody() {
         Reimu cut = new Reimu();
         cut.setCriticalDamege(CriticalDamageType.CUT);
-        StoneLogic.checkPubble(cut);
-        assertTrue(true, "checkPubble should handle cut body gracefully");
+        assertDoesNotThrow(() -> StoneLogic.checkPubble(cut),
+                "CUT状態の body で checkPubble が例外を投げないこと");
+        // CUT状態のbodyは早期リターンのためcriticalDamageが変化しないこと
+        assertEquals(CriticalDamageType.CUT, cut.getCriticalDamege(),
+                "CUT状態は checkPubble 後も CUT のままであること");
     }
 
     @Test
     public void testCheckPubbleNoStones() {
         Yukkuri b = createAdultBody(100, 100);
         // no stones in world → loop has no iterations
-        assertDoesNotThrow(() -> StoneLogic.checkPubble(b));
+        StoneLogic.checkPubble(b);
+        // 石なしならダメージを受けないこと
+        assertNull(b.getCriticalDamege(), "石がない場合は criticalDamage が null のままであること");
     }
 
     @Test
@@ -71,7 +78,9 @@ public class StoneLogicTest {
         Yukkuri b = createAdultBody(100, 100);
         // Stone far away (distance=500) → neither branch fires
         new Stone(600, 100, 0);
-        assertDoesNotThrow(() -> StoneLogic.checkPubble(b));
+        StoneLogic.checkPubble(b);
+        // 遠い石ではダメージを受けないこと
+        assertNull(b.getCriticalDamege(), "遠距離の石では criticalDamage が null のままであること");
     }
 
     @Test
@@ -79,7 +88,9 @@ public class StoneLogicTest {
         Yukkuri b = createAdultBody(100, 100);
         b.setZ(1); // stone at Z=0, body at Z=1 → skip
         new Stone(100, 100, 0); // stone at same position
-        assertDoesNotThrow(() -> StoneLogic.checkPubble(b));
+        StoneLogic.checkPubble(b);
+        // 異なるZ層の石はスキップされるためダメージを受けないこと
+        assertNull(b.getCriticalDamege(), "異なるZ層の石では criticalDamage が null のままであること");
     }
 
     @Test
@@ -98,16 +109,19 @@ public class StoneLogicTest {
     @Test
     public void testCheckPubble_wiseBody_runsAway() {
         // ADULT WISE body at moderate distance → runAway() called
+        // distance=(104-100)^2=16: stepDist=16, 16<=16 (not injure); stepDist*3=48>16 && WISE → runAway
         Yukkuri b = createAdultBody(100, 100);
         b.setIntelligence(Intelligence.WISE);
-        // distance ~ 25 (100+25=125): getStepDist()=16, 16<=25 but 48>25 → WISE runAway
-        new Stone(125, 100, 0);
-        assertDoesNotThrow(() -> StoneLogic.checkPubble(b));
+        new Stone(104, 100, 0);
+        StoneLogic.checkPubble(b);
+        // runAway が呼ばれた場合、body が scared になること
+        assertTrue(b.isScare(), "WISE body が適切な距離の石を検知して scared 状態になること");
     }
 
     @Test
     public void testConstructor_doesNotThrow() {
-        assertDoesNotThrow(() -> new StoneLogic());
+        StoneLogic instance = new StoneLogic();
+        assertNotNull(instance, "StoneLogic インスタンスが生成されること");
     }
 
     // ========== 追加テスト ==========
@@ -147,8 +161,11 @@ public class StoneLogicTest {
         Yukkuri b = createAdultBody(100, 100);
         b.setIntelligence(Intelligence.WISE);
         new Stone(104, 100, 0); // distance=(104-100)^2=16; auto-registers
-        assertDoesNotThrow(() -> StoneLogic.checkPubble(b));
-        // runAway is called (no exception expected)
+        StoneLogic.checkPubble(b);
+        // runAway が呼ばれた場合、body が scared 状態になること
+        assertTrue(b.isScare(), "WISE body が中間距離の石を検知して scared 状態になること");
+        // ダメージは受けないこと
+        assertNull(b.getCriticalDamege(), "runAway 分岐ではダメージを受けないこと");
     }
 
     // --- stepDist*3>distance but non-WISE → skip (line 46 A=true B=false branch)
@@ -169,11 +186,13 @@ public class StoneLogicTest {
 
     @Test
     public void testCheckPubbleMethodExists() {
+        // checkPubble メソッドが存在し引数型が正しいこと
         try {
-            StoneLogic.class.getDeclaredMethod("checkPubble", Yukkuri.class);
-            assertTrue(true, "checkPubble method exists");
+            java.lang.reflect.Method m = StoneLogic.class.getDeclaredMethod("checkPubble", Yukkuri.class);
+            assertNotNull(m, "checkPubble メソッドが存在すること");
+            assertEquals(void.class, m.getReturnType(), "checkPubble の戻り型が void であること");
         } catch (NoSuchMethodException e) {
-            fail("checkPubble method should exist");
+            fail("checkPubble(Yukkuri) メソッドが存在すること");
         }
     }
 

@@ -37,14 +37,16 @@ public class BodyLayerTest {
 
 		layer.clear();
 
-		assertNull(images[0]);
-		assertNull(images[1]);
-		assertNull(images[2]);
-		assertEquals(0, dirs[0]);
-		assertEquals(0, dirs[1]);
-		assertEquals(0, dirs[2]);
-		assertEquals(0, options[0]);
-		assertEquals(0, options[1]);
-		assertEquals(0, options[2]);
+		// 注入した配列のサイズが維持されていること
+		assertEquals(3, layer.getImage().length,  "注入した images のサイズが維持されること");
+		assertEquals(3, layer.getDir().length,    "注入した dirs のサイズが維持されること");
+		assertEquals(3, layer.getOption().length, "注入した options のサイズが維持されること");
+
+		// layer.getImage() を通じて全要素が null/0 であること
+		for (int i = 0; i < 3; i++) {
+			assertNull(layer.getImage()[i], "clear 後 image[" + i + "] が null になること");
+			assertEquals(0, layer.getDir()[i],    "clear 後 dir[" + i + "] が 0 になること");
+			assertEquals(0, layer.getOption()[i], "clear 後 option[" + i + "] が 0 になること");
+		}
 	}
 }
