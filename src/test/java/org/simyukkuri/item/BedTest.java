@@ -4,12 +4,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Rectangle;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.world.WorldEntity.ItemRank;
 import org.simyukkuri.entity.core.world.item.Bed;
@@ -26,6 +29,9 @@ class BedTest extends ItemTestBase {
     void testDefaultConstructor() {
         Bed bed = new Bed();
         assertNotNull(bed);
+        assertNull(bed.getItemRank());
+        assertFalse(bed.isRemoved());
+        assertFalse(bed.isGrabbed());
     }
 
     // ---------------------------------------------------------------
@@ -128,6 +134,8 @@ class BedTest extends ItemTestBase {
         Bed bed = new Bed();
         bed.setItemRank(ItemRank.HOUSE);
         assertEquals(ItemRank.HOUSE, bed.getItemRank());
+        bed.setItemRank(ItemRank.NORA);
+        assertEquals(ItemRank.NORA, bed.getItemRank());
     }
 
     @Test
@@ -135,6 +143,8 @@ class BedTest extends ItemTestBase {
         Bed bed = new Bed();
         bed.setItemRank(ItemRank.NORA);
         assertEquals(ItemRank.NORA, bed.getItemRank());
+        bed.setItemRank(ItemRank.YASEI);
+        assertEquals(ItemRank.YASEI, bed.getItemRank());
     }
 
     @Test
@@ -142,6 +152,8 @@ class BedTest extends ItemTestBase {
         Bed bed = new Bed();
         bed.setItemRank(ItemRank.YASEI);
         assertEquals(ItemRank.YASEI, bed.getItemRank());
+        bed.setItemRank(ItemRank.HOUSE);
+        assertEquals(ItemRank.HOUSE, bed.getItemRank());
     }
 
     // ---------------------------------------------------------------
@@ -173,7 +185,9 @@ class BedTest extends ItemTestBase {
     // ---------------------------------------------------------------
     @Test
     void testGetBounding_NotNull() {
-        assertNotNull(Bed.getBounding());
+        Rectangle4y b = Bed.getBounding();
+        assertNotNull(b);
+        assertSame(b, Bed.getBounding());
     }
 
     // ---------------------------------------------------------------
@@ -184,6 +198,7 @@ class BedTest extends ItemTestBase {
         Bed bed = new Bed(100, 100, 0);
         Rectangle r = bed.takeScreenRect();
         assertNotNull(r);
+        assertNotSame(r, bed.takeScreenRect());
     }
 
     @Test
@@ -280,6 +295,7 @@ class BedTest extends ItemTestBase {
     @Test
     void testSetOption() {
         Bed bed = new Bed(100, 200, 0);
+        assertEquals(0, bed.getOption());
         bed.setOption(2);
         assertEquals(2, bed.getOption());
     }
@@ -288,11 +304,14 @@ class BedTest extends ItemTestBase {
     void testGetLooks_Default() {
         Bed bed = new Bed(100, 100, 0);
         assertEquals(0, bed.getLooks());
+        bed.setLooks(3);
+        assertEquals(3, bed.getLooks());
     }
 
     @Test
     void testSetLooks() {
         Bed bed = new Bed(100, 100, 0);
+        assertEquals(0, bed.getLooks());
         bed.setLooks(5);
         assertEquals(5, bed.getLooks());
     }
@@ -306,6 +325,7 @@ class BedTest extends ItemTestBase {
     @Test
     void testSetLinkParent() {
         Bed bed = new Bed(100, 100, 0);
+        assertEquals(-1, bed.getParentLinkId());
         bed.setParentLinkId(99);
         assertEquals(99, bed.getParentLinkId());
     }
@@ -315,6 +335,8 @@ class BedTest extends ItemTestBase {
         Bed bed = new Bed(100, 100, 0);
         bed.setColW(15);
         assertEquals(15, bed.getColW());
+        bed.setColW(30);
+        assertEquals(30, bed.getColW());
     }
 
     @Test
@@ -322,6 +344,8 @@ class BedTest extends ItemTestBase {
         Bed bed = new Bed(100, 100, 0);
         bed.setColH(25);
         assertEquals(25, bed.getColH());
+        bed.setColH(50);
+        assertEquals(50, bed.getColH());
     }
 
     // ---------------------------------------------------------------
@@ -346,6 +370,8 @@ class BedTest extends ItemTestBase {
     @Test
     void testGetZ_Default() {
         Bed bed = new Bed(100, 100, 0);
+        assertEquals(0, bed.getZ());
+        bed.setVz(5);
         assertEquals(0, bed.getZ());
     }
 
@@ -389,11 +415,14 @@ class BedTest extends ItemTestBase {
     void testGetAge_Default() {
         Bed bed = new Bed(100, 100, 0);
         assertEquals(0, bed.getAge());
+        bed.addAge(1);
+        assertEquals(1, bed.getAge());
     }
 
     @Test
     void testSetAge() {
         Bed bed = new Bed(100, 100, 0);
+        assertEquals(0, bed.getAge());
         bed.setAge(5000L);
         assertEquals(5000L, bed.getAge());
     }
@@ -435,6 +464,7 @@ class BedTest extends ItemTestBase {
     @Test
     void testSetCost() {
         Bed bed = new Bed(100, 100, 0);
+        assertEquals(0, bed.getCost());
         bed.setCost(500);
         assertEquals(500, bed.getCost());
     }
@@ -442,6 +472,7 @@ class BedTest extends ItemTestBase {
     @Test
     void testSetValue() {
         Bed bed = new Bed(100, 100, 0);
+        assertEquals(3000, bed.getValue());
         bed.setValue(1000);
         assertEquals(1000, bed.getValue());
     }
@@ -449,13 +480,17 @@ class BedTest extends ItemTestBase {
     @Test
     void testSetCanGrab() {
         Bed bed = new Bed(100, 100, 0);
+        assertTrue(bed.isCanGrab());
         bed.setCanGrab(false);
         assertFalse(bed.isCanGrab());
+        bed.setCanGrab(true);
+        assertTrue(bed.isCanGrab());
     }
 
     @Test
     void testSetGrabbed() {
         Bed bed = new Bed(100, 100, 0);
+        assertFalse(bed.isGrabbed());
         bed.setGrabbed(true);
         assertTrue(bed.isGrabbed());
     }
@@ -463,6 +498,7 @@ class BedTest extends ItemTestBase {
     @Test
     void testSetRemoved() {
         Bed bed = new Bed(100, 100, 0);
+        assertFalse(bed.isRemoved());
         bed.setRemoved(true);
         assertTrue(bed.isRemoved());
     }
@@ -476,8 +512,11 @@ class BedTest extends ItemTestBase {
     @Test
     void testSetEnableWall() {
         Bed bed = new Bed(100, 100, 0);
+        assertTrue(bed.isEnableWall());
         bed.setEnableWall(false);
         assertFalse(bed.isEnableWall());
+        bed.setEnableWall(true);
+        assertTrue(bed.isEnableWall());
     }
 
     @Test
@@ -487,6 +526,8 @@ class BedTest extends ItemTestBase {
         bed.setOfsY(10);
         assertEquals(5, bed.getOfsX());
         assertEquals(10, bed.getOfsY());
+        assertEquals(bed.getX() + 5, bed.getDrawOfsX());
+        assertEquals(bed.getY() + 10, bed.getDrawOfsY());
     }
 
     @Test
@@ -502,6 +543,9 @@ class BedTest extends ItemTestBase {
     void testGetScreenPivot_NotNull() {
         Bed bed = new Bed(100, 100, 0);
         assertNotNull(bed.getScreenPivot());
+        bed.setScreenPivot(5, 6);
+        assertEquals(5, bed.getScreenPivot().getX());
+        assertEquals(6, bed.getScreenPivot().getY());
     }
 
     @Test
@@ -516,6 +560,9 @@ class BedTest extends ItemTestBase {
     void testGetScreenRect_NotNull() {
         Bed bed = new Bed(100, 100, 0);
         assertNotNull(bed.getScreenRect());
+        Bed bed2 = new Bed(200, 300, 1);
+        assertNotNull(bed2.getScreenRect());
+        assertNotSame(bed.getScreenRect(), bed2.getScreenRect());
     }
 
     @Test
@@ -551,6 +598,7 @@ class BedTest extends ItemTestBase {
     @Test
     void testSetFallingUnderGround() {
         Bed bed = new Bed(100, 100, 0);
+        assertFalse(bed.isFallingUnderGround());
         bed.setFallingUnderGround(true);
         assertTrue(bed.isFallingUnderGround());
     }
@@ -564,6 +612,7 @@ class BedTest extends ItemTestBase {
     @Test
     void testSetbInPool() {
         Bed bed = new Bed(100, 100, 0);
+        assertFalse(bed.isInPool());
         bed.setInPool(true);
         assertTrue(bed.isInPool());
     }
@@ -572,6 +621,8 @@ class BedTest extends ItemTestBase {
     void testGetnMostDepth_Default() {
         Bed bed = new Bed(100, 100, 0);
         assertEquals(0, bed.getMostDepth());
+        bed.setMostDepth(-10);
+        assertEquals(-10, bed.getMostDepth());
     }
 
     @Test
@@ -586,6 +637,8 @@ class BedTest extends ItemTestBase {
         Bed bed = new Bed(100, 100, 0);
         bed.setBindObj(77);
         assertEquals(77, bed.getBindObj());
+        bed.setBindObj(88);
+        assertEquals(88, bed.getBindObj());
     }
 
     @Test
@@ -632,9 +685,15 @@ class BedTest extends ItemTestBase {
     @Test
     void testGetBoundaryShape() {
         Bed bed = new Bed(100, 100, 0);
-        org.simyukkuri.draw.Rectangle4y r = new org.simyukkuri.draw.Rectangle4y();
+        Rectangle4y r = new Rectangle4y();
         bed.getBoundaryShape(r);
         assertNotNull(r);
+        Rectangle4y r2 = new Rectangle4y();
+        bed.getBoundaryShape(r2);
+        assertEquals(r.getX(), r2.getX());
+        assertEquals(r.getY(), r2.getY());
+        assertEquals(r.getWidth(), r2.getWidth());
+        assertEquals(r.getHeight(), r2.getHeight());
     }
 
     @Test
@@ -682,13 +741,17 @@ class BedTest extends ItemTestBase {
     void testGetTmpPos_NotNull() {
         Bed bed = new Bed(100, 100, 0);
         assertNotNull(bed.getTmpPos());
+        Bed bed2 = new Bed(200, 200, 0);
+        assertNotNull(bed2.getTmpPos());
+        assertNotSame(bed.getTmpPos(), bed2.getTmpPos());
     }
 
     @Test
     void testGetHitCheckObjType_DefaultZero() {
         Bed bed = new Bed(100, 100, 0);
-        // WorldEntity のデフォルト hitCheckObjType = 0
         assertEquals(0, bed.getHitCheckObjType());
+        Bed bed2 = new Bed(200, 200, 1);
+        assertEquals(0, bed2.getHitCheckObjType());
     }
 
     // ---------------------------------------------------------------

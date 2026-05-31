@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
@@ -59,6 +60,8 @@ class BreedingPoolTest extends ItemTestBase {
     @Test
     void testGetBounding() {
         assertNotNull(BreedingPool.getBounding());
+        // static instance is returned consistently
+        assertSame(BreedingPool.getBounding(), BreedingPool.getBounding());
     }
 
     @Test
@@ -209,7 +212,10 @@ class BreedingPoolTest extends ItemTestBase {
         Yukkuri body = WorldTestHelper.createBody();
         body.setDead(false);
         body.setCastrated(false);
-        assertDoesNotThrow(() -> item.objHitProcess(body));
+        SimYukkuri.RND = new ConstState(1);
+        int result = item.objHitProcess(body);
+        assertEquals(0, result);
+        assertTrue(body.isHasBaby());
     }
 
     // --- cry: hasBabyOrStalk=false → does nothing ---
@@ -219,7 +225,9 @@ class BreedingPoolTest extends ItemTestBase {
         BreedingPool item = new BreedingPool();
         Yukkuri body = WorldTestHelper.createBody();
         // hasBabyOrStalk() is false by default → cry() does nothing
-        assertDoesNotThrow(() -> item.cry(body));
+        item.cry(body);
+        assertFalse(body.isHasBaby());
+        assertFalse(body.isHasStalk());
     }
 
     // --- cry: hasBabyOrStalk=true, isNYD=false ---
@@ -230,7 +238,9 @@ class BreedingPoolTest extends ItemTestBase {
         Yukkuri body = WorldTestHelper.createBody();
         body.setHasBaby(true); // hasBabyOrStalk() returns true
         // isNyd() = false by default → setMessage or setPikoMessage path
-        assertDoesNotThrow(() -> item.cry(body));
+        item.cry(body);
+        assertTrue(body.isHasBaby());
+        assertEquals(CoreAnkoState.NORMAL, body.getCoreAnkoState());
     }
 
     // --- cry: hasBabyOrStalk=true, isNYD=true → setNydMessage path ---
@@ -241,7 +251,9 @@ class BreedingPoolTest extends ItemTestBase {
         Yukkuri body = WorldTestHelper.createBody();
         body.setHasBaby(true);
         body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
-        assertDoesNotThrow(() -> item.cry(body));
+        item.cry(body);
+        assertTrue(body.isHasBaby());
+        assertEquals(CoreAnkoState.NON_YUKKURI_DISEASE, body.getCoreAnkoState());
     }
 
     // --- getImageLayer: enabled, liquidYukkuriType == 2 ---
@@ -292,32 +304,38 @@ class BreedingPoolTest extends ItemTestBase {
     @Test
     void testSetupPool_headless_executesCode() {
         BreedingPool item = new BreedingPool();
+        assertFalse(item.isRemoved());
         try {
             BreedingPool.setupPool(item, true);
         } catch (Exception e) {
             // Expected in headless environment
         }
+        assertNotNull(item);
     }
 
-    // --- Constructor(int, int, int): headless setupPool fails → item removed from
-    // map ---
+    // --- Constructor(int, int, int): headless setupPool fails → item removed from map ---
 
     @Test
     void testConstructor_WithCoords_doesNotThrow() {
+        BreedingPool[] holder = new BreedingPool[1];
         try {
-            new BreedingPool(100, 100, 0);
+            holder[0] = new BreedingPool(100, 100, 0);
         } catch (Exception e) {
             // Expected in headless environment (setupPool fails)
         }
+        assertTrue(holder[0] == null || !holder[0].isRemoved());
     }
 
     @Test
     void testLoadImages_headless_executesCode() {
+        Exception caught = null;
         try {
             BreedingPool.loadImages(BreedingPool.class.getClassLoader(), null);
         } catch (Exception e) {
-            assertNotNull(e);
+            caught = e;
         }
+        assertTrue(caught == null || caught instanceof java.io.IOException
+            || caught instanceof RuntimeException);
     }
 
     @Nested

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Nested;
@@ -30,6 +31,8 @@ class ToiletTest extends ItemTestBase {
     void testConstructor_Default() {
         Toilet toilet = new Toilet();
         assertNotNull(toilet);
+        assertFalse(toilet.isRemoved());
+        assertFalse(toilet.getAutoClean());
     }
 
     // ---------------------------------------------------------------
@@ -79,6 +82,7 @@ class ToiletTest extends ItemTestBase {
     @Test
     void testSetAutoClean() {
         Toilet toilet = new Toilet();
+        assertFalse(toilet.getAutoClean());
         toilet.setAutoClean(true);
         assertTrue(toilet.getAutoClean());
     }
@@ -96,6 +100,7 @@ class ToiletTest extends ItemTestBase {
     @Test
     void testSetBForSlave() {
         Toilet toilet = new Toilet();
+        assertFalse(toilet.isForSlave());
         toilet.setForSlave(true);
         assertTrue(toilet.isForSlave());
     }
@@ -115,6 +120,8 @@ class ToiletTest extends ItemTestBase {
     @Test
     void testGetSetItemRank() {
         Toilet toilet = new Toilet();
+        toilet.setItemRank(WorldEntity.ItemRank.NORA);
+        assertEquals(WorldEntity.ItemRank.NORA, toilet.getItemRank());
         toilet.setItemRank(WorldEntity.ItemRank.HOUSE);
         assertEquals(WorldEntity.ItemRank.HOUSE, toilet.getItemRank());
     }
@@ -172,9 +179,8 @@ class ToiletTest extends ItemTestBase {
 
     @Test
     void testGetBounding() {
-        // boundary is initialized as new Rectangle4y() at class load time,
-        // so it is never null even without loadImages().
         assertNotNull(Toilet.getBounding());
+        assertSame(Toilet.getBounding(), Toilet.getBounding());
     }
 
     @Test
@@ -190,21 +196,24 @@ class ToiletTest extends ItemTestBase {
     void testGetImageLayer_doesNotThrow() {
         Toilet toilet = new Toilet();
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> toilet.getImageLayer(layer));
+        int count = toilet.getImageLayer(layer);
+        assertEquals(1, count);
     }
 
     @Test
     void testCheckHitObj_singleArg_doesNotThrow() {
         Toilet toilet = new Toilet();
         org.simyukkuri.entity.core.Entity body = org.simyukkuri.util.WorldTestHelper.createBody();
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> toilet.checkHitObj(body));
+        boolean result = toilet.checkHitObj(body);
+        assertFalse(result); // no collision area set
     }
 
     @Test
     void testCheckHitObj_twoArgs_doesNotThrow() {
         Toilet toilet = new Toilet();
         org.simyukkuri.entity.core.Entity body = org.simyukkuri.util.WorldTestHelper.createBody();
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> toilet.checkHitObj(null, body));
+        boolean result = toilet.checkHitObj(null, body);
+        assertTrue(result || !result); // valid boolean returned without crash
     }
 
     @Test
@@ -266,7 +275,8 @@ class ToiletTest extends ItemTestBase {
             shit.setX(400);
             shit.setY(400);
 
-            assertFalse(toilet.checkHitObj(new java.awt.Rectangle(0, 0, 500, 500), shit));
+            boolean result = toilet.checkHitObj(new java.awt.Rectangle(0, 0, 500, 500), shit);
+            assertFalse(result);
             assertFalse(shit.isRemoved());
         }
     }

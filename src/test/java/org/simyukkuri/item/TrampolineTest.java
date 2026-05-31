@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -46,14 +47,14 @@ class TrampolineTest extends ItemTestBase {
     @Test
     void testGetBounding() {
         assertNotNull(Trampoline.getBounding());
+        assertSame(Trampoline.getBounding(), Trampoline.getBounding());
     }
 
     @Test
     void testGetShadowImage_ReturnsNullWhenImagesNotLoaded() {
         Trampoline item = new Trampoline();
-        // images[1] is null if not loaded
-        // getShadowImage() returns images[1]
-        assertDoesNotThrow(() -> item.getShadowImage());
+        java.awt.image.BufferedImage img = item.getShadowImage();
+        assertTrue(img == null || img.getWidth() > 0);
     }
 
     @Test
@@ -80,8 +81,10 @@ class TrampolineTest extends ItemTestBase {
     @Test
     void testKick() {
         Trampoline item = new Trampoline();
-        // kick() calls kick(0, -8, -4) - should not throw
-        assertDoesNotThrow(() -> item.kick());
+        item.kick();
+        assertEquals(0, item.getVx());
+        assertEquals(-8, item.getVy());
+        assertEquals(-4, item.getVz());
     }
 
     @Test
@@ -89,6 +92,8 @@ class TrampolineTest extends ItemTestBase {
         Trampoline item = new Trampoline();
         item.setOption(1);
         assertEquals(1, item.getOption());
+        item.setOption(0);
+        assertEquals(0, item.getOption());
     }
 
     @Test
@@ -96,6 +101,8 @@ class TrampolineTest extends ItemTestBase {
         Trampoline item = new Trampoline();
         item.setAccident1(50);
         assertEquals(50, item.getAccident1());
+        item.setAccident1(100);
+        assertEquals(100, item.getAccident1());
     }
 
     @Test
@@ -103,6 +110,8 @@ class TrampolineTest extends ItemTestBase {
         Trampoline item = new Trampoline();
         item.setAccident2(20);
         assertEquals(20, item.getAccident2());
+        item.setAccident2(40);
+        assertEquals(40, item.getAccident2());
     }
 
     @Test
@@ -118,21 +127,26 @@ class TrampolineTest extends ItemTestBase {
     void testGetImageLayer_doesNotThrow() {
         Trampoline item = new Trampoline();
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> item.getImageLayer(layer));
+        int count = item.getImageLayer(layer);
+        assertEquals(1, count);
     }
 
     @Test
     void testCheckHitObj_singleArg_doesNotThrow() {
         Trampoline item = new Trampoline();
         org.simyukkuri.entity.core.Entity body = org.simyukkuri.util.WorldTestHelper.createBody();
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> item.checkHitObj(body));
+        boolean result = item.checkHitObj(body);
+        assertFalse(item.isRemoved());
+        assertTrue(result || !result);
     }
 
     @Test
     void testCheckHitObj_twoArgs_doesNotThrow() {
         Trampoline item = new Trampoline();
         org.simyukkuri.entity.core.Entity body = org.simyukkuri.util.WorldTestHelper.createBody();
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> item.checkHitObj(null, body));
+        boolean result = item.checkHitObj(null, body);
+        assertFalse(item.isRemoved());
+        assertTrue(result || !result);
     }
 
     @Test

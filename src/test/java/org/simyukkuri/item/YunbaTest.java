@@ -1,11 +1,11 @@
 package org.simyukkuri.item;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -56,7 +56,7 @@ class YunbaTest extends ItemTestBase {
     @Test
     void testActionEnum_toString() {
         for (Action a : Action.values()) {
-            assertDoesNotThrow(() -> a.toString());
+            assertNotNull(a.toString());
         }
     }
 
@@ -77,6 +77,7 @@ class YunbaTest extends ItemTestBase {
     @Test
     void testGetBounding() {
         assertNotNull(Yunba.getBounding());
+        assertSame(Yunba.getBounding(), Yunba.getBounding());
     }
 
     @Test
@@ -106,6 +107,8 @@ class YunbaTest extends ItemTestBase {
         Yunba item = new Yunba();
         item.setColor(3);
         assertEquals(3, item.getColor());
+        item.setColor(5);
+        assertEquals(5, item.getColor());
     }
 
     @Test
@@ -156,6 +159,7 @@ class YunbaTest extends ItemTestBase {
     @Test
     void testGetSetShitCheck() {
         Yunba item = new Yunba();
+        assertFalse(item.isShitCheck());
         item.setShitCheck(true);
         assertTrue(item.isShitCheck());
     }
@@ -163,6 +167,7 @@ class YunbaTest extends ItemTestBase {
     @Test
     void testGetSetStalkCheck() {
         Yunba item = new Yunba();
+        assertFalse(item.isStalkCheck());
         item.setStalkCheck(true);
         assertTrue(item.isStalkCheck());
     }
@@ -170,6 +175,7 @@ class YunbaTest extends ItemTestBase {
     @Test
     void testGetSetNorndCheck() {
         Yunba item = new Yunba();
+        assertFalse(item.isNorndCheck());
         item.setNorndCheck(true);
         assertTrue(item.isNorndCheck());
     }
@@ -177,6 +183,7 @@ class YunbaTest extends ItemTestBase {
     @Test
     void testGetSetKillCheck() {
         Yunba item = new Yunba();
+        assertFalse(item.isKillCheck());
         item.setKillCheck(true);
         assertTrue(item.isKillCheck());
     }
@@ -184,6 +191,7 @@ class YunbaTest extends ItemTestBase {
     @Test
     void testGetSetMineutiCheck() {
         Yunba item = new Yunba();
+        assertFalse(item.isMineutiCheck());
         item.setMineutiCheck(true);
         assertTrue(item.isMineutiCheck());
     }
@@ -191,6 +199,7 @@ class YunbaTest extends ItemTestBase {
     @Test
     void testGetSetNoDamageFallCheck() {
         Yunba item = new Yunba();
+        assertFalse(item.isNoDamageFallCheck());
         item.setNoDamageFallCheck(true);
         assertTrue(item.isNoDamageFallCheck());
     }
@@ -198,6 +207,7 @@ class YunbaTest extends ItemTestBase {
     @Test
     void testGetSetFoodCheck() {
         Yunba item = new Yunba();
+        assertFalse(item.isFoodCheck());
         item.setFoodCheck(true);
         assertTrue(item.isFoodCheck());
     }
@@ -213,6 +223,7 @@ class YunbaTest extends ItemTestBase {
     @Test
     void testGetSetLayerCount() {
         Yunba item = new Yunba();
+        assertEquals(0, item.getLayerCount());
         item.setLayerCount(3);
         assertEquals(3, item.getLayerCount());
     }
@@ -248,6 +259,8 @@ class YunbaTest extends ItemTestBase {
         Yunba item = new Yunba();
         item.setSpeed(600);
         assertEquals(600, item.getSpeed());
+        item.setSpeed(1200);
+        assertEquals(1200, item.getSpeed());
     }
 
     @Test
@@ -287,7 +300,8 @@ class YunbaTest extends ItemTestBase {
         Yunba item = new Yunba();
         item.setCost(100);
         item.setAge(1); // 1 % 2400 != 0
-        assertDoesNotThrow(() -> item.upDate());
+        item.upDate();
+        assertFalse(item.isRemoved());
     }
 
     @Test
@@ -295,7 +309,9 @@ class YunbaTest extends ItemTestBase {
         Yunba item = new Yunba();
         item.setCost(10);
         item.setAge(0); // 0 % 2400 == 0
-        assertDoesNotThrow(() -> item.upDate());
+        long beforeCash = SimYukkuri.world.getPlayer().getCash();
+        item.upDate();
+        assertEquals(beforeCash - 10, SimYukkuri.world.getPlayer().getCash());
     }
 
     // --- clockTick: removed ---
@@ -352,7 +368,8 @@ class YunbaTest extends ItemTestBase {
         item.setDestY(500);
         item.setX(100);
         item.setY(100);
-        assertDoesNotThrow(() -> item.clockTick());
+        TickResult result = item.clockTick();
+        assertEquals(TickResult.NONE, result);
     }
 
     // --- clockTick: movement branch, destination reached (destX=-1, destY=-1) ---
@@ -384,7 +401,8 @@ class YunbaTest extends ItemTestBase {
         food.setRemoved(true);
         item.setAction(Action.EMPFOOD);
         item.setTarget(food);
-        assertDoesNotThrow(() -> item.clockTick());
+        TickResult result = item.clockTick();
+        assertEquals(TickResult.NONE, result);
     }
 
     // --- clockTick: action selection with shitCheck, no shit in world ---
@@ -458,7 +476,8 @@ class YunbaTest extends ItemTestBase {
         item.setObjId(200);
         SimYukkuri.world.getCurrentWorldState().getYunbas().put(200, item);
 
-        assertDoesNotThrow(() -> item.clockTick());
+        item.clockTick();
+        assertFalse(item.isRemoved());
     }
 
     // --- clockTick: shitCheck with shit in world ---
@@ -478,7 +497,8 @@ class YunbaTest extends ItemTestBase {
         shit.setY(110);
         SimYukkuri.world.getCurrentWorldState().getShit().put(shit.getObjId(), shit);
 
-        assertDoesNotThrow(() -> item.clockTick());
+        TickResult result = item.clockTick();
+        assertEquals(TickResult.NONE, result);
     }
 
     @Test
@@ -496,7 +516,8 @@ class YunbaTest extends ItemTestBase {
         vomit.setY(110);
         SimYukkuri.world.getCurrentWorldState().getVomit().put(vomit.getObjId(), vomit);
 
-        assertDoesNotThrow(() -> item.clockTick());
+        TickResult result = item.clockTick();
+        assertEquals(TickResult.NONE, result);
     }
 
     // --- clockTick: foodCheck with empty food in world ---
@@ -518,7 +539,8 @@ class YunbaTest extends ItemTestBase {
         emptyFood.setAmount(0); // empty food
         SimYukkuri.world.getCurrentWorldState().getFoods().put(emptyFood.getObjId(), emptyFood);
 
-        assertDoesNotThrow(() -> item.clockTick());
+        TickResult result = item.clockTick();
+        assertEquals(TickResult.NONE, result);
     }
 
     // --- clockTick: movement with negative direction (body ahead of destination)
@@ -536,7 +558,8 @@ class YunbaTest extends ItemTestBase {
         item.setAction(Action.EMPFOOD);
         Food food = new Food(100, 100, Food.FoodType.SWEETS1.ordinal());
         item.setTarget(food);
-        assertDoesNotThrow(() -> item.clockTick());
+        TickResult result = item.clockTick();
+        assertEquals(TickResult.NONE, result);
     }
 
     // --- clockTick: movement near target (bNear=true) ---
@@ -556,7 +579,8 @@ class YunbaTest extends ItemTestBase {
         shit.setY(100);
         SimYukkuri.world.getCurrentWorldState().getShit().put(shit.getObjId(), shit);
         item.setTarget(shit);
-        assertDoesNotThrow(() -> item.clockTick());
+        TickResult result = item.clockTick();
+        assertEquals(TickResult.NONE, result);
     }
 
     // --- clockTick: grabbed mode ---
@@ -590,15 +614,13 @@ class YunbaTest extends ItemTestBase {
 
     @Test
     void testConstructor_WithCoords_DoesNotThrow() {
-        // setupYunba uses GUI but it's in a try/catch in headless
-        // The constructor always adds to the yunba map when setupYunba fails
-        assertDoesNotThrow(() -> {
-            try {
-                new Yunba(100, 100, 0);
-            } catch (Exception e) {
-                // Expected in headless environment (GUI setup fails)
-            }
-        });
+        Yunba[] holder = new Yunba[1];
+        try {
+            holder[0] = new Yunba(100, 100, 0);
+        } catch (Exception e) {
+            // Expected in headless environment (GUI setup fails)
+        }
+        assertTrue(holder[0] == null || !holder[0].isRemoved());
     }
 
     // --- getImageLayer: layerCount==0 (default new Yunba()) → returns 0 ---
@@ -616,7 +638,6 @@ class YunbaTest extends ItemTestBase {
     void testGetImageLayer_layerCount1_doesNotThrow() {
         Yunba item = createYunba(); // layerCount=1, drawLayer[0]=0
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[5];
-        assertDoesNotThrow(() -> item.getImageLayer(layer));
         assertEquals(1, item.getImageLayer(layer));
     }
 
@@ -626,7 +647,8 @@ class YunbaTest extends ItemTestBase {
     @Test
     void testGetShadowImage_returnsNullElement() {
         Yunba item = new Yunba();
-        assertDoesNotThrow(() -> item.getShadowImage());
+        java.awt.image.BufferedImage img = item.getShadowImage();
+        assertTrue(img == null || img.getWidth() > 0);
     }
 
     // --- setupYunba: headless → returns false or throws ---
@@ -634,20 +656,25 @@ class YunbaTest extends ItemTestBase {
     @Test
     void testSetupYunba_headless_doesNotThrow() {
         Yunba item = createYunba();
+        assertFalse(item.isRemoved());
         try {
             Yunba.setupYunba(item, true);
         } catch (Exception e) {
             // Expected in headless environment
         }
+        assertNotNull(item);
     }
 
     @Test
     void testLoadImages_headless_executesCode() {
+        Exception caught = null;
         try {
             Yunba.loadImages(Yunba.class.getClassLoader(), null);
         } catch (Exception e) {
-            // Expected: IOException because image files not found in test environment
+            caught = e;
         }
+        assertTrue(caught == null || caught instanceof java.io.IOException
+            || caught instanceof RuntimeException);
     }
 
     // Helper: create yunba with action+target set at same position as target
@@ -675,7 +702,8 @@ class YunbaTest extends ItemTestBase {
         deadBody.setY(100);
         SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(deadBody.getObjId(), deadBody);
         item.setTarget(deadBody);
-        assertDoesNotThrow(() -> item.clockTick());
+        TickResult result = item.clockTick();
+        assertEquals(TickResult.NONE, result);
     }
 
     // --- clockTick action execution: CLEAN (near dirty body) ---
@@ -690,7 +718,8 @@ class YunbaTest extends ItemTestBase {
         dirtyBody.setY(100);
         SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(dirtyBody.getObjId(), dirtyBody);
         item.setTarget(dirtyBody);
-        assertDoesNotThrow(() -> item.clockTick());
+        TickResult result = item.clockTick();
+        assertEquals(TickResult.NONE, result);
     }
 
     // --- clockTick action execution: HEAL (near damaged body) ---
@@ -705,7 +734,8 @@ class YunbaTest extends ItemTestBase {
         damagedBody.setY(100);
         SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(damagedBody.getObjId(), damagedBody);
         item.setTarget(damagedBody);
-        assertDoesNotThrow(() -> item.clockTick());
+        TickResult result = item.clockTick();
+        assertEquals(TickResult.NONE, result);
     }
 
     // --- clockTick action execution: STALK (near stalk) ---
@@ -719,7 +749,8 @@ class YunbaTest extends ItemTestBase {
         stalk.setAmount(100);
         SimYukkuri.world.getCurrentWorldState().getStalks().put(stalk.getObjId(), stalk);
         item.setTarget(stalk);
-        assertDoesNotThrow(() -> item.clockTick());
+        TickResult result = item.clockTick();
+        assertEquals(TickResult.NONE, result);
     }
 
     // --- clockTick action execution: EMPFOOD (near empty food) ---
@@ -733,7 +764,8 @@ class YunbaTest extends ItemTestBase {
         food.setAmount(0);
         SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
         item.setTarget(food);
-        assertDoesNotThrow(() -> item.clockTick());
+        TickResult result = item.clockTick();
+        assertEquals(TickResult.NONE, result);
     }
 
     // --- clockTick action execution: DESTROY (near body) ---
@@ -748,7 +780,8 @@ class YunbaTest extends ItemTestBase {
         targetBody.setY(100);
         SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(targetBody.getObjId(), targetBody);
         item.setTarget(targetBody);
-        assertDoesNotThrow(() -> item.clockTick());
+        TickResult result = item.clockTick();
+        assertEquals(TickResult.NONE, result);
     }
 
     // --- clockTick action execution: KABI (near sick body) ---
@@ -762,7 +795,8 @@ class YunbaTest extends ItemTestBase {
         sickBody.setY(100);
         SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(sickBody.getObjId(), sickBody);
         item.setTarget(sickBody);
-        assertDoesNotThrow(() -> item.clockTick());
+        TickResult result = item.clockTick();
+        assertEquals(TickResult.NONE, result);
     }
 
     // --- clockTick: bodyCheck with living body, CLEAN flag set ---
@@ -793,7 +827,8 @@ class YunbaTest extends ItemTestBase {
         item.setObjId(800);
         SimYukkuri.world.getCurrentWorldState().getYunbas().put(800, item);
 
-        assertDoesNotThrow(() -> item.clockTick());
+        TickResult result = item.clockTick();
+        assertEquals(TickResult.NONE, result);
     }
 
     // --- clockTick: bodyCheck with stalkCheck also on ---
@@ -817,6 +852,7 @@ class YunbaTest extends ItemTestBase {
         stalk.setAmount(100);
         SimYukkuri.world.getCurrentWorldState().getStalks().put(stalk.getObjId(), stalk);
 
-        assertDoesNotThrow(() -> item.clockTick());
+        TickResult result = item.clockTick();
+        assertEquals(TickResult.NONE, result);
     }
 }

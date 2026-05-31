@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Nested;
@@ -42,6 +43,7 @@ class FoodMakerTest extends ItemTestBase {
     @Test
     void testGetBounding_notNull() {
         assertNotNull(FoodMaker.getBounding());
+        assertSame(FoodMaker.getBounding(), FoodMaker.getBounding());
     }
 
     @Test
@@ -83,6 +85,7 @@ class FoodMakerTest extends ItemTestBase {
     @Test
     void testGetSetFoodAmount() {
         FoodMaker item = new FoodMaker();
+        assertEquals(0, item.getFoodAmount());
         item.setFoodAmount(10);
         assertEquals(10, item.getFoodAmount());
     }
@@ -280,7 +283,8 @@ class FoodMakerTest extends ItemTestBase {
         item.setEnabled(true);
         item.setAge(0);
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
-        assertDoesNotThrow(() -> item.getImageLayer(layer));
+        int count = item.getImageLayer(layer);
+        assertEquals(1, count);
     }
 
     // --- getImageLayer (enabled=false) ---
@@ -290,7 +294,8 @@ class FoodMakerTest extends ItemTestBase {
         FoodMaker item = new FoodMaker();
         item.setEnabled(false);
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
-        assertDoesNotThrow(() -> item.getImageLayer(layer));
+        int count = item.getImageLayer(layer);
+        assertEquals(1, count);
     }
 
     // --- Constructor(int, int, int): executes code path ---
@@ -352,7 +357,9 @@ class FoodMakerTest extends ItemTestBase {
         food.setFoodType(FoodType.BITTER);
         food.setObjId(201);
         SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
-        assertDoesNotThrow(() -> item.objHitProcess(food));
+        int result = item.objHitProcess(food);
+        assertEquals(0, result);
+        assertTrue(food.isRemoved());
     }
 
     @Test
@@ -366,7 +373,9 @@ class FoodMakerTest extends ItemTestBase {
         food.setFoodType(FoodType.LEMONPOP);
         food.setObjId(202);
         SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
-        assertDoesNotThrow(() -> item.objHitProcess(food));
+        int result = item.objHitProcess(food);
+        assertEquals(0, result);
+        assertTrue(food.isRemoved());
     }
 
     @Test
@@ -380,7 +389,9 @@ class FoodMakerTest extends ItemTestBase {
         food.setFoodType(FoodType.HOT);
         food.setObjId(203);
         SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
-        assertDoesNotThrow(() -> item.objHitProcess(food));
+        int result = item.objHitProcess(food);
+        assertEquals(0, result);
+        assertTrue(food.isRemoved());
     }
 
     @Test

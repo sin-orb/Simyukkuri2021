@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -44,13 +45,16 @@ class DiffuserTest extends ItemTestBase {
     @Test
     void testGetBounding() {
         assertNotNull(Diffuser.getBounding());
+        assertSame(Diffuser.getBounding(), Diffuser.getBounding());
     }
 
     @Test
     void testGetShadowImage_DoesNotThrow() {
         Diffuser item = new Diffuser();
-        // images[2] is null if not loaded
-        assertDoesNotThrow(() -> item.getShadowImage());
+        // images[2] is null if not loaded → getShadowImage returns null
+        java.awt.image.BufferedImage result = item.getShadowImage();
+        // Either null (images not loaded) or a valid image
+        assertTrue(result == null || result.getWidth() > 0);
     }
 
     @Test
@@ -86,19 +90,18 @@ class DiffuserTest extends ItemTestBase {
     void testUpDate_Disabled() {
         Diffuser item = new Diffuser();
         item.setEnabled(false);
-        // !enabled → return early
-        assertDoesNotThrow(() -> item.upDate());
+        item.upDate();
+        assertFalse(item.getEnabled());
+        assertFalse(item.isRemoved());
     }
 
     @Test
     void testUpDate_Enabled_NoSteamTypeSet() {
         Diffuser item = new Diffuser();
         item.setEnabled(true);
-        // all steamType are false by default
-        // age=0 → age%2400==0 calls Cash.addCash; age%40==0 checks steamType
-        // steamType[steamNum=0] is false, so no addEffect call (GUI)
-        // Just checks the do-while loop that resets steamNum
-        assertDoesNotThrow(() -> item.upDate());
+        item.upDate();
+        assertTrue(item.getEnabled());
+        assertFalse(item.isRemoved());
     }
 
     @Test
@@ -106,7 +109,9 @@ class DiffuserTest extends ItemTestBase {
         Diffuser item = new Diffuser();
         item.setEnabled(true);
         item.setAge(1); // 1%40 != 0, 1%2400 != 0 → no cash or steam
-        assertDoesNotThrow(() -> item.upDate());
+        item.upDate();
+        assertTrue(item.getEnabled());
+        assertEquals(1, item.getAge());
     }
 
     // --- getImageLayer ---
@@ -115,7 +120,8 @@ class DiffuserTest extends ItemTestBase {
     void testGetImageLayer_enabled_doesNotThrow() {
         Diffuser item = new Diffuser();
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
-        assertDoesNotThrow(() -> item.getImageLayer(layer));
+        int count = item.getImageLayer(layer);
+        assertEquals(1, count);
     }
 
     @Test
@@ -123,19 +129,21 @@ class DiffuserTest extends ItemTestBase {
         Diffuser item = new Diffuser();
         item.setEnabled(false);
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
-        assertDoesNotThrow(() -> item.getImageLayer(layer));
+        int count = item.getImageLayer(layer);
+        assertEquals(1, count);
     }
 
     // --- Diffuser(int,int,int) constructor ---
 
     @Test
     void testConstructor_WithCoords_executesCode() {
+        Diffuser[] holder = new Diffuser[1];
         try {
-            new Diffuser(100, 100, 0);
-            // If no exception: setupDiffuser returned false → item removed from world map
+            holder[0] = new Diffuser(100, 100, 0);
         } catch (Exception e) {
             // Expected: HeadlessException from JOptionPane in headless environment
         }
+        assertTrue(holder[0] == null || !holder[0].isRemoved());
     }
 
     // --- setupDiffuser ---
@@ -143,10 +151,12 @@ class DiffuserTest extends ItemTestBase {
     @Test
     void testSetupDiffuser_headless_executesCode() {
         Diffuser item = new Diffuser();
+        assertFalse(item.isRemoved());
         try {
             Diffuser.setupDiffuser(item, false);
         } catch (Exception e) {
             // Expected: HeadlessException from JOptionPane
         }
+        assertNotNull(item);
     }
 }

@@ -1,10 +1,10 @@
 package org.simyukkuri.item;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
@@ -50,6 +50,7 @@ class MixerTest extends ItemTestBase {
     @Test
     void testGetSetBind() {
         Mixer item = new Mixer();
+        assertEquals(-1, item.getBind()); // default is -1 (no bind)
         item.setBind(42);
         assertEquals(42, item.getBind());
     }
@@ -57,6 +58,7 @@ class MixerTest extends ItemTestBase {
     @Test
     void testGetSetMix() {
         Mixer item = new Mixer();
+        assertNull(item.getMix()); // default is null
         item.setMix(null);
         assertNull(item.getMix());
     }
@@ -64,6 +66,7 @@ class MixerTest extends ItemTestBase {
     @Test
     void testGetSetCounter() {
         Mixer item = new Mixer();
+        assertEquals(0, item.getCounter());
         item.setCounter(100);
         assertEquals(100, item.getCounter());
     }
@@ -71,6 +74,7 @@ class MixerTest extends ItemTestBase {
     @Test
     void testGetSetAmount() {
         Mixer item = new Mixer();
+        assertEquals(0, item.getAmount());
         item.setAmount(500);
         assertEquals(500, item.getAmount());
     }
@@ -78,6 +82,7 @@ class MixerTest extends ItemTestBase {
     @Test
     void testGetSetSweet() {
         Mixer item = new Mixer();
+        assertEquals(0, item.getSweet());
         item.setSweet(300);
         assertEquals(300, item.getSweet());
     }
@@ -99,6 +104,7 @@ class MixerTest extends ItemTestBase {
     @Test
     void testGetBounding() {
         assertNotNull(Mixer.getBounding());
+        assertSame(Mixer.getBounding(), Mixer.getBounding());
     }
 
     @Test
@@ -152,8 +158,9 @@ class MixerTest extends ItemTestBase {
         Mixer item = new Mixer();
         item.setBind(-1);
         item.setMix(null);
-        // Should not throw even if age%2400==0 (calls Cash.addCash)
-        assertDoesNotThrow(() -> item.upDate());
+        item.upDate();
+        assertEquals(-1, item.getBind());
+        assertFalse(item.isRemoved());
     }
 
     @Test
@@ -164,8 +171,8 @@ class MixerTest extends ItemTestBase {
         SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
         item.setBind(body.getUniqueId());
         item.setEnabled(false);
-        // enabled=false → mix=null branch
-        assertDoesNotThrow(() -> item.upDate());
+        item.upDate();
+        assertFalse(item.isRemoved());
     }
 
     @Test
@@ -181,7 +188,8 @@ class MixerTest extends ItemTestBase {
         body.setLockmove(true);
         SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
         item.setBind(body.getUniqueId());
-        assertDoesNotThrow(() -> item.upDate());
+        item.upDate();
+        assertFalse(item.isRemoved());
     }
 
     @Test
@@ -216,12 +224,16 @@ class MixerTest extends ItemTestBase {
     void testGetImageLayer_doesNotThrow() {
         Mixer item = new Mixer();
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> item.getImageLayer(layer));
+        int count = item.getImageLayer(layer);
+        assertEquals(1, count);
     }
 
     @Test
     void testConstructorWithArgs_doesNotThrow() {
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> new Mixer(100, 100, 0));
+        Mixer item = new Mixer(100, 100, 0);
+        assertNotNull(item);
+        assertEquals(100, item.getX());
+        assertEquals(100, item.getY());
     }
 
     private static final class DummyEffect extends Effect {

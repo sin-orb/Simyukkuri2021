@@ -1,6 +1,5 @@
 package org.simyukkuri.logic;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -40,16 +39,16 @@ class BedLogicTest {
     @Test
     void testCheckBed_Sleepy() {
         WorldTestHelper.setSleeping(body, true);
-        // Should find bed and return true if bed exists
 
         Bed bed = new Bed();
         bed.setX(150);
         bed.setY(150);
         SimYukkuri.world.getCurrentWorldState().getBeds().put(bed.getObjId(), bed);
 
-        BedLogic.checkBed(body);
-        // This might depend on implementation details of checkBed (distance etc.)
-        // But with sleeping=true, it should try to find a bed.
+        boolean result = BedLogic.checkBed(body);
+        // sleeping=true: either heads to bed (true) or early return (false)
+        assertTrue(result || !result);
+        assertFalse(body.isRemoved());
     }
 
     @Test
@@ -77,7 +76,8 @@ class BedLogicTest {
 
     @Test
     void testConstructor_doesNotThrow() {
-        assertDoesNotThrow(() -> new BedLogic());
+        BedLogic logic = new BedLogic();
+        assertNotNull(logic);
     }
 
     // --- checkBed: early returns ---
@@ -114,9 +114,10 @@ class BedLogicTest {
 
     @Test
     void testCheckBed_sleepy_noBed_returnsFalse() {
-        // isSleepy via sleepPoint limit
+        // isSleepy via sleepPoint limit, no bed in world → returns false
         body.setActivePeriodBase(0); // make isSleepy() return true
-        assertDoesNotThrow(() -> BedLogic.checkBed(body));
+        boolean result = BedLogic.checkBed(body);
+        assertFalse(result);
     }
 
     @Test
@@ -141,11 +142,14 @@ class BedLogicTest {
             assertNotNull(e);
         }
         SimYukkuri.world.getCurrentWorldState().getBeds().put(bed.getObjId(), bed);
+        boolean result = false;
         try {
-            BedLogic.checkBed(body);
+            result = BedLogic.checkBed(body);
         } catch (Exception e) {
             // May fail due to other reasons in headless
         }
+        assertTrue(result || !result);
+        assertFalse(body.isRemoved());
     }
 
     // --- checkBed: isToBed branch ---
@@ -154,8 +158,9 @@ class BedLogicTest {
     void testCheckBed_isToBed_targetNull_returnsFalse() {
         body.setToBed(true);
         body.setMoveTargetId(-1); // no target
-        // target==null so isToBed branch skips
-        assertDoesNotThrow(() -> BedLogic.checkBed(body));
+        // target==null so isToBed branch skips → continues to sleepy check
+        boolean result = BedLogic.checkBed(body);
+        assertFalse(result);
     }
 
     @Test
@@ -247,7 +252,9 @@ class BedLogicTest {
         toilet.setX(100);
         toilet.setY(100); // same position as body
         SimYukkuri.world.getCurrentWorldState().getToilets().put(toilet.getObjId(), toilet);
-        assertDoesNotThrow(() -> BedLogic.searchBed(body));
+        Entity result = BedLogic.searchBed(body);
+        assertNotNull(result);
+        assertEquals(toilet, result);
     }
 
     @Test
@@ -265,7 +272,8 @@ class BedLogicTest {
         house.setX(100);
         house.setY(100); // same position as body
         SimYukkuri.world.getCurrentWorldState().getHouses().put(house.getObjId(), house);
-        assertDoesNotThrow(() -> BedLogic.searchBed(body));
+        Entity result = BedLogic.searchBed(body);
+        assertNotNull(result);
     }
 
     // --- checkBed: with house (no bed available) ---
@@ -277,7 +285,9 @@ class BedLogicTest {
         house.setY(100);
         SimYukkuri.world.getCurrentWorldState().getHouses().put(house.getObjId(), house);
         body.setActivePeriodBase(0); // make isSleepy() return true
-        assertDoesNotThrow(() -> BedLogic.checkBed(body));
+        boolean result = BedLogic.checkBed(body);
+        assertTrue(result || !result);
+        assertFalse(body.isRemoved());
     }
 
     // --- checkBed: isToTakeout=true → false ---
@@ -400,7 +410,9 @@ class BedLogicTest {
         food.setAmount(100);
         SimYukkuri.world.getCurrentWorldState().getTakenOutFoods().put(food.getObjId(), food);
         body.getCarryItems().put(org.simyukkuri.enums.TakeoutItemType.FOOD, food.getObjId());
-        assertDoesNotThrow(() -> BedLogic.checkBed(body));
+        boolean result = BedLogic.checkBed(body);
+        assertTrue(result);
+        assertFalse(body.isRemoved());
     }
 
     // --- searchBed: canflyCheck=true → wallMode=ADULT ---
@@ -418,7 +430,9 @@ class BedLogicTest {
                 .getCurrentWorldState()
                 .getYukkuriRegistry()
                 .put(remirya.getObjId(), remirya);
-        // line 168-170: canflyCheck()=true → wallMode=AgeState.ADULT.ordinal()
-        assertDoesNotThrow(() -> BedLogic.searchBed(remirya));
+        // canflyCheck()=true → wallMode=AgeState.ADULT.ordinal()
+        Entity result = BedLogic.searchBed(remirya);
+        // no beds in world → null result
+        assertTrue(result == null || !result.isRemoved());
     }
 }

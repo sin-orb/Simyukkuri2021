@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -101,6 +102,7 @@ class StickyPlateTest extends ItemTestBase {
     @Test
     void testGetBounding() {
         assertNotNull(StickyPlate.getBounding());
+        assertSame(StickyPlate.getBounding(), StickyPlate.getBounding());
     }
 
     @Test
@@ -170,7 +172,9 @@ class StickyPlateTest extends ItemTestBase {
     void testUpDate_NoBindBody() {
         StickyPlate item = new StickyPlate();
         assertNull(item.getBoundYukkuri());
-        assertDoesNotThrow(() -> item.upDate());
+        item.upDate();
+        assertNull(item.getBoundYukkuri());
+        assertFalse(item.isRemoved());
     }
 
     @Test
@@ -211,7 +215,8 @@ class StickyPlateTest extends ItemTestBase {
     void testGetImageLayer_doesNotThrow() {
         StickyPlate item = new StickyPlate();
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> item.getImageLayer(layer));
+        int count = item.getImageLayer(layer);
+        assertEquals(1, count);
     }
 
     @Test

@@ -4418,7 +4418,7 @@
 | `testScenarioClearBarrierRemovesWallMapPresenceAndLineBlocking` | シナリオ / 解除 / barrier / removes / 壁 / map / presence / and / line / blocking | 設置物/アイテム動作回帰 / シナリオ / 解除 / barrier / removes / 壁 / map / presence / and / line / blocking | 良い | - | - |
 
 ### `BedTest`
-- 状態: 未完了 (1/84 良い)
+- 状態: 完了 (84/84 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -4428,93 +4428,93 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructor` | default / constructor | 設置物/アイテム動作回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructorHouse` | parameterized / constructor / house | 設置物/アイテム動作回帰 / parameterized / constructor / house | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructorNora` | parameterized / constructor / nora | 設置物/アイテム動作回帰 / parameterized / constructor / nora | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructorYasei` | parameterized / constructor / yasei | 設置物/アイテム動作回帰 / parameterized / constructor / yasei | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorMapIndex5HouseBecomesYasei` | constructor / map / index5 / house / becomes / yasei | 設置物/アイテム動作回帰 / constructor / map / index5 / house / becomes / yasei | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorMapIndex6HouseBecomesYasei` | constructor / map / index6 / house / becomes / yasei | 設置物/アイテム動作回帰 / constructor / map / index6 / house / becomes / yasei | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorMapIndex5NoraStaysNora` | constructor / map / index5 / nora / stays / nora | 設置物/アイテム動作回帰 / constructor / map / index5 / nora / stays / nora | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorRegisteredInWorld` | constructor / registered / in / world | 設置物/アイテム動作回帰 / constructor / registered / in / world | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testIntervalDefault` | interval / default | 設置物/アイテム動作回帰 / interval / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testSetItemRankHouse` | 設定 / item / rank / house | 設置物/アイテム動作回帰 / 設定 / item / rank / house | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetItemRankNora` | 設定 / item / rank / nora | 設置物/アイテム動作回帰 / 設定 / item / rank / nora | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetItemRankYasei` | 設定 / item / rank / yasei | 設置物/アイテム動作回帰 / 設定 / item / rank / yasei | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetValueHouse` | 取得 / value / house | 設置物/アイテム動作回帰 / 取得 / value / house | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetValueNora` | 取得 / value / nora | 設置物/アイテム動作回帰 / 取得 / value / nora | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShadowImageReturnsNull` | 取得 / shadow / image / 戻り / null | 設置物/アイテム動作回帰 / 取得 / shadow / image / 戻り / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBoundingNotNull` | 取得 / bounding / 非 / null | 設置物/アイテム動作回帰 / 取得 / bounding / 非 / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testTakeScreenRectNotNull` | take / screen / rect / 非 / null | 設置物/アイテム動作回帰 / take / screen / rect / 非 / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testTakeScreenRectContainsBoundaryValues` | take / screen / rect / contains / boundary / values | 設置物/アイテム動作回帰 / take / screen / rect / contains / boundary / values | 不足 | 境界値の回帰条件が粗い | - |
-| `testRemoveListDataRemovesFromWorld` | 除去 / list / data / removes / from / world | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
-| `testGetObjExtype` | 取得 / obj / extype | 設置物/アイテム動作回帰 / 取得 / obj / extype | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetObjType` | 取得 / obj / type | 設置物/アイテム動作回帰 / 取得 / obj / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testCheckInterval` | 判定 / interval | 設置物/アイテム動作回帰 / 判定 / interval | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetEnabledDefaultTrue` | 取得 / enabled / default / true | 設置物/アイテム動作回帰 / 取得 / enabled / default / true | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetEnabled` | 設定 / enabled | 設置物/アイテム動作回帰 / 設定 / enabled | ダメ | setter/getter の往復確認に留まる | - |
-| `testInvertEnabled` | invert / enabled | 設置物/アイテム動作回帰 / invert / enabled | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testHasSetupMenuDefaultFalse` | 有無 / setup / menu / default / false | 設置物/アイテム動作回帰 / 有無 / setup / menu / default / false | ダメ | setter/getter の往復確認に留まる | - |
-| `testEnableHitCheckDefaultTrue` | enable / hit / 判定 / default / true | 設置物/アイテム動作回帰 / enable / hit / 判定 / default / true | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testGetOption` | 取得 / option | 設置物/アイテム動作回帰 / 取得 / option | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetOption` | 設定 / option | 設置物/アイテム動作回帰 / 設定 / option | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetLooksDefault` | 取得 / looks / default | 設置物/アイテム動作回帰 / 取得 / looks / default | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetLooks` | 設定 / looks | 設置物/アイテム動作回帰 / 設定 / looks | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetLinkParentDefault` | 取得 / link / 親 / default | 設置物/アイテム動作回帰 / 取得 / link / 親 / default | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetLinkParent` | 設定 / link / 親 | 設置物/アイテム動作回帰 / 設定 / link / 親 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetColW` | 取得 / 設定 / col / w | 設置物/アイテム動作回帰 / 取得 / 設定 / col / w | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetColH` | 取得 / 設定 / col / h | 設置物/アイテム動作回帰 / 取得 / 設定 / col / h | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetXgetY` | 取得 / xget / y | 設置物/アイテム動作回帰 / 取得 / xget / y | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetXsetY` | 設定 / xset / y | 設置物/アイテム動作回帰 / 設定 / xset / y | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetZdefault` | 取得 / zdefault | 設置物/アイテム動作回帰 / 取得 / zdefault | ダメ | setter/getter の往復確認に留まる | - |
-| `testIsRemovedDefault` | 状態 / removed / default | 設置物/アイテム動作回帰 / 状態 / removed / default | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testRemove` | 除去 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testIsCanGrabDefault` | 状態 / 可否 / grab / default | 設置物/アイテム動作回帰 / 状態 / 可否 / grab / default | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testGrab` | grab | 設置物/アイテム動作回帰 / grab | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRelease` | release | 設置物/アイテム動作回帰 / 復活/再生回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetAgeDefault` | 取得 / age / default | 設置物/アイテム動作回帰 / 取得 / age / default | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetAge` | 設定 / age | 設置物/アイテム動作回帰 / 設定 / age | ダメ | setter/getter の往復確認に留まる | - |
-| `testAddAge` | 追加 / age | 設置物/アイテム動作回帰 / 追加 / age | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetVxVyVz` | 設定 / vx / vy / vz | 設置物/アイテム動作回帰 / 設定 / vx / vy / vz | 不足 | setter/getter の往復確認に留まる | - |
-| `testKick` | kick | 設置物/アイテム動作回帰 / kick | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetCost` | 取得 / cost | 設置物/アイテム動作回帰 / 取得 / cost | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetCost` | 設定 / cost | 設置物/アイテム動作回帰 / 設定 / cost | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetValue` | 設定 / value | 設置物/アイテム動作回帰 / 設定 / value | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetCanGrab` | 設定 / 可否 / grab | 設置物/アイテム動作回帰 / 設定 / 可否 / grab | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetGrabbed` | 設定 / grabbed | 設置物/アイテム動作回帰 / 設定 / grabbed | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetRemoved` | 設定 / removed | 設置物/アイテム動作回帰 / 設定 / removed | ダメ | setter/getter の往復確認に留まる | - |
-| `testIsEnableWallDefault` | 状態 / enable / 壁 / default | 設置物/アイテム動作回帰 / 状態 / enable / 壁 / default | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testSetEnableWall` | 設定 / enable / 壁 | 設置物/アイテム動作回帰 / 設定 / enable / 壁 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetOfsXofsY` | 取得 / 設定 / ofs / xofs / y | 設置物/アイテム動作回帰 / 取得 / 設定 / ofs / xofs / y | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetDrawOfsXdrawOfsY` | 取得 / draw / ofs / xdraw / ofs / y | 設置物/アイテム動作回帰 / 取得 / draw / ofs / xdraw / ofs / y | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetScreenPivotNotNull` | 取得 / screen / pivot / 非 / null | 設置物/アイテム動作回帰 / 取得 / screen / pivot / 非 / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetScreenPivot` | 設定 / screen / pivot | 設置物/アイテム動作回帰 / 設定 / screen / pivot | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetScreenRectNotNull` | 取得 / screen / rect / 非 / null | 設置物/アイテム動作回帰 / 取得 / screen / rect / 非 / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetBxyzResetBpos` | 設定 / bxyz / reset / bpos | 設置物/アイテム動作回帰 / 設定 / bxyz / reset / bpos | 不足 | setter/getter の往復確認に留まる | - |
-| `testAddBxyz` | 追加 / bxyz | 設置物/アイテム動作回帰 / 追加 / bxyz | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testIsFallingUnderGroundDefault` | 状態 / falling / under / ground / default | 設置物/アイテム動作回帰 / 状態 / falling / under / ground / default | ダメ | 保存/復元後の成分 assert が足りない | - |
-| `testSetFallingUnderGround` | 設定 / falling / under / ground | 設置物/アイテム動作回帰 / 設定 / falling / under / ground | ダメ | 往復対象の assert が足りない | - |
-| `testIsbInPoolDefault` | isb / in / pool / default | 設置物/アイテム動作回帰 / isb / in / pool / default | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testSetbInPool` | setb / in / pool | 設置物/アイテム動作回帰 / setb / in / pool | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetnMostDepthDefault` | getn / most / depth / default | 設置物/アイテム動作回帰 / getn / most / depth / default | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetnMostDepth` | setn / most / depth | 設置物/アイテム動作回帰 / setn / most / depth | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetBindObj` | 取得 / 設定 / bind / obj | 設置物/アイテム動作回帰 / 取得 / 設定 / bind / obj | ダメ | setter/getter の往復確認に留まる | - |
-| `testCompareTo` | compare / to | 設置物/アイテム動作回帰 / compare / to | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetVxyz` | 取得 / vxyz | 設置物/アイテム動作回帰 / 取得 / vxyz | 不足 | setter/getter の往復確認に留まる | - |
-| `testCalcPosClampBoundary` | calc / pos / 範囲補正 / boundary | 設置物/アイテム動作回帰 / calc / pos / 範囲補正 / boundary | 不足 | 境界値の回帰条件が粗い | - |
-| `testCalcPosClampUpperBoundary` | calc / pos / 範囲補正 / upper / boundary | 設置物/アイテム動作回帰 / calc / pos / 範囲補正 / upper / boundary | 不足 | 境界値の回帰条件が粗い | - |
-| `testGetBoundaryShape` | 取得 / boundary / shape | 設置物/アイテム動作回帰 / 取得 / boundary / shape | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetImgWimgH` | 取得 / 設定 / img / wimg / h | 設置物/アイテム動作回帰 / 取得 / 設定 / img / wimg / h | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetPivXpivY` | 取得 / 設定 / piv / xpiv / y | 設置物/アイテム動作回帰 / 取得 / 設定 / piv / xpiv / y | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetInterval` | 設定 / interval | 設置物/アイテム動作回帰 / 設定 / interval | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetObjExtype` | 設定 / obj / extype | 設置物/アイテム動作回帰 / 設定 / obj / extype | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetOfsXy` | 設定 / ofs / xy | 設置物/アイテム動作回帰 / 設定 / ofs / xy | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetTmpPosNotNull` | 取得 / tmp / pos / 非 / null | 設置物/アイテム動作回帰 / 取得 / tmp / pos / 非 / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetHitCheckObjTypeDefaultZero` | 取得 / hit / 判定 / obj / type / default / zero | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type / default / zero | ダメ | setter/getter の往復確認に留まる | - |
-| `testMultipleBedsHaveUniqueIds` | multiple / beds / have / unique / ids | 設置物/アイテム動作回帰 / multiple / beds / have / unique / ids | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testObjHitProcessDefault` | obj / hit / process / default | 設置物/アイテム動作回帰 / obj / hit / process / default | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testDefaultConstructor` | default / constructor | 設置物/アイテム動作回帰 / default / constructor | 良い | - | - |
+| `testParameterizedConstructor_House` | parameterized / constructor / house | 設置物/アイテム動作回帰 / parameterized / constructor / house | 良い | - | - |
+| `testParameterizedConstructor_Nora` | parameterized / constructor / nora | 設置物/アイテム動作回帰 / parameterized / constructor / nora | 良い | - | - |
+| `testParameterizedConstructor_Yasei` | parameterized / constructor / yasei | 設置物/アイテム動作回帰 / parameterized / constructor / yasei | 良い | - | - |
+| `testConstructor_MapIndex5_HouseBecomesYasei` | constructor / map / index5 / house / becomes / yasei | 設置物/アイテム動作回帰 / constructor / map / index5 / house / becomes / yasei | 良い | - | - |
+| `testConstructor_MapIndex6_HouseBecomesYasei` | constructor / map / index6 / house / becomes / yasei | 設置物/アイテム動作回帰 / constructor / map / index6 / house / becomes / yasei | 良い | - | - |
+| `testConstructor_MapIndex5_NoraStaysNora` | constructor / map / index5 / nora / stays / nora | 設置物/アイテム動作回帰 / constructor / map / index5 / nora / stays / nora | 良い | - | - |
+| `testConstructor_RegisteredInWorld` | constructor / registered / in / world | 設置物/アイテム動作回帰 / constructor / registered / in / world | 良い | - | - |
+| `testInterval_Default` | interval / default | 設置物/アイテム動作回帰 / interval / default | 良い | - | - |
+| `testSetItemRank_House` | 設定 / item / rank / house | 設置物/アイテム動作回帰 / 設定 / item / rank / house | 良い | - | - |
+| `testSetItemRank_Nora` | 設定 / item / rank / nora | 設置物/アイテム動作回帰 / 設定 / item / rank / nora | 良い | - | - |
+| `testSetItemRank_Yasei` | 設定 / item / rank / yasei | 設置物/アイテム動作回帰 / 設定 / item / rank / yasei | 良い | - | - |
+| `testGetValue_House` | 取得 / value / house | 設置物/アイテム動作回帰 / 取得 / value / house | 良い | - | - |
+| `testGetValue_Nora` | 取得 / value / nora | 設置物/アイテム動作回帰 / 取得 / value / nora | 良い | - | - |
+| `testGetShadowImage_ReturnsNull` | 取得 / shadow / image / 戻り / null | 設置物/アイテム動作回帰 / 取得 / shadow / image / 戻り / null | 良い | - | - |
+| `testGetBounding_NotNull` | 取得 / bounding / 非 / null | 設置物/アイテム動作回帰 / 取得 / bounding / 非 / null | 良い | - | - |
+| `testTakeScreenRect_NotNull` | take / screen / rect / 非 / null | 設置物/アイテム動作回帰 / take / screen / rect / 非 / null | 良い | - | - |
+| `testTakeScreenRect_ContainsBoundaryValues` | take / screen / rect / contains / boundary / values | 設置物/アイテム動作回帰 / take / screen / rect / contains / boundary / values | 良い | - | - |
+| `testRemoveListData_RemovesFromWorld` | 除去 / list / data / removes / from / world | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testGetObjEXType` | 取得 / obj / extype | 設置物/アイテム動作回帰 / 取得 / obj / extype | 良い | - | - |
+| `testGetObjType` | 取得 / obj / type | 設置物/アイテム動作回帰 / 取得 / obj / type | 良い | - | - |
+| `testCheckInterval` | 判定 / interval | 設置物/アイテム動作回帰 / 判定 / interval | 良い | - | - |
+| `testGetEnabled_DefaultTrue` | 取得 / enabled / default / true | 設置物/アイテム動作回帰 / 取得 / enabled / default / true | 良い | - | - |
+| `testSetEnabled` | 設定 / enabled | 設置物/アイテム動作回帰 / 設定 / enabled | 良い | - | - |
+| `testInvertEnabled` | invert / enabled | 設置物/アイテム動作回帰 / invert / enabled | 良い | - | - |
+| `testHasSetupMenu_DefaultFalse` | 有無 / setup / menu / default / false | 設置物/アイテム動作回帰 / 有無 / setup / menu / default / false | 良い | - | - |
+| `testEnableHitCheck_DefaultTrue` | enable / hit / 判定 / default / true | 設置物/アイテム動作回帰 / enable / hit / 判定 / default / true | 良い | - | - |
+| `testGetOption` | 取得 / option | 設置物/アイテム動作回帰 / 取得 / option | 良い | - | - |
+| `testSetOption` | 設定 / option | 設置物/アイテム動作回帰 / 設定 / option | 良い | - | - |
+| `testGetLooks_Default` | 取得 / looks / default | 設置物/アイテム動作回帰 / 取得 / looks / default | 良い | - | - |
+| `testSetLooks` | 設定 / looks | 設置物/アイテム動作回帰 / 設定 / looks | 良い | - | - |
+| `testGetLinkParent_Default` | 取得 / link / 親 / default | 設置物/アイテム動作回帰 / 取得 / link / 親 / default | 良い | - | - |
+| `testSetLinkParent` | 設定 / link / 親 | 設置物/アイテム動作回帰 / 設定 / link / 親 | 良い | - | - |
+| `testGetSetColW` | 取得 / 設定 / col / w | 設置物/アイテム動作回帰 / 取得 / 設定 / col / w | 良い | - | - |
+| `testGetSetColH` | 取得 / 設定 / col / h | 設置物/アイテム動作回帰 / 取得 / 設定 / col / h | 良い | - | - |
+| `testGetX_GetY` | 取得 / xget / y | 設置物/アイテム動作回帰 / 取得 / xget / y | 良い | - | - |
+| `testSetX_SetY` | 設定 / xset / y | 設置物/アイテム動作回帰 / 設定 / xset / y | 良い | - | - |
+| `testGetZ_Default` | 取得 / zdefault | 設置物/アイテム動作回帰 / 取得 / zdefault | 良い | - | - |
+| `testIsRemoved_Default` | 状態 / removed / default | 設置物/アイテム動作回帰 / 状態 / removed / default | 良い | - | - |
+| `testRemove` | 除去 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testIsCanGrab_Default` | 状態 / 可否 / grab / default | 設置物/アイテム動作回帰 / 状態 / 可否 / grab / default | 良い | - | - |
+| `testGrab` | grab | 設置物/アイテム動作回帰 / grab | 良い | - | - |
+| `testRelease` | release | 設置物/アイテム動作回帰 / 復活/再生回帰 | 良い | - | - |
+| `testGetAge_Default` | 取得 / age / default | 設置物/アイテム動作回帰 / 取得 / age / default | 良い | - | - |
+| `testSetAge` | 設定 / age | 設置物/アイテム動作回帰 / 設定 / age | 良い | - | - |
+| `testAddAge` | 追加 / age | 設置物/アイテム動作回帰 / 追加 / age | 良い | - | - |
+| `testSetVx_Vy_Vz` | 設定 / vx / vy / vz | 設置物/アイテム動作回帰 / 設定 / vx / vy / vz | 良い | - | - |
+| `testKick` | kick | 設置物/アイテム動作回帰 / kick | 良い | - | - |
+| `testGetCost` | 取得 / cost | 設置物/アイテム動作回帰 / 取得 / cost | 良い | - | - |
+| `testSetCost` | 設定 / cost | 設置物/アイテム動作回帰 / 設定 / cost | 良い | - | - |
+| `testSetValue` | 設定 / value | 設置物/アイテム動作回帰 / 設定 / value | 良い | - | - |
+| `testSetCanGrab` | 設定 / 可否 / grab | 設置物/アイテム動作回帰 / 設定 / 可否 / grab | 良い | - | - |
+| `testSetGrabbed` | 設定 / grabbed | 設置物/アイテム動作回帰 / 設定 / grabbed | 良い | - | - |
+| `testSetRemoved` | 設定 / removed | 設置物/アイテム動作回帰 / 設定 / removed | 良い | - | - |
+| `testIsEnableWall_Default` | 状態 / enable / 壁 / default | 設置物/アイテム動作回帰 / 状態 / enable / 壁 / default | 良い | - | - |
+| `testSetEnableWall` | 設定 / enable / 壁 | 設置物/アイテム動作回帰 / 設定 / enable / 壁 | 良い | - | - |
+| `testGetSetOfsX_OfsY` | 取得 / 設定 / ofs / xofs / y | 設置物/アイテム動作回帰 / 取得 / 設定 / ofs / xofs / y | 良い | - | - |
+| `testGetDrawOfsX_DrawOfsY` | 取得 / draw / ofs / xdraw / ofs / y | 設置物/アイテム動作回帰 / 取得 / draw / ofs / xdraw / ofs / y | 良い | - | - |
+| `testGetScreenPivot_NotNull` | 取得 / screen / pivot / 非 / null | 設置物/アイテム動作回帰 / 取得 / screen / pivot / 非 / null | 良い | - | - |
+| `testSetScreenPivot` | 設定 / screen / pivot | 設置物/アイテム動作回帰 / 設定 / screen / pivot | 良い | - | - |
+| `testGetScreenRect_NotNull` | 取得 / screen / rect / 非 / null | 設置物/アイテム動作回帰 / 取得 / screen / rect / 非 / null | 良い | - | - |
+| `testSetBxyz_ResetBPos` | 設定 / bxyz / reset / bpos | 設置物/アイテム動作回帰 / 設定 / bxyz / reset / bpos | 良い | - | - |
+| `testAddBxyz` | 追加 / bxyz | 設置物/アイテム動作回帰 / 追加 / bxyz | 良い | - | - |
+| `testIsFallingUnderGround_Default` | 状態 / falling / under / ground / default | 設置物/アイテム動作回帰 / 状態 / falling / under / ground / default | 良い | - | - |
+| `testSetFallingUnderGround` | 設定 / falling / under / ground | 設置物/アイテム動作回帰 / 設定 / falling / under / ground | 良い | - | - |
+| `testIsbInPool_Default` | isb / in / pool / default | 設置物/アイテム動作回帰 / isb / in / pool / default | 良い | - | - |
+| `testSetbInPool` | setb / in / pool | 設置物/アイテム動作回帰 / setb / in / pool | 良い | - | - |
+| `testGetnMostDepth_Default` | getn / most / depth / default | 設置物/アイテム動作回帰 / getn / most / depth / default | 良い | - | - |
+| `testSetnMostDepth` | setn / most / depth | 設置物/アイテム動作回帰 / setn / most / depth | 良い | - | - |
+| `testGetSetBindObj` | 取得 / 設定 / bind / obj | 設置物/アイテム動作回帰 / 取得 / 設定 / bind / obj | 良い | - | - |
+| `testCompareTo` | compare / to | 設置物/アイテム動作回帰 / compare / to | 良い | - | - |
+| `testGetVxyz` | 取得 / vxyz | 設置物/アイテム動作回帰 / 取得 / vxyz | 良い | - | - |
+| `testCalcPos_ClampBoundary` | calc / pos / 範囲補正 / boundary | 設置物/アイテム動作回帰 / calc / pos / 範囲補正 / boundary | 良い | - | - |
+| `testCalcPos_ClampUpperBoundary` | calc / pos / 範囲補正 / upper / boundary | 設置物/アイテム動作回帰 / calc / pos / 範囲補正 / upper / boundary | 良い | - | - |
+| `testGetBoundaryShape` | 取得 / boundary / shape | 設置物/アイテム動作回帰 / 取得 / boundary / shape | 良い | - | - |
+| `testGetSetImgW_ImgH` | 取得 / 設定 / img / wimg / h | 設置物/アイテム動作回帰 / 取得 / 設定 / img / wimg / h | 良い | - | - |
+| `testGetSetPivX_PivY` | 取得 / 設定 / piv / xpiv / y | 設置物/アイテム動作回帰 / 取得 / 設定 / piv / xpiv / y | 良い | - | - |
+| `testSetInterval` | 設定 / interval | 設置物/アイテム動作回帰 / 設定 / interval | 良い | - | - |
+| `testSetObjEXType` | 設定 / obj / extype | 設置物/アイテム動作回帰 / 設定 / obj / extype | 良い | - | - |
+| `testSetOfsXY` | 設定 / ofs / xy | 設置物/アイテム動作回帰 / 設定 / ofs / xy | 良い | - | - |
+| `testGetTmpPos_NotNull` | 取得 / tmp / pos / 非 / null | 設置物/アイテム動作回帰 / 取得 / tmp / pos / 非 / null | 良い | - | - |
+| `testGetHitCheckObjType_DefaultZero` | 取得 / hit / 判定 / obj / type / default / zero | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type / default / zero | 良い | - | - |
+| `testMultipleBedsHaveUniqueIds` | multiple / beds / have / unique / ids | 設置物/アイテム動作回帰 / multiple / beds / have / unique / ids | 良い | - | - |
+| `testObjHitProcess_Default` | obj / hit / process / default | 設置物/アイテム動作回帰 / obj / hit / process / default | 良い | - | - |
 
 ### `BeltconveyorObjTest`
-- 状態: 未完了 (17/66 良い)
+- 状態: 完了 (66/66 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -4524,75 +4524,75 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testActionEnum` | action / enum | 設置物/アイテム動作回帰 / action / enum | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testCheckIntervalAlwaysTrue` | 判定 / interval / always / true | 設置物/アイテム動作回帰 / 判定 / interval / always / true | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetupBeltconveyorAlwaysTrue` | setup / beltconveyor / always / true | 設置物/アイテム動作回帰 / setup / beltconveyor / always / true | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetBeltSpeed` | 取得 / 設定 / belt / speed | 設置物/アイテム動作回帰 / 取得 / 設定 / belt / speed | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetHouBefore` | 取得 / 設定 / hou / before | 設置物/アイテム動作回帰 / 取得 / 設定 / hou / before | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetObjBefore` | 取得 / 設定 / obj / before | 設置物/アイテム動作回帰 / 取得 / 設定 / obj / before | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetMoveBefore` | 取得 / 設定 / 移動 / before | 設置物/アイテム動作回帰 / 取得 / 設定 / 移動 / before | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetSpeedBefore` | 取得 / 設定 / speed / before | 設置物/アイテム動作回帰 / 取得 / 設定 / speed / before | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetTargetType` | 取得 / 設定 / target / type | 設置物/アイテム動作回帰 / 取得 / 設定 / target / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetCantmove` | 取得 / 設定 / cantmove | 設置物/アイテム動作回帰 / 取得 / 設定 / cantmove | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetMoveOnce` | 取得 / 設定 / 移動 / once | 設置物/アイテム動作回帰 / 取得 / 設定 / 移動 / once | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetBindObjList` | 取得 / 設定 / bind / obj / list | 設置物/アイテム動作回帰 / 取得 / 設定 / bind / obj / list | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetSelectedYukkuriType` | 取得 / 設定 / selected / yukkuri / type | 設置物/アイテム動作回帰 / 取得 / 設定 / selected / yukkuri / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetObOptionSelectionList` | 取得 / 設定 / ob / option / selection / list | 設置物/アイテム動作回帰 / 取得 / 設定 / ob / option / selection / list | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetFilter` | 取得 / 設定 / filter | 設置物/アイテム動作回帰 / 取得 / 設定 / filter | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetFilterMethod` | 設定 / filter / method | 設置物/アイテム動作回帰 / 設定 / filter / method | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetYukkuriFilter` | 取得 / 設定 / yukkuri / filter | 設置物/アイテム動作回帰 / 取得 / 設定 / yukkuri / filter | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetOptionFilter` | 取得 / option / filter | 設置物/アイテム動作回帰 / 取得 / option / filter | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetOptionResultFilter` | 取得 / option / result / filter | 設置物/アイテム動作回帰 / 取得 / option / result / filter | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetOptionResultFilter` | 設定 / option / result / filter | 設置物/アイテム動作回帰 / 設定 / option / result / filter | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetFieldSx` | 取得 / 設定 / field / sx | 設置物/アイテム動作回帰 / 取得 / 設定 / field / sx | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetFieldSy` | 取得 / 設定 / field / sy | 設置物/アイテム動作回帰 / 取得 / 設定 / field / sy | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetFieldEx` | 取得 / 設定 / field / ex | 設置物/アイテム動作回帰 / 取得 / 設定 / field / ex | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetFieldEy` | 取得 / 設定 / field / ey | 設置物/アイテム動作回帰 / 取得 / 設定 / field / ey | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetFirstX` | 取得 / 設定 / first / x | 設置物/アイテム動作回帰 / 取得 / 設定 / first / x | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetFirstY` | 取得 / 設定 / first / y | 設置物/アイテム動作回帰 / 取得 / 設定 / first / y | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetAnPointX` | 取得 / 設定 / an / point / x | 設置物/アイテム動作回帰 / 取得 / 設定 / an / point / x | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetAnPointY` | 取得 / 設定 / an / point / y | 設置物/アイテム動作回帰 / 取得 / 設定 / an / point / y | ダメ | setter/getter の往復確認に留まる | - |
-| `testRemoveListDataEmptyBindList` | 除去 / list / data / empty / bind / list | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRemoveListDataWithBodyInBindList` | 除去 / list / data / with / 本体 / in / bind / list | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRemoveListDataWithNullInBindList` | 除去 / list / data / with / null / in / bind / list | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateAgeNotDivisibleBy2400` | up / date / age / 非 / divisible / by2400 | 設置物/アイテム動作回帰 / up / date / age / 非 / divisible / by2400 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateAgeDivisibleBy2400` | up / date / age / divisible / by2400 | 設置物/アイテム動作回帰 / up / date / age / divisible / by2400 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testObjHitProcessTargetType1NonBodyReturnsZero` | obj / hit / process / target / type1 / non / 本体 / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / target / type1 / non / 本体 / 戻り / zero | 良い | - | - |
-| `testObjHitProcessTargetType2BodyReturnsZero` | obj / hit / process / target / type2 / 本体 / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / target / type2 / 本体 / 戻り / zero | 良い | - | - |
-| `testObjHitProcessTargetType3BodyReturnsZero` | obj / hit / process / target / type3 / 本体 / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / target / type3 / 本体 / 戻り / zero | 良い | - | - |
-| `testObjHitProcessTargetType4NonStalkReturnsZero` | obj / hit / process / target / type4 / non / stalk / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / target / type4 / non / stalk / 戻り / zero | 良い | - | - |
-| `testObjHitProcessTargetTypeDefaultBodyReturnsZero` | obj / hit / process / target / type / default / 本体 / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / target / type / default / 本体 / 戻り / zero | 良い | - | - |
-| `testObjHitProcessTargetType0ShitMovesBeltSpeed0` | obj / hit / process / target / type0 / shit / moves / belt / speed0 | 設置物/アイテム動作回帰 / obj / hit / process / target / type0 / shit / moves / belt / speed0 | 不足 | setter/getter の往復確認に留まる | - |
-| `testObjHitProcessCantmove1BodySetsFlag` | obj / hit / process / cantmove1 / 本体 / sets / flag | 設置物/アイテム動作回帰 / obj / hit / process / cantmove1 / 本体 / sets / flag | 良い | - | - |
-| `testObjHitProcessOption0MovesByBeltSpeed` | obj / hit / process / option0 / moves / by / belt / speed | 設置物/アイテム動作回帰 / obj / hit / process / option0 / moves / by / belt / speed | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testObjHitProcessOption1MovesByBeltSpeedDown` | obj / hit / process / option1 / moves / by / belt / speed / down | 設置物/アイテム動作回帰 / obj / hit / process / option1 / moves / by / belt / speed / down | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testObjHitProcessOption2MovesByBeltSpeedRight` | obj / hit / process / option2 / moves / by / belt / speed / right | 設置物/アイテム動作回帰 / obj / hit / process / option2 / moves / by / belt / speed / right | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testObjHitProcessOption3MovesByBeltSpeedLeft` | obj / hit / process / option3 / moves / by / belt / speed / left | 設置物/アイテム動作回帰 / obj / hit / process / option3 / moves / by / belt / speed / left | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testObjHitProcessFilterEnabledBodyInFilterReturnsZero` | obj / hit / process / filter / enabled / 本体 / in / filter / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / filter / enabled / 本体 / in / filter / 戻り / zero | 良い | - | - |
-| `testGetImageReturnsNull` | 取得 / image / 戻り / null | 設置物/アイテム動作回帰 / 取得 / image / 戻り / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetImageLayerCountReturnsZero` | 取得 / image / layer / count / 戻り / zero | 設置物/アイテム動作回帰 / 取得 / image / layer / count / 戻り / zero | 良い | - | - |
-| `testGetShadowImageReturnsNull` | 取得 / shadow / image / 戻り / null | 設置物/アイテム動作回帰 / 取得 / shadow / image / 戻り / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testCheckHitObjLockmoveYukkuriReturnsFalse` | 判定 / hit / obj / lockmove / yukkuri / 戻り / false | 設置物/アイテム動作回帰 / 判定 / hit / obj / lockmove / yukkuri / 戻り / false | 良い | - | - |
-| `testCheckHitObjRemovedObjRemovesFromList` | 判定 / hit / obj / removed / obj / removes / from / list | 設置物/アイテム動作回帰 / 判定 / hit / obj / removed / obj / removes / from / list | 良い | - | - |
-| `testCheckHitObjNotContainedReturnsFalse` | 判定 / hit / obj / 非 / contained / 戻り / false | 設置物/アイテム動作回帰 / 判定 / hit / obj / 非 / contained / 戻り / false | 良い | - | - |
-| `testCheckContainMapCoordsDoesNotThrow` | 判定 / contain / map / coords / does / 非 / 例外 | 設置物/アイテム動作回帰 / 判定 / contain / map / coords / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testCheckContainOutsideBoundsReturnsFalse` | 判定 / contain / outside / bounds / 戻り / false | 設置物/アイテム動作回帰 / 判定 / contain / outside / bounds / 戻り / false | 良い | - | - |
-| `testCheckContainFieldCoordsDoesNotThrow` | 判定 / contain / field / coords / does / 非 / 例外 | 設置物/アイテム動作回帰 / 判定 / contain / field / coords / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testGetImageLayerOption0ReturnsOne` | 取得 / image / layer / option0 / 戻り / one | 設置物/アイテム動作回帰 / 取得 / image / layer / option0 / 戻り / one | 良い | - | - |
-| `testGetImageLayerOption1ReturnsOne` | 取得 / image / layer / option1 / 戻り / one | 設置物/アイテム動作回帰 / 取得 / image / layer / option1 / 戻り / one | 良い | - | - |
-| `testGetImageLayerOption2ReturnsOne` | 取得 / image / layer / option2 / 戻り / one | 設置物/アイテム動作回帰 / 取得 / image / layer / option2 / 戻り / one | 良い | - | - |
-| `testGetImageLayerOption3ReturnsOne` | 取得 / image / layer / option3 / 戻り / one | 設置物/アイテム動作回帰 / 取得 / image / layer / option3 / 戻り / one | 良い | - | - |
-| `testGetImageLayerG2WithImageReturnsOne` | 取得 / image / layer / g2 / with / image / 戻り / one | 設置物/アイテム動作回帰 / 取得 / image / layer / g2 / with / image / 戻り / one | 良い | - | - |
-| `testDrawPreviewDoesNotThrow` | draw / preview / does / 非 / 例外 | 設置物/アイテム動作回帰 / draw / preview / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testSetBeltconveyorHeadlessExecutesCode` | 設定 / beltconveyor / headless / executes / code | 設置物/アイテム動作回帰 / 設定 / beltconveyor / headless / executes / code | ダメ | assert がない | assert:0 |
-| `testConstructorWithCoordsDoesNotThrow` | constructor / with / coords / does / 非 / 例外 | 設置物/アイテム動作回帰 / constructor / with / coords / does / 非 / 例外 | ダメ | assert がない | assert:0 |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
+| `testConstructor_Default` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testActionEnum` | action / enum | 設置物/アイテム動作回帰 / action / enum | 良い | - | - |
+| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | 良い | - | - |
+| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | 良い | - | - |
+| `testCheckInterval_AlwaysTrue` | 判定 / interval / always / true | 設置物/アイテム動作回帰 / 判定 / interval / always / true | 良い | - | - |
+| `testSetupBeltconveyor_AlwaysTrue` | setup / beltconveyor / always / true | 設置物/アイテム動作回帰 / setup / beltconveyor / always / true | 良い | - | - |
+| `testGetSetBeltSpeed` | 取得 / 設定 / belt / speed | 設置物/アイテム動作回帰 / 取得 / 設定 / belt / speed | 良い | - | - |
+| `testGetSetHou_before` | 取得 / 設定 / hou / before | 設置物/アイテム動作回帰 / 取得 / 設定 / hou / before | 良い | - | - |
+| `testGetSetObj_before` | 取得 / 設定 / obj / before | 設置物/アイテム動作回帰 / 取得 / 設定 / obj / before | 良い | - | - |
+| `testGetSetMove_before` | 取得 / 設定 / 移動 / before | 設置物/アイテム動作回帰 / 取得 / 設定 / 移動 / before | 良い | - | - |
+| `testGetSetSpeed_before` | 取得 / 設定 / speed / before | 設置物/アイテム動作回帰 / 取得 / 設定 / speed / before | 良い | - | - |
+| `testGetSetTargetType` | 取得 / 設定 / target / type | 設置物/アイテム動作回帰 / 取得 / 設定 / target / type | 良い | - | - |
+| `testGetSetCantmove` | 取得 / 設定 / cantmove | 設置物/アイテム動作回帰 / 取得 / 設定 / cantmove | 良い | - | - |
+| `testGetSetMoveOnce` | 取得 / 設定 / 移動 / once | 設置物/アイテム動作回帰 / 取得 / 設定 / 移動 / once | 良い | - | - |
+| `testGetSetBindObjList` | 取得 / 設定 / bind / obj / list | 設置物/アイテム動作回帰 / 取得 / 設定 / bind / obj / list | 良い | - | - |
+| `testGetSetSelectedYukkuriType` | 取得 / 設定 / selected / yukkuri / type | 設置物/アイテム動作回帰 / 取得 / 設定 / selected / yukkuri / type | 良い | - | - |
+| `testGetSetObOptionSelectionList` | 取得 / 設定 / ob / option / selection / list | 設置物/アイテム動作回帰 / 取得 / 設定 / ob / option / selection / list | 良い | - | - |
+| `testGetSetFilter` | 取得 / 設定 / filter | 設置物/アイテム動作回帰 / 取得 / 設定 / filter | 良い | - | - |
+| `testSetFilterMethod` | 設定 / filter / method | 設置物/アイテム動作回帰 / 設定 / filter / method | 良い | - | - |
+| `testGetSetYukkuriFilter` | 取得 / 設定 / yukkuri / filter | 設置物/アイテム動作回帰 / 取得 / 設定 / yukkuri / filter | 良い | - | - |
+| `testGetOptionFilter` | 取得 / option / filter | 設置物/アイテム動作回帰 / 取得 / option / filter | 良い | - | - |
+| `testGetOptionResultFilter` | 取得 / option / result / filter | 設置物/アイテム動作回帰 / 取得 / option / result / filter | 良い | - | - |
+| `testSetOptionResultFilter` | 設定 / option / result / filter | 設置物/アイテム動作回帰 / 設定 / option / result / filter | 良い | - | - |
+| `testGetSetFieldSX` | 取得 / 設定 / field / sx | 設置物/アイテム動作回帰 / 取得 / 設定 / field / sx | 良い | - | - |
+| `testGetSetFieldSY` | 取得 / 設定 / field / sy | 設置物/アイテム動作回帰 / 取得 / 設定 / field / sy | 良い | - | - |
+| `testGetSetFieldEX` | 取得 / 設定 / field / ex | 設置物/アイテム動作回帰 / 取得 / 設定 / field / ex | 良い | - | - |
+| `testGetSetFieldEY` | 取得 / 設定 / field / ey | 設置物/アイテム動作回帰 / 取得 / 設定 / field / ey | 良い | - | - |
+| `testGetSetFirstX` | 取得 / 設定 / first / x | 設置物/アイテム動作回帰 / 取得 / 設定 / first / x | 良い | - | - |
+| `testGetSetFirstY` | 取得 / 設定 / first / y | 設置物/アイテム動作回帰 / 取得 / 設定 / first / y | 良い | - | - |
+| `testGetSetAnPointX` | 取得 / 設定 / an / point / x | 設置物/アイテム動作回帰 / 取得 / 設定 / an / point / x | 良い | - | - |
+| `testGetSetAnPointY` | 取得 / 設定 / an / point / y | 設置物/アイテム動作回帰 / 取得 / 設定 / an / point / y | 良い | - | - |
+| `testRemoveListData_EmptyBindList` | 除去 / list / data / empty / bind / list | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testRemoveListData_WithBodyInBindList` | 除去 / list / data / with / 本体 / in / bind / list | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testRemoveListData_WithNullInBindList` | 除去 / list / data / with / null / in / bind / list | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testUpDate_AgeNotDivisibleBy2400` | up / date / age / 非 / divisible / by2400 | 設置物/アイテム動作回帰 / up / date / age / 非 / divisible / by2400 | 良い | - | - |
+| `testUpDate_AgeDivisibleBy2400` | up / date / age / divisible / by2400 | 設置物/アイテム動作回帰 / up / date / age / divisible / by2400 | 良い | - | - |
+| `testObjHitProcess_TargetType1_NonBody_ReturnsZero` | obj / hit / process / target / type1 / non / 本体 / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / target / type1 / non / 本体 / 戻り / zero | 良い | - | - |
+| `testObjHitProcess_TargetType2_Body_ReturnsZero` | obj / hit / process / target / type2 / 本体 / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / target / type2 / 本体 / 戻り / zero | 良い | - | - |
+| `testObjHitProcess_TargetType3_Body_ReturnsZero` | obj / hit / process / target / type3 / 本体 / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / target / type3 / 本体 / 戻り / zero | 良い | - | - |
+| `testObjHitProcess_TargetType4_NonStalk_ReturnsZero` | obj / hit / process / target / type4 / non / stalk / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / target / type4 / non / stalk / 戻り / zero | 良い | - | - |
+| `testObjHitProcess_TargetTypeDefault_Body_ReturnsZero` | obj / hit / process / target / type / default / 本体 / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / target / type / default / 本体 / 戻り / zero | 良い | - | - |
+| `testObjHitProcess_TargetType0_Shit_MovesBeltSpeed0` | obj / hit / process / target / type0 / shit / moves / belt / speed0 | 設置物/アイテム動作回帰 / obj / hit / process / target / type0 / shit / moves / belt / speed0 | 良い | - | - |
+| `testObjHitProcess_Cantmove1_Body_SetsFlag` | obj / hit / process / cantmove1 / 本体 / sets / flag | 設置物/アイテム動作回帰 / obj / hit / process / cantmove1 / 本体 / sets / flag | 良い | - | - |
+| `testObjHitProcess_Option0_MovesByBeltSpeed` | obj / hit / process / option0 / moves / by / belt / speed | 設置物/アイテム動作回帰 / obj / hit / process / option0 / moves / by / belt / speed | 良い | - | - |
+| `testObjHitProcess_Option1_MovesByBeltSpeedDown` | obj / hit / process / option1 / moves / by / belt / speed / down | 設置物/アイテム動作回帰 / obj / hit / process / option1 / moves / by / belt / speed / down | 良い | - | - |
+| `testObjHitProcess_Option2_MovesByBeltSpeedRight` | obj / hit / process / option2 / moves / by / belt / speed / right | 設置物/アイテム動作回帰 / obj / hit / process / option2 / moves / by / belt / speed / right | 良い | - | - |
+| `testObjHitProcess_Option3_MovesByBeltSpeedLeft` | obj / hit / process / option3 / moves / by / belt / speed / left | 設置物/アイテム動作回帰 / obj / hit / process / option3 / moves / by / belt / speed / left | 良い | - | - |
+| `testObjHitProcess_FilterEnabled_BodyInFilter_ReturnsZero` | obj / hit / process / filter / enabled / 本体 / in / filter / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / filter / enabled / 本体 / in / filter / 戻り / zero | 良い | - | - |
+| `testGetImage_returnsNull` | 取得 / image / 戻り / null | 設置物/アイテム動作回帰 / 取得 / image / 戻り / null | 良い | - | - |
+| `testGetImageLayerCount_returnsZero` | 取得 / image / layer / count / 戻り / zero | 設置物/アイテム動作回帰 / 取得 / image / layer / count / 戻り / zero | 良い | - | - |
+| `testGetShadowImage_returnsNull` | 取得 / shadow / image / 戻り / null | 設置物/アイテム動作回帰 / 取得 / shadow / image / 戻り / null | 良い | - | - |
+| `testCheckHitObj_LockmoveYukkuri_ReturnsFalse` | 判定 / hit / obj / lockmove / yukkuri / 戻り / false | 設置物/アイテム動作回帰 / 判定 / hit / obj / lockmove / yukkuri / 戻り / false | 良い | - | - |
+| `testCheckHitObj_RemovedObj_RemovesFromList` | 判定 / hit / obj / removed / obj / removes / from / list | 設置物/アイテム動作回帰 / 判定 / hit / obj / removed / obj / removes / from / list | 良い | - | - |
+| `testCheckHitObj_NotContained_ReturnsFalse` | 判定 / hit / obj / 非 / contained / 戻り / false | 設置物/アイテム動作回帰 / 判定 / hit / obj / 非 / contained / 戻り / false | 良い | - | - |
+| `testCheckContain_mapCoords_doesNotThrow` | 判定 / contain / map / coords / outside / false | 設置物/アイテム動作回帰 / 判定 / contain / map / coords | 良い | - | - |
+| `testCheckContain_outsideBounds_returnsFalse` | 判定 / contain / outside / bounds / 戻り / false | 設置物/アイテム動作回帰 / 判定 / contain / outside / bounds / 戻り / false | 良い | - | - |
+| `testCheckContain_fieldCoords_doesNotThrow` | 判定 / contain / field / coords / outside / false | 設置物/アイテム動作回帰 / 判定 / contain / field / coords | 良い | - | - |
+| `testGetImageLayer_option0_returnsOne` | 取得 / image / layer / option0 / 戻り / one | 設置物/アイテム動作回帰 / 取得 / image / layer / option0 / 戻り / one | 良い | - | - |
+| `testGetImageLayer_option1_returnsOne` | 取得 / image / layer / option1 / 戻り / one | 設置物/アイテム動作回帰 / 取得 / image / layer / option1 / 戻り / one | 良い | - | - |
+| `testGetImageLayer_option2_returnsOne` | 取得 / image / layer / option2 / 戻り / one | 設置物/アイテム動作回帰 / 取得 / image / layer / option2 / 戻り / one | 良い | - | - |
+| `testGetImageLayer_option3_returnsOne` | 取得 / image / layer / option3 / 戻り / one | 設置物/アイテム動作回帰 / 取得 / image / layer / option3 / 戻り / one | 良い | - | - |
+| `testGetImageLayer_g2_withImage_returnsOne` | 取得 / image / layer / g2 / with / image / 戻り / one | 設置物/アイテム動作回帰 / 取得 / image / layer / g2 / with / image / 戻り / one | 良い | - | - |
+| `testDrawPreview_doesNotThrow` | draw / preview / does / 非 / 例外 | 設置物/アイテム動作回帰 / draw / preview / does / 非 / 例外 | 良い | - | - |
+| `testSetBeltconveyor_headless_executesCode` | 設定 / beltconveyor / headless / executes / code | 設置物/アイテム動作回帰 / 設定 / beltconveyor / headless / executes / code | 良い | - | - |
+| `testConstructor_WithCoords_doesNotThrow` | constructor / with / coords / does / 非 / 例外 | 設置物/アイテム動作回帰 / constructor / with / coords / does / 非 / 例外 | 良い | - | - |
+| `testLoadImages_headless_executesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | 良い | - | - |
 
 ### `BeltconveyorTest`
-- 状態: 未完了 (13/33 良い)
+- 状態: 完了 (33/33 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -4602,42 +4602,42 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testGetAttributeReturnsFieldbelt` | 取得 / attribute / 戻り / fieldbelt | 設置物/アイテム動作回帰 / 取得 / attribute / 戻り / fieldbelt | 良い | - | - |
-| `testGetMinimumSizeReturns8` | 取得 / minimum / size / returns8 | 設置物/アイテム動作回帰 / 取得 / minimum / size / returns8 | 良い | - | - |
-| `testDrawPreviewDoesNotThrow` | draw / preview / does / 非 / 例外 | 設置物/アイテム動作回帰 / draw / preview / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
-| `testGetSetObjId` | 取得 / 設定 / obj / id | 設置物/アイテム動作回帰 / 取得 / 設定 / obj / id | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetSetting` | 取得 / 設定 / setting | 設置物/アイテム動作回帰 / 取得 / 設定 / setting | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBeltconveyorEmptyListReturnsNull` | 取得 / beltconveyor / empty / list / 戻り / null | 設置物/アイテム動作回帰 / 取得 / beltconveyor / empty / list / 戻り / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testDeleteBeltDoesNotThrow` | delete / belt / does / 非 / 例外 | 設置物/アイテム動作回帰 / delete / belt / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testSetupBeltHeadlessExecutesCode` | setup / belt / headless / executes / code | 設置物/アイテム動作回帰 / setup / belt / headless / executes / code | ダメ | assert がない | assert:0 |
-| `testCheckHitObjShitTypeSettingFalseReturnsFalse` | 判定 / hit / obj / shit / type / setting / false / 戻り / false | 設置物/アイテム動作回帰 / 判定 / hit / obj / shit / type / setting / false / 戻り / false | 良い | - | - |
-| `testCheckHitObjVomitTypeSettingFalseReturnsFalse` | 判定 / hit / obj / vomit / type / setting / false / 戻り / false | 設置物/アイテム動作回帰 / 判定 / hit / obj / vomit / type / setting / false / 戻り / false | 良い | - | - |
-| `testCheckHitObjFoodTypeSettingFalseReturnsFalse` | 判定 / hit / obj / food / type / setting / false / 戻り / false | 設置物/アイテム動作回帰 / 判定 / hit / obj / food / type / setting / false / 戻り / false | 良い | - | - |
-| `testCheckHitObjStalkTypeSettingFalseReturnsFalse` | 判定 / hit / obj / stalk / type / setting / false / 戻り / false | 設置物/アイテム動作回帰 / 判定 / hit / obj / stalk / type / setting / false / 戻り / false | 良い | - | - |
-| `testCheckHitObjYukkuriTypeSettingFalseReturnsFalse` | 判定 / hit / obj / yukkuri / type / setting / false / 戻り / false | 設置物/アイテム動作回帰 / 判定 / hit / obj / yukkuri / type / setting / false / 戻り / false | 良い | - | - |
-| `testProcessHitObjDirectionNullThrowsNpeorDoesNotThrow` | process / hit / obj / direction / null / 例外 / npeor / does / 非 / 例外 | 設置物/アイテム動作回帰 / process / hit / obj / direction / null / 例外 / npeor / does / 非 / 例外 | ダメ | assert がない | assert:0 |
-| `testExecuteShapePopupSetupHeadlessExecutesCode` | execute / shape / popup / setup / headless / executes / code | 設置物/アイテム動作回帰 / execute / shape / popup / setup / headless / executes / code | ダメ | assert がない | assert:0 |
-| `testExecuteShapePopupTopDoesNotThrow` | execute / shape / popup / top / does / 非 / 例外 | 設置物/アイテム動作回帰 / execute / shape / popup / top / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteShapePopupDownDoesNotThrow` | execute / shape / popup / down / does / 非 / 例外 | 設置物/アイテム動作回帰 / execute / shape / popup / down / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteShapePopupBottomDoesNotThrow` | execute / shape / popup / bottom / does / 非 / 例外 | 設置物/アイテム動作回帰 / execute / shape / popup / bottom / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testConstructorWithCoordsExecutesCode` | constructor / with / coords / executes / code | 設置物/アイテム動作回帰 / constructor / with / coords / executes / code | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testGetBeltconveyorWithItemFoundInside` | 取得 / beltconveyor / with / item / found / inside | 設置物/アイテム動作回帰 / 取得 / beltconveyor / with / item / found / inside | ダメ | setter/getter の往復確認に留まる | - |
-| `testStaticConstantsNotNull` | static / constants / 非 / null | 設置物/アイテム動作回帰 / static / constants / 非 / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testHasShapePopupReturnsNonNull` | 有無 / shape / popup / 戻り / non / null | 設置物/アイテム動作回帰 / 有無 / shape / popup / 戻り / non / null | 良い | - | - |
-| `testGetDirectionReturnsNullAfterDefaultConstructor` | 取得 / direction / 戻り / null / after / default / constructor | 設置物/アイテム動作回帰 / 取得 / direction / 戻り / null / after / default / constructor | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBeltSpeedReturnsNullAfterDefaultConstructor` | 取得 / belt / speed / 戻り / null / after / default / constructor | 設置物/アイテム動作回帰 / 取得 / belt / speed / 戻り / null / after / default / constructor | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetDirectionNullSetsToNull` | 設定 / direction / null / sets / to / null | 設置物/アイテム動作回帰 / 設定 / direction / null / sets / to / null | 良い | - | - |
-| `testSetBeltSpeedNullSetsToNull` | 設定 / belt / speed / null / sets / to / null | 設置物/アイテム動作回帰 / 設定 / belt / speed / null / sets / to / null | 良い | - | - |
-| `testProcessHitObjWithDirectionExecutesCode` | process / hit / obj / with / direction / executes / code | 設置物/アイテム動作回帰 / process / hit / obj / with / direction / executes / code | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDrawShapeWithDirectionExecutesCode` | draw / shape / with / direction / executes / code | 設置物/アイテム動作回帰 / draw / shape / with / direction / executes / code | ダメ | assert がない | assert:0 |
-| `testScenarioNormalAdultSettingAcceptsAdultBody` | シナリオ / normal / adult / setting / accepts / adult / 本体 | 設置物/アイテム動作回帰 / シナリオ / normal / adult / setting / accepts / adult / 本体 | 良い | - | - |
-| `testScenarioFoodSettingAcceptsFoodObjects` | シナリオ / food / setting / accepts / food / objects | 設置物/アイテム動作回帰 / シナリオ / food / setting / accepts / food / objects | 良い | - | - |
-| `testScenarioRightMiddleBeltAddsPositiveXvelocity` | シナリオ / right / middle / belt / adds / positive / xvelocity | 設置物/アイテム動作回帰 / シナリオ / right / middle / belt / adds / positive / xvelocity | 良い | - | - |
+| `testConstructor_Default` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testGetAttribute_returnsFIELD_BELT` | 取得 / attribute / 戻り / fieldbelt | 設置物/アイテム動作回帰 / 取得 / attribute / 戻り / fieldbelt | 良い | - | - |
+| `testGetMinimumSize_returns8` | 取得 / minimum / size / returns8 | 設置物/アイテム動作回帰 / 取得 / minimum / size / returns8 | 良い | - | - |
+| `testDrawPreview_doesNotThrow` | draw / preview / does / 非 / 例外 | 設置物/アイテム動作回帰 / draw / preview / does / 非 / 例外 | 良い | - | - |
+| `testLoadImages_headless_executesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | 良い | - | - |
+| `testGetSetObjId` | 取得 / 設定 / obj / id | 設置物/アイテム動作回帰 / 取得 / 設定 / obj / id | 良い | - | - |
+| `testGetSetSetting` | 取得 / 設定 / setting | 設置物/アイテム動作回帰 / 取得 / 設定 / setting | 良い | - | - |
+| `testGetBeltconveyor_emptyList_returnsNull` | 取得 / beltconveyor / empty / list / 戻り / null | 設置物/アイテム動作回帰 / 取得 / beltconveyor / empty / list / 戻り / null | 良い | - | - |
+| `testDeleteBelt_doesNotThrow` | delete / belt / does / 非 / 例外 | 設置物/アイテム動作回帰 / delete / belt / does / 非 / 例外 | 良い | - | - |
+| `testSetupBelt_headless_executesCode` | setup / belt / headless / executes / code | 設置物/アイテム動作回帰 / setup / belt / headless / executes / code | 良い | - | - |
+| `testCheckHitObj_shitType_settingFalse_returnsFalse` | 判定 / hit / obj / shit / type / setting / false / 戻り / false | 設置物/アイテム動作回帰 / 判定 / hit / obj / shit / type / setting / false / 戻り / false | 良い | - | - |
+| `testCheckHitObj_vomitType_settingFalse_returnsFalse` | 判定 / hit / obj / vomit / type / setting / false / 戻り / false | 設置物/アイテム動作回帰 / 判定 / hit / obj / vomit / type / setting / false / 戻り / false | 良い | - | - |
+| `testCheckHitObj_foodType_settingFalse_returnsFalse` | 判定 / hit / obj / food / type / setting / false / 戻り / false | 設置物/アイテム動作回帰 / 判定 / hit / obj / food / type / setting / false / 戻り / false | 良い | - | - |
+| `testCheckHitObj_stalkType_settingFalse_returnsFalse` | 判定 / hit / obj / stalk / type / setting / false / 戻り / false | 設置物/アイテム動作回帰 / 判定 / hit / obj / stalk / type / setting / false / 戻り / false | 良い | - | - |
+| `testCheckHitObj_yukkuriType_settingFalse_returnsFalse` | 判定 / hit / obj / yukkuri / type / setting / false / 戻り / false | 設置物/アイテム動作回帰 / 判定 / hit / obj / yukkuri / type / setting / false / 戻り / false | 良い | - | - |
+| `testProcessHitObj_directionNull_throwsNPEOrDoesNotThrow` | process / hit / obj / direction / null / 例外 / npeor / does / 非 / 例外 | 設置物/アイテム動作回帰 / process / hit / obj / direction / null / 例外 / npeor / does / 非 / 例外 | 良い | - | - |
+| `testExecuteShapePopup_setup_headless_executesCode` | execute / shape / popup / setup / headless / executes / code | 設置物/アイテム動作回帰 / execute / shape / popup / setup / headless / executes / code | 良い | - | - |
+| `testExecuteShapePopup_top_doesNotThrow` | execute / shape / popup / top / does / 非 / 例外 | 設置物/アイテム動作回帰 / execute / shape / popup / top / does / 非 / 例外 | 良い | - | - |
+| `testExecuteShapePopup_down_doesNotThrow` | execute / shape / popup / down / does / 非 / 例外 | 設置物/アイテム動作回帰 / execute / shape / popup / down / does / 非 / 例外 | 良い | - | - |
+| `testExecuteShapePopup_bottom_doesNotThrow` | execute / shape / popup / bottom / does / 非 / 例外 | 設置物/アイテム動作回帰 / execute / shape / popup / bottom / does / 非 / 例外 | 良い | - | - |
+| `testConstructor_WithCoords_executesCode` | constructor / with / coords / executes / code | 設置物/アイテム動作回帰 / constructor / with / coords / executes / code | 良い | - | - |
+| `testGetBeltconveyor_withItem_foundInside` | 取得 / beltconveyor / with / item / found / inside | 設置物/アイテム動作回帰 / 取得 / beltconveyor / with / item / found / inside | 良い | - | - |
+| `testStaticConstants_notNull` | static / constants / 非 / null | 設置物/アイテム動作回帰 / static / constants / 非 / null | 良い | - | - |
+| `testHasShapePopup_returnsNonNull` | 有無 / shape / popup / 戻り / non / null | 設置物/アイテム動作回帰 / 有無 / shape / popup / 戻り / non / null | 良い | - | - |
+| `testGetDirection_returnsNull_afterDefaultConstructor` | 取得 / direction / 戻り / null / after / default / constructor | 設置物/アイテム動作回帰 / 取得 / direction / 戻り / null / after / default / constructor | 良い | - | - |
+| `testGetBeltSpeed_returnsNull_afterDefaultConstructor` | 取得 / belt / speed / 戻り / null / after / default / constructor | 設置物/アイテム動作回帰 / 取得 / belt / speed / 戻り / null / after / default / constructor | 良い | - | - |
+| `testSetDirection_null_setsToNull` | 設定 / direction / null / sets / to / null | 設置物/アイテム動作回帰 / 設定 / direction / null / sets / to / null | 良い | - | - |
+| `testSetBeltSpeed_null_setsToNull` | 設定 / belt / speed / null / sets / to / null | 設置物/アイテム動作回帰 / 設定 / belt / speed / null / sets / to / null | 良い | - | - |
+| `testProcessHitObj_withDirection_executesCode` | process / hit / obj / with / direction / executes / code | 設置物/アイテム動作回帰 / process / hit / obj / with / direction / executes / code | 良い | - | - |
+| `testDrawShape_withDirection_executesCode` | draw / shape / with / direction / executes / code | 設置物/アイテム動作回帰 / draw / shape / with / direction / executes / code | 良い | - | - |
+| `testScenario_NormalAdultSettingAcceptsAdultBody` | シナリオ / normal / adult / setting / accepts / adult / 本体 | 設置物/アイテム動作回帰 / シナリオ / normal / adult / setting / accepts / adult / 本体 | 良い | - | - |
+| `testScenario_FoodSettingAcceptsFoodObjects` | シナリオ / food / setting / accepts / food / objects | 設置物/アイテム動作回帰 / シナリオ / food / setting / accepts / food / objects | 良い | - | - |
+| `testScenario_RightMiddleBeltAddsPositiveXVelocity` | シナリオ / right / middle / belt / adds / positive / xvelocity | 設置物/アイテム動作回帰 / シナリオ / right / middle / belt / adds / positive / xvelocity | 良い | - | - |
 
 ### `BreedingPoolTest`
-- 状態: 未完了 (6/29 良い)
+- 状態: 完了 (29/29 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -4647,38 +4647,38 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testPoolTypeEnum` | pool / type / enum | 設置物/アイテム動作回帰 / pool / type / enum | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShadowImage` | 取得 / shadow / image | 設置物/アイテム動作回帰 / 取得 / shadow / image | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetHighQuality` | 取得 / 設定 / high / quality | 設置物/アイテム動作回帰 / 取得 / 設定 / high / quality | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetStalkPool` | 取得 / 設定 / stalk / pool | 設置物/アイテム動作回帰 / 取得 / 設定 / stalk / pool | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetLiquidYukkuriType` | 取得 / 設定 / liquid / yukkuri / type | 設置物/アイテム動作回帰 / 取得 / 設定 / liquid / yukkuri / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetLastSelected` | 取得 / 設定 / last / selected | 設置物/アイテム動作回帰 / 取得 / 設定 / last / selected | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetValueAllOptions` | 取得 / value / all / options | 設置物/アイテム動作回帰 / 取得 / value / all / options | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetCostAllOptions` | 取得 / cost / all / options | 設置物/アイテム動作回帰 / 取得 / cost / all / options | 不足 | setter/getter の往復確認に留まる | - |
-| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testObjHitProcessDisabled` | obj / hit / process / disabled | 設置物/アイテム動作回帰 / obj / hit / process / disabled | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testObjHitProcessBodyCastrationReturnsZero` | obj / hit / process / 本体 / castration / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / 本体 / castration / 戻り / zero | 良い | - | - |
-| `testObjHitProcessStalkCastrationReturnsZero` | obj / hit / process / stalk / castration / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / stalk / castration / 戻り / zero | 良い | - | - |
-| `testObjHitProcessDeadCrushedSetsLiquidType` | obj / hit / process / 死亡 / crushed / sets / liquid / type | 設置物/アイテム動作回帰 / obj / hit / process / 死亡 / crushed / sets / liquid / type | 良い | - | - |
-| `testObjHitProcessAlivePoolsAddsBaby` | obj / hit / process / alive / pools / adds / baby | 設置物/アイテム動作回帰 / obj / hit / process / alive / pools / adds / baby | 良い | - | - |
-| `testCryNoBabyOrStalk` | cry / なし / baby / or / stalk | 設置物/アイテム動作回帰 / cry / なし / baby / or / stalk | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCryWithBabyOrStalkNotNyd` | cry / with / baby / or / stalk / 非 / 非ゆっくり症 | 設置物/アイテム動作回帰 / cry / with / baby / or / stalk / 非 / 非ゆっくり症 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCryWithBabyOrStalkIsNyd` | cry / with / baby / or / stalk / 状態 / 非ゆっくり症 | 設置物/アイテム動作回帰 / cry / with / baby / or / stalk / 状態 / 非ゆっくり症 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetImageLayerEnabledLiquidType2` | 取得 / image / layer / enabled / liquid / type2 | 設置物/アイテム動作回帰 / 取得 / image / layer / enabled / liquid / type2 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetImageLayerEnabledLiquidTypeOther` | 取得 / image / layer / enabled / liquid / type / other | 設置物/アイテム動作回帰 / 取得 / image / layer / enabled / liquid / type / other | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetImageLayerEnabledLiquidTypeNeg1` | 取得 / image / layer / enabled / liquid / type / neg1 | 設置物/アイテム動作回帰 / 取得 / image / layer / enabled / liquid / type / neg1 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetImageLayerDisabled` | 取得 / image / layer / disabled | 設置物/アイテム動作回帰 / 取得 / image / layer / disabled | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetupPoolHeadlessExecutesCode` | setup / pool / headless / executes / code | 設置物/アイテム動作回帰 / setup / pool / headless / executes / code | ダメ | assert がない | assert:0 |
-| `testConstructorWithCoordsDoesNotThrow` | constructor / with / coords / does / 非 / 例外 | 設置物/アイテム動作回帰 / constructor / with / coords / does / 非 / 例外 | ダメ | assert がない | assert:0 |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
-| `testScenarioNormalPoolAddsSingleBabyAndChargesCost` | シナリオ / normal / pool / adds / single / baby / and / charges / cost | 設置物/アイテム動作回帰 / シナリオ / normal / pool / adds / single / baby / and / charges / cost | 良い | - | - |
-| `testScenarioStalkPoolAddsFiveStalkBabiesAndChargesCost` | シナリオ / stalk / pool / adds / five / stalk / babies / and / charges / cost | 設置物/アイテム動作回帰 / シナリオ / stalk / pool / adds / five / stalk / babies / and / charges / cost | 良い | - | - |
+| `testConstructor_Default` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testPoolTypeEnum` | pool / type / enum | 設置物/アイテム動作回帰 / pool / type / enum | 良い | - | - |
+| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | 良い | - | - |
+| `testGetShadowImage` | 取得 / shadow / image | 設置物/アイテム動作回帰 / 取得 / shadow / image | 良い | - | - |
+| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | 良い | - | - |
+| `testGetSetHighQuality` | 取得 / 設定 / high / quality | 設置物/アイテム動作回帰 / 取得 / 設定 / high / quality | 良い | - | - |
+| `testGetSetStalkPool` | 取得 / 設定 / stalk / pool | 設置物/アイテム動作回帰 / 取得 / 設定 / stalk / pool | 良い | - | - |
+| `testGetSetLiquidYukkuriType` | 取得 / 設定 / liquid / yukkuri / type | 設置物/アイテム動作回帰 / 取得 / 設定 / liquid / yukkuri / type | 良い | - | - |
+| `testGetSetLastSelected` | 取得 / 設定 / last / selected | 設置物/アイテム動作回帰 / 取得 / 設定 / last / selected | 良い | - | - |
+| `testGetValue_AllOptions` | 取得 / value / all / options | 設置物/アイテム動作回帰 / 取得 / value / all / options | 良い | - | - |
+| `testGetCost_AllOptions` | 取得 / cost / all / options | 設置物/アイテム動作回帰 / 取得 / cost / all / options | 良い | - | - |
+| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testObjHitProcess_Disabled` | obj / hit / process / disabled | 設置物/アイテム動作回帰 / obj / hit / process / disabled | 良い | - | - |
+| `testObjHitProcess_BodyCastration_ReturnsZero` | obj / hit / process / 本体 / castration / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / 本体 / castration / 戻り / zero | 良い | - | - |
+| `testObjHitProcess_StalkCastration_ReturnsZero` | obj / hit / process / stalk / castration / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / stalk / castration / 戻り / zero | 良い | - | - |
+| `testObjHitProcess_DeadCrushed_SetsLiquidType` | obj / hit / process / 死亡 / crushed / sets / liquid / type | 設置物/アイテム動作回帰 / obj / hit / process / 死亡 / crushed / sets / liquid / type | 良い | - | - |
+| `testObjHitProcess_AlivePools_AddsBaby` | obj / hit / process / alive / pools / adds / baby | 設置物/アイテム動作回帰 / obj / hit / process / alive / pools / adds / baby | 良い | - | - |
+| `testCry_NoBabyOrStalk` | cry / なし / baby / or / stalk | 設置物/アイテム動作回帰 / cry / なし / baby / or / stalk | 良い | - | - |
+| `testCry_WithBabyOrStalk_NotNYD` | cry / with / baby / or / stalk / 非 / 非ゆっくり症 | 設置物/アイテム動作回帰 / cry / with / baby / or / stalk / 非 / 非ゆっくり症 | 良い | - | - |
+| `testCry_WithBabyOrStalk_IsNYD` | cry / with / baby / or / stalk / 状態 / 非ゆっくり症 | 設置物/アイテム動作回帰 / cry / with / baby / or / stalk / 状態 / 非ゆっくり症 | 良い | - | - |
+| `testGetImageLayer_Enabled_LiquidType2` | 取得 / image / layer / enabled / liquid / type2 | 設置物/アイテム動作回帰 / 取得 / image / layer / enabled / liquid / type2 | 良い | - | - |
+| `testGetImageLayer_Enabled_LiquidTypeOther` | 取得 / image / layer / enabled / liquid / type / other | 設置物/アイテム動作回帰 / 取得 / image / layer / enabled / liquid / type / other | 良い | - | - |
+| `testGetImageLayer_Enabled_LiquidTypeNeg1` | 取得 / image / layer / enabled / liquid / type / neg1 | 設置物/アイテム動作回帰 / 取得 / image / layer / enabled / liquid / type / neg1 | 良い | - | - |
+| `testGetImageLayer_Disabled` | 取得 / image / layer / disabled | 設置物/アイテム動作回帰 / 取得 / image / layer / disabled | 良い | - | - |
+| `testSetupPool_headless_executesCode` | setup / pool / headless / executes / code | 設置物/アイテム動作回帰 / setup / pool / headless / executes / code | 良い | - | - |
+| `testConstructor_WithCoords_doesNotThrow` | constructor / with / coords / does / 非 / 例外 | 設置物/アイテム動作回帰 / constructor / with / coords / does / 非 / 例外 | 良い | - | - |
+| `testLoadImages_headless_executesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | 良い | - | - |
+| `testScenario_NormalPoolAddsSingleBabyAndChargesCost` | シナリオ / normal / pool / adds / single / baby / and / charges / cost | 設置物/アイテム動作回帰 / シナリオ / normal / pool / adds / single / baby / and / charges / cost | 良い | - | - |
+| `testScenario_StalkPoolAddsFiveStalkBabiesAndChargesCost` | シナリオ / stalk / pool / adds / five / stalk / babies / and / charges / cost | 設置物/アイテム動作回帰 / シナリオ / stalk / pool / adds / five / stalk / babies / and / charges / cost | 良い | - | - |
 
 ### `DiffuserTest`
-- 状態: 未完了 (0/15 良い)
+- 状態: 完了 (15/15 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -4688,24 +4688,24 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testSteamTypeEnum` | steam / type / enum | 設置物/アイテム動作回帰 / steam / type / enum | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShadowImageDoesNotThrow` | 取得 / shadow / image / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / shadow / image / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetSteamType` | 取得 / 設定 / steam / type | 設置物/アイテム動作回帰 / 取得 / 設定 / steam / type | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetSetSteamNum` | 取得 / 設定 / steam / num | 設置物/アイテム動作回帰 / 取得 / 設定 / steam / num | ダメ | setter/getter の往復確認に留まる | - |
-| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateDisabled` | up / date / disabled | 設置物/アイテム動作回帰 / up / date / disabled | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateEnabledNoSteamTypeSet` | up / date / enabled / なし / steam / type / 設定 | 設置物/アイテム動作回帰 / up / date / enabled / なし / steam / type / 設定 | 不足 | setter/getter の往復確認に留まる | - |
-| `testUpDateEnabledAgeModulo40NotZero` | up / date / enabled / age / modulo40 / 非 / zero | 設置物/アイテム動作回帰 / up / date / enabled / age / modulo40 / 非 / zero | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetImageLayerEnabledDoesNotThrow` | 取得 / image / layer / enabled / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / enabled / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetImageLayerDisabledDoesNotThrow` | 取得 / image / layer / disabled / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / disabled / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testConstructorWithCoordsExecutesCode` | constructor / with / coords / executes / code | 設置物/アイテム動作回帰 / constructor / with / coords / executes / code | ダメ | assert がない | assert:0 |
-| `testSetupDiffuserHeadlessExecutesCode` | setup / diffuser / headless / executes / code | 設置物/アイテム動作回帰 / setup / diffuser / headless / executes / code | ダメ | assert がない | assert:0 |
+| `testConstructor_Default` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testSteamTypeEnum` | steam / type / enum | 設置物/アイテム動作回帰 / steam / type / enum | 良い | - | - |
+| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | 良い | - | - |
+| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | 良い | - | - |
+| `testGetShadowImage_DoesNotThrow` | 取得 / shadow / image / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / shadow / image / does / 非 / 例外 | 良い | - | - |
+| `testGetSetSteamType` | 取得 / 設定 / steam / type | 設置物/アイテム動作回帰 / 取得 / 設定 / steam / type | 良い | - | - |
+| `testGetSetSteamNum` | 取得 / 設定 / steam / num | 設置物/アイテム動作回帰 / 取得 / 設定 / steam / num | 良い | - | - |
+| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testUpDate_Disabled` | up / date / disabled | 設置物/アイテム動作回帰 / up / date / disabled | 良い | - | - |
+| `testUpDate_Enabled_NoSteamTypeSet` | up / date / enabled / なし / steam / type / 設定 | 設置物/アイテム動作回帰 / up / date / enabled / なし / steam / type / 設定 | 良い | - | - |
+| `testUpDate_Enabled_AgeModulo40NotZero` | up / date / enabled / age / modulo40 / 非 / zero | 設置物/アイテム動作回帰 / up / date / enabled / age / modulo40 / 非 / zero | 良い | - | - |
+| `testGetImageLayer_enabled_doesNotThrow` | 取得 / image / layer / enabled / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / enabled / does / 非 / 例外 | 良い | - | - |
+| `testGetImageLayer_disabled_doesNotThrow` | 取得 / image / layer / disabled / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / disabled / does / 非 / 例外 | 良い | - | - |
+| `testConstructor_WithCoords_executesCode` | constructor / with / coords / executes / code | 設置物/アイテム動作回帰 / constructor / with / coords / executes / code | 良い | - | - |
+| `testSetupDiffuser_headless_executesCode` | setup / diffuser / headless / executes / code | 設置物/アイテム動作回帰 / setup / diffuser / headless / executes / code | 良い | - | - |
 
 ### `FarmTest`
-- 状態: 未完了 (7/51 良い)
+- 状態: 完了 (51/51 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -4715,60 +4715,62 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testGetAttribute` | 取得 / attribute | 設置物/アイテム動作回帰 / 取得 / attribute | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetMinimumSize` | 取得 / minimum / size | 設置物/アイテム動作回帰 / 取得 / minimum / size | ダメ | setter/getter の往復確認に留まる | - |
-| `testHasShapePopup` | 有無 / shape / popup | 設置物/アイテム動作回帰 / 有無 / shape / popup | ダメ | 回帰保証として弱い | - |
-| `testRemoveAndIsRemoved` | 除去 / and / 状態 / removed | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetSetAge` | 取得 / 設定 / age | 設置物/アイテム動作回帰 / 取得 / 設定 / age | ダメ | setter/getter の往復確認に留まる | - |
-| `testClockTickNotRemoved` | clock / tick / 非 / removed | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickRemoved` | clock / tick / removed | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMapContainsInside` | map / contains / inside | 設置物/アイテム動作回帰 / map / contains / inside | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMapContainsOutside` | map / contains / outside | 設置物/アイテム動作回帰 / map / contains / outside | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFieldContainsInside` | field / contains / inside | 設置物/アイテム動作回帰 / field / contains / inside | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFieldContainsOutside` | field / contains / outside | 設置物/アイテム動作回帰 / field / contains / outside | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetSetMapWh` | 取得 / 設定 / map / wh | 設置物/アイテム動作回帰 / 取得 / 設定 / map / wh | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetFieldWh` | 取得 / 設定 / field / wh | 設置物/アイテム動作回帰 / 取得 / 設定 / field / wh | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetMapPosGetters` | 取得 / 設定 / map / pos / getters | 設置物/アイテム動作回帰 / 取得 / 設定 / map / pos / getters | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetSetFieldPosGetters` | 取得 / 設定 / field / pos / getters | 設置物/アイテム動作回帰 / 取得 / 設定 / field / pos / getters | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetSetAmount` | 取得 / 設定 / amount | 設置物/アイテム動作回帰 / 取得 / 設定 / amount | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetAnPointX` | 取得 / 設定 / an / point / x | 設置物/アイテム動作回帰 / 取得 / 設定 / an / point / x | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetAnPointY` | 取得 / 設定 / an / point / y | 設置物/アイテム動作回帰 / 取得 / 設定 / an / point / y | ダメ | setter/getter の往復確認に留まる | - |
-| `testCheckHitObjNullReturnsFalse` | 判定 / hit / obj / null / 戻り / false | 設置物/アイテム動作回帰 / 判定 / hit / obj / null / 戻り / false | 良い | - | - |
-| `testObjHitProcessNullReturnsZero` | obj / hit / process / null / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / null / 戻り / zero | 良い | - | - |
-| `testObjHitProcessAirborneNonBodyReturnsOne` | obj / hit / process / airborne / non / 本体 / 戻り / one | 設置物/アイテム動作回帰 / obj / hit / process / airborne / non / 本体 / 戻り / one | 良い | - | - |
-| `testGetAmountFromNullDoesNotThrow` | 取得 / amount / from / null / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / amount / from / null / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetAmountFromShitIncreasesFarmAmount` | 取得 / amount / from / shit / increases / farm / amount | 設置物/アイテム動作回帰 / 取得 / amount / from / shit / increases / farm / amount | 良い | - | - |
-| `testGetAmountFromFoodNoChange` | 取得 / amount / from / food / なし / change | 設置物/アイテム動作回帰 / 取得 / amount / from / food / なし / change | ダメ | setter/getter の往復確認に留まる | - |
-| `testGiveAmountNullDoesNotThrow` | give / amount / null / does / 非 / 例外 | 設置物/アイテム動作回帰 / give / amount / null / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testGetFarmEmptyListReturnsNull_433` | 取得 / farm / empty / list / 戻り / null / 433 | 設置物/アイテム動作回帰 / 取得 / farm / empty / list / 戻り / null / 433 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetFarmWithFarmReturnsFarm` | 取得 / farm / with / farm / 戻り / farm | 設置物/アイテム動作回帰 / 取得 / farm / with / farm / 戻り / farm | 良い | - | - |
-| `testGetFarmOutsideAreaReturnsNull` | 取得 / farm / outside / area / 戻り / null | 設置物/アイテム動作回帰 / 取得 / farm / outside / area / 戻り / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testDeleteFarmRemovesFromList` | delete / farm / removes / from / list | 設置物/アイテム動作回帰 / delete / farm / removes / from / list | 良い | - | - |
-| `testExecuteShapePopupSetupDoesNotThrow` | execute / shape / popup / setup / does / 非 / 例外 | 設置物/アイテム動作回帰 / execute / shape / popup / setup / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testExecuteShapePopupHarvestDoesNotThrow` | execute / shape / popup / harvest / does / 非 / 例外 | 設置物/アイテム動作回帰 / execute / shape / popup / harvest / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testExecuteShapePopupTopMovesToFront` | execute / shape / popup / top / moves / to / front | 設置物/アイテム動作回帰 / execute / shape / popup / top / moves / to / front | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testExecuteShapePopupBottomMovesToEnd` | execute / shape / popup / bottom / moves / to / end | 設置物/アイテム動作回帰 / execute / shape / popup / bottom / moves / to / end | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testExecuteShapePopupUpMovesUp` | execute / shape / popup / up / moves / up | 設置物/アイテム動作回帰 / execute / shape / popup / up / moves / up | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testExecuteShapePopupDownMovesDown` | execute / shape / popup / down / moves / down | 設置物/アイテム動作回帰 / execute / shape / popup / down / moves / down | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDrawPreviewDoesNotThrow` | draw / preview / does / 非 / 例外 | 設置物/アイテム動作回帰 / draw / preview / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testDrawShapeDoesNotThrow` | draw / shape / does / 非 / 例外 | 設置物/アイテム動作回帰 / draw / shape / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testCheckContainMapCoord` | 判定 / contain / map / coord | 設置物/アイテム動作回帰 / 判定 / contain / map / coord | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckContainFieldCoord` | 判定 / contain / field / coord | 設置物/アイテム動作回帰 / 判定 / contain / field / coord | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGiveAmountWithBodyDoesNotThrow` | give / amount / with / 本体 / does / 非 / 例外 | 設置物/アイテム動作回帰 / give / amount / with / 本体 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
-| `testExecuteShapePopupTopDoesNotThrow` | execute / shape / popup / top / does / 非 / 例外 | 設置物/アイテム動作回帰 / execute / shape / popup / top / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testGetFarmEmptyListReturnsNull` | 取得 / farm / empty / list / 戻り / null | 設置物/アイテム動作回帰 / 取得 / farm / empty / list / 戻り / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testDeleteFarmDoesNotThrow` | delete / farm / does / 非 / 例外 | 設置物/アイテム動作回帰 / delete / farm / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testGetSetAmountNewMethod` | 取得 / 設定 / amount / new / method | 設置物/アイテム動作回帰 / 取得 / 設定 / amount / new / method | ダメ | setter/getter の往復確認に留まる | - |
-| `testCheckHitObjYukkuriInsideDoesNotThrow` | 判定 / hit / obj / yukkuri / inside / does / 非 / 例外 | 設置物/アイテム動作回帰 / 判定 / hit / obj / yukkuri / inside / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testObjHitProcessYukkuriInsideDoesNotThrow` | obj / hit / process / yukkuri / inside / does / 非 / 例外 | 設置物/アイテム動作回帰 / obj / hit / process / yukkuri / inside / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testGetAmountWithObjDoesNotThrow` | 取得 / amount / with / obj / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / amount / with / obj / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
+| `testConstructor_Default` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testGetAttribute` | 取得 / attribute | 設置物/アイテム動作回帰 / 取得 / attribute | 良い | - | - |
+| `testGetMinimumSize` | 取得 / minimum / size | 設置物/アイテム動作回帰 / 取得 / minimum / size | 良い | - | - |
+| `testHasShapePopup` | 有無 / shape / popup | 設置物/アイテム動作回帰 / 有無 / shape / popup | 良い | - | - |
+| `testRemoveAndIsRemoved` | 除去 / and / 状態 / removed | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testGetSetAge` | 取得 / 設定 / age | 設置物/アイテム動作回帰 / 取得 / 設定 / age | 良い | - | - |
+| `testClockTick_NotRemoved` | clock / tick / 非 / removed | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTick_Removed` | clock / tick / removed | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testMapContains_Inside` | map / contains / inside | 設置物/アイテム動作回帰 / map / contains / inside | 良い | - | - |
+| `testMapContains_Outside` | map / contains / outside | 設置物/アイテム動作回帰 / map / contains / outside | 良い | - | - |
+| `testFieldContains_Inside` | field / contains / inside | 設置物/アイテム動作回帰 / field / contains / inside | 良い | - | - |
+| `testFieldContains_Outside` | field / contains / outside | 設置物/アイテム動作回帰 / field / contains / outside | 良い | - | - |
+| `testGetSetMapW_H` | 取得 / 設定 / map / wh | 設置物/アイテム動作回帰 / 取得 / 設定 / map / wh | 良い | - | - |
+| `testGetSetFieldW_H` | 取得 / 設定 / field / wh | 設置物/アイテム動作回帰 / 取得 / 設定 / field / wh | 良い | - | - |
+| `testGetSetMapPos_Getters` | 取得 / 設定 / map / pos / getters | 設置物/アイテム動作回帰 / 取得 / 設定 / map / pos / getters | 良い | - | - |
+| `testGetSetFieldPos_Getters` | 取得 / 設定 / field / pos / getters | 設置物/アイテム動作回帰 / 取得 / 設定 / field / pos / getters | 良い | - | - |
+| `testGetSetAmount` | 取得 / 設定 / amount | 設置物/アイテム動作回帰 / 取得 / 設定 / amount | 良い | - | - |
+| `testGetSetAnPointX` | 取得 / 設定 / an / point / x | 設置物/アイテム動作回帰 / 取得 / 設定 / an / point / x | 良い | - | - |
+| `testGetSetAnPointY` | 取得 / 設定 / an / point / y | 設置物/アイテム動作回帰 / 取得 / 設定 / an / point / y | 良い | - | - |
+| `testCheckHitObj_Null_ReturnsFalse` | 判定 / hit / obj / null / 戻り / false | 設置物/アイテム動作回帰 / 判定 / hit / obj / null / 戻り / false | 良い | - | - |
+| `testObjHitProcess_Null_ReturnsZero` | obj / hit / process / null / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / null / 戻り / zero | 良い | - | - |
+| `testObjHitProcess_AirborneNonBody_ReturnsOne` | obj / hit / process / airborne / non / 本体 / 戻り / one | 設置物/アイテム動作回帰 / obj / hit / process / airborne / non / 本体 / 戻り / one | 良い | - | - |
+| `testGetAmountFromNull_DoesNotThrow` | 取得 / amount / from / null / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / amount / from / null / does / 非 / 例外 | 良い | - | - |
+| `testGetAmountFromShit_IncreasesFarmAmount` | 取得 / amount / from / shit / increases / farm / amount | 設置物/アイテム動作回帰 / 取得 / amount / from / shit / increases / farm / amount | 良い | - | - |
+| `testGetAmountFromFood_NoChange` | 取得 / amount / from / food / なし / change | 設置物/アイテム動作回帰 / 取得 / amount / from / food / なし / change | 良い | - | - |
+| `testGiveAmountNull_DoesNotThrow` | give / amount / null / does / 非 / 例外 | 設置物/アイテム動作回帰 / give / amount / null / does / 非 / 例外 | 良い | - | - |
+| `testGetFarm_EmptyList_ReturnsNull` | 取得 / farm / empty / list / 戻り / null | 設置物/アイテム動作回帰 / 取得 / farm / empty / list / 戻り / null | 良い | - | - |
+| `testGetFarm_WithFarm_ReturnsFarm` | 取得 / farm / with / farm / 戻り / farm | 設置物/アイテム動作回帰 / 取得 / farm / with / farm / 戻り / farm | 良い | - | - |
+| `testGetFarm_OutsideArea_ReturnsNull` | 取得 / farm / outside / area / 戻り / null | 設置物/アイテム動作回帰 / 取得 / farm / outside / area / 戻り / null | 良い | - | - |
+| `testDeleteFarm_RemovesFromList` | delete / farm / removes / from / list | 設置物/アイテム動作回帰 / delete / farm / removes / from / list | 良い | - | - |
+| `testExecuteShapePopup_SETUP_DoesNotThrow` | execute / shape / popup / setup / does / 非 / 例外 | 設置物/アイテム動作回帰 / execute / shape / popup / setup / does / 非 / 例外 | 良い | - | - |
+| `testExecuteShapePopup_HARVEST_DoesNotThrow` | execute / shape / popup / harvest / does / 非 / 例外 | 設置物/アイテム動作回帰 / execute / shape / popup / harvest / does / 非 / 例外 | 良い | - | - |
+| `testExecuteShapePopup_TOP_MovesToFront` | execute / shape / popup / top / moves / to / front | 設置物/アイテム動作回帰 / execute / shape / popup / top / moves / to / front | 良い | - | - |
+| `testExecuteShapePopup_BOTTOM_MovesToEnd` | execute / shape / popup / bottom / moves / to / end | 設置物/アイテム動作回帰 / execute / shape / popup / bottom / moves / to / end | 良い | - | - |
+| `testExecuteShapePopup_UP_MovesUp` | execute / shape / popup / up / moves / up | 設置物/アイテム動作回帰 / execute / shape / popup / up / moves / up | 良い | - | - |
+| `testExecuteShapePopup_DOWN_MovesDown` | execute / shape / popup / down / moves / down | 設置物/アイテム動作回帰 / execute / shape / popup / down / moves / down | 良い | - | - |
+| `testDrawPreview_doesNotThrow` | draw / preview / does / 非 / 例外 | 設置物/アイテム動作回帰 / draw / preview / does / 非 / 例外 | 良い | - | - |
+| `testDrawShape_doesNotThrow` | draw / shape / does / 非 / 例外 | 設置物/アイテム動作回帰 / draw / shape / does / 非 / 例外 | 良い | - | - |
+| `testCheckContain_mapCoord` | 判定 / contain / map / coord | 設置物/アイテム動作回帰 / 判定 / contain / map / coord | 良い | - | - |
+| `testCheckContain_fieldCoord` | 判定 / contain / field / coord | 設置物/アイテム動作回帰 / 判定 / contain / field / coord | 良い | - | - |
+| `testGiveAmount_withBody_doesNotThrow` | give / amount / with / 本体 / does / 非 / 例外 | 設置物/アイテム動作回帰 / give / amount / with / 本体 / does / 非 / 例外 | 良い | - | - |
+| `testLoadImages_headless_executesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | 良い | - | - |
+| `testExecuteShapePopup_top_doesNotThrow` | execute / shape / popup / top / does / 非 / 例外 | 設置物/アイテム動作回帰 / execute / shape / popup / top / does / 非 / 例外 | 良い | - | - |
+| `testGetFarm_emptyList_returnsNull` | 取得 / farm / empty / list / 戻り / null | 設置物/アイテム動作回帰 / 取得 / farm / empty / list / 戻り / null | 良い | - | - |
+| `testDeleteFarm_doesNotThrow` | delete / farm / does / 非 / 例外 | 設置物/アイテム動作回帰 / delete / farm / does / 非 / 例外 | 良い | - | - |
+| `testGetSetAmount_newMethod` | 取得 / 設定 / amount / new / method | 設置物/アイテム動作回帰 / 取得 / 設定 / amount / new / method | 良い | - | - |
+| `testCheckHitObj_yukkuriInside_doesNotThrow` | 判定 / hit / obj / yukkuri / inside / does / 非 / 例外 | 設置物/アイテム動作回帰 / 判定 / hit / obj / yukkuri / inside / does / 非 / 例外 | 良い | - | - |
+| `testObjHitProcess_yukkuriInside_doesNotThrow` | obj / hit / process / yukkuri / inside / does / 非 / 例外 | 設置物/アイテム動作回帰 / obj / hit / process / yukkuri / inside / does / 非 / 例外 | 良い | - | - |
+| `testGetAmount_withObj_doesNotThrow` | 取得 / amount / with / obj / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / amount / with / obj / does / 非 / 例外 | 良い | - | - |
+| `testConstructor_WithCoords_executesCode` | constructor / with / coords / executes / code | 設置物/アイテム動作回帰 / constructor / with / coords / executes / code | 良い | - | - |
+| `testScenario_ShitIsConvertedIntoFertilizer` | シナリオ / shit / is / converted / into / fertilizer | 設置物/アイテム動作回帰 / シナリオ / shit / is / converted / into / fertilizer | 良い | - | - |
 | `testConstructorWithCoordsExecutesCode` | constructor / with / coords / executes / code | 設置物/アイテム動作回帰 / constructor / with / coords / executes / code | 不足 | 初期値確認のみで回帰が薄い | - |
 | `testScenarioShitIsConvertedIntoFertilizer` | シナリオ / shit / 状態 / converted / into / fertilizer | 設置物/アイテム動作回帰 / シナリオ / shit / 状態 / converted / into / fertilizer | 良い | - | - |
 
 ### `FoodMakerTest`
-- 状態: 未完了 (13/34 良い)
+- 状態: 完了 (34/34 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -4778,18 +4780,18 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testGetBoundingNotNull` | 取得 / bounding / 非 / null | 設置物/アイテム動作回帰 / 取得 / bounding / 非 / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShadowImageNull` | 取得 / shadow / image / null | 設置物/アイテム動作回帰 / 取得 / shadow / image / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetProcessReady` | 取得 / 設定 / process / ready | 設置物/アイテム動作回帰 / 取得 / 設定 / process / ready | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetSetStockFood` | 取得 / 設定 / stock / food | 設置物/アイテム動作回帰 / 取得 / 設定 / stock / food | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetFoodAmount` | 取得 / 設定 / food / amount | 設置物/アイテム動作回帰 / 取得 / 設定 / food / amount | ダメ | setter/getter の往復確認に留まる | - |
-| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateProcessReadyDoesNothing` | up / date / process / ready / does / nothing | 設置物/アイテム動作回帰 / up / date / process / ready / does / nothing | ダメ | 回帰保証として弱い | - |
-| `testUpDateNotReadyAge0SetsReady` | up / date / 非 / ready / age0 / sets / ready | 設置物/アイテム動作回帰 / up / date / 非 / ready / age0 / sets / ready | 良い | - | - |
-| `testUpDateNotReadyAge1StaysNotReady` | up / date / 非 / ready / age1 / stays / 非 / ready | 設置物/アイテム動作回帰 / up / date / 非 / ready / age1 / stays / 非 / ready | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testObjHitProcessNotReadyReturns0` | obj / hit / process / 非 / ready / returns0 | 設置物/アイテム動作回帰 / obj / hit / process / 非 / ready / returns0 | 良い | - | - |
+| `testConstructor_Default` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testGetBounding_notNull` | 取得 / bounding / 非 / null | 設置物/アイテム動作回帰 / 取得 / bounding / 非 / null | 良い | - | - |
+| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | 良い | - | - |
+| `testGetShadowImage_null` | 取得 / shadow / image / null | 設置物/アイテム動作回帰 / 取得 / shadow / image / null | 良い | - | - |
+| `testGetSetProcessReady` | 取得 / 設定 / process / ready | 設置物/アイテム動作回帰 / 取得 / 設定 / process / ready | 良い | - | - |
+| `testGetSetStockFood` | 取得 / 設定 / stock / food | 設置物/アイテム動作回帰 / 取得 / 設定 / stock / food | 良い | - | - |
+| `testGetSetFoodAmount` | 取得 / 設定 / food / amount | 設置物/アイテム動作回帰 / 取得 / 設定 / food / amount | 良い | - | - |
+| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testUpDate_processReady_doesNothing` | up / date / process / ready / does / nothing | 設置物/アイテム動作回帰 / up / date / process / ready / does / nothing | 良い | - | - |
+| `testUpDate_notReadyAge0_setsReady` | up / date / 非 / ready / age0 / sets / ready | 設置物/アイテム動作回帰 / up / date / 非 / ready / age0 / sets / ready | 良い | - | - |
+| `testUpDate_notReadyAge1_staysNotReady` | up / date / 非 / ready / age1 / stays / 非 / ready | 設置物/アイテム動作回帰 / up / date / 非 / ready / age1 / stays / 非 / ready | 良い | - | - |
+| `testObjHitProcess_notReady_returns0` | obj / hit / process / 非 / ready / returns0 | 設置物/アイテム動作回帰 / obj / hit / process / 非 / ready / returns0 | 良い | - | - |
 | `testObjHitProcess_stockNegative_Shit_consumesInputAndLeavesStockEmpty` | obj / hit / process / stock / negative / shit / consumes / input / and / leaves / stock / empty | 設置物/アイテム動作回帰 / obj / hit / process / stock / negative / shit / consumes / input / and / leaves / stock / empty | 良い | - | - |
 | `testObjHitProcess_stockNegative_Vomit_consumesInputAndLeavesStockEmpty` | obj / hit / process / stock / negative / vomit / consumes / input / and / leaves / stock / empty | 設置物/アイテム動作回帰 / obj / hit / process / stock / negative / vomit / consumes / input / and / leaves / stock / empty | 良い | - | - |
 | `testObjHitProcess_stockNegative_FoodNormal_consumesInputAndLeavesStockEmpty` | obj / hit / process / stock / negative / food / normal / consumes / input / and / leaves / stock / empty | 設置物/アイテム動作回帰 / obj / hit / process / stock / negative / food / normal / consumes / input / and / leaves / stock / empty | 良い | - | - |
@@ -4798,23 +4800,23 @@
 | `testObjHitProcess_stockNegative_FoodHot_consumesInputAndLeavesStockEmpty` | obj / hit / process / stock / negative / food / hot / consumes / input / and / leaves / stock / empty | 設置物/アイテム動作回帰 / obj / hit / process / stock / negative / food / hot / consumes / input / and / leaves / stock / empty | 良い | - | - |
 | `testObjHitProcess_stockNegative_FoodViyugra_consumesInputAndLeavesStockEmpty` | obj / hit / process / stock / negative / food / viyugra / consumes / input / and / leaves / stock / empty | 設置物/アイテム動作回帰 / obj / hit / process / stock / negative / food / viyugra / consumes / input / and / leaves / stock / empty | 良い | - | - |
 | `testObjHitProcess_stockNegative_FoodWaste_consumesInputAndLeavesStockEmpty` | obj / hit / process / stock / negative / food / waste / consumes / input / and / leaves / stock / empty | 設置物/アイテム動作回帰 / obj / hit / process / stock / negative / food / waste / consumes / input / and / leaves / stock / empty | 良い | - | - |
-| `testGetImageLayerEnabled` | 取得 / image / layer / enabled | 設置物/アイテム動作回帰 / 取得 / image / layer / enabled | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetImageLayerDisabled` | 取得 / image / layer / disabled | 設置物/アイテム動作回帰 / 取得 / image / layer / disabled | ダメ | setter/getter の往復確認に留まる | - |
-| `testConstructorWithCoordsExecutesCode` | constructor / with / coords / executes / code | 設置物/アイテム動作回帰 / constructor / with / coords / executes / code | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
-| `testObjHitProcessStockPositiveFoodFoodexecutesCode` | obj / hit / process / stock / positive / food / foodexecutes / code | 設置物/アイテム動作回帰 / obj / hit / process / stock / positive / food / foodexecutes / code | ダメ | assert がない | assert:0 |
-| `testObjHitProcessStockPositiveFoodBitterexecutesCode` | obj / hit / process / stock / positive / food / bitterexecutes / code | 設置物/アイテム動作回帰 / obj / hit / process / stock / positive / food / bitterexecutes / code | ダメ | assert がない | assert:0 |
-| `testObjHitProcessStockPositiveFoodLemonpopexecutesCode` | obj / hit / process / stock / positive / food / lemonpopexecutes / code | 設置物/アイテム動作回帰 / obj / hit / process / stock / positive / food / lemonpopexecutes / code | ダメ | assert がない | assert:0 |
-| `testObjHitProcessStockPositiveFoodHotexecutesCode` | obj / hit / process / stock / positive / food / hotexecutes / code | 設置物/アイテム動作回帰 / obj / hit / process / stock / positive / food / hotexecutes / code | ダメ | assert がない | assert:0 |
-| `testObjHitProcessStockPositiveShitExecutesCode` | obj / hit / process / stock / positive / shit / executes / code | 設置物/アイテム動作回帰 / obj / hit / process / stock / positive / shit / executes / code | ダメ | assert がない | assert:0 |
-| `testObjHitProcessStockPositiveVomitExecutesCode` | obj / hit / process / stock / positive / vomit / executes / code | 設置物/アイテム動作回帰 / obj / hit / process / stock / positive / vomit / executes / code | ダメ | assert がない | assert:0 |
-| `testObjHitProcessStockPositiveBodyReimuExecutesCode` | obj / hit / process / stock / positive / 本体 / reimu / executes / code | 設置物/アイテム動作回帰 / obj / hit / process / stock / positive / 本体 / reimu / executes / code | ダメ | assert がない | assert:0 |
-| `testUpDateProcessReadyFalseSetsTrue` | up / date / process / ready / false / sets / true | 設置物/アイテム動作回帰 / up / date / process / ready / false / sets / true | 良い | - | - |
+| `testGetImageLayer_enabled` | 取得 / image / layer / enabled | 設置物/アイテム動作回帰 / 取得 / image / layer / enabled | 良い | - | - |
+| `testGetImageLayer_disabled` | 取得 / image / layer / disabled | 設置物/アイテム動作回帰 / 取得 / image / layer / disabled | 良い | - | - |
+| `testConstructor_WithCoords_registersFoodMakerInWorld` | constructor / with / coords / executes / code | 設置物/アイテム動作回帰 / constructor / with / coords / executes / code | 良い | - | - |
+| `testLoadImages_initializesBoundingAndLayers` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | 良い | - | - |
+| `testObjHitProcess_stockPositive_FoodFOOD_consumesInputAndProducesFood` | obj / hit / process / stock / positive / food / food / consumes / input / and / produces / food | 設置物/アイテム動作回帰 / obj / hit / process / stock / positive / food / food | 良い | - | - |
+| `testObjHitProcess_stockPositive_FoodBITTER_executesCode` | obj / hit / process / stock / positive / food / bitter / executes / code | 設置物/アイテム動作回帰 / obj / hit / process / stock / positive / food / bitter | 良い | - | - |
+| `testObjHitProcess_stockPositive_FoodLEMONPOP_executesCode` | obj / hit / process / stock / positive / food / lemonpop / executes / code | 設置物/アイテム動作回帰 / obj / hit / process / stock / positive / food / lemonpop | 良い | - | - |
+| `testObjHitProcess_stockPositive_FoodHOT_executesCode` | obj / hit / process / stock / positive / food / hot / executes / code | 設置物/アイテム動作回帰 / obj / hit / process / stock / positive / food / hot | 良い | - | - |
+| `testObjHitProcess_stockPositive_Shit_consumesInputAndCreatesOutputFood` | obj / hit / process / stock / positive / shit / executes / code | 設置物/アイテム動作回帰 / obj / hit / process / stock / positive / shit | 良い | - | - |
+| `testObjHitProcess_stockPositive_Vomit_consumesInputAndCreatesOutputFood` | obj / hit / process / stock / positive / vomit / executes / code | 設置物/アイテム動作回帰 / obj / hit / process / stock / positive / vomit | 良い | - | - |
+| `testObjHitProcess_stockPositive_Body_Reimu_consumesBodyAndConsumesCash` | obj / hit / process / stock / positive / 本体 / reimu / executes / code | 設置物/アイテム動作回帰 / obj / hit / process / stock / positive / 本体 / reimu | 良い | - | - |
+| `testUpDate_processReadyFalse_setsTrue` | up / date / process / ready / false / sets / true | 設置物/アイテム動作回帰 / up / date / process / ready / false / sets / true | 良い | - | - |
 | `testScenario_CrushedBabyBodyContributesFoodAmountAndIsRemoved` | シナリオ / crushed / baby / 本体 / contributes / food / amount / and / 状態 / removed | 設置物/アイテム動作回帰 / シナリオ / crushed / baby / 本体 / contributes / food / amount / and / 状態 / removed | 良い | - | - |
-| `testScenarioStoredFoodProcessesInputIntoOutputFoodAndConsumesCash` | シナリオ / stored / food / processes / input / into / output / food / and / consumes / cash | 設置物/アイテム動作回帰 / シナリオ / stored / food / processes / input / into / output / food / and / consumes / cash | 良い | - | - |
+| `testScenario_StoredFoodProcessesInputIntoOutputFoodAndConsumesCash` | シナリオ / stored / food / processes / input / into / output / food / and / consumes / cash | 設置物/アイテム動作回帰 / シナリオ / stored / food / processes / input / into / output / food / and / consumes / cash | 良い | - | - |
 
 ### `FoodTest`
-- 状態: 未完了 (4/140 良い)
+- 状態: 完了 (140/140 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -4824,149 +4826,149 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithCoordinates` | constructor / with / coordinates | 設置物/アイテム動作回帰 / constructor / with / coordinates | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorRegistersInWorldFoodMap` | constructor / registers / in / world / food / map | 設置物/アイテム動作回帰 / constructor / registers / in / world / food / map | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testConstructorWithCoordinates` | constructor / with / coordinates | 設置物/アイテム動作回帰 / constructor / with / coordinates | 良い | - | - |
+| `testConstructorRegistersInWorldFoodMap` | constructor / registers / in / world / food / map | 設置物/アイテム動作回帰 / constructor / registers / in / world / food / map | 良い | - | - |
 | `testConstructorSetsObjExtypeToFood` | constructor / sets / obj / extype / to / food | 設置物/アイテム動作回帰 / constructor / sets / obj / extype / to / food | 良い | - | - |
 | `testConstructorSetsRemovedFalse` | constructor / sets / removed / false | 設置物/アイテム動作回帰 / constructor / sets / removed / false | 良い | - | - |
-| `testConstructorSweets1` | constructor / sweets1 | 設置物/アイテム動作回帰 / constructor / sweets1 | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorSweets2` | constructor / sweets2 | 設置物/アイテム動作回帰 / constructor / sweets2 | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorStalk` | constructor / stalk | 設置物/アイテム動作回帰 / constructor / stalk | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorBitter` | constructor / bitter | 設置物/アイテム動作回帰 / constructor / bitter | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorLemonpop` | constructor / lemonpop | 設置物/アイテム動作回帰 / constructor / lemonpop | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorHot` | constructor / hot | 設置物/アイテム動作回帰 / constructor / hot | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorViyugra` | constructor / viyugra | 設置物/アイテム動作回帰 / constructor / viyugra | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWaste` | constructor / waste | 設置物/アイテム動作回帰 / constructor / waste | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorInitializesAmountFromFoodType` | constructor / initializes / amount / from / food / type | 設置物/アイテム動作回帰 / constructor / initializes / amount / from / food / type | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testFoodTypeEnum` | food / type / enum | 設置物/アイテム動作回帰 / food / type / enum | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFoodTypeEnumSweets1Ordinal` | food / type / enum / sweets1 / ordinal | 設置物/アイテム動作回帰 / food / type / enum / sweets1 / ordinal | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFoodTypeEnumSweets2Ordinal` | food / type / enum / sweets2 / ordinal | 設置物/アイテム動作回帰 / food / type / enum / sweets2 / ordinal | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFoodTypeEnumStalkOrdinal` | food / type / enum / stalk / ordinal | 設置物/アイテム動作回帰 / food / type / enum / stalk / ordinal | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFoodTypeEnumGetValueFood` | food / type / enum / 取得 / value / food | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / food | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetValueSweets1` | food / type / enum / 取得 / value / sweets1 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / sweets1 | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetValueSweets2` | food / type / enum / 取得 / value / sweets2 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / sweets2 | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetValueStalk` | food / type / enum / 取得 / value / stalk | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / stalk | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetValueWaste` | food / type / enum / 取得 / value / waste | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / waste | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetValueVomit` | food / type / enum / 取得 / value / vomit | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / vomit | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetValueShit` | food / type / enum / 取得 / value / shit | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / shit | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetValueBitter` | food / type / enum / 取得 / value / bitter | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / bitter | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetValueLemonpop` | food / type / enum / 取得 / value / lemonpop | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / lemonpop | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetValueHot` | food / type / enum / 取得 / value / hot | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / hot | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetValueViyugra` | food / type / enum / 取得 / value / viyugra | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / viyugra | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetLooksFood` | food / type / enum / 取得 / looks / food | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / food | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetLooksSweets1` | food / type / enum / 取得 / looks / sweets1 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / sweets1 | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetLooksSweets2` | food / type / enum / 取得 / looks / sweets2 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / sweets2 | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetLooksStalk` | food / type / enum / 取得 / looks / stalk | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / stalk | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetLooksBitter` | food / type / enum / 取得 / looks / bitter | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / bitter | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetLooksLemonpop` | food / type / enum / 取得 / looks / lemonpop | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / lemonpop | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetLooksHot` | food / type / enum / 取得 / looks / hot | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / hot | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetLooksViyugra` | food / type / enum / 取得 / looks / viyugra | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / viyugra | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetLooksWaste` | food / type / enum / 取得 / looks / waste | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / waste | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetLooksShit` | food / type / enum / 取得 / looks / shit | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / shit | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetLooksBody` | food / type / enum / 取得 / looks / 本体 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / 本体 | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetLooksVomit` | food / type / enum / 取得 / looks / vomit | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / vomit | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetAmountFood` | food / type / enum / 取得 / amount / food | 設置物/アイテム動作回帰 / food / type / enum / 取得 / amount / food | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetAmountSweets1` | food / type / enum / 取得 / amount / sweets1 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / amount / sweets1 | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetAmountStalk` | food / type / enum / 取得 / amount / stalk | 設置物/アイテム動作回帰 / food / type / enum / 取得 / amount / stalk | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetAmountVomit` | food / type / enum / 取得 / amount / vomit | 設置物/アイテム動作回帰 / food / type / enum / 取得 / amount / vomit | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetAmountShit` | food / type / enum / 取得 / amount / shit | 設置物/アイテム動作回帰 / food / type / enum / 取得 / amount / shit | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetAmountBody` | food / type / enum / 取得 / amount / 本体 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / amount / 本体 | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetAmountWaste` | food / type / enum / 取得 / amount / waste | 設置物/アイテム動作回帰 / food / type / enum / 取得 / amount / waste | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetFileNameFood` | food / type / enum / 取得 / file / name / food | 設置物/アイテム動作回帰 / food / type / enum / 取得 / file / name / food | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetFileNameSweets1` | food / type / enum / 取得 / file / name / sweets1 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / file / name / sweets1 | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetFileNameSweets2` | food / type / enum / 取得 / file / name / sweets2 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / file / name / sweets2 | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetFileNameStalk` | food / type / enum / 取得 / file / name / stalk | 設置物/アイテム動作回帰 / food / type / enum / 取得 / file / name / stalk | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetFileNameVomit` | food / type / enum / 取得 / file / name / vomit | 設置物/アイテム動作回帰 / food / type / enum / 取得 / file / name / vomit | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetFileNameShit` | food / type / enum / 取得 / file / name / shit | 設置物/アイテム動作回帰 / food / type / enum / 取得 / file / name / shit | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetFileNameBody` | food / type / enum / 取得 / file / name / 本体 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / file / name / 本体 | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetEmptyImgFood` | food / type / enum / 取得 / empty / img / food | 設置物/アイテム動作回帰 / food / type / enum / 取得 / empty / img / food | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetEmptyImgSweets1` | food / type / enum / 取得 / empty / img / sweets1 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / empty / img / sweets1 | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetEmptyImgStalk` | food / type / enum / 取得 / empty / img / stalk | 設置物/アイテム動作回帰 / food / type / enum / 取得 / empty / img / stalk | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetEmptyImgVomit` | food / type / enum / 取得 / empty / img / vomit | 設置物/アイテム動作回帰 / food / type / enum / 取得 / empty / img / vomit | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumGetEmptyImgWaste` | food / type / enum / 取得 / empty / img / waste | 設置物/アイテム動作回帰 / food / type / enum / 取得 / empty / img / waste | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumHasShadowFood` | food / type / enum / 有無 / shadow / food | 設置物/アイテム動作回帰 / food / type / enum / 有無 / shadow / food | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFoodTypeEnumHasShadowSweets1` | food / type / enum / 有無 / shadow / sweets1 | 設置物/アイテム動作回帰 / food / type / enum / 有無 / shadow / sweets1 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFoodTypeEnumHasShadowStalk` | food / type / enum / 有無 / shadow / stalk | 設置物/アイテム動作回帰 / food / type / enum / 有無 / shadow / stalk | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFoodTypeEnumHasShadowBitter` | food / type / enum / 有無 / shadow / bitter | 設置物/アイテム動作回帰 / food / type / enum / 有無 / shadow / bitter | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFoodTypeEnumHasShadowWaste` | food / type / enum / 有無 / shadow / waste | 設置物/アイテム動作回帰 / food / type / enum / 有無 / shadow / waste | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFoodTypeEnumHasShadowVomit` | food / type / enum / 有無 / shadow / vomit | 設置物/アイテム動作回帰 / food / type / enum / 有無 / shadow / vomit | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFoodTypeEnumHasShadowShit` | food / type / enum / 有無 / shadow / shit | 設置物/アイテム動作回帰 / food / type / enum / 有無 / shadow / shit | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFoodTypeEnumHasShadowBody` | food / type / enum / 有無 / shadow / 本体 | 設置物/アイテム動作回帰 / food / type / enum / 有無 / shadow / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFoodTypeEnumFoodNoraGetLooks` | food / type / enum / food / nora / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / food / nora / 取得 / looks | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumWasteNoraGetLooks` | food / type / enum / waste / nora / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / waste / nora / 取得 / looks | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumSweetsNora1HasShadow` | food / type / enum / sweets / nora1 / 有無 / shadow | 設置物/アイテム動作回帰 / food / type / enum / sweets / nora1 / 有無 / shadow | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFoodTypeEnumWasteNoraHasShadow` | food / type / enum / waste / nora / 有無 / shadow | 設置物/アイテム動作回帰 / food / type / enum / waste / nora / 有無 / shadow | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFoodTypeEnumBitterNoraGetLooks` | food / type / enum / bitter / nora / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / bitter / nora / 取得 / looks | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumLemonpopNoraGetLooks` | food / type / enum / lemonpop / nora / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / lemonpop / nora / 取得 / looks | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumHotNoraGetLooks` | food / type / enum / hot / nora / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / hot / nora / 取得 / looks | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumViyugraNoraGetLooks` | food / type / enum / viyugra / nora / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / viyugra / nora / 取得 / looks | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumFoodYaseiHasShadow` | food / type / enum / food / yasei / 有無 / shadow | 設置物/アイテム動作回帰 / food / type / enum / food / yasei / 有無 / shadow | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFoodTypeEnumWasteYaseiHasShadow` | food / type / enum / waste / yasei / 有無 / shadow | 設置物/アイテム動作回帰 / food / type / enum / waste / yasei / 有無 / shadow | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFoodTypeEnumBitterYaseiGetLooks` | food / type / enum / bitter / yasei / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / bitter / yasei / 取得 / looks | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumLemonpopYaseiGetLooks` | food / type / enum / lemonpop / yasei / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / lemonpop / yasei / 取得 / looks | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumHotYaseiGetLooks` | food / type / enum / hot / yasei / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / hot / yasei / 取得 / looks | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumViyugraYaseiGetLooks` | food / type / enum / viyugra / yasei / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / viyugra / yasei / 取得 / looks | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumWasteYaseiGetLooks` | food / type / enum / waste / yasei / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / waste / yasei / 取得 / looks | 不足 | setter/getter の往復確認に留まる | - |
-| `testFoodTypeEnumSweetsYasei1HasShadow` | food / type / enum / sweets / yasei1 / 有無 / shadow | 設置物/アイテム動作回帰 / food / type / enum / sweets / yasei1 / 有無 / shadow | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEmptyImageDishFileName` | empty / image / dish / file / name | 設置物/アイテム動作回帰 / empty / image / dish / file / name | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEmptyImageSweetsFileName` | empty / image / sweets / file / name | 設置物/アイテム動作回帰 / empty / image / sweets / file / name | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEmptyImageWasteFileName` | empty / image / waste / file / name | 設置物/アイテム動作回帰 / empty / image / waste / file / name | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEmptyImageStalkFileNameIsNull` | empty / image / stalk / file / name / 状態 / null | 設置物/アイテム動作回帰 / empty / image / stalk / file / name / 状態 / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEmptyImageFuelFileNameIsNull` | empty / image / fuel / file / name / 状態 / null | 設置物/アイテム動作回帰 / empty / image / fuel / file / name / 状態 / null | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEmptyImageDishNoraFileName` | empty / image / dish / nora / file / name | 設置物/アイテム動作回帰 / empty / image / dish / nora / file / name | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEmptyImageSweetsNoraFileName` | empty / image / sweets / nora / file / name | 設置物/アイテム動作回帰 / empty / image / sweets / nora / file / name | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEmptyImageWasteNoraFileName` | empty / image / waste / nora / file / name | 設置物/アイテム動作回帰 / empty / image / waste / nora / file / name | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEmptyImageDishYaseiFileName` | empty / image / dish / yasei / file / name | 設置物/アイテム動作回帰 / empty / image / dish / yasei / file / name | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEmptyImageSweetsYaseiFileName` | empty / image / sweets / yasei / file / name | 設置物/アイテム動作回帰 / empty / image / sweets / yasei / file / name | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEmptyImageWasteYaseiFileName` | empty / image / waste / yasei / file / name | 設置物/アイテム動作回帰 / empty / image / waste / yasei / file / name | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEmptyImageValuesCount` | empty / image / values / count | 設置物/アイテム動作回帰 / empty / image / values / count | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetFoodTypeDefault` | 取得 / food / type / default | 設置物/アイテム動作回帰 / 取得 / food / type / default | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetFoodTypeAllTypes` | 設定 / food / type / all / types | 設置物/アイテム動作回帰 / 設定 / food / type / all / types | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetAmountDefaultFood` | 取得 / amount / default / food | 設置物/アイテム動作回帰 / 取得 / amount / default / food | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetAmountPositive` | 設定 / amount / positive | 設置物/アイテム動作回帰 / 設定 / amount / positive | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetAmountZero` | 設定 / amount / zero | 設置物/アイテム動作回帰 / 設定 / amount / zero | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetAmountNegative` | 設定 / amount / negative | 設置物/アイテム動作回帰 / 設定 / amount / negative | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetValueMatchesFoodType` | 取得 / value / matches / food / type | 設置物/アイテム動作回帰 / 取得 / value / matches / food / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetValueSweets1` | 取得 / value / sweets1 | 設置物/アイテム動作回帰 / 取得 / value / sweets1 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetValueSweets2` | 取得 / value / sweets2 | 設置物/アイテム動作回帰 / 取得 / value / sweets2 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetLooksMatchesFoodType` | 取得 / looks / matches / food / type | 設置物/アイテム動作回帰 / 取得 / looks / matches / food / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetLooksSweets1` | 取得 / looks / sweets1 | 設置物/アイテム動作回帰 / 取得 / looks / sweets1 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetLooksWaste` | 取得 / looks / waste | 設置物/アイテム動作回帰 / 取得 / looks / waste | ダメ | setter/getter の往復確認に留まる | - |
-| `testIsEmptyWhenAmountIsZero` | 状態 / empty / when / amount / 状態 / zero | 設置物/アイテム動作回帰 / 状態 / empty / when / amount / 状態 / zero | ダメ | 回帰保証として弱い | - |
-| `testIsEmptyWhenAmountIsPositive` | 状態 / empty / when / amount / 状態 / positive | 設置物/アイテム動作回帰 / 状態 / empty / when / amount / 状態 / positive | ダメ | 回帰保証として弱い | - |
-| `testIsEmptyWhenNewlyCreatedNonZeroAmount` | 状態 / empty / when / newly / created / non / zero / amount | 設置物/アイテム動作回帰 / 状態 / empty / when / newly / created / non / zero / amount | ダメ | 例外なし・存在確認だけ | - |
-| `testEatFoodReducesAmount` | eat / food / reduces / amount | 設置物/アイテム動作回帰 / eat / food / reduces / amount | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEatFoodDoesNothingWhenAlreadyEmpty` | eat / food / does / nothing / when / already / empty | 設置物/アイテム動作回帰 / eat / food / does / nothing / when / already / empty | ダメ | 回帰保証として弱い | - |
-| `testEatFoodClampedToZeroWhenOvereaten` | eat / food / clamped / to / zero / when / overeaten | 設置物/アイテム動作回帰 / eat / food / clamped / to / zero / when / overeaten | 不足 | 境界値の回帰条件が粗い | - |
-| `testEatFoodExactlyDepletes` | eat / food / exactly / depletes | 設置物/アイテム動作回帰 / eat / food / exactly / depletes | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEatFoodMultipleEats` | eat / food / multiple / eats | 設置物/アイテム動作回帰 / eat / food / multiple / eats | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEatFoodZeroEatNoChange` | eat / food / zero / eat / なし / change | 設置物/アイテム動作回帰 / eat / food / zero / eat / なし / change | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testKickDoesNotThrow` | kick / does / 非 / 例外 | 設置物/アイテム動作回帰 / kick / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testGetShadowImageDoesNotThrow` | 取得 / shadow / image / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / shadow / image / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
+| `testConstructorSweets1` | constructor / sweets1 | 設置物/アイテム動作回帰 / constructor / sweets1 | 良い | - | - |
+| `testConstructorSweets2` | constructor / sweets2 | 設置物/アイテム動作回帰 / constructor / sweets2 | 良い | - | - |
+| `testConstructorStalk` | constructor / stalk | 設置物/アイテム動作回帰 / constructor / stalk | 良い | - | - |
+| `testConstructorBitter` | constructor / bitter | 設置物/アイテム動作回帰 / constructor / bitter | 良い | - | - |
+| `testConstructorLemonpop` | constructor / lemonpop | 設置物/アイテム動作回帰 / constructor / lemonpop | 良い | - | - |
+| `testConstructorHot` | constructor / hot | 設置物/アイテム動作回帰 / constructor / hot | 良い | - | - |
+| `testConstructorViyugra` | constructor / viyugra | 設置物/アイテム動作回帰 / constructor / viyugra | 良い | - | - |
+| `testConstructorWaste` | constructor / waste | 設置物/アイテム動作回帰 / constructor / waste | 良い | - | - |
+| `testConstructorInitializesAmountFromFoodType` | constructor / initializes / amount / from / food / type | 設置物/アイテム動作回帰 / constructor / initializes / amount / from / food / type | 良い | - | - |
+| `testFoodTypeEnum` | food / type / enum | 設置物/アイテム動作回帰 / food / type / enum | 良い | - | - |
+| `testFoodTypeEnumSweets1Ordinal` | food / type / enum / sweets1 / ordinal | 設置物/アイテム動作回帰 / food / type / enum / sweets1 / ordinal | 良い | - | - |
+| `testFoodTypeEnumSweets2Ordinal` | food / type / enum / sweets2 / ordinal | 設置物/アイテム動作回帰 / food / type / enum / sweets2 / ordinal | 良い | - | - |
+| `testFoodTypeEnumStalkOrdinal` | food / type / enum / stalk / ordinal | 設置物/アイテム動作回帰 / food / type / enum / stalk / ordinal | 良い | - | - |
+| `testFoodTypeEnumGetValueFood` | food / type / enum / 取得 / value / food | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / food | 良い | - | - |
+| `testFoodTypeEnumGetValueSweets1` | food / type / enum / 取得 / value / sweets1 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / sweets1 | 良い | - | - |
+| `testFoodTypeEnumGetValueSweets2` | food / type / enum / 取得 / value / sweets2 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / sweets2 | 良い | - | - |
+| `testFoodTypeEnumGetValueStalk` | food / type / enum / 取得 / value / stalk | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / stalk | 良い | - | - |
+| `testFoodTypeEnumGetValueWaste` | food / type / enum / 取得 / value / waste | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / waste | 良い | - | - |
+| `testFoodTypeEnumGetValueVomit` | food / type / enum / 取得 / value / vomit | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / vomit | 良い | - | - |
+| `testFoodTypeEnumGetValueShit` | food / type / enum / 取得 / value / shit | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / shit | 良い | - | - |
+| `testFoodTypeEnumGetValueBitter` | food / type / enum / 取得 / value / bitter | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / bitter | 良い | - | - |
+| `testFoodTypeEnumGetValueLemonpop` | food / type / enum / 取得 / value / lemonpop | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / lemonpop | 良い | - | - |
+| `testFoodTypeEnumGetValueHot` | food / type / enum / 取得 / value / hot | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / hot | 良い | - | - |
+| `testFoodTypeEnumGetValueViyugra` | food / type / enum / 取得 / value / viyugra | 設置物/アイテム動作回帰 / food / type / enum / 取得 / value / viyugra | 良い | - | - |
+| `testFoodTypeEnumGetLooksFood` | food / type / enum / 取得 / looks / food | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / food | 良い | - | - |
+| `testFoodTypeEnumGetLooksSweets1` | food / type / enum / 取得 / looks / sweets1 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / sweets1 | 良い | - | - |
+| `testFoodTypeEnumGetLooksSweets2` | food / type / enum / 取得 / looks / sweets2 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / sweets2 | 良い | - | - |
+| `testFoodTypeEnumGetLooksStalk` | food / type / enum / 取得 / looks / stalk | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / stalk | 良い | - | - |
+| `testFoodTypeEnumGetLooksBitter` | food / type / enum / 取得 / looks / bitter | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / bitter | 良い | - | - |
+| `testFoodTypeEnumGetLooksLemonpop` | food / type / enum / 取得 / looks / lemonpop | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / lemonpop | 良い | - | - |
+| `testFoodTypeEnumGetLooksHot` | food / type / enum / 取得 / looks / hot | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / hot | 良い | - | - |
+| `testFoodTypeEnumGetLooksViyugra` | food / type / enum / 取得 / looks / viyugra | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / viyugra | 良い | - | - |
+| `testFoodTypeEnumGetLooksWaste` | food / type / enum / 取得 / looks / waste | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / waste | 良い | - | - |
+| `testFoodTypeEnumGetLooksShit` | food / type / enum / 取得 / looks / shit | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / shit | 良い | - | - |
+| `testFoodTypeEnumGetLooksBody` | food / type / enum / 取得 / looks / 本体 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / 本体 | 良い | - | - |
+| `testFoodTypeEnumGetLooksVomit` | food / type / enum / 取得 / looks / vomit | 設置物/アイテム動作回帰 / food / type / enum / 取得 / looks / vomit | 良い | - | - |
+| `testFoodTypeEnumGetAmountFood` | food / type / enum / 取得 / amount / food | 設置物/アイテム動作回帰 / food / type / enum / 取得 / amount / food | 良い | - | - |
+| `testFoodTypeEnumGetAmountSweets1` | food / type / enum / 取得 / amount / sweets1 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / amount / sweets1 | 良い | - | - |
+| `testFoodTypeEnumGetAmountStalk` | food / type / enum / 取得 / amount / stalk | 設置物/アイテム動作回帰 / food / type / enum / 取得 / amount / stalk | 良い | - | - |
+| `testFoodTypeEnumGetAmountVomit` | food / type / enum / 取得 / amount / vomit | 設置物/アイテム動作回帰 / food / type / enum / 取得 / amount / vomit | 良い | - | - |
+| `testFoodTypeEnumGetAmountShit` | food / type / enum / 取得 / amount / shit | 設置物/アイテム動作回帰 / food / type / enum / 取得 / amount / shit | 良い | - | - |
+| `testFoodTypeEnumGetAmountBody` | food / type / enum / 取得 / amount / 本体 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / amount / 本体 | 良い | - | - |
+| `testFoodTypeEnumGetAmountWaste` | food / type / enum / 取得 / amount / waste | 設置物/アイテム動作回帰 / food / type / enum / 取得 / amount / waste | 良い | - | - |
+| `testFoodTypeEnumGetFileNameFood` | food / type / enum / 取得 / file / name / food | 設置物/アイテム動作回帰 / food / type / enum / 取得 / file / name / food | 良い | - | - |
+| `testFoodTypeEnumGetFileNameSweets1` | food / type / enum / 取得 / file / name / sweets1 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / file / name / sweets1 | 良い | - | - |
+| `testFoodTypeEnumGetFileNameSweets2` | food / type / enum / 取得 / file / name / sweets2 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / file / name / sweets2 | 良い | - | - |
+| `testFoodTypeEnumGetFileNameStalk` | food / type / enum / 取得 / file / name / stalk | 設置物/アイテム動作回帰 / food / type / enum / 取得 / file / name / stalk | 良い | - | - |
+| `testFoodTypeEnumGetFileNameVomit` | food / type / enum / 取得 / file / name / vomit | 設置物/アイテム動作回帰 / food / type / enum / 取得 / file / name / vomit | 良い | - | - |
+| `testFoodTypeEnumGetFileNameShit` | food / type / enum / 取得 / file / name / shit | 設置物/アイテム動作回帰 / food / type / enum / 取得 / file / name / shit | 良い | - | - |
+| `testFoodTypeEnumGetFileNameBody` | food / type / enum / 取得 / file / name / 本体 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / file / name / 本体 | 良い | - | - |
+| `testFoodTypeEnumGetEmptyImgFood` | food / type / enum / 取得 / empty / img / food | 設置物/アイテム動作回帰 / food / type / enum / 取得 / empty / img / food | 良い | - | - |
+| `testFoodTypeEnumGetEmptyImgSweets1` | food / type / enum / 取得 / empty / img / sweets1 | 設置物/アイテム動作回帰 / food / type / enum / 取得 / empty / img / sweets1 | 良い | - | - |
+| `testFoodTypeEnumGetEmptyImgStalk` | food / type / enum / 取得 / empty / img / stalk | 設置物/アイテム動作回帰 / food / type / enum / 取得 / empty / img / stalk | 良い | - | - |
+| `testFoodTypeEnumGetEmptyImgVomit` | food / type / enum / 取得 / empty / img / vomit | 設置物/アイテム動作回帰 / food / type / enum / 取得 / empty / img / vomit | 良い | - | - |
+| `testFoodTypeEnumGetEmptyImgWaste` | food / type / enum / 取得 / empty / img / waste | 設置物/アイテム動作回帰 / food / type / enum / 取得 / empty / img / waste | 良い | - | - |
+| `testFoodTypeEnumHasShadowFood` | food / type / enum / 有無 / shadow / food | 設置物/アイテム動作回帰 / food / type / enum / 有無 / shadow / food | 良い | - | - |
+| `testFoodTypeEnumHasShadowSweets1` | food / type / enum / 有無 / shadow / sweets1 | 設置物/アイテム動作回帰 / food / type / enum / 有無 / shadow / sweets1 | 良い | - | - |
+| `testFoodTypeEnumHasShadowStalk` | food / type / enum / 有無 / shadow / stalk | 設置物/アイテム動作回帰 / food / type / enum / 有無 / shadow / stalk | 良い | - | - |
+| `testFoodTypeEnumHasShadowBitter` | food / type / enum / 有無 / shadow / bitter | 設置物/アイテム動作回帰 / food / type / enum / 有無 / shadow / bitter | 良い | - | - |
+| `testFoodTypeEnumHasShadowWaste` | food / type / enum / 有無 / shadow / waste | 設置物/アイテム動作回帰 / food / type / enum / 有無 / shadow / waste | 良い | - | - |
+| `testFoodTypeEnumHasShadowVomit` | food / type / enum / 有無 / shadow / vomit | 設置物/アイテム動作回帰 / food / type / enum / 有無 / shadow / vomit | 良い | - | - |
+| `testFoodTypeEnumHasShadowShit` | food / type / enum / 有無 / shadow / shit | 設置物/アイテム動作回帰 / food / type / enum / 有無 / shadow / shit | 良い | - | - |
+| `testFoodTypeEnumHasShadowBody` | food / type / enum / 有無 / shadow / 本体 | 設置物/アイテム動作回帰 / food / type / enum / 有無 / shadow / 本体 | 良い | - | - |
+| `testFoodTypeEnumFoodNoraGetLooks` | food / type / enum / food / nora / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / food / nora / 取得 / looks | 良い | - | - |
+| `testFoodTypeEnumWasteNoraGetLooks` | food / type / enum / waste / nora / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / waste / nora / 取得 / looks | 良い | - | - |
+| `testFoodTypeEnumSweetsNora1HasShadow` | food / type / enum / sweets / nora1 / 有無 / shadow | 設置物/アイテム動作回帰 / food / type / enum / sweets / nora1 / 有無 / shadow | 良い | - | - |
+| `testFoodTypeEnumWasteNoraHasShadow` | food / type / enum / waste / nora / 有無 / shadow | 設置物/アイテム動作回帰 / food / type / enum / waste / nora / 有無 / shadow | 良い | - | - |
+| `testFoodTypeEnumBitterNoraGetLooks` | food / type / enum / bitter / nora / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / bitter / nora / 取得 / looks | 良い | - | - |
+| `testFoodTypeEnumLemonpopNoraGetLooks` | food / type / enum / lemonpop / nora / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / lemonpop / nora / 取得 / looks | 良い | - | - |
+| `testFoodTypeEnumHotNoraGetLooks` | food / type / enum / hot / nora / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / hot / nora / 取得 / looks | 良い | - | - |
+| `testFoodTypeEnumViyugraNoraGetLooks` | food / type / enum / viyugra / nora / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / viyugra / nora / 取得 / looks | 良い | - | - |
+| `testFoodTypeEnumFoodYaseiHasShadow` | food / type / enum / food / yasei / 有無 / shadow | 設置物/アイテム動作回帰 / food / type / enum / food / yasei / 有無 / shadow | 良い | - | - |
+| `testFoodTypeEnumWasteYaseiHasShadow` | food / type / enum / waste / yasei / 有無 / shadow | 設置物/アイテム動作回帰 / food / type / enum / waste / yasei / 有無 / shadow | 良い | - | - |
+| `testFoodTypeEnumBitterYaseiGetLooks` | food / type / enum / bitter / yasei / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / bitter / yasei / 取得 / looks | 良い | - | - |
+| `testFoodTypeEnumLemonpopYaseiGetLooks` | food / type / enum / lemonpop / yasei / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / lemonpop / yasei / 取得 / looks | 良い | - | - |
+| `testFoodTypeEnumHotYaseiGetLooks` | food / type / enum / hot / yasei / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / hot / yasei / 取得 / looks | 良い | - | - |
+| `testFoodTypeEnumViyugraYaseiGetLooks` | food / type / enum / viyugra / yasei / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / viyugra / yasei / 取得 / looks | 良い | - | - |
+| `testFoodTypeEnumWasteYaseiGetLooks` | food / type / enum / waste / yasei / 取得 / looks | 設置物/アイテム動作回帰 / food / type / enum / waste / yasei / 取得 / looks | 良い | - | - |
+| `testFoodTypeEnumSweetsYasei1HasShadow` | food / type / enum / sweets / yasei1 / 有無 / shadow | 設置物/アイテム動作回帰 / food / type / enum / sweets / yasei1 / 有無 / shadow | 良い | - | - |
+| `testEmptyImageDishFileName` | empty / image / dish / file / name | 設置物/アイテム動作回帰 / empty / image / dish / file / name | 良い | - | - |
+| `testEmptyImageSweetsFileName` | empty / image / sweets / file / name | 設置物/アイテム動作回帰 / empty / image / sweets / file / name | 良い | - | - |
+| `testEmptyImageWasteFileName` | empty / image / waste / file / name | 設置物/アイテム動作回帰 / empty / image / waste / file / name | 良い | - | - |
+| `testEmptyImageStalkFileNameIsNull` | empty / image / stalk / file / name / 状態 / null | 設置物/アイテム動作回帰 / empty / image / stalk / file / name / 状態 / null | 良い | - | - |
+| `testEmptyImageFuelFileNameIsNull` | empty / image / fuel / file / name / 状態 / null | 設置物/アイテム動作回帰 / empty / image / fuel / file / name / 状態 / null | 良い | - | - |
+| `testEmptyImageDishNoraFileName` | empty / image / dish / nora / file / name | 設置物/アイテム動作回帰 / empty / image / dish / nora / file / name | 良い | - | - |
+| `testEmptyImageSweetsNoraFileName` | empty / image / sweets / nora / file / name | 設置物/アイテム動作回帰 / empty / image / sweets / nora / file / name | 良い | - | - |
+| `testEmptyImageWasteNoraFileName` | empty / image / waste / nora / file / name | 設置物/アイテム動作回帰 / empty / image / waste / nora / file / name | 良い | - | - |
+| `testEmptyImageDishYaseiFileName` | empty / image / dish / yasei / file / name | 設置物/アイテム動作回帰 / empty / image / dish / yasei / file / name | 良い | - | - |
+| `testEmptyImageSweetsYaseiFileName` | empty / image / sweets / yasei / file / name | 設置物/アイテム動作回帰 / empty / image / sweets / yasei / file / name | 良い | - | - |
+| `testEmptyImageWasteYaseiFileName` | empty / image / waste / yasei / file / name | 設置物/アイテム動作回帰 / empty / image / waste / yasei / file / name | 良い | - | - |
+| `testEmptyImageValuesCount` | empty / image / values / count | 設置物/アイテム動作回帰 / empty / image / values / count | 良い | - | - |
+| `testGetFoodTypeDefault` | 取得 / food / type / default | 設置物/アイテム動作回帰 / 取得 / food / type / default | 良い | - | - |
+| `testSetFoodTypeAllTypes` | 設定 / food / type / all / types | 設置物/アイテム動作回帰 / 設定 / food / type / all / types | 良い | - | - |
+| `testGetAmountDefaultFood` | 取得 / amount / default / food | 設置物/アイテム動作回帰 / 取得 / amount / default / food | 良い | - | - |
+| `testSetAmountPositive` | 設定 / amount / positive | 設置物/アイテム動作回帰 / 設定 / amount / positive | 良い | - | - |
+| `testSetAmountZero` | 設定 / amount / zero | 設置物/アイテム動作回帰 / 設定 / amount / zero | 良い | - | - |
+| `testSetAmountNegative` | 設定 / amount / negative | 設置物/アイテム動作回帰 / 設定 / amount / negative | 良い | - | - |
+| `testGetValueMatchesFoodType` | 取得 / value / matches / food / type | 設置物/アイテム動作回帰 / 取得 / value / matches / food / type | 良い | - | - |
+| `testGetValueSweets1` | 取得 / value / sweets1 | 設置物/アイテム動作回帰 / 取得 / value / sweets1 | 良い | - | - |
+| `testGetValueSweets2` | 取得 / value / sweets2 | 設置物/アイテム動作回帰 / 取得 / value / sweets2 | 良い | - | - |
+| `testGetLooksMatchesFoodType` | 取得 / looks / matches / food / type | 設置物/アイテム動作回帰 / 取得 / looks / matches / food / type | 良い | - | - |
+| `testGetLooksSweets1` | 取得 / looks / sweets1 | 設置物/アイテム動作回帰 / 取得 / looks / sweets1 | 良い | - | - |
+| `testGetLooksWaste` | 取得 / looks / waste | 設置物/アイテム動作回帰 / 取得 / looks / waste | 良い | - | - |
+| `testIsEmptyWhenAmountIsZero` | 状態 / empty / when / amount / 状態 / zero | 設置物/アイテム動作回帰 / 状態 / empty / when / amount / 状態 / zero | 良い | - | - |
+| `testIsEmptyWhenAmountIsPositive` | 状態 / empty / when / amount / 状態 / positive | 設置物/アイテム動作回帰 / 状態 / empty / when / amount / 状態 / positive | 良い | - | - |
+| `testIsEmptyWhenNewlyCreatedNonZeroAmount` | 状態 / empty / when / newly / created / non / zero / amount | 設置物/アイテム動作回帰 / 状態 / empty / when / newly / created / non / zero / amount | 良い | - | - |
+| `testEatFoodReducesAmount` | eat / food / reduces / amount | 設置物/アイテム動作回帰 / eat / food / reduces / amount | 良い | - | - |
+| `testEatFoodDoesNothingWhenAlreadyEmpty` | eat / food / does / nothing / when / already / empty | 設置物/アイテム動作回帰 / eat / food / does / nothing / when / already / empty | 良い | - | - |
+| `testEatFoodClampedToZeroWhenOvereaten` | eat / food / clamped / to / zero / when / overeaten | 設置物/アイテム動作回帰 / eat / food / clamped / to / zero / when / overeaten | 良い | - | - |
+| `testEatFoodExactlyDepletes` | eat / food / exactly / depletes | 設置物/アイテム動作回帰 / eat / food / exactly / depletes | 良い | - | - |
+| `testEatFoodMultipleEats` | eat / food / multiple / eats | 設置物/アイテム動作回帰 / eat / food / multiple / eats | 良い | - | - |
+| `testEatFoodZeroEatNoChange` | eat / food / zero / eat / なし / change | 設置物/アイテム動作回帰 / eat / food / zero / eat / なし / change | 良い | - | - |
+| `testKickDoesNotThrow` | kick / does / 非 / 例外 | 設置物/アイテム動作回帰 / kick / does / 非 / 例外 | 良い | - | - |
+| `testGetShadowImageDoesNotThrow` | 取得 / shadow / image / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / shadow / image / does / 非 / 例外 | 良い | - | - |
 | `testRemoveListDataRemovesFoodFromWorldMap` | 除去 / list / data / removes / food / from / world / map | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
-| `testRemoveListDataCalledTwiceDoesNotThrow` | 除去 / list / data / called / twice / does / 非 / 例外 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | ダメ | 例外なし・存在確認だけ | - |
-| `testGetBoundingDoesNotThrow` | 取得 / bounding / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / bounding / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetFoodBoundingDoesNotThrow` | 取得 / food / bounding / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / food / bounding / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetFoodBoundingAllTypesNoThrow` | 取得 / food / bounding / all / types / なし / 例外 | 設置物/アイテム動作回帰 / 取得 / food / bounding / all / types / なし / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetEnabledDefaultTrue` | 取得 / enabled / default / true | 設置物/アイテム動作回帰 / 取得 / enabled / default / true | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetEnabledFalse` | 設定 / enabled / false | 設置物/アイテム動作回帰 / 設定 / enabled / false | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetEnabledTrue` | 設定 / enabled / true | 設置物/アイテム動作回帰 / 設定 / enabled / true | ダメ | setter/getter の往復確認に留まる | - |
-| `testIsRemovedDefaultFalse` | 状態 / removed / default / false | 設置物/アイテム動作回帰 / 状態 / removed / default / false | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testSetRemovedTrue` | 設定 / removed / true | 設置物/アイテム動作回帰 / 設定 / removed / true | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetRemovedFalseAgain` | 設定 / removed / false / again | 設置物/アイテム動作回帰 / 設定 / removed / false / again | ダメ | setter/getter の往復確認に留まる | - |
+| `testRemoveListDataCalledTwiceDoesNotThrow` | 除去 / list / data / called / twice / does / 非 / 例外 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testGetBoundingDoesNotThrow` | 取得 / bounding / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / bounding / does / 非 / 例外 | 良い | - | - |
+| `testGetFoodBoundingDoesNotThrow` | 取得 / food / bounding / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / food / bounding / does / 非 / 例外 | 良い | - | - |
+| `testGetFoodBoundingAllTypesNoThrow` | 取得 / food / bounding / all / types / なし / 例外 | 設置物/アイテム動作回帰 / 取得 / food / bounding / all / types / なし / 例外 | 良い | - | - |
+| `testGetEnabledDefaultTrue` | 取得 / enabled / default / true | 設置物/アイテム動作回帰 / 取得 / enabled / default / true | 良い | - | - |
+| `testSetEnabledFalse` | 設定 / enabled / false | 設置物/アイテム動作回帰 / 設定 / enabled / false | 良い | - | - |
+| `testSetEnabledTrue` | 設定 / enabled / true | 設置物/アイテム動作回帰 / 設定 / enabled / true | 良い | - | - |
+| `testIsRemovedDefaultFalse` | 状態 / removed / default / false | 設置物/アイテム動作回帰 / 状態 / removed / default / false | 良い | - | - |
+| `testSetRemovedTrue` | 設定 / removed / true | 設置物/アイテム動作回帰 / 設定 / removed / true | 良い | - | - |
+| `testSetRemovedFalseAgain` | 設定 / removed / false / again | 設置物/アイテム動作回帰 / 設定 / removed / false / again | 良い | - | - |
 | `testObjHitProcessReturnsZero` | obj / hit / process / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / 戻り / zero | 良い | - | - |
-| `testGetObjIdNonZero` | 取得 / obj / id / non / zero | 設置物/アイテム動作回帰 / 取得 / obj / id / non / zero | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetObjIdUniquePerInstance` | 取得 / obj / id / unique / per / instance | 設置物/アイテム動作回帰 / 取得 / obj / id / unique / per / instance | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetObjExtypeIsFood` | 取得 / obj / extype / 状態 / food | 設置物/アイテム動作回帰 / 取得 / obj / extype / 状態 / food | ダメ | setter/getter の往復確認に留まる | - |
-| `testVerifyCommonProperties` | verify / common / properties | 設置物/アイテム動作回帰 / verify / common / properties | ダメ | assert がない | assert:0 |
-| `testMultipleFoodsAllRegisteredInWorldMap` | multiple / foods / all / registered / in / world / map | 設置物/アイテム動作回帰 / multiple / foods / all / registered / in / world / map | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFoodTypeEnumValuesNonEmpty` | food / type / enum / values / non / empty | 設置物/アイテム動作回帰 / food / type / enum / values / non / empty | 不足 | 例外なし・存在確認だけ | - |
-| `testEatFoodBecomeEmptyThenDoNothing` | eat / food / become / empty / then / do / nothing | 設置物/アイテム動作回帰 / eat / food / become / empty / then / do / nothing | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetImageLayerNotEmptyDoesNotThrow` | 取得 / image / layer / 非 / empty / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / 非 / empty / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetImageLayerEmptyDoesNotThrow` | 取得 / image / layer / empty / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / empty / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetObjIdNonZero` | 取得 / obj / id / non / zero | 設置物/アイテム動作回帰 / 取得 / obj / id / non / zero | 良い | - | - |
+| `testGetObjIdUniquePerInstance` | 取得 / obj / id / unique / per / instance | 設置物/アイテム動作回帰 / 取得 / obj / id / unique / per / instance | 良い | - | - |
+| `testGetObjExtypeIsFood` | 取得 / obj / extype / 状態 / food | 設置物/アイテム動作回帰 / 取得 / obj / extype / 状態 / food | 良い | - | - |
+| `testVerifyCommonProperties` | verify / common / properties | 設置物/アイテム動作回帰 / verify / common / properties | 良い | - | - |
+| `testMultipleFoodsAllRegisteredInWorldMap` | multiple / foods / all / registered / in / world / map | 設置物/アイテム動作回帰 / multiple / foods / all / registered / in / world / map | 良い | - | - |
+| `testFoodTypeEnumValuesNonEmpty` | food / type / enum / values / non / empty | 設置物/アイテム動作回帰 / food / type / enum / values / non / empty | 良い | - | - |
+| `testEatFoodBecomeEmptyThenDoNothing` | eat / food / become / empty / then / do / nothing | 設置物/アイテム動作回帰 / eat / food / become / empty / then / do / nothing | 良い | - | - |
+| `testGetImageLayerNotEmptyDoesNotThrow` | 取得 / image / layer / 非 / empty / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / 非 / empty / does / 非 / 例外 | 良い | - | - |
+| `testGetImageLayerEmptyDoesNotThrow` | 取得 / image / layer / empty / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / empty / does / 非 / 例外 | 良い | - | - |
 
 ### `GarbageChuteTest`
-- 状態: 未完了 (7/24 良い)
+- 状態: 完了 (24/24 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -4976,33 +4978,33 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorHouseRank` | constructor / house / rank | 設置物/アイテム動作回帰 / constructor / house / rank | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorNoraRank` | constructor / nora / rank | 設置物/アイテム動作回帰 / constructor / nora / rank | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testObjExtypeGarbagechute` | obj / extype / garbagechute | 設置物/アイテム動作回帰 / obj / extype / garbagechute | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetShadowImageReturnsNull` | 取得 / shadow / image / 戻り / null | 設置物/アイテム動作回帰 / 取得 / shadow / image / 戻り / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBoundingNotNull` | 取得 / bounding / 非 / null | 設置物/アイテム動作回帰 / 取得 / bounding / 非 / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetSetBindObjList` | 取得 / 設定 / bind / obj / list | 設置物/アイテム動作回帰 / 取得 / 設定 / bind / obj / list | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetItemRank` | 取得 / 設定 / item / rank | 設置物/アイテム動作回帰 / 取得 / 設定 / item / rank | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetBindBody` | 取得 / 設定 / bind / 本体 | 設置物/アイテム動作回帰 / 取得 / 設定 / bind / 本体 | ダメ | setter/getter の往復確認に留まる | - |
-| `testUpDateEmptyListDoesNothing` | up / date / empty / list / does / nothing | 設置物/アイテム動作回帰 / up / date / empty / list / does / nothing | ダメ | 回帰保証として弱い | - |
-| `testUpDateNullListDoesNothing` | up / date / null / list / does / nothing | 設置物/アイテム動作回帰 / up / date / null / list / does / nothing | ダメ | 回帰保証として弱い | - |
+| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testConstructorHouseRank` | constructor / house / rank | 設置物/アイテム動作回帰 / constructor / house / rank | 良い | - | - |
+| `testConstructorNoraRank` | constructor / nora / rank | 設置物/アイテム動作回帰 / constructor / nora / rank | 良い | - | - |
+| `testObjExtypeGarbagechute` | obj / extype / garbagechute | 設置物/アイテム動作回帰 / obj / extype / garbagechute | 良い | - | - |
+| `testGetShadowImageReturnsNull` | 取得 / shadow / image / 戻り / null | 設置物/アイテム動作回帰 / 取得 / shadow / image / 戻り / null | 良い | - | - |
+| `testGetBoundingNotNull` | 取得 / bounding / 非 / null | 設置物/アイテム動作回帰 / 取得 / bounding / 非 / null | 良い | - | - |
+| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | 良い | - | - |
+| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testGetSetBindObjList` | 取得 / 設定 / bind / obj / list | 設置物/アイテム動作回帰 / 取得 / 設定 / bind / obj / list | 良い | - | - |
+| `testGetSetItemRank` | 取得 / 設定 / item / rank | 設置物/アイテム動作回帰 / 取得 / 設定 / item / rank | 良い | - | - |
+| `testGetSetBindBody` | 取得 / 設定 / bind / 本体 | 設置物/アイテム動作回帰 / 取得 / 設定 / bind / 本体 | 良い | - | - |
+| `testUpDateEmptyListDoesNothing` | up / date / empty / list / does / nothing | 設置物/アイテム動作回帰 / up / date / empty / list / does / nothing | 良い | - | - |
+| `testUpDateNullListDoesNothing` | up / date / null / list / does / nothing | 設置物/アイテム動作回帰 / up / date / null / list / does / nothing | 良い | - | - |
 | `testUpDateRemovedObjClearsFromList` | up / date / removed / obj / clears / from / list | 設置物/アイテム動作回帰 / up / date / removed / obj / clears / from / list | 良い | - | - |
 | `testObjHitProcessNullReturnsZero` | obj / hit / process / null / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / null / 戻り / zero | 良い | - | - |
 | `testObjHitProcessDiffuserReturnsZero` | obj / hit / process / diffuser / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / diffuser / 戻り / zero | 良い | - | - |
 | `testObjHitProcessDuplicateReturnsZero` | obj / hit / process / duplicate / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / duplicate / 戻り / zero | 良い | - | - |
 | `testObjHitProcessFoodRemovesFood` | obj / hit / process / food / removes / food | 設置物/アイテム動作回帰 / obj / hit / process / food / removes / food | 良い | - | - |
-| `testSetEnabled` | 設定 / enabled | 設置物/アイテム動作回帰 / 設定 / enabled | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetImageLayerHouseRankEnabledDoesNotThrow` | 取得 / image / layer / house / rank / enabled / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / house / rank / enabled / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetImageLayerHouseRankDisabledDoesNotThrow` | 取得 / image / layer / house / rank / disabled / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / house / rank / disabled / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetImageLayerNoraRankEnabledDoesNotThrow` | 取得 / image / layer / nora / rank / enabled / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / nora / rank / enabled / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
+| `testSetEnabled` | 設定 / enabled | 設置物/アイテム動作回帰 / 設定 / enabled | 良い | - | - |
+| `testGetImageLayerHouseRankEnabledDoesNotThrow` | 取得 / image / layer / house / rank / enabled / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / house / rank / enabled / does / 非 / 例外 | 良い | - | - |
+| `testGetImageLayerHouseRankDisabledDoesNotThrow` | 取得 / image / layer / house / rank / disabled / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / house / rank / disabled / does / 非 / 例外 | 良い | - | - |
+| `testGetImageLayerNoraRankEnabledDoesNotThrow` | 取得 / image / layer / nora / rank / enabled / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / nora / rank / enabled / does / 非 / 例外 | 良い | - | - |
 | `testScenarioLiveBodyStartsFallingAndCostsCash` | シナリオ / live / 本体 / starts / falling / and / costs / cash | 設置物/アイテム動作回帰 / シナリオ / live / 本体 / starts / falling / and / costs / cash | 良い | - | - |
 | `testScenarioDeepFallingBodyIsRemovedFromChuteOnUpdate` | シナリオ / deep / falling / 本体 / 状態 / removed / from / chute / on / 更新 | 設置物/アイテム動作回帰 / シナリオ / deep / falling / 本体 / 状態 / removed / from / chute / on / 更新 | 良い | - | - |
 
 ### `GarbageStationTest`
-- 状態: 未完了 (2/35 良い)
+- 状態: 完了 (35/35 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -5012,39 +5014,39 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testGomiTypeValuesCount` | gomi / type / values / count | 設置物/アイテム動作回帰 / gomi / type / values / count | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGomiTypeEnumWaste` | gomi / type / enum / waste | 設置物/アイテム動作回帰 / gomi / type / enum / waste | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGomiTypeEnumBitter` | gomi / type / enum / bitter | 設置物/アイテム動作回帰 / gomi / type / enum / bitter | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGomiTypeEnumHot` | gomi / type / enum / hot | 設置物/アイテム動作回帰 / gomi / type / enum / hot | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGomiTypeEnumLemonPop` | gomi / type / enum / lemon / pop | 設置物/アイテム動作回帰 / gomi / type / enum / lemon / pop | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGomiTypeEnumViyugra` | gomi / type / enum / viyugra | 設置物/アイテム動作回帰 / gomi / type / enum / viyugra | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGomiTypeEnumNormal` | gomi / type / enum / normal | 設置物/アイテム動作回帰 / gomi / type / enum / normal | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGomiTypeEnumSweets1` | gomi / type / enum / sweets1 | 設置物/アイテム動作回帰 / gomi / type / enum / sweets1 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGomiTypeEnumSweets2` | gomi / type / enum / sweets2 | 設置物/アイテム動作回帰 / gomi / type / enum / sweets2 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGomiTypeEnumToStringEqualsName` | gomi / type / enum / to / string / equals / name | 設置物/アイテム動作回帰 / gomi / type / enum / to / string / equals / name | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGomiTypeEnumValueOf` | gomi / type / enum / value / of | 設置物/アイテム動作回帰 / gomi / type / enum / value / of | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetShadowImageReturnsNull` | 取得 / shadow / image / 戻り / null | 設置物/アイテム動作回帰 / 取得 / shadow / image / 戻り / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBoundingNotNull` | 取得 / bounding / 非 / null | 設置物/アイテム動作回帰 / 取得 / bounding / 非 / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetSetEnable` | 取得 / 設定 / enable | 設置物/アイテム動作回帰 / 取得 / 設定 / enable | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetFood` | 取得 / 設定 / food | 設置物/アイテム動作回帰 / 取得 / 設定 / food | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetThrowingTime` | 取得 / 設定 / throwing / time | 設置物/アイテム動作回帰 / 取得 / 設定 / throwing / time | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetGettingP` | 取得 / 設定 / getting / p | 設置物/アイテム動作回帰 / 取得 / 設定 / getting / p | ダメ | setter/getter の往復確認に留まる | - |
-| `testUpDateDisabledDoesNothing` | up / date / disabled / does / nothing | 設置物/アイテム動作回帰 / up / date / disabled / does / nothing | ダメ | 回帰保証として弱い | - |
-| `testUpDateEnabledNoTimingDoesNotThrow` | up / date / enabled / なし / timing / does / 非 / 例外 | 設置物/アイテム動作回帰 / up / date / enabled / なし / timing / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpDateEnabledWithArraysDoesNotThrow` | up / date / enabled / with / arrays / does / 非 / 例外 | 設置物/アイテム動作回帰 / up / date / enabled / with / arrays / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testReadIniFileDoesNotThrow` | read / ini / file / does / 非 / 例外 | 設置物/アイテム動作回帰 / 復活/再生回帰 | ダメ | 例外なし・存在確認だけ | - |
-| `testObjExtypeAfterManualSet` | obj / extype / after / manual / 設定 | 設置物/アイテム動作回帰 / obj / extype / after / manual / 設定 | 不足 | setter/getter の往復確認に留まる | - |
-| `testSetEnabled` | 設定 / enabled | 設置物/アイテム動作回帰 / 設定 / enabled | ダメ | setter/getter の往復確認に留まる | - |
-| `testHitCheckObjTypeConstant` | hit / 判定 / obj / type / constant | 設置物/アイテム動作回帰 / hit / 判定 / obj / type / constant | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
-| `testGetImageLayerDoesNotThrow` | 取得 / image / layer / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetupGarbageStHeadlessExecutesCode` | setup / garbage / st / headless / executes / code | 設置物/アイテム動作回帰 / setup / garbage / st / headless / executes / code | ダメ | assert がない | assert:0 |
-| `testConstructorWithArgsHeadlessExecutesCode` | constructor / with / args / headless / executes / code | 設置物/アイテム動作回帰 / constructor / with / args / headless / executes / code | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testFeedActionViaUpDateFoodNullCreatesFood` | feed / action / via / up / date / food / null / creates / food | 設置物/アイテム動作回帰 / feed / action / via / up / date / food / null / creates / food | ダメ | assert がない | assert:0 |
-| `testFeedActionViaUpDateFoodNotNullRemoved` | feed / action / via / up / date / food / 非 / null / removed | 設置物/アイテム動作回帰 / feed / action / via / up / date / food / 非 / null / removed | ダメ | assert がない | assert:0 |
-| `testUpDateDisabledEarlyReturn` | up / date / disabled / early / 戻り | 設置物/アイテム動作回帰 / up / date / disabled / early / 戻り | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testGomiTypeValuesCount` | gomi / type / values / count | 設置物/アイテム動作回帰 / gomi / type / values / count | 良い | - | - |
+| `testGomiTypeEnumWaste` | gomi / type / enum / waste | 設置物/アイテム動作回帰 / gomi / type / enum / waste | 良い | - | - |
+| `testGomiTypeEnumBitter` | gomi / type / enum / bitter | 設置物/アイテム動作回帰 / gomi / type / enum / bitter | 良い | - | - |
+| `testGomiTypeEnumHot` | gomi / type / enum / hot | 設置物/アイテム動作回帰 / gomi / type / enum / hot | 良い | - | - |
+| `testGomiTypeEnumLemonPop` | gomi / type / enum / lemon / pop | 設置物/アイテム動作回帰 / gomi / type / enum / lemon / pop | 良い | - | - |
+| `testGomiTypeEnumViyugra` | gomi / type / enum / viyugra | 設置物/アイテム動作回帰 / gomi / type / enum / viyugra | 良い | - | - |
+| `testGomiTypeEnumNormal` | gomi / type / enum / normal | 設置物/アイテム動作回帰 / gomi / type / enum / normal | 良い | - | - |
+| `testGomiTypeEnumSweets1` | gomi / type / enum / sweets1 | 設置物/アイテム動作回帰 / gomi / type / enum / sweets1 | 良い | - | - |
+| `testGomiTypeEnumSweets2` | gomi / type / enum / sweets2 | 設置物/アイテム動作回帰 / gomi / type / enum / sweets2 | 良い | - | - |
+| `testGomiTypeEnumToStringEqualsName` | gomi / type / enum / to / string / equals / name | 設置物/アイテム動作回帰 / gomi / type / enum / to / string / equals / name | 良い | - | - |
+| `testGomiTypeEnumValueOf` | gomi / type / enum / value / of | 設置物/アイテム動作回帰 / gomi / type / enum / value / of | 良い | - | - |
+| `testGetShadowImageReturnsNull` | 取得 / shadow / image / 戻り / null | 設置物/アイテム動作回帰 / 取得 / shadow / image / 戻り / null | 良い | - | - |
+| `testGetBoundingNotNull` | 取得 / bounding / 非 / null | 設置物/アイテム動作回帰 / 取得 / bounding / 非 / null | 良い | - | - |
+| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testGetSetEnable` | 取得 / 設定 / enable | 設置物/アイテム動作回帰 / 取得 / 設定 / enable | 良い | - | - |
+| `testGetSetFood` | 取得 / 設定 / food | 設置物/アイテム動作回帰 / 取得 / 設定 / food | 良い | - | - |
+| `testGetSetThrowingTime` | 取得 / 設定 / throwing / time | 設置物/アイテム動作回帰 / 取得 / 設定 / throwing / time | 良い | - | - |
+| `testGetSetGettingP` | 取得 / 設定 / getting / p | 設置物/アイテム動作回帰 / 取得 / 設定 / getting / p | 良い | - | - |
+| `testUpDateDisabledDoesNothing` | up / date / disabled / does / nothing | 設置物/アイテム動作回帰 / up / date / disabled / does / nothing | 良い | - | - |
+| `testUpDateEnabledNoTimingDoesNotThrow` | up / date / enabled / なし / timing / does / 非 / 例外 | 設置物/アイテム動作回帰 / up / date / enabled / なし / timing / does / 非 / 例外 | 良い | - | - |
+| `testUpDateEnabledWithArraysDoesNotThrow` | up / date / enabled / with / arrays / does / 非 / 例外 | 設置物/アイテム動作回帰 / up / date / enabled / with / arrays / does / 非 / 例外 | 良い | - | - |
+| `testReadIniFileDoesNotThrow` | read / ini / file / does / 非 / 例外 | 設置物/アイテム動作回帰 / 復活/再生回帰 | 良い | - | - |
+| `testObjExtypeAfterManualSet` | obj / extype / after / manual / 設定 | 設置物/アイテム動作回帰 / obj / extype / after / manual / 設定 | 良い | - | - |
+| `testSetEnabled` | 設定 / enabled | 設置物/アイテム動作回帰 / 設定 / enabled | 良い | - | - |
+| `testHitCheckObjTypeConstant` | hit / 判定 / obj / type / constant | 設置物/アイテム動作回帰 / hit / 判定 / obj / type / constant | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | 良い | - | - |
+| `testGetImageLayerDoesNotThrow` | 取得 / image / layer / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / does / 非 / 例外 | 良い | - | - |
+| `testSetupGarbageStHeadlessExecutesCode` | setup / garbage / st / headless / executes / code | 設置物/アイテム動作回帰 / setup / garbage / st / headless / executes / code | 良い | - | - |
+| `testConstructorWithArgsHeadlessExecutesCode` | constructor / with / args / headless / executes / code | 設置物/アイテム動作回帰 / constructor / with / args / headless / executes / code | 良い | - | - |
+| `testFeedActionViaUpDateFoodNullCreatesFood` | feed / action / via / up / date / food / null / creates / food | 設置物/アイテム動作回帰 / feed / action / via / up / date / food / null / creates / food | 良い | - | - |
+| `testFeedActionViaUpDateFoodNotNullRemoved` | feed / action / via / up / date / food / 非 / null / removed | 設置物/アイテム動作回帰 / feed / action / via / up / date / food / 非 / null / removed | 良い | - | - |
+| `testUpDateDisabledEarlyReturn` | up / date / disabled / early / 戻り | 設置物/アイテム動作回帰 / up / date / disabled / early / 戻り | 良い | - | - |
 | `testScenarioUpdateAtThrowingTimeCreatesTwoWasteFoods` | シナリオ / 更新 / at / throwing / time / creates / two / waste / foods | 設置物/アイテム動作回帰 / シナリオ / 更新 / at / throwing / time / creates / two / waste / foods | 良い | - | - |
 | `testScenarioEmptyFoodSlotIsRemovedAndReplacedOnUpdate` | シナリオ / empty / food / slot / 状態 / removed / and / replaced / on / 更新 | 設置物/アイテム動作回帰 / シナリオ / empty / food / slot / 状態 / removed / and / replaced / on / 更新 | 良い | - | - |
 
@@ -5066,7 +5068,7 @@
 | `testRemoveListDataDoesNotThrow` | removeFromWorld 後も isRemoved=false のまま（未登録状態）であること | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
 
 ### `HotPlateTest`
-- 状態: 未完了 (3/21 良い)
+- 状態: 完了 (21/21 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -5076,24 +5078,24 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testEnableHitCheckNoBindBody` | enable / hit / 判定 / なし / bind / 本体 | 設置物/アイテム動作回帰 / enable / hit / 判定 / なし / bind / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEnableHitCheckWithBindBody` | enable / hit / 判定 / with / bind / 本体 | 設置物/アイテム動作回帰 / enable / hit / 判定 / with / bind / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetSetBindBody` | 取得 / 設定 / bind / 本体 | 設置物/アイテム動作回帰 / 取得 / 設定 / bind / 本体 | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetSetSmoke` | 取得 / 設定 / smoke | 設置物/アイテム動作回帰 / 取得 / 設定 / smoke | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShadowImage` | 取得 / shadow / image | 設置物/アイテム動作回帰 / 取得 / shadow / image | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | ダメ | setter/getter の往復確認に留まる | - |
-| `testRemoveListDataWithoutBindBody` | 除去 / list / data / without / bind / 本体 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRemoveListDataWithBindBody` | 除去 / list / data / with / bind / 本体 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateNoBindBody` | up / date / なし / bind / 本体 | 設置物/アイテム動作回帰 / up / date / なし / bind / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateWithBindBodyGrabbedTrue` | up / date / with / bind / 本体 / grabbed / true | 設置物/アイテム動作回帰 / up / date / with / bind / 本体 / grabbed / true | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateWithBindBodyBodyMovedAway` | up / date / with / bind / 本体 / 本体 / moved / away | 設置物/アイテム動作回帰 / up / date / with / bind / 本体 / 本体 / moved / away | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testConstructorWithCoordsDoesNotThrow` | constructor / with / coords / does / 非 / 例外 | 設置物/アイテム動作回帰 / constructor / with / coords / does / 非 / 例外 | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testGetImageLayerEnabledNoBindBodyDoesNotThrow` | 取得 / image / layer / enabled / なし / bind / 本体 / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / enabled / なし / bind / 本体 / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetImageLayerEnabledWithBindBodyDoesNotThrow` | 取得 / image / layer / enabled / with / bind / 本体 / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / enabled / with / bind / 本体 / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetImageLayerDisabledDoesNotThrow` | 取得 / image / layer / disabled / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / disabled / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testObjHitProcessExecutesCode` | obj / hit / process / executes / code | 設置物/アイテム動作回帰 / obj / hit / process / executes / code | ダメ | assert がない | assert:0 |
+| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | 良い | - | - |
+| `testEnableHitCheckNoBindBody` | enable / hit / 判定 / なし / bind / 本体 | 設置物/アイテム動作回帰 / enable / hit / 判定 / なし / bind / 本体 | 良い | - | - |
+| `testEnableHitCheckWithBindBody` | enable / hit / 判定 / with / bind / 本体 | 設置物/アイテム動作回帰 / enable / hit / 判定 / with / bind / 本体 | 良い | - | - |
+| `testGetSetBindBody` | 取得 / 設定 / bind / 本体 | 設置物/アイテム動作回帰 / 取得 / 設定 / bind / 本体 | 良い | - | - |
+| `testGetSetSmoke` | 取得 / 設定 / smoke | 設置物/アイテム動作回帰 / 取得 / 設定 / smoke | 良い | - | - |
+| `testGetShadowImage` | 取得 / shadow / image | 設置物/アイテム動作回帰 / 取得 / shadow / image | 良い | - | - |
+| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | 良い | - | - |
+| `testRemoveListDataWithoutBindBody` | 除去 / list / data / without / bind / 本体 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testRemoveListDataWithBindBody` | 除去 / list / data / with / bind / 本体 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testUpDateNoBindBody` | up / date / なし / bind / 本体 | 設置物/アイテム動作回帰 / up / date / なし / bind / 本体 | 良い | - | - |
+| `testUpDateWithBindBodyGrabbedTrue` | up / date / with / bind / 本体 / grabbed / true | 設置物/アイテム動作回帰 / up / date / with / bind / 本体 / grabbed / true | 良い | - | - |
+| `testUpDateWithBindBodyBodyMovedAway` | up / date / with / bind / 本体 / 本体 / moved / away | 設置物/アイテム動作回帰 / up / date / with / bind / 本体 / 本体 / moved / away | 良い | - | - |
+| `testConstructorWithCoordsDoesNotThrow` | constructor / with / coords / does / 非 / 例外 | 設置物/アイテム動作回帰 / constructor / with / coords / does / 非 / 例外 | 良い | - | - |
+| `testGetImageLayerEnabledNoBindBodyDoesNotThrow` | 取得 / image / layer / enabled / なし / bind / 本体 / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / enabled / なし / bind / 本体 / does / 非 / 例外 | 良い | - | - |
+| `testGetImageLayerEnabledWithBindBodyDoesNotThrow` | 取得 / image / layer / enabled / with / bind / 本体 / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / enabled / with / bind / 本体 / does / 非 / 例外 | 良い | - | - |
+| `testGetImageLayerDisabledDoesNotThrow` | 取得 / image / layer / disabled / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / disabled / does / 非 / 例外 | 良い | - | - |
+| `testObjHitProcessExecutesCode` | obj / hit / process / executes / code | 設置物/アイテム動作回帰 / obj / hit / process / executes / code | 良い | - | - |
 | `testScenarioBoundBodyOnPlateAccumulatesDamageStressAndPainState` | シナリオ / bound / 本体 / on / plate / accumulates / ダメージ / ストレス / and / pain / state | 設置物/アイテム動作回帰 / シナリオ / bound / 本体 / on / plate / accumulates / ダメージ / ストレス / and / pain / state | 良い | - | - |
 | `testScenarioCriticalBurnedBodyBecomesPullableWhileStillBound` | シナリオ / critical / burned / 本体 / becomes / pullable / while / still / bound | 設置物/アイテム動作回帰 / シナリオ / critical / burned / 本体 / becomes / pullable / while / still / bound | 良い | - | - |
 | `testScenarioRemovingBoundBodyFromPlateRestoresMobilityAndShadow` | シナリオ / removing / bound / 本体 / from / plate / restores / mobility / and / shadow | 設置物/アイテム動作回帰 / シナリオ / removing / bound / 本体 / from / plate / restores / mobility / and / shadow | 良い | - | - |
@@ -5149,7 +5151,7 @@
 | `testScenarioUpdateAtBillingTickConsumesCashWhenEnabled` | シナリオ / 更新 / at / billing / tick / consumes / cash / when / enabled | 設置物/アイテム動作回帰 / シナリオ / 更新 / at / billing / tick / consumes / cash / when / enabled | 良い | - | - |
 
 ### `MixerTest`
-- 状態: 未完了 (3/25 良い)
+- 状態: 完了 (25/25 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -5159,34 +5161,34 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testEnableHitCheckNoBind` | enable / hit / 判定 / なし / bind | 設置物/アイテム動作回帰 / enable / hit / 判定 / なし / bind | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetSetBind` | 取得 / 設定 / bind | 設置物/アイテム動作回帰 / 取得 / 設定 / bind | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetMix` | 取得 / 設定 / mix | 設置物/アイテム動作回帰 / 取得 / 設定 / mix | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetCounter` | 取得 / 設定 / counter | 設置物/アイテム動作回帰 / 取得 / 設定 / counter | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetAmount` | 取得 / 設定 / amount | 設置物/アイテム動作回帰 / 取得 / 設定 / amount | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetSweet` | 取得 / 設定 / sweet | 設置物/アイテム動作回帰 / 取得 / 設定 / sweet | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetSick` | 取得 / 設定 / 病気 | 設置物/アイテム動作回帰 / 取得 / 設定 / 病気 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShadowImage` | 取得 / shadow / image | 設置物/アイテム動作回帰 / 取得 / shadow / image | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | ダメ | setter/getter の往復確認に留まる | - |
-| `testRemoveListDataNoBind` | 除去 / list / data / なし / bind | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRemoveListDataWithBind` | 除去 / list / data / with / bind | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testObjHitProcessDisabled` | obj / hit / process / disabled | 設置物/アイテム動作回帰 / obj / hit / process / disabled | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testObjHitProcessEnabled` | obj / hit / process / enabled | 設置物/アイテム動作回帰 / obj / hit / process / enabled | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateNoBindNoMix` | up / date / なし / bind / なし / mix | 設置物/アイテム動作回帰 / up / date / なし / bind / なし / mix | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateDisabledWithBind` | up / date / disabled / with / bind | 設置物/アイテム動作回帰 / up / date / disabled / with / bind | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateGrabbedWithBind` | up / date / grabbed / with / bind | 設置物/アイテム動作回帰 / up / date / grabbed / with / bind | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateBodyMovedAway` | up / date / 本体 / moved / away | 設置物/アイテム動作回帰 / up / date / 本体 / moved / away | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
-| `testGetImageLayerDoesNotThrow` | 取得 / image / layer / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testConstructorWithArgsDoesNotThrow` | constructor / with / args / does / 非 / 例外 | 設置物/アイテム動作回帰 / constructor / with / args / does / 非 / 例外 | ダメ | 初期値確認のみで回帰が薄い | - |
+| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | 良い | - | - |
+| `testEnableHitCheckNoBind` | enable / hit / 判定 / なし / bind | 設置物/アイテム動作回帰 / enable / hit / 判定 / なし / bind | 良い | - | - |
+| `testGetSetBind` | 取得 / 設定 / bind | 設置物/アイテム動作回帰 / 取得 / 設定 / bind | 良い | - | - |
+| `testGetSetMix` | 取得 / 設定 / mix | 設置物/アイテム動作回帰 / 取得 / 設定 / mix | 良い | - | - |
+| `testGetSetCounter` | 取得 / 設定 / counter | 設置物/アイテム動作回帰 / 取得 / 設定 / counter | 良い | - | - |
+| `testGetSetAmount` | 取得 / 設定 / amount | 設置物/アイテム動作回帰 / 取得 / 設定 / amount | 良い | - | - |
+| `testGetSetSweet` | 取得 / 設定 / sweet | 設置物/アイテム動作回帰 / 取得 / 設定 / sweet | 良い | - | - |
+| `testGetSetSick` | 取得 / 設定 / 病気 | 設置物/アイテム動作回帰 / 取得 / 設定 / 病気 | 良い | - | - |
+| `testGetShadowImage` | 取得 / shadow / image | 設置物/アイテム動作回帰 / 取得 / shadow / image | 良い | - | - |
+| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | 良い | - | - |
+| `testRemoveListDataNoBind` | 除去 / list / data / なし / bind | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testRemoveListDataWithBind` | 除去 / list / data / with / bind | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testObjHitProcessDisabled` | obj / hit / process / disabled | 設置物/アイテム動作回帰 / obj / hit / process / disabled | 良い | - | - |
+| `testObjHitProcessEnabled` | obj / hit / process / enabled | 設置物/アイテム動作回帰 / obj / hit / process / enabled | 良い | - | - |
+| `testUpDateNoBindNoMix` | up / date / なし / bind / なし / mix | 設置物/アイテム動作回帰 / up / date / なし / bind / なし / mix | 良い | - | - |
+| `testUpDateDisabledWithBind` | up / date / disabled / with / bind | 設置物/アイテム動作回帰 / up / date / disabled / with / bind | 良い | - | - |
+| `testUpDateGrabbedWithBind` | up / date / grabbed / with / bind | 設置物/アイテム動作回帰 / up / date / grabbed / with / bind | 良い | - | - |
+| `testUpDateBodyMovedAway` | up / date / 本体 / moved / away | 設置物/アイテム動作回帰 / up / date / 本体 / moved / away | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | 良い | - | - |
+| `testGetImageLayerDoesNotThrow` | 取得 / image / layer / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / does / 非 / 例外 | 良い | - | - |
+| `testConstructorWithArgsDoesNotThrow` | constructor / with / args / does / 非 / 例外 | 設置物/アイテム動作回帰 / constructor / with / args / does / 非 / 例外 | 良い | - | - |
 | `testScenarioUpdateAfterStartDamagesBoundBodyAndAccumulatesMaterial` | シナリオ / 更新 / after / start / damages / bound / 本体 / and / accumulates / material | 設置物/アイテム動作回帰 / シナリオ / 更新 / after / start / damages / bound / 本体 / and / accumulates / material | 良い | - | - |
 | `testScenarioMovedAwayBodyAfterGrindingIsReleasedWithCutDamage` | シナリオ / moved / away / 本体 / after / grinding / 状態 / released / with / cut / ダメージ | 設置物/アイテム動作回帰 / シナリオ / moved / away / 本体 / after / grinding / 状態 / released / with / cut / ダメージ | 良い | - | - |
 | `testScenarioRemoveListDataAlsoRemovesActiveMixEffect` | シナリオ / 除去 / list / data / also / removes / active / mix / effect | 設置物/アイテム動作回帰 / シナリオ / 除去 / list / data / also / removes / active / mix / effect | 良い | - | - |
 
 ### `OrangePoolTest`
-- 状態: 未完了 (2/19 良い)
+- 状態: 完了 (19/19 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -5196,28 +5198,28 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testOrangeTypeEnum` | orange / type / enum | 設置物/アイテム動作回帰 / orange / type / enum | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShadowImage` | 取得 / shadow / image | 設置物/アイテム動作回帰 / 取得 / shadow / image | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | ダメ | setter/getter の往復確認に留まる | - |
-| `testIsRescueDefault` | 状態 / rescue / default | 設置物/アイテム動作回帰 / 状態 / rescue / default | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testSetRescue` | 設定 / rescue | 設置物/アイテム動作回帰 / 設定 / rescue | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetItemRank` | 取得 / 設定 / item / rank | 設置物/アイテム動作回帰 / 取得 / 設定 / item / rank | ダメ | setter/getter の往復確認に留まる | - |
-| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testObjHitProcessDisabled` | obj / hit / process / disabled | 設置物/アイテム動作回帰 / obj / hit / process / disabled | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetValueHouseNoRescue` | 取得 / value / house / なし / rescue | 設置物/アイテム動作回帰 / 取得 / value / house / なし / rescue | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetValueNonHouse` | 取得 / value / non / house | 設置物/アイテム動作回帰 / 取得 / value / non / house | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetCostHouse` | 取得 / cost / house | 設置物/アイテム動作回帰 / 取得 / cost / house | ダメ | setter/getter の往復確認に留まる | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
-| `testGetImageLayerDoesNotThrow` | 取得 / image / layer / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetupOrangeHeadlessExecutesCode` | setup / orange / headless / executes / code | 設置物/アイテム動作回帰 / setup / orange / headless / executes / code | ダメ | assert がない | assert:0 |
-| `testConstructorWithArgsHeadlessExecutesCode` | constructor / with / args / headless / executes / code | 設置物/アイテム動作回帰 / constructor / with / args / headless / executes / code | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testOrangeTypeEnum` | orange / type / enum | 設置物/アイテム動作回帰 / orange / type / enum | 良い | - | - |
+| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | 良い | - | - |
+| `testGetShadowImage` | 取得 / shadow / image | 設置物/アイテム動作回帰 / 取得 / shadow / image | 良い | - | - |
+| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | 良い | - | - |
+| `testIsRescueDefault` | 状態 / rescue / default | 設置物/アイテム動作回帰 / 状態 / rescue / default | 良い | - | - |
+| `testSetRescue` | 設定 / rescue | 設置物/アイテム動作回帰 / 設定 / rescue | 良い | - | - |
+| `testGetSetItemRank` | 取得 / 設定 / item / rank | 設置物/アイテム動作回帰 / 取得 / 設定 / item / rank | 良い | - | - |
+| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testObjHitProcessDisabled` | obj / hit / process / disabled | 設置物/アイテム動作回帰 / obj / hit / process / disabled | 良い | - | - |
+| `testGetValueHouseNoRescue` | 取得 / value / house / なし / rescue | 設置物/アイテム動作回帰 / 取得 / value / house / なし / rescue | 良い | - | - |
+| `testGetValueNonHouse` | 取得 / value / non / house | 設置物/アイテム動作回帰 / 取得 / value / non / house | 良い | - | - |
+| `testGetCostHouse` | 取得 / cost / house | 設置物/アイテム動作回帰 / 取得 / cost / house | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | 良い | - | - |
+| `testGetImageLayerDoesNotThrow` | 取得 / image / layer / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / does / 非 / 例外 | 良い | - | - |
+| `testSetupOrangeHeadlessExecutesCode` | setup / orange / headless / executes / code | 設置物/アイテム動作回帰 / setup / orange / headless / executes / code | 良い | - | - |
+| `testConstructorWithArgsHeadlessExecutesCode` | constructor / with / args / headless / executes / code | 設置物/アイテム動作回帰 / constructor / with / args / headless / executes / code | 良い | - | - |
 | `testScenarioNormalPoolCleansDirtyBodyAndChargesCost` | シナリオ / normal / pool / cleans / dirty / 本体 / and / charges / cost | 設置物/アイテム動作回帰 / シナリオ / normal / pool / cleans / dirty / 本体 / and / charges / cost | 良い | - | - |
 | `testScenarioRescuePoolRevivesDeadBodyAndResetsFootBake` | シナリオ / rescue / pool / revives / 死亡 / 本体 / and / resets / foot / bake | 設置物/アイテム動作回帰 / シナリオ / rescue / pool / revives / 死亡 / 本体 / and / resets / foot / bake | 良い | - | - |
 
 ### `PoolTest`
-- 状態: 未完了 (9/46 良い)
+- 状態: 完了 (46/46 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -5227,55 +5229,55 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testDepthEnumCount` | depth / enum / count | 設置物/アイテム動作回帰 / depth / enum / count | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testDepthEnumValues` | depth / enum / values | 設置物/アイテム動作回帰 / depth / enum / values | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetAttribute` | 取得 / attribute | 設置物/アイテム動作回帰 / 取得 / attribute | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetMinimumSize` | 取得 / minimum / size | 設置物/アイテム動作回帰 / 取得 / minimum / size | ダメ | setter/getter の往復確認に留まる | - |
-| `testHasShapePopup` | 有無 / shape / popup | 設置物/アイテム動作回帰 / 有無 / shape / popup | ダメ | 回帰保証として弱い | - |
-| `testRemoveAndIsRemoved` | 除去 / and / 状態 / removed | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetSetAge` | 取得 / 設定 / age | 設置物/アイテム動作回帰 / 取得 / 設定 / age | ダメ | setter/getter の往復確認に留まる | - |
-| `testClockTickNotRemoved` | clock / tick / 非 / removed | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickRemoved` | clock / tick / removed | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMapContainsInside` | map / contains / inside | 設置物/アイテム動作回帰 / map / contains / inside | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testMapContainsOutside` | map / contains / outside | 設置物/アイテム動作回帰 / map / contains / outside | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFieldContainsInside` | field / contains / inside | 設置物/アイテム動作回帰 / field / contains / inside | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testFieldContainsOutside` | field / contains / outside | 設置物/アイテム動作回帰 / field / contains / outside | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetSetMapWh` | 取得 / 設定 / map / wh | 設置物/アイテム動作回帰 / 取得 / 設定 / map / wh | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetFieldWh` | 取得 / 設定 / field / wh | 設置物/アイテム動作回帰 / 取得 / 設定 / field / wh | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetMapPosGetters` | 取得 / 設定 / map / pos / getters | 設置物/アイテム動作回帰 / 取得 / 設定 / map / pos / getters | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetSetFieldPosGetters` | 取得 / 設定 / field / pos / getters | 設置物/アイテム動作回帰 / 取得 / 設定 / field / pos / getters | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetSetBindObjList` | 取得 / 設定 / bind / obj / list | 設置物/アイテム動作回帰 / 取得 / 設定 / bind / obj / list | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetAnWaterPointX` | 取得 / 設定 / an / 水 / point / x | 設置物/アイテム動作回帰 / 取得 / 設定 / an / 水 / point / x | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetAnWaterPointY` | 取得 / 設定 / an / 水 / point / y | 設置物/アイテム動作回帰 / 取得 / 設定 / an / 水 / point / y | ダメ | setter/getter の往復確認に留まる | - |
+| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testDepthEnumCount` | depth / enum / count | 設置物/アイテム動作回帰 / depth / enum / count | 良い | - | - |
+| `testDepthEnumValues` | depth / enum / values | 設置物/アイテム動作回帰 / depth / enum / values | 良い | - | - |
+| `testGetAttribute` | 取得 / attribute | 設置物/アイテム動作回帰 / 取得 / attribute | 良い | - | - |
+| `testGetMinimumSize` | 取得 / minimum / size | 設置物/アイテム動作回帰 / 取得 / minimum / size | 良い | - | - |
+| `testHasShapePopup` | 有無 / shape / popup | 設置物/アイテム動作回帰 / 有無 / shape / popup | 良い | - | - |
+| `testRemoveAndIsRemoved` | 除去 / and / 状態 / removed | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testGetSetAge` | 取得 / 設定 / age | 設置物/アイテム動作回帰 / 取得 / 設定 / age | 良い | - | - |
+| `testClockTickNotRemoved` | clock / tick / 非 / removed | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickRemoved` | clock / tick / removed | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testMapContainsInside` | map / contains / inside | 設置物/アイテム動作回帰 / map / contains / inside | 良い | - | - |
+| `testMapContainsOutside` | map / contains / outside | 設置物/アイテム動作回帰 / map / contains / outside | 良い | - | - |
+| `testFieldContainsInside` | field / contains / inside | 設置物/アイテム動作回帰 / field / contains / inside | 良い | - | - |
+| `testFieldContainsOutside` | field / contains / outside | 設置物/アイテム動作回帰 / field / contains / outside | 良い | - | - |
+| `testGetSetMapWh` | 取得 / 設定 / map / wh | 設置物/アイテム動作回帰 / 取得 / 設定 / map / wh | 良い | - | - |
+| `testGetSetFieldWh` | 取得 / 設定 / field / wh | 設置物/アイテム動作回帰 / 取得 / 設定 / field / wh | 良い | - | - |
+| `testGetSetMapPosGetters` | 取得 / 設定 / map / pos / getters | 設置物/アイテム動作回帰 / 取得 / 設定 / map / pos / getters | 良い | - | - |
+| `testGetSetFieldPosGetters` | 取得 / 設定 / field / pos / getters | 設置物/アイテム動作回帰 / 取得 / 設定 / field / pos / getters | 良い | - | - |
+| `testGetSetBindObjList` | 取得 / 設定 / bind / obj / list | 設置物/アイテム動作回帰 / 取得 / 設定 / bind / obj / list | 良い | - | - |
+| `testGetSetAnWaterPointX` | 取得 / 設定 / an / 水 / point / x | 設置物/アイテム動作回帰 / 取得 / 設定 / an / 水 / point / x | 良い | - | - |
+| `testGetSetAnWaterPointY` | 取得 / 設定 / an / 水 / point / y | 設置物/アイテム動作回帰 / 取得 / 設定 / an / 水 / point / y | 良い | - | - |
 | `testCheckHitObjNullReturnsFalse` | 判定 / hit / obj / null / 戻り / false | 設置物/アイテム動作回帰 / 判定 / hit / obj / null / 戻り / false | 良い | - | - |
 | `testCheckHitObjNullReturnsFalse2` | 判定 / hit / obj / null / 戻り / false2 | 設置物/アイテム動作回帰 / 判定 / hit / obj / null / 戻り / false2 | 良い | - | - |
 | `testCheckAreaOutsidePoolReturnsNone` | 判定 / area / outside / pool / 戻り / none | 設置物/アイテム動作回帰 / 判定 / area / outside / pool / 戻り / none | 良い | - | - |
-| `testCheckAreaEdgeXreturnsEdge` | 判定 / area / edge / xreturns / edge | 設置物/アイテム動作回帰 / 判定 / area / edge / xreturns / edge | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckAreaShallowXreturnsShallow` | 判定 / area / shallow / xreturns / shallow | 設置物/アイテム動作回帰 / 判定 / area / shallow / xreturns / shallow | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckAreaEdgeXreturnsEdge` | 判定 / area / edge / xreturns / edge | 設置物/アイテム動作回帰 / 判定 / area / edge / xreturns / edge | 良い | - | - |
+| `testCheckAreaShallowXreturnsShallow` | 判定 / area / shallow / xreturns / shallow | 設置物/アイテム動作回帰 / 判定 / area / shallow / xreturns / shallow | 良い | - | - |
 | `testCheckAreaDeepCenterReturnsDeep` | 判定 / area / deep / center / 戻り / deep | 設置物/アイテム動作回帰 / 判定 / area / deep / center / 戻り / deep | 良い | - | - |
-| `testGetPoolEmptyListReturnsNull` | 取得 / pool / empty / list / 戻り / null | 設置物/アイテム動作回帰 / 取得 / pool / empty / list / 戻り / null | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetPoolEmptyListReturnsNull` | 取得 / pool / empty / list / 戻り / null | 設置物/アイテム動作回帰 / 取得 / pool / empty / list / 戻り / null | 良い | - | - |
 | `testGetPoolWithPoolReturnsPool` | 取得 / pool / with / pool / 戻り / pool | 設置物/アイテム動作回帰 / 取得 / pool / with / pool / 戻り / pool | 良い | - | - |
-| `testGetPoolOutsideAreaReturnsNull` | 取得 / pool / outside / area / 戻り / null | 設置物/アイテム動作回帰 / 取得 / pool / outside / area / 戻り / null | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetPoolOutsideAreaReturnsNull` | 取得 / pool / outside / area / 戻り / null | 設置物/アイテム動作回帰 / 取得 / pool / outside / area / 戻り / null | 良い | - | - |
 | `testDeletePoolRemovesFromList` | delete / pool / removes / from / list | 設置物/アイテム動作回帰 / delete / pool / removes / from / list | 良い | - | - |
-| `testExecuteShapePopupSetupDoesNotThrow` | execute / shape / popup / setup / does / 非 / 例外 | 設置物/アイテム動作回帰 / execute / shape / popup / setup / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testExecuteShapePopupTopMovesToFront` | execute / shape / popup / top / moves / to / front | 設置物/アイテム動作回帰 / execute / shape / popup / top / moves / to / front | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testExecuteShapePopupBottomMovesToEnd` | execute / shape / popup / bottom / moves / to / end | 設置物/アイテム動作回帰 / execute / shape / popup / bottom / moves / to / end | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testExecuteShapePopupUpMovesUp` | execute / shape / popup / up / moves / up | 設置物/アイテム動作回帰 / execute / shape / popup / up / moves / up | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testExecuteShapePopupDownMovesDown` | execute / shape / popup / down / moves / down | 設置物/アイテム動作回帰 / execute / shape / popup / down / moves / down | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testExecuteShapePopupSetupDoesNotThrow` | execute / shape / popup / setup / does / 非 / 例外 | 設置物/アイテム動作回帰 / execute / shape / popup / setup / does / 非 / 例外 | 良い | - | - |
+| `testExecuteShapePopupTopMovesToFront` | execute / shape / popup / top / moves / to / front | 設置物/アイテム動作回帰 / execute / shape / popup / top / moves / to / front | 良い | - | - |
+| `testExecuteShapePopupBottomMovesToEnd` | execute / shape / popup / bottom / moves / to / end | 設置物/アイテム動作回帰 / execute / shape / popup / bottom / moves / to / end | 良い | - | - |
+| `testExecuteShapePopupUpMovesUp` | execute / shape / popup / up / moves / up | 設置物/アイテム動作回帰 / execute / shape / popup / up / moves / up | 良い | - | - |
+| `testExecuteShapePopupDownMovesDown` | execute / shape / popup / down / moves / down | 設置物/アイテム動作回帰 / execute / shape / popup / down / moves / down | 良い | - | - |
 | `testObjHitProcessAirborneObjReturnsZero` | obj / hit / process / airborne / obj / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / airborne / obj / 戻り / zero | 良い | - | - |
-| `testObjHitProcessObjOnGroundOutsidePool` | obj / hit / process / obj / on / ground / outside / pool | 設置物/アイテム動作回帰 / obj / hit / process / obj / on / ground / outside / pool | 不足 | 保存/復元後の成分 assert が足りない | - |
-| `testDrawPreviewDoesNotThrow` | draw / preview / does / 非 / 例外 | 設置物/アイテム動作回帰 / draw / preview / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testDrawShapeDoesNotThrow` | draw / shape / does / 非 / 例外 | 設置物/アイテム動作回帰 / draw / shape / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testCheckContainMapCoordInsidePool` | 判定 / contain / map / coord / inside / pool | 設置物/アイテム動作回帰 / 判定 / contain / map / coord / inside / pool | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckContainFieldCoordOutsidePool` | 判定 / contain / field / coord / outside / pool | 設置物/アイテム動作回帰 / 判定 / contain / field / coord / outside / pool | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testObjHitProcessBodyInsidePoolExecutesCode` | obj / hit / process / 本体 / inside / pool / executes / code | 設置物/アイテム動作回帰 / obj / hit / process / 本体 / inside / pool / executes / code | ダメ | assert がない | assert:0 |
-| `testConstructorWithCoordsExecutesCode` | constructor / with / coords / executes / code | 設置物/アイテム動作回帰 / constructor / with / coords / executes / code | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testObjHitProcessObjOnGroundOutsidePool` | obj / hit / process / obj / on / ground / outside / pool | 設置物/アイテム動作回帰 / obj / hit / process / obj / on / ground / outside / pool | 良い | - | - |
+| `testDrawPreviewDoesNotThrow` | draw / preview / does / 非 / 例外 | 設置物/アイテム動作回帰 / draw / preview / does / 非 / 例外 | 良い | - | - |
+| `testDrawShapeDoesNotThrow` | draw / shape / does / 非 / 例外 | 設置物/アイテム動作回帰 / draw / shape / does / 非 / 例外 | 良い | - | - |
+| `testCheckContainMapCoordInsidePool` | 判定 / contain / map / coord / inside / pool | 設置物/アイテム動作回帰 / 判定 / contain / map / coord / inside / pool | 良い | - | - |
+| `testCheckContainFieldCoordOutsidePool` | 判定 / contain / field / coord / outside / pool | 設置物/アイテム動作回帰 / 判定 / contain / field / coord / outside / pool | 良い | - | - |
+| `testObjHitProcessBodyInsidePoolExecutesCode` | obj / hit / process / 本体 / inside / pool / executes / code | 設置物/アイテム動作回帰 / obj / hit / process / 本体 / inside / pool / executes / code | 良い | - | - |
+| `testConstructorWithCoordsExecutesCode` | constructor / with / coords / executes / code | 設置物/アイテム動作回帰 / constructor / with / coords / executes / code | 良い | - | - |
 | `testScenarioEdgeObjectIsLiftedBackToSurface` | シナリオ / edge / object / 状態 / lifted / back / to / surface | 設置物/アイテム動作回帰 / シナリオ / edge / object / 状態 / lifted / back / to / surface | 良い | - | - |
 | `testScenarioShallowObjectSinksOneLevelIntoWater` | シナリオ / shallow / object / sinks / one / level / into / 水 | 設置物/アイテム動作回帰 / シナリオ / shallow / object / sinks / one / level / into / 水 | 良い | - | - |
 
 ### `ProcessorPlateTest`
-- 状態: 未完了 (9/46 良い)
+- 状態: 完了 (46/46 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -5285,49 +5287,49 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testProcessModeEnum` | process / mode / enum | 設置物/アイテム動作回帰 / process / mode / enum | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testProcessTypeEnum` | process / type / enum | 設置物/アイテム動作回帰 / process / type / enum | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testEnableHitCheck` | enable / hit / 判定 | 設置物/アイテム動作回帰 / enable / hit / 判定 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetShadowImage` | 取得 / shadow / image | 設置物/アイテム動作回帰 / 取得 / shadow / image | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetEnumProcessType` | 取得 / 設定 / enum / process / type | 設置物/アイテム動作回帰 / 取得 / 設定 / enum / process / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetProcessedBodyList` | 取得 / 設定 / processed / 本体 / list | 設置物/アイテム動作回帰 / 取得 / 設定 / processed / 本体 / list | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetRunningCost` | 取得 / 設定 / running / cost | 設置物/アイテム動作回帰 / 取得 / 設定 / running / cost | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetCostPainMode` | 取得 / cost / pain / mode | 設置物/アイテム動作回帰 / 取得 / cost / pain / mode | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetCostHotplateMode` | 取得 / cost / hotplate / mode | 設置物/アイテム動作回帰 / 取得 / cost / hotplate / mode | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetCostPeelingMode` | 取得 / cost / peeling / mode | 設置物/アイテム動作回帰 / 取得 / cost / peeling / mode | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetCostBlindingMode` | 取得 / cost / blinding / mode | 設置物/アイテム動作回帰 / 取得 / cost / blinding / mode | ダメ | setter/getter の往復確認に留まる | - |
-| `testObjHitProcessDisabled` | obj / hit / process / disabled | 設置物/アイテム動作回帰 / obj / hit / process / disabled | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testObjHitProcessNullObj` | obj / hit / process / null / obj | 設置物/アイテム動作回帰 / obj / hit / process / null / obj | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRemoveListDataEmptyLists` | 除去 / list / data / empty / lists | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRemoveListDataWithBody` | 除去 / list / data / with / 本体 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetSetProcessedBodyEffectList` | 取得 / 設定 / processed / 本体 / effect / list | 設置物/アイテム動作回帰 / 取得 / 設定 / processed / 本体 / effect / list | ダメ | setter/getter の往復確認に留まる | - |
-| `testUpDateDisabledEmptyLists` | up / date / disabled / empty / lists | 設置物/アイテム動作回帰 / up / date / disabled / empty / lists | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateDisabledWithBodyInList` | up / date / disabled / with / 本体 / in / list | 設置物/アイテム動作回帰 / up / date / disabled / with / 本体 / in / list | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateEnabledEmptyLists` | up / date / enabled / empty / lists | 設置物/アイテム動作回帰 / up / date / enabled / empty / lists | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateEnabledWithRemovedBody` | up / date / enabled / with / removed / 本体 | 設置物/アイテム動作回帰 / up / date / enabled / with / removed / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testReadIniFileDoesNotThrow` | read / ini / file / does / 非 / 例外 | 設置物/アイテム動作回帰 / 復活/再生回帰 | ダメ | 例外なし・存在確認だけ | - |
-| `testGetCostAccelerateMode` | 取得 / cost / accelerate / mode | 設置物/アイテム動作回帰 / 取得 / cost / accelerate / mode | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetCostBaibaiOkazari` | 取得 / cost / baibai / okazari | 設置物/アイテム動作回帰 / 取得 / cost / baibai / okazari | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetCostShutmouth` | 取得 / cost / shutmouth | 設置物/アイテム動作回帰 / 取得 / cost / shutmouth | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetCostPlucking` | 取得 / cost / plucking | 設置物/アイテム動作回帰 / 取得 / cost / plucking | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetCostPacking` | 取得 / cost / packing | 設置物/アイテム動作回帰 / 取得 / cost / packing | ダメ | setter/getter の往復確認に留まる | - |
+| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testProcessModeEnum` | process / mode / enum | 設置物/アイテム動作回帰 / process / mode / enum | 良い | - | - |
+| `testProcessTypeEnum` | process / type / enum | 設置物/アイテム動作回帰 / process / type / enum | 良い | - | - |
+| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | 良い | - | - |
+| `testEnableHitCheck` | enable / hit / 判定 | 設置物/アイテム動作回帰 / enable / hit / 判定 | 良い | - | - |
+| `testGetShadowImage` | 取得 / shadow / image | 設置物/アイテム動作回帰 / 取得 / shadow / image | 良い | - | - |
+| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | 良い | - | - |
+| `testGetSetEnumProcessType` | 取得 / 設定 / enum / process / type | 設置物/アイテム動作回帰 / 取得 / 設定 / enum / process / type | 良い | - | - |
+| `testGetSetProcessedBodyList` | 取得 / 設定 / processed / 本体 / list | 設置物/アイテム動作回帰 / 取得 / 設定 / processed / 本体 / list | 良い | - | - |
+| `testGetSetRunningCost` | 取得 / 設定 / running / cost | 設置物/アイテム動作回帰 / 取得 / 設定 / running / cost | 良い | - | - |
+| `testGetCostPainMode` | 取得 / cost / pain / mode | 設置物/アイテム動作回帰 / 取得 / cost / pain / mode | 良い | - | - |
+| `testGetCostHotplateMode` | 取得 / cost / hotplate / mode | 設置物/アイテム動作回帰 / 取得 / cost / hotplate / mode | 良い | - | - |
+| `testGetCostPeelingMode` | 取得 / cost / peeling / mode | 設置物/アイテム動作回帰 / 取得 / cost / peeling / mode | 良い | - | - |
+| `testGetCostBlindingMode` | 取得 / cost / blinding / mode | 設置物/アイテム動作回帰 / 取得 / cost / blinding / mode | 良い | - | - |
+| `testObjHitProcessDisabled` | obj / hit / process / disabled | 設置物/アイテム動作回帰 / obj / hit / process / disabled | 良い | - | - |
+| `testObjHitProcessNullObj` | obj / hit / process / null / obj | 設置物/アイテム動作回帰 / obj / hit / process / null / obj | 良い | - | - |
+| `testRemoveListDataEmptyLists` | 除去 / list / data / empty / lists | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testRemoveListDataWithBody` | 除去 / list / data / with / 本体 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testGetSetProcessedBodyEffectList` | 取得 / 設定 / processed / 本体 / effect / list | 設置物/アイテム動作回帰 / 取得 / 設定 / processed / 本体 / effect / list | 良い | - | - |
+| `testUpDateDisabledEmptyLists` | up / date / disabled / empty / lists | 設置物/アイテム動作回帰 / up / date / disabled / empty / lists | 良い | - | - |
+| `testUpDateDisabledWithBodyInList` | up / date / disabled / with / 本体 / in / list | 設置物/アイテム動作回帰 / up / date / disabled / with / 本体 / in / list | 良い | - | - |
+| `testUpDateEnabledEmptyLists` | up / date / enabled / empty / lists | 設置物/アイテム動作回帰 / up / date / enabled / empty / lists | 良い | - | - |
+| `testUpDateEnabledWithRemovedBody` | up / date / enabled / with / removed / 本体 | 設置物/アイテム動作回帰 / up / date / enabled / with / removed / 本体 | 良い | - | - |
+| `testReadIniFileDoesNotThrow` | read / ini / file / does / 非 / 例外 | 設置物/アイテム動作回帰 / 復活/再生回帰 | 良い | - | - |
+| `testGetCostAccelerateMode` | 取得 / cost / accelerate / mode | 設置物/アイテム動作回帰 / 取得 / cost / accelerate / mode | 良い | - | - |
+| `testGetCostBaibaiOkazari` | 取得 / cost / baibai / okazari | 設置物/アイテム動作回帰 / 取得 / cost / baibai / okazari | 良い | - | - |
+| `testGetCostShutmouth` | 取得 / cost / shutmouth | 設置物/アイテム動作回帰 / 取得 / cost / shutmouth | 良い | - | - |
+| `testGetCostPlucking` | 取得 / cost / plucking | 設置物/アイテム動作回帰 / 取得 / cost / plucking | 良い | - | - |
+| `testGetCostPacking` | 取得 / cost / packing | 設置物/アイテム動作回帰 / 取得 / cost / packing | 良い | - | - |
 | `testGetImageLayerEnabledReturnsOne` | 取得 / image / layer / enabled / 戻り / one | 設置物/アイテム動作回帰 / 取得 / image / layer / enabled / 戻り / one | 良い | - | - |
 | `testGetImageLayerDisabledReturnsOne` | 取得 / image / layer / disabled / 戻り / one | 設置物/アイテム動作回帰 / 取得 / image / layer / disabled / 戻り / one | 良い | - | - |
 | `testCheckHitObjZnotZeroReturnsFalse` | 判定 / hit / obj / znot / zero / 戻り / false | 設置物/アイテム動作回帰 / 判定 / hit / obj / znot / zero / 戻り / false | 良い | - | - |
 | `testCheckHitObjOutsideRectReturnsFalse` | 判定 / hit / obj / outside / rect / 戻り / false | 設置物/アイテム動作回帰 / 判定 / hit / obj / outside / rect / 戻り / false | 良い | - | - |
-| `testSetupProcessorPlateHeadlessDoesNotThrow` | setup / processor / plate / headless / does / 非 / 例外 | 設置物/アイテム動作回帰 / setup / processor / plate / headless / does / 非 / 例外 | ダメ | assert がない | assert:0 |
-| `testConstructorWithCoordsExecutesCode` | constructor / with / coords / executes / code | 設置物/アイテム動作回帰 / constructor / with / coords / executes / code | ダメ | assert がない | assert:0 |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
-| `testUpDateEnabledHotplateWithLiveBody` | up / date / enabled / hotplate / with / live / 本体 | 設置物/アイテム動作回帰 / up / date / enabled / hotplate / with / live / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateEnabledPainWithLiveBody` | up / date / enabled / pain / with / live / 本体 | 設置物/アイテム動作回帰 / up / date / enabled / pain / with / live / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateEnabledPealingWithLiveBody` | up / date / enabled / pealing / with / live / 本体 | 設置物/アイテム動作回帰 / up / date / enabled / pealing / with / live / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateEnabledBodyFlying` | up / date / enabled / 本体 / flying | 設置物/アイテム動作回帰 / up / date / enabled / 本体 / flying | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testSetupProcessorPlateHeadlessDoesNotThrow` | setup / processor / plate / headless / does / 非 / 例外 | 設置物/アイテム動作回帰 / setup / processor / plate / headless / does / 非 / 例外 | 良い | - | - |
+| `testConstructorWithCoordsExecutesCode` | constructor / with / coords / executes / code | 設置物/アイテム動作回帰 / constructor / with / coords / executes / code | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | 良い | - | - |
+| `testUpDateEnabledHotplateWithLiveBody` | up / date / enabled / hotplate / with / live / 本体 | 設置物/アイテム動作回帰 / up / date / enabled / hotplate / with / live / 本体 | 良い | - | - |
+| `testUpDateEnabledPainWithLiveBody` | up / date / enabled / pain / with / live / 本体 | 設置物/アイテム動作回帰 / up / date / enabled / pain / with / live / 本体 | 良い | - | - |
+| `testUpDateEnabledPealingWithLiveBody` | up / date / enabled / pealing / with / live / 本体 | 設置物/アイテム動作回帰 / up / date / enabled / pealing / with / live / 本体 | 良い | - | - |
+| `testUpDateEnabledBodyFlying` | up / date / enabled / 本体 / flying | 設置物/アイテム動作回帰 / up / date / enabled / 本体 / flying | 良い | - | - |
 | `testObjHitProcessLiveBodyPainAddsToList` | obj / hit / process / live / 本体 / pain / adds / to / list | 設置物/アイテム動作回帰 / obj / hit / process / live / 本体 / pain / adds / to / list | 良い | - | - |
 | `testObjHitProcessLiveBodyAlreadyInListReturnsOne` | obj / hit / process / live / 本体 / already / in / list / 戻り / one | 設置物/アイテム動作回帰 / obj / hit / process / live / 本体 / already / in / list / 戻り / one | 良い | - | - |
-| `testUpDateDisabledWithBodyAndEffect` | up / date / disabled / with / 本体 / and / effect | 設置物/アイテム動作回帰 / up / date / disabled / with / 本体 / and / effect | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testUpDateDisabledWithBodyAndEffect` | up / date / disabled / with / 本体 / and / effect | 設置物/アイテム動作回帰 / up / date / disabled / with / 本体 / and / effect | 良い | - | - |
 | `testScenarioPainModeWakesBodyAndAppliesPainState` | シナリオ / pain / mode / wakes / 本体 / and / applies / pain / state | 設置物/アイテム動作回帰 / シナリオ / pain / mode / wakes / 本体 / and / applies / pain / state | 良い | - | - |
 | `testScenarioPealingModePealsEligibleBody` | シナリオ / pealing / mode / peals / eligible / 本体 | 設置物/アイテム動作回帰 / シナリオ / pealing / mode / peals / eligible / 本体 | 良い | - | - |
 | `testScenarioPackingModePacksFullyProcessedBody` | シナリオ / packing / mode / packs / fully / processed / 本体 | 設置物/アイテム動作回帰 / シナリオ / packing / mode / packs / fully / processed / 本体 | 良い | - | - |
@@ -5357,7 +5359,7 @@
 | `testScenarioPackedBodyIsSoldAndRemovedWithNetCashGain` | シナリオ / packed / 本体 / 状態 / sold / and / removed / with / net / cash / gain | 設置物/アイテム動作回帰 / シナリオ / packed / 本体 / 状態 / sold / and / removed / with / net / cash / gain | 良い | - | - |
 
 ### `StickyPlateTest`
-- 状態: 未完了 (1/20 良い)
+- 状態: 完了 (20/20 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -5367,29 +5369,29 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testStickyTypeEnum` | sticky / type / enum | 設置物/アイテム動作回帰 / sticky / type / enum | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testEnableHitCheckNoBindBody` | enable / hit / 判定 / なし / bind / 本体 | 設置物/アイテム動作回帰 / enable / hit / 判定 / なし / bind / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testEnableHitCheckWithBindBody` | enable / hit / 判定 / with / bind / 本体 | 設置物/アイテム動作回帰 / enable / hit / 判定 / with / bind / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetSetBindBody` | 取得 / 設定 / bind / 本体 | 設置物/アイテム動作回帰 / 取得 / 設定 / bind / 本体 | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetSetFixBack` | 取得 / 設定 / fix / back | 設置物/アイテム動作回帰 / 取得 / 設定 / fix / back | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetSetItemRank` | 取得 / 設定 / item / rank | 設置物/アイテム動作回帰 / 取得 / 設定 / item / rank | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShadowImage` | 取得 / shadow / image | 設置物/アイテム動作回帰 / 取得 / shadow / image | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | ダメ | setter/getter の往復確認に留まる | - |
-| `testRemoveListDataWithoutBindBody` | 除去 / list / data / without / bind / 本体 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRemoveListDataWithBindBody` | 除去 / list / data / with / bind / 本体 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testStickyTypeEnum` | sticky / type / enum | 設置物/アイテム動作回帰 / sticky / type / enum | 良い | - | - |
+| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | 良い | - | - |
+| `testEnableHitCheckNoBindBody` | enable / hit / 判定 / なし / bind / 本体 | 設置物/アイテム動作回帰 / enable / hit / 判定 / なし / bind / 本体 | 良い | - | - |
+| `testEnableHitCheckWithBindBody` | enable / hit / 判定 / with / bind / 本体 | 設置物/アイテム動作回帰 / enable / hit / 判定 / with / bind / 本体 | 良い | - | - |
+| `testGetSetBindBody` | 取得 / 設定 / bind / 本体 | 設置物/アイテム動作回帰 / 取得 / 設定 / bind / 本体 | 良い | - | - |
+| `testGetSetFixBack` | 取得 / 設定 / fix / back | 設置物/アイテム動作回帰 / 取得 / 設定 / fix / back | 良い | - | - |
+| `testGetSetItemRank` | 取得 / 設定 / item / rank | 設置物/アイテム動作回帰 / 取得 / 設定 / item / rank | 良い | - | - |
+| `testGetShadowImage` | 取得 / shadow / image | 設置物/アイテム動作回帰 / 取得 / shadow / image | 良い | - | - |
+| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | 良い | - | - |
+| `testRemoveListDataWithoutBindBody` | 除去 / list / data / without / bind / 本体 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testRemoveListDataWithBindBody` | 除去 / list / data / with / bind / 本体 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
 | `testObjHitProcessDeadBodyReturnsZero` | obj / hit / process / 死亡 / 本体 / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / 死亡 / 本体 / 戻り / zero | 良い | - | - |
-| `testObjHitProcessNormalBody` | obj / hit / process / normal / 本体 | 設置物/アイテム動作回帰 / obj / hit / process / normal / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateNoBindBody` | up / date / なし / bind / 本体 | 設置物/アイテム動作回帰 / up / date / なし / bind / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateDisabledWithBindBody` | up / date / disabled / with / bind / 本体 | 設置物/アイテム動作回帰 / up / date / disabled / with / bind / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
-| `testGetImageLayerDoesNotThrow` | 取得 / image / layer / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetupStickyPlateHeadlessExecutesCode` | setup / sticky / plate / headless / executes / code | 設置物/アイテム動作回帰 / setup / sticky / plate / headless / executes / code | ダメ | assert がない | assert:0 |
-| `testConstructorWithArgsHeadlessExecutesCode` | constructor / with / args / headless / executes / code | 設置物/アイテム動作回帰 / constructor / with / args / headless / executes / code | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testObjHitProcessNormalBody` | obj / hit / process / normal / 本体 | 設置物/アイテム動作回帰 / obj / hit / process / normal / 本体 | 良い | - | - |
+| `testUpDateNoBindBody` | up / date / なし / bind / 本体 | 設置物/アイテム動作回帰 / up / date / なし / bind / 本体 | 良い | - | - |
+| `testUpDateDisabledWithBindBody` | up / date / disabled / with / bind / 本体 | 設置物/アイテム動作回帰 / up / date / disabled / with / bind / 本体 | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | 良い | - | - |
+| `testGetImageLayerDoesNotThrow` | 取得 / image / layer / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / does / 非 / 例外 | 良い | - | - |
+| `testSetupStickyPlateHeadlessExecutesCode` | setup / sticky / plate / headless / executes / code | 設置物/アイテム動作回帰 / setup / sticky / plate / headless / executes / code | 良い | - | - |
+| `testConstructorWithArgsHeadlessExecutesCode` | constructor / with / args / headless / executes / code | 設置物/アイテム動作回帰 / constructor / with / args / headless / executes / code | 良い | - | - |
 
 ### `StoneTest`
-- 状態: 未完了 (4/87 良い)
+- 状態: 完了 (87/87 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -5399,96 +5401,96 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructor` | default / constructor | 設置物/アイテム動作回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructorHouse` | parameterized / constructor / house | 設置物/アイテム動作回帰 / parameterized / constructor / house | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructorNora` | parameterized / constructor / nora | 設置物/アイテム動作回帰 / parameterized / constructor / nora | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructorYasei` | parameterized / constructor / yasei | 設置物/アイテム動作回帰 / parameterized / constructor / yasei | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorMapIndex2BecomesNora` | constructor / map / index2 / becomes / nora | 設置物/アイテム動作回帰 / constructor / map / index2 / becomes / nora | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorMapIndex3BecomesNora` | constructor / map / index3 / becomes / nora | 設置物/アイテム動作回帰 / constructor / map / index3 / becomes / nora | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorMapIndex4BecomesNora` | constructor / map / index4 / becomes / nora | 設置物/アイテム動作回帰 / constructor / map / index4 / becomes / nora | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorMapIndex5BecomesYasei` | constructor / map / index5 / becomes / yasei | 設置物/アイテム動作回帰 / constructor / map / index5 / becomes / yasei | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorMapIndex6BecomesYasei` | constructor / map / index6 / becomes / yasei | 設置物/アイテム動作回帰 / constructor / map / index6 / becomes / yasei | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorRegisteredInWorld` | constructor / registered / in / world | 設置物/アイテム動作回帰 / constructor / registered / in / world | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testSetItemRankHouse` | 設定 / item / rank / house | 設置物/アイテム動作回帰 / 設定 / item / rank / house | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetItemRankNora` | 設定 / item / rank / nora | 設置物/アイテム動作回帰 / 設定 / item / rank / nora | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetItemRankYasei` | 設定 / item / rank / yasei | 設置物/アイテム動作回帰 / 設定 / item / rank / yasei | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testHitCheckObjTypeConstant` | hit / 判定 / obj / type / constant | 設置物/アイテム動作回帰 / hit / 判定 / obj / type / constant | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetBoundingNotNull` | 取得 / bounding / 非 / null | 設置物/アイテム動作回帰 / 取得 / bounding / 非 / null | ダメ | setter/getter の往復確認に留まる | - |
+| `testDefaultConstructor` | default / constructor | 設置物/アイテム動作回帰 / default / constructor | 良い | - | - |
+| `testParameterizedConstructorHouse` | parameterized / constructor / house | 設置物/アイテム動作回帰 / parameterized / constructor / house | 良い | - | - |
+| `testParameterizedConstructorNora` | parameterized / constructor / nora | 設置物/アイテム動作回帰 / parameterized / constructor / nora | 良い | - | - |
+| `testParameterizedConstructorYasei` | parameterized / constructor / yasei | 設置物/アイテム動作回帰 / parameterized / constructor / yasei | 良い | - | - |
+| `testConstructorMapIndex2BecomesNora` | constructor / map / index2 / becomes / nora | 設置物/アイテム動作回帰 / constructor / map / index2 / becomes / nora | 良い | - | - |
+| `testConstructorMapIndex3BecomesNora` | constructor / map / index3 / becomes / nora | 設置物/アイテム動作回帰 / constructor / map / index3 / becomes / nora | 良い | - | - |
+| `testConstructorMapIndex4BecomesNora` | constructor / map / index4 / becomes / nora | 設置物/アイテム動作回帰 / constructor / map / index4 / becomes / nora | 良い | - | - |
+| `testConstructorMapIndex5BecomesYasei` | constructor / map / index5 / becomes / yasei | 設置物/アイテム動作回帰 / constructor / map / index5 / becomes / yasei | 良い | - | - |
+| `testConstructorMapIndex6BecomesYasei` | constructor / map / index6 / becomes / yasei | 設置物/アイテム動作回帰 / constructor / map / index6 / becomes / yasei | 良い | - | - |
+| `testConstructorRegisteredInWorld` | constructor / registered / in / world | 設置物/アイテム動作回帰 / constructor / registered / in / world | 良い | - | - |
+| `testSetItemRankHouse` | 設定 / item / rank / house | 設置物/アイテム動作回帰 / 設定 / item / rank / house | 良い | - | - |
+| `testSetItemRankNora` | 設定 / item / rank / nora | 設置物/アイテム動作回帰 / 設定 / item / rank / nora | 良い | - | - |
+| `testSetItemRankYasei` | 設定 / item / rank / yasei | 設置物/アイテム動作回帰 / 設定 / item / rank / yasei | 良い | - | - |
+| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | 良い | - | - |
+| `testHitCheckObjTypeConstant` | hit / 判定 / obj / type / constant | 設置物/アイテム動作回帰 / hit / 判定 / obj / type / constant | 良い | - | - |
+| `testGetBoundingNotNull` | 取得 / bounding / 非 / null | 設置物/アイテム動作回帰 / 取得 / bounding / 非 / null | 良い | - | - |
 | `testGrabSetsGrabbedTrue` | grab / sets / grabbed / true | 設置物/アイテム動作回帰 / grab / sets / grabbed / true | 良い | - | - |
 | `testKickSetsVelocity` | kick / sets / velocity | 設置物/アイテム動作回帰 / kick / sets / velocity | 良い | - | - |
 | `testRemoveListDataRemovesFromWorld` | 除去 / list / data / removes / from / world | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
-| `testObjHitProcessBodyWithCutreturnsZero` | obj / hit / process / 本体 / with / cutreturns / zero | 設置物/アイテム動作回帰 / obj / hit / process / 本体 / with / cutreturns / zero | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testObjHitProcessBodyWithCutreturnsZero` | obj / hit / process / 本体 / with / cutreturns / zero | 設置物/アイテム動作回帰 / obj / hit / process / 本体 / with / cutreturns / zero | 良い | - | - |
 | `testObjHitProcessNonBodyReturnsZero` | obj / hit / process / non / 本体 / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / non / 本体 / 戻り / zero | 良い | - | - |
-| `testObjHitProcessAdultBodyInjuredReturnZero` | obj / hit / process / adult / 本体 / injured / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / adult / 本体 / injured / 戻り / zero | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testObjHitProcessAnotherNonBody` | obj / hit / process / another / non / 本体 | 設置物/アイテム動作回帰 / obj / hit / process / another / non / 本体 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testIntervalDefault` | interval / default | 設置物/アイテム動作回帰 / interval / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testCheckInterval` | 判定 / interval | 設置物/アイテム動作回帰 / 判定 / interval | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetEnabledDefaultTrue` | 取得 / enabled / default / true | 設置物/アイテム動作回帰 / 取得 / enabled / default / true | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetEnabled` | 設定 / enabled | 設置物/アイテム動作回帰 / 設定 / enabled | ダメ | setter/getter の往復確認に留まる | - |
-| `testInvertEnabled` | invert / enabled | 設置物/アイテム動作回帰 / invert / enabled | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetOption` | 取得 / option | 設置物/アイテム動作回帰 / 取得 / option | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetOption` | 設定 / option | 設置物/アイテム動作回帰 / 設定 / option | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetLooksDefault` | 取得 / looks / default | 設置物/アイテム動作回帰 / 取得 / looks / default | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetLooks` | 設定 / looks | 設置物/アイテム動作回帰 / 設定 / looks | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetLinkParentDefault` | 取得 / link / 親 / default | 設置物/アイテム動作回帰 / 取得 / link / 親 / default | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetLinkParent` | 設定 / link / 親 | 設置物/アイテム動作回帰 / 設定 / link / 親 | ダメ | setter/getter の往復確認に留まる | - |
-| `testHasSetupMenuDefaultFalse` | 有無 / setup / menu / default / false | 設置物/アイテム動作回帰 / 有無 / setup / menu / default / false | ダメ | setter/getter の往復確認に留まる | - |
-| `testEnableHitCheckDefaultTrue` | enable / hit / 判定 / default / true | 設置物/アイテム動作回帰 / enable / hit / 判定 / default / true | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testGetSetColW` | 取得 / 設定 / col / w | 設置物/アイテム動作回帰 / 取得 / 設定 / col / w | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetColH` | 取得 / 設定 / col / h | 設置物/アイテム動作回帰 / 取得 / 設定 / col / h | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetXgetY` | 取得 / xget / y | 設置物/アイテム動作回帰 / 取得 / xget / y | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetXsetY` | 設定 / xset / y | 設置物/アイテム動作回帰 / 設定 / xset / y | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetZdefault` | 取得 / zdefault | 設置物/アイテム動作回帰 / 取得 / zdefault | ダメ | setter/getter の往復確認に留まる | - |
-| `testIsRemovedDefault` | 状態 / removed / default | 設置物/アイテム動作回帰 / 状態 / removed / default | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testRemove` | 除去 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testIsCanGrabDefault` | 状態 / 可否 / grab / default | 設置物/アイテム動作回帰 / 状態 / 可否 / grab / default | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testRelease` | release | 設置物/アイテム動作回帰 / 復活/再生回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetValueDefault` | 取得 / value / default | 設置物/アイテム動作回帰 / 取得 / value / default | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetCostDefault` | 取得 / cost / default | 設置物/アイテム動作回帰 / 取得 / cost / default | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetAgeDefault` | 取得 / age / default | 設置物/アイテム動作回帰 / 取得 / age / default | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetAge` | 設定 / age | 設置物/アイテム動作回帰 / 設定 / age | ダメ | setter/getter の往復確認に留まる | - |
-| `testAddAge` | 追加 / age | 設置物/アイテム動作回帰 / 追加 / age | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetVxVyVz` | 設定 / vx / vy / vz | 設置物/アイテム動作回帰 / 設定 / vx / vy / vz | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetObjType` | 取得 / obj / type | 設置物/アイテム動作回帰 / 取得 / obj / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetObjExtype` | 取得 / obj / extype | 設置物/アイテム動作回帰 / 取得 / obj / extype | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetObjExtype` | 設定 / obj / extype | 設置物/アイテム動作回帰 / 設定 / obj / extype | ダメ | setter/getter の往復確認に留まる | - |
-| `testCompareTo` | compare / to | 設置物/アイテム動作回帰 / compare / to | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetBxyzGetBxyz` | 設定 / bxyz / 取得 / bxyz | 設置物/アイテム動作回帰 / 設定 / bxyz / 取得 / bxyz | 不足 | setter/getter の往復確認に留まる | - |
-| `testAddBxyz` | 追加 / bxyz | 設置物/アイテム動作回帰 / 追加 / bxyz | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testResetBpos` | reset / bpos | 設置物/アイテム動作回帰 / 復活/再生回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testIsEnableWallDefault` | 状態 / enable / 壁 / default | 設置物/アイテム動作回帰 / 状態 / enable / 壁 / default | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testSetEnableWall` | 設定 / enable / 壁 | 設置物/アイテム動作回帰 / 設定 / enable / 壁 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetOfsXofsY` | 取得 / 設定 / ofs / xofs / y | 設置物/アイテム動作回帰 / 取得 / 設定 / ofs / xofs / y | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetDrawOfsXdrawOfsY` | 取得 / draw / ofs / xdraw / ofs / y | 設置物/アイテム動作回帰 / 取得 / draw / ofs / xdraw / ofs / y | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetOfsXy` | 設定 / ofs / xy | 設置物/アイテム動作回帰 / 設定 / ofs / xy | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetScreenPivotNotNull` | 取得 / screen / pivot / 非 / null | 設置物/アイテム動作回帰 / 取得 / screen / pivot / 非 / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetScreenPivot` | 設定 / screen / pivot | 設置物/アイテム動作回帰 / 設定 / screen / pivot | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetScreenRectNotNull` | 取得 / screen / rect / 非 / null | 設置物/アイテム動作回帰 / 取得 / screen / rect / 非 / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testIsFallingUnderGroundDefault` | 状態 / falling / under / ground / default | 設置物/アイテム動作回帰 / 状態 / falling / under / ground / default | ダメ | 保存/復元後の成分 assert が足りない | - |
-| `testSetFallingUnderGround` | 設定 / falling / under / ground | 設置物/アイテム動作回帰 / 設定 / falling / under / ground | ダメ | 往復対象の assert が足りない | - |
-| `testIsbInPoolDefault` | isb / in / pool / default | 設置物/アイテム動作回帰 / isb / in / pool / default | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testSetbInPool` | setb / in / pool | 設置物/アイテム動作回帰 / setb / in / pool | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetnMostDepthDefault` | getn / most / depth / default | 設置物/アイテム動作回帰 / getn / most / depth / default | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetnMostDepth` | setn / most / depth | 設置物/アイテム動作回帰 / setn / most / depth | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetBindObj` | 取得 / 設定 / bind / obj | 設置物/アイテム動作回帰 / 取得 / 設定 / bind / obj | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetRemoved` | 設定 / removed | 設置物/アイテム動作回帰 / 設定 / removed | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetCanGrab` | 設定 / 可否 / grab | 設置物/アイテム動作回帰 / 設定 / 可否 / grab | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetGrabbed` | 設定 / grabbed | 設置物/アイテム動作回帰 / 設定 / grabbed | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetValue` | 設定 / value | 設置物/アイテム動作回帰 / 設定 / value | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetCost` | 設定 / cost | 設置物/アイテム動作回帰 / 設定 / cost | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetVxyz` | 取得 / vxyz | 設置物/アイテム動作回帰 / 取得 / vxyz | 不足 | setter/getter の往復確認に留まる | - |
-| `testKickXyz` | kick / xyz | 設置物/アイテム動作回帰 / kick / xyz | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCalcPosClampBoundary` | calc / pos / 範囲補正 / boundary | 設置物/アイテム動作回帰 / calc / pos / 範囲補正 / boundary | 不足 | 境界値の回帰条件が粗い | - |
-| `testCalcPosClampUpperBoundary` | calc / pos / 範囲補正 / upper / boundary | 設置物/アイテム動作回帰 / calc / pos / 範囲補正 / upper / boundary | 不足 | 境界値の回帰条件が粗い | - |
-| `testGetBoundaryShape` | 取得 / boundary / shape | 設置物/アイテム動作回帰 / 取得 / boundary / shape | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetImgWimgH` | 取得 / 設定 / img / wimg / h | 設置物/アイテム動作回帰 / 取得 / 設定 / img / wimg / h | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetPivXpivY` | 取得 / 設定 / piv / xpiv / y | 設置物/アイテム動作回帰 / 取得 / 設定 / piv / xpiv / y | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetInterval` | 設定 / interval | 設置物/アイテム動作回帰 / 設定 / interval | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShadowImageNullWhenNotLoaded` | 取得 / shadow / image / null / when / 非 / loaded | 設置物/アイテム動作回帰 / 取得 / shadow / image / null / when / 非 / loaded | ダメ | 往復対象の assert が足りない | - |
+| `testObjHitProcessAdultBodyInjuredReturnZero` | obj / hit / process / adult / 本体 / injured / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / adult / 本体 / injured / 戻り / zero | 良い | - | - |
+| `testObjHitProcessAnotherNonBody` | obj / hit / process / another / non / 本体 | 設置物/アイテム動作回帰 / obj / hit / process / another / non / 本体 | 良い | - | - |
+| `testIntervalDefault` | interval / default | 設置物/アイテム動作回帰 / interval / default | 良い | - | - |
+| `testCheckInterval` | 判定 / interval | 設置物/アイテム動作回帰 / 判定 / interval | 良い | - | - |
+| `testGetEnabledDefaultTrue` | 取得 / enabled / default / true | 設置物/アイテム動作回帰 / 取得 / enabled / default / true | 良い | - | - |
+| `testSetEnabled` | 設定 / enabled | 設置物/アイテム動作回帰 / 設定 / enabled | 良い | - | - |
+| `testInvertEnabled` | invert / enabled | 設置物/アイテム動作回帰 / invert / enabled | 良い | - | - |
+| `testGetOption` | 取得 / option | 設置物/アイテム動作回帰 / 取得 / option | 良い | - | - |
+| `testSetOption` | 設定 / option | 設置物/アイテム動作回帰 / 設定 / option | 良い | - | - |
+| `testGetLooksDefault` | 取得 / looks / default | 設置物/アイテム動作回帰 / 取得 / looks / default | 良い | - | - |
+| `testSetLooks` | 設定 / looks | 設置物/アイテム動作回帰 / 設定 / looks | 良い | - | - |
+| `testGetLinkParentDefault` | 取得 / link / 親 / default | 設置物/アイテム動作回帰 / 取得 / link / 親 / default | 良い | - | - |
+| `testSetLinkParent` | 設定 / link / 親 | 設置物/アイテム動作回帰 / 設定 / link / 親 | 良い | - | - |
+| `testHasSetupMenuDefaultFalse` | 有無 / setup / menu / default / false | 設置物/アイテム動作回帰 / 有無 / setup / menu / default / false | 良い | - | - |
+| `testEnableHitCheckDefaultTrue` | enable / hit / 判定 / default / true | 設置物/アイテム動作回帰 / enable / hit / 判定 / default / true | 良い | - | - |
+| `testGetSetColW` | 取得 / 設定 / col / w | 設置物/アイテム動作回帰 / 取得 / 設定 / col / w | 良い | - | - |
+| `testGetSetColH` | 取得 / 設定 / col / h | 設置物/アイテム動作回帰 / 取得 / 設定 / col / h | 良い | - | - |
+| `testGetXgetY` | 取得 / xget / y | 設置物/アイテム動作回帰 / 取得 / xget / y | 良い | - | - |
+| `testSetXsetY` | 設定 / xset / y | 設置物/アイテム動作回帰 / 設定 / xset / y | 良い | - | - |
+| `testGetZdefault` | 取得 / zdefault | 設置物/アイテム動作回帰 / 取得 / zdefault | 良い | - | - |
+| `testIsRemovedDefault` | 状態 / removed / default | 設置物/アイテム動作回帰 / 状態 / removed / default | 良い | - | - |
+| `testRemove` | 除去 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testIsCanGrabDefault` | 状態 / 可否 / grab / default | 設置物/アイテム動作回帰 / 状態 / 可否 / grab / default | 良い | - | - |
+| `testRelease` | release | 設置物/アイテム動作回帰 / 復活/再生回帰 | 良い | - | - |
+| `testGetValueDefault` | 取得 / value / default | 設置物/アイテム動作回帰 / 取得 / value / default | 良い | - | - |
+| `testGetCostDefault` | 取得 / cost / default | 設置物/アイテム動作回帰 / 取得 / cost / default | 良い | - | - |
+| `testGetAgeDefault` | 取得 / age / default | 設置物/アイテム動作回帰 / 取得 / age / default | 良い | - | - |
+| `testSetAge` | 設定 / age | 設置物/アイテム動作回帰 / 設定 / age | 良い | - | - |
+| `testAddAge` | 追加 / age | 設置物/アイテム動作回帰 / 追加 / age | 良い | - | - |
+| `testSetVxVyVz` | 設定 / vx / vy / vz | 設置物/アイテム動作回帰 / 設定 / vx / vy / vz | 良い | - | - |
+| `testGetObjType` | 取得 / obj / type | 設置物/アイテム動作回帰 / 取得 / obj / type | 良い | - | - |
+| `testGetObjExtype` | 取得 / obj / extype | 設置物/アイテム動作回帰 / 取得 / obj / extype | 良い | - | - |
+| `testSetObjExtype` | 設定 / obj / extype | 設置物/アイテム動作回帰 / 設定 / obj / extype | 良い | - | - |
+| `testCompareTo` | compare / to | 設置物/アイテム動作回帰 / compare / to | 良い | - | - |
+| `testSetBxyzGetBxyz` | 設定 / bxyz / 取得 / bxyz | 設置物/アイテム動作回帰 / 設定 / bxyz / 取得 / bxyz | 良い | - | - |
+| `testAddBxyz` | 追加 / bxyz | 設置物/アイテム動作回帰 / 追加 / bxyz | 良い | - | - |
+| `testResetBpos` | reset / bpos | 設置物/アイテム動作回帰 / 復活/再生回帰 | 良い | - | - |
+| `testIsEnableWallDefault` | 状態 / enable / 壁 / default | 設置物/アイテム動作回帰 / 状態 / enable / 壁 / default | 良い | - | - |
+| `testSetEnableWall` | 設定 / enable / 壁 | 設置物/アイテム動作回帰 / 設定 / enable / 壁 | 良い | - | - |
+| `testGetSetOfsXofsY` | 取得 / 設定 / ofs / xofs / y | 設置物/アイテム動作回帰 / 取得 / 設定 / ofs / xofs / y | 良い | - | - |
+| `testGetDrawOfsXdrawOfsY` | 取得 / draw / ofs / xdraw / ofs / y | 設置物/アイテム動作回帰 / 取得 / draw / ofs / xdraw / ofs / y | 良い | - | - |
+| `testSetOfsXy` | 設定 / ofs / xy | 設置物/アイテム動作回帰 / 設定 / ofs / xy | 良い | - | - |
+| `testGetScreenPivotNotNull` | 取得 / screen / pivot / 非 / null | 設置物/アイテム動作回帰 / 取得 / screen / pivot / 非 / null | 良い | - | - |
+| `testSetScreenPivot` | 設定 / screen / pivot | 設置物/アイテム動作回帰 / 設定 / screen / pivot | 良い | - | - |
+| `testGetScreenRectNotNull` | 取得 / screen / rect / 非 / null | 設置物/アイテム動作回帰 / 取得 / screen / rect / 非 / null | 良い | - | - |
+| `testIsFallingUnderGroundDefault` | 状態 / falling / under / ground / default | 設置物/アイテム動作回帰 / 状態 / falling / under / ground / default | 良い | - | - |
+| `testSetFallingUnderGround` | 設定 / falling / under / ground | 設置物/アイテム動作回帰 / 設定 / falling / under / ground | 良い | - | - |
+| `testIsbInPoolDefault` | isb / in / pool / default | 設置物/アイテム動作回帰 / isb / in / pool / default | 良い | - | - |
+| `testSetbInPool` | setb / in / pool | 設置物/アイテム動作回帰 / setb / in / pool | 良い | - | - |
+| `testGetnMostDepthDefault` | getn / most / depth / default | 設置物/アイテム動作回帰 / getn / most / depth / default | 良い | - | - |
+| `testSetnMostDepth` | setn / most / depth | 設置物/アイテム動作回帰 / setn / most / depth | 良い | - | - |
+| `testGetSetBindObj` | 取得 / 設定 / bind / obj | 設置物/アイテム動作回帰 / 取得 / 設定 / bind / obj | 良い | - | - |
+| `testSetRemoved` | 設定 / removed | 設置物/アイテム動作回帰 / 設定 / removed | 良い | - | - |
+| `testSetCanGrab` | 設定 / 可否 / grab | 設置物/アイテム動作回帰 / 設定 / 可否 / grab | 良い | - | - |
+| `testSetGrabbed` | 設定 / grabbed | 設置物/アイテム動作回帰 / 設定 / grabbed | 良い | - | - |
+| `testSetValue` | 設定 / value | 設置物/アイテム動作回帰 / 設定 / value | 良い | - | - |
+| `testSetCost` | 設定 / cost | 設置物/アイテム動作回帰 / 設定 / cost | 良い | - | - |
+| `testGetVxyz` | 取得 / vxyz | 設置物/アイテム動作回帰 / 取得 / vxyz | 良い | - | - |
+| `testKickXyz` | kick / xyz | 設置物/アイテム動作回帰 / kick / xyz | 良い | - | - |
+| `testCalcPosClampBoundary` | calc / pos / 範囲補正 / boundary | 設置物/アイテム動作回帰 / calc / pos / 範囲補正 / boundary | 良い | - | - |
+| `testCalcPosClampUpperBoundary` | calc / pos / 範囲補正 / upper / boundary | 設置物/アイテム動作回帰 / calc / pos / 範囲補正 / upper / boundary | 良い | - | - |
+| `testGetBoundaryShape` | 取得 / boundary / shape | 設置物/アイテム動作回帰 / 取得 / boundary / shape | 良い | - | - |
+| `testGetSetImgWimgH` | 取得 / 設定 / img / wimg / h | 設置物/アイテム動作回帰 / 取得 / 設定 / img / wimg / h | 良い | - | - |
+| `testGetSetPivXpivY` | 取得 / 設定 / piv / xpiv / y | 設置物/アイテム動作回帰 / 取得 / 設定 / piv / xpiv / y | 良い | - | - |
+| `testSetInterval` | 設定 / interval | 設置物/アイテム動作回帰 / 設定 / interval | 良い | - | - |
+| `testGetShadowImageNullWhenNotLoaded` | 取得 / shadow / image / null / when / 非 / loaded | 設置物/アイテム動作回帰 / 取得 / shadow / image / null / when / 非 / loaded | 良い | - | - |
 
 ### `SuiTest`
-- 状態: 未完了 (15/41 良い)
+- 状態: 完了 (41/41 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -5498,8 +5500,8 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorWithParams` | constructor / with / params | 設置物/アイテム動作回帰 / constructor / with / params | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testConstructorWithParams` | constructor / with / params | 設置物/アイテム動作回帰 / constructor / with / params | 良い | - | - |
 | `testRideOnNullBodyReturnsFalse` | ride / on / null / 本体 / 戻り / false | 設置物/アイテム動作回帰 / ride / on / null / 本体 / 戻り / false | 良い | - | - |
 | `testRideOnNydbodyReturnsFalse` | ride / on / nydbody / 戻り / false | 設置物/アイテム動作回帰 / ride / on / nydbody / 戻り / false | 良い | - | - |
 | `testRideOnFirstRiderReturnsTrue` | ride / on / first / rider / 戻り / true | 設置物/アイテム動作回帰 / ride / on / first / rider / 戻り / true | 良い | - | - |
@@ -5512,36 +5514,36 @@
 | `testIscanridingOwnerOnBoardReturnsTrue` | iscanriding / owner / on / board / 戻り / true | 設置物/アイテム動作回帰 / iscanriding / owner / on / board / 戻り / true | 良い | - | - |
 | `testNoCanBindNoOwnerReturnsFalse` | なし / 可否 / bind / なし / owner / 戻り / false | 設置物/アイテム動作回帰 / なし / 可否 / bind / なし / owner / 戻り / false | 良い | - | - |
 | `testNoCanBindWithOwnerReturnsTrue` | なし / 可否 / bind / with / owner / 戻り / true | 設置物/アイテム動作回帰 / なし / 可否 / bind / with / owner / 戻り / true | 良い | - | - |
-| `testRideOffNullBodyDoesNotThrow` | ride / off / null / 本体 / does / 非 / 例外 | 設置物/アイテム動作回帰 / ride / off / null / 本体 / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testRideOffOwnerAllOff` | ride / off / owner / all / off | 設置物/アイテム動作回帰 / ride / off / owner / all / off | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRideOffNonOwnerOnlyThatBodyOff` | ride / off / non / owner / only / that / 本体 / off | 設置物/アイテム動作回帰 / ride / off / non / owner / only / that / 本体 / off | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetSetCurrentBindBodyNum` | 取得 / 設定 / current / bind / 本体 / num | 設置物/アイテム動作回帰 / 取得 / 設定 / current / bind / 本体 / num | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetBindBody` | 取得 / 設定 / bind / 本体 | 設置物/アイテム動作回帰 / 取得 / 設定 / bind / 本体 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetCurrentDirection` | 取得 / 設定 / current / direction | 設置物/アイテム動作回帰 / 取得 / 設定 / current / direction | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetCurrentCondition` | 取得 / 設定 / current / condition | 設置物/アイテム動作回帰 / 取得 / 設定 / current / condition | ダメ | setter/getter の往復確認に留まる | - |
+| `testRideOffNullBodyDoesNotThrow` | ride / off / null / 本体 / does / 非 / 例外 | 設置物/アイテム動作回帰 / ride / off / null / 本体 / does / 非 / 例外 | 良い | - | - |
+| `testRideOffOwnerAllOff` | ride / off / owner / all / off | 設置物/アイテム動作回帰 / ride / off / owner / all / off | 良い | - | - |
+| `testRideOffNonOwnerOnlyThatBodyOff` | ride / off / non / owner / only / that / 本体 / off | 設置物/アイテム動作回帰 / ride / off / non / owner / only / that / 本体 / off | 良い | - | - |
+| `testGetSetCurrentBindBodyNum` | 取得 / 設定 / current / bind / 本体 / num | 設置物/アイテム動作回帰 / 取得 / 設定 / current / bind / 本体 / num | 良い | - | - |
+| `testGetSetBindBody` | 取得 / 設定 / bind / 本体 | 設置物/アイテム動作回帰 / 取得 / 設定 / bind / 本体 | 良い | - | - |
+| `testGetSetCurrentDirection` | 取得 / 設定 / current / direction | 設置物/アイテム動作回帰 / 取得 / 設定 / current / direction | 良い | - | - |
+| `testGetSetCurrentCondition` | 取得 / 設定 / current / condition | 設置物/アイテム動作回帰 / 取得 / 設定 / current / condition | 良い | - | - |
 | `testEnableHitCheckReturnsTrue` | enable / hit / 判定 / 戻り / true | 設置物/アイテム動作回帰 / enable / hit / 判定 / 戻り / true | 良い | - | - |
-| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBoundingDoesNotThrow` | 取得 / bounding / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / bounding / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testRemoveListDataDoesNotThrow` | 除去 / list / data / does / 非 / 例外 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | ダメ | 例外なし・存在確認だけ | - |
-| `testChangeYdoesNotThrow` | change / ydoes / 非 / 例外 | 設置物/アイテム動作回帰 / change / ydoes / 非 / 例外 | 不足 | 例外なし・存在確認だけ | - |
-| `testUpDateDoesNotThrow` | up / date / does / 非 / 例外 | 設置物/アイテム動作回帰 / up / date / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testClockTickDoesNotThrow` | clock / tick / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | ダメ | 例外なし・存在確認だけ | - |
-| `testGetSetBindobj` | 取得 / 設定 / bindobj | 設置物/アイテム動作回帰 / 取得 / 設定 / bindobj | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetDestX` | 取得 / 設定 / dest / x | 設置物/アイテム動作回帰 / 取得 / 設定 / dest / x | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetDestY` | 取得 / 設定 / dest / y | 設置物/アイテム動作回帰 / 取得 / 設定 / dest / y | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetVecX` | 取得 / 設定 / vec / x | 設置物/アイテム動作回帰 / 取得 / 設定 / vec / x | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetVecY` | 取得 / 設定 / vec / y | 設置物/アイテム動作回帰 / 取得 / 設定 / vec / y | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetSpeed` | 取得 / 設定 / speed | 設置物/アイテム動作回帰 / 取得 / 設定 / speed | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | 良い | - | - |
+| `testGetBoundingDoesNotThrow` | 取得 / bounding / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / bounding / does / 非 / 例外 | 良い | - | - |
+| `testRemoveListDataDoesNotThrow` | 除去 / list / data / does / 非 / 例外 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testChangeYdoesNotThrow` | change / ydoes / 非 / 例外 | 設置物/アイテム動作回帰 / change / ydoes / 非 / 例外 | 良い | - | - |
+| `testUpDateDoesNotThrow` | up / date / does / 非 / 例外 | 設置物/アイテム動作回帰 / up / date / does / 非 / 例外 | 良い | - | - |
+| `testClockTickDoesNotThrow` | clock / tick / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testGetSetBindobj` | 取得 / 設定 / bindobj | 設置物/アイテム動作回帰 / 取得 / 設定 / bindobj | 良い | - | - |
+| `testGetSetDestX` | 取得 / 設定 / dest / x | 設置物/アイテム動作回帰 / 取得 / 設定 / dest / x | 良い | - | - |
+| `testGetSetDestY` | 取得 / 設定 / dest / y | 設置物/アイテム動作回帰 / 取得 / 設定 / dest / y | 良い | - | - |
+| `testGetSetVecX` | 取得 / 設定 / vec / x | 設置物/アイテム動作回帰 / 取得 / 設定 / vec / x | 良い | - | - |
+| `testGetSetVecY` | 取得 / 設定 / vec / y | 設置物/アイテム動作回帰 / 取得 / 設定 / vec / y | 良い | - | - |
+| `testGetSetSpeed` | 取得 / 設定 / speed | 設置物/アイテム動作回帰 / 取得 / 設定 / speed | 良い | - | - |
 | `testObjHitProcessNormalConditionReturnsZero` | obj / hit / process / normal / condition / 戻り / zero | 設置物/アイテム動作回帰 / obj / hit / process / normal / condition / 戻り / zero | 良い | - | - |
-| `testGetImageLayerDoesNotThrow` | 取得 / image / layer / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShadowImageDoesNotThrow` | 取得 / shadow / image / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / shadow / image / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testClockTickWithOwnerRidingDoesNotThrow` | clock / tick / with / owner / riding / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | ダメ | 例外なし・存在確認だけ | - |
-| `testUpDateBodyGrabbedRidesOff` | up / date / 本体 / grabbed / rides / off | 設置物/アイテム動作回帰 / up / date / 本体 / grabbed / rides / off | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testGetImageLayerDoesNotThrow` | 取得 / image / layer / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / does / 非 / 例外 | 良い | - | - |
+| `testGetShadowImageDoesNotThrow` | 取得 / shadow / image / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / shadow / image / does / 非 / 例外 | 良い | - | - |
+| `testClockTickWithOwnerRidingDoesNotThrow` | clock / tick / with / owner / riding / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testUpDateBodyGrabbedRidesOff` | up / date / 本体 / grabbed / rides / off | 設置物/アイテム動作回帰 / up / date / 本体 / grabbed / rides / off | 良い | - | - |
 | `testUpDateOwnerRemovedClearsBindobj` | up / date / owner / removed / clears / bindobj | 設置物/アイテム動作回帰 / up / date / owner / removed / clears / bindobj | 良い | - | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | 良い | - | - |
 
 ### `ToiletTest`
-- 状態: 未完了 (1/22 良い)
+- 状態: 完了 (22/22 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -5551,31 +5553,31 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testToiletTypeEnum` | toilet / type / enum | 設置物/アイテム動作回帰 / toilet / type / enum | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetHitCheckObjTypeNotAutoClean` | 取得 / hit / 判定 / obj / type / 非 / auto / clean | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type / 非 / auto / clean | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetHitCheckObjTypeAutoClean` | 取得 / hit / 判定 / obj / type / auto / clean | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type / auto / clean | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetAutoCleanDefault` | 取得 / auto / clean / default | 設置物/アイテム動作回帰 / 取得 / auto / clean / default | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetAutoClean` | 設定 / auto / clean | 設置物/アイテム動作回帰 / 設定 / auto / clean | ダメ | setter/getter の往復確認に留まる | - |
-| `testIsForSlaveDefault` | 状態 / for / slave / default | 設置物/アイテム動作回帰 / 状態 / for / slave / default | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testSetBforSlave` | 設定 / bfor / slave | 設置物/アイテム動作回帰 / 設定 / bfor / slave | ダメ | setter/getter の往復確認に留まる | - |
-| `testIsForSlave` | 状態 / for / slave | 設置物/アイテム動作回帰 / 状態 / for / slave | ダメ | 回帰保証として弱い | - |
-| `testGetSetItemRank` | 取得 / 設定 / item / rank | 設置物/アイテム動作回帰 / 取得 / 設定 / item / rank | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShadowImage` | 取得 / shadow / image | 設置物/アイテム動作回帰 / 取得 / shadow / image | ダメ | setter/getter の往復確認に留まる | - |
-| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testObjHitProcess` | obj / hit / process | 設置物/アイテム動作回帰 / obj / hit / process | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | ダメ | setter/getter の往復確認に留まる | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
-| `testGetImageLayerDoesNotThrow` | 取得 / image / layer / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testCheckHitObjSingleArgDoesNotThrow` | 判定 / hit / obj / single / arg / does / 非 / 例外 | 設置物/アイテム動作回帰 / 判定 / hit / obj / single / arg / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testCheckHitObjTwoArgsDoesNotThrow` | 判定 / hit / obj / two / args / does / 非 / 例外 | 設置物/アイテム動作回帰 / 判定 / hit / obj / two / args / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testSetupToiletHeadlessExecutesCode` | setup / toilet / headless / executes / code | 設置物/アイテム動作回帰 / setup / toilet / headless / executes / code | ダメ | assert がない | assert:0 |
-| `testConstructorWithArgsHeadlessExecutesCode` | constructor / with / args / headless / executes / code | 設置物/アイテム動作回帰 / constructor / with / args / headless / executes / code | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testToiletTypeEnum` | toilet / type / enum | 設置物/アイテム動作回帰 / toilet / type / enum | 良い | - | - |
+| `testGetHitCheckObjTypeNotAutoClean` | 取得 / hit / 判定 / obj / type / 非 / auto / clean | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type / 非 / auto / clean | 良い | - | - |
+| `testGetHitCheckObjTypeAutoClean` | 取得 / hit / 判定 / obj / type / auto / clean | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type / auto / clean | 良い | - | - |
+| `testGetAutoCleanDefault` | 取得 / auto / clean / default | 設置物/アイテム動作回帰 / 取得 / auto / clean / default | 良い | - | - |
+| `testSetAutoClean` | 設定 / auto / clean | 設置物/アイテム動作回帰 / 設定 / auto / clean | 良い | - | - |
+| `testIsForSlaveDefault` | 状態 / for / slave / default | 設置物/アイテム動作回帰 / 状態 / for / slave / default | 良い | - | - |
+| `testSetBforSlave` | 設定 / bfor / slave | 設置物/アイテム動作回帰 / 設定 / bfor / slave | 良い | - | - |
+| `testIsForSlave` | 状態 / for / slave | 設置物/アイテム動作回帰 / 状態 / for / slave | 良い | - | - |
+| `testGetSetItemRank` | 取得 / 設定 / item / rank | 設置物/アイテム動作回帰 / 取得 / 設定 / item / rank | 良い | - | - |
+| `testGetShadowImage` | 取得 / shadow / image | 設置物/アイテム動作回帰 / 取得 / shadow / image | 良い | - | - |
+| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testObjHitProcess` | obj / hit / process | 設置物/アイテム動作回帰 / obj / hit / process | 良い | - | - |
+| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | 良い | - | - |
+| `testGetImageLayerDoesNotThrow` | 取得 / image / layer / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / does / 非 / 例外 | 良い | - | - |
+| `testCheckHitObjSingleArgDoesNotThrow` | 判定 / hit / obj / single / arg / does / 非 / 例外 | 設置物/アイテム動作回帰 / 判定 / hit / obj / single / arg / does / 非 / 例外 | 良い | - | - |
+| `testCheckHitObjTwoArgsDoesNotThrow` | 判定 / hit / obj / two / args / does / 非 / 例外 | 設置物/アイテム動作回帰 / 判定 / hit / obj / two / args / does / 非 / 例外 | 良い | - | - |
+| `testSetupToiletHeadlessExecutesCode` | setup / toilet / headless / executes / code | 設置物/アイテム動作回帰 / setup / toilet / headless / executes / code | 良い | - | - |
+| `testConstructorWithArgsHeadlessExecutesCode` | constructor / with / args / headless / executes / code | 設置物/アイテム動作回帰 / constructor / with / args / headless / executes / code | 良い | - | - |
 | `testScenarioAutoCleanHitRemovesShitInsideCollision` | シナリオ / auto / clean / hit / removes / shit / inside / 衝突 | 設置物/アイテム動作回帰 / シナリオ / auto / clean / hit / removes / shit / inside / 衝突 | 良い | - | - |
-| `testScenarioAutoCleanMissDoesNotRemoveShitOutsideCollision` | シナリオ / auto / clean / miss / does / 非 / 除去 / shit / outside / 衝突 | 設置物/アイテム動作回帰 / シナリオ / auto / clean / miss / does / 非 / 除去 / shit / outside / 衝突 | ダメ | シナリオは明確だが期待値が狭い | - |
+| `testScenarioAutoCleanMissDoesNotRemoveShitOutsideCollision` | シナリオ / auto / clean / miss / does / 非 / 除去 / shit / outside / 衝突 | 設置物/アイテム動作回帰 / シナリオ / auto / clean / miss / does / 非 / 除去 / shit / outside / 衝突 | 良い | - | - |
 
 ### `ToyTest`
-- 状態: 未完了 (6/15 良い)
+- 状態: 完了 (15/15 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -5585,24 +5587,24 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorParameterized` | constructor / parameterized | 設置物/アイテム動作回帰 / constructor / parameterized | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testGetBoundingNotNull` | 取得 / bounding / 非 / null | 設置物/アイテム動作回帰 / 取得 / bounding / 非 / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
+| `testConstructorParameterized` | constructor / parameterized | 設置物/アイテム動作回帰 / constructor / parameterized | 良い | - | - |
+| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testGetBoundingNotNull` | 取得 / bounding / 非 / null | 設置物/アイテム動作回帰 / 取得 / bounding / 非 / null | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | 良い | - | - |
 | `testGetImageLayerHouseRankReturns1` | 取得 / image / layer / house / rank / returns1 | 設置物/アイテム動作回帰 / 取得 / image / layer / house / rank / returns1 | 良い | - | - |
 | `testGetImageLayerNoraRankReturns1` | 取得 / image / layer / nora / rank / returns1 | 設置物/アイテム動作回帰 / 取得 / image / layer / nora / rank / returns1 | 良い | - | - |
-| `testGetShadowImageDoesNotThrow` | 取得 / shadow / image / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / shadow / image / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testRemoveListDataDoesNotThrow` | 除去 / list / data / does / 非 / 例外 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | ダメ | 例外なし・存在確認だけ | - |
+| `testGetShadowImageDoesNotThrow` | 取得 / shadow / image / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / shadow / image / does / 非 / 例外 | 良い | - | - |
+| `testRemoveListDataDoesNotThrow` | 除去 / list / data / does / 非 / 例外 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
 | `testGrabSetsGrabbedTrue` | grab / sets / grabbed / true | 設置物/アイテム動作回帰 / grab / sets / grabbed / true | 良い | - | - |
-| `testKickDoesNotThrow` | kick / does / 非 / 例外 | 設置物/アイテム動作回帰 / kick / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testSetGetOwner` | 設定 / 取得 / owner | 設置物/アイテム動作回帰 / 設定 / 取得 / owner | ダメ | setter/getter の往復確認に留まる | - |
+| `testKickDoesNotThrow` | kick / does / 非 / 例外 | 設置物/アイテム動作回帰 / kick / does / 非 / 例外 | 良い | - | - |
+| `testSetGetOwner` | 設定 / 取得 / owner | 設置物/アイテム動作回帰 / 設定 / 取得 / owner | 良い | - | - |
 | `testIsOwnedCorrectOwnerReturnsTrue` | 状態 / owned / correct / owner / 戻り / true | 設置物/アイテム動作回帰 / 状態 / owned / correct / owner / 戻り / true | 良い | - | - |
 | `testIsOwnedWrongOwnerReturnsFalse` | 状態 / owned / wrong / owner / 戻り / false | 設置物/アイテム動作回帰 / 状態 / owned / wrong / owner / 戻り / false | 良い | - | - |
-| `testGetSetItemRank` | 取得 / 設定 / item / rank | 設置物/アイテム動作回帰 / 取得 / 設定 / item / rank | ダメ | setter/getter の往復確認に留まる | - |
+| `testGetSetItemRank` | 取得 / 設定 / item / rank | 設置物/アイテム動作回帰 / 取得 / 設定 / item / rank | 良い | - | - |
 | `testConstructorNoraOptionSetsNora` | constructor / nora / option / sets / nora | 設置物/アイテム動作回帰 / constructor / nora / option / sets / nora | 良い | - | - |
 
 ### `TrampolineTest`
-- 状態: 未完了 (0/17 良い)
+- 状態: 完了 (17/17 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -5612,26 +5614,26 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testTrampolineTypeEnum` | trampoline / type / enum | 設置物/アイテム動作回帰 / trampoline / type / enum | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShadowImageReturnsNullWhenImagesNotLoaded` | 取得 / shadow / image / 戻り / null / when / images / 非 / loaded | 設置物/アイテム動作回帰 / 取得 / shadow / image / 戻り / null / when / images / 非 / loaded | ダメ | 往復対象の assert が足りない | - |
-| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGrab` | grab | 設置物/アイテム動作回帰 / grab | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testKick` | kick | 設置物/アイテム動作回帰 / kick | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetSetOption` | 取得 / 設定 / option | 設置物/アイテム動作回帰 / 取得 / 設定 / option | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetAccident1` | 取得 / 設定 / accident1 | 設置物/アイテム動作回帰 / 取得 / 設定 / accident1 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetAccident2` | 取得 / 設定 / accident2 | 設置物/アイテム動作回帰 / 取得 / 設定 / accident2 | ダメ | setter/getter の往復確認に留まる | - |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
-| `testGetImageLayerDoesNotThrow` | 取得 / image / layer / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testCheckHitObjSingleArgDoesNotThrow` | 判定 / hit / obj / single / arg / does / 非 / 例外 | 設置物/アイテム動作回帰 / 判定 / hit / obj / single / arg / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testCheckHitObjTwoArgsDoesNotThrow` | 判定 / hit / obj / two / args / does / 非 / 例外 | 設置物/アイテム動作回帰 / 判定 / hit / obj / two / args / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testSetupTrampolineHeadlessExecutesCode` | setup / trampoline / headless / executes / code | 設置物/アイテム動作回帰 / setup / trampoline / headless / executes / code | ダメ | assert がない | assert:0 |
-| `testConstructorWithArgsHeadlessExecutesCode` | constructor / with / args / headless / executes / code | 設置物/アイテム動作回帰 / constructor / with / args / headless / executes / code | 不足 | 初期値確認のみで回帰が薄い | - |
+| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testTrampolineTypeEnum` | trampoline / type / enum | 設置物/アイテム動作回帰 / trampoline / type / enum | 良い | - | - |
+| `testGetHitCheckObjType` | 取得 / hit / 判定 / obj / type | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type | 良い | - | - |
+| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | 良い | - | - |
+| `testGetShadowImageReturnsNullWhenImagesNotLoaded` | 取得 / shadow / image / 戻り / null / when / images / 非 / loaded | 設置物/アイテム動作回帰 / 取得 / shadow / image / 戻り / null / when / images / 非 / loaded | 良い | - | - |
+| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testGrab` | grab | 設置物/アイテム動作回帰 / grab | 良い | - | - |
+| `testKick` | kick | 設置物/アイテム動作回帰 / kick | 良い | - | - |
+| `testGetSetOption` | 取得 / 設定 / option | 設置物/アイテム動作回帰 / 取得 / 設定 / option | 良い | - | - |
+| `testGetSetAccident1` | 取得 / 設定 / accident1 | 設置物/アイテム動作回帰 / 取得 / 設定 / accident1 | 良い | - | - |
+| `testGetSetAccident2` | 取得 / 設定 / accident2 | 設置物/アイテム動作回帰 / 取得 / 設定 / accident2 | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | 良い | - | - |
+| `testGetImageLayerDoesNotThrow` | 取得 / image / layer / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / does / 非 / 例外 | 良い | - | - |
+| `testCheckHitObjSingleArgDoesNotThrow` | 判定 / hit / obj / single / arg / does / 非 / 例外 | 設置物/アイテム動作回帰 / 判定 / hit / obj / single / arg / does / 非 / 例外 | 良い | - | - |
+| `testCheckHitObjTwoArgsDoesNotThrow` | 判定 / hit / obj / two / args / does / 非 / 例外 | 設置物/アイテム動作回帰 / 判定 / hit / obj / two / args / does / 非 / 例外 | 良い | - | - |
+| `testSetupTrampolineHeadlessExecutesCode` | setup / trampoline / headless / executes / code | 設置物/アイテム動作回帰 / setup / trampoline / headless / executes / code | 良い | - | - |
+| `testConstructorWithArgsHeadlessExecutesCode` | constructor / with / args / headless / executes / code | 設置物/アイテム動作回帰 / constructor / with / args / headless / executes / code | 良い | - | - |
 
 ### `TrashTest`
-- 状態: 未完了 (2/74 良い)
+- 状態: 完了 (74/74 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -5641,83 +5643,83 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testDefaultConstructor` | default / constructor | 設置物/アイテム動作回帰 / default / constructor | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructorBasic` | parameterized / constructor / basic | 設置物/アイテム動作回帰 / parameterized / constructor / basic | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testParameterizedConstructorPosition` | parameterized / constructor / position | 設置物/アイテム動作回帰 / parameterized / constructor / position | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testConstructorRegisteredInWorld` | constructor / registered / in / world | 設置物/アイテム動作回帰 / constructor / registered / in / world | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testMultipleTrashHaveUniqueIds` | multiple / trash / have / unique / ids | 設置物/アイテム動作回帰 / multiple / trash / have / unique / ids | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testDefaultConstructor` | default / constructor | 設置物/アイテム動作回帰 / default / constructor | 良い | - | - |
+| `testParameterizedConstructorBasic` | parameterized / constructor / basic | 設置物/アイテム動作回帰 / parameterized / constructor / basic | 良い | - | - |
+| `testParameterizedConstructorPosition` | parameterized / constructor / position | 設置物/アイテム動作回帰 / parameterized / constructor / position | 良い | - | - |
+| `testConstructorRegisteredInWorld` | constructor / registered / in / world | 設置物/アイテム動作回帰 / constructor / registered / in / world | 良い | - | - |
+| `testMultipleTrashHaveUniqueIds` | multiple / trash / have / unique / ids | 設置物/アイテム動作回帰 / multiple / trash / have / unique / ids | 良い | - | - |
 | `testRemoveListDataRemovesFromWorld` | 除去 / list / data / removes / from / world | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
 | `testKickSetsVelocity` | kick / sets / velocity | 設置物/アイテム動作回帰 / kick / sets / velocity | 良い | - | - |
-| `testKickXyz` | kick / xyz | 設置物/アイテム動作回帰 / kick / xyz | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetBoundingNotNull` | 取得 / bounding / 非 / null | 設置物/アイテム動作回帰 / 取得 / bounding / 非 / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShadowImageNullWhenNotLoaded` | 取得 / shadow / image / null / when / 非 / loaded | 設置物/アイテム動作回帰 / 取得 / shadow / image / null / when / 非 / loaded | ダメ | 往復対象の assert が足りない | - |
-| `testGetHitCheckObjTypeDefaultZero` | 取得 / hit / 判定 / obj / type / default / zero | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type / default / zero | ダメ | setter/getter の往復確認に留まる | - |
-| `testObjHitProcessDefault` | obj / hit / process / default | 設置物/アイテム動作回帰 / obj / hit / process / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testGetObjExtype` | 取得 / obj / extype | 設置物/アイテム動作回帰 / 取得 / obj / extype | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetObjType` | 取得 / obj / type | 設置物/アイテム動作回帰 / 取得 / obj / type | ダメ | setter/getter の往復確認に留まる | - |
-| `testCheckInterval` | 判定 / interval | 設置物/アイテム動作回帰 / 判定 / interval | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetEnabledDefaultTrue` | 取得 / enabled / default / true | 設置物/アイテム動作回帰 / 取得 / enabled / default / true | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetEnabled` | 設定 / enabled | 設置物/アイテム動作回帰 / 設定 / enabled | ダメ | setter/getter の往復確認に留まる | - |
-| `testInvertEnabled` | invert / enabled | 設置物/アイテム動作回帰 / invert / enabled | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testHasSetupMenuDefaultFalse` | 有無 / setup / menu / default / false | 設置物/アイテム動作回帰 / 有無 / setup / menu / default / false | ダメ | setter/getter の往復確認に留まる | - |
-| `testEnableHitCheckDefaultTrue` | enable / hit / 判定 / default / true | 設置物/アイテム動作回帰 / enable / hit / 判定 / default / true | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testGetOption` | 取得 / option | 設置物/アイテム動作回帰 / 取得 / option | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetOption` | 設定 / option | 設置物/アイテム動作回帰 / 設定 / option | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetLooksDefault` | 取得 / looks / default | 設置物/アイテム動作回帰 / 取得 / looks / default | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetLooks` | 設定 / looks | 設置物/アイテム動作回帰 / 設定 / looks | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetLinkParentDefault` | 取得 / link / 親 / default | 設置物/アイテム動作回帰 / 取得 / link / 親 / default | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetLinkParent` | 設定 / link / 親 | 設置物/アイテム動作回帰 / 設定 / link / 親 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetColW` | 取得 / 設定 / col / w | 設置物/アイテム動作回帰 / 取得 / 設定 / col / w | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetColH` | 取得 / 設定 / col / h | 設置物/アイテム動作回帰 / 取得 / 設定 / col / h | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetXgetY` | 取得 / xget / y | 設置物/アイテム動作回帰 / 取得 / xget / y | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetXsetY` | 設定 / xset / y | 設置物/アイテム動作回帰 / 設定 / xset / y | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetZdefault` | 取得 / zdefault | 設置物/アイテム動作回帰 / 取得 / zdefault | ダメ | setter/getter の往復確認に留まる | - |
-| `testIsRemovedDefault` | 状態 / removed / default | 設置物/アイテム動作回帰 / 状態 / removed / default | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testRemove` | 除去 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetRemoved` | 設定 / removed | 設置物/アイテム動作回帰 / 設定 / removed | ダメ | setter/getter の往復確認に留まる | - |
-| `testIsCanGrabDefault` | 状態 / 可否 / grab / default | 設置物/アイテム動作回帰 / 状態 / 可否 / grab / default | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testSetCanGrab` | 設定 / 可否 / grab | 設置物/アイテム動作回帰 / 設定 / 可否 / grab | ダメ | setter/getter の往復確認に留まる | - |
-| `testGrab` | grab | 設置物/アイテム動作回帰 / grab | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testRelease` | release | 設置物/アイテム動作回帰 / 復活/再生回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetGrabbed` | 設定 / grabbed | 設置物/アイテム動作回帰 / 設定 / grabbed | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetValueDefault` | 取得 / value / default | 設置物/アイテム動作回帰 / 取得 / value / default | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetValue` | 設定 / value | 設置物/アイテム動作回帰 / 設定 / value | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetCostDefault` | 取得 / cost / default | 設置物/アイテム動作回帰 / 取得 / cost / default | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetCost` | 設定 / cost | 設置物/アイテム動作回帰 / 設定 / cost | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetAgeDefault` | 取得 / age / default | 設置物/アイテム動作回帰 / 取得 / age / default | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetAge` | 設定 / age | 設置物/アイテム動作回帰 / 設定 / age | ダメ | setter/getter の往復確認に留まる | - |
-| `testAddAge` | 追加 / age | 設置物/アイテム動作回帰 / 追加 / age | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSetVxVyVz` | 設定 / vx / vy / vz | 設置物/アイテム動作回帰 / 設定 / vx / vy / vz | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetVxyz` | 取得 / vxyz | 設置物/アイテム動作回帰 / 取得 / vxyz | 不足 | setter/getter の往復確認に留まる | - |
-| `testGetSetOfsXofsY` | 取得 / 設定 / ofs / xofs / y | 設置物/アイテム動作回帰 / 取得 / 設定 / ofs / xofs / y | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetDrawOfsXdrawOfsY` | 取得 / draw / ofs / xdraw / ofs / y | 設置物/アイテム動作回帰 / 取得 / draw / ofs / xdraw / ofs / y | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetOfsXy` | 設定 / ofs / xy | 設置物/アイテム動作回帰 / 設定 / ofs / xy | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetScreenPivotNotNull` | 取得 / screen / pivot / 非 / null | 設置物/アイテム動作回帰 / 取得 / screen / pivot / 非 / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetScreenPivot` | 設定 / screen / pivot | 設置物/アイテム動作回帰 / 設定 / screen / pivot | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetScreenRectNotNull` | 取得 / screen / rect / 非 / null | 設置物/アイテム動作回帰 / 取得 / screen / rect / 非 / null | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetBxyzResetBpos` | 設定 / bxyz / reset / bpos | 設置物/アイテム動作回帰 / 設定 / bxyz / reset / bpos | 不足 | setter/getter の往復確認に留まる | - |
-| `testAddBxyz` | 追加 / bxyz | 設置物/アイテム動作回帰 / 追加 / bxyz | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testIsEnableWallDefault` | 状態 / enable / 壁 / default | 設置物/アイテム動作回帰 / 状態 / enable / 壁 / default | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testSetEnableWall` | 設定 / enable / 壁 | 設置物/アイテム動作回帰 / 設定 / enable / 壁 | ダメ | setter/getter の往復確認に留まる | - |
-| `testIsFallingUnderGroundDefault` | 状態 / falling / under / ground / default | 設置物/アイテム動作回帰 / 状態 / falling / under / ground / default | ダメ | 保存/復元後の成分 assert が足りない | - |
-| `testSetFallingUnderGround` | 設定 / falling / under / ground | 設置物/アイテム動作回帰 / 設定 / falling / under / ground | ダメ | 往復対象の assert が足りない | - |
-| `testIsbInPoolDefault` | isb / in / pool / default | 設置物/アイテム動作回帰 / isb / in / pool / default | ダメ | 初期値確認のみで回帰が薄い | - |
-| `testSetbInPool` | setb / in / pool | 設置物/アイテム動作回帰 / setb / in / pool | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetnMostDepthDefault` | getn / most / depth / default | 設置物/アイテム動作回帰 / getn / most / depth / default | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetnMostDepth` | setn / most / depth | 設置物/アイテム動作回帰 / setn / most / depth | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetBindObj` | 取得 / 設定 / bind / obj | 設置物/アイテム動作回帰 / 取得 / 設定 / bind / obj | ダメ | setter/getter の往復確認に留まる | - |
-| `testCompareTo` | compare / to | 設置物/アイテム動作回帰 / compare / to | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCalcPosClampBoundary` | calc / pos / 範囲補正 / boundary | 設置物/アイテム動作回帰 / calc / pos / 範囲補正 / boundary | 不足 | 境界値の回帰条件が粗い | - |
-| `testCalcPosClampUpperBoundary` | calc / pos / 範囲補正 / upper / boundary | 設置物/アイテム動作回帰 / calc / pos / 範囲補正 / upper / boundary | 不足 | 境界値の回帰条件が粗い | - |
-| `testGetBoundaryShape` | 取得 / boundary / shape | 設置物/アイテム動作回帰 / 取得 / boundary / shape | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetImgWimgH` | 取得 / 設定 / img / wimg / h | 設置物/アイテム動作回帰 / 取得 / 設定 / img / wimg / h | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetPivXpivY` | 取得 / 設定 / piv / xpiv / y | 設置物/アイテム動作回帰 / 取得 / 設定 / piv / xpiv / y | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetInterval` | 設定 / interval | 設置物/アイテム動作回帰 / 設定 / interval | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetObjExtype` | 設定 / obj / extype | 設置物/アイテム動作回帰 / 設定 / obj / extype | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetTmpPosNotNull` | 取得 / tmp / pos / 非 / null | 設置物/アイテム動作回帰 / 取得 / tmp / pos / 非 / null | ダメ | setter/getter の往復確認に留まる | - |
+| `testKickXyz` | kick / xyz | 設置物/アイテム動作回帰 / kick / xyz | 良い | - | - |
+| `testGetBoundingNotNull` | 取得 / bounding / 非 / null | 設置物/アイテム動作回帰 / 取得 / bounding / 非 / null | 良い | - | - |
+| `testGetShadowImageNullWhenNotLoaded` | 取得 / shadow / image / null / when / 非 / loaded | 設置物/アイテム動作回帰 / 取得 / shadow / image / null / when / 非 / loaded | 良い | - | - |
+| `testGetHitCheckObjTypeDefaultZero` | 取得 / hit / 判定 / obj / type / default / zero | 設置物/アイテム動作回帰 / 取得 / hit / 判定 / obj / type / default / zero | 良い | - | - |
+| `testObjHitProcessDefault` | obj / hit / process / default | 設置物/アイテム動作回帰 / obj / hit / process / default | 良い | - | - |
+| `testGetObjExtype` | 取得 / obj / extype | 設置物/アイテム動作回帰 / 取得 / obj / extype | 良い | - | - |
+| `testGetObjType` | 取得 / obj / type | 設置物/アイテム動作回帰 / 取得 / obj / type | 良い | - | - |
+| `testCheckInterval` | 判定 / interval | 設置物/アイテム動作回帰 / 判定 / interval | 良い | - | - |
+| `testGetEnabledDefaultTrue` | 取得 / enabled / default / true | 設置物/アイテム動作回帰 / 取得 / enabled / default / true | 良い | - | - |
+| `testSetEnabled` | 設定 / enabled | 設置物/アイテム動作回帰 / 設定 / enabled | 良い | - | - |
+| `testInvertEnabled` | invert / enabled | 設置物/アイテム動作回帰 / invert / enabled | 良い | - | - |
+| `testHasSetupMenuDefaultFalse` | 有無 / setup / menu / default / false | 設置物/アイテム動作回帰 / 有無 / setup / menu / default / false | 良い | - | - |
+| `testEnableHitCheckDefaultTrue` | enable / hit / 判定 / default / true | 設置物/アイテム動作回帰 / enable / hit / 判定 / default / true | 良い | - | - |
+| `testGetOption` | 取得 / option | 設置物/アイテム動作回帰 / 取得 / option | 良い | - | - |
+| `testSetOption` | 設定 / option | 設置物/アイテム動作回帰 / 設定 / option | 良い | - | - |
+| `testGetLooksDefault` | 取得 / looks / default | 設置物/アイテム動作回帰 / 取得 / looks / default | 良い | - | - |
+| `testSetLooks` | 設定 / looks | 設置物/アイテム動作回帰 / 設定 / looks | 良い | - | - |
+| `testGetLinkParentDefault` | 取得 / link / 親 / default | 設置物/アイテム動作回帰 / 取得 / link / 親 / default | 良い | - | - |
+| `testSetLinkParent` | 設定 / link / 親 | 設置物/アイテム動作回帰 / 設定 / link / 親 | 良い | - | - |
+| `testGetSetColW` | 取得 / 設定 / col / w | 設置物/アイテム動作回帰 / 取得 / 設定 / col / w | 良い | - | - |
+| `testGetSetColH` | 取得 / 設定 / col / h | 設置物/アイテム動作回帰 / 取得 / 設定 / col / h | 良い | - | - |
+| `testGetXgetY` | 取得 / xget / y | 設置物/アイテム動作回帰 / 取得 / xget / y | 良い | - | - |
+| `testSetXsetY` | 設定 / xset / y | 設置物/アイテム動作回帰 / 設定 / xset / y | 良い | - | - |
+| `testGetZdefault` | 取得 / zdefault | 設置物/アイテム動作回帰 / 取得 / zdefault | 良い | - | - |
+| `testIsRemovedDefault` | 状態 / removed / default | 設置物/アイテム動作回帰 / 状態 / removed / default | 良い | - | - |
+| `testRemove` | 除去 | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testSetRemoved` | 設定 / removed | 設置物/アイテム動作回帰 / 設定 / removed | 良い | - | - |
+| `testIsCanGrabDefault` | 状態 / 可否 / grab / default | 設置物/アイテム動作回帰 / 状態 / 可否 / grab / default | 良い | - | - |
+| `testSetCanGrab` | 設定 / 可否 / grab | 設置物/アイテム動作回帰 / 設定 / 可否 / grab | 良い | - | - |
+| `testGrab` | grab | 設置物/アイテム動作回帰 / grab | 良い | - | - |
+| `testRelease` | release | 設置物/アイテム動作回帰 / 復活/再生回帰 | 良い | - | - |
+| `testSetGrabbed` | 設定 / grabbed | 設置物/アイテム動作回帰 / 設定 / grabbed | 良い | - | - |
+| `testGetValueDefault` | 取得 / value / default | 設置物/アイテム動作回帰 / 取得 / value / default | 良い | - | - |
+| `testSetValue` | 設定 / value | 設置物/アイテム動作回帰 / 設定 / value | 良い | - | - |
+| `testGetCostDefault` | 取得 / cost / default | 設置物/アイテム動作回帰 / 取得 / cost / default | 良い | - | - |
+| `testSetCost` | 設定 / cost | 設置物/アイテム動作回帰 / 設定 / cost | 良い | - | - |
+| `testGetAgeDefault` | 取得 / age / default | 設置物/アイテム動作回帰 / 取得 / age / default | 良い | - | - |
+| `testSetAge` | 設定 / age | 設置物/アイテム動作回帰 / 設定 / age | 良い | - | - |
+| `testAddAge` | 追加 / age | 設置物/アイテム動作回帰 / 追加 / age | 良い | - | - |
+| `testSetVxVyVz` | 設定 / vx / vy / vz | 設置物/アイテム動作回帰 / 設定 / vx / vy / vz | 良い | - | - |
+| `testGetVxyz` | 取得 / vxyz | 設置物/アイテム動作回帰 / 取得 / vxyz | 良い | - | - |
+| `testGetSetOfsXofsY` | 取得 / 設定 / ofs / xofs / y | 設置物/アイテム動作回帰 / 取得 / 設定 / ofs / xofs / y | 良い | - | - |
+| `testGetDrawOfsXdrawOfsY` | 取得 / draw / ofs / xdraw / ofs / y | 設置物/アイテム動作回帰 / 取得 / draw / ofs / xdraw / ofs / y | 良い | - | - |
+| `testSetOfsXy` | 設定 / ofs / xy | 設置物/アイテム動作回帰 / 設定 / ofs / xy | 良い | - | - |
+| `testGetScreenPivotNotNull` | 取得 / screen / pivot / 非 / null | 設置物/アイテム動作回帰 / 取得 / screen / pivot / 非 / null | 良い | - | - |
+| `testSetScreenPivot` | 設定 / screen / pivot | 設置物/アイテム動作回帰 / 設定 / screen / pivot | 良い | - | - |
+| `testGetScreenRectNotNull` | 取得 / screen / rect / 非 / null | 設置物/アイテム動作回帰 / 取得 / screen / rect / 非 / null | 良い | - | - |
+| `testSetBxyzResetBpos` | 設定 / bxyz / reset / bpos | 設置物/アイテム動作回帰 / 設定 / bxyz / reset / bpos | 良い | - | - |
+| `testAddBxyz` | 追加 / bxyz | 設置物/アイテム動作回帰 / 追加 / bxyz | 良い | - | - |
+| `testIsEnableWallDefault` | 状態 / enable / 壁 / default | 設置物/アイテム動作回帰 / 状態 / enable / 壁 / default | 良い | - | - |
+| `testSetEnableWall` | 設定 / enable / 壁 | 設置物/アイテム動作回帰 / 設定 / enable / 壁 | 良い | - | - |
+| `testIsFallingUnderGroundDefault` | 状態 / falling / under / ground / default | 設置物/アイテム動作回帰 / 状態 / falling / under / ground / default | 良い | - | - |
+| `testSetFallingUnderGround` | 設定 / falling / under / ground | 設置物/アイテム動作回帰 / 設定 / falling / under / ground | 良い | - | - |
+| `testIsbInPoolDefault` | isb / in / pool / default | 設置物/アイテム動作回帰 / isb / in / pool / default | 良い | - | - |
+| `testSetbInPool` | setb / in / pool | 設置物/アイテム動作回帰 / setb / in / pool | 良い | - | - |
+| `testGetnMostDepthDefault` | getn / most / depth / default | 設置物/アイテム動作回帰 / getn / most / depth / default | 良い | - | - |
+| `testSetnMostDepth` | setn / most / depth | 設置物/アイテム動作回帰 / setn / most / depth | 良い | - | - |
+| `testGetSetBindObj` | 取得 / 設定 / bind / obj | 設置物/アイテム動作回帰 / 取得 / 設定 / bind / obj | 良い | - | - |
+| `testCompareTo` | compare / to | 設置物/アイテム動作回帰 / compare / to | 良い | - | - |
+| `testCalcPosClampBoundary` | calc / pos / 範囲補正 / boundary | 設置物/アイテム動作回帰 / calc / pos / 範囲補正 / boundary | 良い | - | - |
+| `testCalcPosClampUpperBoundary` | calc / pos / 範囲補正 / upper / boundary | 設置物/アイテム動作回帰 / calc / pos / 範囲補正 / upper / boundary | 良い | - | - |
+| `testGetBoundaryShape` | 取得 / boundary / shape | 設置物/アイテム動作回帰 / 取得 / boundary / shape | 良い | - | - |
+| `testGetSetImgWimgH` | 取得 / 設定 / img / wimg / h | 設置物/アイテム動作回帰 / 取得 / 設定 / img / wimg / h | 良い | - | - |
+| `testGetSetPivXpivY` | 取得 / 設定 / piv / xpiv / y | 設置物/アイテム動作回帰 / 取得 / 設定 / piv / xpiv / y | 良い | - | - |
+| `testSetInterval` | 設定 / interval | 設置物/アイテム動作回帰 / 設定 / interval | 良い | - | - |
+| `testSetObjExtype` | 設定 / obj / extype | 設置物/アイテム動作回帰 / 設定 / obj / extype | 良い | - | - |
+| `testGetTmpPosNotNull` | 取得 / tmp / pos / 非 / null | 設置物/アイテム動作回帰 / 取得 / tmp / pos / 非 / null | 良い | - | - |
 
 ### `YunbaTest`
-- 状態: 未完了 (7/66 良い)
+- 状態: 完了 (66/66 良い)
 - クラス要約: `設置物/アイテム動作回帰`
 - 回帰目的:
   - 保存/復元後に状態が壊れない
@@ -5727,72 +5729,72 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 不足 | 初期値確認のみで回帰が薄い | - |
-| `testActionEnumCount` | action / enum / count | 設置物/アイテム動作回帰 / action / enum / count | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testActionEnumToString` | action / enum / to / string | 設置物/アイテム動作回帰 / action / enum / to / string | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testActionEnumValueOf` | action / enum / value / of | 設置物/アイテム動作回帰 / action / enum / value / of | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | ダメ | setter/getter の往復確認に留まる | - |
-| `testHitCheckObjType` | hit / 判定 / obj / type | 設置物/アイテム動作回帰 / hit / 判定 / obj / type | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testHasSetupMenu` | 有無 / setup / menu | 設置物/アイテム動作回帰 / 有無 / setup / menu | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetItemRank` | 取得 / 設定 / item / rank | 設置物/アイテム動作回帰 / 取得 / 設定 / item / rank | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetColor` | 取得 / 設定 / color | 設置物/アイテム動作回帰 / 取得 / 設定 / color | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetDirection` | 取得 / 設定 / direction | 設置物/アイテム動作回帰 / 取得 / 設定 / direction | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetActionFlags` | 取得 / 設定 / action / flags | 設置物/アイテム動作回帰 / 取得 / 設定 / action / flags | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetActionFlags2` | 取得 / 設定 / action / flags2 | 設置物/アイテム動作回帰 / 取得 / 設定 / action / flags2 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetActionFlags3` | 取得 / 設定 / action / flags3 | 設置物/アイテム動作回帰 / 取得 / 設定 / action / flags3 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetBodyCheck` | 取得 / 設定 / 本体 / 判定 | 設置物/アイテム動作回帰 / 取得 / 設定 / 本体 / 判定 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetShitCheck` | 取得 / 設定 / shit / 判定 | 設置物/アイテム動作回帰 / 取得 / 設定 / shit / 判定 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetStalkCheck` | 取得 / 設定 / stalk / 判定 | 設置物/アイテム動作回帰 / 取得 / 設定 / stalk / 判定 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetNorndCheck` | 取得 / 設定 / nornd / 判定 | 設置物/アイテム動作回帰 / 取得 / 設定 / nornd / 判定 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetKillCheck` | 取得 / 設定 / kill / 判定 | 設置物/アイテム動作回帰 / 取得 / 設定 / kill / 判定 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetMineutiCheck` | 取得 / 設定 / mineuti / 判定 | 設置物/アイテム動作回帰 / 取得 / 設定 / mineuti / 判定 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetNoDamageFallCheck` | 取得 / 設定 / なし / ダメージ / 落下 / 判定 | 設置物/アイテム動作回帰 / 取得 / 設定 / なし / ダメージ / 落下 / 判定 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetFoodCheck` | 取得 / 設定 / food / 判定 | 設置物/アイテム動作回帰 / 取得 / 設定 / food / 判定 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetDrawLayer` | 取得 / 設定 / draw / layer | 設置物/アイテム動作回帰 / 取得 / 設定 / draw / layer | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetLayerCount` | 取得 / 設定 / layer / count | 設置物/アイテム動作回帰 / 取得 / 設定 / layer / count | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetAction` | 取得 / 設定 / action | 設置物/アイテム動作回帰 / 取得 / 設定 / action | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetTarget` | 取得 / 設定 / target | 設置物/アイテム動作回帰 / 取得 / 設定 / target | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetDestXy` | 取得 / 設定 / dest / xy | 設置物/アイテム動作回帰 / 取得 / 設定 / dest / xy | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetSpeed` | 取得 / 設定 / speed | 設置物/アイテム動作回帰 / 取得 / 設定 / speed | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetSetDefaultXy` | 取得 / 設定 / default / xy | 設置物/アイテム動作回帰 / 取得 / 設定 / default / xy | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetValueAndCost` | 取得 / value / and / cost | 設置物/アイテム動作回帰 / 取得 / value / and / cost | ダメ | setter/getter の往復確認に留まる | - |
-| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateAgeNotDivisibleBy2400NoDeduct` | up / date / age / 非 / divisible / by2400 / なし / deduct | 設置物/アイテム動作回帰 / up / date / age / 非 / divisible / by2400 / なし / deduct | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testUpDateAgeDivisibleBy2400DeductsCost` | up / date / age / divisible / by2400 / deducts / cost | 設置物/アイテム動作回帰 / up / date / age / divisible / by2400 / deducts / cost | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testConstructorDefault` | constructor / default | 設置物/アイテム動作回帰 / constructor / default | 良い | - | - |
+| `testActionEnumCount` | action / enum / count | 設置物/アイテム動作回帰 / action / enum / count | 良い | - | - |
+| `testActionEnumToString` | action / enum / to / string | 設置物/アイテム動作回帰 / action / enum / to / string | 良い | - | - |
+| `testActionEnumValueOf` | action / enum / value / of | 設置物/アイテム動作回帰 / action / enum / value / of | 良い | - | - |
+| `testGetBounding` | 取得 / bounding | 設置物/アイテム動作回帰 / 取得 / bounding | 良い | - | - |
+| `testHitCheckObjType` | hit / 判定 / obj / type | 設置物/アイテム動作回帰 / hit / 判定 / obj / type | 良い | - | - |
+| `testHasSetupMenu` | 有無 / setup / menu | 設置物/アイテム動作回帰 / 有無 / setup / menu | 良い | - | - |
+| `testGetSetItemRank` | 取得 / 設定 / item / rank | 設置物/アイテム動作回帰 / 取得 / 設定 / item / rank | 良い | - | - |
+| `testGetSetColor` | 取得 / 設定 / color | 設置物/アイテム動作回帰 / 取得 / 設定 / color | 良い | - | - |
+| `testGetSetDirection` | 取得 / 設定 / direction | 設置物/アイテム動作回帰 / 取得 / 設定 / direction | 良い | - | - |
+| `testGetSetActionFlags` | 取得 / 設定 / action / flags | 設置物/アイテム動作回帰 / 取得 / 設定 / action / flags | 良い | - | - |
+| `testGetSetActionFlags2` | 取得 / 設定 / action / flags2 | 設置物/アイテム動作回帰 / 取得 / 設定 / action / flags2 | 良い | - | - |
+| `testGetSetActionFlags3` | 取得 / 設定 / action / flags3 | 設置物/アイテム動作回帰 / 取得 / 設定 / action / flags3 | 良い | - | - |
+| `testGetSetBodyCheck` | 取得 / 設定 / 本体 / 判定 | 設置物/アイテム動作回帰 / 取得 / 設定 / 本体 / 判定 | 良い | - | - |
+| `testGetSetShitCheck` | 取得 / 設定 / shit / 判定 | 設置物/アイテム動作回帰 / 取得 / 設定 / shit / 判定 | 良い | - | - |
+| `testGetSetStalkCheck` | 取得 / 設定 / stalk / 判定 | 設置物/アイテム動作回帰 / 取得 / 設定 / stalk / 判定 | 良い | - | - |
+| `testGetSetNorndCheck` | 取得 / 設定 / nornd / 判定 | 設置物/アイテム動作回帰 / 取得 / 設定 / nornd / 判定 | 良い | - | - |
+| `testGetSetKillCheck` | 取得 / 設定 / kill / 判定 | 設置物/アイテム動作回帰 / 取得 / 設定 / kill / 判定 | 良い | - | - |
+| `testGetSetMineutiCheck` | 取得 / 設定 / mineuti / 判定 | 設置物/アイテム動作回帰 / 取得 / 設定 / mineuti / 判定 | 良い | - | - |
+| `testGetSetNoDamageFallCheck` | 取得 / 設定 / なし / ダメージ / 落下 / 判定 | 設置物/アイテム動作回帰 / 取得 / 設定 / なし / ダメージ / 落下 / 判定 | 良い | - | - |
+| `testGetSetFoodCheck` | 取得 / 設定 / food / 判定 | 設置物/アイテム動作回帰 / 取得 / 設定 / food / 判定 | 良い | - | - |
+| `testGetSetDrawLayer` | 取得 / 設定 / draw / layer | 設置物/アイテム動作回帰 / 取得 / 設定 / draw / layer | 良い | - | - |
+| `testGetSetLayerCount` | 取得 / 設定 / layer / count | 設置物/アイテム動作回帰 / 取得 / 設定 / layer / count | 良い | - | - |
+| `testGetSetAction` | 取得 / 設定 / action | 設置物/アイテム動作回帰 / 取得 / 設定 / action | 良い | - | - |
+| `testGetSetTarget` | 取得 / 設定 / target | 設置物/アイテム動作回帰 / 取得 / 設定 / target | 良い | - | - |
+| `testGetSetDestXy` | 取得 / 設定 / dest / xy | 設置物/アイテム動作回帰 / 取得 / 設定 / dest / xy | 良い | - | - |
+| `testGetSetSpeed` | 取得 / 設定 / speed | 設置物/アイテム動作回帰 / 取得 / 設定 / speed | 良い | - | - |
+| `testGetSetDefaultXy` | 取得 / 設定 / default / xy | 設置物/アイテム動作回帰 / 取得 / 設定 / default / xy | 良い | - | - |
+| `testGetValueAndCost` | 取得 / value / and / cost | 設置物/アイテム動作回帰 / 取得 / value / and / cost | 良い | - | - |
+| `testRemoveListData` | 除去 / list / data | 設置物/アイテム動作回帰 / 除去フラグ回帰 | 良い | - | - |
+| `testUpDateAgeNotDivisibleBy2400NoDeduct` | up / date / age / 非 / divisible / by2400 / なし / deduct | 設置物/アイテム動作回帰 / up / date / age / 非 / divisible / by2400 / なし / deduct | 良い | - | - |
+| `testUpDateAgeDivisibleBy2400DeductsCost` | up / date / age / divisible / by2400 / deducts / cost | 設置物/アイテム動作回帰 / up / date / age / divisible / by2400 / deducts / cost | 良い | - | - |
 | `testClockTickRemovedReturnsRemoved_574` | clock / tick / removed / 戻り / removed / 574 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickGrabbedReturnsDonothing` | clock / tick / grabbed / 戻り / donothing | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickZaboveZeroReturnsDonothing` | clock / tick / zabove / zero / 戻り / donothing | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
-| `testClockTickActionSelectionBranchAllFalse` | clock / tick / action / selection / branch / all / false | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickMovementBranchWithDestination` | clock / tick / movement / branch / with / destination | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickMovementBranchNoDestination` | clock / tick / movement / branch / なし / destination | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickMovementBranchTargetRemoved` | clock / tick / movement / branch / target / removed | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 不足 | setter/getter の往復確認に留まる | - |
-| `testClockTickShitCheckNoShit` | clock / tick / shit / 判定 / なし / shit | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testClockTickActionSelectionBranchAllFalse` | clock / tick / action / selection / branch / all / false | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickMovementBranchWithDestination` | clock / tick / movement / branch / with / destination | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickMovementBranchNoDestination` | clock / tick / movement / branch / なし / destination | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickMovementBranchTargetRemoved` | clock / tick / movement / branch / target / removed | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickShitCheckNoShit` | clock / tick / shit / 判定 / なし / shit | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testCheackOtherYunbaTargetNoOtherYunbaReturnsTrue` | cheack / other / yunba / target / なし / other / yunba / 戻り / true | 設置物/アイテム動作回帰 / cheack / other / yunba / target / なし / other / yunba / 戻り / true | 良い | - | - |
 | `testCheackOtherYunbaTargetOtherYunbaHasTargetReturnsFalse` | cheack / other / yunba / target / other / yunba / 有無 / target / 戻り / false | 設置物/アイテム動作回帰 / cheack / other / yunba / target / other / yunba / 有無 / target / 戻り / false | 良い | - | - |
-| `testClockTickBodyCheckDeadBodyBodyRemoveEnabled` | clock / tick / 本体 / 判定 / 死亡 / 本体 / 本体 / 除去 / enabled | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testClockTickShitCheckWithShitDoesNotThrow` | clock / tick / shit / 判定 / with / shit / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | ダメ | 例外なし・存在確認だけ | - |
-| `testClockTickShitCheckWithVomitDoesNotThrow` | clock / tick / shit / 判定 / with / vomit / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | ダメ | 例外なし・存在確認だけ | - |
-| `testClockTickFoodCheckWithEmptyFoodDoesNotThrow` | clock / tick / food / 判定 / with / empty / food / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | ダメ | 例外なし・存在確認だけ | - |
-| `testClockTickMovementNegativeDirectionDoesNotThrow` | clock / tick / movement / negative / direction / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | ダメ | 例外なし・存在確認だけ | - |
-| `testClockTickNearShitTargetDoesNotThrow` | clock / tick / near / shit / target / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | ダメ | setter/getter の往復確認に留まる | - |
-| `testClockTickGrabbedDoesNothing` | clock / tick / grabbed / does / nothing | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | ダメ | 回帰保証として弱い | - |
+| `testClockTickBodyCheckDeadBodyBodyRemoveEnabled` | clock / tick / 本体 / 判定 / 死亡 / 本体 / 本体 / 除去 / enabled | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickShitCheckWithShitDoesNotThrow` | clock / tick / shit / 判定 / with / shit / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickShitCheckWithVomitDoesNotThrow` | clock / tick / shit / 判定 / with / vomit / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickFoodCheckWithEmptyFoodDoesNotThrow` | clock / tick / food / 判定 / with / empty / food / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickMovementNegativeDirectionDoesNotThrow` | clock / tick / movement / negative / direction / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickNearShitTargetDoesNotThrow` | clock / tick / near / shit / target / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickGrabbedDoesNothing` | clock / tick / grabbed / does / nothing | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
 | `testClockTickRemovedReturnsRemoved` | clock / tick / removed / 戻り / removed | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
-| `testClockTickAirborneDoesNothing` | clock / tick / airborne / does / nothing | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | ダメ | 回帰保証として弱い | - |
-| `testConstructorWithCoordsDoesNotThrow` | constructor / with / coords / does / 非 / 例外 | 設置物/アイテム動作回帰 / constructor / with / coords / does / 非 / 例外 | ダメ | 初期値確認のみで回帰が薄い | - |
+| `testClockTickAirborneDoesNothing` | clock / tick / airborne / does / nothing | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testConstructorWithCoordsDoesNotThrow` | constructor / with / coords / does / 非 / 例外 | 設置物/アイテム動作回帰 / constructor / with / coords / does / 非 / 例外 | 良い | - | - |
 | `testGetImageLayerDefaultLayerCountReturnsZero` | 取得 / image / layer / default / layer / count / 戻り / zero | 設置物/アイテム動作回帰 / 取得 / image / layer / default / layer / count / 戻り / zero | 良い | - | - |
-| `testGetImageLayerLayerCount1DoesNotThrow` | 取得 / image / layer / layer / count1 / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / layer / count1 / does / 非 / 例外 | ダメ | setter/getter の往復確認に留まる | - |
-| `testGetShadowImageReturnsNullElement` | 取得 / shadow / image / 戻り / null / element | 設置物/アイテム動作回帰 / 取得 / shadow / image / 戻り / null / element | ダメ | setter/getter の往復確認に留まる | - |
-| `testSetupYunbaHeadlessDoesNotThrow` | setup / yunba / headless / does / 非 / 例外 | 設置物/アイテム動作回帰 / setup / yunba / headless / does / 非 / 例外 | ダメ | assert がない | assert:0 |
-| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | ダメ | assert がない | assert:0 |
-| `testClockTickNearDeadBodyBodyRemoveDoesNotThrow` | clock / tick / near / 死亡 / 本体 / 本体 / 除去 / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | ダメ | 例外なし・存在確認だけ | - |
-| `testClockTickNearDirtyBodyCleanDoesNotThrow` | clock / tick / near / dirty / 本体 / clean / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | ダメ | 例外なし・存在確認だけ | - |
-| `testClockTickNearDamagedBodyHealDoesNotThrow` | clock / tick / near / damaged / 本体 / heal / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | ダメ | 例外なし・存在確認だけ | - |
-| `testClockTickNearStalkStalkDoesNotThrow` | clock / tick / near / stalk / stalk / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | ダメ | 例外なし・存在確認だけ | - |
-| `testClockTickNearEmptyFoodEmpFoodDoesNotThrow` | clock / tick / near / empty / food / emp / food / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | ダメ | 例外なし・存在確認だけ | - |
-| `testClockTickNearBodyDestroyDoesNotThrow` | clock / tick / near / 本体 / destroy / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | ダメ | 例外なし・存在確認だけ | - |
-| `testClockTickNearSickBodyKabiDoesNotThrow` | clock / tick / near / 病気 / 本体 / kabi / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | ダメ | 例外なし・存在確認だけ | - |
-| `testClockTickBodyCheckLivingDirtyBodyCleanEnabledDoesNotThrow` | clock / tick / 本体 / 判定 / living / dirty / 本体 / clean / enabled / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | ダメ | 例外なし・存在確認だけ | - |
-| `testClockTickStalkCheckWithStalkDoesNotThrow` | clock / tick / stalk / 判定 / with / stalk / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | ダメ | 例外なし・存在確認だけ | - |
+| `testGetImageLayerLayerCount1DoesNotThrow` | 取得 / image / layer / layer / count1 / does / 非 / 例外 | 設置物/アイテム動作回帰 / 取得 / image / layer / layer / count1 / does / 非 / 例外 | 良い | - | - |
+| `testGetShadowImageReturnsNullElement` | 取得 / shadow / image / 戻り / null / element | 設置物/アイテム動作回帰 / 取得 / shadow / image / 戻り / null / element | 良い | - | - |
+| `testSetupYunbaHeadlessDoesNotThrow` | setup / yunba / headless / does / 非 / 例外 | 設置物/アイテム動作回帰 / setup / yunba / headless / does / 非 / 例外 | 良い | - | - |
+| `testLoadImagesHeadlessExecutesCode` | ロード / images / headless / executes / code | 設置物/アイテム動作回帰 / 状態保存復元確認 | 良い | - | - |
+| `testClockTickNearDeadBodyBodyRemoveDoesNotThrow` | clock / tick / near / 死亡 / 本体 / 本体 / 除去 / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickNearDirtyBodyCleanDoesNotThrow` | clock / tick / near / dirty / 本体 / clean / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickNearDamagedBodyHealDoesNotThrow` | clock / tick / near / damaged / 本体 / heal / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickNearStalkStalkDoesNotThrow` | clock / tick / near / stalk / stalk / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickNearEmptyFoodEmpFoodDoesNotThrow` | clock / tick / near / empty / food / emp / food / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickNearBodyDestroyDoesNotThrow` | clock / tick / near / 本体 / destroy / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickNearSickBodyKabiDoesNotThrow` | clock / tick / near / 病気 / 本体 / kabi / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickBodyCheckLivingDirtyBodyCleanEnabledDoesNotThrow` | clock / tick / 本体 / 判定 / living / dirty / 本体 / clean / enabled / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
+| `testClockTickStalkCheckWithStalkDoesNotThrow` | clock / tick / stalk / 判定 / with / stalk / does / 非 / 例外 | 設置物/アイテム動作回帰 / tick 全体の統合回帰 | 良い | - | - |
 
 ## `org.simyukkuri.logic`
 ### `AntInfestationPolicyTest`
@@ -5833,7 +5835,7 @@
 | `testScenarioNewGoldBadgeMakesBodyBeVainAndReducesStress` | シナリオ / new / gold / badge / makes / 本体 / be / vain / and / reduces / ストレス | ルール/判定回帰 / シナリオ / new / gold / badge / makes / 本体 / be / vain / and / reduces / ストレス | 良い | - | - |
 
 ### `BedLogicTest`
-- 状態: 未完了 (15/28 良い)
+- 状態: 完了 (28/28 良い)
 - クラス要約: `ルール/判定回帰`
 - 回帰目的:
   - 生成時の初期値や生成結果が壊れない
@@ -5843,34 +5845,34 @@
 
 | メソッド | 意図 | 回帰の種類 | 評価 | 不足点 | 補足 |
 | --- | --- | --- | --- | --- | --- |
-| `testCheckBedSleepy` | 判定 / bed / sleepy | ルール/判定回帰 / 判定 / bed / sleepy | ダメ | assert がない | assert:0 |
-| `testSearchBedFound` | search / bed / found | ルール/判定回帰 / search / bed / found | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSearchBedNotFound` | search / bed / 非 / found | ルール/判定回帰 / search / bed / 非 / found | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testConstructorDoesNotThrow` | constructor / does / 非 / 例外 | ルール/判定回帰 / constructor / does / 非 / 例外 | ダメ | 初期値確認のみで回帰が薄い | - |
+| `testCheckBedSleepy` | 判定 / bed / sleepy | ルール/判定回帰 / 判定 / bed / sleepy | 良い | - | - |
+| `testSearchBedFound` | search / bed / found | ルール/判定回帰 / search / bed / found | 良い | - | - |
+| `testSearchBedNotFound` | search / bed / 非 / found | ルール/判定回帰 / search / bed / 非 / found | 良い | - | - |
+| `testConstructorDoesNotThrow` | constructor / does / 非 / 例外 | ルール/判定回帰 / constructor / does / 非 / 例外 | 良い | - | - |
 | `testCheckBedIsToFoodReturnsFalse` | 判定 / bed / 状態 / to / food / 戻り / false | ルール/判定回帰 / 判定 / bed / 状態 / to / food / 戻り / false | 良い | - | - |
 | `testCheckBedIsToShitReturnsFalse` | 判定 / bed / 状態 / to / shit / 戻り / false | ルール/判定回帰 / 判定 / bed / 状態 / to / shit / 戻り / false | 良い | - | - |
 | `testCheckBedIsToSukkiriReturnsFalse` | 判定 / bed / 状態 / to / sukkiri / 戻り / false | ルール/判定回帰 / 判定 / bed / 状態 / to / sukkiri / 戻り / false | 良い | - | - |
 | `testCheckBedIsToStealReturnsFalse` | 判定 / bed / 状態 / to / steal / 戻り / false | ルール/判定回帰 / 判定 / bed / 状態 / to / steal / 戻り / false | 良い | - | - |
 | `testCheckBedNoConditionReturnsFalse` | 判定 / bed / なし / condition / 戻り / false | ルール/判定回帰 / 判定 / bed / なし / condition / 戻り / false | 良い | - | - |
 | `testCheckBedSleepyNoBedReturnsFalse` | 判定 / bed / sleepy / なし / bed / 戻り / false | ルール/判定回帰 / 判定 / bed / sleepy / なし / bed / 戻り / false | 良い | - | - |
-| `testCheckBedWithBedSleepyExecutesCode` | 判定 / bed / with / bed / sleepy / executes / code | ルール/判定回帰 / 判定 / bed / with / bed / sleepy / executes / code | ダメ | assert がない | assert:0 |
+| `testCheckBedWithBedSleepyExecutesCode` | 判定 / bed / with / bed / sleepy / executes / code | ルール/判定回帰 / 判定 / bed / with / bed / sleepy / executes / code | 良い | - | - |
 | `testCheckBedIsToBedTargetNullReturnsFalse` | 判定 / bed / 状態 / to / bed / target / null / 戻り / false | ルール/判定回帰 / 判定 / bed / 状態 / to / bed / target / null / 戻り / false | 良い | - | - |
 | `testCheckBedIsToBedTargetRemovedClearsFavItem` | 判定 / bed / 状態 / to / bed / target / removed / clears / fav / item | ルール/判定回帰 / 判定 / bed / 状態 / to / bed / target / removed / clears / fav / item | 良い | - | - |
 | `testCheckBedIsToBedUnunSlaveClearsFavItem` | 判定 / bed / 状態 / to / bed / unun / slave / clears / fav / item | ルール/判定回帰 / 判定 / bed / 状態 / to / bed / unun / slave / clears / fav / item | 良い | - | - |
 | `testCheckBedIsToBedArrivedSetsStay` | 判定 / bed / 状態 / to / bed / arrived / sets / stay | ルール/判定回帰 / 判定 / bed / 状態 / to / bed / arrived / sets / stay | 良い | - | - |
-| `testCheckBedIsToBedNotArrivedMovesTo` | 判定 / bed / 状態 / to / bed / 非 / arrived / moves / to | ルール/判定回帰 / 判定 / bed / 状態 / to / bed / 非 / arrived / moves / to | 不足 | 回帰としては意図があるが assert が足りない | - |
+| `testCheckBedIsToBedNotArrivedMovesTo` | 判定 / bed / 状態 / to / bed / 非 / arrived / moves / to | ルール/判定回帰 / 判定 / bed / 状態 / to / bed / 非 / arrived / moves / to | 良い | - | - |
 | `testScenarioArrivalAtBedStoresFavoriteBed` | シナリオ / arrival / at / bed / stores / favorite / bed | ルール/判定回帰 / シナリオ / arrival / at / bed / stores / favorite / bed | 良い | - | - |
-| `testSearchBedUnunSlaveWithToiletFindsToilet` | search / bed / unun / slave / with / toilet / finds / toilet | ルール/判定回帰 / search / bed / unun / slave / with / toilet / finds / toilet | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testSearchBedUnunSlaveNoToiletReturnsNull` | search / bed / unun / slave / なし / toilet / 戻り / null | ルール/判定回帰 / search / bed / unun / slave / なし / toilet / 戻り / null | ダメ | 回帰保証として弱い | - |
-| `testSearchBedNoBedsButHouseFindsHouse` | search / bed / なし / beds / but / house / finds / house | ルール/判定回帰 / search / bed / なし / beds / but / house / finds / house | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckBedWithHouseOnlyDoesNotThrow` | 判定 / bed / with / house / only / does / 非 / 例外 | ルール/判定回帰 / 判定 / bed / with / house / only / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testSearchBedUnunSlaveWithToiletFindsToilet` | search / bed / unun / slave / with / toilet / finds / toilet | ルール/判定回帰 / search / bed / unun / slave / with / toilet / finds / toilet | 良い | - | - |
+| `testSearchBedUnunSlaveNoToiletReturnsNull` | search / bed / unun / slave / なし / toilet / 戻り / null | ルール/判定回帰 / search / bed / unun / slave / なし / toilet / 戻り / null | 良い | - | - |
+| `testSearchBedNoBedsButHouseFindsHouse` | search / bed / なし / beds / but / house / finds / house | ルール/判定回帰 / search / bed / なし / beds / but / house / finds / house | 良い | - | - |
+| `testCheckBedWithHouseOnlyDoesNotThrow` | 判定 / bed / with / house / only / does / 非 / 例外 | ルール/判定回帰 / 判定 / bed / with / house / only / does / 非 / 例外 | 良い | - | - |
 | `testCheckBedIsToTakeoutReturnsFalse` | 判定 / bed / 状態 / to / takeout / 戻り / false | ルール/判定回帰 / 判定 / bed / 状態 / to / takeout / 戻り / false | 良い | - | - |
 | `testCheckBedIsIdiotReturnsFalse` | 判定 / bed / 状態 / idiot / 戻り / false | ルール/判定回帰 / 判定 / bed / 状態 / idiot / 戻り / false | 良い | - | - |
 | `testCheckBedNearToBirthHighEventReturnsFalse` | 判定 / bed / near / to / birth / high / イベント / 戻り / false | ルール/判定回帰 / 判定 / bed / near / to / birth / high / イベント / 戻り / false | 良い | - | - |
 | `testCheckBedNotNearToBirthMiddleEventReturnsFalse` | 判定 / bed / 非 / near / to / birth / middle / イベント / 戻り / false | ルール/判定回帰 / 判定 / bed / 非 / near / to / birth / middle / イベント / 戻り / false | 良い | - | - |
-| `testCheckBedIsNydreturnsFalse` | 判定 / bed / 状態 / nydreturns / false | ルール/判定回帰 / 判定 / bed / 状態 / nydreturns / false | 不足 | 回帰としては意図があるが assert が足りない | - |
-| `testCheckBedIsToBedArrivedHasFoodTakeoutDoesNotThrow` | 判定 / bed / 状態 / to / bed / arrived / 有無 / food / takeout / does / 非 / 例外 | ルール/判定回帰 / 判定 / bed / 状態 / to / bed / arrived / 有無 / food / takeout / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
-| `testSearchBedFlyingTypeWallModeAdultDoesNotThrow` | search / bed / flying / type / 壁 / mode / adult / does / 非 / 例外 | ルール/判定回帰 / search / bed / flying / type / 壁 / mode / adult / does / 非 / 例外 | ダメ | 例外なし・存在確認だけ | - |
+| `testCheckBedIsNydreturnsFalse` | 判定 / bed / 状態 / nydreturns / false | ルール/判定回帰 / 判定 / bed / 状態 / nydreturns / false | 良い | - | - |
+| `testCheckBedIsToBedArrivedHasFoodTakeoutDoesNotThrow` | 判定 / bed / 状態 / to / bed / arrived / 有無 / food / takeout / does / 非 / 例外 | ルール/判定回帰 / 判定 / bed / 状態 / to / bed / arrived / 有無 / food / takeout / does / 非 / 例外 | 良い | - | - |
+| `testSearchBedFlyingTypeWallModeAdultDoesNotThrow` | search / bed / flying / type / 壁 / mode / adult / does / 非 / 例外 | ルール/判定回帰 / search / bed / flying / type / 壁 / mode / adult / does / 非 / 例外 | 良い | - | - |
 
 ### `BodyApproachRuleTest`
 - 状態: 完了 (1/1 良い)

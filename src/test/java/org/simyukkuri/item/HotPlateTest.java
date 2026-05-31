@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Nested;
@@ -63,6 +64,7 @@ class HotPlateTest extends ItemTestBase {
     @Test
     void testGetSetSmoke() {
         HotPlate item = new HotPlate();
+        assertNull(item.getSmoke());
         item.setSmoke(null);
         assertNull(item.getSmoke());
     }
@@ -76,6 +78,7 @@ class HotPlateTest extends ItemTestBase {
     @Test
     void testGetBounding() {
         assertNotNull(HotPlate.getBounding());
+        assertSame(HotPlate.getBounding(), HotPlate.getBounding());
     }
 
     @Test
@@ -125,7 +128,9 @@ class HotPlateTest extends ItemTestBase {
         item.setBoundYukkuri(body);
         item.setGrabbed(true);
 
-        assertDoesNotThrow(() -> item.upDate());
+        item.upDate();
+        assertNotNull(item);
+        assertFalse(item.isRemoved());
     }
 
     // bindBody のX座標をプレートのX座標と変える。upDate() 後 bindBody が null になる。
@@ -160,7 +165,8 @@ class HotPlateTest extends ItemTestBase {
     void testGetImageLayer_enabled_noBindBody_doesNotThrow() {
         HotPlate item = new HotPlate();
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
-        assertDoesNotThrow(() -> item.getImageLayer(layer));
+        int count = item.getImageLayer(layer);
+        assertEquals(1, count);
     }
 
     @Test
@@ -169,7 +175,8 @@ class HotPlateTest extends ItemTestBase {
         Yukkuri body = WorldTestHelper.createBody();
         item.setBoundYukkuri(body);
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
-        assertDoesNotThrow(() -> item.getImageLayer(layer));
+        int count = item.getImageLayer(layer);
+        assertEquals(1, count);
     }
 
     @Test
@@ -177,7 +184,8 @@ class HotPlateTest extends ItemTestBase {
         HotPlate item = new HotPlate();
         item.setEnabled(false);
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
-        assertDoesNotThrow(() -> item.getImageLayer(layer));
+        int count = item.getImageLayer(layer);
+        assertEquals(1, count);
     }
 
     // --- objHitProcess ---
@@ -193,6 +201,7 @@ class HotPlateTest extends ItemTestBase {
         } catch (Exception e) {
             // mypane.getTerrarium().addEffect fails in headless
         }
+        assertFalse(item.isRemoved());
     }
 
     @Nested

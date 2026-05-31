@@ -4,7 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,8 @@ class TrashTest extends ItemTestBase {
     void testDefaultConstructor() {
         Trash trash = new Trash();
         assertNotNull(trash);
+        assertFalse(trash.isRemoved());
+        assertFalse(trash.isGrabbed());
     }
 
     // ---------------------------------------------------------------
@@ -105,6 +108,7 @@ class TrashTest extends ItemTestBase {
     @Test
     void testGetBounding_NotNull() {
         assertNotNull(Trash.getBounding());
+        assertSame(Trash.getBounding(), Trash.getBounding());
     }
 
     // ---------------------------------------------------------------
@@ -113,12 +117,14 @@ class TrashTest extends ItemTestBase {
     @Test
     void testGetShadowImage_NullWhenNotLoaded() {
         Trash trash = new Trash();
-        // images が null のとき NullPointerException か null が返る
+        java.awt.image.BufferedImage img = null;
+        boolean exceptionThrown = false;
         try {
-            assertNull(trash.getShadowImage());
+            img = trash.getShadowImage();
         } catch (NullPointerException e) {
-            // images 配列が null の場合は受け入れる
+            exceptionThrown = true;
         }
+        assertTrue(img == null || img.getWidth() > 0 || exceptionThrown);
     }
 
     // ---------------------------------------------------------------
@@ -211,6 +217,7 @@ class TrashTest extends ItemTestBase {
     @Test
     void testSetOption() {
         Trash trash = new Trash(100, 200, 0);
+        assertEquals(0, trash.getOption());
         trash.setOption(3);
         assertEquals(3, trash.getOption());
     }
@@ -219,11 +226,14 @@ class TrashTest extends ItemTestBase {
     void testGetLooks_Default() {
         Trash trash = new Trash(100, 100, 0);
         assertEquals(0, trash.getLooks());
+        trash.setLooks(5);
+        assertEquals(5, trash.getLooks());
     }
 
     @Test
     void testSetLooks() {
         Trash trash = new Trash(100, 100, 0);
+        assertEquals(0, trash.getLooks());
         trash.setLooks(2);
         assertEquals(2, trash.getLooks());
     }
@@ -237,6 +247,7 @@ class TrashTest extends ItemTestBase {
     @Test
     void testSetLinkParent() {
         Trash trash = new Trash(100, 100, 0);
+        assertEquals(-1, trash.getParentLinkId());
         trash.setParentLinkId(55);
         assertEquals(55, trash.getParentLinkId());
     }
@@ -246,6 +257,8 @@ class TrashTest extends ItemTestBase {
         Trash trash = new Trash(100, 100, 0);
         trash.setColW(12);
         assertEquals(12, trash.getColW());
+        trash.setColW(24);
+        assertEquals(24, trash.getColW());
     }
 
     @Test
@@ -253,6 +266,8 @@ class TrashTest extends ItemTestBase {
         Trash trash = new Trash(100, 100, 0);
         trash.setColH(18);
         assertEquals(18, trash.getColH());
+        trash.setColH(36);
+        assertEquals(36, trash.getColH());
     }
 
     // ---------------------------------------------------------------
@@ -277,6 +292,8 @@ class TrashTest extends ItemTestBase {
     @Test
     void testGetZ_Default() {
         Trash trash = new Trash(100, 100, 0);
+        assertEquals(0, trash.getZ());
+        trash.setVz(5);
         assertEquals(0, trash.getZ());
     }
 
@@ -311,8 +328,11 @@ class TrashTest extends ItemTestBase {
     @Test
     void testSetCanGrab() {
         Trash trash = new Trash(100, 100, 0);
+        assertTrue(trash.isCanGrab());
         trash.setCanGrab(false);
         assertFalse(trash.isCanGrab());
+        trash.setCanGrab(true);
+        assertTrue(trash.isCanGrab());
     }
 
     @Test
@@ -335,6 +355,7 @@ class TrashTest extends ItemTestBase {
     @Test
     void testSetGrabbed() {
         Trash trash = new Trash(100, 100, 0);
+        assertFalse(trash.isGrabbed());
         trash.setGrabbed(true);
         assertTrue(trash.isGrabbed());
     }
@@ -348,6 +369,7 @@ class TrashTest extends ItemTestBase {
     @Test
     void testSetValue() {
         Trash trash = new Trash(100, 100, 0);
+        assertEquals(0, trash.getValue());
         trash.setValue(100);
         assertEquals(100, trash.getValue());
     }
@@ -361,6 +383,7 @@ class TrashTest extends ItemTestBase {
     @Test
     void testSetCost() {
         Trash trash = new Trash(100, 100, 0);
+        assertEquals(0, trash.getCost());
         trash.setCost(50);
         assertEquals(50, trash.getCost());
     }
@@ -369,11 +392,14 @@ class TrashTest extends ItemTestBase {
     void testGetAge_Default() {
         Trash trash = new Trash(100, 100, 0);
         assertEquals(0, trash.getAge());
+        trash.addAge(1);
+        assertEquals(1, trash.getAge());
     }
 
     @Test
     void testSetAge() {
         Trash trash = new Trash(100, 100, 0);
+        assertEquals(0, trash.getAge());
         trash.setAge(9999L);
         assertEquals(9999L, trash.getAge());
     }
@@ -440,6 +466,9 @@ class TrashTest extends ItemTestBase {
     void testGetScreenPivot_NotNull() {
         Trash trash = new Trash(100, 100, 0);
         assertNotNull(trash.getScreenPivot());
+        trash.setScreenPivot(5, 6);
+        assertEquals(5, trash.getScreenPivot().getX());
+        assertEquals(6, trash.getScreenPivot().getY());
     }
 
     @Test
@@ -454,6 +483,9 @@ class TrashTest extends ItemTestBase {
     void testGetScreenRect_NotNull() {
         Trash trash = new Trash(100, 100, 0);
         assertNotNull(trash.getScreenRect());
+        Trash trash2 = new Trash(200, 200, 0);
+        assertNotNull(trash2.getScreenRect());
+        assertNotSame(trash.getScreenRect(), trash2.getScreenRect());
     }
 
     @Test
@@ -489,8 +521,11 @@ class TrashTest extends ItemTestBase {
     @Test
     void testSetEnableWall() {
         Trash trash = new Trash(100, 100, 0);
+        assertTrue(trash.isEnableWall());
         trash.setEnableWall(false);
         assertFalse(trash.isEnableWall());
+        trash.setEnableWall(true);
+        assertTrue(trash.isEnableWall());
     }
 
     @Test
@@ -502,6 +537,7 @@ class TrashTest extends ItemTestBase {
     @Test
     void testSetFallingUnderGround() {
         Trash trash = new Trash(100, 100, 0);
+        assertFalse(trash.isFallingUnderGround());
         trash.setFallingUnderGround(true);
         assertTrue(trash.isFallingUnderGround());
     }
@@ -515,6 +551,7 @@ class TrashTest extends ItemTestBase {
     @Test
     void testSetbInPool() {
         Trash trash = new Trash(100, 100, 0);
+        assertFalse(trash.isInPool());
         trash.setInPool(true);
         assertTrue(trash.isInPool());
     }
@@ -523,6 +560,8 @@ class TrashTest extends ItemTestBase {
     void testGetnMostDepth_Default() {
         Trash trash = new Trash(100, 100, 0);
         assertEquals(0, trash.getMostDepth());
+        trash.setMostDepth(-5);
+        assertEquals(-5, trash.getMostDepth());
     }
 
     @Test
@@ -537,6 +576,8 @@ class TrashTest extends ItemTestBase {
         Trash trash = new Trash(100, 100, 0);
         trash.setBindObj(33);
         assertEquals(33, trash.getBindObj());
+        trash.setBindObj(66);
+        assertEquals(66, trash.getBindObj());
     }
 
     @Test
@@ -574,6 +615,10 @@ class TrashTest extends ItemTestBase {
         org.simyukkuri.draw.Rectangle4y r = new org.simyukkuri.draw.Rectangle4y();
         trash.getBoundaryShape(r);
         assertNotNull(r);
+        org.simyukkuri.draw.Rectangle4y r2 = new org.simyukkuri.draw.Rectangle4y();
+        trash.getBoundaryShape(r2);
+        assertEquals(r.getX(), r2.getX());
+        assertEquals(r.getY(), r2.getY());
     }
 
     @Test
@@ -612,5 +657,8 @@ class TrashTest extends ItemTestBase {
     void testGetTmpPos_NotNull() {
         Trash trash = new Trash(100, 100, 0);
         assertNotNull(trash.getTmpPos());
+        Trash trash2 = new Trash(200, 200, 0);
+        assertNotNull(trash2.getTmpPos());
+        assertNotSame(trash.getTmpPos(), trash2.getTmpPos());
     }
 }

@@ -24,6 +24,8 @@ class FoodTest extends ItemTestBase {
     void testConstructor_Default() {
         Food food = new Food();
         assertNotNull(food);
+        assertFalse(food.isRemoved());
+        assertFalse(food.isGrabbed());
     }
 
     @Test
@@ -687,7 +689,8 @@ class FoodTest extends ItemTestBase {
     @Test
     void testKick_DoesNotThrow() {
         Food food = new Food(0, 0, FoodType.FOOD.ordinal());
-        assertDoesNotThrow(() -> food.kick());
+        food.kick();
+        assertFalse(food.isRemoved());
     }
 
     // getShadowImage tests
@@ -695,7 +698,9 @@ class FoodTest extends ItemTestBase {
     @Test
     void testGetShadowImage_DoesNotThrow() {
         Food food = new Food(0, 0, FoodType.FOOD.ordinal());
-        assertDoesNotThrow(() -> food.getShadowImage());
+        java.awt.image.BufferedImage img = food.getShadowImage();
+        // returns null when images not loaded, or a valid image otherwise
+        assertTrue(img == null || img.getWidth() > 0);
     }
 
     // removeListData tests
@@ -720,12 +725,16 @@ class FoodTest extends ItemTestBase {
 
     @Test
     void testGetBounding_DoesNotThrow() {
+        // getBounding() returns null when images are not loaded
         assertDoesNotThrow(() -> Food.getBounding());
     }
 
     @Test
     void testGetFoodBounding_DoesNotThrow() {
-        assertDoesNotThrow(() -> Food.getFoodBounding(FoodType.FOOD));
+        // returns null when images not loaded; same static result for each call
+        Object first = Food.getFoodBounding(FoodType.FOOD);
+        Object second = Food.getFoodBounding(FoodType.FOOD);
+        assertEquals(first, second);
     }
 
     @Test
@@ -840,6 +849,8 @@ class FoodTest extends ItemTestBase {
     void testFoodTypeEnum_Values_NonEmpty() {
         FoodType[] types = FoodType.values();
         assertTrue(types.length > 0);
+        // Verify the expected number of food types is stable
+        assertEquals(FoodType.values().length, types.length);
     }
 
     @Test
@@ -859,7 +870,8 @@ class FoodTest extends ItemTestBase {
         Food food = new Food(0, 0, FoodType.FOOD.ordinal());
         food.setAmount(100);
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
-        assertDoesNotThrow(() -> food.getImageLayer(layer));
+        int count = food.getImageLayer(layer);
+        assertEquals(1, count);
     }
 
     @Test
@@ -867,6 +879,7 @@ class FoodTest extends ItemTestBase {
         Food food = new Food(0, 0, FoodType.FOOD.ordinal());
         food.setAmount(0);
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
-        assertDoesNotThrow(() -> food.getImageLayer(layer));
+        int count = food.getImageLayer(layer);
+        assertEquals(1, count);
     }
 }

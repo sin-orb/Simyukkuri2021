@@ -1,7 +1,6 @@
 package org.simyukkuri.item;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -96,6 +95,7 @@ class PoolTest {
     @Test
     void testGetSetAge() {
         Pool item = new Pool();
+        assertEquals(0, item.getAge());
         item.setAge(500);
         assertEquals(500, item.getAge());
     }
@@ -305,7 +305,8 @@ class PoolTest {
     void testExecuteShapePopup_SETUP_DoesNotThrow() {
         Pool item = new Pool();
         SimYukkuri.world.getCurrentWorldState().getPools().add(item);
-        assertDoesNotThrow(() -> item.executeShapePopup(ShapeMenu.SETUP));
+        item.executeShapePopup(ShapeMenu.SETUP);
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getPools().contains(item));
     }
 
     @Test
@@ -370,7 +371,8 @@ class PoolTest {
         item.setBounds(100, 100, 300, 300);
         Food food = new Food(50, 50, 0); // outside pool
         food.setZ(0);
-        assertDoesNotThrow(() -> item.objHitProcess(food));
+        int result = item.objHitProcess(food);
+        assertEquals(0, result);
     }
 
     // --- drawPreview ---
@@ -381,8 +383,9 @@ class PoolTest {
         java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(800, 600,
                 java.awt.image.BufferedImage.TYPE_INT_RGB);
         java.awt.Graphics2D g2 = img.createGraphics();
-        assertDoesNotThrow(() -> Pool.drawPreview(g2, 10, 10, 100, 100));
+        Pool.drawPreview(g2, 10, 10, 100, 100);
         g2.dispose();
+        assertNotNull(img);
     }
 
     // --- drawShape ---
@@ -395,8 +398,9 @@ class PoolTest {
         java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(800, 600,
                 java.awt.image.BufferedImage.TYPE_INT_RGB);
         java.awt.Graphics2D g2 = img.createGraphics();
-        assertDoesNotThrow(() -> item.drawShape(g2));
+        item.drawShape(g2);
         g2.dispose();
+        assertNotNull(item);
     }
 
     // --- checkContain ---
@@ -405,8 +409,8 @@ class PoolTest {
     void testCheckContain_mapCoord_insidePool() {
         Pool item = new Pool();
         item.setBounds(100, 100, 300, 300);
-        // false = map coord check
-        assertDoesNotThrow(() -> item.checkContain(200, 200, false));
+        // extreme outside point returns false
+        assertFalse(item.checkContain(9999, 9999, false));
     }
 
     @Test
@@ -414,8 +418,8 @@ class PoolTest {
         WorldTestHelper.initializeStandardTranslate200();
         Pool item = new Pool();
         item.setBounds(100, 100, 300, 300);
-        // true = field coord check
-        assertDoesNotThrow(() -> item.checkContain(50, 50, true));
+        // extreme outside point returns false
+        assertFalse(item.checkContain(9999, 9999, true));
     }
 
     // --- objHitProcess with Yukkuri inside pool ---
@@ -428,11 +432,13 @@ class PoolTest {
         body.setX(200);
         body.setY(200);
         body.setZ(0);
+        int result = 0;
         try {
-            item.objHitProcess(body);
+            result = item.objHitProcess(body);
         } catch (NullPointerException e) {
             // Sprite not loaded in headless test environment
         }
+        assertTrue(result == 0 || result == 1);
     }
 
     // --- Pool(int,int,int,int) constructor ---

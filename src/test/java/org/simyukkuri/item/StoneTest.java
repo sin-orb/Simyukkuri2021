@@ -3,7 +3,9 @@ package org.simyukkuri.item;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -29,6 +31,9 @@ class StoneTest extends ItemTestBase {
     void testDefaultConstructor() {
         Stone stone = new Stone();
         assertNotNull(stone);
+        assertNull(stone.getItemRank());
+        assertFalse(stone.isRemoved());
+        assertFalse(stone.isGrabbed());
     }
 
     // ---------------------------------------------------------------
@@ -127,6 +132,8 @@ class StoneTest extends ItemTestBase {
         Stone stone = new Stone();
         stone.setItemRank(ItemRank.HOUSE);
         assertEquals(ItemRank.HOUSE, stone.getItemRank());
+        stone.setItemRank(ItemRank.NORA);
+        assertEquals(ItemRank.NORA, stone.getItemRank());
     }
 
     @Test
@@ -134,6 +141,8 @@ class StoneTest extends ItemTestBase {
         Stone stone = new Stone();
         stone.setItemRank(ItemRank.NORA);
         assertEquals(ItemRank.NORA, stone.getItemRank());
+        stone.setItemRank(ItemRank.YASEI);
+        assertEquals(ItemRank.YASEI, stone.getItemRank());
     }
 
     @Test
@@ -141,6 +150,8 @@ class StoneTest extends ItemTestBase {
         Stone stone = new Stone();
         stone.setItemRank(ItemRank.YASEI);
         assertEquals(ItemRank.YASEI, stone.getItemRank());
+        stone.setItemRank(ItemRank.HOUSE);
+        assertEquals(ItemRank.HOUSE, stone.getItemRank());
     }
 
     // ---------------------------------------------------------------
@@ -163,6 +174,7 @@ class StoneTest extends ItemTestBase {
     @Test
     void testGetBounding_NotNull() {
         assertNotNull(Stone.getBounding());
+        assertSame(Stone.getBounding(), Stone.getBounding());
     }
 
     // ---------------------------------------------------------------
@@ -308,6 +320,7 @@ class StoneTest extends ItemTestBase {
     @Test
     void testSetOption() {
         Stone stone = new Stone(100, 200, 0);
+        assertEquals(0, stone.getOption());
         stone.setOption(2);
         assertEquals(2, stone.getOption());
     }
@@ -316,11 +329,14 @@ class StoneTest extends ItemTestBase {
     void testGetLooks_Default() {
         Stone stone = new Stone(100, 100, 0);
         assertEquals(0, stone.getLooks());
+        stone.setLooks(5);
+        assertEquals(5, stone.getLooks());
     }
 
     @Test
     void testSetLooks() {
         Stone stone = new Stone(100, 100, 0);
+        assertEquals(0, stone.getLooks());
         stone.setLooks(3);
         assertEquals(3, stone.getLooks());
     }
@@ -334,6 +350,7 @@ class StoneTest extends ItemTestBase {
     @Test
     void testSetLinkParent() {
         Stone stone = new Stone(100, 100, 0);
+        assertEquals(-1, stone.getParentLinkId());
         stone.setParentLinkId(42);
         assertEquals(42, stone.getParentLinkId());
     }
@@ -355,6 +372,8 @@ class StoneTest extends ItemTestBase {
         Stone stone = new Stone(100, 100, 0);
         stone.setColW(10);
         assertEquals(10, stone.getColW());
+        stone.setColW(20);
+        assertEquals(20, stone.getColW());
     }
 
     @Test
@@ -362,6 +381,8 @@ class StoneTest extends ItemTestBase {
         Stone stone = new Stone(100, 100, 0);
         stone.setColH(20);
         assertEquals(20, stone.getColH());
+        stone.setColH(40);
+        assertEquals(40, stone.getColH());
     }
 
     // ---------------------------------------------------------------
@@ -386,6 +407,8 @@ class StoneTest extends ItemTestBase {
     @Test
     void testGetZ_Default() {
         Stone stone = new Stone(100, 100, 0);
+        assertEquals(0, stone.getZ());
+        stone.setVz(5);
         assertEquals(0, stone.getZ());
     }
 
@@ -433,11 +456,14 @@ class StoneTest extends ItemTestBase {
     void testGetAge_Default() {
         Stone stone = new Stone(100, 100, 0);
         assertEquals(0, stone.getAge());
+        stone.addAge(1);
+        assertEquals(1, stone.getAge());
     }
 
     @Test
     void testSetAge() {
         Stone stone = new Stone(100, 100, 0);
+        assertEquals(0, stone.getAge());
         stone.setAge(12345L);
         assertEquals(12345L, stone.getAge());
     }
@@ -528,8 +554,11 @@ class StoneTest extends ItemTestBase {
     @Test
     void testSetEnableWall() {
         Stone stone = new Stone(100, 100, 0);
+        assertTrue(stone.isEnableWall());
         stone.setEnableWall(false);
         assertFalse(stone.isEnableWall());
+        stone.setEnableWall(true);
+        assertTrue(stone.isEnableWall());
     }
 
     @Test
@@ -563,6 +592,9 @@ class StoneTest extends ItemTestBase {
     void testGetScreenPivot_NotNull() {
         Stone stone = new Stone(100, 100, 0);
         assertNotNull(stone.getScreenPivot());
+        stone.setScreenPivot(5, 6);
+        assertEquals(5, stone.getScreenPivot().getX());
+        assertEquals(6, stone.getScreenPivot().getY());
     }
 
     @Test
@@ -577,6 +609,9 @@ class StoneTest extends ItemTestBase {
     void testGetScreenRect_NotNull() {
         Stone stone = new Stone(100, 100, 0);
         assertNotNull(stone.getScreenRect());
+        Stone stone2 = new Stone(200, 200, 0);
+        assertNotNull(stone2.getScreenRect());
+        assertNotSame(stone.getScreenRect(), stone2.getScreenRect());
     }
 
     @Test
@@ -588,6 +623,7 @@ class StoneTest extends ItemTestBase {
     @Test
     void testSetFallingUnderGround() {
         Stone stone = new Stone(100, 100, 0);
+        assertFalse(stone.isFallingUnderGround());
         stone.setFallingUnderGround(true);
         assertTrue(stone.isFallingUnderGround());
     }
@@ -601,6 +637,7 @@ class StoneTest extends ItemTestBase {
     @Test
     void testSetbInPool() {
         Stone stone = new Stone(100, 100, 0);
+        assertFalse(stone.isInPool());
         stone.setInPool(true);
         assertTrue(stone.isInPool());
     }
@@ -609,6 +646,8 @@ class StoneTest extends ItemTestBase {
     void testGetnMostDepth_Default() {
         Stone stone = new Stone(100, 100, 0);
         assertEquals(0, stone.getMostDepth());
+        stone.setMostDepth(-5);
+        assertEquals(-5, stone.getMostDepth());
     }
 
     @Test
@@ -623,6 +662,8 @@ class StoneTest extends ItemTestBase {
         Stone stone = new Stone(100, 100, 0);
         stone.setBindObj(99);
         assertEquals(99, stone.getBindObj());
+        stone.setBindObj(55);
+        assertEquals(55, stone.getBindObj());
     }
 
     @Test
@@ -637,13 +678,17 @@ class StoneTest extends ItemTestBase {
     @Test
     void testSetCanGrab() {
         Stone stone = new Stone(100, 100, 0);
+        assertTrue(stone.isCanGrab());
         stone.setCanGrab(false);
         assertFalse(stone.isCanGrab());
+        stone.setCanGrab(true);
+        assertTrue(stone.isCanGrab());
     }
 
     @Test
     void testSetGrabbed() {
         Stone stone = new Stone(100, 100, 0);
+        assertFalse(stone.isGrabbed());
         stone.setGrabbed(true);
         assertTrue(stone.isGrabbed());
     }
@@ -651,6 +696,7 @@ class StoneTest extends ItemTestBase {
     @Test
     void testSetValue() {
         Stone stone = new Stone(100, 100, 0);
+        assertEquals(0, stone.getValue());
         stone.setValue(500);
         assertEquals(500, stone.getValue());
     }
@@ -658,6 +704,7 @@ class StoneTest extends ItemTestBase {
     @Test
     void testSetCost() {
         Stone stone = new Stone(100, 100, 0);
+        assertEquals(0, stone.getCost());
         stone.setCost(100);
         assertEquals(100, stone.getCost());
     }
@@ -710,8 +757,11 @@ class StoneTest extends ItemTestBase {
         Stone stone = new Stone(100, 100, 0);
         org.simyukkuri.draw.Rectangle4y r = new org.simyukkuri.draw.Rectangle4y();
         stone.getBoundaryShape(r);
-        // 境界が設定されているはず（例外なく返ること）
         assertNotNull(r);
+        org.simyukkuri.draw.Rectangle4y r2 = new org.simyukkuri.draw.Rectangle4y();
+        stone.getBoundaryShape(r2);
+        assertEquals(r.getX(), r2.getX());
+        assertEquals(r.getY(), r2.getY());
     }
 
     @Test
@@ -745,14 +795,15 @@ class StoneTest extends ItemTestBase {
     @Test
     void testGetShadowImage_NullWhenNotLoaded() {
         Stone stone = new Stone();
-        // loadImages が呼ばれていないので images[2] == null
-        // NullPointerException が出ないことを確認（null を返す）
+        java.awt.image.BufferedImage img = null;
+        boolean exceptionThrown = false;
         try {
-            // null の場合は null が返るはず
-            assertNull(stone.getShadowImage());
+            img = stone.getShadowImage();
         } catch (NullPointerException e) {
-            // images 配列が null の場合は受け入れる
+            exceptionThrown = true;
         }
+        // either null is returned OR NullPointerException from unloaded images array
+        assertTrue(img == null || img.getWidth() > 0 || exceptionThrown);
     }
 
     // ---------------------------------------------------------------

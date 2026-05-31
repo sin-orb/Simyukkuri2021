@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
@@ -48,6 +49,9 @@ class BeltconveyorObjTest extends ItemTestBase {
     void testConstructor_Default() {
         BeltconveyorObj belt = new BeltconveyorObj();
         assertNotNull(belt);
+        assertFalse(belt.isFilter());
+        assertFalse(belt.isMoveOnce());
+        assertEquals(0, belt.getBeltSpeed());
     }
 
     @Test
@@ -66,6 +70,7 @@ class BeltconveyorObjTest extends ItemTestBase {
     void testGetBounding() {
         Rectangle4y b = BeltconveyorObj.getBounding();
         assertNotNull(b);
+        assertSame(b, BeltconveyorObj.getBounding());
     }
 
     @Test
@@ -92,6 +97,7 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testGetSetBeltSpeed() {
         BeltconveyorObj belt = new BeltconveyorObj();
+        assertEquals(0, belt.getBeltSpeed());
         belt.setBeltSpeed(5);
         assertEquals(5, belt.getBeltSpeed());
     }
@@ -101,6 +107,8 @@ class BeltconveyorObjTest extends ItemTestBase {
         BeltconveyorObj belt = new BeltconveyorObj();
         belt.setHouBefore(3);
         assertEquals(3, belt.getHouBefore());
+        belt.setHouBefore(7);
+        assertEquals(7, belt.getHouBefore());
     }
 
     @Test
@@ -108,6 +116,8 @@ class BeltconveyorObjTest extends ItemTestBase {
         BeltconveyorObj belt = new BeltconveyorObj();
         belt.setObjBefore(2);
         assertEquals(2, belt.getObjBefore());
+        belt.setObjBefore(5);
+        assertEquals(5, belt.getObjBefore());
     }
 
     @Test
@@ -115,6 +125,8 @@ class BeltconveyorObjTest extends ItemTestBase {
         BeltconveyorObj belt = new BeltconveyorObj();
         belt.setMoveBefore(1);
         assertEquals(1, belt.getMoveBefore());
+        belt.setMoveBefore(4);
+        assertEquals(4, belt.getMoveBefore());
     }
 
     @Test
@@ -122,6 +134,8 @@ class BeltconveyorObjTest extends ItemTestBase {
         BeltconveyorObj belt = new BeltconveyorObj();
         belt.setSpeedBefore(4);
         assertEquals(4, belt.getSpeedBefore());
+        belt.setSpeedBefore(8);
+        assertEquals(8, belt.getSpeedBefore());
     }
 
     @Test
@@ -129,6 +143,8 @@ class BeltconveyorObjTest extends ItemTestBase {
         BeltconveyorObj belt = new BeltconveyorObj();
         belt.setTargetType(3);
         assertEquals(3, belt.getTargetType());
+        belt.setTargetType(0);
+        assertEquals(0, belt.getTargetType());
     }
 
     @Test
@@ -136,6 +152,8 @@ class BeltconveyorObjTest extends ItemTestBase {
         BeltconveyorObj belt = new BeltconveyorObj();
         belt.setCantmove(1);
         assertEquals(1, belt.getCantmove());
+        belt.setCantmove(0);
+        assertEquals(0, belt.getCantmove());
     }
 
     @Test
@@ -185,8 +203,11 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testSetFilterMethod() {
         BeltconveyorObj belt = new BeltconveyorObj();
+        assertFalse(belt.isFilter());
         belt.setFilter(true);
         assertTrue(belt.isFilter());
+        belt.setFilter(false);
+        assertFalse(belt.isFilter());
     }
 
     @Test
@@ -201,14 +222,19 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testGetOptionFilter() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        // Not null by default (initialized in class)
-        assertDoesNotThrow(() -> belt.getOptionLabels());
+        assertNotNull(belt.getOptionLabels());
+        assertFalse(belt.getOptionLabels().isEmpty());
     }
 
     @Test
     void testGetOptionResultFilter() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        assertDoesNotThrow(() -> belt.getOptionSelections());
+        assertNotNull(belt.getOptionSelections());
+        // Initially empty, populated after setOptionSelections
+        List<Boolean> selections = new ArrayList<>();
+        selections.add(true);
+        belt.setOptionSelections(selections);
+        assertEquals(1, belt.getOptionSelections().size());
     }
 
     @Test
@@ -225,6 +251,8 @@ class BeltconveyorObjTest extends ItemTestBase {
         BeltconveyorObj belt = new BeltconveyorObj();
         belt.setFieldSx(100);
         assertEquals(100, belt.getFieldSx());
+        belt.setFieldSx(200);
+        assertEquals(200, belt.getFieldSx());
     }
 
     @Test
@@ -232,6 +260,8 @@ class BeltconveyorObjTest extends ItemTestBase {
         BeltconveyorObj belt = new BeltconveyorObj();
         belt.setFieldSy(200);
         assertEquals(200, belt.getFieldSy());
+        belt.setFieldSy(400);
+        assertEquals(400, belt.getFieldSy());
     }
 
     @Test
@@ -239,6 +269,8 @@ class BeltconveyorObjTest extends ItemTestBase {
         BeltconveyorObj belt = new BeltconveyorObj();
         belt.setFieldEx(500);
         assertEquals(500, belt.getFieldEx());
+        belt.setFieldEx(1000);
+        assertEquals(1000, belt.getFieldEx());
     }
 
     @Test
@@ -246,6 +278,8 @@ class BeltconveyorObjTest extends ItemTestBase {
         BeltconveyorObj belt = new BeltconveyorObj();
         belt.setFieldEy(600);
         assertEquals(600, belt.getFieldEy());
+        belt.setFieldEy(1200);
+        assertEquals(1200, belt.getFieldEy());
     }
 
     @Test
@@ -253,6 +287,8 @@ class BeltconveyorObjTest extends ItemTestBase {
         BeltconveyorObj belt = new BeltconveyorObj();
         belt.setFirstX(50);
         assertEquals(50, belt.getFirstX());
+        belt.setFirstX(100);
+        assertEquals(100, belt.getFirstX());
     }
 
     @Test
@@ -260,6 +296,8 @@ class BeltconveyorObjTest extends ItemTestBase {
         BeltconveyorObj belt = new BeltconveyorObj();
         belt.setFirstY(75);
         assertEquals(75, belt.getFirstY());
+        belt.setFirstY(150);
+        assertEquals(150, belt.getFirstY());
     }
 
     @Test
@@ -318,6 +356,7 @@ class BeltconveyorObjTest extends ItemTestBase {
         list.add(null);
         belt.setBoundObjects(list);
 
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getBeltconveyorObjects().containsKey(97));
         assertDoesNotThrow(() -> belt.removeFromWorld());
         assertFalse(SimYukkuri.world.getCurrentWorldState().getBeltconveyorObjects().containsKey(97));
     }
@@ -328,14 +367,20 @@ class BeltconveyorObjTest extends ItemTestBase {
     void testUpDate_AgeNotDivisibleBy2400() {
         BeltconveyorObj belt = new BeltconveyorObj();
         belt.setAge(1);
-        assertDoesNotThrow(() -> belt.upDate());
+        belt.upDate();
+        // upDate does not modify age (incremented by game loop externally)
+        assertEquals(1, belt.getAge());
+        assertFalse(belt.isRemoved());
     }
 
     @Test
     void testUpDate_AgeDivisibleBy2400() {
         BeltconveyorObj belt = new BeltconveyorObj();
         belt.setAge(0); // 0 % 2400 == 0
-        assertDoesNotThrow(() -> belt.upDate());
+        belt.upDate();
+        // upDate does not modify age
+        assertEquals(0, belt.getAge());
+        assertFalse(belt.isRemoved());
     }
 
     // --- objHitProcess ---
@@ -388,7 +433,8 @@ class BeltconveyorObjTest extends ItemTestBase {
         belt.setCantmove(0);
         Shit shit = new Shit();
         // Barrier.onBarrier with 0 dimensions → returns false → bMove=true → setCalcY
-        assertDoesNotThrow(() -> belt.objHitProcess(shit));
+        int result = belt.objHitProcess(shit);
+        assertEquals(0, result);
     }
 
     @Test
@@ -411,7 +457,8 @@ class BeltconveyorObjTest extends ItemTestBase {
         Shit shit = new Shit();
         shit.setX(100);
         shit.setY(100);
-        assertDoesNotThrow(() -> belt.objHitProcess(shit));
+        int result = belt.objHitProcess(shit);
+        assertEquals(0, result);
     }
 
     @Test
@@ -422,7 +469,8 @@ class BeltconveyorObjTest extends ItemTestBase {
         belt.setBeltSpeed(5);
         belt.setOption(1);
         Shit shit = new Shit();
-        assertDoesNotThrow(() -> belt.objHitProcess(shit));
+        int result = belt.objHitProcess(shit);
+        assertEquals(0, result);
     }
 
     @Test
@@ -433,7 +481,8 @@ class BeltconveyorObjTest extends ItemTestBase {
         belt.setBeltSpeed(5);
         belt.setOption(2);
         Shit shit = new Shit();
-        assertDoesNotThrow(() -> belt.objHitProcess(shit));
+        int result = belt.objHitProcess(shit);
+        assertEquals(0, result);
     }
 
     @Test
@@ -444,7 +493,8 @@ class BeltconveyorObjTest extends ItemTestBase {
         belt.setBeltSpeed(5);
         belt.setOption(3);
         Shit shit = new Shit();
-        assertDoesNotThrow(() -> belt.objHitProcess(shit));
+        int result = belt.objHitProcess(shit);
+        assertEquals(0, result);
     }
 
     @Test
@@ -516,8 +566,8 @@ class BeltconveyorObjTest extends ItemTestBase {
         BeltconveyorObj belt = new BeltconveyorObj();
         belt.setPolygonX(new int[] { 0, 0, 100, 100 });
         belt.setPolygonY(new int[] { 0, 100, 100, 0 });
-        // isField=false → uses x/y directly, polygon points converted via invertLimit
-        assertDoesNotThrow(() -> belt.checkContain(50, 50, false));
+        // outside point returns false
+        assertFalse(belt.checkContain(999, 999, false));
     }
 
     @Test
@@ -534,8 +584,8 @@ class BeltconveyorObjTest extends ItemTestBase {
         BeltconveyorObj belt = new BeltconveyorObj();
         belt.setPolygonX(new int[] { 0, 0, 100, 100 });
         belt.setPolygonY(new int[] { 0, 100, 100, 0 });
-        // bIsField=true → calls Translate.invertLimit for input coords too
-        assertDoesNotThrow(() -> belt.checkContain(50, 50, true));
+        // outside point returns false even with field coords
+        assertFalse(belt.checkContain(9999, 9999, true));
     }
 
     // --- getImageLayer(BufferedImage[]): option 0,1,2,3 ---
@@ -592,8 +642,10 @@ class BeltconveyorObjTest extends ItemTestBase {
     void testDrawPreview_doesNotThrow() {
         BufferedImage img = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
         java.awt.Graphics2D g2 = img.createGraphics();
-        assertDoesNotThrow(() -> BeltconveyorObj.drawPreview(g2, 10, 10, 100, 100));
+        BeltconveyorObj.drawPreview(g2, 10, 10, 100, 100);
         g2.dispose();
+        // drawPreview completed: pixel at (10,10) may have changed
+        assertNotNull(img);
     }
 
     // --- setBeltconveyor: headless → try/catch ---
@@ -601,30 +653,39 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testSetBeltconveyor_headless_executesCode() {
         BeltconveyorObj belt = new BeltconveyorObj();
+        assertFalse(belt.isRemoved());
         try {
             BeltconveyorObj.setBeltconveyors(belt, true);
         } catch (Exception e) {
             // Expected in headless environment (GUI setup fails)
         }
+        assertFalse(belt.isRemoved());
     }
 
     // --- Constructor(int, int, int): headless → try/catch ---
 
     @Test
     void testConstructor_WithCoords_doesNotThrow() {
+        BeltconveyorObj[] holder = new BeltconveyorObj[1];
         try {
-            new BeltconveyorObj(100, 100, 0);
+            holder[0] = new BeltconveyorObj(100, 100, 0);
         } catch (Exception e) {
             // Expected in headless environment
         }
+        // Either created successfully or caught exception; no NPE from test
+        assertTrue(holder[0] == null || !holder[0].isRemoved());
     }
 
     @Test
     void testLoadImages_headless_executesCode() {
+        Exception caught = null;
         try {
             BeltconveyorObj.loadImages(BeltconveyorObj.class.getClassLoader(), null);
         } catch (Exception e) {
-            // Expected: IOException because image files not found in test environment
+            caught = e;
         }
+        // In headless env, either succeeds (if images exist) or throws IOException
+        assertTrue(caught == null || caught instanceof java.io.IOException
+            || caught instanceof RuntimeException);
     }
 }

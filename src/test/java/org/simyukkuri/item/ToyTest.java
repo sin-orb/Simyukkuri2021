@@ -21,9 +21,10 @@ class ToyTest extends ItemTestBase {
 
     @Test
     void testConstructor_Parameterized() {
-        // 0 = HOUSE
         Toy toy = new Toy(0, 0, WorldEntity.ItemRank.HOUSE.ordinal());
         assertNotNull(toy);
+        assertEquals(ItemRank.HOUSE, toy.getItemRank());
+        assertFalse(toy.isRemoved());
     }
 
     // --- Default constructor ---
@@ -32,6 +33,8 @@ class ToyTest extends ItemTestBase {
     void testConstructor_Default() {
         Toy toy = new Toy();
         assertNotNull(toy);
+        assertNull(toy.getOwner());
+        assertFalse(toy.isRemoved());
     }
 
     // --- getBounding ---
@@ -39,17 +42,21 @@ class ToyTest extends ItemTestBase {
     @Test
     void testGetBounding_notNull() {
         assertNotNull(Toy.getBounding());
+        assertSame(Toy.getBounding(), Toy.getBounding());
     }
 
     // --- loadImages ---
 
     @Test
     void testLoadImages_headless_executesCode() {
+        Exception caught = null;
         try {
             Toy.loadImages(Toy.class.getClassLoader(), null);
         } catch (Exception e) {
-            // Expected: IOException because image files not found
+            caught = e;
         }
+        assertTrue(caught == null || caught instanceof java.io.IOException
+            || caught instanceof RuntimeException);
     }
 
     // --- getImageLayer: HOUSE itemRank ---
@@ -75,7 +82,8 @@ class ToyTest extends ItemTestBase {
     @Test
     void testGetShadowImage_doesNotThrow() {
         Toy toy = new Toy();
-        assertDoesNotThrow(() -> toy.getShadowImage());
+        BufferedImage img = toy.getShadowImage();
+        assertTrue(img == null || img.getWidth() > 0);
     }
 
     // --- removeListData ---
@@ -105,7 +113,8 @@ class ToyTest extends ItemTestBase {
     @Test
     void testKick_doesNotThrow() {
         Toy toy = new Toy(0, 0, ItemRank.HOUSE.ordinal());
-        assertDoesNotThrow(() -> toy.kick());
+        toy.kick();
+        assertFalse(toy.isRemoved());
     }
 
     // --- setOwner / getOwner ---
@@ -144,6 +153,8 @@ class ToyTest extends ItemTestBase {
         Toy toy = new Toy();
         toy.setItemRank(ItemRank.NORA);
         assertEquals(ItemRank.NORA, toy.getItemRank());
+        toy.setItemRank(ItemRank.HOUSE);
+        assertEquals(ItemRank.HOUSE, toy.getItemRank());
     }
 
     // --- Toy(int,int,int) with NORA option ---

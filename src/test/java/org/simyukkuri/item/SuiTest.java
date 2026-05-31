@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,8 @@ class SuiTest extends ItemTestBase {
     void testConstructor_WithParams() {
         Sui item = new Sui(50, 60, 0);
         assertNotNull(item);
+        assertEquals(50, item.getX());
+        assertEquals(60, item.getY());
     }
 
     // --- rideOn ---
@@ -142,7 +145,8 @@ class SuiTest extends ItemTestBase {
     @Test
     void testRideOff_NullBody_doesNotThrow() {
         Sui sui = new Sui();
-        assertDoesNotThrow(() -> sui.rideOff(null));
+        sui.rideOff(null);
+        assertEquals(0, sui.getBoundBodyCount());
     }
 
     @Test
@@ -177,6 +181,7 @@ class SuiTest extends ItemTestBase {
     @Test
     void testGetSetCurrentBindBodyNum() {
         Sui sui = new Sui();
+        assertEquals(0, sui.getBoundBodyCount());
         sui.setBoundBodyCount(2);
         assertEquals(2, sui.getBoundBodyCount());
     }
@@ -186,7 +191,7 @@ class SuiTest extends ItemTestBase {
         Sui sui = new Sui();
         Yukkuri[] bodies = new Yukkuri[3];
         sui.setBoundYukkuri(bodies);
-        assertNotNull(sui.getBoundYukkuri());
+        assertSame(bodies, sui.getBoundYukkuri());
     }
 
     @Test
@@ -194,6 +199,8 @@ class SuiTest extends ItemTestBase {
         Sui sui = new Sui();
         sui.setDirectionIndex(3);
         assertEquals(3, sui.getDirectionIndex());
+        sui.setDirectionIndex(0);
+        assertEquals(0, sui.getDirectionIndex());
     }
 
     @Test
@@ -201,6 +208,8 @@ class SuiTest extends ItemTestBase {
         Sui sui = new Sui();
         sui.setConditionIndex(1);
         assertEquals(1, sui.getConditionIndex());
+        sui.setConditionIndex(0);
+        assertEquals(0, sui.getConditionIndex());
     }
 
     // --- enableHitCheck / getHitCheckObjType ---
@@ -221,7 +230,8 @@ class SuiTest extends ItemTestBase {
 
     @Test
     void testGetBounding_doesNotThrow() {
-        assertDoesNotThrow(() -> Sui.getBounding());
+        assertNotNull(Sui.getBounding());
+        assertSame(Sui.getBounding(), Sui.getBounding());
     }
 
     // --- removeListData ---
@@ -230,7 +240,9 @@ class SuiTest extends ItemTestBase {
     void testRemoveListData_doesNotThrow() {
         Sui sui = new Sui();
         SimYukkuri.world.getCurrentWorldState().getSuis().put(sui.getObjId(), sui);
-        assertDoesNotThrow(() -> sui.removeFromWorld());
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getSuis().containsKey(sui.getObjId()));
+        sui.removeFromWorld();
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getSuis().containsKey(sui.getObjId()));
     }
 
     // --- ChangeY ---
@@ -238,8 +250,9 @@ class SuiTest extends ItemTestBase {
     @Test
     void testChangeY_doesNotThrow() {
         Sui sui = new Sui();
-        assertDoesNotThrow(() -> sui.shiftVerticalPosition(true));
-        assertDoesNotThrow(() -> sui.shiftVerticalPosition(false));
+        sui.shiftVerticalPosition(true);
+        sui.shiftVerticalPosition(false);
+        assertFalse(sui.isRemoved());
     }
 
     // --- upDate ---
@@ -247,7 +260,8 @@ class SuiTest extends ItemTestBase {
     @Test
     void testUpDate_doesNotThrow() {
         Sui sui = new Sui();
-        assertDoesNotThrow(() -> sui.upDate());
+        sui.upDate();
+        assertFalse(sui.isRemoved());
     }
 
     // --- clockTick ---
@@ -255,7 +269,8 @@ class SuiTest extends ItemTestBase {
     @Test
     void testClockTick_doesNotThrow() {
         Sui sui = new Sui();
-        assertDoesNotThrow(() -> sui.clockTick());
+        sui.clockTick();
+        assertFalse(sui.isRemoved());
     }
 
     // --- getBindobj / setBindobj ---
@@ -276,6 +291,8 @@ class SuiTest extends ItemTestBase {
         Sui sui = new Sui();
         sui.setDestX(200);
         assertEquals(200, sui.getDestX());
+        sui.setDestX(400);
+        assertEquals(400, sui.getDestX());
     }
 
     @Test
@@ -283,6 +300,8 @@ class SuiTest extends ItemTestBase {
         Sui sui = new Sui();
         sui.setDestY(300);
         assertEquals(300, sui.getDestY());
+        sui.setDestY(600);
+        assertEquals(600, sui.getDestY());
     }
 
     // --- getVecX / setVecX / getVecY / setVecY ---
@@ -292,6 +311,8 @@ class SuiTest extends ItemTestBase {
         Sui sui = new Sui();
         sui.setVecX(5);
         assertEquals(5, sui.getVecX());
+        sui.setVecX(-5);
+        assertEquals(-5, sui.getVecX());
     }
 
     @Test
@@ -299,6 +320,8 @@ class SuiTest extends ItemTestBase {
         Sui sui = new Sui();
         sui.setVecY(-3);
         assertEquals(-3, sui.getVecY());
+        sui.setVecY(3);
+        assertEquals(3, sui.getVecY());
     }
 
     // --- getSpeed / setSpeed ---
@@ -308,6 +331,8 @@ class SuiTest extends ItemTestBase {
         Sui sui = new Sui();
         sui.setSpeed(800);
         assertEquals(800, sui.getSpeed());
+        sui.setSpeed(1600);
+        assertEquals(1600, sui.getSpeed());
     }
 
     // --- objHitProcess (current_condition != out_of_control → returns 0) ---
@@ -326,7 +351,8 @@ class SuiTest extends ItemTestBase {
     void testGetImageLayer_doesNotThrow() {
         Sui sui = new Sui();
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
-        assertDoesNotThrow(() -> sui.getImageLayer(layer));
+        int count = sui.getImageLayer(layer);
+        assertTrue(count >= 0);
     }
 
     // --- getShadowImage (images are null in headless) ---
@@ -334,7 +360,8 @@ class SuiTest extends ItemTestBase {
     @Test
     void testGetShadowImage_doesNotThrow() {
         Sui sui = new Sui();
-        assertDoesNotThrow(() -> sui.getShadowImage());
+        java.awt.image.BufferedImage img = sui.getShadowImage();
+        assertTrue(img == null || img.getWidth() > 0);
     }
 
     // --- clockTick with owner riding ---
@@ -344,7 +371,8 @@ class SuiTest extends ItemTestBase {
         Sui sui = new Sui(100, 100, 0);
         Yukkuri b = createBody();
         sui.rideOn(b);
-        assertDoesNotThrow(() -> sui.clockTick());
+        sui.clockTick();
+        assertFalse(sui.isRemoved());
     }
 
     // --- upDate with body grabbed ---

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Nested;
@@ -64,9 +65,9 @@ class OrangePoolTest extends ItemTestBase {
 
     @Test
     void testGetBounding() {
-        // boundary は static final フィールドで new Rectangle4y() 済み
         Rectangle4y bounding = OrangePool.getBounding();
         assertNotNull(bounding);
+        assertSame(bounding, OrangePool.getBounding());
     }
 
     // --- isRescue default ---
@@ -82,8 +83,11 @@ class OrangePoolTest extends ItemTestBase {
     @Test
     void testSetRescue() {
         OrangePool item = new OrangePool();
+        assertFalse(item.isRescue());
         item.setRescue(true);
         assertTrue(item.isRescue());
+        item.setRescue(false);
+        assertFalse(item.isRescue());
     }
 
     // --- getItemRank / setItemRank ---
@@ -91,6 +95,8 @@ class OrangePoolTest extends ItemTestBase {
     @Test
     void testGetSetItemRank() {
         OrangePool item = new OrangePool();
+        item.setItemRank(WorldEntity.ItemRank.NORA);
+        assertEquals(WorldEntity.ItemRank.NORA, item.getItemRank());
         item.setItemRank(WorldEntity.ItemRank.HOUSE);
         assertEquals(WorldEntity.ItemRank.HOUSE, item.getItemRank());
     }
@@ -174,7 +180,8 @@ class OrangePoolTest extends ItemTestBase {
     void testGetImageLayer_doesNotThrow() {
         OrangePool item = new OrangePool();
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> item.getImageLayer(layer));
+        int count = item.getImageLayer(layer);
+        assertEquals(1, count);
     }
 
     @Test

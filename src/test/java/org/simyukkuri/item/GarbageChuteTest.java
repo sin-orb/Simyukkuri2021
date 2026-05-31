@@ -92,6 +92,7 @@ class GarbageChuteTest extends ItemTestBase {
     @Test
     void testGetBounding_notNull() {
         assertNotNull(GarbageChute.getBounding());
+        assertSame(GarbageChute.getBounding(), GarbageChute.getBounding());
     }
 
     // --- getHitCheckObjType ---
@@ -149,7 +150,9 @@ class GarbageChuteTest extends ItemTestBase {
     void testUpDate_emptyList_doesNothing() {
         GarbageChute item = new GarbageChute();
         item.setBoundObjects(new LinkedList<>());
-        assertDoesNotThrow(() -> item.upDate());
+        item.upDate();
+        assertTrue(item.getBoundObjects().isEmpty());
+        assertFalse(item.isRemoved());
     }
 
     // --- upDate: null bindObjList ---
@@ -158,7 +161,9 @@ class GarbageChuteTest extends ItemTestBase {
     void testUpDate_nullList_doesNothing() {
         GarbageChute item = new GarbageChute();
         item.setBoundObjects(null);
-        assertDoesNotThrow(() -> item.upDate());
+        item.upDate();
+        assertNull(item.getBoundObjects());
+        assertFalse(item.isRemoved());
     }
 
     // --- upDate: list with a removed object ---
@@ -236,7 +241,8 @@ class GarbageChuteTest extends ItemTestBase {
     void testGetImageLayer_houseRank_enabled_doesNotThrow() {
         GarbageChute item = new GarbageChute(100, 100, 0);
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
-        assertDoesNotThrow(() -> item.getImageLayer(layer));
+        int count = item.getImageLayer(layer);
+        assertEquals(1, count);
     }
 
     @Test
@@ -244,14 +250,16 @@ class GarbageChuteTest extends ItemTestBase {
         GarbageChute item = new GarbageChute(100, 100, 0);
         item.setEnabled(false);
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
-        assertDoesNotThrow(() -> item.getImageLayer(layer));
+        int count = item.getImageLayer(layer);
+        assertEquals(1, count);
     }
 
     @Test
     void testGetImageLayer_noraRank_enabled_doesNotThrow() {
         GarbageChute item = new GarbageChute(100, 100, 1);
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
-        assertDoesNotThrow(() -> item.getImageLayer(layer));
+        int count = item.getImageLayer(layer);
+        assertEquals(1, count);
     }
 
     @Nested
