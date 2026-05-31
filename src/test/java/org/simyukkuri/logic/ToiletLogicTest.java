@@ -256,11 +256,6 @@ class ToiletLogicTest {
         assertFalse(ToiletLogic.checkShit(body));
     }
 
-    @Test
-    void testConstructor_doesNotThrow() {
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> new ToiletLogic());
-    }
-
     // --- checkShit: isExciting early return ---
 
     @Test
@@ -318,41 +313,6 @@ class ToiletLogicTest {
         assertTrue(ToiletLogic.checkShit(body));
     }
 
-    // --- checkShit: FOOL child ShitIntimidation (line 193) ---
-
-    @Test
-    void testCheckShit_FoolChild_NearShit_ShitIntimidation() {
-        // Use anonymous subclass with getCollisionX() override to avoid sprite NPE
-        Yukkuri child =
-                new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
-                    @Override
-                    public int getCollisionX() {
-                        return 10;
-                    }
-
-                    @Override
-                    public org.simyukkuri.enums.AgeState getAgeState() {
-                        return org.simyukkuri.enums.AgeState.CHILD;
-                    }
-                };
-        child.setX(100);
-        child.setY(100);
-        child.setAge(0); // 0 % 15 == 0
-        child.setIntelligence(org.simyukkuri.enums.Intelligence.FOOL);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getObjId(), child);
-
-        Shit shit = new Shit();
-        shit.setX(101);
-        shit.setY(101); // very close → nDistance < stepDist*2
-        SimYukkuri.world.getCurrentWorldState().getShit().put(shit.getObjId(), shit);
-
-        // nextBoolean()=true → triggers ShitIntimidation branch
-        org.simyukkuri.ConstState rng = new org.simyukkuri.ConstState(0);
-        rng.setFixedBoolean(true);
-        SimYukkuri.RND = rng;
-        assertDoesNotThrow(() -> ToiletLogic.checkShit(child));
-    }
-
     // --- checkToilet: target.getZ() != 0 → clearActions, return false ---
 
     @Test
@@ -376,41 +336,6 @@ class ToiletLogicTest {
         assertFalse(ToiletLogic.checkToilet(body));
     }
 
-    // --- checkToilet: UnunSlave arrived, hasShit → drops ---
-
-    @Test
-    void testCheckToilet_UnunSlave_HasShit_Arrived_Drops() {
-        body.setPublicRank(PublicRank.UNUN_SLAVE);
-        Shit shit = new Shit();
-        SimYukkuri.world.getCurrentWorldState().getTakenOutShits().put(shit.getObjId(), shit);
-        body.getCarryItems().put(org.simyukkuri.enums.TakeoutItemType.SHIT, shit.getObjId());
-
-        Toilet toilet = new Toilet();
-        toilet.setX(100);
-        toilet.setY(100); // same position as body → arrived
-        SimYukkuri.world.getCurrentWorldState().getToilets().put(toilet.getObjId(), toilet);
-        body.setMoveTargetId(toilet.getObjId());
-        // !wantToShit (shit=0) + UnunSlave + bHasShit → drops shit, returns true
-        assertDoesNotThrow(() -> ToiletLogic.checkToilet(body));
-    }
-
-    // --- checkToilet: non-slave arrived with hasShit → drops ---
-
-    @Test
-    void testCheckToilet_NonSlave_HasShit_Arrived_Drops() {
-        Shit shit = new Shit();
-        SimYukkuri.world.getCurrentWorldState().getTakenOutShits().put(shit.getObjId(), shit);
-        body.getCarryItems().put(org.simyukkuri.enums.TakeoutItemType.SHIT, shit.getObjId());
-
-        Toilet toilet = new Toilet();
-        toilet.setX(100);
-        toilet.setY(100); // same position as body → arrived
-        SimYukkuri.world.getCurrentWorldState().getToilets().put(toilet.getObjId(), toilet);
-        body.setMoveTargetId(toilet.getObjId());
-        // bHasShit=true, !wantToShit, non-slave → drops shit, returns true
-        assertDoesNotThrow(() -> ToiletLogic.checkToilet(body));
-    }
-
     // --- checkToilet: !wantToShit + !hasShit + non-auto toilet at body position
     // ---
 
@@ -423,18 +348,6 @@ class ToiletLogicTest {
         toilet.setY(100);
         SimYukkuri.world.getCurrentWorldState().getToilets().put(toilet.getObjId(), toilet);
         assertFalse(ToiletLogic.checkToilet(body));
-    }
-
-    // --- checkToilet: no toilet, hasShit → drop on spot ---
-
-    @Test
-    void testCheckToilet_NoToilet_HasShit_DropsOnSpot() {
-        // bHasShit=true, no toilet → found=null → drop takeout on spot
-        Shit shit = new Shit();
-        SimYukkuri.world.getCurrentWorldState().getTakenOutShits().put(shit.getObjId(), shit);
-        body.getCarryItems().put(org.simyukkuri.enums.TakeoutItemType.SHIT, shit.getObjId());
-        // No toilet in map, no moveTargetId
-        assertDoesNotThrow(() -> ToiletLogic.checkToilet(body));
     }
 
     // --- checkShit: bHasShit=true (L62) ---
@@ -453,30 +366,6 @@ class ToiletLogicTest {
         body.setAge(0);
         // section C: distance < stepDist*2 → hate reaction → true
         assertTrue(ToiletLogic.checkShit(body));
-    }
-
-    // --- checkShit: toilet with large colW, shit ON toilet → bIsOnToilet=true
-    // (L119-120) → continue (L133) ---
-
-    @Test
-    void testCheckShit_ShitOnLargeToilet_bIsOnToilet_continue_returnsTrue() {
-        // Toilet with large colW makes checkHitObj(shit, false)=true
-        Toilet toilet = new Toilet();
-        toilet.setX(100);
-        toilet.setY(100);
-        toilet.setColW(1000);
-        toilet.setColH(1000);
-        SimYukkuri.world.getCurrentWorldState().getToilets().put(toilet.getObjId(), toilet);
-
-        Shit shit = new Shit();
-        shit.setX(100);
-        shit.setY(100); // same position as body/toilet
-        SimYukkuri.world.getCurrentWorldState().getShit().put(shit.getObjId(), shit);
-
-        body.setAge(0);
-        // section B: shit ON toilet → bIsOnToilet=true → L133 continue
-        // section C: same shit, distance=0 < stepDist*2 → hate reaction → true
-        assertDoesNotThrow(() -> ToiletLogic.checkShit(body));
     }
 
     // --- checkShit: toilet with default colW=0, shit NOT on toilet →
@@ -624,29 +513,6 @@ class ToiletLogicTest {
         body.setToSteal(true);
         // !wantToShit (shit=0 default)
         assertFalse(ToiletLogic.checkToilet(body));
-    }
-
-    // --- checkToilet: UnunSlave on slave toilet, bHasShit → drops (L260-262) ---
-
-    @Test
-    void testCheckToilet_UnunSlave_OnSlaveToilet_HasShit_Drops() {
-        body.setPublicRank(PublicRank.UNUN_SLAVE);
-        Shit shit = new Shit();
-        SimYukkuri.world.getCurrentWorldState().getTakenOutShits().put(shit.getObjId(), shit);
-        body.getCarryItems().put(TakeoutItemType.SHIT, shit.getObjId());
-
-        Toilet slaveTiolet = new Toilet();
-        slaveTiolet.setX(100);
-        slaveTiolet.setY(100);
-        slaveTiolet.setColW(1000);
-        slaveTiolet.setColH(1000);
-        slaveTiolet.setForSlave(true);
-        SimYukkuri.world
-                .getCurrentWorldState()
-                .getToilets()
-                .put(slaveTiolet.getObjId(), slaveTiolet);
-        // bHasShit=true, UnunSlave on slave toilet → drops shit (L260-262)
-        assertDoesNotThrow(() -> ToiletLogic.checkToilet(body));
     }
 
     // --- checkToilet: UnunSlave on slave toilet, !bHasShit → return false (L266)
@@ -956,106 +822,6 @@ class ToiletLogicTest {
         body.setAge(0);
         // z mismatch → all shits skipped → no hate reaction → returns false
         assertFalse(ToiletLogic.checkShit(body));
-    }
-
-    // --- checkShit: child with non-NONE rank → L103 B false → else (HateShit) ---
-
-    @Test
-    void testCheckShit_ChildNotNoneRank_HateShit_returnsTrue() {
-        Yukkuri childSlave =
-                new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
-                    @Override
-                    public int getCollisionX() {
-                        return 10;
-                    }
-
-                    @Override
-                    public AgeState getAgeState() {
-                        return AgeState.CHILD;
-                    }
-                };
-        childSlave.setX(100);
-        childSlave.setY(100);
-        childSlave.setAge(0);
-        childSlave.setPublicRank(PublicRank.UNUN_SLAVE); // not NONE → L103 B false → else
-        SimYukkuri.world
-                .getCurrentWorldState()
-                .getYukkuriRegistry()
-                .put(childSlave.getObjId(), childSlave);
-        Shit shit = new Shit();
-        shit.setX(101);
-        shit.setY(101);
-        SimYukkuri.world.getCurrentWorldState().getShit().put(shit.getObjId(), shit);
-        assertDoesNotThrow(() -> ToiletLogic.checkShit(childSlave));
-    }
-
-    // --- checkShit: child NONE rank but not FOOL → L103 C false → else (HateShit)
-    // ---
-
-    @Test
-    void testCheckShit_ChildNoneNotFool_HateShit_returnsTrue() {
-        Yukkuri childNormal =
-                new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
-                    @Override
-                    public int getCollisionX() {
-                        return 10;
-                    }
-
-                    @Override
-                    public AgeState getAgeState() {
-                        return AgeState.CHILD;
-                    }
-                };
-        childNormal.setX(100);
-        childNormal.setY(100);
-        childNormal.setAge(0);
-        childNormal.setIntelligence(
-                org.simyukkuri.enums.Intelligence.AVERAGE); // not FOOL → L103 C false → else
-        SimYukkuri.world
-                .getCurrentWorldState()
-                .getYukkuriRegistry()
-                .put(childNormal.getObjId(), childNormal);
-        Shit shit = new Shit();
-        shit.setX(101);
-        shit.setY(101);
-        SimYukkuri.world.getCurrentWorldState().getShit().put(shit.getObjId(), shit);
-        assertDoesNotThrow(() -> ToiletLogic.checkShit(childNormal));
-    }
-
-    // --- checkShit: child NONE FOOL nextBoolean=false → L103 D false → else
-    // (HateShit) ---
-
-    @Test
-    void testCheckShit_ChildFoolNextBoolFalse_HateShit_returnsTrue() {
-        Yukkuri childFool =
-                new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
-                    @Override
-                    public int getCollisionX() {
-                        return 10;
-                    }
-
-                    @Override
-                    public AgeState getAgeState() {
-                        return AgeState.CHILD;
-                    }
-                };
-        childFool.setX(100);
-        childFool.setY(100);
-        childFool.setAge(0);
-        childFool.setIntelligence(org.simyukkuri.enums.Intelligence.FOOL);
-        SimYukkuri.world
-                .getCurrentWorldState()
-                .getYukkuriRegistry()
-                .put(childFool.getObjId(), childFool);
-        Shit shit = new Shit();
-        shit.setX(101);
-        shit.setY(101);
-        SimYukkuri.world.getCurrentWorldState().getShit().put(shit.getObjId(), shit);
-        // nextBoolean=false → L103 D false → else HateShit (not ShitIntimidation)
-        org.simyukkuri.ConstState rng = new org.simyukkuri.ConstState(0);
-        rng.setFixedBoolean(false);
-        SimYukkuri.RND = rng;
-        assertDoesNotThrow(() -> ToiletLogic.checkShit(childFool));
     }
 
     // --- checkToilet: isToSukkiri → return false (L125) ---

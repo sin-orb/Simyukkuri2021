@@ -1,7 +1,6 @@
 package org.simyukkuri.logic;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -178,32 +177,6 @@ public class TrashLogicTest {
 
         // checkTrashOkazari 自体は okazari を変更しない
         assertFalse(body.hasOkazari(), "checkTrashOkazari は okazari を直接変更しない");
-    }
-
-    // ---------------------------------------------------------------
-    // メソッドシグネチャの確認
-    // ---------------------------------------------------------------
-    @Test
-    void testCheckTrashOkazariMethodExists() {
-        try {
-            TrashLogic.class.getDeclaredMethod("checkTrashOkazari", Yukkuri.class);
-            assertTrue(true, "checkTrashOkazari メソッドが存在する");
-        } catch (NoSuchMethodException e) {
-            fail("checkTrashOkazari メソッドが存在しない");
-        }
-    }
-
-    @Test
-    void testSearchTrashObjMethodExists() {
-        try {
-            java.lang.reflect.Method m = TrashLogic.class.getDeclaredMethod("searchTrashObj", Yukkuri.class);
-            assertNotNull(m);
-            // private メソッドであることを確認
-            assertTrue(java.lang.reflect.Modifier.isPrivate(m.getModifiers()),
-                    "searchTrashObj は private であるべき");
-        } catch (NoSuchMethodException e) {
-            fail("searchTrashObj メソッドが存在しない");
-        }
     }
 
     // ---------------------------------------------------------------

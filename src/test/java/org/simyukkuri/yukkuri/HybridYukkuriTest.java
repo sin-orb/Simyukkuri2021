@@ -107,12 +107,6 @@ public class HybridYukkuriTest {
     }
 
     @Test
-    public void testIsImageLoaded_ReturnsTrue() {
-        HybridYukkuri hybrid = new HybridYukkuri();
-        assertTrue(hybrid.isImageLoaded());
-    }
-
-    @Test
     public void testGetMyName_NullAnMyName_FallsBackToNameJ() {
         HybridYukkuri hybrid = new HybridYukkuri();
         hybrid.setNameJ("FallbackName");

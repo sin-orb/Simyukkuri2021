@@ -31,40 +31,6 @@ public class EventLogicTest {
         }
     }
 
-    // ========== World TickResult Registration Tests ==========
-
-    @Test
-    public void testAddWorldEventShortcut() {
-        try {
-            Reimu speaker = new Reimu();
-            MockEventPacket event = new MockEventPacket();
-
-            // Should not crash - uses default HOLDMESSAGE count
-            EventLogic.addWorldEvent(event, speaker, "test message");
-
-            assertTrue(true, "addWorldEvent shortcut should not crash");
-        } catch (NullPointerException e) {
-            // Expected if World not properly initialized
-            assertNotNull(e);
-        }
-    }
-
-    @Test
-    public void testAddWorldEventWithCount() {
-        try {
-            Reimu speaker = new Reimu();
-            MockEventPacket event = new MockEventPacket();
-
-            // Should not crash - uses custom count
-            EventLogic.addWorldEvent(event, speaker, "test message", 100);
-
-            assertTrue(true, "addWorldEvent with count should not crash");
-        } catch (NullPointerException e) {
-            // Expected if World not properly initialized
-            assertNotNull(e);
-        }
-    }
-
     @Test
     public void testAddWorldEventRegistersEventAndSpeakerMessage() {
         Reimu speaker = new Reimu();
@@ -76,21 +42,6 @@ public class EventLogicTest {
         assertSame(event, org.simyukkuri.SimYukkuri.world.getCurrentWorldState().getEvents().get(0));
         assertEquals("world-message", speaker.getMessageBuffer());
         assertEquals(42, speaker.getMessageTicks());
-    }
-
-    @Test
-    public void testAddWorldEventNullMessage() {
-        try {
-            MockEventPacket event = new MockEventPacket();
-
-            // Should not crash with null message body
-            EventLogic.addWorldEvent(event, null, null);
-
-            assertTrue(true, "addWorldEvent with null message should not crash");
-        } catch (NullPointerException e) {
-            // Expected if World not properly initialized
-            assertNotNull(e);
-        }
     }
 
     // ========== Yukkuri TickResult Registration Tests ==========
@@ -145,26 +96,6 @@ public class EventLogicTest {
 
         // TickResult should be added to target's event list
         assertEquals(1, target.getEvents().size(), "TickResult should be added to body");
-    }
-
-    // ========== TickResult Lifecycle Tests (Require World) ==========
-
-    @Test
-    public void testClockWorldEvent() {
-        // Add an expired event then clock it
-        MockEventPacket event = new MockCountDownEvent(); // countDown returns true → removed
-        org.simyukkuri.SimYukkuri.world.getCurrentWorldState().getEvents().add(event);
-        EventLogic.clockWorldEvent();
-        // Should not crash
-        assertTrue(true);
-    }
-
-    @Test
-    public void testEventUpdate_noCurrentEvent() {
-        Reimu yukkuri = new Reimu();
-        // Should not crash with no current event
-        EventLogic.eventUpdate(yukkuri);
-        assertTrue(true);
     }
 
     @Test
@@ -289,13 +220,6 @@ public class EventLogicTest {
         // execute should have been called because distance is small
         assertTrue(event.wasExecuteCalled);
         assertNull(yukkuri.getCurrentEvent());
-    }
-
-    // ========== 追加テスト ==========
-
-    @Test
-    public void testConstructor_doesNotThrow() {
-        assertDoesNotThrow(() -> new EventLogic());
     }
 
     // --- checkYukkuriEvent: countDown でイベント除去 ---

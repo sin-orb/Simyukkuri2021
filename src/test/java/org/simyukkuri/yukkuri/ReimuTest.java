@@ -108,13 +108,6 @@ public class ReimuTest {
     }
 
     @Test
-    public void testReimuJudgeCanTransForGodHand() {
-        Reimu reimu = new Reimu();
-        // Default Reimu should be able to transform (not a real yukkuri)
-        assertTrue(reimu.judgeCanTransForGodHand());
-    }
-
-    @Test
     public void testReimuParameterizedConstructor() {
         Reimu parent1 = new Reimu();
         Reimu parent2 = new Reimu();
@@ -145,34 +138,6 @@ public class ReimuTest {
     }
 
     @Test
-    public void testReimuIsImageLoaded() {
-        Reimu obj = new Reimu();
-        // isImageLoaded() reflects static image loader state, which may be changed by
-        // other tests.
-        assertDoesNotThrow(() -> obj.isImageLoaded());
-    }
-
-    @Test
-    public void testReimuKillTime() {
-        try {
-            // Initialize minimal World for testing
-            org.simyukkuri.util.WorldTestHelper.initializeMinimalWorld();
-            org.simyukkuri.util.WorldTestHelper.setDeterministicRNG(12345L);
-
-            Reimu obj = new Reimu();
-            // killTime() is the main behavior method when yukkuri is idle
-            // Just verify it executes without crashing
-            obj.killTime();
-
-            assertNotNull(obj);
-        } catch (Exception e) {
-            // If World initialization fails, just verify object exists
-            Reimu obj = new Reimu();
-            assertNotNull(obj);
-        }
-    }
-
-    @Test
     public void testReimuHybridTypeWithMarisa() {
         Reimu obj = new Reimu();
         assertEquals(MarisaReimu.type, obj.getHybridType(Marisa.type));
@@ -183,97 +148,6 @@ public class ReimuTest {
         Reimu obj = new Reimu();
         // Test with a type not specifically handled - should return own type
         assertEquals(Reimu.type, obj.getHybridType(org.simyukkuri.enums.YukkuriType.ALICE));
-    }
-
-    @Test
-    public void testReimuJudgeCanTransForGodHandWhenUnbirth() {
-        Reimu obj = new Reimu();
-        // Unbirth yukkuri (default state) - transformation behavior varies by class
-        // Just verify the method executes without crashing
-        obj.judgeCanTransForGodHand();
-        assertNotNull(obj);
-    }
-
-    @Test
-    public void testReimuJudgeCanTransForGodHandWhenAdult() {
-        Reimu parent1 = new Reimu();
-        Reimu parent2 = new Reimu();
-        Reimu obj = new Reimu(100, 100, 0, AgeState.ADULT, parent1, parent2);
-        // Adult yukkuri - test transformation eligibility
-        obj.judgeCanTransForGodHand();
-        // Result varies by class, just verify no crash
-        assertNotNull(obj);
-    }
-
-    @Test
-    public void testReimuJudgeCanTransForGodHandWhenBaby() {
-        Reimu parent1 = new Reimu();
-        Reimu parent2 = new Reimu();
-        Reimu obj = new Reimu(100, 100, 0, AgeState.BABY, parent1, parent2);
-        // Baby yukkuri - test transformation eligibility
-        obj.judgeCanTransForGodHand();
-        // Result varies by class, just verify no crash
-        assertNotNull(obj);
-    }
-
-    @Test
-    public void testReimuKillTimeMultipleBranches() {
-        try {
-            org.simyukkuri.util.WorldTestHelper.initializeMinimalWorld();
-
-            Reimu obj = new Reimu();
-
-            // Test multiple branches by calling killTime with different RNG values
-            // Each value hits a different branch in the if/else chain
-
-            // Branch 1: p <= 6 (values 0-6)
-            SimYukkuri.RND = new org.simyukkuri.SequenceRandom(3);
-            obj.killTime();
-
-            // Branch 2: p <= 14 (values 7-14)
-            SimYukkuri.RND = new org.simyukkuri.SequenceRandom(10);
-            obj.killTime();
-
-            // Branch 3: p <= 21 (values 15-21)
-            SimYukkuri.RND = new org.simyukkuri.SequenceRandom(18);
-            obj.killTime();
-
-            // Branch 4: p <= 28 (values 22-28)
-            SimYukkuri.RND = new org.simyukkuri.SequenceRandom(25);
-            obj.killTime();
-
-            // Branch 5: p > 28 (values 29-49)
-            SimYukkuri.RND = new org.simyukkuri.SequenceRandom(35);
-            obj.killTime();
-
-            assertNotNull(obj);
-        } catch (Exception e) {
-            // If World initialization fails, just verify object exists
-            Reimu obj = new Reimu();
-            assertNotNull(obj);
-        }
-    }
-
-    @Test
-    public void testReimuKillTimeSequence() {
-        try {
-            org.simyukkuri.util.WorldTestHelper.initializeMinimalWorld();
-
-            Reimu obj = new Reimu();
-
-            // Use a sequence to hit multiple branches in succession
-            SimYukkuri.RND = new org.simyukkuri.SequenceRandom(3, 10, 18, 25, 35, 40, 45);
-
-            // Call killTime multiple times to execute different branches
-            for (int i = 0; i < 7; i++) {
-                obj.killTime();
-            }
-
-            assertNotNull(obj);
-        } catch (Exception e) {
-            Reimu obj = new Reimu();
-            assertNotNull(obj);
-        }
     }
 
     // --- getImage: imagePack==null → NPE ---
@@ -524,41 +398,6 @@ public class ReimuTest {
     }
 
     // --- loadImages: executes code path (IOException expected in headless) ---
-
-    @Test
-    public void testLoadImages_headless_executesCode() {
-        try {
-            // Set imageLoaded=true so loadImages exits via early-return path (fires JaCoCo
-            // probe)
-            java.lang.reflect.Field fl = Reimu.class.getDeclaredField("imageLoaded");
-            fl.setAccessible(true);
-            boolean oldVal = fl.getBoolean(null);
-            fl.setBoolean(null, true);
-            Reimu.loadImages(Reimu.class.getClassLoader(), null);
-            fl.setBoolean(null, oldVal);
-        } catch (Exception e) {
-            assertNotNull(e);
-        }
-    }
-
-    @Test
-    public void testLoadIniFile_executesCode() {
-        try {
-            Reimu.loadIniFile(Reimu.class.getClassLoader());
-        } catch (Exception e) {
-            assertNotNull(e);
-        } finally {
-            try {
-                java.lang.reflect.Field fa = Reimu.class.getDeclaredField("AttachOffset");
-                fa.setAccessible(true);
-                if (fa.get(null) == null) {
-                    fa.set(null, new java.util.HashMap<>());
-                }
-            } catch (Exception e) {
-                assertNotNull(e);
-            }
-        }
-    }
 
     // --- getImage / getBodyBaseImage with imagePack set ---
 

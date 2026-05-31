@@ -3104,14 +3104,6 @@ class BodyLogicTest {
                 () -> YukkuriLogic.createActiveChildren(me, false));
     }
 
-    // gatheringYukkuri
-    @Test
-    void testGatheringYukkuri() {
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(me.getUniqueId(), me);
-        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(you.getUniqueId(), you);
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> YukkuriLogic.gatheringYukkuri());
-    }
-
     @Test
     void testGatheringYukkuri_WithToilet_L1530() {
         // L1530: Toilet が map に存在 → for ループ body が実行 → L1534: t!=null →
@@ -3122,26 +3114,6 @@ class BodyLogicTest {
         toilet.setObjId(org.simyukkuri.enums.Numbering.INSTANCE.numberingObjId());
         SimYukkuri.world.getCurrentWorldState().getToilets().put(toilet.getObjId(), toilet);
         assertDoesNotThrow(() -> YukkuriLogic.gatheringYukkuri());
-    }
-
-    // checkNearParent
-    @Test
-    void testCheckNearParent() {
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> YukkuriLogic.checkNearParent(me));
-    }
-
-    // checkWakeupOtherYukkuri
-    @Test
-    void testCheckWakeupOtherYukkuri() {
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(
-                () -> YukkuriLogic.checkWakeupOtherYukkuri(me));
-    }
-
-    // checkEmotionFromUnunSlave
-    @Test
-    void testCheckEmotionFromUnunSlave() {
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(
-                () -> YukkuriLogic.checkEmotionFromUnunSlave(me, you));
     }
 
     // checkMyRelation: FATHER

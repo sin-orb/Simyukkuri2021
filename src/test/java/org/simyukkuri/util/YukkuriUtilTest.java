@@ -80,109 +80,6 @@ public class YukkuriUtilTest {
     }
 
     @Test
-    public void testGetChangelingBabyType() {
-        // Test changeling type generation with controlled RNG
-        SimYukkuri.RND = new SequenceRandom(5);
-
-        YukkuriType changelingType = YukkuriBirthTypeResolver.getChangelingBabyType();
-
-        // Should return a valid yukkuri type
-        assertNotNull(changelingType);
-        assertTrue(changelingType.getTypeId() >= 0);
-    }
-
-    @Test
-    public void testGetMarisaType() {
-        // Test Marisa subtype selection with controlled RNG
-        SimYukkuri.RND = new SequenceRandom(1);
-
-        int marisaType = YukkuriBirthTypeResolver.getMarisaType();
-
-        // Should return a Marisa-related type
-        assertTrue(marisaType >= 0);
-    }
-
-    @Test
-    public void testGetRandomYukkuriType() {
-        // Test random yukkuri type generation
-        SimYukkuri.RND = new SequenceRandom(10);
-
-        Reimu parent = new Reimu();
-        YukkuriType randomType = YukkuriBirthTypeResolver.getRandomYukkuriType(parent);
-
-        // Should return a valid type
-        assertTrue(randomType.getTypeId() >= 0);
-    }
-
-    @Test
-    public void testGetRandomYukkuriTypeWithNullParent() {
-        // Test with null parent
-        SimYukkuri.RND = new SequenceRandom(5);
-
-        YukkuriType randomType = YukkuriBirthTypeResolver.getRandomYukkuriType(null);
-
-        // Should still return a valid type
-        assertTrue(randomType.getTypeId() >= 0);
-    }
-
-    @Test
-    public void testChangeBody() {
-        // Test changeBody method
-        try {
-            Reimu from = new Reimu();
-            from.setAge(100);
-            from.setDamage(500);
-
-            Reimu to = new Reimu();
-
-            // Perform copy
-            TransformationBodyCopier.copy(to, from);
-
-            // Verify field copy
-            assertEquals(500, to.getDamage(), "Damage should be copied");
-        } catch (Throwable e) {
-            // changeBody uses reflection and may fail in some environments
-            // Just verify it doesn't crash catastrophically
-            assertNotNull(e);
-        }
-    }
-
-    @Test
-    public void testGetBodyInstanceWithWorldHelper() {
-        // Test getBodyMap with World setup
-        try {
-            org.simyukkuri.util.WorldTestHelper.initializeMinimalWorld();
-
-            // This will likely return null without actual bodies in the map
-            // but should not crash. Use Integer.MIN_VALUE as ID that can't be assigned.
-            org.simyukkuri.entity.core.living.yukkuri.Yukkuri body = org.simyukkuri.util.YukkuriLookup
-                    .getYukkuriById(Integer.MIN_VALUE);
-
-            // Null is expected for non-existent ID
-            assertNull(body);
-        } catch (Exception e) {
-            // World initialization may fail
-            assertNotNull(e);
-        }
-    }
-
-    @Test
-    public void testGetBodyInstancesWithWorldHelper() {
-        // Test getYukkuriBodies with World setup
-        try {
-            org.simyukkuri.util.WorldTestHelper.initializeMinimalWorld();
-
-            org.simyukkuri.entity.core.living.yukkuri.Yukkuri[] bodies = YukkuriLookup.getYukkuriBodies();
-
-            // Should return an array (possibly empty)
-            assertNotNull(bodies);
-        } catch (Exception e) {
-            // World initialization may fail
-            assertNotNull(e);
-        }
-    }
-
-    @Test
     public void testGetBodyInstanceFromObjId_negativeOne_returnsNull() {
         org.simyukkuri.util.WorldTestHelper.initializeMinimalWorld();
         assertNull(YukkuriLookup.findYukkuriByObjId(-1));
@@ -205,48 +102,7 @@ public class YukkuriUtilTest {
         assertEquals(42, result.getObjId());
     }
 
-    @Test
-    public void testJudgeNewAnt() {
-        // Test ant judgment logic
-        SimYukkuri.RND = new SequenceRandom(50);
-
-        Reimu reimu = new Reimu();
-
-        AntInfestationPolicy.judgeNewAnt(reimu);
-
-        // Should complete without crashing
-        assertNotNull(reimu);
-    }
-
     // --- changeBody: copy fields from one body to another ---
-
-    @Test
-    public void testChangeBody_ReimuToReimu_DoesNotThrow() throws Exception {
-        Reimu from = new Reimu();
-        Reimu to = new Reimu();
-        from.setX(123);
-        from.setY(456);
-        assertDoesNotThrow(() -> {
-            try {
-                copyTransformedBody(to, from);
-            } catch (Exception e) {
-                // reflection exception possible in some environments
-            }
-        });
-    }
-
-    @Test
-    public void testChangeBody_MarisaToReimu_DoesNotThrow() {
-        Marisa from = new Marisa();
-        Reimu to = new Reimu();
-        from.setX(200);
-        try {
-            copyTransformedBody(to, from);
-        } catch (Exception e) {
-            // expected if class hierarchy differs
-        }
-        assertNotNull(to);
-    }
 
     @Test
     public void testChangeBody_CopiesX() throws Exception {
@@ -483,36 +339,9 @@ public class YukkuriUtilTest {
 
     // --- getRandomYukkuriType ---
 
-    @Test
-    public void testGetRandomYukkuriType_ReturnsValidType() {
-        SimYukkuri.RND = new SequenceRandom(0);
-        Reimu parent = new Reimu();
-        YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(parent);
-        assertNotNull(type);
-    }
-
-    @Test
-    public void testGetRandomYukkuriType_NullParent_ReturnsValidType() {
-        SimYukkuri.RND = new SequenceRandom(999);
-        YukkuriType type = YukkuriBirthTypeResolver.getRandomYukkuriType(null);
-        assertNotNull(type);
-    }
-
     // --- getChangelingBabyType ---
 
-    @Test
-    public void testGetChangelingBabyType_ReturnsValidType() {
-        YukkuriType type = YukkuriBirthTypeResolver.getChangelingBabyType();
-        assertNotNull(type);
-    }
-
     // --- getMarisaType ---
-
-    @Test
-    public void testGetMarisaType_ReturnsValidType() {
-        int type = YukkuriBirthTypeResolver.getMarisaType();
-        assertTrue(type >= 0);
-    }
 
     private static void copyTransformedBody(org.simyukkuri.entity.core.living.yukkuri.Yukkuri to,
             org.simyukkuri.entity.core.living.yukkuri.Yukkuri from) {

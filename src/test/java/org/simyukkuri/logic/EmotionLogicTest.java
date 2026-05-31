@@ -1,10 +1,7 @@
 package org.simyukkuri.logic;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -73,40 +70,6 @@ public class EmotionLogicTest {
         b.setCriticalDamege(critical ? CriticalDamageType.CUT : null);
     }
 
-    @Test
-    public void testCheckEmotionForOther() throws Exception {
-        Yukkuri me = WorldTestHelper.createBody();
-        Yukkuri you = WorldTestHelper.createBody();
-        me.setUniqueId(1);
-        you.setUniqueId(2);
-
-        for (Happiness hTarget : Happiness.values()) {
-            you.setHappiness(hTarget);
-            for (Happiness hMine : Happiness.values()) {
-                me.setHappiness(hMine);
-                for (YukkuriRelationType rel : YukkuriRelationType.values()) {
-                    resetRelation(me, you);
-                    mockRelation(me, you, rel);
-
-                    for (boolean rude : new boolean[] {false, true}) {
-                        me.setAttitude(rude ? Attitude.SHITHEAD : Attitude.AVERAGE);
-
-                        for (boolean p : new boolean[] {false, true}) {
-                            for (boolean d : new boolean[] {false, true}) {
-                                for (boolean c : new boolean[] {false, true}) {
-                                    setPainStates(you, p, d, c);
-
-                                    boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
-                                    assertNotNull(result);
-                                    assertEquals(7, result.length);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     @Test
     public void testCheckEmotion_FamilyJoy() throws Exception {
@@ -188,14 +151,6 @@ public class EmotionLogicTest {
         boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
         assertTrue(result[1], "Sad rude yukkuri should feel Anger at happy other");
         assertTrue(result[5], "Sad rude yukkuri should feel Envy at happy other");
-    }
-
-    // --- constructor ---
-
-    @Test
-    public void testConstructor_doesNotThrow() {
-        // Line 10: コンストラクタ呼び出し (3 missed instructions)
-        assertDoesNotThrow(() -> new EmotionLogic());
     }
 
     // --- mine=SAD × target=HAPPY × FATHER relation → joy (lines 99,103-104) ---
@@ -379,10 +334,4 @@ public class EmotionLogicTest {
         }
     }
 
-    private void resetRelation(Yukkuri me, Yukkuri you) throws Exception {
-        me.setParents(new int[] {-1, -1});
-        you.setParents(new int[] {-1, -1});
-        me.setPartner(-1);
-        you.setPartner(-1);
-    }
 }
