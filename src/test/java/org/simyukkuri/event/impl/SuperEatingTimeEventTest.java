@@ -585,4 +585,89 @@ public class SuperEatingTimeEventTest {
             assertEquals(-1, child.getMoveTargetId());
         }
     }
+
+    // ================================================================
+    // TEST_EXPANTION_PLAN: SuperEatingTimeEvent.update
+    // ================================================================
+
+    @Test
+    public void testUpdate_nearToBirth_returnsAbort() {
+        // 産気づいた子ゆへのイベントが止まらない → ABORT になることを確認
+        Yukkuri from = createBody();
+        Yukkuri child = createBody();
+        child.setHasBaby(true);
+        child.setPregnantPeriod(2400); // nearToBirth() = true
+
+        Food food = createFood();
+        SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, child, food, 10);
+        from.setCurrentEvent(event);
+        child.setCurrentEvent(event);
+
+        assertEquals(org.simyukkuri.event.EventPacket.UpdateState.ABORT, event.update(child));
+    }
+
+    @Test
+    public void testUpdate_tick1_skipsExecution_returnsNull() {
+        // tick % 20 != 0 の場合は null（継続待機）を返す
+        Yukkuri from = createBody();
+        Yukkuri child = createBody();
+        Food food = createFood();
+
+        SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, child, food, 10);
+        event.setState(SuperEatingTimeEvent.State.START);
+        event.setTick(1); // tick % 20 = 1 ≠ 0 → null を返す
+        from.setCurrentEvent(event);
+        child.setCurrentEvent(event);
+
+        assertNull(event.update(child));
+    }
+
+    @Test
+    public void testUpdate_childHungry_hungrySetTo60Percent() {
+        // 空腹の子ゆの hunger が 60% に補正されることを確認
+        Yukkuri from = createBody();
+        Yukkuri child = createBody();
+        child.setHungry(0); // isHungry() = true
+        Food food = createFood();
+
+        SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, child, food, 10);
+        event.setState(SuperEatingTimeEvent.State.START);
+        event.setTick(0); // tick % 20 = 0 → 補正処理に入る
+        from.setCurrentEvent(event);
+        child.setCurrentEvent(event);
+
+        event.update(child);
+
+        assertEquals(child.getHungryLimit() * 6 / 10, child.getHungry());
+    }
+
+    @Test
+    public void testUpdate_from_noChildren_returnsAbort() {
+        // 子ゆが全員いなくなると from の update が ABORT を返す
+        Yukkuri from = createBody();
+        Food food = createFood();
+
+        SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
+        event.setState(SuperEatingTimeEvent.State.START);
+        event.setTick(0); // tick % 20 = 0 → 処理実行
+        from.setCurrentEvent(event);
+        // from に子ゆをセットしない → createActiveChildren が空リスト → ABORT
+        assertEquals(org.simyukkuri.event.EventPacket.UpdateState.ABORT, event.update(from));
+    }
+
+    @Test
+    public void testUpdate_targetFoodRemoved_fromBecomesVerySad() {
+        // target が消えると from が VERY_SAD になることを確認
+        Yukkuri from = createBody();
+        Yukkuri child = createBody();
+        Food food = createFood();
+        food.setRemoved(true); // target が消えた状態
+
+        SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, child, food, 10);
+        from.setCurrentEvent(event);
+        child.setCurrentEvent(event);
+
+        assertEquals(org.simyukkuri.event.EventPacket.UpdateState.ABORT, event.update(child));
+        assertEquals(Happiness.VERY_SAD, from.getHappiness());
+    }
 }

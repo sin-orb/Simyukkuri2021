@@ -13,9 +13,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.simyukkuri.ConstState;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.Entity;
+import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.item.Food;
+import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.field.impl.Pool;
 import org.simyukkuri.field.impl.Pool.Depth;
@@ -485,5 +488,122 @@ class PoolTest {
             assertEquals(-1, food.getMostDepth());
             assertEquals(-1, food.getZ());
         }
+    }
+
+    // ================================================================
+    // TEST_EXPANTION_PLAN: Pool.objHitProcess
+    // ================================================================
+
+    @Test
+    void testObjHitProcess_EdgeArea_BodyNotWet() {
+        // EDGE エリアに入った個体は isWet にならない
+        // Pool bounds: (0,0,200,200), edgeWidth=10 → EDGE: x in [0,10) or (190,200]
+        Pool pool = new Pool();
+        pool.setBounds(0, 0, 200, 200);
+
+        Yukkuri body = WorldTestHelper.createBody();
+        body.setX(5);   // EDGE 領域（x < 10）
+        body.setY(100);
+        body.setZ(0);
+
+        assertEquals(Pool.Depth.EDGE, pool.checkArea(5, 100));
+
+        pool.objHitProcess(body);
+
+        assertTrue(body.isInPool());
+        assertFalse(body.isWet());
+    }
+
+    @Test
+    void testObjHitProcess_ShallowArea_BodyBecomesWet() {
+        // SHALLOW エリアに入った個体は isWet になる（初回は !isWet=true でinWater必ず呼ばれる）
+        // Pool bounds: (0,0,200,200), edgeWidth=10 → SHALLOW: x in [10,20)
+        Pool pool = new Pool();
+        pool.setBounds(0, 0, 200, 200);
+
+        Yukkuri body = WorldTestHelper.createBody();
+        body.setX(15);  // SHALLOW 領域
+        body.setY(100);
+        body.setZ(0);
+
+        assertEquals(Pool.Depth.SHALLOW, pool.checkArea(15, 100));
+
+        pool.objHitProcess(body);
+
+        assertTrue(body.isWet());
+    }
+
+    @Test
+    void testObjHitProcess_ShallowArea_LikesWater_NoDamage() {
+        // 水好きの個体は SHALLOW でダメージを受けない
+        Pool pool = new Pool();
+        pool.setBounds(0, 0, 200, 200);
+
+        Yukkuri body = WorldTestHelper.createBody();
+        body.setX(15);  // SHALLOW
+        body.setY(100);
+        body.setZ(0);
+        body.setLikeWater(true);
+
+        int damageBefore = body.getDamage();
+        pool.objHitProcess(body);
+
+        assertEquals(damageBefore, body.getDamage());
+    }
+
+    @Test
+    void testObjHitProcess_DeepArea_NonLikeWater_DeepEnough_LockMove() {
+        // 非水好きの ADULT が depthLimit=-3 を超えると isLockmove=true
+        // ADULT depthLimit=3 → zcord < -3 → Z=-4 でロック
+        SimYukkuri.RND = new ConstState(0); // nextInt(10+3*5)==0 でダメージチェックも
+        Pool pool = new Pool();
+        pool.setBounds(0, 0, 200, 200);
+
+        Yukkuri body = WorldTestHelper.createBody();
+        body.setX(50);  // DEEP 領域（edgeWidth*2=20 <= x < 180）
+        body.setY(50);
+        body.setAgeState(AgeState.ADULT);
+        body.setZ(-4);  // zcord < -depthLimit(3)
+        body.setLikeWater(false);
+
+        pool.objHitProcess(body);
+
+        assertTrue(body.isLockmove());
+    }
+
+    @Test
+    void testObjHitProcess_DeepArea_Baby_ShallowZNotLocked() {
+        // BABY は depthLimit=1 なので Z=-1 ではロックしない（Z < -1 のとき=Z=-2 でロック）
+        Pool pool = new Pool();
+        pool.setBounds(0, 0, 200, 200);
+
+        Yukkuri body = WorldTestHelper.createBody();
+        body.setX(50);  // DEEP
+        body.setY(50);
+        body.setAgeState(AgeState.BABY);
+        body.setZ(-1);  // zcord >= -depthLimit(1) → ロックしない
+        body.setLikeWater(false);
+
+        pool.objHitProcess(body);
+
+        assertFalse(body.isLockmove());
+    }
+
+    @Test
+    void testObjHitProcess_DeepArea_Baby_DeepZLocked() {
+        // BABY は depthLimit=1 なので Z=-2 でロックする
+        Pool pool = new Pool();
+        pool.setBounds(0, 0, 200, 200);
+
+        Yukkuri body = WorldTestHelper.createBody();
+        body.setX(50);  // DEEP
+        body.setY(50);
+        body.setAgeState(AgeState.BABY);
+        body.setZ(-2);  // zcord < -depthLimit(1) → ロック
+        body.setLikeWater(false);
+
+        pool.objHitProcess(body);
+
+        assertTrue(body.isLockmove());
     }
 }

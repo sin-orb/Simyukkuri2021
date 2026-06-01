@@ -8894,4 +8894,36 @@ class BodyLogicTest {
                         YukkuriLogic.gatheringYukkuriSquare(
                                 you, new Yukkuri[] {me, third}, GatheringDirection.DOWN, null));
     }
+
+    // ================================================================
+    // TEST_EXPANTION_PLAN: checkPartner/doActionOther 残り
+    // ================================================================
+
+    @Test
+    void testCheckPartner_Dead_NoTarget_ReturnsFalse() {
+        // isDead=true でも shouldSkipPartnerAction は死亡チェックしない。
+        // 周囲にゆっくりなし → ターゲット見つからず false を返す。
+        me.setDead(true);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(you.getUniqueId());
+        assertFalse(YukkuriLogic.checkPartner(me));
+    }
+
+    @Test
+    void testCheckPartner_BurialStateAll_Self_ReturnsFalse() {
+        // me 自身が BurialState.ALL のとき周囲にゆっくりなし → false
+        me.setBurialState(org.simyukkuri.enums.BurialState.ALL);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(you.getUniqueId());
+        assertFalse(YukkuriLogic.checkPartner(me));
+    }
+
+    @Test
+    void testDoActionOther_NotExciting_Raper_RankMismatch_ReturnsFalse() {
+        // target.isExciting=false + target.isRaper=true のとき rank 不一致なら
+        // 「target.isRaper() && target.isExciting()」= false → 発情ルートで通過できず false
+        you.setRaper(true);
+        you.setExciting(false);
+        you.setPublicRank(PublicRank.UNUN_SLAVE); // me(NONE) != you(UNUN_SLAVE)
+        you.setToSteal(false);
+        assertFalse(YukkuriLogic.doActionOther(me, you));
+    }
 }

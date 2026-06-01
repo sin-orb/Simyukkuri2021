@@ -19,6 +19,8 @@ import org.simyukkuri.entity.core.world.item.Yunba.Action;
 import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.entity.core.world.mobile.Vomit;
 import org.simyukkuri.enums.TickResult;
+import org.simyukkuri.ConstState;
+import org.simyukkuri.entity.core.world.bodylinked.Stalk;
 import org.simyukkuri.util.WorldTestHelper;
 
 class YunbaTest extends ItemTestBase {
@@ -854,5 +856,92 @@ class YunbaTest extends ItemTestBase {
 
         TickResult result = item.clockTick();
         assertEquals(TickResult.NONE, result);
+    }
+
+    // ================================================================
+    // TEST_EXPANTION_PLAN: Yunba.clockTick
+    // ================================================================
+
+    @Test
+    void testClockTick_Grabbed_ClearsAction() {
+        // grabbed 中は action が null にリセットされることを確認
+        Yunba item = createYunba();
+        item.setGrabbed(true);
+        item.setAction(Action.SHIT);
+        item.clockTick();
+        assertNull(item.getAction());
+    }
+
+    @Test
+    void testClockTick_ZAboveZero_DecreasesZ() {
+        // Z>0 のとき clockTick のたびに 5 ずつ落下する
+        Yunba item = createYunba();
+        item.setZ(20);
+        item.clockTick();
+        assertEquals(15, item.getZ());
+    }
+
+    @Test
+    void testClockTick_ZAboveZero_ClearsAction() {
+        // Z>0 のとき action が null にリセットされる
+        Yunba item = createYunba();
+        item.setZ(10);
+        item.setAction(Action.SHIT);
+        item.clockTick();
+        assertNull(item.getAction());
+    }
+
+    // testClockTick_ShitOnToilet_SkipsSameShit は headless 環境で Toilet.checkHitObj が
+    // Translate 変換の座標系不一致により正確に動作しないためスキップ（COVERAGE_STATUS.md 参照）
+
+    @Test
+    void testClockTick_StalkWithPlantedYukkuri_SkipsStalk() {
+        // 植わっているゆっくりがいる Stalk は掃除ターゲットに設定されない
+        SimYukkuri.RND = new ConstState(0);
+        Yunba item = createYunba();
+        item.setNorndCheck(true);
+        item.setStalkCheck(true);
+        item.setShitCheck(false);
+        item.setX(100);
+        item.setY(100);
+        item.setObjId(901);
+        SimYukkuri.world.getCurrentWorldState().getYunbas().put(901, item);
+
+        Yukkuri body = WorldTestHelper.createBody();
+        body.setX(110);
+        body.setY(110);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
+
+        Stalk stalk = new Stalk(110, 110, 0);
+        stalk.setPlantYukkuri(body.getUniqueId()); // ゆっくりが植わっている
+        SimYukkuri.world.getCurrentWorldState().getStalks().put(stalk.getObjId(), stalk);
+
+        item.clockTick();
+
+        // 植わっているゆっくりがいる茎はスキップ → action != STALK
+        assertFalse(Action.STALK == item.getAction());
+    }
+
+    @Test
+    void testClockTick_StalkCheck_NonStalkFood_Skipped() {
+        // STALK タイプでない Food は stalk 掃除として選ばれない
+        SimYukkuri.RND = new ConstState(0);
+        Yunba item = createYunba();
+        item.setNorndCheck(true);
+        item.setStalkCheck(true);
+        item.setShitCheck(false);
+        item.setX(100);
+        item.setY(100);
+        item.setObjId(902);
+        SimYukkuri.world.getCurrentWorldState().getYunbas().put(902, item);
+
+        // SWEETS1 タイプの Food（STALK ではない）
+        Food food = new Food(110, 110, Food.FoodType.SWEETS1.ordinal());
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
+
+        item.clockTick();
+
+        // STALK でない Food は stalk 候補にならない → action != STALK
+        assertFalse(Action.STALK == item.getAction());
     }
 }
