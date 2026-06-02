@@ -163,8 +163,22 @@ public class SuperEatingTimeEventTest {
     public void testStart_setsCurrentEvent() {
         Yukkuri b = createBody();
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(b, null, null, 10);
+        b.setMoveTargetId(123);
+        b.setDestX(45);
+        b.setDestY(67);
+        b.setDestZ(9);
+        b.setTargetOffsetX(12);
+        b.setTargetOffsetY(-8);
+        b.setTargetBind(true);
         event.start(b);
         assertEquals(event, b.getCurrentEvent());
+        assertEquals(-1, b.getMoveTargetId());
+        assertEquals(-1, b.getDestX());
+        assertEquals(-1, b.getDestY());
+        assertEquals(-1, b.getDestZ());
+        assertEquals(0, b.getTargetOffsetX());
+        assertEquals(0, b.getTargetOffsetY());
+        assertFalse(b.isTargetBind());
     }
 
     // --- update ---
@@ -560,6 +574,120 @@ public class SuperEatingTimeEventTest {
             assertTrue(from.isToFood());
             assertEquals(food.getObjId(), from.getMoveTargetId());
             assertEquals(500, from.getSuperEatingNoHungryPeriod());
+        }
+
+        @Test
+        void testScenario_WaitStateMarksChildAsParticipant() {
+            Yukkuri from = createBody();
+            Yukkuri child = createBody();
+            child.setAgeState(AgeState.BABY);
+            from.addChild(child);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueId(), child);
+            Food food = createFood();
+
+            SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
+            event.setState(SuperEatingTimeEvent.State.WAIT);
+            from.setCurrentEvent(event);
+
+            assertNull(child.getCurrentEvent());
+            assertNull(event.update(from));
+            assertEquals(event, child.getCurrentEvent());
+        }
+
+        @Test
+        void testScenario_StartBindsChildrenImmediately() {
+            Yukkuri from = createBody();
+            Yukkuri child = createBody();
+            child.setAgeState(AgeState.BABY);
+            from.addChild(child);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueId(), child);
+            Food food = createFood();
+
+            SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
+
+            assertNull(child.getCurrentEvent());
+            event.start(from);
+            assertEquals(event, child.getCurrentEvent());
+        }
+
+        @Test
+        void testScenario_StartClearsBlockedTicks() {
+            Yukkuri from = createBody();
+            Yukkuri child = createBody();
+            child.setAgeState(AgeState.BABY);
+            from.addChild(child);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueId(), child);
+            Food food = createFood();
+
+            SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
+            from.setBlockedTicks(3);
+            child.setBlockedTicks(3);
+            from.setVx(2);
+            from.setVy(3);
+            from.setVz(1);
+            from.setMotionX(4);
+            from.setMotionY(5);
+            from.setMotionZ(6);
+            child.setVx(2);
+            child.setVy(3);
+            child.setVz(1);
+            child.setMotionX(4);
+            child.setMotionY(5);
+            child.setMotionZ(6);
+
+            event.start(from);
+            assertEquals(0, from.getBlockedTicks());
+            assertEquals(0, child.getBlockedTicks());
+            assertEquals(0, from.getVx());
+            assertEquals(0, from.getVy());
+            assertEquals(0, from.getVz());
+            assertEquals(0, from.getMotionX());
+            assertEquals(0, from.getMotionY());
+            assertEquals(0, from.getMotionZ());
+            assertEquals(0, child.getVx());
+            assertEquals(0, child.getVy());
+            assertEquals(0, child.getVz());
+            assertEquals(0, child.getMotionX());
+            assertEquals(0, child.getMotionY());
+            assertEquals(0, child.getMotionZ());
+        }
+
+        @Test
+        void testScenario_ChildWaitStateMovesTowardFrom() {
+            Yukkuri from = createBody();
+            Yukkuri child = createBody();
+            child.setAgeState(AgeState.BABY);
+            from.addChild(child);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueId(), child);
+            Food food = createFood();
+
+            SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
+            event.setState(SuperEatingTimeEvent.State.WAIT);
+            from.setCurrentEvent(event);
+            child.setCurrentEvent(event);
+
+            assertNull(event.update(child));
+            assertTrue(child.getDestX() != child.getX() || child.getDestY() != child.getY());
+        }
+
+        @Test
+        void testScenario_ChildGoStateUsesBackLineFormation() {
+            Yukkuri from = createBody();
+            Yukkuri child = createBody();
+            child.setAgeState(AgeState.BABY);
+            child.setX(from.getX() + 120);
+            child.setY(from.getY());
+            from.addChild(child);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueId(), child);
+            Food food = createFood();
+
+            SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
+            event.setState(SuperEatingTimeEvent.State.GO);
+            from.setCurrentEvent(event);
+            child.setCurrentEvent(event);
+
+            assertNull(event.update(child));
+            assertTrue(child.getDestX() != child.getX() || child.getDestY() != child.getY());
         }
 
         @Test

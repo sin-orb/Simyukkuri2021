@@ -1047,6 +1047,20 @@ public class WorldState implements Serializable {
 	}
 
 	/**
+	 * エフェクトをワールド状態から削除する.
+	 * <p>
+	 * 通常描画用と前面描画用の両方を確認し、見つかった側を取り除く.
+	 *
+	 * @param id 削除するエフェクト ID
+	 */
+	public void removeEffect(int id) {
+		if (effectRepo.getSortedEffects().remove(id) == null) {
+			effectRepo.getFrontEffects().remove(id);
+		}
+		unregisterEntity(id);
+	}
+
+	/**
 	 * エンティティ ID から全エンティティへの逆引きインデックスを返す.
 	 * 未構築の場合は再構築してから返す.
 	 *

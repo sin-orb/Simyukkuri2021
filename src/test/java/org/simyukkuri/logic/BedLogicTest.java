@@ -15,6 +15,8 @@ import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.item.Bed;
 import org.simyukkuri.entity.core.world.item.House;
+import org.simyukkuri.enums.Direction;
+import org.simyukkuri.enums.FavItemType;
 import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.util.WorldTestHelper;
 
@@ -152,6 +154,32 @@ class BedLogicTest {
         assertFalse(body.isRemoved());
     }
 
+    @Test
+    void testSyncBedDirection_flipsWithMovedBed() throws Exception {
+        body.setHasStalk(true);
+        body.setStaying(true);
+
+        Bed bed = new Bed();
+        bed.setX(120);
+        bed.setY(100);
+        java.lang.reflect.Field wf = org.simyukkuri.entity.core.Entity.class.getDeclaredField("imgW");
+        wf.setAccessible(true);
+        wf.setInt(bed, 40);
+        java.lang.reflect.Field hf = org.simyukkuri.entity.core.Entity.class.getDeclaredField("imgH");
+        hf.setAccessible(true);
+        hf.setInt(bed, 20);
+        SimYukkuri.world.getCurrentWorldState().getBeds().put(bed.getObjId(), bed);
+        body.setFavoriteItem(FavItemType.BED, bed);
+
+        body.setX(100);
+        assertTrue(BedLogic.syncBedDirection(body, SimYukkuri.world.getCurrentWorldState()));
+        assertEquals(Direction.RIGHT, body.getDirection());
+
+        bed.setX(40);
+        assertTrue(BedLogic.syncBedDirection(body, SimYukkuri.world.getCurrentWorldState()));
+        assertEquals(Direction.LEFT, body.getDirection());
+    }
+
     // --- checkBed: isToBed branch ---
 
     @Test
@@ -239,6 +267,25 @@ class BedLogicTest {
             assertEquals(
                     bed.getObjId(),
                     body.getFavoriteItem(org.simyukkuri.enums.FavItemType.BED).getObjId());
+        }
+
+        @Test
+        void testScenario_StalkPregnantBodyMovesToBedEdge() throws Exception {
+            body.setHasBaby(true);
+            body.setPregnantPeriod(body.getPregPeriodBase());
+            body.setHasStalk(true);
+            body.setDirection(Direction.RIGHT);
+
+            Bed bed = new Bed();
+            bed.setX(100);
+            bed.setY(100);
+            bed.setW(60);
+            bed.setH(20);
+            SimYukkuri.world.getCurrentWorldState().getBeds().put(bed.getObjId(), bed);
+
+            assertTrue(BedLogic.checkBed(body));
+            assertEquals(-19, body.getTargetOffsetX());
+            assertEquals(-19, body.getDestX() - bed.getX());
         }
     }
 

@@ -134,6 +134,13 @@ class FamilyActionLogicTest {
     }
 
     @Test
+    void testCheckFamilyAction_EventChecksIgnoreRandomGate() {
+        SimYukkuri.RND = new ConstState(1);
+        parent.setCurrentEvent(new SuperEatingTimeEvent(parent, null, null, 1));
+        assertTrue(FamilyActionLogic.checkFamilyAction(parent));
+    }
+
+    @Test
     void testCheckFamilyAction_SelfStateChecks() {
 
         parent.addDamage(parent.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 2); // VERY or OVER

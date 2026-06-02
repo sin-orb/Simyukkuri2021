@@ -415,6 +415,21 @@ class FoodLogicTest {
         assertTrue(FoodLogic.checkFood(body));
     }
 
+    @Test
+    void testCheckFood_SuperEatingTimeEventWait_DoesNotSearchFood() {
+        body.setHungry(0);
+        Food food = new Food(102, 100, Food.FoodType.SWEETS1.ordinal());
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
+
+        SuperEatingTimeEvent ev = new SuperEatingTimeEvent(body, null, food, 1);
+        ev.setPriority(EventPacket.EventPriority.HIGH);
+        ev.setState(SuperEatingTimeEvent.State.WAIT);
+        body.setCurrentEvent(ev);
+        SimYukkuri.RND = new ConstState(0);
+
+        assertFalse(FoodLogic.checkFood(body));
+    }
+
     // ================================================================
     // TEST_EXPANTION_PLAN: Stalk 所有者ガード（B1 分岐）
     // ================================================================

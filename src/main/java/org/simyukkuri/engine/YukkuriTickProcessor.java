@@ -181,6 +181,7 @@ public final class YukkuriTickProcessor {
 			}
 			yukkuri.getStalkBabyTypes().clear();
 		}
+		BedLogic.syncBedDirection(yukkuri, curMap);
 		yukkuri.upDate();
 
 		if (transCheck) {

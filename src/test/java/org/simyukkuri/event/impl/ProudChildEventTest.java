@@ -174,6 +174,29 @@ public class ProudChildEventTest {
         assertNull(b.getCurrentEvent());
     }
 
+    @Test
+    public void testEnd_clearsCurrentEventFromAllParticipants() {
+        Yukkuri from = createBody();
+        Yukkuri partner = createBody();
+        Yukkuri child = createBody();
+        child.setAgeState(AgeState.BABY);
+        from.setPartner(partner.getUniqueId());
+        partner.setPartner(from.getUniqueId());
+        from.addChild(child);
+        WorldTestHelper.setParents(child, from.getUniqueId(), partner.getUniqueId());
+
+        ProudChildEvent event = new ProudChildEvent(from, partner, null, 10);
+        from.setCurrentEvent(event);
+        partner.setCurrentEvent(event);
+        child.setCurrentEvent(event);
+
+        event.end(from);
+
+        assertNull(from.getCurrentEvent());
+        assertNull(partner.getCurrentEvent());
+        assertNull(child.getCurrentEvent());
+    }
+
     // --- getState / setState ---
 
     @Test

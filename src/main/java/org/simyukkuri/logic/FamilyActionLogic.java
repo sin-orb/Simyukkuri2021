@@ -51,6 +51,14 @@ public class FamilyActionLogic {
 	 * @return 処理が実行された場合は true、それ以外は false
 	 */
 	public static final boolean checkFamilyAction(Yukkuri body, WorldState ws) {
+		// 家族イベント実行中は、通常の家族行動判定を通すだけで他行動を止める。
+		EventPacket currentEvent = body.getCurrentEvent();
+		if (currentEvent instanceof SuperEatingTimeEvent || currentEvent instanceof ShitExercisesEvent
+				|| currentEvent instanceof YukkuriRideEvent || currentEvent instanceof ProudChildEvent
+				|| currentEvent instanceof FuneralEvent) {
+			return true;
+		}
+
 		// 他の用事がある場合
 		if (body.isToFood() || body.isToYukkuri() || body.isToSukkiri()
 				|| body.isToBed() || body.isToShit() || body.isToSteal() || body.isToTakeout()) {
@@ -64,13 +72,7 @@ public class FamilyActionLogic {
 		// -------------------------------------
 		// イベント処理
 		// -------------------------------------
-		EventPacket currentEvent = body.getCurrentEvent();
-		// イベント中なら終了
-		if (currentEvent instanceof SuperEatingTimeEvent || currentEvent instanceof ShitExercisesEvent
-				|| currentEvent instanceof YukkuriRideEvent || currentEvent instanceof ProudChildEvent
-				|| currentEvent instanceof FuneralEvent) {
-			return true;
-		} else if (currentEvent != null) {
+		if (currentEvent != null) {
 			return false;
 		}
 		// 大人だけが実行する

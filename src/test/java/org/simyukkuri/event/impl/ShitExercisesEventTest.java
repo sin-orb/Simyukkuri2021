@@ -97,6 +97,31 @@ public class ShitExercisesEventTest {
         assertFalse(event.checkEventResponse(b));
     }
 
+    // --- start ---
+    @Test
+    public void testStart_clearsMovementTargets() {
+        Yukkuri b = createBody();
+        ShitExercisesEvent event = new ShitExercisesEvent(b, null, null, 10);
+        b.setMoveTargetId(123);
+        b.setDestX(45);
+        b.setDestY(67);
+        b.setDestZ(9);
+        b.setTargetOffsetX(12);
+        b.setTargetOffsetY(-8);
+        b.setTargetBind(true);
+        b.setBlockedTicks(4);
+        event.start(b);
+        assertEquals(event, b.getCurrentEvent());
+        assertEquals(-1, b.getMoveTargetId());
+        assertEquals(-1, b.getDestX());
+        assertEquals(-1, b.getDestY());
+        assertEquals(-1, b.getDestZ());
+        assertEquals(0, b.getTargetOffsetX());
+        assertEquals(0, b.getTargetOffsetY());
+        assertFalse(b.isTargetBind());
+        assertEquals(0, b.getBlockedTicks());
+    }
+
     // --- execute ---
 
     @Test
@@ -296,9 +321,24 @@ public class ShitExercisesEventTest {
         Yukkuri from = createBody();
         Yukkuri child = createBody();
         ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
+        event.setState(ShitExercisesEvent.State.GO);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
         assertDoesNotThrow(() -> event.update(child));
+    }
+
+    @Test
+    public void testUpdate_childBody_stateGO_movesTowardFrom() {
+        Yukkuri from = createBody();
+        Yukkuri child = createBody();
+        ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
+        event.setState(ShitExercisesEvent.State.GO);
+        from.setCurrentEvent(event);
+        child.setCurrentEvent(event);
+
+        assertNull(event.update(child));
+        assertEquals(from.getX(), child.getDestX());
+        assertEquals(from.getY(), child.getDestY());
     }
 
     @Test
@@ -310,6 +350,20 @@ public class ShitExercisesEventTest {
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
         assertDoesNotThrow(() -> event.update(child));
+    }
+
+    @Test
+    public void testUpdate_childBody_stateWAIT_movesTowardFrom() {
+        Yukkuri from = createBody();
+        final Yukkuri child = createBody();
+        ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
+        event.setState(ShitExercisesEvent.State.WAIT);
+        from.setCurrentEvent(event);
+        child.setCurrentEvent(event);
+
+        assertNull(event.update(child));
+        assertEquals(from.getX(), child.getDestX());
+        assertEquals(from.getY(), child.getDestY());
     }
 
     @Test

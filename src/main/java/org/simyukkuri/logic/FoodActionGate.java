@@ -55,6 +55,11 @@ public final class FoodActionGate {
 		}
 
 		EventPacket ev = body.getCurrentEvent();
+		if (ev instanceof SuperEatingTimeEvent) {
+			if (((SuperEatingTimeEvent) ev).getState() != SuperEatingTimeEvent.State.START) {
+				return true;
+			}
+		}
 		if (ev != null && ev.getPriority() != EventPacket.EventPriority.LOW) {
 			if (ev instanceof SuperEatingTimeEvent
 					&& ((SuperEatingTimeEvent) ev).getState() == SuperEatingTimeEvent.State.START) {

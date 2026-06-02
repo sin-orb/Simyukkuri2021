@@ -1,6 +1,7 @@
 package org.simyukkuri.logic;
 
 import java.util.Map;
+import java.awt.Rectangle;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.entity.core.Entity;
@@ -142,13 +143,17 @@ public class BedLogic {
 			if (body.hasBabyOrStalk()) {
 				offsetY = Translate.invertY(targetObject.getH() - 4);
 				offsetY = -(offsetY >> 1);
-				// 茎妊娠の場合は茎がベッドの上に収まるように親を茎の反対方向にオフセット
+				// 茎妊娠の場合は親をベッドの端に寄せて、赤ゆが中央に落ちるようにする
 				if (body.isHasStalk()) {
-					int stalkOffset = Translate.invertX(15, targetObject.getY());
+					int bedEdgeOffset = (Translate.invertX(targetObject.getW(), targetObject.getY() - 4) >> 1)
+							- Translate.invertX(15, targetObject.getY() - 4);
+					if (bedEdgeOffset < 0) {
+						bedEdgeOffset = 0;
+					}
 					if (body.getDirection() == Direction.RIGHT) {
-						offsetX = -stalkOffset; // 茎が右にあるので親を左に
+						offsetX = -bedEdgeOffset; // 茎が右にあるので親を左端へ
 					} else {
-						offsetX = stalkOffset; // 茎が左にあるので親を右に
+						offsetX = bedEdgeOffset; // 茎が左にあるので親を右端へ
 					}
 				}
 			} else {
@@ -162,6 +167,57 @@ public class BedLogic {
 			foundBed = true;
 		}
 		return foundBed;
+	}
+
+	/**
+	 * ベッド上にいる茎持ち/赤ゆ持ちゆっくりの向きを、ベッド位置に合わせて同期する。
+	 *
+	 * @param body ゆっくり
+	 * @param ws ワールド状態
+	 * @return 向きを同期できた場合は true
+	 */
+	public static final boolean syncBedDirection(Yukkuri body, WorldState ws) {
+		if (body == null || ws == null) {
+			return false;
+		}
+		if (!body.hasBabyOrStalk()) {
+			return false;
+		}
+		if (!body.isStaying() && !body.isToBed() && !body.checkOnBed()) {
+			return false;
+		}
+
+		Bed targetBed = null;
+		Entity favoriteBed = body.getFavoriteItem(FavItemType.BED);
+		if (favoriteBed instanceof Bed) {
+			targetBed = (Bed) favoriteBed;
+			if (targetBed.isRemoved()) {
+				targetBed = null;
+			}
+		}
+		if (targetBed == null) {
+			Rectangle bodyRect = new Rectangle(body.getScreenRect().getX(), body.getScreenRect().getY(),
+					body.getScreenRect().getWidth(), body.getScreenRect().getHeight());
+			for (Bed bed : ws.getBeds().values()) {
+				Rectangle bedRect = new Rectangle(bed.getScreenRect().getX(), bed.getScreenRect().getY(),
+						bed.getScreenRect().getWidth(), bed.getScreenRect().getHeight());
+				if (bedRect.intersects(bodyRect)) {
+					targetBed = bed;
+					break;
+				}
+			}
+		}
+		if (targetBed == null) {
+			return false;
+		}
+
+		int centerX = targetBed.getX() + (targetBed.getW() >> 1);
+		if (body.getX() <= centerX) {
+			body.setDirection(Direction.RIGHT);
+		} else {
+			body.setDirection(Direction.LEFT);
+		}
+		return true;
 	}
 
 	/**

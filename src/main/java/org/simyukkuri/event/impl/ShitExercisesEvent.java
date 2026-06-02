@@ -173,6 +173,36 @@ public class ShitExercisesEvent extends EventPacket {
 	@Override
 	public void start(Yukkuri body) {
 		body.setCurrentEvent(this);
+		// うんうん体操もイベント開始時はその場で集合させる。
+		// 以前の移動先が残ると、親ゆがフラフラ歩き続けてしまう。
+		body.clearActionsForEvent();
+		body.setMoveTargetId(-1);
+		body.setDestX(-1);
+		body.setDestY(-1);
+		body.setDestZ(-1);
+		body.setTargetOffsetX(0);
+		body.setTargetOffsetY(0);
+		body.setTargetBind(false);
+		body.setBlockedTicks(0);
+		body.stopStaying();
+
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
+		if (sourceBody != null) {
+			java.util.List<Yukkuri> babyList = YukkuriLogic.createActiveChildren(sourceBody, false);
+			if (babyList != null) {
+				for (Yukkuri child : babyList) {
+					if (child != null && child.getCurrentEvent() == null) {
+						child.setCurrentEvent(this);
+					}
+					if (child != null) {
+						child.setMoveTargetId(-1);
+						child.setBlockedTicks(0);
+						child.clearActionsForEvent();
+						child.stopStaying();
+					}
+				}
+			}
+		}
 	}
 
 	/** イベントの進行ステートを返す。 */
@@ -396,6 +426,7 @@ public class ShitExercisesEvent extends EventPacket {
 		} else {
 			switch (state) {
 				case GO:
+					body.moveToEvent(this, sourceBody.getX(), sourceBody.getY());
 					if (Barrier.onBarrier(body.getX(), body.getY(), sourceBody.getX(), sourceBody.getY(),
 							Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 						return UpdateState.ABORT;
@@ -409,6 +440,7 @@ public class ShitExercisesEvent extends EventPacket {
 					}
 					break;
 				case WAIT:
+					body.moveToEvent(this, sourceBody.getX(), sourceBody.getY());
 					if (checkWait(body, waitTicks)) {
 						body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ShitExercisesWAIT),
 								52, true,

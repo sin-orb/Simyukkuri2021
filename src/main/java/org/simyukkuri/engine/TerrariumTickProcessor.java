@@ -2,7 +2,9 @@ package org.simyukkuri.engine;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import org.simyukkuri.entity.core.Entity;
+import org.simyukkuri.entity.core.effect.Effect;
 import org.simyukkuri.entity.core.world.WorldEntity;
 import org.simyukkuri.entity.core.world.bodylinked.Stalk;
 import org.simyukkuri.entity.core.world.item.Diffuser;
@@ -41,7 +43,22 @@ public final class TerrariumTickProcessor {
 			}
 		}
 
+		processEffects(curMap.getSortedEffects().entrySet().iterator(), curMap);
+		processEffects(curMap.getFrontEffects().entrySet().iterator(), curMap);
 		TerrariumEntryProcessor.processEntries(curMap);
+	}
+
+	private static void processEffects(Iterator<Map.Entry<Integer, Effect>> iterator, WorldState curMap) {
+		while (iterator.hasNext()) {
+			Map.Entry<Integer, Effect> entry = iterator.next();
+			Effect effect = entry.getValue();
+			TickResult ret = effect.clockTick();
+			if (ret == TickResult.REMOVED) {
+				effect.remove();
+				iterator.remove();
+				curMap.unregisterEntity(effect.getObjId());
+			}
+		}
 	}
 
 	static int toObjExType(Entity o) {

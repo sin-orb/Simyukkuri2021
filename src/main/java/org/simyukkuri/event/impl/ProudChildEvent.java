@@ -508,7 +508,28 @@ public class ProudChildEvent extends EventPacket {
 	/** End. */
 	@Override
 	public void end(Yukkuri body) {
-		body.setCurrentEvent(null);
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
+		if (sourceBody != null && sourceBody.getCurrentEvent() == this) {
+			sourceBody.setCurrentEvent(null);
+		}
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
+		if (targetBody != null && targetBody.getCurrentEvent() == this) {
+			targetBody.setCurrentEvent(null);
+		}
+		if (sourceBody != null) {
+			List<Yukkuri> childrenList = YukkuriLogic.createActiveChildren(sourceBody, true);
+			if (childrenList != null) {
+				for (Yukkuri child : childrenList) {
+					if (child != null && child.getCurrentEvent() == this) {
+						child.setCurrentEvent(null);
+					}
+				}
+			}
+			Yukkuri partner = org.simyukkuri.util.YukkuriLookup.getYukkuriById(sourceBody.getPartner());
+			if (partner != null && partner.getCurrentEvent() == this) {
+				partner.setCurrentEvent(null);
+			}
+		}
 	}
 
 	/** イベント名の文字列表現を返す。 */
