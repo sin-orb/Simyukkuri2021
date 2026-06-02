@@ -14,9 +14,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.ConstState;
+import org.simyukkuri.SequenceRandom;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Marisa;
 import org.simyukkuri.entity.core.world.item.Food;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.TickResult;
@@ -605,5 +607,56 @@ class PoolTest {
         pool.objHitProcess(body);
 
         assertTrue(body.isLockmove());
+    }
+
+    @Test
+    void testObjHitProcess_DeepArea_MeltBody_SinksWhenRngZero() {
+        // isMelt=true → deepWaterChance=25 → ConstState(0) で nextInt(25)=0 → 沈む
+        // ConstState(0) は全 nextInt=0 なので inWater/damage 等副作用があっても sink check=0 が確定
+        // ※ melt と non-melt で deepWaterChance が 25/50 と異なるが、ConstState(0) はどちらも 0 を返すため
+        //   「melt の場合に限り沈む」は SequenceRandom での厳密テストが必要だが RNG 呼び出し数が不定定のため割愛
+        SimYukkuri.RND = new ConstState(0);
+        Pool pool = new Pool();
+        pool.setBounds(0, 0, 200, 200);
+
+        Yukkuri body = new Marisa() {
+            @Override public int getCollisionX() { return 10; }
+        };
+        body.setX(50); body.setY(50);
+        body.setAgeState(AgeState.ADULT);
+        body.setZ(-4);
+        body.setLikeWater(false);
+        body.setMelt(true);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
+
+        pool.objHitProcess(body);
+
+        assertTrue(body.isFallingUnderGround());
+    }
+
+    @Test
+    void testObjHitProcess_DeepArea_NonMeltBody_DoesNotSinkOnSeed25() {
+        // isMelt=false → deepWaterChance=50 → SequenceRandom([25]) で 25%50=25≠0 → 沈まない
+        // setWet(true) + getH()=1000 で inWater/damage check を skip し sink check のみ制御
+        // (melt=true で同一設定にすると deepWaterChance=25, 25%25=0 で沈む → 回帰確認可能)
+        SimYukkuri.RND = new SequenceRandom(25);
+        Pool pool = new Pool();
+        pool.setBounds(0, 0, 200, 200);
+
+        Yukkuri body = new Marisa() {
+            @Override public int getCollisionX() { return 10; }
+            @Override public int getH() { return 1000; }
+        };
+        body.setX(50); body.setY(50);
+        body.setAgeState(AgeState.ADULT);
+        body.setZ(-4);
+        body.setLikeWater(false);
+        body.setWet(true);
+        body.setMelt(false);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
+
+        pool.objHitProcess(body);
+
+        assertFalse(body.isFallingUnderGround());
     }
 }

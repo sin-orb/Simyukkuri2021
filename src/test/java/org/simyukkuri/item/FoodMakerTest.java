@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Alice;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Chen;
 import org.simyukkuri.entity.core.world.item.Food;
 import org.simyukkuri.entity.core.world.item.Food.FoodType;
 import org.simyukkuri.entity.core.world.item.FoodMaker;
@@ -540,5 +542,106 @@ class FoodMakerTest extends ItemTestBase {
             assertEquals(-1, item.getStockFood());
             assertEquals(0, item.getFoodAmount());
         }
+    }
+
+    // ================================================================
+    // TEST_EXPANTION_PLAN: FoodMaker.objHitProcess — 食料生成の各タイプ別レシピ
+    // ================================================================
+
+    @Test
+    void testObjHitProcess_stockNegative_AliceBody_Baby_ProcessedAsIngredient() {
+        // ありす BABY が第1原料として認識される (食べ物は生産されないが foodAmount が増加)
+        // BABY 経路: stockFood は内部設定後に -1 にリセット、foodAmount += 1、body 除去
+        FoodMaker item = new FoodMaker();
+        item.setProcessReady(true);
+        Alice alice = new Alice() {
+            @Override public int getCollisionX() { return 10; }
+        };
+        alice.setCrushed(true);
+        alice.setAgeState(AgeState.BABY);
+        alice.setObjType(Type.YUKKURI);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(alice.getUniqueId(), alice);
+
+        assertEquals(0, item.objHitProcess(alice));
+
+        assertEquals(-1, item.getStockFood()); // 呼び出し後リセット
+        assertEquals(1, item.getFoodAmount()); // BABY → foodAmount += 1
+        assertTrue(alice.isRemoved());
+    }
+
+    @Test
+    void testObjHitProcess_stockNegative_ChenBody_Baby_ProcessedAsIngredient() {
+        // ちぇん BABY が第1原料として認識される
+        FoodMaker item = new FoodMaker();
+        item.setProcessReady(true);
+        Chen chen = new Chen() {
+            @Override public int getCollisionX() { return 10; }
+        };
+        chen.setCrushed(true);
+        chen.setAgeState(AgeState.BABY);
+        chen.setObjType(Type.YUKKURI);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(chen.getUniqueId(), chen);
+
+        assertEquals(0, item.objHitProcess(chen));
+
+        assertEquals(-1, item.getStockFood());
+        assertEquals(1, item.getFoodAmount());
+        assertTrue(chen.isRemoved());
+    }
+
+    @Test
+    void testObjHitProcess_AliceStock_FoodInput_ProducesViyugra() {
+        // ありすストック (stockFood=2) + えさ:ふつう → VIYUGRA (makeTable[2][5]=5 → foodTable[5])
+        FoodMaker item = new FoodMaker();
+        item.setProcessReady(true);
+        item.setStockFood(2); // ありすストック
+        item.setFoodAmount(4);
+        item.setX(50); item.setY(50);
+
+        Food food = new Food();
+        food.setObjType(Type.OBJECT);
+        food.setFoodType(FoodType.FOOD);
+        food.setObjId(400);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
+
+        assertEquals(0, item.objHitProcess(food));
+
+        long viyugraCount = SimYukkuri.world.getCurrentWorldState().getFoods().values().stream()
+                .filter(f -> f.getObjId() != food.getObjId())
+                .filter(f -> f.getFoodType() == FoodType.VIYUGRA)
+                .count();
+
+        assertTrue(food.isRemoved());
+        // VIYUGRA が生産されている
+        assertTrue(viyugraCount > 0);
+        assertEquals(-1, item.getStockFood());
+    }
+
+    @Test
+    void testObjHitProcess_ChenStock_FoodInput_ProducesBitter() {
+        // ちぇんストック (stockFood=3) + えさ:ふつう → BITTER (makeTable[3][5]=2 → foodTable[2])
+        FoodMaker item = new FoodMaker();
+        item.setProcessReady(true);
+        item.setStockFood(3); // ちぇんストック
+        item.setFoodAmount(4);
+        item.setX(50); item.setY(50);
+
+        Food food = new Food();
+        food.setObjType(Type.OBJECT);
+        food.setFoodType(FoodType.FOOD);
+        food.setObjId(401);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
+
+        assertEquals(0, item.objHitProcess(food));
+
+        long bitterCount = SimYukkuri.world.getCurrentWorldState().getFoods().values().stream()
+                .filter(f -> f.getObjId() != food.getObjId())
+                .filter(f -> f.getFoodType() == FoodType.BITTER)
+                .count();
+
+        assertTrue(food.isRemoved());
+        // BITTER が生産されている
+        assertTrue(bitterCount > 0);
+        assertEquals(-1, item.getStockFood());
     }
 }

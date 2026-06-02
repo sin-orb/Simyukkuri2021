@@ -3198,6 +3198,77 @@ class BodyLogicTest {
                         me, new Yukkuri[0], org.simyukkuri.enums.GatheringDirection.DOWN, null));
     }
 
+    @Test
+    void testGatheringYukkuriSquare_SingleBodyFarFromTarget_ReturnsFalse() {
+        // you が計算済みターゲット位置から遠い → success=false
+        // wallMap(152x152) OOB 防止のため小さいマップを使う
+        WorldTestHelper.initializeTranslate(100, 100, 50, 800, 600, 100, 100, new float[] {1.0f});
+        me.setSpriteSet(makeSprites(1, 1));
+        you.setSpriteSet(makeSprites(1, 1));
+        me.setX(50); me.setY(50);
+        // DOWN: target=(50, 60), you は (50,50) に置く → squared distance=100 > 1 → false
+        you.setX(50); you.setY(50);
+        assertFalse(
+                YukkuriLogic.gatheringYukkuriSquare(
+                        me, new Yukkuri[]{you}, GatheringDirection.DOWN, null));
+    }
+
+    @Test
+    void testGatheringYukkuriSquare_DirectionLeft_DoesNotThrow() {
+        // LEFT 方向のスイッチ分岐を踏む
+        WorldTestHelper.initializeTranslate(100, 100, 50, 800, 600, 100, 100, new float[] {1.0f});
+        me.setSpriteSet(makeSprites(1, 1));
+        you.setSpriteSet(makeSprites(1, 1));
+        me.setX(50); me.setY(50);
+        you.setX(50); you.setY(50);
+        assertDoesNotThrow(
+                () -> YukkuriLogic.gatheringYukkuriSquare(
+                        me, new Yukkuri[]{you}, GatheringDirection.LEFT, null));
+    }
+
+    @Test
+    void testGatheringYukkuriSquare_DirectionRight_DoesNotThrow() {
+        // RIGHT 方向のスイッチ分岐を踏む
+        WorldTestHelper.initializeTranslate(100, 100, 50, 800, 600, 100, 100, new float[] {1.0f});
+        me.setSpriteSet(makeSprites(1, 1));
+        you.setSpriteSet(makeSprites(1, 1));
+        me.setX(50); me.setY(50);
+        you.setX(50); you.setY(50);
+        assertDoesNotThrow(
+                () -> YukkuriLogic.gatheringYukkuriSquare(
+                        me, new Yukkuri[]{you}, GatheringDirection.RIGHT, null));
+    }
+
+    @Test
+    void testGatheringYukkuriSquare_DirectionUp_DoesNotThrow() {
+        // UP 方向のスイッチ分岐を踏む
+        WorldTestHelper.initializeTranslate(100, 100, 50, 800, 600, 100, 100, new float[] {1.0f});
+        me.setSpriteSet(makeSprites(1, 1));
+        you.setSpriteSet(makeSprites(1, 1));
+        me.setX(50); me.setY(50);
+        you.setX(50); you.setY(50);
+        assertDoesNotThrow(
+                () -> YukkuriLogic.gatheringYukkuriSquare(
+                        me, new Yukkuri[]{you}, GatheringDirection.UP, null));
+    }
+
+    @Test
+    void testGatheringYukkuriSquare_MultiBody_OddLayout_DoesNotThrow() {
+        // 3体 → maxRowSize=3 (odd) → 奇数レイアウト分岐を踏む
+        WorldTestHelper.initializeTranslate(100, 100, 50, 800, 600, 100, 100, new float[] {1.0f});
+        Yukkuri third = WorldTestHelper.createBody();
+        third.setX(50); third.setY(50);
+        third.setSpriteSet(makeSprites(1, 1));
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(third.getUniqueId(), third);
+        me.setSpriteSet(makeSprites(1, 1));
+        you.setSpriteSet(makeSprites(1, 1));
+        me.setX(50); me.setY(50);
+        you.setX(50); you.setY(50);
+        assertDoesNotThrow(
+                () -> YukkuriLogic.gatheringYukkuriSquare(
+                        me, new Yukkuri[]{me, you, third}, GatheringDirection.DOWN, null));
+    }
+
     // gatheringYukkuriBackLine
     @Test
     void testGatheringYukkuriBackLine_NullList_ReturnsFalse() {
@@ -3208,6 +3279,20 @@ class BodyLogicTest {
     void testGatheringYukkuriBackLine_EmptyList_DoesNotThrow() {
         assertDoesNotThrow(
                 () -> YukkuriLogic.gatheringYukkuriBackLine(me, new LinkedList<>(), null));
+    }
+
+    @Test
+    void testGatheringYukkuriBackLine_SingleBodyFar_ReturnsFalse() {
+        // you が me から遠い → getRealDistance > collisionOffset*2 → distance>1 → false
+        WorldTestHelper.initializeTranslate(100, 100, 50, 800, 600, 100, 100, new float[] {1.0f});
+        me.setSpriteSet(makeSprites(1, 1));
+        you.setSpriteSet(makeSprites(1, 1));
+        me.setX(50); me.setY(50);
+        you.setX(50); you.setY(90); // Y 方向に 40 離れている
+
+        LinkedList<Yukkuri> list = new LinkedList<>();
+        list.add(you);
+        assertFalse(YukkuriLogic.gatheringYukkuriBackLine(me, list, null));
     }
 
     // createActiveFianceeList

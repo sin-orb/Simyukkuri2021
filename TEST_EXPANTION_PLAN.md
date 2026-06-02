@@ -125,7 +125,7 @@
 | EDGE エリアに入った個体がずぶ濡れになる | EDGE 深さになる座標に body を配置 | `body.isInPool()` == true、`body.isWet()` == false | 完了 (testObjHitProcess_EdgeArea_BodyNotWet) |
 | SHALLOW で水好きの個体がダメージを受ける | `body.setLikeWater(true)` + SHALLOW エリア | `body.getDamage()` の増加なし | 完了 (testObjHitProcess_ShallowArea_LikesWater_NoDamage) |
 | DEEP で非水好き・深く沈んだ個体がロック移動にならない | `body.setZ(-4)`（depthLimit=-3 超え）、`body.setLikeWater(false)` | `body.isLockmove()` == true | 完了 (testObjHitProcess_DeepArea_NonLikeWater_DeepEnough_LockMove) |
-| 溶けている個体の沈没確率が下がらない | `body.setMelt(true)` | deepWaterChance が半減し沈没が起きやすくなる（統計的確認または RNG 固定） | スキップ（統計的確認は困難。RNG 固定でも内部カウンタ依存で安定しない） |
+| 溶けている個体の沈没確率が下がらない | `body.setMelt(true)` | deepWaterChance が半減し沈没が起きやすくなる（統計的確認または RNG 固定） | 完了 (testObjHitProcess_DeepArea_MeltBody_SinksWhenRngZero + NonMeltBody_DoesNotSinkOnSeed25) — ConstState(0) では melt/non-melt 両方沈むため完全な区別には不十分だが、「melt=false + SequenceRandom([25]) で沈まない」でレグレッション網羅 |
 | BABY がダメージ閾値で正しく判定されない | `body.setAgeState(AgeState.BABY)` + depthLimit=1 超えの Z | 対応するダメージ分岐が発動する | 完了 (testObjHitProcess_DeepArea_Baby_ShallowZNotLocked / DeepZLocked) |
 
 ---
@@ -238,8 +238,70 @@
 
 ---
 
-## 今後の追加対象（次フェーズ）
+---
 
-- `FoodArrivalActionPolicy.handleArrivedFood` の Stalk/UNUN_SLAVE 給餌分岐
-- `YukkuriGatheringRule` (集合行動)
-- `FoodMaker.objHitProcess` (食料生成の各タイプ別レシピ)
+## `FoodArrivalActionPolicy.handleArrivedFood` — Stalk/UNUN_SLAVE 給餌分岐
+
+| 壊れると | テスト条件 | assert | ステータス |
+|---|---|---|---|
+| Z=0 の茎に到達しても hungry が増えない | `stalk.getZ()==0`, plantBody=null | `body.getHungry() > 0` | 完了 (testHandleArrivedFood_Stalk_NoPlantBody_EatsStalk) |
+| 完全埋没したゆっくりの茎を食べて VERY_HAPPY にならない | `plantBody.setBurialState(ALL)` | `body.getHappiness() == VERY_HAPPY` | 完了 (testHandleArrivedFood_Stalk_WithPlantBodyBurialAll_VeryHappy) |
+| 非埋没の茎に到達して誤って VERY_HAPPY になる | `plantBody.setBurialState(NONE)` | `body.getHappiness() != VERY_HAPPY` | 完了 (testHandleArrivedFood_Stalk_WithPlantBodyBurialNone_NotVeryHappy) |
+| UNUN_SLAVE がうんうん運搬時に stress が増えない | `body.setPublicRank(UNUN_SLAVE)` + `isToTakeout=true` + Shit | `body.getStress() == before + 20` | 完了 (testHandleArrivedFood_UnunSlave_ToTakeout_Shit_StressIncreases) |
+| 通常ゆっくりに UNUN_SLAVE 専用 stress が乗る | 通常 + `isToTakeout=true` + Shit | `body.getStress() == before`（増加なし） | 完了 (testHandleArrivedFood_NonUnunSlave_ToTakeout_Shit_NoExtraStress) |
+
+---
+
+## `YukkuriGatheringRule` (集合行動)
+
+| 壊れると | テスト条件 | assert | ステータス |
+|---|---|---|---|
+| 対象が null/空 のときクラッシュしない | null/[]に渡す | false を返す | 完了 (BodyLogicTest 既存テスト群) |
+| DOWN 以外の方向で集合できない | LEFT/RIGHT/UP direction | assertDoesNotThrow | 完了 (testGatheringYukkuriSquare_DirectionLeft/Right/Up_DoesNotThrow) |
+| 対象が目標位置から遠いのに success=true になる | body が target から離れた位置 | `false` | 完了 (testGatheringYukkuriSquare_SingleBodyFarFromTarget_ReturnsFalse) |
+| 3体 (odd layout) で例外が起きる | 3体 array | assertDoesNotThrow | 完了 (testGatheringYukkuriSquare_MultiBody_OddLayout_DoesNotThrow) |
+| gatheringYukkuriBackLine で遠い体が success=true になる | body が leader から遠い | `false` | 完了 (testGatheringYukkuriBackLine_SingleBodyFar_ReturnsFalse) |
+
+---
+
+## `FoodMaker.objHitProcess` (食料生成の各タイプ別レシピ)
+
+| 壊れると | テスト条件 | assert | ステータス |
+|---|---|---|---|
+| ありすが通常種として処理され誤ったレシピになる | Alice BABY (crushed) を第1原料 | `foodAmount==1`, removed, stockFood==-1 | 完了 (testObjHitProcess_stockNegative_AliceBody_Baby_ProcessedAsIngredient) |
+| ちぇんが通常種として処理され誤ったレシピになる | Chen BABY (crushed) を第1原料 | `foodAmount==1`, removed, stockFood==-1 | 完了 (testObjHitProcess_stockNegative_ChenBody_Baby_ProcessedAsIngredient) |
+| ありすストック + えさ:ふつう → FOOD ではなく VIYUGRA が出ない | `setStockFood(2)` + `FoodType.FOOD` | VIYUGRA が生産される (makeTable[2][5]=5) | 完了 (testObjHitProcess_AliceStock_FoodInput_ProducesViyugra) |
+| ちぇんストック + えさ:ふつう → FOOD ではなく BITTER が出ない | `setStockFood(3)` + `FoodType.FOOD` | BITTER が生産される (makeTable[3][5]=2) | 完了 (testObjHitProcess_ChenStock_FoodInput_ProducesBitter) |
+
+---
+
+## `YukkuriFoundAffinityRule.handleFoundAffinity`
+
+| 壊れると | テスト条件 | assert | ステータス |
+|---|---|---|---|
+| rank 不一致でも近寄ってしまう | `actor.rank != target.rank` | `false` | 完了 (testHandleFoundAffinity_RankMismatch_ReturnsFalse) |
+| 針刺しゆっくりが無視される | `target.setNeedled(true)` | `true` | 完了 (testHandleFoundAffinity_TargetNeedled_SameRank_ReturnsTrue) |
+| 針刺しつがいが RNG==0 で接近しない | needled + partner + RNG=0 | `true` & moveTargetId==target | 完了 (testHandleFoundAffinity_TargetNeedled_IsPartner_RngZero_MovesToTarget) |
+| 針刺し親子が RNG==0 で接近しない | needled + 親子 + RNG=0 | `true` & moveTargetId==target | 完了 (testHandleFoundAffinity_TargetNeedled_IsParentChild_RngZero_MovesToTarget) |
+| 無関係+全RNG!=0 で true を返す | 無関係 RNG=1 | `false` | 完了 (testHandleFoundAffinity_NotNeedled_NoRelation_AllRngNonZero_ReturnsFalse) |
+| partner が RNG==0 で接近しない | partner + RNG=0 | moveTargetId==target | 完了 (testHandleFoundAffinity_NotNeedled_IsPartner_RngZero_MovesToPartner) |
+| 子が RNG==0 で親のところへ向かわない | child+parent RNG=0 | moveTargetId==target | 完了 (testHandleFoundAffinity_NotNeedled_IsChild_RngZero_MovesToParent) |
+| 姉妹が RNG==0 で向かわない | 同父 child×2 RNG=0 | moveTargetId==target | 完了 (testHandleFoundAffinity_NotNeedled_IsSister_RngZero_MovesToSister) |
+| 親が RNG==0 で子のところへ向かわない | adult+child RNG=0 | moveTargetId==target | 完了 (testHandleFoundAffinity_NotNeedled_AdultIsFamily_RngZero_MovesToChild) |
+| FOOL+!okazari でも子に近づく | FOOL + !hasOkazari + child + nextBoolean=true | `true` (近づかない分岐) | 完了 (testHandleFoundAffinity_NotNeedled_IdiotNoOkazari_ChildRelation_ReturnsTrue) |
+
+---
+
+## `YukkuriSkinshipRule.handleSkinship`
+
+| 壊れると | テスト条件 | assert | ステータス |
+|---|---|---|---|
+| 条件なしでも true を返す | 無関係ゆっくり | `false` | 完了 (testHandleSkinship_NoConditionMatches_ReturnsFalse) |
+| アリに食われた相手を放置する | `target.addAttachment(new Ants())` | `true` & actor.isPeropero() | 完了 (testHandleSkinship_TargetHasAnts_ActorNoAnts_DoesPeroperoReturnsTrue) |
+| 自分もアリに食われていても peropero する | both have Ants | `true` & !actor.isPeropero() | 完了 (testHandleSkinship_BothHaveAnts_ClearsActionsNoPeroperoReturnsTrue) |
+| 空腹な子への食料吐き出しが起きない | parent+veryHungryChild+food | carryItem==null | 完了 (testHandleSkinship_ActorIsParent_TargetVeryHungry_ActorHasFood_DropsFood) |
+| 親子スキンシップが発動しない | adult actor + child target | `true` | 完了 (testHandleSkinship_AdultActor_ChildTarget_ParentRelation_ReturnsTrueWithSkinship) |
+| 母+汚れた子でぺろぺろが起きない | mother+dirty child | `true` & actor.isPeropero() | 完了 (testHandleSkinship_AdultActor_ChildTarget_MotherRelation_DirtyChildPeropero) |
+| つがいへのすりすりが起きない | partner + nextBoolean=true | `true` | 完了 (testHandleSkinship_Partner_ReturnsTrueWithSurisuri) |
+| 子→親のスキンシップが起きない | child actor + parent target | `true` | 完了 (testHandleSkinship_ChildActor_ParentTarget_ReturnsTrueWithSkinship) |
+| 姉妹スキンシップが起きない | sister + nextBoolean=true | `true` | 完了 (testHandleSkinship_ChildActor_SisterTarget_ReturnsTrueWithSkinship) |

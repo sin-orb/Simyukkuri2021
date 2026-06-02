@@ -21,6 +21,7 @@ import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.enums.CoreAnkoState;
+import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.FavItemType;
 import org.simyukkuri.enums.FootBake;
 import org.simyukkuri.enums.Intelligence;
@@ -688,5 +689,82 @@ class FoodLogicTest {
 
         // 非常に空腹なので食べる → hungry が増加
         assertTrue(body.getHungry() > 0);
+    }
+
+    // ================================================================
+    // TEST_EXPANTION_PLAN: FoodArrivalActionPolicy — Stalk/UNUN_SLAVE 給餌分岐
+    // ================================================================
+
+    @Test
+    void testHandleArrivedFood_Stalk_NoPlantBody_EatsStalk() {
+        // Stalk Z=0, plantBody=null → eatFood(STALK) が呼ばれ hungry が増加する
+        body.setHungry(0);
+        body.setToTakeout(false);
+        Stalk stalk = new Stalk(100, 100, 0);
+        // getZ()==0, getPlantYukkuri()==-1(default) → plantBody=null
+
+        FoodArrivalActionPolicy.handleArrivedFood(body, stalk, new boolean[]{false});
+
+        assertTrue(body.getHungry() > 0);
+    }
+
+    @Test
+    void testHandleArrivedFood_Stalk_WithPlantBodyBurialAll_VeryHappy() {
+        // Stalk に plantBody (BurialState.ALL) → body が VERY_HAPPY になる
+        Stalk stalk = new Stalk(100, 100, 0);
+        Yukkuri plantBody = WorldTestHelper.createBody();
+        plantBody.setBurialState(BurialState.ALL);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(plantBody.getUniqueId(), plantBody);
+        stalk.setPlantYukkuri(plantBody);
+
+        FoodArrivalActionPolicy.handleArrivedFood(body, stalk, new boolean[]{false});
+
+        assertEquals(Happiness.VERY_HAPPY, body.getHappiness());
+    }
+
+    @Test
+    void testHandleArrivedFood_Stalk_WithPlantBodyBurialNone_NotVeryHappy() {
+        // plantBody が BurialState.NONE → VERY_HAPPY にならない (body.stay() のみ)
+        Stalk stalk = new Stalk(100, 100, 0);
+        Yukkuri plantBody = WorldTestHelper.createBody();
+        plantBody.setBurialState(BurialState.NONE);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(plantBody.getUniqueId(), plantBody);
+        stalk.setPlantYukkuri(plantBody);
+
+        FoodArrivalActionPolicy.handleArrivedFood(body, stalk, new boolean[]{false});
+
+        // BurialState.NONE では VERY_HAPPY にならない
+        assertFalse(body.getHappiness() == Happiness.VERY_HAPPY);
+    }
+
+    @Test
+    void testHandleArrivedFood_UnunSlave_ToTakeout_Shit_StressIncreases() {
+        // UNUN_SLAVE が isToTakeout=true でうんうんに到達 → stress += 20
+        body.setPublicRank(PublicRank.UNUN_SLAVE);
+        body.setToTakeout(true);
+        int stressBefore = body.getStress();
+        Shit shit = new Shit();
+        shit.setX(100);
+        shit.setY(100);
+
+        FoodArrivalActionPolicy.handleArrivedFood(body, shit, new boolean[]{false});
+
+        assertEquals(stressBefore + 20, body.getStress());
+        assertNotNull(body.getCarryItem(org.simyukkuri.enums.TakeoutItemType.SHIT));
+    }
+
+    @Test
+    void testHandleArrivedFood_NonUnunSlave_ToTakeout_Shit_NoExtraStress() {
+        // 通常ゆっくりが isToTakeout=true でうんうんに到達 → UNUN_SLAVE 用 stress+20 は発動しない
+        body.setToTakeout(true);
+        int stressBefore = body.getStress();
+        Shit shit = new Shit();
+        shit.setX(100);
+        shit.setY(100);
+
+        FoodArrivalActionPolicy.handleArrivedFood(body, shit, new boolean[]{false});
+
+        assertEquals(stressBefore, body.getStress());
+        assertNotNull(body.getCarryItem(org.simyukkuri.enums.TakeoutItemType.SHIT));
     }
 }
