@@ -54,6 +54,20 @@ class BodyExcretionRuleTest {
 		assertEquals(5, random.lastBound, "sick + damage で確率境界が 10/2=5 に半減すること");
 	}
 
+	@Test
+	void zeroDiarrhoeaProbClampsToOneAndAlwaysReturnsTrue() {
+		StubBodyAttributes body = new StubBodyAttributes();
+		body.setRank(YukkuriRank.NORAYU);
+		body.setDiarrheaProb(0);
+
+		CapturingRandom random = new CapturingRandom(0);
+		GameRandom.setOverride(random);
+
+		assertTrue(YukkuriExcretionRule.getDiarrhea(body),
+				"diarrheaProb=0 は 1 にクランプされ nextInt(1)==0 で常に true になること");
+		assertEquals(1, random.lastBound, "クランプ後の境界は 1 であること");
+	}
+
 	private static final class CapturingRandom implements RandomSource {
 		private int lastBound;
 		private final int returnValue;

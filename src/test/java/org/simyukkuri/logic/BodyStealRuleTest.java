@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
+import org.simyukkuri.entity.core.living.yukkuri.impl.MarisaReimu;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Attitude;
 import org.simyukkuri.enums.Happiness;
@@ -51,6 +53,128 @@ public class BodyStealRuleTest {
 		// giveOkazari が VERY_HAPPY を設定し、後続の setHappiness(HAPPY) はそれより低いため変化しない
 		assertEquals(Happiness.VERY_HAPPY, thief.getHappiness(), "盗み成功で thief が VERY_HAPPY になること");
 		assertTrue(thief.getStress() < initialStress,       "盗み成功で thief のストレスが減ること");
+	}
+
+	private Yukkuri makeRudeThief() {
+		Yukkuri thief = WorldTestHelper.createBody();
+		thief.setAgeState(AgeState.ADULT);
+		thief.setAttitude(Attitude.SHITHEAD);
+		thief.takeOkazari(false);
+		thief.setToSteal(true);
+		thief.setPublicRank(PublicRank.NONE);
+		return thief;
+	}
+
+	private Yukkuri makeSleepingTarget() {
+		Yukkuri target = WorldTestHelper.createBody();
+		target.setAgeState(AgeState.ADULT);
+		target.setSleeping(true);
+		target.setPublicRank(PublicRank.NONE);
+		return target;
+	}
+
+	@Test
+	void actorWithOkazariCannotSteal() {
+		Yukkuri thief = WorldTestHelper.createBody();
+		thief.setAgeState(AgeState.ADULT);
+		thief.setAttitude(Attitude.SHITHEAD);
+		// hasOkazari() はデフォルト true → !hasOkazari()=false → ガードで弾かれる
+		Yukkuri target = makeSleepingTarget();
+		assertFalse(YukkuriStealRule.handleOkazariSteal(target, thief),
+				"お飾りを持っている actor は盗みに失敗すること");
+	}
+
+	@Test
+	void targetWithoutOkazariCannotBeStolen() {
+		Yukkuri thief = makeRudeThief();
+		Yukkuri target = makeSleepingTarget();
+		target.setOkazaris(null); // hasOkazari=false
+		assertFalse(YukkuriStealRule.handleOkazariSteal(target, thief),
+				"お飾りのない target から盗めないこと");
+	}
+
+	@Test
+	void ageStateMismatchBlocksSteal() {
+		Yukkuri thief = makeRudeThief();
+		thief.setAgeState(AgeState.ADULT);
+		Yukkuri target = makeSleepingTarget();
+		target.setAgeState(AgeState.CHILD);
+		assertFalse(YukkuriStealRule.handleOkazariSteal(target, thief),
+				"年齢が違うゆっくりから盗めないこと");
+	}
+
+	@Test
+	void typeMismatchBlocksSteal() {
+		Yukkuri thief = makeRudeThief(); // Marisa
+		// Reimu でターゲットを作る（型が異なる）
+		Reimu reimu = new Reimu();
+		reimu.setObjId(org.simyukkuri.enums.Numbering.INSTANCE.numberingObjId());
+		reimu.setUniqueId(org.simyukkuri.enums.Numbering.INSTANCE.numberingYukkuriId());
+		reimu.setAgeState(AgeState.ADULT);
+		reimu.setPublicRank(PublicRank.NONE);
+		reimu.setSleeping(true);
+		assertFalse(YukkuriStealRule.handleOkazariSteal(reimu, thief),
+				"種族が違うゆっくりから盗めないこと");
+	}
+
+	@Test
+	void hybridActorBlocksSteal() {
+		// ハイブリッド種（MarisaReimu）はisHybrid()=true
+		MarisaReimu hybrid = new MarisaReimu();
+		hybrid.setObjId(org.simyukkuri.enums.Numbering.INSTANCE.numberingObjId());
+		hybrid.setUniqueId(org.simyukkuri.enums.Numbering.INSTANCE.numberingYukkuriId());
+		hybrid.setAgeState(AgeState.ADULT);
+		hybrid.setAttitude(Attitude.SHITHEAD);
+		hybrid.takeOkazari(false);
+		hybrid.setToSteal(true);
+		hybrid.setPublicRank(PublicRank.NONE);
+		Yukkuri target = makeSleepingTarget();
+		assertFalse(YukkuriStealRule.handleOkazariSteal(target, hybrid),
+				"ハイブリッドは盗みに失敗すること");
+	}
+
+	@Test
+	void rankConditionBlocksSteal() {
+		// target.rank=UNUN_SLAVE かつ actor.rank=NONE → (UNUN_SLAVE==NONE || NONE==UNUN_SLAVE) = false
+		Yukkuri thief = makeRudeThief();
+		thief.setPublicRank(PublicRank.NONE);
+		Yukkuri target = makeSleepingTarget();
+		target.setPublicRank(PublicRank.UNUN_SLAVE);
+		assertFalse(YukkuriStealRule.handleOkazariSteal(target, thief),
+				"target が NONE 以外かつ actor が UNUN_SLAVE 以外の場合は盗めないこと");
+	}
+
+	@Test
+	void lockmoveActorBlocksSteal() {
+		Yukkuri thief = makeRudeThief();
+		thief.setLockmove(true);
+		Yukkuri target = makeSleepingTarget();
+		assertFalse(YukkuriStealRule.handleOkazariSteal(target, thief),
+				"移動ロック中は盗みに失敗すること");
+	}
+
+	@Test
+	void niceActorCannotSteal() {
+		Yukkuri thief = makeRudeThief();
+		thief.setAttitude(Attitude.NICE); // isRude=false
+		Yukkuri target = makeSleepingTarget();
+		assertFalse(YukkuriStealRule.handleOkazariSteal(target, thief),
+				"ゲスでない actor は盗みに失敗すること");
+	}
+
+	@Test
+	void ununSlaveStealsFromNoneAndRanksSwap() {
+		Yukkuri thief = makeRudeThief();
+		thief.setPublicRank(PublicRank.UNUN_SLAVE);
+		Yukkuri target = makeSleepingTarget();
+		target.setPublicRank(PublicRank.NONE);
+
+		assertTrue(YukkuriStealRule.handleOkazariSteal(target, thief),
+				"UNUN_SLAVE が NONE から盗み成功すること");
+		assertEquals(PublicRank.NONE, thief.getPublicRank(),
+				"盗み成功で thief が NONE に昇格すること");
+		assertEquals(PublicRank.UNUN_SLAVE, target.getPublicRank(),
+				"盗み成功で target が UNUN_SLAVE に降格すること");
 	}
 
 	@Test

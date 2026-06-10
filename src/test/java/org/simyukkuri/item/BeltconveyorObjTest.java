@@ -18,9 +18,14 @@ import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
+import org.simyukkuri.entity.core.world.bodylinked.Stalk;
 import org.simyukkuri.entity.core.world.item.BeltconveyorObj;
+import org.simyukkuri.entity.core.world.item.Food;
 import org.simyukkuri.entity.core.world.item.ItemTestBase;
 import org.simyukkuri.entity.core.world.mobile.Shit;
+import org.simyukkuri.entity.core.world.mobile.Vomit;
+import org.simyukkuri.enums.Attitude;
+import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.system.Sprite;
 import org.simyukkuri.util.WorldTestHelper;
@@ -674,6 +679,251 @@ class BeltconveyorObjTest extends ItemTestBase {
         }
         // Either created successfully or caught exception; no NPE from test
         assertTrue(holder[0] == null || !holder[0].isRemoved());
+    }
+
+    // --- 座標変化確認テスト (targetType=0, option=0/UP, beltSpeed=5, Y=100 → Y=95) ---
+
+    @Test
+    void testObjHitProcess_TargetType0_YukkuriYChanges() {
+        BeltconveyorObj belt = new BeltconveyorObj();
+        belt.setTargetType(0);
+        belt.setCantmove(0);
+        belt.setBeltSpeed(5);
+        belt.setOption(0);
+        Yukkuri body = createBodyWithSprites();
+        body.setCalcX(0);
+        body.setCalcY(100);
+        belt.objHitProcess(body);
+        assertEquals(95, body.getY(), "targetType=0 で Yukkuri の Y 座標が beltSpeed 分減少すること");
+    }
+
+    @Test
+    void testObjHitProcess_TargetType0_ShitYChanges() {
+        BeltconveyorObj belt = new BeltconveyorObj();
+        belt.setTargetType(0);
+        belt.setCantmove(0);
+        belt.setBeltSpeed(5);
+        belt.setOption(0);
+        Shit shit = new Shit();
+        shit.setCalcX(0);
+        shit.setCalcY(100);
+        belt.objHitProcess(shit);
+        assertEquals(95, shit.getY(), "targetType=0 で Shit の Y 座標が beltSpeed 分減少すること");
+    }
+
+    @Test
+    void testObjHitProcess_TargetType0_FoodYChanges() {
+        BeltconveyorObj belt = new BeltconveyorObj();
+        belt.setTargetType(0);
+        belt.setCantmove(0);
+        belt.setBeltSpeed(5);
+        belt.setOption(0);
+        Food food = new Food(0, 100, Food.FoodType.FOOD.ordinal());
+        belt.objHitProcess(food);
+        assertEquals(95, food.getY(), "targetType=0 で Food の Y 座標が beltSpeed 分減少すること");
+    }
+
+    @Test
+    void testObjHitProcess_TargetType0_StalkYChanges() {
+        BeltconveyorObj belt = new BeltconveyorObj();
+        belt.setTargetType(0);
+        belt.setCantmove(0);
+        belt.setBeltSpeed(5);
+        belt.setOption(0);
+        Stalk stalk = new Stalk(0, 100, 0);
+        belt.objHitProcess(stalk);
+        assertEquals(95, stalk.getY(), "targetType=0 で Stalk の Y 座標が beltSpeed 分減少すること");
+    }
+
+    @Test
+    void testObjHitProcess_TargetType0_VomitYChanges() {
+        BeltconveyorObj belt = new BeltconveyorObj();
+        belt.setTargetType(0);
+        belt.setCantmove(0);
+        belt.setBeltSpeed(5);
+        belt.setOption(0);
+        Vomit vomit = new Vomit();
+        vomit.setCalcX(0);
+        vomit.setCalcY(100);
+        belt.objHitProcess(vomit);
+        assertEquals(95, vomit.getY(), "targetType=0 で Vomit の Y 座標が beltSpeed 分減少すること");
+    }
+
+    // --- targetType 別フィルタ（ポジティブ側）---
+
+    @Test
+    void testObjHitProcess_TargetType1_YukkuriIsTransported() {
+        BeltconveyorObj belt = new BeltconveyorObj();
+        belt.setTargetType(1); // Yukkuri のみ
+        belt.setCantmove(0);
+        belt.setBeltSpeed(5);
+        belt.setOption(0);
+        Yukkuri body = createBodyWithSprites();
+        body.setCalcX(0);
+        body.setCalcY(100);
+        belt.objHitProcess(body);
+        assertEquals(95, body.getY(), "targetType=1 で Yukkuri が搬送されること");
+    }
+
+    @Test
+    void testObjHitProcess_TargetType2_ShitIsTransported() {
+        BeltconveyorObj belt = new BeltconveyorObj();
+        belt.setTargetType(2); // うんうん/吐餡
+        belt.setCantmove(0);
+        belt.setBeltSpeed(5);
+        belt.setOption(0);
+        Shit shit = new Shit();
+        shit.setCalcX(0);
+        shit.setCalcY(100);
+        belt.objHitProcess(shit);
+        assertEquals(95, shit.getY(), "targetType=2 で Shit が搬送されること");
+    }
+
+    @Test
+    void testObjHitProcess_TargetType2_VomitIsTransported() {
+        BeltconveyorObj belt = new BeltconveyorObj();
+        belt.setTargetType(2);
+        belt.setCantmove(0);
+        belt.setBeltSpeed(5);
+        belt.setOption(0);
+        Vomit vomit = new Vomit();
+        vomit.setCalcX(0);
+        vomit.setCalcY(100);
+        belt.objHitProcess(vomit);
+        assertEquals(95, vomit.getY(), "targetType=2 で Vomit が搬送されること");
+    }
+
+    @Test
+    void testObjHitProcess_TargetType3_FoodIsTransported() {
+        BeltconveyorObj belt = new BeltconveyorObj();
+        belt.setTargetType(3); // 食料のみ
+        belt.setCantmove(0);
+        belt.setBeltSpeed(5);
+        belt.setOption(0);
+        Food food = new Food(0, 100, Food.FoodType.FOOD.ordinal());
+        belt.objHitProcess(food);
+        assertEquals(95, food.getY(), "targetType=3 で Food が搬送されること");
+    }
+
+    @Test
+    void testObjHitProcess_TargetType4_StalkIsTransported() {
+        BeltconveyorObj belt = new BeltconveyorObj();
+        belt.setTargetType(4); // 茎のみ
+        belt.setCantmove(0);
+        belt.setBeltSpeed(5);
+        belt.setOption(0);
+        Stalk stalk = new Stalk(0, 100, 0);
+        belt.objHitProcess(stalk);
+        assertEquals(95, stalk.getY(), "targetType=4 で Stalk が搬送されること");
+    }
+
+    @Test
+    void testObjHitProcess_TargetType5_FoodIsTransported() {
+        BeltconveyorObj belt = new BeltconveyorObj();
+        belt.setTargetType(5); // ゆっくり以外
+        belt.setCantmove(0);
+        belt.setBeltSpeed(5);
+        belt.setOption(0);
+        Food food = new Food(0, 100, Food.FoodType.FOOD.ordinal());
+        belt.objHitProcess(food);
+        assertEquals(95, food.getY(), "targetType=5 で Food（ゆっくり以外）が搬送されること");
+    }
+
+    // --- フィルター条件テスト ---
+
+    /** filter=true + obOptionSelectionList[8]=true → 死体のみ搬送 */
+    private BeltconveyorObj createDeadOnlyFilterBelt() {
+        BeltconveyorObj belt = new BeltconveyorObj();
+        belt.setFilter(true);
+        belt.setTargetType(0);
+        belt.setCantmove(0);
+        belt.setBeltSpeed(5);
+        belt.setOption(0);
+        // デフォルトは [true×8, false] → index 8 を true に変更して「死体のみ」
+        List<Boolean> opts = makeDefaultFilterOptions();
+        opts.set(8, true);
+        belt.setOptionSelections(opts);
+        return belt;
+    }
+
+    /** BeltconveyorObj の 3 引数コンストラクタで初期化される 9 要素デフォルトリストを生成する。 */
+    private static List<Boolean> makeDefaultFilterOptions() {
+        java.util.ArrayList<Boolean> opts = new java.util.ArrayList<>();
+        for (int i = 0; i < 8; i++) opts.add(true);
+        opts.add(false);
+        return opts;
+    }
+
+    @Test
+    void testObjHitProcess_DeadOnlyFilter_BlocksAliveYukkuri() {
+        BeltconveyorObj belt = createDeadOnlyFilterBelt();
+        Yukkuri body = createBodyWithSprites();
+        body.setCalcX(0);
+        body.setCalcY(100);
+        body.setDead(false); // 生きているゆっくり
+
+        belt.objHitProcess(body);
+
+        assertEquals(100, body.getY(), "死体のみフィルターで生きたゆっくりは搬送されないこと");
+    }
+
+    @Test
+    void testObjHitProcess_DeadOnlyFilter_AllowsDeadYukkuri() {
+        BeltconveyorObj belt = createDeadOnlyFilterBelt();
+        Yukkuri body = createBodyWithSprites();
+        body.setCalcX(0);
+        body.setCalcY(100);
+        body.setDead(true); // 死亡ゆっくり
+
+        belt.objHitProcess(body);
+
+        assertEquals(95, body.getY(), "死体のみフィルターで死亡ゆっくりは搬送されること");
+    }
+
+    @Test
+    void testObjHitProcess_AttitudeFilter_BlocksVeryNice() {
+        BeltconveyorObj belt = new BeltconveyorObj();
+        belt.setFilter(true);
+        belt.setTargetType(0);
+        belt.setCantmove(0);
+        belt.setBeltSpeed(5);
+        belt.setOption(0);
+        // index 0 (VERY_NICE) を false → VERY_NICE ゆっくりは弾かれる
+        List<Boolean> opts = makeDefaultFilterOptions();
+        opts.set(0, false);
+        belt.setOptionSelections(opts);
+
+        Yukkuri body = createBodyWithSprites();
+        body.setCalcX(0);
+        body.setCalcY(100);
+        body.setAttitude(Attitude.VERY_NICE);
+
+        belt.objHitProcess(body);
+
+        assertEquals(100, body.getY(), "VERY_NICE が除外された場合は搬送されないこと");
+    }
+
+    @Test
+    void testObjHitProcess_IntelligenceFilter_BlocksWise() {
+        BeltconveyorObj belt = new BeltconveyorObj();
+        belt.setFilter(true);
+        belt.setTargetType(0);
+        belt.setCantmove(0);
+        belt.setBeltSpeed(5);
+        belt.setOption(0);
+        // index 5 (WISE) を false → WISE ゆっくりは弾かれる
+        List<Boolean> opts = makeDefaultFilterOptions();
+        opts.set(5, false);
+        belt.setOptionSelections(opts);
+
+        Yukkuri body = createBodyWithSprites();
+        body.setCalcX(0);
+        body.setCalcY(100);
+        body.setIntelligence(Intelligence.WISE);
+
+        belt.objHitProcess(body);
+
+        assertEquals(100, body.getY(), "WISE が除外された場合は搬送されないこと");
     }
 
     @Test

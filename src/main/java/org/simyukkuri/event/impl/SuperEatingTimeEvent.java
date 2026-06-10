@@ -26,6 +26,7 @@ import org.simyukkuri.util.GameText;
 public class SuperEatingTimeEvent extends EventPacket {
 
 	private static final long serialVersionUID = -2604356330046082053L;
+	private static final boolean DEBUG_SUPER_EATING_TIME = true;
 	int tick = 0;
 	int waitTicks = 0;
 	private State state = State.WAIT;
@@ -160,6 +161,8 @@ public class SuperEatingTimeEvent extends EventPacket {
 		b.setMotionY(0);
 		b.setMotionZ(0);
 		b.stopStaying();
+		b.stay();
+		b.setMessage(GameMessages.getMessage(b, MessagePool.Action.SuperEatingTime));
 
 		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (from != null) {
@@ -230,6 +233,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 		if (b == null || from == null) {
 			return UpdateState.ABORT;
 		}
+		debugDump("begin", b, from);
 		if (b.isNyd()) {
 			return UpdateState.ABORT;
 		}
@@ -255,12 +259,18 @@ public class SuperEatingTimeEvent extends EventPacket {
 			return UpdateState.ABORT;
 		}
 
-		if ((10 < waitTicks && from.getCurrentEvent() == null) || target == null || target.isRemoved()) {
-			return UpdateState.ABORT;
+		if (b == from) {
+			if (state == State.WAIT || state == State.GO) {
+				b.stay();
+				b.setLockmove(true);
+			} else {
+				b.setLockmove(false);
+			}
+			waitTicks++;
 		}
 
-		if (tick % 20 != 0) {
-			return null;
+		if ((10 < waitTicks && from.getCurrentEvent() == null) || target == null || target.isRemoved()) {
+			return UpdateState.ABORT;
 		}
 
 		// 空腹状態なら60%にする(強制イベント救済措置)
@@ -272,6 +282,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 
 		// 親
 		if (b == from) {
+			b.stay();
 			// 何らかの理由で終了しそうにないなら終わらせる
 			if (5000 < waitTicks) {
 				return UpdateState.ABORT;
@@ -311,9 +322,11 @@ public class SuperEatingTimeEvent extends EventPacket {
 			boolean gathered = false;
 			switch (state) {
 				case WAIT:// ごはんさんをたべにいくよ！みんなあつまってね！
+					b.stay();
 					// 家族を集める
 					gathered = YukkuriLogic.gatheringYukkuriSquare(from, childrenList.toArray(new Yukkuri[0]),
 							GatheringDirection.DOWN, this);
+					debugGather("WAIT", b, from, target, gathered, childrenList);
 					for (Yukkuri childBody : childrenList) {
 						if (childBody != null) {
 							if (childBody.getCurrentEvent() == null) {
@@ -321,6 +334,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 							}
 							// 他に用事があれば除外
 							childBody.setMoveTargetId(-1);
+							childBody.stopStaying();
 							childBody.wakeup();
 						}
 					}
@@ -337,7 +351,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 						partner.setMoveTargetId(-1);
 					}
 					// ステート移行
-					if (gathered) {
+					if (gathered || waitTicks >= 20) {
 						state = State.GO;
 					} else {
 						b.stay(100);
@@ -346,25 +360,20 @@ public class SuperEatingTimeEvent extends EventPacket {
 					if (1000 < waitTicks) {
 						return UpdateState.ABORT;
 					}
-					waitTicks++;
-					break;
+			break;
 				case GO:// ごはんさんのにおいがするよ！
+					b.stay();
 					// 移動開始
 					gathered = YukkuriLogic.gatheringYukkuriBackLine(from, childrenList, this);
+					debugGather("GO", b, from, target, gathered, childrenList);
 					for (Yukkuri childBody : childrenList) {
 						if (childBody != null && childBody.getCurrentEvent() == null) {
 							childBody.setCurrentEvent(this);
 						}
 						// 他に用事があれば除外
 						childBody.setMoveTargetId(-1);
+						childBody.stopStaying();
 						childBody.wakeup();
-					}
-					Yukkuri firstChild = childrenList.get(0);
-					int distance = Translate.getRealDistance(b.getX(), b.getY(), firstChild.getX(), firstChild.getY());
-					int colxChild = Math.abs(YukkuriLogic.calcCollisionX(b, firstChild));
-					// 一定距離を保つ
-					if (colxChild * 3 < distance) {
-						b.stay();
 					}
 
 					// 番の処理
@@ -379,26 +388,26 @@ public class SuperEatingTimeEvent extends EventPacket {
 						}
 					}
 
-					int colX = Translate.invertX(b.getCollisionX(), target.getY());
-					colX = Translate.transSize(colX);
+					int goColX = Translate.invertX(b.getCollisionX(), target.getY());
+					goColX = Translate.transSize(goColX);
+
+					if (gathered || waitTicks >= 40) {
+						state = State.START_BEFORE;
+					}
+					break;
+				case START_BEFORE:// ごはんの上に集合
+					b.setLockmove(false);
 					int distanceToFood = Translate.getRealDistance(b.getX(), b.getY(), target.getX(),
 							target.getY() - 20);
-					// 餌の近くで待つ
 					if (distanceToFood <= 1) {
-						if (gathered) {
-							state = State.START_BEFORE;
-						}
 						b.stay();
 					} else {
-						// 餌に近づく
+						// 親ゆは食べ物へ移動し、子ゆは上に整列する
 						b.moveToEvent(this, target.getX(), target.getY() - 20);
 						if (GameRandom.nextInt(50) == 0) {
 							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.WantFood));
 						}
 					}
-					break;
-				case START_BEFORE:// ごはんの上に集合
-					b.stay();
 					gathered = YukkuriLogic.gatheringYukkuriSquare(target, childrenList.toArray(new Yukkuri[0]),
 							GatheringDirection.UP, this);
 					for (Yukkuri childBody : childrenList) {
@@ -407,11 +416,13 @@ public class SuperEatingTimeEvent extends EventPacket {
 						}
 						// 他に用事があれば除外
 						childBody.setMoveTargetId(-1);
+						childBody.stopStaying();
 						childBody.wakeup();
 					}
 
 					// 配置済みの場合
 					if (gathered) {
+						b.setLockmove(true);
 						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.SuperEatingTime));
 						b.setHappiness(Happiness.VERY_HAPPY);
 						b.addMemories(1);
@@ -434,15 +445,18 @@ public class SuperEatingTimeEvent extends EventPacket {
 					} else {
 						// 番の処理
 						if (partner != null) {
-							colX = YukkuriLogic.calcCollisionX(partner, from);
-							partner.moveTo((int) (from.getX() + colX * 1.5), from.getY());
+							int partnerColX = YukkuriLogic.calcCollisionX(partner, from);
+							partner.moveTo((int) (from.getX() + partnerColX * 1.5), from.getY());
 							partner.setHappiness(Happiness.HAPPY);
 							// 他に用事があれば除外
 							partner.setMoveTargetId(-1);
 						}
 					}
+					debugGather("START_BEFORE", b, from, target, gathered, childrenList);
 					break;
 				case START:
+					b.setLockmove(true);
+					b.stay();
 					boolean isHungry = false;
 					int noHungerPeriod = 500;
 
@@ -462,6 +476,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 							if (childBody.getCurrentEvent() == null) {
 								childBody.setCurrentEvent(this);
 							}
+							childBody.stopStaying();
 							childBody.wakeup();
 							if (childBody.getHungryLimit() * 10 / 100 > childBody.getHungry()) {
 								childBody.setMoveTargetId(target.objId);
@@ -595,8 +610,86 @@ public class SuperEatingTimeEvent extends EventPacket {
 			}
 		}
 
-		tick++;
 		return null;
+	}
+
+	private void debugDump(String phase, Yukkuri body, Yukkuri from) {
+		if (!DEBUG_SUPER_EATING_TIME) {
+			return;
+		}
+		if (body == null) {
+			return;
+		}
+		if (body != from && body.getCurrentEvent() != this) {
+			return;
+		}
+		System.out.printf(
+				"[SUE:%s] body=%d from=%d to=%d state=%s tick=%d wait=%d pos=(%d,%d,%d) dest=(%d,%d,%d) v=(%d,%d,%d) m=(%d,%d,%d) block=%d stay=%s moveTarget=%d flags[F=%s B=%s Y=%s S=%s]%n",
+				phase,
+				body.getUniqueId(),
+				getFrom(),
+				getTo(),
+				state,
+				tick,
+				waitTicks,
+				body.getX(),
+				body.getY(),
+				body.getZ(),
+				body.getDestX(),
+				body.getDestY(),
+				body.getDestZ(),
+				body.getVx(),
+				body.getVy(),
+				body.getVz(),
+				body.getMotionX(),
+				body.getMotionY(),
+				body.getMotionZ(),
+				body.getBlockedTicks(),
+				body.isStaying(),
+				body.getMoveTargetId(),
+				body.isToFood(),
+				body.isToBed(),
+				body.isToYukkuri(),
+				body.isToShit());
+	}
+
+	private void debugGather(String phase, Yukkuri body, Yukkuri from, Entity target, boolean gathered,
+			List<Yukkuri> childrenList) {
+		if (!DEBUG_SUPER_EATING_TIME) {
+			return;
+		}
+		if (body == null || from == null || target == null) {
+			return;
+		}
+		if (body != from) {
+			return;
+		}
+		StringBuilder childPos = new StringBuilder();
+		for (Yukkuri child : childrenList) {
+			if (child == null) {
+				continue;
+			}
+			if (childPos.length() > 0) {
+				childPos.append(' ');
+			}
+			childPos.append(child.getUniqueId())
+					.append(":(")
+					.append(child.getX()).append(',')
+					.append(child.getY()).append(',')
+					.append(child.getZ()).append(")->(")
+					.append(child.getDestX()).append(',')
+					.append(child.getDestY()).append(',')
+					.append(child.getDestZ()).append(')');
+		}
+		System.out.printf(
+				"[SUE:%s] gathered=%s target=(%d,%d,%d) children=%d [%s]%n",
+				phase,
+				gathered,
+				target.getX(),
+				target.getY(),
+				target.getZ(),
+				childrenList.size(),
+				childPos.toString());
 	}
 
 	// イベント目標に到着した際に呼ばれる
@@ -613,10 +706,12 @@ public class SuperEatingTimeEvent extends EventPacket {
 		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (from != null && from.getCurrentEvent() == this) {
 			from.setCurrentEvent(null);
+			from.setLockmove(false);
 		}
 		Yukkuri partner = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		if (partner != null && partner.getCurrentEvent() == this) {
 			partner.setCurrentEvent(null);
+			partner.setLockmove(false);
 		}
 		if (from != null) {
 			List<Yukkuri> childrenList = YukkuriLogic.createActiveChildren(from, true);
@@ -624,6 +719,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 				for (Yukkuri child : childrenList) {
 					if (child != null && child.getCurrentEvent() == this) {
 						child.setCurrentEvent(null);
+						child.setLockmove(false);
 					}
 				}
 			}

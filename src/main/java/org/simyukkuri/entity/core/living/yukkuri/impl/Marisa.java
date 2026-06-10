@@ -168,13 +168,20 @@ public class Marisa extends Yukkuri {
 	 */
 	@Override
 	public boolean judgeCanTransForGodHand() {
-		boolean ret = true;
 		if (isUnBirth() || isBaby()) {
 			bodyBurst();
 			return false;
 		}
-		// ドスまりさが他にいるなら突然変異しない
-		return ret;
+		if (GameEnvironment.isAntidosSteam()) {
+			return false;
+		}
+		// ドスまりさがワールドに既にいるなら突然変異しない
+		for (Yukkuri candidate : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values()) {
+			if (candidate.getType() == YukkuriType.DOSMARISA) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**

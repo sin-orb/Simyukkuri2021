@@ -11,6 +11,7 @@ import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.entity.core.world.mobile.Vomit;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.BurialState;
+import org.simyukkuri.enums.CoreAnkoState;
 import org.simyukkuri.enums.TakeoutItemType;
 import org.simyukkuri.enums.TangType;
 import org.simyukkuri.field.impl.Barrier;
@@ -77,6 +78,17 @@ public final class FoodSearchPolicy {
 					continue;
 				}
 
+				// NON_YUKKURI_DISEASE 状態ではあまあまのみを候補とする
+				if (body.getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE) {
+					switch (f.getFoodType()) {
+						case SWEETS1: case SWEETS2:
+						case SWEETS_NORA1: case SWEETS_NORA2:
+						case SWEETS_YASEI1: case SWEETS_YASEI2:
+							break;
+						default:
+							continue;
+					}
+				}
 				boolean acceptable = false;
 				boolean takeoutCandidate = false;
 				switch (f.getFoodType()) {

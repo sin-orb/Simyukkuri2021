@@ -3,6 +3,7 @@ package org.simyukkuri.command;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -17,10 +18,15 @@ import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.StubBody;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
+import org.simyukkuri.entity.core.living.yukkuri.impl.DosMarisa;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Marisa;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
+import org.simyukkuri.entity.core.world.bodylinked.Stalk;
 import org.simyukkuri.enums.AgeState;
+import org.simyukkuri.enums.Attitude;
 import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.enums.CriticalDamageType;
+import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.system.Sprite;
@@ -44,6 +50,29 @@ public class GadgetToolTest {
     @AfterEach
     public void tearDown() {
         SimYukkuri.RND = originalRnd;
+    }
+
+    /** Marisa実体を生成・Sprite初期化・ワールドに登録する */
+    private Yukkuri createMarisaBody(AgeState age) {
+        Yukkuri b = new Marisa();
+        Sprite[] spr = new Sprite[3];
+        Sprite[] expSpr = new Sprite[3];
+        Sprite[] brdSpr = new Sprite[3];
+        for (int i = 0; i < 3; i++) {
+            spr[i] = new Sprite();
+            spr[i].setImageW(100);
+            spr[i].setImageH(100);
+            expSpr[i] = new Sprite();
+            brdSpr[i] = new Sprite();
+        }
+        b.setSpriteSet(spr);
+        b.setExpandSpr(expSpr);
+        b.setBraidSpr(brdSpr);
+        b.setAgeState(age);
+        b.setMsgType(YukkuriType.MARISA);
+        b.setIntelligence(Intelligence.AVERAGE);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueId(), b);
+        return b;
     }
 
     /** Reimu実体を生成・Sprite初期化・ワールドに登録する */
@@ -248,6 +277,130 @@ public class GadgetToolTest {
             assertTrue(b.getAbFlagGodHand()[0], "膨張フラグは維持される");
             assertEquals(b.getShitLimitBase()[b.getAgeState().ordinal()] * 10, b.getShit(),
                     "爆発的拡大ではうんうん量が増えるべき");
+        }
+
+        // --- まりさ変身系 ---
+
+        @Test
+        public void testCase0RudeMarisaDoesNotTransform() {
+            // ゲスまりさ: execTransform() 内の isRude() チェックで早期 return
+            Yukkuri b = createMarisaBody(AgeState.ADULT);
+            b.setAttitude(Attitude.SHITHEAD);
+            SimYukkuri.RND = new ConstState(0);
+            GadgetTool.doGodHand(b);
+            assertNotEquals(YukkuriType.DOSMARISA, b.getType(), "ゲスまりさはドス化しないこと");
+        }
+
+        @Test
+        public void testCase0DamagedMarisaDoesNotTransform() {
+            // ダメージありまりさ: canTransform()=false → execTransform() 早期 return
+            Yukkuri b = createMarisaBody(AgeState.ADULT);
+            int halfLimit = b.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 2 + 1;
+            b.setDamage(halfLimit);
+            SimYukkuri.RND = new ConstState(0);
+            GadgetTool.doGodHand(b);
+            assertNotEquals(YukkuriType.DOSMARISA, b.getType(), "ダメージありまりさはドス化しないこと");
+        }
+
+        @Test
+        public void testCase0DoesNotTransformWhenDosMarisaExistsInRegistry() {
+            // ワールドにドスまりさが既にいる場合は judgeCanTransForGodHand()=false
+            DosMarisa dos = new DosMarisa();
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(dos.getUniqueId(), dos);
+            Yukkuri b = createMarisaBody(AgeState.ADULT);
+            SimYukkuri.RND = new ConstState(0);
+            GadgetTool.doGodHand(b);
+            assertNotEquals(YukkuriType.DOSMARISA, b.getType(), "ドスまりさが既にいる場合はドス化しないこと");
+        }
+
+        // --- 持ち物落下 ---
+
+        @Test
+        public void testCase1DropCarryItem() {
+            // case 1 (切断) で dropAllTakeoutItem が呼ばれること
+            Yukkuri b = createReimuBody(AgeState.ADULT);
+            b.getCarryItems().put(org.simyukkuri.enums.TakeoutItemType.FOOD, 9999);
+            b.setBurialState(BurialState.ALL);
+            SimYukkuri.RND = new ConstState(1);
+            GadgetTool.doGodHand(b);
+            assertFalse(b.getCarryItems().containsKey(org.simyukkuri.enums.TakeoutItemType.FOOD),
+                    "case1(切断) で持ち物が落ちること");
+        }
+
+        @Test
+        public void testDefaultDropCarryItem() {
+            // default (膨張) で dropAllTakeoutItem が呼ばれること
+            Yukkuri b = createReimuBody(AgeState.ADULT);
+            b.getCarryItems().put(org.simyukkuri.enums.TakeoutItemType.FOOD, 9999);
+            SimYukkuri.RND = new ConstState(7);
+            GadgetTool.doGodHand(b);
+            assertFalse(b.getCarryItems().containsKey(org.simyukkuri.enums.TakeoutItemType.FOOD),
+                    "default(膨張) で持ち物が落ちること");
+        }
+
+        // --- 言語破壊 (まりさ) ---
+
+        @Test
+        public void testCase5TarinaiForNonReimu() {
+            Yukkuri b = createMarisaBody(AgeState.ADULT);
+            SimYukkuri.RND = new ConstState(5);
+            GadgetTool.doGodHand(b);
+            assertEquals(YukkuriType.TARINAI, b.getMsgType(), "まりさへの言語破壊はTARINAIになること");
+        }
+
+        // --- 茎実ゆ親への通知 ---
+
+        @Test
+        public void testCase2NotifiesStalkMotherWithSad() {
+            Yukkuri mother = createReimuBody(AgeState.ADULT);
+            Yukkuri child = createReimuBody(AgeState.ADULT);
+            Stalk stalk = new Stalk(100, 100, 0);
+            stalk.setPlantYukkuri(mother.getUniqueId());
+            child.setBindStalk(stalk);
+
+            SimYukkuri.RND = new ConstState(2);
+            GadgetTool.doGodHand(child);
+
+            assertEquals(Happiness.SAD, mother.getHappiness(), "case2(引っ張り)で茎実ゆの親がSADになること");
+        }
+
+        @Test
+        public void testCase3NotifiesStalkMotherWithSad() {
+            Yukkuri mother = createReimuBody(AgeState.ADULT);
+            Yukkuri child = createReimuBody(AgeState.ADULT);
+            Stalk stalk = new Stalk(100, 100, 0);
+            stalk.setPlantYukkuri(mother.getUniqueId());
+            child.setBindStalk(stalk);
+
+            SimYukkuri.RND = new ConstState(3);
+            GadgetTool.doGodHand(child);
+
+            assertEquals(Happiness.SAD, mother.getHappiness(), "case3(つぶし)で茎実ゆの親がSADになること");
+        }
+
+        @Test
+        public void testCase4NotifiesStalkMotherWithHappy() {
+            Yukkuri mother = createReimuBody(AgeState.ADULT);
+            Yukkuri child = createReimuBody(AgeState.ADULT);
+            Stalk stalk = new Stalk(100, 100, 0);
+            stalk.setPlantYukkuri(mother.getUniqueId());
+            child.setBindStalk(stalk);
+
+            SimYukkuri.RND = new ConstState(4);
+            GadgetTool.doGodHand(child);
+
+            assertEquals(Happiness.VERY_HAPPY, mother.getHappiness(), "case4(回復)で茎実ゆの親がVERY_HAPPYになること");
+        }
+
+        @Test
+        public void testCase4SetsHalfDamageBeforeHeal() {
+            // case4: setDamage(limit/2) → giveJuice() → damage=0 の流れを確認
+            // damage=0 の初期状態から doGodHand(case4) → giveJuice 後 damage=0
+            Yukkuri b = createReimuBody(AgeState.ADULT);
+            assertEquals(0, b.getDamage(), "初期 damage は 0");
+            SimYukkuri.RND = new ConstState(4);
+            GadgetTool.doGodHand(b);
+            assertEquals(0, b.getDamage(), "case4後 giveJuice によりdamage=0になること");
         }
     }
 }

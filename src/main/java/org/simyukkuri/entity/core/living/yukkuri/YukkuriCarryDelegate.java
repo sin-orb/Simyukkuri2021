@@ -79,9 +79,9 @@ public final class YukkuriCarryDelegate {
 			GameWorld.get().getCurrentWorldState().getTakenOutShits().remove(val.objId);
 			val.setCalcX(body.getX());
 			if (body.getY() + 3 <= Translate.getWorldHeight()) {
-				val.setCalcY(body.getY());
-			} else {
 				val.setCalcY(body.getY() + 3);
+			} else {
+				val.setCalcY(body.getY());
 			}
 			val.setCalcZ(body.getZ() + 10);
 			val.setWhere(Where.ON_FLOOR);

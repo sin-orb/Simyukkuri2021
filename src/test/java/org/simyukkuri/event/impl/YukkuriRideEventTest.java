@@ -289,6 +289,17 @@ public class YukkuriRideEventTest {
         assertDoesNotThrow(() -> event.update(to));
     }
 
+    @Test
+    public void testUpdate_fromDead_returnsAbort() {
+        // from.setDead(true) → canActionForEvent()=false → update(from) → ABORT
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
+        from.setDead(true);
+        YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
+        from.setCurrentEvent(event);
+        assertEquals(org.simyukkuri.event.EventPacket.UpdateState.ABORT, event.update(from));
+    }
+
     @Nested
     class RegressionScenarios {
 

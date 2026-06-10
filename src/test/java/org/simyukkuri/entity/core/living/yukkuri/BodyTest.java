@@ -3975,14 +3975,13 @@ public class BodyTest {
 
         @Test
         public void testDoSukkiriReducesStress() {
-            // doSukkiri calls setStress(0), but setStress has guard: if (s > 0)
-            // So setStress(0) is a no-op, stress remains unchanged
+            // doSukkiri calls setStress(0) to reset stress (works now that setStress allows 0)
             StubBody partner = createBody(AgeState.ADULT);
             body.setDead(false);
             body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setStress(500);
             body.doSukkiri(partner);
-            assertEquals(500, body.getStress());
+            assertEquals(0, body.getStress());
             assertTrue(body.isSukkiri());
         }
 
@@ -4296,8 +4295,7 @@ public class BodyTest {
 
         @Test
         public void testDoRapeReducesStress() {
-            // doRape calls setStress(0), but setStress has guard: if (s > 0)
-            // So setStress(0) is a no-op, stress remains unchanged
+            // doRape calls setStress(0) to reset stress (works now that setStress allows 0)
             StubBody partner = createBody(AgeState.ADULT);
             partner.setRaper(false);
             body.setDead(false);
@@ -4305,7 +4303,7 @@ public class BodyTest {
             body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setStress(500);
             body.doRape(partner);
-            assertEquals(500, body.getStress());
+            assertEquals(0, body.getStress());
         }
 
         @Test
@@ -15136,6 +15134,66 @@ public class BodyTest {
             Entity dropped = body.dropTakeoutItem(TakeoutItemType.SHIT);
             assertNull(dropped);
             assertNull(body.getCarryItems().get(TakeoutItemType.SHIT));
+        }
+
+        @Test
+        public void testDropTakeoutItemShitXCoordMatchesBodyX() {
+            Shit s = new Shit();
+            setObjId(s, 9010);
+            SimYukkuri.world.getCurrentWorldState().getTakenOutShits().put(9010, s);
+            body.getCarryItems().put(TakeoutItemType.SHIT, 9010);
+            body.setCalcX(50); // world 幅内に収める
+            body.setCalcY(30);
+
+            body.dropTakeoutItem(TakeoutItemType.SHIT);
+
+            assertEquals(50, s.getX(), "降ろし後の X 座標が body.getX() と一致すること");
+        }
+
+        @Test
+        public void testDropTakeoutItemShitYCoordIsBodyYPlus3InNormalPath() {
+            // 通常パス: body.getY() + 3 <= worldHeight → shit.Y = body.Y + 3
+            Shit s = new Shit();
+            setObjId(s, 9011);
+            SimYukkuri.world.getCurrentWorldState().getTakenOutShits().put(9011, s);
+            body.getCarryItems().put(TakeoutItemType.SHIT, 9011);
+            body.setCalcX(50);
+            body.setCalcY(30); // 30+3=33 は worldHeight 以下
+
+            body.dropTakeoutItem(TakeoutItemType.SHIT);
+
+            assertEquals(33, s.getY(), "通常パスでの降ろし後 Y 座標が body.getY()+3 になること");
+        }
+
+        @Test
+        public void testDropTakeoutItemShitYCoordIsBodyYAtWorldBoundary() {
+            // 下端パス: body.getY() + 3 > worldHeight → shit.Y = body.getY()
+            Shit s = new Shit();
+            setObjId(s, 9012);
+            SimYukkuri.world.getCurrentWorldState().getTakenOutShits().put(9012, s);
+            body.getCarryItems().put(TakeoutItemType.SHIT, 9012);
+            int boundaryY = Translate.getWorldHeight() - 2; // +3 すると worldHeight 超過
+            body.setCalcX(50);
+            body.setCalcY(boundaryY);
+
+            body.dropTakeoutItem(TakeoutItemType.SHIT);
+
+            assertEquals(boundaryY, s.getY(), "下端パスでの降ろし後 Y 座標が body.getY() そのままになること");
+        }
+
+        @Test
+        public void testDropTakeoutItemShitZCoordIsBodyZPlus10() {
+            Shit s = new Shit();
+            setObjId(s, 9013);
+            SimYukkuri.world.getCurrentWorldState().getTakenOutShits().put(9013, s);
+            body.getCarryItems().put(TakeoutItemType.SHIT, 9013);
+            body.setCalcX(50);
+            body.setCalcY(30);
+            body.setCalcZ(5);
+
+            body.dropTakeoutItem(TakeoutItemType.SHIT);
+
+            assertEquals(15, s.getZ(), "降ろし後の Z 座標が body.getZ()+10 になること");
         }
     }
 

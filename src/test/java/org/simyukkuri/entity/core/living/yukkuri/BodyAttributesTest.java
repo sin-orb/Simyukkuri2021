@@ -591,10 +591,10 @@ public class BodyAttributesTest {
         }
 
         @Test
-        public void testSetStressZeroIgnored() {
+        public void testSetStressZeroResetsToZero() {
             body.setStress(50);
             body.setStress(0);
-            assertEquals(50, body.getStress()); // 変更されない
+            assertEquals(0, body.getStress()); // 0 に正常リセットされる
         }
 
         @Test

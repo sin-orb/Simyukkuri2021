@@ -206,6 +206,18 @@ public class FuneralEvent extends EventPacket {
 		if (b.nearToBirth()) {
 			return UpdateState.ABORT;
 		}
+		// 視野内に捕食種/れいぱーがいれば身の危険が優先 → ABORT
+		for (Yukkuri candidate : org.simyukkuri.SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().values()) {
+			if (candidate == b || candidate.isDead()) {
+				continue;
+			}
+			if ((candidate.isRaper() && candidate.isExciting()) || candidate.isPredatorType()) {
+				int dist = org.simyukkuri.draw.Translate.distance(b.getX(), b.getY(), candidate.getX(), candidate.getY());
+				if (dist < b.getEyesightBase()) {
+					return UpdateState.ABORT;
+				}
+			}
+		}
 		// 3秒に1回（FROMのみ tick を進め、参加者数に依らず30フレーム周期を保つ）
 		if (b == from) {
 			if (tick++ % 30 != 0) {

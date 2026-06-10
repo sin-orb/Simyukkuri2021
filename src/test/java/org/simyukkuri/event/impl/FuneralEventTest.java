@@ -17,6 +17,7 @@ import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Attitude;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
+import org.simyukkuri.enums.PredatorType;
 import org.simyukkuri.event.EventPacket.EventPriority;
 import org.simyukkuri.util.WorldTestHelper;
 
@@ -627,5 +628,102 @@ class FuneralEventTest {
         child.setCurrentEvent(event);
         event.setState(FuneralEvent.State.END);
         assertDoesNotThrow(() -> event.update(child));
+    }
+
+    @Test
+    void testUpdate_wakesSleepingParticipant() {
+        // FuneralEvent 中に眠ったままになる問題のガード：update 後に sleeping=false
+        Yukkuri from = createBody();
+        Yukkuri child = createBody();
+        child.setSleeping(true);
+        child.setSleepingPeriod(100);
+        FuneralEvent event = new FuneralEvent(from, null, null, 10);
+        from.setCurrentEvent(event);
+        child.setCurrentEvent(event);
+
+        event.update(child); // tick=0 → 0%30==0 → sleeping/hungry チェックに到達
+
+        assertFalse(child.isSleeping(), "FuneralEvent update で寝ていた参加者が起こされること");
+    }
+
+    @Test
+    void testUpdate_feedsHungryParticipant() {
+        // FuneralEvent 中に空腹状態が維持されてイベントが止まる問題のガード：60% 補給
+        Yukkuri from = createBody();
+        Yukkuri child = createBody();
+        child.setHungry(0); // isHungry()=true (0 <= limit/2)
+        FuneralEvent event = new FuneralEvent(from, null, null, 10);
+        from.setCurrentEvent(event);
+        child.setCurrentEvent(event);
+
+        event.update(child);
+
+        assertEquals(child.getHungryLimit() * 6 / 10, child.getHungry(),
+                "FuneralEvent update で空腹な参加者が 60% まで補給されること");
+    }
+
+    @Test
+    void testUpdate_raperInRange_returnsAbort() {
+        // 視野内にれいぱー（isRaper=true + isExciting=true）がいれば FuneralEvent → ABORT
+        Yukkuri from = createBody();
+        Yukkuri child = createBody();
+        from.setX(100); from.setY(100);
+        child.setX(100); child.setY(100);
+        FuneralEvent event = new FuneralEvent(from, null, null, 10);
+        from.setCurrentEvent(event);
+        child.setCurrentEvent(event);
+
+        Yukkuri raper = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu() {
+            @Override public int getCollisionX() { return 10; }
+        };
+        raper.setAgeState(AgeState.ADULT);
+        raper.setX(110); raper.setY(100);
+        raper.setRaper(true);
+        raper.setExciting(true);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(raper.getUniqueId(), raper);
+
+        assertEquals(org.simyukkuri.event.EventPacket.UpdateState.ABORT, event.update(child),
+                "視野内にれいぱーがいれば FuneralEvent は ABORT を返すこと");
+    }
+
+    @Test
+    void testUpdate_predatorInRange_returnsAbort() {
+        // 視野内に捕食種（isPredatorType=true）がいれば FuneralEvent → ABORT
+        Yukkuri from = createBody();
+        Yukkuri child = createBody();
+        from.setX(100); from.setY(100);
+        child.setX(100); child.setY(100);
+        FuneralEvent event = new FuneralEvent(from, null, null, 10);
+        from.setCurrentEvent(event);
+        child.setCurrentEvent(event);
+
+        Yukkuri predator = new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya() {
+            @Override public int getCollisionX() { return 10; }
+        };
+        predator.setAgeState(AgeState.ADULT);
+        predator.setX(110); predator.setY(100);
+        predator.setPredatorType(PredatorType.SUCTION); // new Remirya() は tuneParameters() を呼ばないので手動設定
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(predator.getUniqueId(), predator);
+
+        assertEquals(org.simyukkuri.event.EventPacket.UpdateState.ABORT, event.update(child),
+                "視野内に捕食種がいれば FuneralEvent は ABORT を返すこと");
+    }
+
+    @Test
+    void testFuneralEvent_highPriority_blocksCheckPartner_whenExciting() {
+        // FuneralEvent は HIGH priority → shouldSkipPartnerAction() が true → checkPartner が skip される
+        // b.setExciting(true) でもイベント中は checkPartner に入らず isToSukkiri() = false のまま
+        Yukkuri from = createBody();
+        Yukkuri child = createBody();
+        FuneralEvent event = new FuneralEvent(from, null, null, 10);
+        child.setCurrentEvent(event);
+        child.setExciting(true);
+
+        assertEquals(EventPriority.HIGH, event.getPriority(),
+                "FuneralEvent の priority は HIGH であること");
+
+        boolean result = org.simyukkuri.logic.YukkuriLogic.checkPartner(child);
+        assertFalse(result, "FuneralEvent 中はHigh priorityにより checkPartner がスキップされること");
+        assertFalse(child.isToSukkiri(), "FuneralEvent 中は発情中でも isToSukkiri() が false のままであること");
     }
 }

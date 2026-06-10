@@ -17,6 +17,9 @@ import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.item.BreedingPool;
 import org.simyukkuri.entity.core.world.item.ItemTestBase;
 import org.simyukkuri.enums.CoreAnkoState;
+import org.simyukkuri.enums.YukkuriType;
+import org.simyukkuri.util.GameRandom;
+import org.simyukkuri.util.RandomSource;
 import org.simyukkuri.util.WorldTestHelper;
 
 class BreedingPoolTest extends ItemTestBase {
@@ -361,6 +364,100 @@ class BreedingPoolTest extends ItemTestBase {
             assertEquals(beforeBabyTypes + 1, body.getBabyTypes().size());
             assertEquals(beforePregnantLimit - 1, body.getPregnantLimit());
             assertEquals(beforeCash - item.getCost(), SimYukkuri.world.getPlayer().getCash());
+        }
+
+        @Test
+        void testScenario_SecondDeadCrushedBodyDoesNotOverwriteLiquidType() {
+            // liquidYukkuriType が既に設定済みの場合、2匹目の dead+crushed は上書きしない
+            BreedingPool item = new BreedingPool();
+            item.setEnabled(true);
+            item.setLiquidYukkuriType(1011); // SAKUYA typeId = 既設定
+            item.setAge(0);
+
+            Yukkuri body2 = WorldTestHelper.createBody();
+            body2.setDead(true);
+            body2.setCrushed(true);
+
+            item.objHitProcess(body2);
+
+            assertEquals(1011, item.getLiquidYukkuriType(),
+                    "liquidYukkuriType が既に設定済みの場合、2匹目の dead+crushed で上書きされないこと");
+        }
+
+        @Test
+        void testScenario_DeadButNotCrushedBodyDoesNotLiquidize() {
+            // crushed でない死亡ゆっくりは液状化の条件を満たさない
+            BreedingPool item = new BreedingPool();
+            item.setEnabled(true);
+            item.setLiquidYukkuriType(-1);
+            item.setAge(0);
+
+            Yukkuri body = WorldTestHelper.createBody();
+            body.setDead(true);
+            body.setCrushed(false);
+
+            item.objHitProcess(body);
+
+            assertEquals(-1, item.getLiquidYukkuriType(),
+                    "crushed されていない死亡ゆっくりでは liquidYukkuriType が変化しないこと");
+        }
+
+        @Test
+        void testScenario_LiquidTypeSakuyaWithNextBooleanTrueMakesSakuyaBaby() {
+            // liquidYukkuriType=SAKUYA(1011), nextBoolean()=true → babyType=SAKUYA
+            // nextInt≠0 でハイブリッドパスをスキップ
+            BreedingPool item = new BreedingPool();
+            item.setEnabled(true);
+            item.setHighQuality(true);
+            item.setStalkPool(false);
+            item.setOption(0);
+            item.setAge(0);
+            item.setLiquidYukkuriType(1011); // SAKUYA typeId
+
+            Yukkuri body = WorldTestHelper.createBody();
+            body.setDead(false);
+            GameRandom.setOverride(new RandomSource() {
+                @Override public int nextInt(int bound) { return 1; } // skip hybrid
+                @Override public boolean nextBoolean() { return true; } // liquid path
+            });
+
+            item.objHitProcess(body);
+
+            assertTrue(body.isHasBaby(), "液状プール入泳後に hasBaby=true になること");
+            assertFalse(body.getBabyTypes().isEmpty(), "赤ゆが1件追加されること");
+            assertEquals(YukkuriType.SAKUYA, body.getBabyTypes().get(0).getType(),
+                    "nextBoolean()=true で liquid タイプ（SAKUYA）の赤ゆが生まれること");
+
+            GameRandom.clearOverride();
+        }
+
+        @Test
+        void testScenario_LiquidTypeWithNextBooleanFalseMakesMotherTypeBaby() {
+            // nextBoolean()=false → babyType=body.getType()=MARISA
+            BreedingPool item = new BreedingPool();
+            item.setEnabled(true);
+            item.setHighQuality(true);
+            item.setStalkPool(false);
+            item.setOption(0);
+            item.setAge(0);
+            item.setLiquidYukkuriType(1011); // SAKUYA
+
+            Yukkuri body = WorldTestHelper.createBody();
+            body.setDead(false);
+            YukkuriType bodyType = body.getType();
+            GameRandom.setOverride(new RandomSource() {
+                @Override public int nextInt(int bound) { return 1; } // skip hybrid, skip mutations
+                @Override public boolean nextBoolean() { return false; } // mother path
+            });
+
+            item.objHitProcess(body);
+
+            assertTrue(body.isHasBaby());
+            assertFalse(body.getBabyTypes().isEmpty());
+            assertEquals(bodyType, body.getBabyTypes().get(0).getType(),
+                    "nextBoolean()=false で母体タイプ（MARISA）の赤ゆが生まれること");
+
+            GameRandom.clearOverride();
         }
 
         @Test

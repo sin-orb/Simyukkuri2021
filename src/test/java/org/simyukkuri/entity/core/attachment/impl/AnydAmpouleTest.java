@@ -1,9 +1,11 @@
 package org.simyukkuri.entity.core.attachment.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +14,9 @@ import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
+import org.simyukkuri.entity.core.living.yukkuri.YukkuriNydDelegate;
 import org.simyukkuri.enums.AgeState;
+import org.simyukkuri.enums.CoreAnkoState;
 import org.simyukkuri.enums.Direction;
 import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.system.ResourceUtil;
@@ -176,6 +180,21 @@ public class AnydAmpouleTest {
             }
         }
         return images;
+    }
+
+    @Test
+    void testAnydAmpouleBlocksNydProgression() {
+        // AnydAmpoule を付けていると、高ストレス状態でも NYD にならないこと
+        Yukkuri parent = createParent(AgeState.ADULT);
+        parent.setCoreAnkoState(CoreAnkoState.NORMAL);
+        // ストレスを耐性閾値の 3 倍に設定（通常なら NYD_NEAR → NYD になる）
+        int stressLimit = parent.getStressLimitBase()[parent.getAgeState().ordinal()];
+        parent.setStress(stressLimit * 3);
+        parent.addAttachment(new AnydAmpoule(parent));
+
+        new YukkuriNydDelegate(parent).hasNonYukkuriDisease();
+
+        assertFalse(parent.isNyd(), "AnydAmpoule があれば高ストレス状態でも NYD にならないこと");
     }
 
     @Test

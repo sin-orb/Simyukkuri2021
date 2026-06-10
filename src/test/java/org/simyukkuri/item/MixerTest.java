@@ -313,6 +313,112 @@ class MixerTest extends ItemTestBase {
         }
 
         @Test
+        void testScenario_NoDamageBeforeGrindingStarts() {
+            // counter=0 → upDate() 後 counter=1。1 > 60 でないため mixing 未開始 → damage 不変
+            Mixer item = new Mixer();
+            item.setEnabled(true);
+            item.setX(100);
+            item.setY(100);
+            item.setZ(0);
+            item.setCounter(0);
+
+            Yukkuri body = WorldTestHelper.createBody();
+            body.setX(100);
+            body.setY(100);
+            body.setZ(0);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
+            item.setBind(body.getUniqueId());
+            int damageBefore = body.getDamage();
+            int stressBefore = body.getStress();
+
+            item.upDate();
+
+            assertEquals(1, item.getCounter(), "counter が 1 になること");
+            assertEquals(damageBefore, body.getDamage(), "待機中は damage が入らないこと");
+            assertEquals(stressBefore, body.getStress(), "待機中は stress が入らないこと");
+        }
+
+        @Test
+        void testScenario_MovedAwayAtCounter60DoesNotCut() {
+            // counter=60 → 分離時 if(60 > 60) は false → CUT されない
+            Mixer item = new Mixer();
+            item.setEnabled(true);
+            item.setX(100);
+            item.setY(100);
+            item.setZ(0);
+            item.setCounter(60);
+
+            Yukkuri body = WorldTestHelper.createBody();
+            body.setX(150); // 位置をずらして離れた状態にする
+            body.setY(100);
+            body.setZ(0);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
+            item.setBind(body.getUniqueId());
+
+            item.upDate();
+
+            assertEquals(-1, item.getBind(), "body 離脱で bind が -1 になること");
+            assertFalse(body.getCriticalDamageType() == CriticalDamageType.CUT,
+                    "counter=60（まだ >60 でない）での離脱は CUT にならないこと");
+        }
+
+        @Test
+        void testScenario_AnkoDepletionRemovesBody() {
+            // counter=60 → upDate で 61 になり mixing 開始 → addAmount(-100) で餡子0以下 → remove
+            Mixer item = new Mixer();
+            item.setEnabled(true);
+            item.setX(100);
+            item.setY(100);
+            item.setZ(0);
+            item.setCounter(60);
+            item.setMix(new DummyEffect());
+
+            Yukkuri body = WorldTestHelper.createBody();
+            body.setX(100);
+            body.setY(100);
+            body.setZ(0);
+            body.setAnkoAmount(100); // addAmount(-100) で 0 以下 → remove
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
+            item.setBind(body.getUniqueId());
+            SimYukkuri.RND = new ConstState(1);
+
+            item.upDate();
+
+            assertTrue(body.isRemoved(), "餡子が尽きると body が除去されること");
+            assertEquals(-1, item.getBind(), "body 除去後に bind が -1 になること");
+        }
+
+        @Test
+        void testScenario_DeadBodySkipsDamageButAmountStillAccumulates() {
+            // counter=60 → mixing 開始 → isDead=true → damage/stress スキップ → amount は加算される
+            Mixer item = new Mixer();
+            item.setEnabled(true);
+            item.setX(100);
+            item.setY(100);
+            item.setZ(0);
+            item.setCounter(60);
+            item.setMix(new DummyEffect());
+
+            Yukkuri body = WorldTestHelper.createBody();
+            body.setX(100);
+            body.setY(100);
+            body.setZ(0);
+            body.setDead(true);
+            body.setAnkoAmount(1000);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueId(), body);
+            item.setBind(body.getUniqueId());
+            SimYukkuri.RND = new ConstState(1);
+            int damageBefore = body.getDamage();
+            int stressBefore = body.getStress();
+
+            item.upDate();
+
+            assertEquals(damageBefore, body.getDamage(), "死亡ゆっくりには damage が加算されないこと");
+            assertEquals(stressBefore, body.getStress(), "死亡ゆっくりには stress が加算されないこと");
+            assertEquals(100, item.getAmount(), "死亡ゆっくりでも amount は加算されること");
+        }
+
+        @Test
         void testScenario_RemoveListDataAlsoRemovesActiveMixEffect() {
             Mixer item = new Mixer();
             item.setObjId(1234);

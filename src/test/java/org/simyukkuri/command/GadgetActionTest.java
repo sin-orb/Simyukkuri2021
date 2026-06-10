@@ -1,5 +1,6 @@
 package org.simyukkuri.command;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -217,6 +218,118 @@ public class GadgetActionTest {
         }
 
         @Test
+        public void testNeedleNeedlesBody() {
+            Yukkuri b = createReimuBody(AgeState.ADULT);
+            assertFalse(b.isNeedled());
+            MouseEvent ev = createEvent(0);
+            GadgetAction.evaluateTool2(GadgetMenuChoice.NEEDLE, ev, b);
+            assertTrue(b.isNeedled(), "NEEDLE で針が刺さること");
+        }
+
+        @Test
+        public void testNeedleToggleRemovesNeedle() {
+            Yukkuri b = createReimuBody(AgeState.ADULT);
+            b.setNeedle(true); // まず針を刺す
+            assertTrue(b.isNeedled());
+            MouseEvent ev = createEvent(0);
+            GadgetAction.evaluateTool2(GadgetMenuChoice.NEEDLE, ev, b);
+            assertFalse(b.isNeedled(), "NEEDLE 再適用で針が抜けること（トグル仕様）");
+        }
+
+        @Test
+        public void testWaterWetsBody() {
+            Yukkuri b = createReimuBody(AgeState.ADULT);
+            assertFalse(b.isWet());
+            MouseEvent ev = createEvent(0);
+            GadgetAction.evaluateTool2(GadgetMenuChoice.WATER, ev, b);
+            assertTrue(b.isWet(), "WATER で濡れること");
+        }
+
+        @Test
+        public void testPealPealsBody() {
+            Yukkuri b = createReimuBody(AgeState.ADULT);
+            assertFalse(b.isPealed());
+            MouseEvent ev = createEvent(0);
+            GadgetAction.evaluateTool(GadgetMenuChoice.PEAL, ev, b);
+            assertTrue(b.isPealed(), "PEAL で皮がむけること");
+        }
+
+        @Test
+        public void testBlindBlindsBody() {
+            Yukkuri b = createReimuBody(AgeState.ADULT);
+            assertFalse(b.isBlind());
+            MouseEvent ev = createEvent(0);
+            GadgetAction.evaluateTool(GadgetMenuChoice.BLIND, ev, b);
+            assertTrue(b.isBlind(), "BLIND で目が見えなくなること");
+        }
+
+        @Test
+        public void testJuiceRestoresDamage() {
+            Yukkuri b = createReimuBody(AgeState.ADULT);
+            b.setDamage(500);
+            MouseEvent ev = createEvent(0);
+            GadgetAction.evaluateTool(GadgetMenuChoice.JUICE, ev, b);
+            assertEquals(0, b.getDamage(), "JUICE でダメージが 0 に回復すること");
+        }
+
+        @Test
+        public void testPackPacksBody() {
+            Yukkuri b = createReimuBody(AgeState.ADULT);
+            assertFalse(b.isPacked());
+            MouseEvent ev = createEvent(0);
+            GadgetAction.evaluateTool(GadgetMenuChoice.PACK, ev, b);
+            assertTrue(b.isPacked(), "PACK で詰められること");
+        }
+
+        @Test
+        public void testCastrationCastratesBody() {
+            Yukkuri b = createReimuBody(AgeState.ADULT);
+            assertFalse(b.isCastrated());
+            MouseEvent ev = createEvent(0);
+            GadgetAction.evaluateTool2(GadgetMenuChoice.CASTRATION, ev, b);
+            assertTrue(b.isCastrated(), "CASTRATION で去勢されること");
+        }
+
+        @Test
+        public void testBuryBuriesBody() {
+            Yukkuri b = createReimuBody(AgeState.ADULT);
+            assertEquals(org.simyukkuri.enums.BurialState.NONE, b.getBurialState());
+            // 畑フィールドに配置（baryInUnderGround の前提条件）
+            b.setCalcX(50);
+            b.setCalcY(50);
+            b.setCalcZ(0);
+            org.simyukkuri.draw.Translate.setCurrentFieldGridValue(50, 50,
+                    org.simyukkuri.field.FieldShape.FIELD_FARM);
+            MouseEvent ev = createEvent(0);
+            GadgetAction.evaluateTool2(GadgetMenuChoice.BURY, ev, b);
+            assertFalse(b.getBurialState() == org.simyukkuri.enums.BurialState.NONE,
+                    "BURY で埋まること（畑フィールド上）");
+        }
+
+        @Test
+        public void testHammerDamagesBody() {
+            Yukkuri b = createReimuBody(AgeState.ADULT);
+            int damageBefore = b.getDamage();
+            MouseEvent ev = createEvent(0);
+            // HAMMER は headless で addVomit NPE の可能性あり
+            try {
+                GadgetAction.evaluateTool(GadgetMenuChoice.HAMMER, ev, b);
+            } catch (NullPointerException e) {
+                // headless 許容
+            }
+            assertTrue(b.getDamage() > damageBefore, "HAMMER でダメージが入ること");
+        }
+
+        @Test
+        public void testSetSickMakesSick() {
+            Yukkuri b = createReimuBody(AgeState.ADULT);
+            assertFalse(b.isSick());
+            MouseEvent ev = createEvent(0);
+            GadgetAction.evaluateTool2(GadgetMenuChoice.SET_SICK, ev, b);
+            assertTrue(b.isSick(), "SET_SICK でカビが接種されること");
+        }
+
+        @Test
         public void testVibratorExcitesBody() {
             Yukkuri b = createReimuBody(AgeState.ADULT);
             assertFalse(b.isExciting());
@@ -269,6 +382,41 @@ public class GadgetActionTest {
             GadgetAction.evaluateCommunicate(GadgetMenuChoice.YUKKURISITEITTENE, ev, b);
 
             assertNotNull(b.getMessageBuffer(), "ゆっくりしていってね！でメッセージが設定されるべき");
+        }
+
+        @Test
+        public void testTakeItEasyReducesStressAndIncreasesLove() {
+            Yukkuri b = createReimuBody(AgeState.ADULT);
+            b.setStress(500);
+            int loveBefore = b.getLovePlayer();
+            MouseEvent ev = createEvent(0);
+
+            GadgetAction.evaluateCommunicate(GadgetMenuChoice.YUKKURISITEITTENE, ev, b);
+
+            assertTrue(b.getStress() < 500, "ゆっくりしていってね！でストレスが減ること");
+            assertTrue(b.getLovePlayer() > loveBefore, "ゆっくりしていってね！で好感度が上がること");
+        }
+
+        @Test
+        public void testYukkuriDieIncreasesStressAndDecreasesLove() {
+            Yukkuri b = createReimuBody(AgeState.ADULT);
+            b.setStress(0);
+            int loveBefore = b.getLovePlayer();
+            MouseEvent ev = createEvent(0);
+
+            GadgetAction.evaluateCommunicate(GadgetMenuChoice.YUKKURIDIE, ev, b);
+
+            assertTrue(b.getStress() > 0, "ゆっくり死んでね！でストレスが増えること");
+            assertTrue(b.getLovePlayer() < loveBefore, "ゆっくり死んでね！で好感度が下がること");
+        }
+
+        @Test
+        public void testYukkuriFurifuriSetsMessage() {
+            Yukkuri b = createReimuBody(AgeState.ADULT);
+            MouseEvent ev = createEvent(0);
+
+            assertDoesNotThrow(() -> GadgetAction.evaluateCommunicate(GadgetMenuChoice.YUKKURIFURIFURI, ev, b),
+                    "ゆっくりふりふりしてね！で例外なく voiceReaction が呼ばれること");
         }
     }
 
@@ -551,6 +699,40 @@ public class GadgetActionTest {
 
             assertEquals(1, b.getAttachmentSize(Ants.class), "Ctrl時は蟻操作されないべき");
             assertEquals(0, other.getAttachmentSize(Ants.class), "Ctrl時は他Bodyの蟻も変化しないべき");
+        }
+    }
+
+    // --- 床設置コマンド スモークテスト ---
+
+    @Nested
+    class FloorItemSmokeTests {
+
+        @Test
+        public void testDiffuserFloorItemDoesNotThrowWithNullTarget() {
+            MouseEvent ev = createEvent(0);
+            assertDoesNotThrow(() -> GadgetAction.evaluateFloorItems(GadgetMenuChoice.DIFFUSER, ev, null),
+                    "DIFFUSER: targetObject=null でも例外なく処理されること");
+        }
+
+        @Test
+        public void testBreedPoolFloorItemDoesNotThrowWithNullTarget() {
+            MouseEvent ev = createEvent(0);
+            assertDoesNotThrow(() -> GadgetAction.evaluateFloorItems(GadgetMenuChoice.BREED_POOL, ev, null),
+                    "BREED_POOL: targetObject=null でも例外なく処理されること");
+        }
+
+        @Test
+        public void testYunbaSetupDoesNotThrowWithNullTarget() {
+            MouseEvent ev = createEvent(0);
+            assertDoesNotThrow(() -> GadgetAction.evaluateToys(GadgetMenuChoice.YUNBA_SETUP, ev, null),
+                    "YUNBA_SETUP: targetObject=null でも例外なく処理されること");
+        }
+
+        @Test
+        public void testBeltconveyorSetupDoesNotThrowWithNullTarget() {
+            MouseEvent ev = createEvent(0);
+            assertDoesNotThrow(() -> GadgetAction.evaluateConveyor(GadgetMenuChoice.BELTCONVEYOR_SETUP, ev, null),
+                    "BELTCONVEYOR_SETUP: targetObject=null でも例外なく処理されること");
         }
     }
 }

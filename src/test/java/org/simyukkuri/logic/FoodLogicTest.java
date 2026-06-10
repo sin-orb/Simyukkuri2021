@@ -20,6 +20,7 @@ import org.simyukkuri.entity.core.world.item.Stone;
 import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.BurialState;
+import org.simyukkuri.entity.core.living.yukkuri.YukkuriNydDelegate;
 import org.simyukkuri.enums.CoreAnkoState;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.FavItemType;
@@ -87,9 +88,60 @@ class FoodLogicTest {
 
     @Test
     void testCheckFood_NonYukkuriDiseaseState() {
+        // 食べ物なし → SWEETS サーチを試みるが見つからず false
         body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
 
         assertFalse(FoodLogic.checkFood(body));
+    }
+
+    @Test
+    void testCheckFood_Nyd_SweetsInRange_ReturnsTrue() {
+        // NYD 状態でもあまあまが視野内にあれば食べに行くこと（A テスト）
+        body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
+        body.setHungry(body.getHungryLimit() / 2); // 半分の空腹
+        Food sweets = new Food(102, 100, Food.FoodType.SWEETS1.ordinal());
+        sweets.setAmount(100);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(sweets.getObjId(), sweets);
+
+        boolean result = FoodLogic.checkFood(body);
+
+        assertTrue(result, "NYD 状態でもあまあまが近くにあれば checkFood が true を返すこと");
+    }
+
+    @Test
+    void testCheckFood_Nyd_BitterInRange_ReturnsFalse() {
+        // NYD 状態で BITTER しかない場合は引き続きブロック（B テスト）
+        body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
+        body.setHungry(body.getHungryLimit() / 2);
+        Food bitter = new Food(102, 100, Food.FoodType.BITTER.ordinal());
+        bitter.setAmount(100);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(bitter.getObjId(), bitter);
+
+        boolean result = FoodLogic.checkFood(body);
+
+        assertFalse(result, "NYD 状態で BITTER しかない場合は checkFood が false を返すこと");
+    }
+
+    @Test
+    void testEatFood_Nyd_SweetsResetsStress() {
+        // NYD 状態でもあまあまを食べると stress=0 になること（C テスト）
+        body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
+        body.setStress(9999);
+
+        FoodLogic.eatFood(body, Food.FoodType.SWEETS1, 100);
+
+        assertEquals(0, body.getStress(), "NYD 状態でもあまあまを食べると stress が 0 にリセットされること");
+    }
+
+    @Test
+    void testNyd_StressZero_Recovers() {
+        // ストレスが 0 なら NYD から回復すること（D テスト）
+        body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
+        body.setStress(0);
+
+        new YukkuriNydDelegate(body).hasNonYukkuriDisease();
+
+        assertTrue(body.isNotNyd(), "stress=0 の NYD body は hasNonYukkuriDisease() 後に NORMAL 復帰すること");
     }
 
     @Test
@@ -781,5 +833,83 @@ class FoodLogicTest {
 
         assertEquals(stressBefore, body.getStress());
         assertNotNull(body.getCarryItem(org.simyukkuri.enums.TakeoutItemType.SHIT));
+    }
+
+    // --- FoodConsumptionPolicy.eatFood — BITTER食後 excretionBoost 加速 ---
+
+    @Test
+    void testEatFood_BitterHated_ExcretionBoostIncreasedByRapidShit() {
+        // isLikeBitterFood=false（Marisa デフォルト）、ConstState(0) で getDiarrhea=true
+        // → rapidShit() → excretionBoost += TICK*5 = 5
+        body.setLikeBitterFood(false);
+        SimYukkuri.RND = new ConstState(0);
+
+        FoodLogic.eatFood(body, Food.FoodType.BITTER, 100);
+
+        assertEquals(5, body.getExcretionBoost(),
+                "BITTER 嫌いゆっくりが BITTER を食べると excretionBoost が 5 増加すること");
+    }
+
+    @Test
+    void testEatFood_BitterLiked_NoExcretionBoost() {
+        // isLikeBitterFood=true のとき rapidShit は呼ばれない → excretionBoost=0 のまま
+        body.setLikeBitterFood(true);
+        SimYukkuri.RND = new ConstState(0);
+
+        FoodLogic.eatFood(body, Food.FoodType.BITTER, 100);
+
+        assertEquals(0, body.getExcretionBoost(),
+                "BITTER 好きゆっくりでは excretionBoost が変化しないこと");
+    }
+
+    @Test
+    void testCheckShit_WithExcretionBoost_AcceleratesShitAccumulation() {
+        // excretionBoost=5 のとき非満腹パス: shit += TICK + excretionBoost*20 = 1 + 100 = 101
+        // 満腹時は TICK*2 になるため、hungry を下げて非満腹にする
+        body.setExcretionBoost(5);
+        body.setShit(0);
+        body.setHungry(0); // isFull=false
+        body.setAge(1);
+
+        body.checkShit();
+
+        assertEquals(101, body.getShit(),
+                "excretionBoost=5 のとき checkShit で shit が 1+5*20=101 増加すること");
+    }
+
+    @Test
+    void testCheckShit_ExcretionBoostDecaysOnOverflow() {
+        // shit が SHIT_LIMIT を超えると excretionBoost -= 1
+        body.setExcretionBoost(5);
+        body.setShit(body.getShitLimit()); // overflow 状態
+        body.setHungry(0); // isFull=false
+        body.setAge(1);
+
+        body.checkShit();
+
+        assertEquals(4, body.getExcretionBoost(),
+                "shit overflow 後に excretionBoost が 1 減衰されること");
+        assertEquals(0, body.getShit(),
+                "shit overflow 後に shit がリセット（排泄）されること");
+    }
+
+    // --- FoodLogic.eatFood — isTooHungry 連携 ---
+
+    @Test
+    void testIsTooHungry_HungryZeroAndDamageNone_ReturnsFalse() {
+        // hungry=0 + damage=0（NONE） → isTooHungry は false
+        body.setHungry(0);
+        body.setDamage(0);
+        assertFalse(body.isTooHungry(),
+                "hungry=0 でも damage=NONE のときは isTooHungry=false であること");
+    }
+
+    @Test
+    void testIsTooHungry_HungryZeroAndDamageVery_ReturnsTrue() {
+        // hungry=0 + damage=VERY → isTooHungry は true
+        body.setHungry(0);
+        WorldTestHelper.setDamage(body, body.getDamageLimit() / 2 + 1);
+        assertTrue(body.isTooHungry(),
+                "hungry=0 かつ damage=VERY のときは isTooHungry=true であること");
     }
 }

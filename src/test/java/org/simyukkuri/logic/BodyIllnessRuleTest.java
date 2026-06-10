@@ -67,4 +67,11 @@ class BodyIllnessRuleTest {
 		assertFalse(YukkuriIllnessRule.findSick(self, target),
 				"健康な target は WISE にも無視されること");
 	}
+
+	@Test
+	void nullTargetDoesNotCrash() {
+		self.setIntelligence(Intelligence.AVERAGE);
+		assertFalse(YukkuriIllnessRule.findSick(self, null),
+				"target=null を渡しても false を返してクラッシュしないこと");
+	}
 }

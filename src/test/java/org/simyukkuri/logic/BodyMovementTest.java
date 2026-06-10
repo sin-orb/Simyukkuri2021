@@ -12,6 +12,7 @@ import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.attachment.impl.Ants;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
+import org.simyukkuri.enums.CoreAnkoState;
 import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.PredatorType;
 import org.simyukkuri.system.Sprite;
@@ -520,6 +521,88 @@ class BodyMovementTest {
 
 		assertEquals(-1, body.getDestX());
 		assertEquals(-1, body.getDestY());
+	}
+
+	@Test
+	void landingFirstGroundReducesStress() {
+		// ADULT の jumpLevel=1 なので falldownDamage >= 8/1=8 が必要
+		// noDamageNextFall=true で strike(addStress) を無効化し firstGround の -400 だけを検証
+		body.setFirstGround(true);
+		body.setNoDamageNextFall(true);
+		body.setStress(500);
+		body.setZ(1);
+		body.setMostDepth(0);
+		body.setVx(0);
+		body.setVy(0);
+		body.setVz(1);
+		body.setMotionX(0);
+		body.setMotionY(0);
+		body.setMotionZ(0);
+		body.setFalldownDamage(7);
+
+		YukkuriMovement.applyExternalMotion(body);
+
+		assertEquals(100, body.getStress(), "初接地着地でストレスが 500-400=100 になること");
+		assertFalse(body.isFirstGround(), "firstGround フラグがクリアされること");
+	}
+
+	@Test
+	void landingNydFirstGroundSkipsStressReduction() {
+		// noDamageNextFall=true で strike(addStress) を無効化し、firstGround/NYD 条件だけを検証する
+		body.setFirstGround(true);
+		body.setStress(500);
+		body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
+		body.setNoDamageNextFall(true);
+		body.setZ(1);
+		body.setMostDepth(0);
+		body.setVx(0);
+		body.setVy(0);
+		body.setVz(1);
+		body.setMotionX(0);
+		body.setMotionY(0);
+		body.setMotionZ(0);
+		body.setFalldownDamage(7);
+
+		YukkuriMovement.applyExternalMotion(body);
+
+		assertEquals(500, body.getStress(), "NYD 中は初接地でもストレス軽減が起きないこと（回帰テスト）");
+		assertFalse(body.isFirstGround(), "firstGround フラグはクリアされること");
+	}
+
+	@Test
+	void landingWithPealedKillsYukkuri() {
+		body.setPealed(true);
+		body.setZ(1);
+		body.setMostDepth(0);
+		body.setVx(0);
+		body.setVy(0);
+		body.setVz(1);
+		body.setMotionX(0);
+		body.setMotionY(0);
+		body.setMotionZ(0);
+		body.setFalldownDamage(7);
+
+		YukkuriMovement.applyExternalMotion(body);
+
+		assertTrue(body.isDead(), "皮むきゆっくりが着地ダメージで死亡すること");
+	}
+
+	@Test
+	void landingDeathSetsCrushed() {
+		body.setPealed(true);
+		body.setZ(1);
+		body.setMostDepth(0);
+		body.setVx(0);
+		body.setVy(0);
+		body.setVz(1);
+		body.setMotionX(0);
+		body.setMotionY(0);
+		body.setMotionZ(0);
+		body.setFalldownDamage(7);
+
+		YukkuriMovement.applyExternalMotion(body);
+
+		assertTrue(body.isCrushed(), "死亡着地で crushed フラグが立つこと");
 	}
 
 	private RandomSource fixedRandom(final int fixedInt, final boolean fixedBoolean) {

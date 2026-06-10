@@ -3425,7 +3425,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param s ストレス値
 	 */
 	public void setStress(int s) {
-		if (s > 0) {
+		if (s >= 0) {
 			this.stress = s;
 		}
 	}

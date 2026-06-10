@@ -16,6 +16,7 @@ import org.simyukkuri.entity.core.world.item.HotPlate;
 import org.simyukkuri.entity.core.world.item.ItemTestBase;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
+import org.simyukkuri.enums.FootBake;
 import org.simyukkuri.util.WorldTestHelper;
 
 class HotPlateTest extends ItemTestBase {
@@ -255,6 +256,74 @@ class HotPlateTest extends ItemTestBase {
 
             assertTrue(body.canPullOrPush());
             assertEquals(body, item.getBoundYukkuri());
+        }
+
+        @Test
+        void footBakeAtMediumThresholdRemainsNone() {
+            // threshold_medium = getDamageLimit() >> 1（現 ageState 基準）
+            // 等値（== threshold_medium）は NONE のまま（条件が > のため）
+            Yukkuri body = WorldTestHelper.createBody();
+            body.setAgeState(org.simyukkuri.enums.AgeState.ADULT);
+            int limit = body.getDamageLimit();
+            body.setFootBakePeriod(limit >> 1);
+            assertEquals(FootBake.NONE, body.getFootBakeLevel(),
+                    "threshold_medium ちょうどは NONE のままであること（> ではないため）");
+        }
+
+        @Test
+        void footBakeAtCriticalThresholdRemainsMedium() {
+            // threshold_critical = getDamageLimit()。等値は MEDIUM のまま（> ではないため）
+            Yukkuri body = WorldTestHelper.createBody();
+            body.setAgeState(org.simyukkuri.enums.AgeState.ADULT);
+            int limit = body.getDamageLimit();
+            body.setFootBakePeriod(limit);
+            assertEquals(FootBake.MEDIUM, body.getFootBakeLevel(),
+                    "threshold_critical ちょうどは MEDIUM のままであること（> ではないため）");
+        }
+
+        @Test
+        void upDateAccumulatesToMediumBurn() {
+            // NONE 上限 (threshold_medium ちょうど) + upDate() 1回(+50) → MEDIUM に遷移
+            HotPlate item = new HotPlate();
+            item.setX(120);
+            item.setY(140);
+            Yukkuri body = WorldTestHelper.createBody();
+            body.setAgeState(org.simyukkuri.enums.AgeState.ADULT);
+            body.setCalcX(item.getX());
+            body.setCalcY(item.getY());
+            body.setCalcZ(item.getZ());
+            int limit = body.getDamageLimit();
+            body.setFootBakePeriod(limit >> 1);
+            item.setBoundYukkuri(body);
+
+            item.upDate();
+
+            assertEquals(FootBake.MEDIUM, body.getFootBakeLevel(),
+                    "upDate +50 で threshold_medium を超えて MEDIUM に遷移すること");
+        }
+
+        @Test
+        void upDateAccumulatesToCriticalBurnAndEnablesPull() {
+            // CRITICAL 手前 50 + upDate() 1回(+50) → CRITICAL に遷移 + canPullOrPush=true
+            HotPlate item = new HotPlate();
+            item.setX(160);
+            item.setY(180);
+            Yukkuri body = WorldTestHelper.createBody();
+            body.setAgeState(org.simyukkuri.enums.AgeState.ADULT);
+            body.setCalcX(item.getX());
+            body.setCalcY(item.getY());
+            body.setCalcZ(item.getZ());
+            int limit = body.getDamageLimit();
+            body.setFootBakePeriod(limit - 49);
+            body.setCanPullOrPush(false);
+            item.setBoundYukkuri(body);
+
+            item.upDate();
+
+            assertEquals(FootBake.CRITICAL, body.getFootBakeLevel(),
+                    "upDate +50 で threshold_critical を超えて CRITICAL に遷移すること");
+            assertTrue(body.canPullOrPush(),
+                    "CRITICAL になると canPullOrPush が true になること");
         }
 
         @Test

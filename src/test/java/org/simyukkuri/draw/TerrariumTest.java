@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.draw.Translate;
 import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.engine.TerrariumWorldLogic;
 import org.simyukkuri.entity.core.Entity;
@@ -2221,6 +2222,90 @@ class TerrariumTest {
                 assertTrue(restoredEvent.isFlyGame());
                 assertTrue(restoredEvent.isGrabbing());
                 assertTrue(restoredEvent.isSnack());
+            } finally {
+                tempFile.delete();
+            }
+        }
+
+        @Test
+        void testScenario_SaveLoadRestoresUnyoOff() throws Exception {
+            File tempFile = File.createTempFile("simyukkuri_test_unyo_off", ".sav");
+            try {
+                SimYukkuri.world.setUnyo(false);
+                Terrarium.saveState(tempFile);
+                SimYukkuri.UNYO = true; // セーブ後に変更
+                WorldTestHelper.resetStates();
+                WorldTestHelper.initializeMinimalWorld();
+                terrarium = new Terrarium();
+
+                Terrarium.loadState(tempFile);
+
+                assertFalse(SimYukkuri.UNYO, "ロード後に SimYukkuri.UNYO がセーブ時の false に復元されること");
+            } finally {
+                tempFile.delete();
+            }
+        }
+
+        @Test
+        void testScenario_SaveLoadRestoresUnyoOn() throws Exception {
+            File tempFile = File.createTempFile("simyukkuri_test_unyo_on", ".sav");
+            try {
+                SimYukkuri.world.setUnyo(true);
+                Terrarium.saveState(tempFile);
+                SimYukkuri.UNYO = false; // セーブ後に変更
+                WorldTestHelper.resetStates();
+                WorldTestHelper.initializeMinimalWorld();
+                terrarium = new Terrarium();
+
+                Terrarium.loadState(tempFile);
+
+                assertTrue(SimYukkuri.UNYO, "ロード後に SimYukkuri.UNYO がセーブ時の true に復元されること");
+            } finally {
+                tempFile.delete();
+            }
+        }
+
+        @Test
+        void testScenario_SaveLoadRestoresWindowType0SizeIndex1() throws Exception {
+            // windowType=0, sizeIndex=1(100%) → maxX = DEFAULT_MAP_X[0]*100/100 = 300
+            File tempFile = File.createTempFile("simyukkuri_test_wintype0_size1", ".sav");
+            try {
+                SimYukkuri.world.setWindowType(0);
+                SimYukkuri.world.setTerrariumSizeIndex(1);
+                Terrarium.saveState(tempFile);
+                // セーブ後にウィンドウタイプを変更
+                SimYukkuri.world.setWindowType(1);
+                WorldTestHelper.resetStates();
+                WorldTestHelper.initializeMinimalWorld();
+                terrarium = new Terrarium();
+
+                Terrarium.loadState(tempFile);
+
+                assertEquals(301, Translate.getWorldWidth(),
+                        "ロード後に Translate.getWorldWidth() が windowType=0, sizeIndex=1 に対応する 301 になること");
+            } finally {
+                tempFile.delete();
+            }
+        }
+
+        @Test
+        void testScenario_SaveLoadRestoresWindowType0SizeIndex2() throws Exception {
+            // windowType=0, sizeIndex=2(200%) → maxX = 300*200/100 = 600
+            File tempFile = File.createTempFile("simyukkuri_test_wintype0_size2", ".sav");
+            try {
+                SimYukkuri.world.setWindowType(0);
+                SimYukkuri.world.setTerrariumSizeIndex(2);
+                Terrarium.saveState(tempFile);
+                // セーブ後に変更
+                SimYukkuri.world.setTerrariumSizeIndex(1);
+                WorldTestHelper.resetStates();
+                WorldTestHelper.initializeMinimalWorld();
+                terrarium = new Terrarium();
+
+                Terrarium.loadState(tempFile);
+
+                assertEquals(601, Translate.getWorldWidth(),
+                        "ロード後に Translate.getWorldWidth() が windowType=0, sizeIndex=2 に対応する 601 になること");
             } finally {
                 tempFile.delete();
             }

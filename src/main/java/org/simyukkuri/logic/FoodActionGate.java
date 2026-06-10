@@ -48,6 +48,21 @@ public final class FoodActionGate {
 			}
 		}
 		if (body.getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE) {
+			// NON_YUKKURI_DISEASE 状態でも「あまあま」だけは自発サーチを許可する。
+			// ここではゲートを通過させ、FoodSearchPolicy 側で SWEETS 以外を弾く。
+			// ただし死亡・重傷・埋没など行動不能な副次原因がある場合は引き続きブロック。
+			if (!body.isDead()
+					&& body.getCriticalDamageType() == null
+					&& !body.isPealed()
+					&& !body.isPacked()
+					&& !body.isShitting()
+					&& !body.isBirth()
+					&& !body.isSukkiri()
+					&& !body.isNeedled()
+					&& body.getBurialState() == org.simyukkuri.enums.BurialState.NONE) {
+				// SWEETS サーチのみ許可 - 以降のゲートチェックをスキップ
+				return false;
+			}
 			return true;
 		}
 		if (body.isRaper() && body.isExciting() && !body.isStarving()) {

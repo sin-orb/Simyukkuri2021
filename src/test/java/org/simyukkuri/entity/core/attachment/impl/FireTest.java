@@ -636,6 +636,86 @@ public class FireTest {
         }
     }
 
+    // --- 燃焼による毛焼けテスト（alive body）---
+
+    @Test
+    void testAliveBodyBurningCausesHairToBrindled1() {
+        // 生きている body に burnPeriod > limit*2/3 → pickHair → DEFAULT→BRINDLED1
+        SimYukkuri.RND = new ConstState(1);
+        Yukkuri parent = createParent(AgeState.ADULT);
+        Fire fire = new Fire(parent);
+        parent.setDead(false);
+        parent.setOkazaris(null); // okazari ブランチをスキップ
+        parent.setHairState(HairState.DEFAULT);
+        int limit = parent.getDamageLimit();
+        fire.setBurnPeriod(limit * 2 / 3 + 1);
+
+        fire.update();
+
+        assertEquals(HairState.BRINDLED1, parent.getHairState(),
+                "燃焼中の alive ゆっくりの髪が BRINDLED1 になること");
+    }
+
+    @Test
+    void testThreeUpdatesProgressHairToBaldhead() {
+        // 3回 update で DEFAULT → BRINDLED1 → BRINDLED2 → BALDHEAD
+        SimYukkuri.RND = new ConstState(1);
+        Yukkuri parent = createParent(AgeState.ADULT);
+        Fire fire = new Fire(parent);
+        parent.setDead(false);
+        parent.setOkazaris(null);
+        parent.setHairState(HairState.DEFAULT);
+        int limit = parent.getDamageLimit();
+        fire.setBurnPeriod(limit * 2 / 3 + 1);
+
+        fire.update(); // DEFAULT → BRINDLED1
+        fire.update(); // BRINDLED1 → BRINDLED2
+        fire.update(); // BRINDLED2 → BALDHEAD
+
+        assertEquals(HairState.BALDHEAD, parent.getHairState(),
+                "3回の燃焼でハゲになること");
+    }
+
+    @Test
+    void testExtinguishAfterBurningPreservesHairState() {
+        // 1回焼けた後に消火 → hairState は BRINDLED1 のまま（DEFAULT に戻らない）
+        SimYukkuri.RND = new ConstState(1);
+        Yukkuri parent = createParent(AgeState.ADULT);
+        Fire fire = new Fire(parent);
+        parent.setDead(false);
+        parent.setOkazaris(null);
+        parent.setHairState(HairState.DEFAULT);
+        int limit = parent.getDamageLimit();
+        fire.setBurnPeriod(limit * 2 / 3 + 1);
+
+        fire.update(); // → BRINDLED1
+        parent.removeAttachment(Fire.class); // 消火
+
+        assertFalse(parent.getHairState() == HairState.DEFAULT,
+                "消火後も焼け状態（BRINDLED1）が維持されること");
+        assertEquals(HairState.BRINDLED1, parent.getHairState());
+    }
+
+    @Test
+    void testExtinguishBeforeBaldhoodPreservesIntermediateHairState() {
+        // BRINDLED2 まで焼けてから消火 → BRINDLED2 が維持される（完全ハゲではない）
+        SimYukkuri.RND = new ConstState(1);
+        Yukkuri parent = createParent(AgeState.ADULT);
+        Fire fire = new Fire(parent);
+        parent.setDead(false);
+        parent.setOkazaris(null);
+        parent.setHairState(HairState.DEFAULT);
+        int limit = parent.getDamageLimit();
+        fire.setBurnPeriod(limit * 2 / 3 + 1);
+
+        fire.update(); // DEFAULT → BRINDLED1
+        fire.update(); // BRINDLED1 → BRINDLED2
+        parent.removeAttachment(Fire.class); // BRINDLED2 で消火
+
+        assertEquals(HairState.BRINDLED2, parent.getHairState(),
+                "ハゲになる前に消火しても焼け状態（BRINDLED2）が維持されること");
+    }
+
     @Test
     void testLoadImages_headless_executesCode() {
         try {

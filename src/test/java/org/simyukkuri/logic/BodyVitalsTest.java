@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
+import org.simyukkuri.enums.Damage;
 import org.simyukkuri.util.WorldTestHelper;
 
 class BodyVitalsTest {
@@ -135,6 +136,39 @@ class BodyVitalsTest {
 		body.setSickPeriod(base * 8 + 1);
 		assertTrue(YukkuriVitals.isSick(body),         "sickPeriod=base*8+1: isSick=true");
 		assertTrue(YukkuriVitals.isSickHeavily(body),  "sickPeriod=base*8+1: isSickHeavily=true");
+	}
+
+	@Test
+	void damageStateNoneWhenDamageIsZero() {
+		body.setDamage(0);
+		assertEquals(Damage.NONE, body.getDamageState(),
+				"damage=0 のとき getDamageState() == NONE であること");
+	}
+
+	@Test
+	void damageStateVeryWhenDamageAtHalfLimit() {
+		int limit = body.getDamageLimit();
+		body.setDamage(limit / 2);
+		assertEquals(Damage.VERY, body.getDamageState(),
+				"damage=limit/2 のとき getDamageState() == VERY であること");
+	}
+
+	@Test
+	void damageStateTooMuchWhenDamageAtThreeFourthLimit() {
+		int limit = body.getDamageLimit();
+		body.setDamage(limit * 3 / 4);
+		assertEquals(Damage.TOOMUCH, body.getDamageState(),
+				"damage=limit*3/4 のとき getDamageState() == TOOMUCH であること");
+	}
+
+	@Test
+	void bodyDiesWhenDamageExceedsLimit() {
+		// addDamage は damage を増やすだけ。getDamageState() で limit 超えを検出して toDead()
+		int limit = body.getDamageLimit();
+		body.setDamage(limit + 1);
+		body.getDamageState(); // toDead() トリガー
+		assertTrue(body.isDead(),
+				"damage が limit を超えた状態で getDamageState() を呼ぶと toDead() が呼ばれること");
 	}
 
 	@Test
