@@ -15,6 +15,7 @@ import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.CoreAnkoState;
+import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.util.WorldTestHelper;
 
@@ -121,6 +122,7 @@ class BodySelectionRuleTest {
 		@Test
 		void sickCandidateExcludedByAverageActor() {
 			// AVERAGE intel でも barely sick 候補は findSick で検知され除外される
+            body.setIntelligence(Intelligence.AVERAGE);
 			Yukkuri sick = addCandidate(AgeState.ADULT);
 			sick.setSickPeriod(sick.getIncubationPeriodBase() + 1); // barely sick
 
