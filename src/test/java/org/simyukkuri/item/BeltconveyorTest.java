@@ -441,8 +441,7 @@ class BeltconveyorTest {
         }
 
         // SetupMenu.NORMAL_BABY.ordinal() = 2 (DIRECT/SPEED が先頭 2 項目のため)
-        // bodyIdx = SetupButton.XYZ.ordinal() + NORMAL_BABY.ordinal()
-        // NORMAL=0+2=2, PREDATOR=1+2=3, RARE=2+2=4, IDIOT=3+2=5, HYBRID=4+2=6
+        // 種別ごとに3行ずつ設定が並ぶため、各グループの先頭行を直接参照する。
 
         // checkHitObj — normal BABY/CHILD
         @Test
@@ -471,7 +470,7 @@ class BeltconveyorTest {
         @Test
         void testScenario_PredatorBabySettingAcceptsPredatorBaby() {
             Beltconveyor item = new Beltconveyor();
-            int predatorIdx = setupMenuOrdinal("NORMAL_BABY") + 1; // = 3
+            int predatorIdx = setupMenuOrdinal("PREDATOR_BABY"); // = 5
             item.getSetting()[predatorIdx][AgeState.BABY.ordinal()] = true;
             Yukkuri body = WorldTestHelper.createBody();
             body.setAgeState(AgeState.BABY);
@@ -483,7 +482,7 @@ class BeltconveyorTest {
         @Test
         void testScenario_PredatorChildSettingAcceptsPredatorChild() {
             Beltconveyor item = new Beltconveyor();
-            int predatorIdx = setupMenuOrdinal("NORMAL_BABY") + 1;
+            int predatorIdx = setupMenuOrdinal("PREDATOR_BABY");
             item.getSetting()[predatorIdx][AgeState.CHILD.ordinal()] = true;
             Yukkuri body = WorldTestHelper.createBody();
             body.setAgeState(AgeState.CHILD);
@@ -495,7 +494,7 @@ class BeltconveyorTest {
         @Test
         void testScenario_PredatorAdultSettingAcceptsPredatorAdult() {
             Beltconveyor item = new Beltconveyor();
-            int predatorIdx = setupMenuOrdinal("NORMAL_BABY") + 1;
+            int predatorIdx = setupMenuOrdinal("PREDATOR_BABY");
             item.getSetting()[predatorIdx][AgeState.ADULT.ordinal()] = true;
             Yukkuri body = WorldTestHelper.createBody();
             body.setAgeState(AgeState.ADULT);
@@ -508,7 +507,7 @@ class BeltconveyorTest {
         @Test
         void testScenario_RareBabySettingAcceptsRareBaby() {
             Beltconveyor item = new Beltconveyor();
-            int rareIdx = setupMenuOrdinal("NORMAL_BABY") + 2; // = 4
+            int rareIdx = setupMenuOrdinal("RARE_BABY"); // = 8
             item.getSetting()[rareIdx][AgeState.BABY.ordinal()] = true;
             Yukkuri body = WorldTestHelper.createBody();
             body.setAgeState(AgeState.BABY);
@@ -520,7 +519,7 @@ class BeltconveyorTest {
         @Test
         void testScenario_RareChildSettingAcceptsRareChild() {
             Beltconveyor item = new Beltconveyor();
-            int rareIdx = setupMenuOrdinal("NORMAL_BABY") + 2;
+            int rareIdx = setupMenuOrdinal("RARE_BABY");
             item.getSetting()[rareIdx][AgeState.CHILD.ordinal()] = true;
             Yukkuri body = WorldTestHelper.createBody();
             body.setAgeState(AgeState.CHILD);
@@ -532,7 +531,7 @@ class BeltconveyorTest {
         @Test
         void testScenario_RareAdultSettingAcceptsRareAdult() {
             Beltconveyor item = new Beltconveyor();
-            int rareIdx = setupMenuOrdinal("NORMAL_BABY") + 2;
+            int rareIdx = setupMenuOrdinal("RARE_BABY");
             item.getSetting()[rareIdx][AgeState.ADULT.ordinal()] = true;
             Yukkuri body = WorldTestHelper.createBody();
             body.setAgeState(AgeState.ADULT);
@@ -541,11 +540,11 @@ class BeltconveyorTest {
             assertTrue(item.checkHitObj(body));
         }
 
-        // checkHitObj — idiot (TarinaiReimu) BABY/CHILD/ADULT (normalIdx+3)
+        // checkHitObj — idiot (TarinaiReimu) BABY/CHILD/ADULT
         @Test
         void testScenario_IdiotBabySettingAcceptsTarinaiReimyBaby() {
             Beltconveyor item = new Beltconveyor();
-            int idiotIdx = setupMenuOrdinal("NORMAL_BABY") + 3; // = 5
+            int idiotIdx = setupMenuOrdinal("IDIOT_BABY"); // = 11
             item.getSetting()[idiotIdx][AgeState.BABY.ordinal()] = true;
             org.simyukkuri.entity.core.living.yukkuri.impl.TarinaiReimu idiot =
                     new org.simyukkuri.entity.core.living.yukkuri.impl.TarinaiReimu();
@@ -558,7 +557,7 @@ class BeltconveyorTest {
         @Test
         void testScenario_IdiotChildSettingAcceptsTarinaiReimuChild() {
             Beltconveyor item = new Beltconveyor();
-            int idiotIdx = setupMenuOrdinal("NORMAL_BABY") + 3;
+            int idiotIdx = setupMenuOrdinal("IDIOT_BABY");
             item.getSetting()[idiotIdx][AgeState.CHILD.ordinal()] = true;
             org.simyukkuri.entity.core.living.yukkuri.impl.TarinaiReimu idiot =
                     new org.simyukkuri.entity.core.living.yukkuri.impl.TarinaiReimu();
@@ -571,7 +570,7 @@ class BeltconveyorTest {
         @Test
         void testScenario_IdiotAdultSettingAcceptsTarinaiReimuAdult() {
             Beltconveyor item = new Beltconveyor();
-            int idiotIdx = setupMenuOrdinal("NORMAL_BABY") + 3;
+            int idiotIdx = setupMenuOrdinal("IDIOT_BABY");
             item.getSetting()[idiotIdx][AgeState.ADULT.ordinal()] = true;
             org.simyukkuri.entity.core.living.yukkuri.impl.TarinaiReimu idiot =
                     new org.simyukkuri.entity.core.living.yukkuri.impl.TarinaiReimu();
@@ -581,11 +580,11 @@ class BeltconveyorTest {
             assertTrue(item.checkHitObj(idiot));
         }
 
-        // checkHitObj — hybrid (MarisaReimu) BABY/CHILD/ADULT (normalIdx+4)
+        // checkHitObj — hybrid (MarisaReimu) BABY/CHILD/ADULT
         @Test
         void testScenario_HybridBabySettingAcceptsHybridBaby() {
             Beltconveyor item = new Beltconveyor();
-            int hybridIdx = setupMenuOrdinal("NORMAL_BABY") + 4; // = 6
+            int hybridIdx = setupMenuOrdinal("HYBRID_BABY"); // = 14
             item.getSetting()[hybridIdx][AgeState.BABY.ordinal()] = true;
             org.simyukkuri.entity.core.living.yukkuri.impl.MarisaReimu hybrid =
                     new org.simyukkuri.entity.core.living.yukkuri.impl.MarisaReimu();
@@ -598,7 +597,7 @@ class BeltconveyorTest {
         @Test
         void testScenario_HybridChildSettingAcceptsHybridChild() {
             Beltconveyor item = new Beltconveyor();
-            int hybridIdx = setupMenuOrdinal("NORMAL_BABY") + 4;
+            int hybridIdx = setupMenuOrdinal("HYBRID_BABY");
             item.getSetting()[hybridIdx][AgeState.CHILD.ordinal()] = true;
             org.simyukkuri.entity.core.living.yukkuri.impl.MarisaReimu hybrid =
                     new org.simyukkuri.entity.core.living.yukkuri.impl.MarisaReimu();
@@ -611,7 +610,7 @@ class BeltconveyorTest {
         @Test
         void testScenario_HybridAdultSettingAcceptsHybridAdult() {
             Beltconveyor item = new Beltconveyor();
-            int hybridIdx = setupMenuOrdinal("NORMAL_BABY") + 4;
+            int hybridIdx = setupMenuOrdinal("HYBRID_BABY");
             item.getSetting()[hybridIdx][AgeState.ADULT.ordinal()] = true;
             org.simyukkuri.entity.core.living.yukkuri.impl.MarisaReimu hybrid =
                     new org.simyukkuri.entity.core.living.yukkuri.impl.MarisaReimu();

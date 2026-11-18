@@ -402,23 +402,23 @@ public class Beltconveyor extends FieldShape {
 				Yukkuri b = (Yukkuri) o;
 				int ageIdx = b.getAgeState().ordinal();
 				int bodyIdx;
-				// settingのインデックスはSetupButton.ordinal() + SetupMenu.NORMAL_BABY.ordinal()
-				// setupBeltで連続した行(2,3,4,5,6)に保存しているため
+				// UIの設定行に対応する種別の先頭行を参照する。
+				// SetupButton.ordinal() は種別グループ番号であり、設定配列の行番号ではない。
 				if (b.isHybrid()) {
 					// ハイブリッド
-					bodyIdx = SetupButton.HYBRID.ordinal() + SetupMenu.NORMAL_BABY.ordinal();
+					bodyIdx = SetupMenu.HYBRID_BABY.ordinal();
 				} else if (b.isIdiot()) {
 					// 足りない
-					bodyIdx = SetupButton.IDIOT.ordinal() + SetupMenu.NORMAL_BABY.ordinal();
+					bodyIdx = SetupMenu.IDIOT_BABY.ordinal();
 				} else if (b.isRareType()) {
 					// 希少種
-					bodyIdx = SetupButton.RARE.ordinal() + SetupMenu.NORMAL_BABY.ordinal();
+					bodyIdx = SetupMenu.RARE_BABY.ordinal();
 				} else if (b.isPredatorType()) {
 					// 捕食種
-					bodyIdx = SetupButton.PREDATOR.ordinal() + SetupMenu.NORMAL_BABY.ordinal();
+					bodyIdx = SetupMenu.PREDATOR_BABY.ordinal();
 				} else {
 					// 通常種
-					bodyIdx = SetupButton.NORMAL.ordinal() + SetupMenu.NORMAL_BABY.ordinal();
+					bodyIdx = SetupMenu.NORMAL_BABY.ordinal();
 				}
 				if (setting[bodyIdx][ageIdx]) {
 					matches = true;
